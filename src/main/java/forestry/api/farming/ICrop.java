@@ -5,10 +5,12 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 public interface ICrop {
 
@@ -20,4 +22,6 @@ public interface ICrop {
 	@Nullable
 	Collection<ItemStack> harvest();
 
+	@Nonnull
+	BlockPos getPosition();
 }

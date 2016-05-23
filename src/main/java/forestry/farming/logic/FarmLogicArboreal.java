@@ -102,15 +102,26 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		}
 
 		// get all crops of the same type that are connected to the first one
-		Stack<BlockPos> candidates = new Stack<>();
-		candidates.add(position);
+		Stack<BlockPos> knownCropPositions = new Stack<>();
+		knownCropPositions.add(position);
 
-		Set<BlockPos> seen = new HashSet<>();
+		Set<BlockPos> checkedBlocks = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
-		while (!candidates.empty()) {
-			BlockPos candidate = candidates.pop();
-			processHarvestBlock(world, candidate, farmable, crops, candidates, seen);
+		while (!knownCropPositions.empty()) {
+			BlockPos knownCropPos = knownCropPositions.pop();
+			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
+				if (!checkedBlocks.contains(candidate)) {
+					checkedBlocks.add(candidate);
+
+					IBlockState blockState = world.getBlockState(candidate);
+					ICrop crop = farmable.getCropAt(world, candidate, blockState);
+					if (crop != null) {
+						crops.push(crop);
+						knownCropPositions.push(candidate);
+					}
+				}
+			}
 		}
 
 		return crops;
@@ -125,21 +136,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			}
 		}
 		return null;
-	}
-
-	private static void processHarvestBlock(World world, BlockPos position, IFarmable farmable, Stack<ICrop> crops, Stack<BlockPos> candidates, Set<BlockPos> seen) {
-		for (BlockPos candidate : BlockPos.getAllInBox(position.add(-1, -1, -1), position.add(1, 1, 1))) {
-			if (!seen.contains(candidate)) {
-				seen.add(candidate);
-
-				IBlockState blockState = world.getBlockState(candidate);
-				ICrop crop = farmable.getCropAt(world, candidate, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					candidates.push(candidate);
-				}
-			}
-		}
 	}
 
 	@Override

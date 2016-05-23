@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
@@ -24,7 +25,7 @@ public abstract class Crop implements ICrop {
 	private final World world;
 	protected final BlockPos position;
 
-	protected Crop(World world, BlockPos position) {
+	protected Crop(@Nonnull World world, @Nonnull BlockPos position) {
 		this.world = world;
 		this.position = position;
 	}
@@ -43,4 +44,9 @@ public abstract class Crop implements ICrop {
 		return harvestBlock(world, position);
 	}
 
+	@Nonnull
+	@Override
+	public BlockPos getPosition() {
+		return position;
+	}
 }

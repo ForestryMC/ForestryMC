@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -29,6 +28,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
+import forestry.core.utils.TopDownBlockPosComparator;
 import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
@@ -62,12 +62,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 		if (genPos != null) {
 			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
-			Collections.sort(branchEnds, new Comparator<BlockPos>() {
-				@Override
-				public int compare(BlockPos o1, BlockPos o2) {
-					return Integer.compare(o2.getY(), o1.getY());
-				}
-			});
+			Collections.sort(branchEnds, TopDownBlockPosComparator.INSTANCE);
 			generateLeaves(world, rand, leaf, branchEnds, genPos);
 			generateExtras(world, rand, genPos);
 			return true;

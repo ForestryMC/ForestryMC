@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +76,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.TopDownBlockPosComparator;
 import forestry.core.utils.Translator;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
@@ -114,7 +117,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private int allowedExtent = 0;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
-	private final Stack<ICrop> pendingCrops = new Stack<>();
+	private final List<ICrop> pendingCrops = new LinkedList<>();
 	private final Stack<ItemStack> pendingProduce = new Stack<>();
 
 	private Stage stage = Stage.CULTIVATE;
@@ -469,8 +472,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		// Cull queued crops.
 		if (!pendingCrops.isEmpty()) {
-			if (cullCrop(pendingCrops.peek(), harvestProvider)) {
-				pendingCrops.pop();
+			ICrop first = pendingCrops.get(0);
+			if (cullCrop(first, harvestProvider)) {
+				pendingCrops.remove(0);
 				return true;
 			} else {
 				return false;
@@ -505,6 +509,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
+					Collections.sort(pendingCrops, TopDownICropComparator.INSTANCE);
 					harvestProvider = logic;
 				}
 			} else if (stage == Stage.CULTIVATE) {
@@ -869,5 +874,18 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("stage", stage).add("logic", farmLogics.toString()).toString();
+	}
+
+	private static class TopDownICropComparator implements Comparator<ICrop> {
+		public static final TopDownICropComparator INSTANCE = new TopDownICropComparator();
+
+		private TopDownICropComparator() {
+
+		}
+
+		@Override
+		public int compare(ICrop o1, ICrop o2) {
+			return TopDownBlockPosComparator.INSTANCE.compare(o1.getPosition(), o2.getPosition());
+		}
 	}
 }
