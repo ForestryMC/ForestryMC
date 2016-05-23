@@ -76,7 +76,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			return true;
 		}
 
-		return maintainGermlings(world, farmHousing, pos.add(0, 1, 0), direction, extent);
+		return maintainGermlings(world, farmHousing, pos.up(), direction, extent);
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {

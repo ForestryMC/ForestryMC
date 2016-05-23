@@ -401,7 +401,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public int getBlockLightValue() {
 		BlockPos topCenter = getTopCenterCoord();
-		return worldObj.getLightFromNeighbors(topCenter.add(0, 1, 0));
+		return worldObj.getLightFromNeighbors(topCenter.up());
 	}
 
 	@Override

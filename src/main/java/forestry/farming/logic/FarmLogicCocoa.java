@@ -103,7 +103,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		boolean result = tryPlantingCocoa(world, farmHousing, position);
 
 		lastExtent++;
@@ -125,7 +125,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
 		lastExtentsHarvest.put(pos, lastExtent);

@@ -84,7 +84,7 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	protected static EnumGrowthConditions getConditionFromLight(World world, BlockPos pos) {
-		int lightValue = world.getLightFromNeighbors(pos.add(0, 1, 0));
+		int lightValue = world.getLightFromNeighbors(pos.up());
 
 		if (lightValue > 13) {
 			return EnumGrowthConditions.EXCELLENT;

@@ -99,7 +99,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			BlockPos position = translateWithOffset(pos.up(), direction, i);
 			IBlockState blockState = world.getBlockState(position);
 			for (IFarmable seed : seeds) {
 				ICrop crop = seed.getCropAt(world, position, blockState);

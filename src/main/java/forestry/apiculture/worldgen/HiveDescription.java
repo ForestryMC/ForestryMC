@@ -70,8 +70,9 @@ public enum HiveDescription implements IHiveDescription {
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
-			if (world.isAirBlock(pos.add(0, 1, 0))) {
-				world.setBlockState(pos.add(0, 1, 0), Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			BlockPos posAbove = pos.up();
+			if (world.isAirBlock(posAbove)) {
+				world.setBlockState(posAbove, Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 			}
 
 			postGenFlowers(world, pos, flowerStates);

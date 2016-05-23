@@ -138,7 +138,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		// Let's get to work
-		int lightvalue = worldObj.getLightFromNeighbors(getPos().add(0, 1, 0));
+		int lightvalue = worldObj.getLightFromNeighbors(getPos().up());
 
 		IErrorLogic errorLogic = getErrorLogic();
 

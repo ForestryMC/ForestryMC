@@ -38,7 +38,7 @@ public class WorldGenCocobolo extends WorldGenTree {
 		int leafSpawn = height;
 
 		for (BlockPos treeTop : branchEnds) {
-			WorldGenHelper.addBlock(world, treeTop.add(0, 1, 0), leaf, WorldGenHelper.EnumReplaceMode.AIR);
+			WorldGenHelper.addBlock(world, treeTop.up(), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 		leafSpawn--;
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1 + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);

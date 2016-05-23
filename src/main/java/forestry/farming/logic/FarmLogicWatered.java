@@ -80,7 +80,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 			return true;
 		}
 
-		if (maintainCrops(world, farmHousing, pos.add(0, 1, 0), direction, extent)) {
+		if (maintainCrops(world, farmHousing, pos.up(), direction, extent)) {
 			return true;
 		}
 

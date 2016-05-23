@@ -67,7 +67,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			BlockPos position = translateWithOffset(pos.up(), direction, i);
 			IBlockState blockState = world.getBlockState(position);
 			for (IFarmable farmable : farmables) {
 				ICrop crop = farmable.getCropAt(world, position, blockState);

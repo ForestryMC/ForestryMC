@@ -151,12 +151,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getLightFromNeighbors(getPos().add(0, 1, 0));
+		return worldObj.getLightFromNeighbors(getPos().up());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
+		return worldObj.canBlockSeeSky(getPos().up());
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.fluids.Fluid;
@@ -96,10 +97,11 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
 		errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
 
-		boolean hasSky = worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
+		BlockPos posAbove = getPos().up();
+		boolean hasSky = worldObj.canBlockSeeSky(posAbove);
 		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-		errorLogic.setCondition(!worldObj.isRainingAt(getPos().add(0, 1, 0)), EnumErrorCode.NOT_RAINING);
+		errorLogic.setCondition(!worldObj.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);
