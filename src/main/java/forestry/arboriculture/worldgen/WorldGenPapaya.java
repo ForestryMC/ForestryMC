@@ -31,7 +31,7 @@ public class WorldGenPapaya extends WorldGenTree {
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
-		return WorldGenHelper.generateBranches(world, rand, wood, startPos.add(0, height, 0), girth, 0.15f, 0.25f, height / 4, 1, 0.25f);
+		return WorldGenHelper.generateBranches(world, rand, wood, startPos.add(0, height - 1, 0), girth, 0.15f, 0.25f, height / 4, 1, 0.25f);
 	}
 
 	@Override
