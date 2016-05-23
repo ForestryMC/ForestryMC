@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -38,8 +36,6 @@ import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
-	private static final int BRANCH_RANGE = 20;
-
 	public FarmLogicArboreal(ItemStack resource, IBlockState ground, Collection<IFarmable> germlings) {
 		super(resource, ground, germlings);
 	}
@@ -91,83 +87,59 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		}
 
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
-		Collection<ICrop> crops = getHarvestBlocks(world, position);
+		Collection<ICrop> crops = harvestBlocks(world, position);
 		lastExtent++;
 		lastExtentsHarvest.put(pos, lastExtent);
 
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
+	private Collection<ICrop> harvestBlocks(World world, BlockPos position) {
+		// Determine what type we want to harvest.
+		IFarmable farmable = getFarmableForBlock(world, position, farmables);
+		if (farmable == null) {
+			return Collections.emptyList();
+		}
+
+		// get all crops of the same type that are connected to the first one
+		Stack<BlockPos> candidates = new Stack<>();
+		candidates.add(position);
+
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
-		IBlockState blockState = world.getBlockState(position);
-		// Determine what type we want to harvest.
-		IFarmable germling = null;
-		for (IFarmable germl : farmables) {
-			ICrop crop = germl.getCropAt(world, position, blockState);
-			if (crop != null) {
-				crops.push(crop);
-				seen.add(position);
-				germling = germl;
-				break;
-			}
-		}
-
-		if (germling == null) {
-			return crops;
-		}
-
-		List<BlockPos> candidates = processHarvestBlock(world, germling, crops, seen, position, position);
-		List<BlockPos> temp = new ArrayList<>();
-		while (!candidates.isEmpty()) {
-			for (BlockPos candidate : candidates) {
-				temp.addAll(processHarvestBlock(world, germling, crops, seen, position, candidate));
-			}
-			candidates.clear();
-			candidates.addAll(temp);
-			temp.clear();
+		while (!candidates.empty()) {
+			BlockPos candidate = candidates.pop();
+			processHarvestBlock(world, candidate, farmable, crops, candidates, seen);
 		}
 
 		return crops;
 	}
 
-	private static List<BlockPos> processHarvestBlock(World world, IFarmable germling, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
-		List<BlockPos> candidates = new ArrayList<>();
+	private static IFarmable getFarmableForBlock(World world, BlockPos position, Collection<IFarmable> farmables) {
+		IBlockState blockState = world.getBlockState(position);
+		for (IFarmable farmable : farmables) {
+			ICrop crop = farmable.getCropAt(world, position, blockState);
+			if (crop != null) {
+				return farmable;
+			}
+		}
+		return null;
+	}
 
-		// Get additional candidates to return
-		for (int x = -1; x < 2; x++) {
-			for (int y = -1; y < 2; y++) {
-				for (int z = -1; z < 2; z++) {
-					BlockPos candidate = position.add(x, y, z);
-					if (candidate.equals(position)) {
-						continue;
-					}
-					if (Math.abs(candidate.getX() - start.getX()) > BRANCH_RANGE) {
-						continue;
-					}
-					if (Math.abs(candidate.getZ() - start.getZ()) > BRANCH_RANGE) {
-						continue;
-					}
+	private static void processHarvestBlock(World world, BlockPos position, IFarmable farmable, Stack<ICrop> crops, Stack<BlockPos> candidates, Set<BlockPos> seen) {
+		for (BlockPos candidate : BlockPos.getAllInBox(position.add(-1, -1, -1), position.add(1, 1, 1))) {
+			if (!seen.contains(candidate)) {
+				seen.add(candidate);
 
-					// See whether the given position has already been processed
-					if (seen.contains(candidate)) {
-						continue;
-					}
-
-					IBlockState blockState = world.getBlockState(position);
-					ICrop crop = germling.getCropAt(world, candidate, blockState);
-					if (crop != null) {
-						crops.push(crop);
-						candidates.add(candidate);
-						seen.add(candidate);
-					}
+				IBlockState blockState = world.getBlockState(candidate);
+				ICrop crop = farmable.getCropAt(world, candidate, blockState);
+				if (crop != null) {
+					crops.push(crop);
+					candidates.push(candidate);
 				}
 			}
 		}
-
-		return candidates;
 	}
 
 	@Override

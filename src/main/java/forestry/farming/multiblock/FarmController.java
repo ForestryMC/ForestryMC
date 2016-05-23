@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import com.google.common.base.Objects;
+
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -473,8 +476,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Cultivation and collection
 		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
-		for (FarmDirection farmSide : FarmDirection.values()) {
-
+		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
+		Collections.shuffle(farmDirections, worldObj.rand);
+		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = getFarmLogic(farmSide);
 			if (logic == null) {
 				continue;
@@ -855,5 +859,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.FARM;
+	}
+
+	// for debugging
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("stage", stage).add("logic", farmLogics.toString()).toString();
 	}
 }

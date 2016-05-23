@@ -130,4 +130,10 @@ public abstract class FarmLogic implements IFarmLogic {
 			return farmLogic.isAcceptedGermling(contained) || farmLogic.isAcceptedWindfall(contained);
 		}
 	}
+
+	// for debugging
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
