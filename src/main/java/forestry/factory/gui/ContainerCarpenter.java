@@ -19,6 +19,7 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
@@ -38,7 +39,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 		}
 
 		// Liquid Input
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryCarpenter.SLOT_CAN_INPUT, 120, 20));
+		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryCarpenter.SLOT_CAN_INPUT, 120, 20));
 		// Boxes
 		this.addSlotToContainer(new SlotFiltered(tile, InventoryCarpenter.SLOT_BOX, 83, 20));
 		// Product

@@ -24,8 +24,9 @@ import forestry.core.tiles.IFilterSlotDelegate;
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.
  */
 public class SlotFiltered extends SlotWatched {
-	private String blockedTexture = "slots/blocked";
 	private final IFilterSlotDelegate filterSlotDelegate;
+	private String backgroundTexture = null;
+	private String blockedTexture = "slots/blocked";
 
 	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
@@ -49,12 +50,19 @@ public class SlotFiltered extends SlotWatched {
 		return this;
 	}
 
+	public SlotFiltered setBackgroundTexture(String backgroundTexture) {
+		this.backgroundTexture = backgroundTexture;
+		return this;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
 			return TextureManager.getInstance().getDefault(blockedTexture);
+		} else if (backgroundTexture != null) {
+			return TextureManager.getInstance().getDefault(backgroundTexture);
 		} else {
 			return null;
 		}

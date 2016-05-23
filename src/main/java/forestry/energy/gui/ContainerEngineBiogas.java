@@ -14,7 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
 
@@ -23,7 +23,7 @@ public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas
 	public ContainerEngineBiogas(InventoryPlayer player, TileEngineBiogas engine) {
 		super(engine, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
+		this.addSlotToContainer(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
 	}
 
 	@Override

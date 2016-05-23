@@ -13,6 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.inventory.InventoryAnalyzer;
@@ -34,7 +35,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 		addSlotToContainer(new SlotWorking(tile, InventoryAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
-		addSlotToContainer(new SlotFiltered(tile, InventoryAnalyzer.SLOT_CAN, 143, 24));
+		addSlotToContainer(new SlotLiquidIn(tile, InventoryAnalyzer.SLOT_CAN, 143, 24));
 
 		// Output buffer
 		for (int i = 0; i < 2; i++) {

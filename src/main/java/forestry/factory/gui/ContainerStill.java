@@ -13,7 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.tiles.TileStill;
@@ -24,7 +25,7 @@ public class ContainerStill extends ContainerLiquidTanks<TileStill> {
 		super(tile, player, 8, 84);
 
 		this.addSlotToContainer(new SlotOutput(tile, InventoryStill.SLOT_PRODUCT, 150, 54));
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryStill.SLOT_RESOURCE, 150, 18));
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryStill.SLOT_CAN, 10, 36));
+		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(tile, InventoryStill.SLOT_RESOURCE, 150, 18));
+		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryStill.SLOT_CAN, 10, 36));
 	}
 }

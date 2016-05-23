@@ -14,7 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.energy.tiles.TileEuGenerator;
 
@@ -23,7 +23,7 @@ public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 	public ContainerGenerator(InventoryPlayer player, TileEuGenerator tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryGenerator.SLOT_CAN, 22, 38));
+		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
 	}
 
 	@Override

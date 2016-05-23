@@ -14,7 +14,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.tiles.TileFermenter;
@@ -27,8 +29,8 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_RESOURCE, 85, 23));
 		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_FUEL, 75, 57));
 		this.addSlotToContainer(new SlotOutput(fermenter, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
-		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
-		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_INPUT, 10, 40));
+		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(fermenter, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
+		this.addSlotToContainer(new SlotLiquidIn(fermenter, InventoryFermenter.SLOT_INPUT, 10, 40));
 	}
 
 	@Override
