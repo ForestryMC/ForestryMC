@@ -179,23 +179,6 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public void addProduce(ItemStack produce) {
-
-		if (acceptsAsGermling(produce)) {
-			produce.stackSize -= InventoryUtil.addStack(germlingsInventory, produce, true);
-		}
-
-		if (produce.stackSize <= 0) {
-			return;
-		}
-
-		if (acceptsAsResource(produce)) {
-			produce.stackSize -= InventoryUtil.addStack(resourcesInventory, produce, true);
-		}
-
-		if (produce.stackSize <= 0) {
-			return;
-		}
-
 		produce.stackSize -= InventoryUtil.addStack(productInventory, produce, true);
 	}
 
