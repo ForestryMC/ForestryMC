@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
 
 public abstract class FarmableBase implements IFarmable {
 	protected final ItemStack germling;
@@ -49,7 +49,7 @@ public abstract class FarmableBase implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, plantedState, Constants.FLAG_BLOCK_SYNCH);
+		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 
 	@Override

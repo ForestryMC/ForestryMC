@@ -20,8 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,7 +30,6 @@ import net.minecraftforge.fml.common.Loader;
 
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommon {
@@ -79,25 +76,8 @@ public class ProxyCommon {
 		return false;
 	}
 
-	public void playSoundFX(World world, BlockPos pos, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
-	}
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState blockState) {
 
-	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
-		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, pos, state);
-	}
-
-	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
-		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, pos, state);
-	}
-
-	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
-	}
-
-	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
-	}
-
-	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, state), world);
 	}
 
 	public World getRenderWorld() {

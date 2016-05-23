@@ -1025,7 +1025,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos) {
-		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getDefaultState());
 		if (!placed) {
 			return false;
 		}

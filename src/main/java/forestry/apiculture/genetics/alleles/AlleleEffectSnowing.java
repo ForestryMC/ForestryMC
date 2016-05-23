@@ -22,7 +22,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
-import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.VectUtil;
 
@@ -68,10 +67,10 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			if (block == Blocks.SNOW_LAYER) {
 				int meta = block.getMetaFromState(state);
 				if (meta < 7) {
-					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1));
 				}
 			} else if (block.isReplaceable(world, posBlock)) {
-				world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+				world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
 			}
 		}
 

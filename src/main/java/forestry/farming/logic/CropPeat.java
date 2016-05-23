@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 
 public class CropPeat extends Crop {
@@ -50,8 +51,11 @@ public class CropPeat extends Crop {
 		drops.add(PluginCore.items.peat.getItemStack());
 
 		IBlockState blockState = world.getBlockState(pos);
-		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
-		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		Proxies.net.sendNetworkPacket(packet, world);
+
+		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		return drops;
 	}
 

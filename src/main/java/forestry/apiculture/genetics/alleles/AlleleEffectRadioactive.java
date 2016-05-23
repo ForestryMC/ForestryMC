@@ -27,6 +27,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.VectUtil;
 
@@ -103,7 +104,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.setBlockToAir(posBlock);
+			BlockUtil.setBlockToAirWithSound(world, posBlock, blockState);
 			break;
 		}
 

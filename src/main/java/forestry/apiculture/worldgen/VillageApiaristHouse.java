@@ -334,7 +334,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		}
 
 		IBlockState beeHouseDefaultState = PluginApiculture.blocks.beeHouse.getDefaultState();
-		world.setBlockState(posNew, beeHouseDefaultState, Constants.FLAG_BLOCK_SYNCH);
+		world.setBlockState(posNew, beeHouseDefaultState, Constants.FLAG_BLOCK_SYNC);
 
 		TileBeeHouse beeHouse = TileUtil.getTile(world, posNew, TileBeeHouse.class);
 		if (beeHouse == null) {

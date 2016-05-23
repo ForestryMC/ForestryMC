@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -164,7 +165,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			}
 
 			if (TreeManager.treeRoot.plantSapling(worldIn, tree, playerIn.getGameProfile(), pos)) {
-				Proxies.common.addBlockPlaceEffects(worldIn, pos, worldIn.getBlockState(pos));
 				if (!playerIn.capabilities.isCreativeMode) {
 					stack.stackSize--;
 				}
@@ -191,8 +191,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			}
 
 			pollinatable.mateWith(tree);
-			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, worldIn, pos,
-					worldIn.getBlockState(pos));
+
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, Blocks.LEAVES.getDefaultState());
+			Proxies.net.sendNetworkPacket(packet, worldIn);
+
 			if (!playerIn.capabilities.isCreativeMode) {
 				stack.stackSize--;
 			}

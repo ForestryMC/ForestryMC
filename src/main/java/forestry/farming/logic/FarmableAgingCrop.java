@@ -12,9 +12,10 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 
 /**
- * For blocks that are harvestable once they are a certain aga.
+ * For blocks that are harvestable once they are a certain age.
  */
 public class FarmableAgingCrop implements IFarmable {
 	protected final ItemStack germling;
@@ -53,11 +54,15 @@ public class FarmableAgingCrop implements IFarmable {
 		}
 
 		if (replantAge != null) {
-			IBlockState replantState = cropBlock.getDefaultState().withProperty(ageProperty, replantAge);
+			IBlockState replantState = getReplantState(world, pos, blockState);
 			return new CropDestroy(world, blockState, pos, replantState);
 		} else {
 			return new CropDestroy(world, blockState, pos, null);
 		}
+	}
+
+	protected IBlockState getReplantState(World world, BlockPos pos, IBlockState blockState) {
+		return blockState.withProperty(ageProperty, replantAge);
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class FarmableAgingCrop implements IFarmable {
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		IBlockState plantedState = cropBlock.getDefaultState().withProperty(ageProperty, 0);
-		return world.setBlockState(pos, plantedState);
+		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 
 	@Override

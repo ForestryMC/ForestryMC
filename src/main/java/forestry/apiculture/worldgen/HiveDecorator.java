@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkGenerator;
+
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -128,7 +129,7 @@ public abstract class HiveDecorator {
 	private static boolean setHive(World world, BlockPos pos, Hive hive) {
 		IBlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
-		boolean placed = world.setBlockState(pos, hiveState, Constants.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
 		if (!placed) {
 			return false;
 		}

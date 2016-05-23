@@ -105,7 +105,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-			world.setBlockState(position, this.soilState);
+			BlockUtil.setBlockWithPlaceSound(world, position, this.soilState);
 			farmHousing.getFarmInventory().removeResources(resources);
 			return true;
 		}

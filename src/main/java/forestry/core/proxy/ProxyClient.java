@@ -19,8 +19,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,11 +29,10 @@ import org.lwjgl.input.Keyboard;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
-import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.render.TextureManager;
 import forestry.core.worldgen.WorldGenerator;
 
-public class ProxyCommonClient extends ProxyCommon {
+public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
@@ -92,45 +89,8 @@ public class ProxyCommonClient extends ProxyCommon {
 	}
 
 	@Override
-	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
-		Block block = state.getBlock();
-		playSoundFX(world, pos, block.getSoundType().getBreakSound(), SoundCategory.BLOCKS, block.getSoundType().getVolume() / 4, block.getSoundType().getPitch());
-	}
-
-	@Override
-	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
-		Block block = state.getBlock();
-		playSoundFX(world, pos, block.getSoundType().getStepSound(), SoundCategory.BLOCKS, block.getSoundType().getVolume() / 4, block.getSoundType().getPitch());
-	}
-
-	@Override
-	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
-	}
-
-	@Override
-	public void playSoundFX(World world, BlockPos pos, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, soundCategory, volume, pitch, false);
-	}
-
-	@Override
-	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
-		if (world.isRemote) {
-			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, state);
-		} else {
-			super.addBlockDestroyEffects(world, pos, state);
-		}
-	}
-
-	@Override
-	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
-		if (world.isRemote) {
-			playBlockPlaceSoundFX(world, pos, state);
-		} else {
-			super.addBlockPlaceEffects(world, pos, state);
-		}
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState blockState) {
+		Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);
 	}
 
 	@Override

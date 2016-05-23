@@ -203,7 +203,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, final BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			return EnumActionResult.PASS;
 		}
@@ -214,12 +214,12 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		IBlockState blockState = worldIn.getBlockState(pos);
 		if (type == EnumFlutterType.COCOON) {
 			int age = stack.getTagCompound().getInteger(NBT_AGE);
 			
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 			int yShift;
-			IBlockState blockState = worldIn.getBlockState(pos);
 			if (!BlockUtil.isReplaceableBlock(blockState, worldIn, pos)) {
 				if(!worldIn.isAirBlock(pos.down())){
 					return EnumActionResult.PASS;
@@ -246,7 +246,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				if(nursery.canNurse(flutter)){
 					nursery.setCaterpillar(flutter);
 					if(ButterflyManager.butterflyRoot.plantCocoon(worldIn, nursery, playerIn.getGameProfile(), age)){
-						Proxies.common.addBlockPlaceEffects(worldIn, pos, worldIn.getBlockState(posS));
+						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, worldIn.getBlockState(posS));
+						Proxies.net.sendNetworkPacket(packet, worldIn);
+
 						if (!playerIn.capabilities.isCreativeMode) {
 							stack.stackSize--;
 						}
@@ -260,19 +262,20 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return EnumActionResult.PASS;
 		}else if (type == EnumFlutterType.CATERPILLAR) {
 
-			TileEntity target = tileEntity;
-			if (!(target instanceof IButterflyNursery)) {
+			if (!(tileEntity instanceof IButterflyNursery)) {
 				return EnumActionResult.PASS;
 			}
 
-			IButterflyNursery pollinatable = (IButterflyNursery) target;
+			IButterflyNursery pollinatable = (IButterflyNursery) tileEntity;
 			if (!pollinatable.canNurse(flutter)) {
 				return EnumActionResult.PASS;
 			}
 
 			pollinatable.setCaterpillar(flutter);
-			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, worldIn, pos,
-					worldIn.getBlockState(pos));
+
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+			Proxies.net.sendNetworkPacket(packet, worldIn);
+
 			if (!playerIn.capabilities.isCreativeMode) {
 				stack.stackSize--;
 			}

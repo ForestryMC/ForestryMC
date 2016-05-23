@@ -149,7 +149,9 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		if (!farmHousing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
-		world.setBlockState(position, ground);
+		if (!BlockUtil.setBlockWithPlaceSound(world, position, ground)) {
+			return false;
+		}
 		farmHousing.getFarmInventory().removeResources(resources);
 		return true;
 	}
@@ -164,7 +166,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
-		world.setBlockState(position, Blocks.WATER.getDefaultState());
+		BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
 		farmHousing.removeLiquid(STACK_WATER);
 		return true;
 	}

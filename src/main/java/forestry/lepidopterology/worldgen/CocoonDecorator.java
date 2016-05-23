@@ -111,7 +111,7 @@ public abstract class CocoonDecorator {
 
 	private static boolean setCocoon(World world, BlockPos pos, IButterfly butterfly) {
 		Block cocoonBlock = PluginLepidopterology.blocks.solidCocoon;
-		boolean placed = world.setBlockState(pos, cocoonBlock.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, cocoonBlock.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		if (!placed) {
 			return false;
 		}

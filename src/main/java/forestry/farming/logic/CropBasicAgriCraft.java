@@ -15,13 +15,11 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
 
 public class CropBasicAgriCraft extends Crop {
 
@@ -45,8 +43,9 @@ public class CropBasicAgriCraft extends Crop {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
-		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.MELON_BLOCK.getDefaultState());
-		world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+
+		IBlockState oldState = world.getBlockState(pos);
+		BlockUtil.setBlockWithBreakSound(world, pos, block.getDefaultState(), oldState);
 		return harvest;
 	}
 

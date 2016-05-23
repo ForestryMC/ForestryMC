@@ -59,8 +59,9 @@ import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
@@ -210,12 +211,13 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 
 		IBlockState state = PluginArboriculture.blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, tree.getGenome().getPrimary());
-		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
 		}
 
-		Block block = world.getBlockState(pos).getBlock();
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
 		if (PluginArboriculture.blocks.saplingGE != block) {
 			return false;
 		}
@@ -229,6 +231,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		TileSapling sapling = (TileSapling) tile;
 		sapling.setTree(tree.copy());
 		sapling.setOwner(owner);
+
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
+		Proxies.net.sendNetworkPacket(packet, world);
 
 		return true;
 	}

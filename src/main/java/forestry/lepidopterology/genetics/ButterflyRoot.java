@@ -44,7 +44,6 @@ import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
@@ -181,7 +180,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
 		BlockPos pos = getNextPos(world, nursery.getCoordinates());
 		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
-		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
 		}

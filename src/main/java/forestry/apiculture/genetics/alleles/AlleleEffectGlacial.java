@@ -20,7 +20,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
-import forestry.core.config.Constants;
 import forestry.core.utils.VectUtil;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
@@ -62,7 +61,7 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.setBlockState(posBlock, Blocks.ICE.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+			world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
 		}
 
 		return storedData;

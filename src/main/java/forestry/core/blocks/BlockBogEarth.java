@@ -133,8 +133,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 
 		if (type == SoilType.BOG_EARTH) {
 			if (isMoistened(world, pos)) {
-				world.setBlockState(pos, state.withProperty(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNCH);
-				world.markBlockRangeForRenderUpdate(pos, pos);
+				world.setBlockState(pos, state.withProperty(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
 			}
 		}
 	}

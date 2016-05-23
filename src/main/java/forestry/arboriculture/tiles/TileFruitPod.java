@@ -36,6 +36,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
@@ -142,8 +143,9 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		Collection<ItemStack> fruits = getDrops();
 		maturity = 0;
 
-		IBlockState state = worldObj.getBlockState(getPos()).withProperty(BlockCocoa.AGE, 0);
-		worldObj.setBlockState(getPos(), state);
+		IBlockState oldState = worldObj.getBlockState(getPos());
+		IBlockState newState = oldState.withProperty(BlockCocoa.AGE, 0);
+		BlockUtil.setBlockWithBreakSound(worldObj, getPos(), newState, oldState);
 
 		return fruits;
 	}

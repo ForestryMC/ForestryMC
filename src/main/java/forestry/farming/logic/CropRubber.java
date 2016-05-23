@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.compat.PluginIC2;
 
@@ -33,8 +34,11 @@ public class CropRubber extends CropDestroy {
 	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Collection<ItemStack> harvested = new ArrayList<>();
 		harvested.add(PluginIC2.resin.copy());
-		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
-		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNCH);
+
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		Proxies.net.sendNetworkPacket(packet, world);
+
+		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		return harvested;
 	}
 

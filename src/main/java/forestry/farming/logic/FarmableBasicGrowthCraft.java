@@ -46,7 +46,7 @@ public class FarmableBasicGrowthCraft {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 	}
 
 	@Override

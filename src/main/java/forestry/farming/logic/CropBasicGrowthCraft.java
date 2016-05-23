@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 
 public class CropBasicGrowthCraft extends Crop {
@@ -47,16 +48,19 @@ public class CropBasicGrowthCraft extends Crop {
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
+
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		Proxies.net.sendNetworkPacket(packet, world);
+
 		if (isGrape) {
 			world.setBlockToAir(pos);
 		} else {
-			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		}
 
 		if (isRice) {
 			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
-			world.setBlockState(pos.down(), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos.down(), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNC);
 		}
 
 		return harvest;

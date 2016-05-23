@@ -293,6 +293,6 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	@Override
 	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
 		Flower flower = getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Constants.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Constants.FLAG_BLOCK_SYNC);
 	}
 }

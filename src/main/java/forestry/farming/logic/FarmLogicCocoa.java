@@ -20,8 +20,10 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +46,12 @@ public class FarmLogicCocoa extends FarmLogic {
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
 		return Items.DYE;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getMetadata() {
+		return 3;
 	}
 
 	@Override
@@ -128,9 +136,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position) {
 		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
 		IBlockState blockState = world.getBlockState(current);
-		Block block = blockState.getBlock();
-		while (block.isWood(world, current) && blockState.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
-
+		while (isJungleTreeTrunk(blockState)) {
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 				BlockPos candidate = new BlockPos(current.getX() + direction.getFrontOffsetX(), current.getY(), current.getZ() + direction.getFrontOffsetZ());
 				if (world.isAirBlock(candidate)) {
@@ -144,9 +150,16 @@ public class FarmLogicCocoa extends FarmLogic {
 			}
 
 			blockState = world.getBlockState(current);
-			blockState.getBlock();
 		}
 
+		return false;
+	}
+
+	private static boolean isJungleTreeTrunk(IBlockState blockState) {
+		Block block = blockState.getBlock();
+		if (block == Blocks.LOG && blockState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
+			return true;
+		}
 		return false;
 	}
 

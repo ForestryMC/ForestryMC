@@ -34,6 +34,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileEngine;
 
 import cofh.api.energy.IEnergyConnection;
@@ -313,5 +315,32 @@ public abstract class BlockUtil {
 		}
 
 		return !blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
+	}
+
+	public static boolean setBlockWithPlaceSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState blockState) {
+		if (world.setBlockState(pos, blockState)) {
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
+			Proxies.net.sendNetworkPacket(packet, world);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean setBlockWithBreakSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState blockState, @Nonnull IBlockState oldState) {
+		if (world.setBlockState(pos, blockState)) {
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
+			Proxies.net.sendNetworkPacket(packet, world);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean setBlockToAirWithSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState oldState) {
+		if (world.setBlockToAir(pos)) {
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
+			Proxies.net.sendNetworkPacket(packet, world);
+			return true;
+		}
+		return false;
 	}
 }

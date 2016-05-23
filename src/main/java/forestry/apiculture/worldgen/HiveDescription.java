@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -34,6 +35,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
+import forestry.core.config.Constants;
 
 public enum HiveDescription implements IHiveDescription {
 
@@ -69,7 +71,7 @@ public enum HiveDescription implements IHiveDescription {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
-				world.setBlockState(pos.add(0, 1, 0), Blocks.SNOW_LAYER.getDefaultState(), 0);
+				world.setBlockState(pos.add(0, 1, 0), Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 			}
 
 			postGenFlowers(world, pos, flowerStates);

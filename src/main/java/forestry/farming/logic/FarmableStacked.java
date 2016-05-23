@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 
 public class FarmableStacked implements IFarmable {
 	protected final ItemStack germling;
@@ -55,8 +56,7 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		IBlockState plantedState = cropBlock.getDefaultState();
-		return world.setBlockState(pos, plantedState);
+		return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.getDefaultState());
 	}
 
 	@Override

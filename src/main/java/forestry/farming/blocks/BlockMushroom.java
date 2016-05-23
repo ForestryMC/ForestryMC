@@ -18,6 +18,7 @@ import java.util.Random;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -77,6 +78,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, MushroomType.BROWN).withProperty(MATURE, false));
 		setTickRandomly(true);
+		setSoundType(SoundType.PLANT);
 	}
 	
 	@Override
@@ -134,7 +136,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 
 		IBlockState blockState = world.getBlockState(pos);
 		if (!blockState.getValue(MATURE)) {
-			world.setBlockState(pos, blockState.withProperty(MATURE, true), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, blockState.withProperty(MATURE, true), Constants.FLAG_BLOCK_SYNC);
 		} else {
 			int lightValue1 = world.getLightFromNeighbors(pos.up());
 			if (lightValue1 <= 7) {

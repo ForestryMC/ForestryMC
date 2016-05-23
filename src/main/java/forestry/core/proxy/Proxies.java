@@ -13,7 +13,7 @@ package forestry.core.proxy;
 import net.minecraftforge.fml.common.SidedProxy;
 
 public class Proxies {
-	@SidedProxy(clientSide = "forestry.core.proxy.ProxyCommonClient", serverSide = "forestry.core.proxy.ProxyCommon")
+	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
 	public static ProxyCommon common;
 	@SidedProxy(clientSide = "forestry.core.proxy.ProxyNetworkClient", serverSide = "forestry.core.proxy.ProxyNetwork")
 	public static ProxyNetwork net;

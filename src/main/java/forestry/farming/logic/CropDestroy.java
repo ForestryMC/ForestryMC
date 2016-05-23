@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 
 public class CropDestroy extends Crop {
@@ -43,10 +44,12 @@ public class CropDestroy extends Crop {
 	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		Collection<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);
-		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
+
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		Proxies.net.sendNetworkPacket(packet, world);
 
 		if (replantState != null) {
-			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		} else {
 			world.setBlockToAir(pos);
 		}

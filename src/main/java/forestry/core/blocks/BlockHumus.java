@@ -115,9 +115,9 @@ public class BlockHumus extends Block implements IItemModelRegister {
 		degrade++;
 
 		if (degrade >= degradeDelimiter) {
-			world.setBlockState(pos, Blocks.SAND.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, Blocks.SAND.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		} else {
-			world.setBlockState(pos, blockState.withProperty(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, blockState.withProperty(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
 		}
 		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
