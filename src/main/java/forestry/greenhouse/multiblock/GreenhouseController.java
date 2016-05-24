@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -635,13 +636,20 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		internalBlocks.clear();
 		
 		if (isNextRoof) {
-			checkInternalBlock(createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1))));
+			Stack<IInternalBlock> blocksToCheck = new Stack<>();
+			IInternalBlock internalBlock = createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)));
+			blocksToCheck.add(internalBlock);
+			while (!blocksToCheck.isEmpty()) {
+				IInternalBlock blockToCheck = blocksToCheck.pop();
+				List<IInternalBlock> newBlocksToCheck = checkInternalBlock(blockToCheck);
+				blocksToCheck.addAll(newBlocksToCheck);
+			}
 		}
+
 		if (internalBlocks.isEmpty()) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
-		this.internalBlocks.addAll(internalBlocks);
-		
+
 		int hatches = 0;
 		for (IMultiblockComponent comp : connectedParts) {
 			if (comp instanceof IGreenhouseComponent.ButterflyHatch) {
@@ -656,8 +664,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	protected void updateClient(int tickCount) {
 	}
-	
-	private void checkInternalBlock(IInternalBlock blockToCheck) throws MultiblockValidationException {
+
+	/**
+	 * Returns a list of more internal blocks to check.
+	 * @throws MultiblockValidationException
+	 */
+	private List<IInternalBlock> checkInternalBlock(IInternalBlock blockToCheck) throws MultiblockValidationException {
+		List<IInternalBlock> newBlocksToCheck = new ArrayList<>();
+
 		internalBlocks.add(blockToCheck);
 		BlockPos posRoot = blockToCheck.getPos();
 		
@@ -692,11 +706,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					if (internalBlocks.contains(internalBlock)) {
 						faceToCheck.setTested(true);
 					} else {
-						checkInternalBlock(internalBlock);
+						newBlocksToCheck.add(internalBlock);
 					}
 				}
 			}
 		}
+		return newBlocksToCheck;
 	}
 	
 	private IInternalBlock createInternalBlock(IInternalBlock internalBlock) {
