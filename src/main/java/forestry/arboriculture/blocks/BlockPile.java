@@ -524,6 +524,45 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 	
 	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if(getPileType() == EnumPileType.WOOD){
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ICharcoalPileComponent) {
+				
+				ITree tree = ((ICharcoalPileComponent)tile).getTree();
+				if(tree != null){
+					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
+					if(wood != null){
+						Block block = Block.getBlockFromItem(wood.getItem());
+						return block.getFlammability(world, pos, face);
+					}
+				}
+			}
+		}
+		return super.getFlammability(world, pos, face);
+	}
+
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if(getPileType() == EnumPileType.WOOD){
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ICharcoalPileComponent) {
+				
+				ITree tree = ((ICharcoalPileComponent)tile).getTree();
+				if(tree != null){
+					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
+					if(wood != null){
+						Block block = Block.getBlockFromItem(wood.getItem());
+						return block.getFireSpreadSpeed(world, pos, face);
+					}
+				}
+			}
+		}
+		return super.getFireSpreadSpeed(world, pos, face);
+		
+	}
+	
+	@Override
 	public float getBlockHardness(IBlockState blockState, World world, BlockPos pos) {
 		if(getPileType() == EnumPileType.WOOD){
 			TileEntity tile = world.getTileEntity(pos);

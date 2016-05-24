@@ -210,7 +210,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 		if (fireproof) {
 			return 0;
 		}
-		return super.getFlammability(world, pos, face);
+		return 5;
 	}
 
 	@Override
