@@ -41,6 +41,8 @@ import forestry.core.config.Config;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
+import forestry.core.gui.widgets.ItemStackWidget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
@@ -238,6 +240,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		}
 
 		TextLayoutHelper textLayout = gui.getTextLayout();
+		WidgetManager widgetManager = gui.getWidgetManager();
 
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
@@ -246,7 +249,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 		int x = GuiAlyzer.COLUMN_0;
 		for (ItemStack stack : tree.getProducts().keySet()) {
-			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, gui.getGuiLeft() + x, gui.getGuiTop() + textLayout.getLineY());
+			widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), stack));
 			x += 18;
 			if (x > 148) {
 				x = GuiAlyzer.COLUMN_0;
