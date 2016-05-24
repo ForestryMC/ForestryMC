@@ -76,7 +76,7 @@ public class ParticleHelper {
 			}
 
 			EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
-			callback.addHitEffects(fx, pos, iblockstate);
+			callback.addHitEffects(fx, world, pos, iblockstate);
 			effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		}
 		return true;
@@ -106,7 +106,7 @@ public class ParticleHelper {
 					int random = rand.nextInt(6);
 
 					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
-					callback.addDestroyEffects(fx, pos, state);
+					callback.addDestroyEffects(fx, world, pos, state);
 					effectRenderer.addEffect(fx.setBlockPos(pos));
 				}
 			}
@@ -118,10 +118,10 @@ public class ParticleHelper {
 	public interface Callback {
 
 		@SideOnly(Side.CLIENT)
-		void addHitEffects(EntityDiggingFX fx, BlockPos pos, IBlockState state);
+		void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
 
 		@SideOnly(Side.CLIENT)
-		void addDestroyEffects(EntityDiggingFX fx, BlockPos pos, IBlockState state);
+		void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
 	}
 
 	public static class DefaultCallback<B extends Block> implements ParticleHelper.Callback {
@@ -134,18 +134,18 @@ public class ParticleHelper {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addHitEffects(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-			setTexture(fx, pos, state);
+		public void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+			setTexture(fx, world, pos, state);
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addDestroyEffects(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-			setTexture(fx, pos, state);
+		public void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+			setTexture(fx, world, pos, state);
 		}
 
 		@SideOnly(Side.CLIENT)
-		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
+		protected void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
 			Minecraft minecraft = Proxies.common.getClientInstance();
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();

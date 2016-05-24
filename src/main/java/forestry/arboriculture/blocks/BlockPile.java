@@ -26,14 +26,17 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.multiblock.EnumPilePosition;
 import forestry.arboriculture.multiblock.ICharcoalPileControllerInternal;
+import forestry.arboriculture.render.PileParticleCallback;
 import forestry.arboriculture.render.PileStateMapper;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.multiblock.MultiblockLogic;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
@@ -44,6 +47,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -119,6 +123,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
     protected static final AxisAlignedBB AABB_SLAB_BOTTOM = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
     
 	public static final PropertyEnum<EnumPilePosition> PILE_POSITION = PropertyEnum.create("position", EnumPilePosition.class);
+	public final ParticleHelper.Callback particleCallback;
 	
 	public static Map<EnumPileType, BlockPile> create() {
 		Map<EnumPileType, BlockPile> blockMap = new EnumMap<>(EnumPileType.class);
@@ -154,6 +159,8 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		setCreativeTab(Tabs.tabArboriculture);
 		setHarvestLevel("axe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(PILE_POSITION, EnumPilePosition.INTERIOR));
+		
+		particleCallback = new PileParticleCallback(this);
 	}
 
 	@Override
@@ -500,6 +507,19 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 				treeSpecies.getWoodProvider().registerSprites(Item.getItemFromBlock(this), manager);
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+		IBlockState blockState = world.getBlockState(pos);
+		return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
 	}
 	
 	public static ITree getTree(ItemStack stack){

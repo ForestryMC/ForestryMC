@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.world.World;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
@@ -34,7 +34,7 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	}
 	
 	@Override
-	protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
+	protected void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if(machineProperties instanceof IMachinePropertiesTesr){
 			Minecraft minecraft = Proxies.common.getClientInstance();
