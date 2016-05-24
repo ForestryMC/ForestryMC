@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -100,6 +101,15 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 					@Override
 					public BlockGreenhouseType getGreenhouseType() {
 						return type;
+					}
+					
+					@Nonnull
+					@Override
+					public SoundType getSoundType() {
+						if(type == BlockGreenhouseType.SPRINKLER || type == BlockGreenhouseType.GLASS){
+							return SoundType.GLASS;
+						}
+						return super.getSoundType();
 					}
 				};
 			}
