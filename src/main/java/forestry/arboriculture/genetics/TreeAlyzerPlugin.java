@@ -110,6 +110,12 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		textLayout.newLineCompressed();
 
 		gui.drawChromosomeRow(Translator.translateToLocal("for.gui.effect"), tree, EnumTreeChromosome.EFFECT);
+		textLayout.newLineCompressed();
+		IAlleleInteger activeCombustibility = (IAlleleInteger) tree.getGenome().getActiveAllele(EnumTreeChromosome.COMBUSTIBILITY);
+		IAlleleInteger inactiveCombustibility = (IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.COMBUSTIBILITY);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.combustibility"), GuiAlyzer.COLUMN_0);
+		gui.drawLine(Integer.toString(activeCombustibility.getValue()), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.COMBUSTIBILITY, false);
+		gui.drawLine(Integer.toString(inactiveCombustibility.getValue()), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.COMBUSTIBILITY, true);
 
 		textLayout.endPage();
 	}
@@ -134,13 +140,20 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 		textLayout.newLine();
 		textLayout.newLine();
+		
+		IAlleleInteger activeCarbonization = (IAlleleInteger) tree.getGenome().getActiveAllele(EnumTreeChromosome.CARBONIZATION);
+		IAlleleInteger inactiveCarbonization = (IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.CARBONIZATION);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.carbonization"), GuiAlyzer.COLUMN_0);
+		gui.drawLine(Integer.toString(activeCarbonization.getValue()), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.CARBONIZATION, false);
+		gui.drawLine(Integer.toString(inactiveCarbonization.getValue()), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.CARBONIZATION, true);
+		textLayout.newLineCompressed();
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.growth"), GuiAlyzer.COLUMN_0);
 		gui.drawLine(tree.getGenome().getGrowthProvider().getDescription(), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.GROWTH, false);
 		gui.drawLine(((IAlleleGrowth) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GROWTH)).getProvider().getDescription(), GuiAlyzer.COLUMN_2, tree,
 				EnumTreeChromosome.GROWTH, true);
 
-		textLayout.newLine();
+		textLayout.newLineCompressed();
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.native"), GuiAlyzer.COLUMN_0);
 		textLayout.drawLine(Translator.translateToLocal("for.gui." + tree.getGenome().getPrimary().getPlantType().toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_1,
@@ -148,7 +161,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		textLayout.drawLine(Translator.translateToLocal("for.gui." + tree.getGenome().getSecondary().getPlantType().toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_2,
 				speciesDominance1);
 
-		textLayout.newLine();
+		textLayout.newLineCompressed();
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.tolerated"), GuiAlyzer.COLUMN_0);
 
@@ -163,7 +176,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		int max = Math.max(activeTolerated.size(), inactiveTolerated.size());
 		for (int i = 0; i < max; i++) {
 			if (i > 0) {
-				textLayout.newLine();
+				textLayout.newLineCompressed();
 			}
 			if (activeTolerated.size() > i) {
 				gui.drawLine(Translator.translateToLocal("for.gui." + activeTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.PLANT, false);
@@ -172,7 +185,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				gui.drawLine(Translator.translateToLocal("for.gui." + inactiveTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.PLANT, true);
 			}
 		}
-		textLayout.newLine();
+		textLayout.newLineCompressed();
 
 		// FRUITS
 		textLayout.drawLine(Translator.translateToLocal("for.gui.supports"), GuiAlyzer.COLUMN_0);
@@ -182,7 +195,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		max = Math.max(families0.size(), families1.size());
 		for (int i = 0; i < max; i++) {
 			if (i > 0) {
-				textLayout.newLine();
+				textLayout.newLineCompressed();
 			}
 
 			if (families0.size() > i) {
@@ -193,7 +206,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			}
 
 		}
-
+		
 		textLayout.newLine();
 		textLayout.newLine();
 
