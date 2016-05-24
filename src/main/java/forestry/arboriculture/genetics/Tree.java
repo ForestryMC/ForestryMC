@@ -301,9 +301,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
 		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
 		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+		String combustibility = TextFormatting.DARK_GRAY + "CO: " + genome.getCombustibility();
+		String carbonization = TextFormatting.GRAY + "CA: " + genome.getCarbonization();
 		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));
 		list.add(String.format("%s, %s", yield, sappiness));
+		list.add(String.format("%s, %s", combustibility, carbonization));
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue()) {
