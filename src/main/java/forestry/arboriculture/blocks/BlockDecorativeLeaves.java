@@ -2,7 +2,6 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -24,7 +23,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +37,7 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
 
-public abstract class BlockDecorativeLeaves extends Block implements IShearable, IItemModelRegister, IColoredBlock {
+public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock {
 	private static final int VARIANTS_PER_BLOCK = 16;
 	private static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
@@ -66,7 +64,9 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 		super(Material.LEAVES);
 		this.blockNumber = blockNumber;
 		this.setCreativeTab(Tabs.tabArboriculture);
-		setSoundType(SoundType.PLANT);
+		this.setHardness(0.2F);
+		this.setLightOpacity(1);
+		this.setSoundType(SoundType.PLANT);
 	}
 
 	public int getBlockNumber() {
@@ -89,18 +89,6 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 			ItemStack itemStack = new ItemStack(item, 1, meta);
 			list.add(itemStack);
 		}
-	}
-
-	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		return true;
-	}
-
-	@Override
-	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		IBlockState state = world.getBlockState(pos);
-		int meta = getMetaFromState(state);
-		return Collections.singletonList(new ItemStack(this, 1, meta));
 	}
 
 	@Override
