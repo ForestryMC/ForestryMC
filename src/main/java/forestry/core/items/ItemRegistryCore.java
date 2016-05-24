@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
+import forestry.core.utils.OreDictUtil;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -92,15 +95,15 @@ public class ItemRegistryCore extends ItemRegistry {
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizerCompound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
-		OreDictionary.registerOre("gemApatite", apatite);
+		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "researchNote");
 		
 		portableAlyzer = registerItem(new ItemAlyzer(), "portableAlyzer");
 
-		ingotCopper = createItemForOreName("ingotCopper");
-		ingotTin = createItemForOreName("ingotTin");
-		ingotBronze = createItemForOreName("ingotBronze");
+		ingotCopper = createItemForOreName(OreDictUtil.INGOT_COPPER);
+		ingotTin = createItemForOreName(OreDictUtil.INGOT_TIN);
+		ingotBronze = createItemForOreName(OreDictUtil.INGOT_BRONZE);
 
 		wrench = registerItem(new ItemWrench(), "wrench");
 		pipette = registerItem(new ItemPipette(), "pipette");
@@ -114,16 +117,16 @@ public class ItemRegistryCore extends ItemRegistry {
 		spectacles = registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
 
 		peat = registerItem(new ItemForestry(), "peat");
-		OreDictionary.registerOre("brickPeat", peat);
+		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
-		OreDictionary.registerOre("dustAsh", ash);
+		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
 		bituminousPeat = registerItem(new ItemForestry(), "bituminousPeat");
 
-		gearBronze = createItemForOreName("gearBronze");
-		gearCopper = createItemForOreName("gearCopper");
-		gearTin = createItemForOreName("gearTin");
+		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE);
+		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER);
+		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN);
 
 		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
@@ -139,7 +142,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / CRAFTING CARPENTER
 		stickImpregnated = registerItem(new ItemForestry(), "oakStick");
 		woodPulp = registerItem(new ItemForestry(), "woodPulp");
-		OreDictionary.registerOre("pulpWood", woodPulp);
+		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
 
 		// / RECLAMATION
 		brokenBronzePickaxe = registerItem(new ItemForestry(), "brokenBronzePickaxe");
@@ -174,7 +177,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / BEE RESOURCES
 		beeswax = registerItem(new ItemForestry(), "beeswax");
 		beeswax.setCreativeTab(Tabs.tabApiculture);
-		OreDictionary.registerOre("itemBeeswax", beeswax);
+		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 
 		refractoryWax = registerItem(new ItemForestry(), "refractoryWax");
 

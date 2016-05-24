@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.OreDictUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
@@ -43,5 +47,16 @@ public abstract class BlockRegistry {
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {
 		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
+	}
+
+	@Nonnull
+	public static ItemStack registerOreDictIfFirst(String oreName, ItemStack oreItem) {
+		ItemStack firstSuitableOre = OreDictUtil.getFirstSuitableOre(oreName);
+		if (firstSuitableOre != null) {
+			return firstSuitableOre;
+		}
+
+		OreDictionary.registerOre(oreName, oreItem);
+		return oreItem;
 	}
 }

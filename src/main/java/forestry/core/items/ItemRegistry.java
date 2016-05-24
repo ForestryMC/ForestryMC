@@ -28,7 +28,9 @@ public abstract class ItemRegistry {
 			throw new RuntimeException("Tried to register Item outside of REGISTER");
 		}
 		item.setUnlocalizedName("for." + name);
-		GameRegistry.registerItem(item, name);
+		item.setRegistryName(name);
+
+		GameRegistry.register(item);
 		Proxies.common.registerItem(item);
 		return item;
 	}
@@ -39,9 +41,15 @@ public abstract class ItemRegistry {
 
 	@Nonnull
 	public static ItemStack createItemForOreName(String oreName) {
-		Item oreItem = registerItem(new ItemForestry(), oreName);
+		ItemStack oreItem = new ItemStack(registerItem(new ItemForestry(), oreName));
+
+		ItemStack firstSuitableOre = OreDictUtil.getFirstSuitableOre(oreName);
+		if (firstSuitableOre != null) {
+			return firstSuitableOre;
+		}
+
 		OreDictionary.registerOre(oreName, oreItem);
-		return OreDictUtil.getFirstSuitableOre(oreName);
+		return oreItem;
 	}
 
 }
