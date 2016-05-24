@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -27,29 +29,29 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManager;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 
 	private static class OverlayType {
 		public final String ident;
-		public final short texUID;
+		public final ResourceLocation sprite;
 
-		public OverlayType(String ident, short texUID) {
+		public OverlayType(String ident) {
 			this.ident = ident;
-			this.texUID = texUID;
+			this.sprite = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/fruits." + ident);
 		}
 	}
 
 	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<>();
 
 	static {
-		overlayTypes.put("berries", new OverlayType("berries", (short) 1000));
-		overlayTypes.put("pomes", new OverlayType("pomes", (short) 1001));
-		overlayTypes.put("nuts", new OverlayType("nuts", (short) 1002));
-		overlayTypes.put("citrus", new OverlayType("citrus", (short) 1003));
-		overlayTypes.put("plums", new OverlayType("plums", (short) 1004));
+		overlayTypes.put("berries", new OverlayType("berries"));
+		overlayTypes.put("pomes", new OverlayType("pomes"));
+		overlayTypes.put("nuts", new OverlayType("nuts"));
+		overlayTypes.put("citrus", new OverlayType("citrus"));
+		overlayTypes.put("plums", new OverlayType("plums"));
 	}
 
 	private final String unlocalizedDescription;
@@ -101,7 +103,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return false;
 	}
 
@@ -126,29 +128,30 @@ public class FruitProviderNone implements IFruitProvider {
 	public String getDescription() {
 		return Translator.translateToLocal(unlocalizedDescription);
 	}
-	
+
 	@Override
-	public short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
+	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		if (overlay != null) {
-			return overlay.texUID;
+			return overlay.sprite;
 		} else {
-			return -1;
+			return null;
 		}
 	}
 
 	@Override
-	public short getDecorativeSpriteIndex() {
+	public ResourceLocation getDecorativeSprite() {
 		if (overlay != null) {
-			return overlay.texUID;
+			return overlay.sprite;
 		} else {
-			return -1;
+			return null;
 		}
 	}
 
 	@Override
 	public void registerSprites() {
 		if (overlay != null) {
-			TextureManager.registerSpriteUID(overlay.texUID, "blocks/leaves/fruits." + overlay.ident);
+			TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+			map.registerSprite(overlay.sprite);
 		}
 	}
 

@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,12 +20,15 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -38,7 +40,6 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeaves> {
 
@@ -107,22 +108,26 @@ public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeav
 			return;
 		}
 
+		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+
 		ITreeGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getPrimary();
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
-		TextureAtlasSprite leaveSprite = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
+
+		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
+		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 		
 		// Render the plain leaf block.
-		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leaveSprite, 0);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leafSprite, 0);
 
 		// Render overlay for fruit leaves.
-		TextureAtlasSprite fruitSprite = TextureManager.getInstance().getSprite(genome.getFruitProvider().getDecorativeSpriteIndex());
-
-		if (fruitSprite != null) {
+		ResourceLocation fruitSpriteLocation = genome.getFruitProvider().getDecorativeSprite();
+		if (fruitSpriteLocation != null) {
+			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
 			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitSprite, 1);
 		}
 		
 		// Set the particle sprite
-		baker.setParticleSprite(leaveSprite);
+		baker.setParticleSprite(leafSprite);
 	}
 }

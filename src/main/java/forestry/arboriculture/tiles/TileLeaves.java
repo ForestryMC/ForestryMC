@@ -11,6 +11,7 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,16 +20,14 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -58,7 +57,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 
@@ -66,7 +64,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private int colourFruits;
 
-	private short textureIndexFruits = -1;
+	@Nullable
+	private ResourceLocation fruitSprite;
 	private IAlleleTreeSpecies species;
 
 	private boolean isFruitLeaf;
@@ -166,20 +165,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (tree.canBearFruit()) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
 
-			isFruitLeaf = fruitProvider.markAsFruitLeaf(genome, worldObj, getPos());
+			isFruitLeaf = fruitProvider.isFruitLeaf(genome, worldObj, getPos());
 			if (isFruitLeaf) {
 				// Hardcoded because vanilla oak trees don't show fruits.
 				if (species == TreeDefinition.Oak.getGenome().getPrimary() && fruitProvider == AlleleFruit.fruitApple.getProvider()) {
-					textureIndexFruits = -1;
+					fruitSprite = null;
 				} else {
-					textureIndexFruits = fruitProvider.getSpriteIndex(genome, worldObj, getPos(), getRipeningTime(), true);
+					fruitSprite = fruitProvider.getSprite(genome, worldObj, getPos(), getRipeningTime());
 				}
 
 				ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
 			}
 		} else {
 			isFruitLeaf = false;
-			textureIndexFruits = -1;
+			fruitSprite = null;
 		}
 
 		markDirty();
@@ -230,8 +229,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return fruit.getColour(genome, worldObj, getPos(), getRipeningTime());
 	}
 
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getLeaveSprite(boolean fancy) {
+	@Nonnull
+	public ResourceLocation getLeaveSprite(boolean fancy) {
 		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider();
 		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
 	}
@@ -246,13 +245,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getFruitSprite() {
-		if (textureIndexFruits >= 0) {
-			return TextureManager.getInstance().getSprite(textureIndexFruits);
-		} else {
-			return null;
-		}
+	@Nullable
+	public ResourceLocation getFruitSprite() {
+		return fruitSprite;
 	}
 
 	public int getRipeningTime() {
@@ -370,15 +365,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-
-		if (fruitAlleleUID != null) {
-			IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
-			if (fruitAllele != null) {
-				treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
-			}
-		}
-
 		if (treeTemplate != null) {
+			if (fruitAlleleUID != null) {
+				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
+				if (fruitAllele != null) {
+					treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
+				}
+			}
+
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 			if (isPollinatedState) {
 				tree.mate(tree);

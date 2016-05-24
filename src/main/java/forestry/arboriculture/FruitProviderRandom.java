@@ -79,7 +79,7 @@ public class FruitProviderRandom extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return true;
 	}
 

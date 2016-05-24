@@ -6,6 +6,7 @@
 package forestry.core.errors;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -111,8 +112,7 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprite() {
-		String location = "forestry:gui/errors/" + iconName;
-		texture = TextureManager.registerSprite(new ErrorAtlasSprite(location), location);
+		texture = TextureManager.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "gui/errors/" + iconName));
 	}
 
 	@SideOnly(Side.CLIENT)

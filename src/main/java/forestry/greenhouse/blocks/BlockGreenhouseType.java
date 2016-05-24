@@ -7,15 +7,18 @@ import java.util.Locale;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.render.TextureManager;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 
@@ -76,13 +79,17 @@ public enum BlockGreenhouseType {
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
 		sprites = new EnumMap<>(BlockGreenhouseSprites.class);
+		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+
 		for (BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES) {
 			if (sprite == BlockGreenhouseSprites.PLAIN) {
-				sprites.put(sprite, TextureManager.getSprite("minecraft", "blocks/brick"));
+				sprites.put(sprite, map.getAtlasSprite("minecraft:blocks/brick"));
 			} else if (sprite == BlockGreenhouseSprites.GLASS) {
-				sprites.put(sprite, TextureManager.getSprite("minecraft", "blocks/glass_green"));
+				sprites.put(sprite, map.getAtlasSprite("minecraft:blocks/glass_green"));
 			} else {
-				sprites.put(sprite, TextureManager.registerSprite("blocks/greenhouse/" + sprite.spriteName));
+				ResourceLocation location = new ResourceLocation(Constants.RESOURCE_ID, "blocks/greenhouse/" + sprite.spriteName);
+				TextureAtlasSprite textureAtlasSprite = map.registerSprite(location);
+				sprites.put(sprite, textureAtlasSprite);
 			}
 		}
 	}

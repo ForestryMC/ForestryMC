@@ -13,9 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface ITextureManager {
 
-	void registerIconProvider(ISpriteProvider provider);
-
-	TextureAtlasSprite getSprite(short texUID);
-
 	TextureAtlasSprite getDefault(String ident);
+
 }

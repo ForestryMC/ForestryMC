@@ -7,7 +7,7 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Provides icons for leaves. Used by TreeManager.treeFactory.createSpecies()
@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  */
 public interface ILeafSpriteProvider {
 	@Nonnull
-	TextureAtlasSprite getSprite(boolean pollinated, boolean fancy);
+	ResourceLocation getSprite(boolean pollinated, boolean fancy);
 
 	int getColor(boolean pollinated);
 }

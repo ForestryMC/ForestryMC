@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -42,7 +40,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.lepidopterology.render.TextureAtlasButterfly;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder, ISpriteProvider {
+public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
 	private final String modID;
 	private final Color serumColour;
@@ -195,11 +193,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		}
 		return 0xffffff;
 	}
-
-	@Override
-	public ISpriteProvider getSpriteProvider() {
-		return this;
-	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -207,12 +200,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		String spriteName = getItemTexture();
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
 		textureMap.setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getSprite(short texUID) {
-		return null;
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ package forestry.arboriculture.models;
 import javax.annotation.Nonnull;
 import java.awt.Color;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
@@ -41,7 +41,7 @@ public class SpriteProviderLeaves implements ILeafSpriteProvider {
 
 	@Override
 	@Nonnull
-	public TextureAtlasSprite getSprite(boolean pollinated, boolean fancy) {
+	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
 		return leafTexture.getSprite(pollinated, fancy);
 	}
 

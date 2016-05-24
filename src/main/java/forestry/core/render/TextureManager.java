@@ -25,29 +25,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpriteProvider;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 
 @SideOnly(Side.CLIENT)
 public class TextureManager implements ITextureManager {
 
-	private static final TextureManager instance = new TextureManager();
-
+	private static final TextureManager INSTANCE = new TextureManager();
 	private static final Map<String, TextureAtlasSprite> defaultIcons = new HashMap<>();
-	private static final DefaultSpriteProvider defaultIconProvider = new DefaultSpriteProvider();
-	private static final List<ISpriteProvider> iconProviders = new ArrayList<>();
-	
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 
 	static {
-		ForestryAPI.textureManager = instance;
-		instance.registerIconProvider(defaultIconProvider);
+		ForestryAPI.textureManager = INSTANCE;
 	}
 
 	public static TextureManager getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	private TextureManager() {
@@ -63,72 +58,21 @@ public class TextureManager implements ITextureManager {
 				"errors/errored", "errors/unknown",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
-		for (String str : defaultIconNames) {
-			TextureAtlasSprite icon = registerSprite("gui/" + str);
-			defaultIcons.put(str, icon);
+		for (String identifier : defaultIconNames) {
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.RESOURCE_ID, "gui/" + identifier);
+			TextureAtlasSprite icon = registerSprite(resourceLocation);
+			defaultIcons.put(identifier, icon);
 		}
 	}
 
-	public static TextureAtlasSprite registerSprite(String identifier) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		return map.registerSprite(new ResourceLocation("forestry:" + identifier));
-	}
-	
-	public static TextureAtlasSprite registerSprite(TextureAtlasSprite sprite, String identifier) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		if(map.setTextureEntry(identifier, sprite)){
-			return sprite;
-		}else{
-			return map.getTextureExtry(identifier);
-		}
-	}
-	
-	public static TextureAtlasSprite getSprite(String modID, String identifier) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString()) == map.getMissingSprite()) {
-			return map.registerSprite(new ResourceLocation(modID + ":" + identifier));
-		}
-		return map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString());
-	}
-	
-	public static TextureAtlasSprite getSprite(String modID, String modifier, String identifier) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite()) {
-			return map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier));
-		}
-		return map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString());
-	}
-
-	public static TextureAtlasSprite registerSpriteUID(short uid, String identifier) {
-		TextureAtlasSprite texture = registerSprite(identifier);
-		defaultIconProvider.addTexture(uid, texture);
-		return texture;
+	public static TextureAtlasSprite registerSprite(ResourceLocation location) {
+		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
+		return textureMap.registerSprite(location);
 	}
 
 	@Override
 	public TextureAtlasSprite getDefault(String ident) {
 		return defaultIcons.get(ident);
-	}
-
-	@Override
-	public void registerIconProvider(ISpriteProvider provider) {
-		iconProviders.add(provider);
-	}
-
-	@Override
-	public TextureAtlasSprite getSprite(short texUID) {
-		if (texUID < 0) {
-			return null;
-		}
-
-		for (ISpriteProvider provider : iconProviders) {
-			TextureAtlasSprite icon = provider.getSprite(texUID);
-			if (icon != null) {
-				return icon;
-			}
-		}
-
-		return null;
 	}
 	
 	public void registerBlock(Block block) {
@@ -147,24 +91,6 @@ public class TextureManager implements ITextureManager {
 	public void registerSprites() {
 		for (ISpriteRegister spriteRegister : spriteRegisters) {
 			spriteRegister.registerSprites(getInstance());
-		}
-	}
-
-	private static class DefaultSpriteProvider implements ISpriteProvider {
-		private final Map<Short, TextureAtlasSprite> textures = new HashMap<>();
-
-		public void addTexture(short texUID, TextureAtlasSprite texture) {
-			textures.put(texUID, texture);
-		}
-
-		@Override
-		public TextureAtlasSprite getSprite(short texUID) {
-			return textures.get(texUID);
-		}
-
-		@Override
-		public void registerSprites() {
-
 		}
 	}
 }

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -34,15 +35,8 @@ import forestry.core.utils.BlockUtil;
 public class FruitProviderPod extends FruitProviderNone {
 
 	public enum EnumPodType {
-		COCOA((short) 2000, (short) 2001, (short) 2002), DATES((short) 2010, (short) 2011, (short) 2012),
-		PAPAYA((short) 2013, (short) 2014, (short) 2015);//, COCONUT((short)2016, (short)2017, (short)2018);
+		COCOA, DATES, PAPAYA;//, COCONUT;
 
-		public final short[] uids;
-
-		EnumPodType(short stage1, short stage2, short stage3) {
-			uids = new short[]{stage1, stage2, stage3};
-		}
-		
 		public String getModelName() {
 			return toString().toLowerCase(Locale.ENGLISH);
 		}
@@ -100,17 +94,13 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 	
 	@Override
-	public short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
-		if (ripeningTime < 0 || ripeningTime >= type.uids.length) {
-			return getDecorativeSpriteIndex();
-		}
-		return type.uids[ripeningTime];
+	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+		return null;
 	}
 
 	@Override
-	public short getDecorativeSpriteIndex() {
-		int index = type.uids.length - 1;
-		return type.uids[index];
+	public ResourceLocation getDecorativeSprite() {
+		return null;
 	}
 
 	@Nonnull

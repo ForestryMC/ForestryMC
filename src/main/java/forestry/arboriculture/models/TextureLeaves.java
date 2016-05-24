@@ -15,7 +15,6 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,29 +41,29 @@ public class TextureLeaves {
 		}
 	}
 
-	private final EnumLeafType leafType;
-
-	private TextureAtlasSprite plain;
-	private TextureAtlasSprite fancy;
-	private TextureAtlasSprite pollinatedPlain;
-	private TextureAtlasSprite pollinatedFancy;
+	private final ResourceLocation plain;
+	private final ResourceLocation fancy;
+	private final ResourceLocation pollinatedPlain;
+	private final ResourceLocation pollinatedFancy;
 
 	private TextureLeaves(EnumLeafType enumLeafType) {
-		this.leafType = enumLeafType;
+		String ident = enumLeafType.toString().toLowerCase(Locale.ENGLISH);
+		this.plain = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".plain");
+		this.fancy = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".fancy");
+		this.pollinatedPlain = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed.plain");
+		this.pollinatedFancy = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed");
 	}
 
 	private void registerSprites() {
-		String ident = leafType.toString().toLowerCase(Locale.ENGLISH);
-
 		TextureMap textureMapBlocks = Proxies.common.getClientInstance().getTextureMapBlocks();
-		plain = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".plain"));
-		fancy = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".fancy"));
-		pollinatedPlain = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed.plain"));
-		pollinatedFancy = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed"));
+		textureMapBlocks.registerSprite(plain);
+		textureMapBlocks.registerSprite(fancy);
+		textureMapBlocks.registerSprite(pollinatedPlain);
+		textureMapBlocks.registerSprite(pollinatedFancy);
 	}
 
 	@Nonnull
-	public TextureAtlasSprite getSprite(boolean pollinated, boolean fancy) {
+	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
 		if (pollinated) {
 			if (fancy) {
 				return this.pollinatedFancy;

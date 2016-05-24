@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -30,7 +31,7 @@ public interface IFruitProvider {
 	/** return the color to use for decorative leaves. Usually the ripe color. */
 	int getDecorativeColor();
 
-	boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
+	boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
 
 	int getRipeningPeriod();
 
@@ -59,18 +60,15 @@ public interface IFruitProvider {
 	/* TEXTURE OVERLAY */
 
 	/**
-	 * @param genome
-	 * @param world
-	 * @param pos
-	 * @param ripeningTime
-	 *            Elapsed ripening time for the fruit.
-	 * @param fancy
-	 * @return IIcon index of the texture to overlay on the leaf block.
+	 * @param ripeningTime Elapsed ripening time for the fruit.
+	 * @return ResourceLocation of the texture to overlay on the leaf block.
 	 */
-	short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy);
+	@Nullable
+	ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
 
-	/** return the sprite index to display on decorative leaves */
-	short getDecorativeSpriteIndex();
+	/** return the ResourceLocation to display on decorative leaves */
+	@Nullable
+	ResourceLocation getDecorativeSprite();
 
 	/**
 	 * @return true if this fruit provider requires fruit blocks to spawn, false otherwise.

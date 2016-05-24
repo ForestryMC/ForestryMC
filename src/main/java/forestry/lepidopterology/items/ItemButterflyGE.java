@@ -294,7 +294,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	public void registerSprites(ITextureManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleButterflySpecies) {
-				((IAlleleButterflySpecies) allele).getSpriteProvider().registerSprites();
+				((IAlleleButterflySpecies) allele).registerSprites();
 			}
 		}
 	}
