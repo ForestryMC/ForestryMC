@@ -2,6 +2,7 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -23,6 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,7 +39,7 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
 
-public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock {
+public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock, IShearable {
 	private static final int VARIANTS_PER_BLOCK = 16;
 	private static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
@@ -161,6 +163,11 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return Collections.emptyList();
+	}
+
+	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		TreeDefinition type = getTreeType(meta);
 		return getDefaultState().withProperty(getVariant(), type);
@@ -186,6 +193,17 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		} else {
 			return 5;
 		}
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		IBlockState state = world.getBlockState(pos);
+		return Collections.singletonList(new ItemStack(this, 1, damageDropped(state)));
 	}
 
 	@Override
