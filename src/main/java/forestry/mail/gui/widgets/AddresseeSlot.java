@@ -39,7 +39,7 @@ public class AddresseeSlot extends Widget {
 		if (carrier != null) {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos - 5, carrier.getSprite(), 26, 26);
+			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);
 		}
 	}
 
