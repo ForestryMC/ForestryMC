@@ -13,8 +13,6 @@ package forestry.greenhouse;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.world.World;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.greenhouse.IGreenhouseState;
@@ -26,12 +24,10 @@ public final class GreenhouseState implements IGreenhouseState {
 
 	private final float humidity;
 	private final float temperature;
-	private final World world;
 	private final List<IInternalBlock> internalBlocks;
 	private final Collection<IMultiblockComponent> greenhouseComponents;
 	
-	public GreenhouseState(World world, float humidity, float temperature, List<IInternalBlock> internalBlocks, Collection<IMultiblockComponent> greenhouseComponents) {
-		this.world = world;
+	public GreenhouseState(float humidity, float temperature, List<IInternalBlock> internalBlocks, Collection<IMultiblockComponent> greenhouseComponents) {
 		this.humidity = humidity;
 		this.temperature = temperature;
 		this.internalBlocks = internalBlocks;
@@ -39,7 +35,7 @@ public final class GreenhouseState implements IGreenhouseState {
 	}
 	
 	public GreenhouseState(GreenhouseController controller) {
-		this(controller.getWorldObj(), controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks(), controller.getComponents());
+		this(controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks(), controller.getComponents());
 	}
 	
 	@Override
