@@ -12,6 +12,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
@@ -95,7 +96,7 @@ public class ModelWoodPile extends BlankItemModel{
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return null;
+		return TreeDefinition.Oak.getGenome().getPrimary().getWoodProvider().getSprite(false);
 	}
 	
 	@Override

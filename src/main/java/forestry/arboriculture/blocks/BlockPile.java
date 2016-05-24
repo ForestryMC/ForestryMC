@@ -40,6 +40,7 @@ import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -53,6 +54,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -71,6 +73,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -131,6 +134,20 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			BlockPile pile = new BlockPile() {
 				
 				@Override
+				public String getHarvestTool(IBlockState state) {
+					if(type == EnumPileType.WOOD){
+						return "axe";
+					}else{
+						return "shovel";
+					}
+				}
+				
+				@Override
+				public int getHarvestLevel(IBlockState state) {
+					return 0;
+				}
+				
+				@Override
 				public EnumPileType getPileType() {
 					return type;
 				}
@@ -157,7 +174,6 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		setHardness(1.0F);
 		setUnlocalizedName("charcoal.pile");
 		setCreativeTab(Tabs.tabArboriculture);
-		setHarvestLevel("axe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(PILE_POSITION, EnumPilePosition.INTERIOR));
 		
 		particleCallback = new PileParticleCallback(this);
@@ -403,33 +419,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		if (world.isRemote) {
-			return;
-		}
-		
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof ICharcoalPileComponent) {
-			ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;
-			ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-			if (getPileType() == EnumPileType.ASH) {
-				if(pile.getTree() != null){
-					ItemStack charcoal = TreeManager.treeRoot.getMemberStack(pile.getTree(), EnumGermlingType.CHARCOAL);
-					charcoal.stackSize = pile.getTree().getGenome().getCarbonization();
-					list.add(charcoal);
-					list.add(new ItemStack(PluginCore.items.ash, 3));
-				}else{
-					list.add(new ItemStack(Blocks.DIRT, 2));
-					list.add(new ItemStack(PluginCore.items.ash, 2));
-				}
-			} else if (getPileType() == EnumPileType.DIRT) {
-				list.add(new ItemStack(this));
-			}	else {
-				list.add(createWoodPile(pile.getTree()));
-			}
-			for(ItemStack items : list){
-				ItemStackUtil.dropItemStackAsEntity(items, world, pos);
-			}
-		}
+		//use to override world.removeTileEntity
 	}
 	
 	@Override
@@ -479,11 +469,15 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof ICharcoalPileComponent) {
-			return createWoodPile(((ICharcoalPileComponent) tile).getTree());
+		if(getPileType() == EnumPileType.WOOD){
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ICharcoalPileComponent) {
+				return createWoodPile(((ICharcoalPileComponent) tile).getTree());
+			}
+		}else if(getPileType() == EnumPileType.DIRT){
+			return super.getPickBlock(state, target, world, pos, player);
 		}
-		return super.getPickBlock(state, target, world, pos, player);
+		return null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -527,6 +521,25 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			return new Tree(stack.getTagCompound().getCompoundTag("ContainedTree"));
 		}
 		return null;
+	}
+	
+	@Override
+	public float getBlockHardness(IBlockState blockState, World world, BlockPos pos) {
+		if(getPileType() == EnumPileType.WOOD){
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ICharcoalPileComponent) {
+				
+				ITree tree = ((ICharcoalPileComponent)tile).getTree();
+				if(tree != null){
+					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
+					if(wood != null){
+						Block block = Block.getBlockFromItem(wood.getItem());
+						return block.getStateFromMeta(wood.getMetadata()).getBlockHardness(world, pos);
+					}
+				}
+			}
+		}
+		return super.getBlockHardness(blockState, world, pos);
 	}
 	
 	public static ItemStack createWoodPile(ITree tree) {

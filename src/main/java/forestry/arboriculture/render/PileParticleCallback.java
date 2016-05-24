@@ -30,14 +30,14 @@ public class PileParticleCallback extends ParticleHelper.DefaultCallback<BlockPi
 	protected void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
 		EnumPileType type = block.getPileType();
 		TilePile pile = TileUtil.getTile(world, pos, TilePile.class);
-		if(pile == null || pile.getTree() == null){
-			super.setTexture(fx, world, pos, state);
-			return;
-		}
 		TextureAtlasSprite texture;
 		if(type == EnumPileType.DIRT){
 			texture = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/loam"));
 		}else if(type == EnumPileType.WOOD){
+			if(pile == null || pile.getTree() == null){
+				super.setTexture(fx, world, pos, state);
+				return;
+			}
 			texture = pile.getTree().getGenome().getPrimary().getWoodProvider().getSprite(false);
 		}else{
 			texture = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/ash"));
