@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
@@ -32,13 +36,15 @@ public abstract class ItemStackWidgetBase extends Widget {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		EntityPlayer player = Proxies.common.getPlayer();
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		EntityPlayer player = minecraft.thePlayer;
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (itemStack != null) {
-			tip.add(itemStack.getTooltip(player, false));
+			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
 		}
 		return tip;
 	}

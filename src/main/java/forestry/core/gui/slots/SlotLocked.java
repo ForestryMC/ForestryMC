@@ -33,11 +33,6 @@ public class SlotLocked extends SlotForestry {
 	}
 
 	@Override
-	public boolean getHasStack() {
-		return false;
-	}
-
-	@Override
 	public ItemStack decrStackSize(int i) {
 		return null;
 	}

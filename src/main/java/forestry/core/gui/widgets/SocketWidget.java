@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
@@ -43,6 +47,7 @@ public class SocketWidget extends Widget {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTip;
@@ -50,12 +55,14 @@ public class SocketWidget extends Widget {
 
 	private final ToolTip toolTip = new ToolTip(250) {
 		@Override
+		@SideOnly(Side.CLIENT)
 		public void refresh() {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
 			if (stack != null) {
-				EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
-				toolTip.add(stack.getTooltip(player, false));
+				Minecraft minecraft = Proxies.common.getClientInstance();
+				EntityPlayer player = minecraft.thePlayer;
+				toolTip.add(stack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
 				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));

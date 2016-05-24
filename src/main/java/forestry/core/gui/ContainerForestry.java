@@ -65,7 +65,7 @@ public abstract class ContainerForestry extends Container {
 			return null;
 		}
 
-		if (clickTypeIn == ClickType.QUICK_MOVE && dragType_or_button >= 0 && dragType_or_button < 9) {
+		if (clickTypeIn == ClickType.SWAP && dragType_or_button >= 0 && dragType_or_button < 9) {
 			// hotkey used to move item from slot to hotbar
 			int hotbarSlotIndex = 27 + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);

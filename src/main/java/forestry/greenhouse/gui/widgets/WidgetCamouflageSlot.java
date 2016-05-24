@@ -22,6 +22,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.greenhouse.GreenhouseManager;
@@ -68,7 +71,9 @@ public class WidgetCamouflageSlot extends Widget {
 				Block block = Block.getBlockFromItem(stack.getItem());
 				if (!GreenhouseManager.greenhouseAccess.isOnCamouflageBlockBlackList(type, stack)) {
 					IBlockState stateFromMeta = block.getStateFromMeta(stack.getItemDamage());
-					if (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube(stateFromMeta) && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta, player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack)) {
+					if (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube(stateFromMeta) && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta, player.worldObj, camouflageHandler.getCoordinates())) {
+						camouflageHandler.setCamouflageBlock(type, stack);
+					} else if (type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack)) {
 						camouflageHandler.setCamouflageBlock(type, stack);
 					}
 				}
@@ -87,6 +92,7 @@ public class WidgetCamouflageSlot extends Widget {
 
 	protected final ToolTip toolTip = new ToolTip(250) {
 		@Override
+		@SideOnly(Side.CLIENT)
 		public void refresh() {
 			toolTip.clear();
 			String typeName = type.name().toLowerCase(Locale.ENGLISH);
@@ -100,7 +106,8 @@ public class WidgetCamouflageSlot extends Widget {
 			if (camouflageHandler == null || camouflageBlock == null) {
 				toolTip.add(TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
 			} else {
-				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(Proxies.common.getClientInstance().thePlayer, false));
+				Minecraft minecraft = Proxies.common.getClientInstance();
+				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.thePlayer, minecraft.gameSettings.advancedItemTooltips));
 			}
 		}
 	};
