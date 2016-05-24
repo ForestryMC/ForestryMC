@@ -28,6 +28,7 @@ import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
@@ -54,6 +55,11 @@ public class BlockArbFenceGate extends BlockFenceGate implements IWoodTyped, IIt
 		setResistance(5.0F);
 		setSoundType(SoundType.WOOD);
         setCreativeTab(Tabs.tabArboriculture);
+    }
+    
+    @Override
+    public Material getMaterial(IBlockState state) {
+    	return MaterialArbWood.ARB_WOOD;
     }
     
     @Override

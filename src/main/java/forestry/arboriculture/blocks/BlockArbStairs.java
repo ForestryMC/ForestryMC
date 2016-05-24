@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +45,11 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 		this.woodType = woodType;
 		setCreativeTab(Tabs.tabArboriculture);
 		setHarvestLevel("axe", 0);
+	}
+	
+	@Override
+	public Material getMaterial(IBlockState state) {
+		return MaterialArbWood.ARB_WOOD;
 	}
 
 	/* MODELS */

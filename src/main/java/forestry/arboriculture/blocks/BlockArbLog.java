@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -92,6 +93,11 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 
 	public int getBlockNumber() {
 		return blockNumber;
+	}
+	
+	@Override
+	public Material getMaterial(IBlockState state) {
+		return MaterialArbWood.ARB_WOOD;
 	}
 
 	@Override

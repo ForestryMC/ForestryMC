@@ -40,7 +40,7 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	private final EnumWoodType woodType;
 
 	public BlockArbDoor(EnumWoodType woodType) {
-		super(Material.WOOD);
+		super(MaterialArbWood.ARB_WOOD);
 		this.woodType = woodType;
 
 		setHarvestLevel("axe", 0);

@@ -74,7 +74,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	private final int blockNumber;
 
 	public BlockArbFence(boolean fireproof, int blockNumber) {
-		super(Material.WOOD, BlockPlanks.EnumType.OAK.getMapColor());
+		super(MaterialArbWood.ARB_WOOD, BlockPlanks.EnumType.OAK.getMapColor());
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 

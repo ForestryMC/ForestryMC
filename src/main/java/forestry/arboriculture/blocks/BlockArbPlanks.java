@@ -67,7 +67,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	private final int blockNumber;
 
 	private BlockArbPlanks(boolean fireproof, int blockNumber) {
-		super(Material.WOOD);
+		super(MaterialArbWood.ARB_WOOD);
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 

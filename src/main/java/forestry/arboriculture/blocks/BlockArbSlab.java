@@ -75,7 +75,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	private final int blockNumber;
 
 	private BlockArbSlab(boolean fireproof, int blockNumber) {
-		super(Material.WOOD);
+		super(MaterialArbWood.ARB_WOOD);
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 
