@@ -67,29 +67,32 @@ public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeav
 	
 	@Override
 	protected ItemOverrideList createOverrides() {
-		return new LeaveOverideList();
+		return new LeaveOverideList(this);
 	}
 	
-	private class LeaveOverideList extends ItemOverrideList{
+	private static class LeaveOverideList extends ItemOverrideList{
 
-		public LeaveOverideList() {
+		private final ModelDecorativeLeaves modelDecorativeLeaves;
+
+		public LeaveOverideList(ModelDecorativeLeaves modelDecorativeLeaves) {
 			super(Collections.emptyList());
+			this.modelDecorativeLeaves = modelDecorativeLeaves;
 		}
 		
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			IModelBaker baker = new ModelBaker();
 			Block block = Block.getBlockFromItem(stack.getItem());
-			if (!blockClass.isInstance(block)) {
+			if (!modelDecorativeLeaves.blockClass.isInstance(block)) {
 				return null;
 			}
-			BlockDecorativeLeaves bBlock = blockClass.cast(block);
+			BlockDecorativeLeaves bBlock = modelDecorativeLeaves.blockClass.cast(block);
 			TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
 
 			baker.setRenderBounds(Block.FULL_BLOCK_AABB);
 			bakeBlock(bBlock, tree, baker);
 
-			return itemModel = baker.bakeModel(true);
+			return modelDecorativeLeaves.itemModel = baker.bakeModel(true);
 		}
 		
 	}
