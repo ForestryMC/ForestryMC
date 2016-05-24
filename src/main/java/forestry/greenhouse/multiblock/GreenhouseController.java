@@ -602,7 +602,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						TileEntity tileUp = worldObj.getTileEntity(posUp);
 						if (sides >= 1 && !(tileUp instanceof IGreenhouseComponent)) {
 							int delta = y - minimumCoord.getY();
-							if (y - minimumCoord.getY() >= minY) {
+							if (delta + 1 >= minY) {
 								isNextRoof = true;
 							}
 							break height;
