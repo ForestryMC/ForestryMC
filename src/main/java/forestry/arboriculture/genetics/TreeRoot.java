@@ -49,7 +49,7 @@ import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlyzer;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -155,7 +155,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ITree getMember(ItemStack itemstack) {
-		itemstack = GeneticsUtil.convertSaplingToGeneticEquivalent(itemstack);
+		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		if (!isMember(itemstack)) {
 			return null;
 		}
@@ -426,10 +426,10 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public IChromosomeType getKaryotypeKey() {
 		return EnumTreeChromosome.SPECIES;
 	}
-	
+
 	@Override
-	public IAlyzer getAlyzer() {
-		return new TreeAlyzer();
+	public IAlyzerPlugin getAlyzerPlugin() {
+		return TreeAlyzerPlugin.INSTANCE;
 	}
 
 }

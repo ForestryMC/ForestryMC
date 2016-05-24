@@ -15,7 +15,6 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -68,12 +67,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		this.fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
 		this.textLayout = new TextLayoutHelper(this, this.fontColor);
-	}
-
-	@Override
-	public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
-		super.setWorldAndResolution(minecraft, width, height);
-		textLayout.setFontRendererObj(fontRendererObj);
 	}
 
 	/* LEDGERS */

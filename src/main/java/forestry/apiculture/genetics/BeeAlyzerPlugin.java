@@ -1,7 +1,14 @@
 package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -11,28 +18,23 @@ import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.config.Config;
-import forestry.core.genetics.Alyzer;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
-import forestry.core.gui.IHintSource;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BeeAlyzer extends Alyzer<IBee, EnumBeeType, GuiAlyzer> implements IHintSource{
+public class BeeAlyzerPlugin implements IAlyzerPlugin {
+	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
 
-	public BeeAlyzer() {
-		super(BeeManager.beeRoot);
-		
+	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
+
+	private BeeAlyzerPlugin() {
 		ArrayList<ItemStack> beeList = new ArrayList<>();
 		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
@@ -42,27 +44,17 @@ public class BeeAlyzer extends Alyzer<IBee, EnumBeeType, GuiAlyzer> implements I
 			}
 		}
 	}
-	
-	@Override
-	public boolean isAlyzingFuel(ItemStack itemstack) {
-		if (itemstack == null || itemstack.stackSize <= 0) {
-			return false;
-		}
-
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems == null) {
-			return false;
-		}
-
-		Item item = itemstack.getItem();
-		return beeItems.honeyDrop == item || beeItems.honeydew == item;
-	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(GuiAlyzer gui, IBee bee, EnumBeeType type) {
+	public void drawAnalyticsPage1(GuiAlyzer gui, ItemStack itemStack) {
+		IBee bee = BeeManager.beeRoot.getMember(itemStack);
+		if (bee == null) {
+			return;
+		}
+		EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
 
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
@@ -107,9 +99,14 @@ public class BeeAlyzer extends Alyzer<IBee, EnumBeeType, GuiAlyzer> implements I
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(GuiAlyzer gui, IBee bee, EnumBeeType type) {
+	public void drawAnalyticsPage2(GuiAlyzer gui, ItemStack itemStack) {
+		IBee bee = BeeManager.beeRoot.getMember(itemStack);
+		if (bee == null) {
+			return;
+		}
+		EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
 
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
@@ -206,7 +203,12 @@ public class BeeAlyzer extends Alyzer<IBee, EnumBeeType, GuiAlyzer> implements I
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(GuiAlyzer gui, IBee bee, EnumBeeType type) {
+	public void drawAnalyticsPage3(GuiAlyzer gui, ItemStack itemStack) {
+		IBee bee = BeeManager.beeRoot.getMember(itemStack);
+		if (bee == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
 		WidgetManager widgetManager = gui.getWidgetManager();
 		
@@ -248,12 +250,7 @@ public class BeeAlyzer extends Alyzer<IBee, EnumBeeType, GuiAlyzer> implements I
 
 		textLayout.endPage();
 	}
-	
-	@Override
-	public EnumBeeType getDefaultType() {
-		return EnumBeeType.DRONE;
-	}
-	
+
 	@Override
 	public List<String> getHints() {
 		return Config.hints.get("beealyzer");

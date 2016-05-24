@@ -12,16 +12,18 @@ package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -31,27 +33,24 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.core.config.Config;
-import forestry.core.genetics.Alyzer;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.GuiAlyzer;
-import forestry.core.gui.IHintSource;
 import forestry.core.gui.TextLayoutHelper;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
-public class TreeAlyzer extends Alyzer<ITree, EnumGermlingType, GuiAlyzer> implements IHintSource {
-	
-	public TreeAlyzer() {
-		super(TreeManager.treeRoot);
-		
-		ArrayList<ItemStack> treeList = new ArrayList<>();
+public class TreeAlyzerPlugin implements IAlyzerPlugin {
+	public static final TreeAlyzerPlugin INSTANCE = new TreeAlyzerPlugin();
+
+	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
+
+	private TreeAlyzerPlugin() {
+		List<ItemStack> treeList = new ArrayList<>();
 		PluginArboriculture.items.sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
@@ -60,37 +59,18 @@ public class TreeAlyzer extends Alyzer<ITree, EnumGermlingType, GuiAlyzer> imple
 			}
 		}
 	}
-	
-	@Override
-	public boolean canSlotAccept(ItemInventoryAlyzer inventory, int slotIndex, ItemStack itemStack) {
-		if (!TreeManager.treeRoot.isMember(itemStack)) {
-			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
-			if (ersatz != null) {
-				return super.canSlotAccept(inventory, slotIndex, ersatz);
-			}
-		}
-		return super.canSlotAccept(inventory, slotIndex, itemStack);
-	}
-
-	@Override
-	public void onSlotClick(ItemInventoryAlyzer inventory, int slotIndex, EntityPlayer player) {
-		ItemStack specimen = inventory.getStackInSlot(ItemInventoryAlyzer.SLOT_SPECIMEN);
-		if (!TreeManager.treeRoot.isMember(specimen)) {
-			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(specimen);
-			if (ersatz != null) {
-				inventory.setInventorySlotContents(ItemInventoryAlyzer.SLOT_SPECIMEN, ersatz);
-			}
-		}
-
-		super.onSlotClick(inventory, slotIndex, player);
-	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(GuiAlyzer gui, ITree tree, EnumGermlingType type) {
+	public void drawAnalyticsPage1(GuiAlyzer gui, ItemStack itemStack) {
+		ITree tree = TreeManager.treeRoot.getMember(itemStack);
+		if (tree == null) {
+			return;
+		}
+		EnumGermlingType type = TreeManager.treeRoot.getType(itemStack);
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
-		
+
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
@@ -134,10 +114,14 @@ public class TreeAlyzer extends Alyzer<ITree, EnumGermlingType, GuiAlyzer> imple
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(GuiAlyzer gui, ITree tree, EnumGermlingType type) {
+	public void drawAnalyticsPage2(GuiAlyzer gui, ItemStack itemStack) {
+		ITree tree = TreeManager.treeRoot.getMember(itemStack);
+		if (tree == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
-		
+
 		textLayout.startPage();
 
 		int speciesDominance0 = gui.getColorCoding(tree.getGenome().getPrimary().isDominant());
@@ -247,9 +231,13 @@ public class TreeAlyzer extends Alyzer<ITree, EnumGermlingType, GuiAlyzer> imple
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(GuiAlyzer gui, ITree tree, EnumGermlingType type) {
+	public void drawAnalyticsPage3(GuiAlyzer gui, ItemStack itemStack) {
+		ITree tree = TreeManager.treeRoot.getMember(itemStack);
+		if (tree == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
 
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
@@ -287,11 +275,6 @@ public class TreeAlyzer extends Alyzer<ITree, EnumGermlingType, GuiAlyzer> imple
 		textLayout.endPage();
 	}
 
-	@Override
-	public EnumGermlingType getDefaultType() {
-		return EnumGermlingType.SAPLING;
-	}
-	
 	@Override
 	public List<String> getHints() {
 		return Config.hints.get("treealyzer");

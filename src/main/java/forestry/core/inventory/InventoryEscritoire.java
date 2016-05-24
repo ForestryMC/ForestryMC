@@ -80,7 +80,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 		}
 		if (slotIndex == SLOT_ANALYZE && !tile.getWorld().isRemote) {
 			if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
-				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
+				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
 				if (ersatz != null) {
 					setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}

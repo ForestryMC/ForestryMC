@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 
 /**
  * Holds a static reference to the {@link IAlleleRegistry}. 
@@ -28,7 +28,7 @@ public class AlleleManager {
 	/**
 	 * Translates plain saplings into genetic data. Used by the treealyzer and the farm to convert foreign saplings.
 	 */
-	public static Map<ItemStack, IIndividual> saplingTranslation = new HashMap<>();
+	public static Map<Item, ISaplingTranslator> saplingTranslation = new HashMap<>();
 
 	/**
 	 * Queryable instance of an {@link IClimateHelper} for easier implementation.

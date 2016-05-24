@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ILeafTranslator;
+import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -382,6 +384,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	private static void registerErsatzGenomes() {
 		AlleleManager.leafTranslators.put(Blocks.LEAVES, new ILeafTranslator() {
+			@Nullable
 			@Override
 			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
 				if (!leafBlockState.getValue(BlockOldLeaf.DECAYABLE)) {
@@ -401,6 +404,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			}
 		});
 		AlleleManager.leafTranslators.put(Blocks.LEAVES2, new ILeafTranslator() {
+			@Nullable
 			@Override
 			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
 				if (!leafBlockState.getValue(BlockNewLeaf.DECAYABLE)) {
@@ -416,12 +420,27 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			}
 		});
 
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 5), TreeDefinition.DarkOak.getIndividual());
+		AlleleManager.saplingTranslation.put(Item.getItemFromBlock(Blocks.SAPLING), new ISaplingTranslator() {
+			@Nullable
+			@Override
+			public ITree getTreeFromSapling(ItemStack sapling) {
+				switch (sapling.getMetadata()) {
+					case 0:
+						return TreeDefinition.Oak.getIndividual();
+					case 1:
+						return TreeDefinition.Spruce.getIndividual();
+					case 2:
+						return TreeDefinition.Birch.getIndividual();
+					case 3:
+						return TreeDefinition.Jungle.getIndividual();
+					case 4:
+						return TreeDefinition.AcaciaVanilla.getIndividual();
+					case 5:
+						return TreeDefinition.DarkOak.getIndividual();
+				}
+				return null;
+			}
+		});
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	@Override
 	public void setInventorySlotContents(int slotId, ItemStack itemStack) {
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(itemStack)) {
-			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
+			ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 			if (ersatz != null) {
 				itemStack = ersatz;
 			}

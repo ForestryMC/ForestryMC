@@ -59,7 +59,7 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		itemstack = GeneticsUtil.convertSaplingToGeneticEquivalent(itemstack);
+		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		return TreeManager.treeRoot.isMember(itemstack);
 	}
 

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
 import forestry.core.render.FontColour;
@@ -20,7 +19,6 @@ public class TextLayoutHelper {
 
 	private final GuiForestry guiForestry;
 	private final int defaultFontColor;
-	private FontRenderer fontRendererObj;
 
 	public int column0;
 	public int column1;
@@ -30,10 +28,6 @@ public class TextLayoutHelper {
 	public TextLayoutHelper(GuiForestry guiForestry, FontColour fontColour) {
 		this.guiForestry = guiForestry;
 		this.defaultFontColor = fontColour.get("gui.screen");
-	}
-
-	public void setFontRendererObj(FontRenderer fontRendererObj) {
-		this.fontRendererObj = fontRendererObj;
 	}
 	
 	public void startPage() {
@@ -89,15 +83,15 @@ public class TextLayoutHelper {
 	}
 
 	public void drawCenteredLine(String text, int x, int width, int color) {
-		fontRendererObj.drawString(text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + line, color);
+		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + line, color);
 	}
 
 	public void drawLine(String text, int x, int color) {
-		fontRendererObj.drawString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, color);
+		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, color);
 	}
 
 	public void drawSplitLine(String text, int x, int maxWidth, int color) {
-		fontRendererObj.drawSplitString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
+		guiForestry.getFontRenderer().drawSplitString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
 	}
 
 	public int getCenteredOffset(String string) {
@@ -105,6 +99,6 @@ public class TextLayoutHelper {
 	}
 
 	public int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
+		return (xWidth - guiForestry.getFontRenderer().getStringWidth(string)) / 2;
 	}
 }

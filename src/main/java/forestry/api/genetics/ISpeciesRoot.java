@@ -179,5 +179,8 @@ public interface ISpeciesRoot {
 	 */
 	IChromosomeType getKaryotypeKey();
 
-	IAlyzer getAlyzer();
+	/**
+	 * Plugin to add information for the handheld genetic analyzer.
+	 */
+	IAlyzerPlugin getAlyzerPlugin();
 }

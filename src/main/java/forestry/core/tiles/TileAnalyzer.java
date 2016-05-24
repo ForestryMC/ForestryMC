@@ -207,7 +207,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
-			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
+			ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 			if (ersatz != null) {
 				inputStack = ersatz;
 			}

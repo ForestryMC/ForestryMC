@@ -11,39 +11,41 @@
 package forestry.lepidopterology.genetics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Config;
-import forestry.core.genetics.Alyzer;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
-import forestry.core.gui.IHintSource;
 import forestry.core.gui.TextLayoutHelper;
-import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 
-public class Flutterlyzer extends Alyzer<IButterfly, EnumFlutterType, GuiAlyzer> implements IHintSource {
+public class FlutterlyzerPlugin implements IAlyzerPlugin {
+	public static final FlutterlyzerPlugin INSTANCE = new FlutterlyzerPlugin();
 
-	public Flutterlyzer() {
-		super(ButterflyManager.butterflyRoot);
-		
-		ArrayList<ItemStack> butterflyList = new ArrayList<>();
+	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
+
+	private FlutterlyzerPlugin() {
+		List<ItemStack> butterflyList = new ArrayList<>();
 		PluginLepidopterology.items.butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
@@ -55,10 +57,14 @@ public class Flutterlyzer extends Alyzer<IButterfly, EnumFlutterType, GuiAlyzer>
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(GuiAlyzer gui, IButterfly butterfly, EnumFlutterType type) {
+	public void drawAnalyticsPage1(GuiAlyzer gui, ItemStack itemStack) {
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+		if (butterfly == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
-		
+
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
@@ -111,10 +117,14 @@ public class Flutterlyzer extends Alyzer<IButterfly, EnumFlutterType, GuiAlyzer>
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(GuiAlyzer gui, IButterfly butterfly, EnumFlutterType type) {
+	public void drawAnalyticsPage2(GuiAlyzer gui, ItemStack itemStack) {
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+		if (butterfly == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
-		
+
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 		textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
@@ -193,9 +203,13 @@ public class Flutterlyzer extends Alyzer<IButterfly, EnumFlutterType, GuiAlyzer>
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(GuiAlyzer gui, IButterfly butterfly, EnumFlutterType type) {
+	public void drawAnalyticsPage3(GuiAlyzer gui, ItemStack itemStack) {
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+		if (butterfly == null) {
+			return;
+		}
+
 		TextLayoutHelper textLayout = gui.getTextLayout();
-		WidgetManager widgetManager = gui.getWidgetManager();
 
 		textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
@@ -229,11 +243,6 @@ public class Flutterlyzer extends Alyzer<IButterfly, EnumFlutterType, GuiAlyzer>
 		}
 
 		textLayout.endPage();
-	}
-
-	@Override
-	public EnumFlutterType getDefaultType() {
-		return EnumFlutterType.BUTTERFLY;
 	}
 	
 	@Override

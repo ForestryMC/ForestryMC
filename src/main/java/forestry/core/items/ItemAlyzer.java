@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import forestry.api.apiculture.BeeManager;
+
 import forestry.api.core.Tabs;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlyzer;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
@@ -33,22 +33,17 @@ public class ItemAlyzer extends ItemWithGui {
 
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		IAlyzer alyzer =BeeManager.beeRoot.getAlyzer();
-		ItemInventoryAlyzer inventory = new ItemInventoryAlyzer(player, heldItem, null);
-		if(inventory.getSpecimen() != null){
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(inventory.getSpecimen());
-			alyzer = speciesRoot.getAlyzer();
-		}
-		return new GuiAlyzer(player, alyzer, new ItemInventoryAlyzer(player, heldItem, alyzer));
+		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		ItemInventoryAlyzer inventory = new ItemInventoryAlyzer(player, heldItem, null);
-		if(inventory.getSpecimen() != null){
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(inventory.getSpecimen());
-			return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem, speciesRoot.getAlyzer()), player);
-		}
-		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem, BeeManager.beeRoot.getAlyzer()), player);
+		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		super.addInformation(stack, playerIn, tooltip, advanced);
+		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}
 }

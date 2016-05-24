@@ -12,7 +12,6 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -38,6 +37,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ILeafTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
@@ -145,36 +145,36 @@ public class GeneticsUtil {
 		if (itemStack == null) {
 			return null;
 		}
+
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
 
-		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.saplingTranslation.entrySet()) {
-			if (ItemStackUtil.isIdenticalItem(itemStack, entry.getKey())) {
-				return entry.getValue().copy();
-			}
+		ISaplingTranslator saplingTranslator = AlleleManager.saplingTranslation.get(item);
+		if (saplingTranslator == null) {
+			return null;
 		}
-		return null;
+		return saplingTranslator.getTreeFromSapling(itemStack);
 	}
 
-	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
+	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
 		if (foreign == null) {
 			return null;
 		}
 
-		if (TreeManager.treeRoot.isMember(foreign)) {
+		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) != null) {
 			return foreign;
 		}
 
-		IIndividual tree = getGeneticEquivalent(foreign);
-		if (!(tree instanceof ITree)) {
-			return null;
+		IIndividual individual = getGeneticEquivalent(foreign);
+		if (individual instanceof ITree) {
+			ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+			equivalent.stackSize = foreign.stackSize;
+			return equivalent;
 		}
 
-		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
-		ersatz.stackSize = foreign.stackSize;
-		return ersatz;
+		return null;
 	}
 
 	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
