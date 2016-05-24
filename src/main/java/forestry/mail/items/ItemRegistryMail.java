@@ -13,10 +13,9 @@ package forestry.mail.items;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemRegistry;
+import forestry.core.utils.OreDictUtil;
 
 public class ItemRegistryMail extends ItemRegistry {
-	public static final String emptiedLetterOreDict = "emptiedLetter";
-
 	public final ItemStamps stamps;
 	public final ItemLetter letters;
 	public final ItemCatalogue catalogue;
@@ -27,7 +26,7 @@ public class ItemRegistryMail extends ItemRegistry {
 		catalogue = registerItem(new ItemCatalogue(), "catalogue");
 
 		for (ItemStack itemStack : letters.getEmptiedLetters()) {
-			registerOreDict(emptiedLetterOreDict, itemStack);
+			registerOreDict(OreDictUtil.EMPTIED_LETTER_ORE_DICT, itemStack);
 		}
 	}
 }

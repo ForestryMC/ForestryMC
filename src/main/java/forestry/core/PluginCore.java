@@ -150,29 +150,29 @@ public class PluginCore extends BlankForestryPlugin {
 		crateRegistry.registerCrate(items.mulch);
 		crateRegistry.registerCrate(items.phosphor);
 		crateRegistry.registerCrate(items.ash);
-		crateRegistry.registerCrateUsingOreDict(items.ingotTin);
-		crateRegistry.registerCrateUsingOreDict(items.ingotCopper);
-		crateRegistry.registerCrateUsingOreDict(items.ingotBronze);
+		crateRegistry.registerCrate("ingotTin");
+		crateRegistry.registerCrate("ingotCopper");
+		crateRegistry.registerCrate("ingotBronze");
 
 		// forestry blocks
 		crateRegistry.registerCrate(blocks.humus);
 		crateRegistry.registerCrate(blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1));
 
 		// vanilla items
-		crateRegistry.registerCrate(Items.WHEAT);
+		crateRegistry.registerCrate("cropWheat");
 		crateRegistry.registerCrate(Items.COOKIE);
-		crateRegistry.registerCrate(Items.REDSTONE);
+		crateRegistry.registerCrate("dustRedstone");
 		crateRegistry.registerCrate(new ItemStack(Items.DYE, 1, 4));
-		crateRegistry.registerCrate(Items.REEDS);
+		crateRegistry.registerCrate("sugarcane");
 		crateRegistry.registerCrate(Items.CLAY_BALL);
-		crateRegistry.registerCrate(Items.GLOWSTONE_DUST);
+		crateRegistry.registerCrate("dustGlowstone");
 		crateRegistry.registerCrate(Items.APPLE);
 		crateRegistry.registerCrate(new ItemStack(Items.NETHER_WART));
 		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 1));
 		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 0));
 		crateRegistry.registerCrate(Items.WHEAT_SEEDS);
-		crateRegistry.registerCrate(Items.POTATO);
-		crateRegistry.registerCrate(Items.CARROT);
+		crateRegistry.registerCrate("cropPotato");
+		crateRegistry.registerCrate("cropCarrot");
 
 		// vanilla blocks
 		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 0));
@@ -181,27 +181,27 @@ public class PluginCore extends BlankForestryPlugin {
 		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 3));
 		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 0));
 		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 1));
-		crateRegistry.registerCrate(Blocks.COBBLESTONE);
-		crateRegistry.registerCrate(new ItemStack(Blocks.DIRT, 1, 0));
+		crateRegistry.registerCrate("cobblestone");
+		crateRegistry.registerCrate("dirt");
 		crateRegistry.registerCrate(new ItemStack(Blocks.DIRT, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 5));
-		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 2));
+		crateRegistry.registerCrate("stone");
+		crateRegistry.registerCrate("stoneGranite");
+		crateRegistry.registerCrate("stoneDiorite");
+		crateRegistry.registerCrate("stoneAndesite");
+		crateRegistry.registerCrate("blockPrismarine");
+		crateRegistry.registerCrate("blockPrismarineBrick");
+		crateRegistry.registerCrate("blockPrismarineDark");
 		crateRegistry.registerCrate(Blocks.BRICK_BLOCK);
-		crateRegistry.registerCrate(Blocks.CACTUS);
+		crateRegistry.registerCrate("blockCactus");
 		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 0));
 		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 1));
-		crateRegistry.registerCrate(Blocks.OBSIDIAN);
-		crateRegistry.registerCrate(Blocks.NETHERRACK);
+		crateRegistry.registerCrate("obsidian");
+		crateRegistry.registerCrate("netherrack");
 		crateRegistry.registerCrate(Blocks.SOUL_SAND);
 		crateRegistry.registerCrate(Blocks.SANDSTONE);
 		crateRegistry.registerCrate(Blocks.NETHER_BRICK);
 		crateRegistry.registerCrate(Blocks.MYCELIUM);
-		crateRegistry.registerCrate(Blocks.GRAVEL);
+		crateRegistry.registerCrate("gravel");
 		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 0));
 		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 1));
 		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 2));
@@ -221,7 +221,9 @@ public class PluginCore extends BlankForestryPlugin {
 
 		/* BRONZE INGOTS */
 		if (Config.isCraftingBronzeEnabled()) {
-			RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
+			ItemStack ingotBronze = items.ingotBronze.copy();
+			ingotBronze.stackSize = 4;
+			RecipeUtil.addShapelessRecipe(ingotBronze, "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
 		}
 
 		/* STURDY MACHINE */
@@ -352,13 +354,20 @@ public class PluginCore extends BlankForestryPlugin {
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.apatite, 9), "blockApatite");
 
 		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.COPPER), "###", "###", "###", '#', "ingotCopper");
-		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotCopper, 9), "blockCopper");
-
 		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.TIN), "###", "###", "###", '#', "ingotTin");
-		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotTin, 9), "blockTin");
-
 		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.BRONZE), "###", "###", "###", '#', "ingotBronze");
-		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 9), "blockBronze");
+
+		ItemStack ingotCopper = items.ingotCopper.copy();
+		ingotCopper.stackSize = 9;
+		RecipeUtil.addShapelessRecipe(ingotCopper, "blockCopper");
+
+		ItemStack ingotTin = items.ingotTin.copy();
+		ingotTin.stackSize = 9;
+		RecipeUtil.addShapelessRecipe(ingotTin, "blockTin");
+
+		ItemStack ingotBronze = items.ingotBronze.copy();
+		ingotBronze.stackSize = 9;
+		RecipeUtil.addShapelessRecipe(ingotBronze, "blockBronze");
 
 		// alternate recipes
 		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {

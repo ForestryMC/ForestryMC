@@ -32,9 +32,9 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemAlyzer portableAlyzer;
 
 	/* Ingots */
-	public final ItemForestry ingotCopper;
-	public final ItemForestry ingotTin;
-	public final ItemForestry ingotBronze;
+	public final ItemStack ingotCopper;
+	public final ItemStack ingotTin;
+	public final ItemStack ingotBronze;
 
 	/* Tools */
 	public final ItemWrench wrench;
@@ -53,9 +53,9 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry sturdyCasing;
 	public final ItemForestry hardenedCasing;
 	public final ItemForestry impregnatedCasing;
-	public final ItemForestry gearBronze;
-	public final ItemForestry gearCopper;
-	public final ItemForestry gearTin;
+	public final ItemStack gearBronze;
+	public final ItemStack gearCopper;
+	public final ItemStack gearTin;
 
 	/* Soldering */
 	public final ItemSolderingIron solderingIron;
@@ -98,14 +98,9 @@ public class ItemRegistryCore extends ItemRegistry {
 		
 		portableAlyzer = registerItem(new ItemAlyzer(), "portableAlyzer");
 
-		ingotCopper = registerItem(new ItemForestry(), "ingotCopper");
-		OreDictionary.registerOre("ingotCopper", ingotCopper);
-		
-		ingotTin = registerItem(new ItemForestry(), "ingotTin");
-		OreDictionary.registerOre("ingotTin", ingotTin);
-		
-		ingotBronze = registerItem(new ItemForestry(), "ingotBronze");
-		OreDictionary.registerOre("ingotBronze", ingotBronze);
+		ingotCopper = createItemForOreName("ingotCopper");
+		ingotTin = createItemForOreName("ingotTin");
+		ingotBronze = createItemForOreName("ingotBronze");
 
 		wrench = registerItem(new ItemWrench(), "wrench");
 		pipette = registerItem(new ItemPipette(), "pipette");
@@ -126,12 +121,9 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		bituminousPeat = registerItem(new ItemForestry(), "bituminousPeat");
 
-		gearBronze = registerItem(new ItemForestry(), "gearBronze");
-		OreDictionary.registerOre("gearBronze", gearBronze);
-		gearCopper = registerItem(new ItemForestry(), "gearCopper");
-		OreDictionary.registerOre("gearCopper", gearCopper);
-		gearTin = registerItem(new ItemForestry(), "gearTin");
-		OreDictionary.registerOre("gearTin", gearTin);
+		gearBronze = createItemForOreName("gearBronze");
+		gearCopper = createItemForOreName("gearCopper");
+		gearTin = createItemForOreName("gearTin");
 
 		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
@@ -193,4 +185,5 @@ public class ItemRegistryCore extends ItemRegistry {
 			OreDictionary.registerOre(def.getOreDict(), fruit);
 		}
 	}
+
 }

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -31,21 +33,24 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
-
+	@Nullable
 	private final ItemStack contained;
-	private final boolean usesOreDict;
+	@Nullable
+	private final String oreDictName;
 
-	public ItemCrated(ItemStack contained, boolean usesOreDict) {
+	public ItemCrated(@Nullable ItemStack contained, @Nullable String oreDictName) {
 		this.contained = contained;
-		this.usesOreDict = usesOreDict;
+		this.oreDictName = oreDictName;
 	}
 
-	public boolean usesOreDict() {
-		return usesOreDict;
-	}
-
+	@Nullable
 	public ItemStack getContained() {
 		return contained;
+	}
+
+	@Nullable
+	public String getOreDictName() {
+		return oreDictName;
 	}
 
 	@Override

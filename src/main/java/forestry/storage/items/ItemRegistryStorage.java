@@ -42,7 +42,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 
 	public ItemRegistryStorage() {
 		// CRATE
-		crate = registerItem(new ItemCrated(null, false), "crate");
+		crate = registerItem(new ItemCrated(null, null), "crate");
 		
 		// BACKPACKS
 		IBackpackDefinition definition;

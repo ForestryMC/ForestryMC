@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
@@ -42,19 +43,19 @@ public class BlockRegistryCore extends BlockRegistry {
 		resources = new BlockResourceOre();
 		registerBlock(resources, new ItemBlockForestry(resources), "resources");
 		resources.setHarvestLevel("pickaxe", 1);
-		OreDictionary.registerOre("oreApatite", resources.get(EnumResourceType.APATITE, 1));
-		OreDictionary.registerOre("oreCopper", resources.get(EnumResourceType.COPPER, 1));
-		OreDictionary.registerOre("oreTin", resources.get(EnumResourceType.TIN, 1));
+		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
+		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
+		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 		
 		resourceStorage = new BlockResourceStorage();
 		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
-		OreDictionary.registerOre("blockApatite", resourceStorage.get(EnumResourceType.APATITE));
-		OreDictionary.registerOre("blockCopper", resourceStorage.get(EnumResourceType.COPPER));
-		OreDictionary.registerOre("blockTin", resourceStorage.get(EnumResourceType.TIN));
-		OreDictionary.registerOre("blockBronze", resourceStorage.get(EnumResourceType.BRONZE));
+		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorage.get(EnumResourceType.APATITE));
+		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorage.get(EnumResourceType.COPPER));
+		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorage.get(EnumResourceType.TIN));
+		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorage.get(EnumResourceType.BRONZE));
 
 		// register some common oreDict names for our recipes
-		OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
+		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);
 	}
 }

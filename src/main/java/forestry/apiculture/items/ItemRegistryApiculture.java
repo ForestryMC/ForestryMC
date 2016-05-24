@@ -20,6 +20,7 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemScoop;
+import forestry.core.utils.OreDictUtil;
 
 public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeQueenGE;
@@ -71,24 +72,24 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		
 		// / BEE RESOURCES
 		honeyDrop = registerItem(new ItemOverlay(Tabs.tabApiculture, EnumHoneyDrop.VALUES), "honeyDrop");
-		OreDictionary.registerOre("dropHoney", honeyDrop);
+		OreDictionary.registerOre(OreDictUtil.DROP_HONEY, honeyDrop);
 
 		pollenCluster = registerItem(new ItemPollenCluster(), "pollen");
-		OreDictionary.registerOre("itemPollen", pollenCluster);
+		OreDictionary.registerOre(OreDictUtil.ITEM_POLLEN, pollenCluster);
 
 		propolis = registerItem(new ItemPropolis(), "propolis");
 
 		honeydew = registerItem(new ItemForestry(Tabs.tabApiculture), "honeydew");
-		OreDictionary.registerOre("dropHoneydew", honeydew);
+		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
 
 		royalJelly = registerItem(new ItemForestry(Tabs.tabApiculture), "royalJelly");
-		OreDictionary.registerOre("dropRoyalJelly", royalJelly);
+		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
 		
 		waxCast = registerItem(new ItemWaxCast(), "waxCast");
 		
 		// / BEE COMBS
 		beeComb = registerItem(new ItemHoneyComb(), "beeCombs");
-		OreDictionary.registerOre("beeComb", beeComb.getWildcard());
+		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
 		
 		// / APIARIST'S CLOTHES
 		apiaristHat = registerItem(new ItemArmorApiarist(EntityEquipmentSlot.HEAD), "apiaristHelmet");

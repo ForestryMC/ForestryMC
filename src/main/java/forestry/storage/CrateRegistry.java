@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.storage;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,51 +24,53 @@ import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.OreDictUtil;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	private static void registerCrate(ItemStack stack, boolean useOreDict) {
+	private static void registerCrate(@Nonnull ItemStack stack, @Nullable String oreDictName) {
 		if (stack == null || stack.getItem() == null) {
 			Log.warning("Tried to make a crate without an item");
 			return;
 		}
 
-		String itemName = ItemStackUtil.getStringForItemStack(stack).replace(':', '.');
-		String crateName = "crated." + itemName;
-		ItemCrated crate = new ItemCrated(stack, useOreDict);
+		String crateName;
+		if (oreDictName != null) {
+			crateName = "crated." + oreDictName;
+		} else {
+			String itemName = ItemStackUtil.getStringForItemStack(stack).replace(':', '.');
+			crateName = "crated." + itemName;
+		}
+
+		ItemCrated crate = new ItemCrated(stack, oreDictName);
 		crate.setUnlocalizedName(crateName);
-		GameRegistry.registerItem(crate, crateName);
+		crate.setRegistryName(crateName);
+
+		GameRegistry.register(crate);
 		Proxies.common.registerItem(crate);
 		PluginStorage.registerCrate(crate);
 	}
 
 	@Override
-	public void registerCrate(Item item) {
-		registerCrate(new ItemStack(item), false);
+	public void registerCrate(@Nonnull String oreDictName) {
+		ItemStack stack = OreDictUtil.getFirstSuitableOre(oreDictName);
+		if (stack != null) {
+			registerCrate(stack, oreDictName);
+		}
 	}
 
 	@Override
-	public void registerCrateUsingOreDict(Item item) {
-		registerCrate(new ItemStack(item), true);
+	public void registerCrate(@Nonnull Block block) {
+		registerCrate(new ItemStack(block), null);
 	}
 
 	@Override
-	public void registerCrate(Block block) {
-		registerCrate(new ItemStack(block), false);
+	public void registerCrate(@Nonnull Item item) {
+		registerCrate(new ItemStack(item), null);
 	}
 
 	@Override
-	public void registerCrateUsingOreDict(Block block) {
-		registerCrate(new ItemStack(block), true);
-	}
-
-	@Override
-	public void registerCrate(ItemStack stack) {
-		registerCrate(stack, false);
-	}
-
-	@Override
-	public void registerCrateUsingOreDict(ItemStack stack) {
-		registerCrate(stack, true);
+	public void registerCrate(@Nonnull ItemStack stack) {
+		registerCrate(stack, null);
 	}
 }

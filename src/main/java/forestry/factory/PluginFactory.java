@@ -413,9 +413,13 @@ public class PluginFactory extends BlankForestryPlugin {
 				new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
 
 		// Reclamation
-		RecipeManagers.carpenterManager.addRecipe(null, PluginCore.items.ingotBronze.getItemStack(2),
-				"#", '#', PluginCore.items.brokenBronzePickaxe);
-		RecipeManagers.carpenterManager.addRecipe(null, PluginCore.items.ingotBronze.getItemStack(), "#", '#', PluginCore.items.brokenBronzeShovel);
+		ItemStack ingotBronze = PluginCore.items.ingotBronze.copy();
+		ingotBronze.stackSize = 2;
+		RecipeManagers.carpenterManager.addRecipe(null, ingotBronze, "#", '#', PluginCore.items.brokenBronzePickaxe);
+
+		ingotBronze = ingotBronze.copy();
+		ingotBronze.stackSize = 1;
+		RecipeManagers.carpenterManager.addRecipe(null, ingotBronze, "#", '#', PluginCore.items.brokenBronzeShovel);
 
 		// Crating and uncrating
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.STORAGE)) {

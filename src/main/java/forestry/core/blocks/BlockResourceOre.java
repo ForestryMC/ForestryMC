@@ -35,6 +35,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.PluginCore;
+import forestry.core.utils.OreDictUtil;
 
 public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, new Predicate<EnumResourceType>(){
@@ -79,20 +80,28 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = new ArrayList<>();
-		EnumResourceType metadata = state.getValue(ORE_RESOURCES);
+		EnumResourceType type = state.getValue(ORE_RESOURCES);
+		switch (type) {
+			case APATITE: {
+				int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;
+				if (fortuneModifier < 0) {
+					fortuneModifier = 0;
+				}
 
-		if (metadata == EnumResourceType.APATITE) {
-			int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;
-			if (fortuneModifier < 0) {
-				fortuneModifier = 0;
+				int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
+				if (amount > 0) {
+					drops.add(PluginCore.items.apatite.getItemStack(amount));
+				}
+				break;
 			}
-
-			int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
-			if (amount > 0) {
-				drops.add(PluginCore.items.apatite.getItemStack(amount));
+			case TIN: {
+				drops.add(OreDictUtil.getFirstSuitableOre(OreDictUtil.ORE_TIN));
+				break;
 			}
-		} else {
-			drops.add(new ItemStack(this, 1, metadata.getMeta()));
+			case COPPER: {
+				drops.add(OreDictUtil.getFirstSuitableOre(OreDictUtil.ORE_COPPER));
+				break;
+			}
 		}
 
 		return drops;

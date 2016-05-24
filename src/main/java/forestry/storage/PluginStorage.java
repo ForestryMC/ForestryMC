@@ -386,26 +386,24 @@ public class PluginStorage extends BlankForestryPlugin {
 		for (ItemCrated crate : crates) {
 			ItemStack crateStack = new ItemStack(crate);
 			ItemStack uncrated = crate.getContained();
-			if (crate.usesOreDict()) {
-				int[] oreIds = OreDictionary.getOreIDs(uncrated);
-				for (int oreId : oreIds) {
-					String oreName = OreDictionary.getOreName(oreId);
-					addCrating(crateStack, oreName);
+			if (uncrated != null) {
+				if (crate.getOreDictName() != null) {
+					addCrating(crateStack, crate.getOreDictName());
+				} else {
+					addCrating(crateStack, uncrated);
 				}
-			} else {
-				addCrating(crateStack, uncrated);
+				addUncrating(crateStack, uncrated);
 			}
-			addUncrating(crateStack, uncrated);
 		}
 	}
 
-	private static void addCrating(ItemStack crateStack, Object uncrated) {
+	private static void addCrating(@Nonnull ItemStack crateStack, @Nonnull Object uncrated) {
 		FluidStack water = Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
 		ItemStack box = items.crate.getItemStack();
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
 	}
 
-	private static void addUncrating(ItemStack crateStack, ItemStack uncrated) {
+	private static void addUncrating(@Nonnull ItemStack crateStack, @Nonnull ItemStack uncrated) {
 		ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage());
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, null, product, "#", '#', crateStack);
 	}

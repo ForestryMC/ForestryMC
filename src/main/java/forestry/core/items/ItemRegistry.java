@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.OreDictUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class ItemRegistry {
@@ -33,4 +36,12 @@ public abstract class ItemRegistry {
 	protected static void registerOreDict(String oreDictName, ItemStack itemStack) {
 		OreDictionary.registerOre(oreDictName, itemStack);
 	}
+
+	@Nonnull
+	public static ItemStack createItemForOreName(String oreName) {
+		Item oreItem = registerItem(new ItemForestry(), oreName);
+		OreDictionary.registerOre(oreName, oreItem);
+		return OreDictUtil.getFirstSuitableOre(oreName);
+	}
+
 }

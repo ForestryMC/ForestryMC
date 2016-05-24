@@ -22,11 +22,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.core.PluginCore;
+import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {
 
 	public enum EnumFruit {
-		CHERRY("cropCherry"), WALNUT("cropWalnut"), CHESTNUT("cropChestnut"), LEMON("cropLemon"), PLUM("cropPlum"), DATES("cropDate"), PAPAYA("cropPapaya");//, COCONUT("cropCoconut");
+		CHERRY(OreDictUtil.CROP_CHERRY),
+		WALNUT(OreDictUtil.CROP_WALNUT),
+		CHESTNUT(OreDictUtil.CROP_CHESTNUT),
+		LEMON(OreDictUtil.CROP_LEMON),
+		PLUM(OreDictUtil.CROP_PLUM),
+		DATES(OreDictUtil.CROP_DATE),
+		PAPAYA(OreDictUtil.CROP_PAPAYA);
+		//, COCONUT("cropCoconut");
 		public static final EnumFruit[] VALUES = values();
 
 		private final String oreDict;

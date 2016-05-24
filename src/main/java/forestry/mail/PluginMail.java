@@ -31,6 +31,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
@@ -129,7 +130,7 @@ public class PluginMail extends BlankForestryPlugin {
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.PAPER), "###", '#', ItemRegistryMail.emptiedLetterOreDict);
+		RecipeUtil.addRecipe(new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);

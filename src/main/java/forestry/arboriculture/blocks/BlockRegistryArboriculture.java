@@ -29,6 +29,7 @@ import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
@@ -60,25 +61,25 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		logs = BlockArbLog.create(false);
 		for (BlockArbLog block : logs) {
 			registerBlock(block, new ItemBlockWood(block), "logs." + block.getBlockNumber());
-			registerOreDictWildcard("logWood", block);
+			registerOreDictWildcard(OreDictUtil.LOG_WOOD, block);
 		}
 
 		logsFireproof = BlockArbLog.create(true);
 		for (BlockArbLog block : logsFireproof) {
 			registerBlock(block, new ItemBlockWood(block), "logs.fireproof." + block.getBlockNumber());
-			registerOreDictWildcard("logWood", block);
+			registerOreDictWildcard(OreDictUtil.LOG_WOOD, block);
 		}
 
 		planks = BlockArbPlanks.create(false);
 		for (BlockArbPlanks block : planks) {
 			registerBlock(block, new ItemBlockWood(block), "planks." + block.getBlockNumber());
-			registerOreDictWildcard("plankWood", block);
+			registerOreDictWildcard(OreDictUtil.PLANK_WOOD, block);
 		}
 
 		planksFireproof = BlockArbPlanks.create(true);
 		for (BlockArbPlanks block : planksFireproof) {
 			registerBlock(block, new ItemBlockWood(block), "planks.fireproof." + block.getBlockNumber());
-			registerOreDictWildcard("plankWood", block);
+			registerOreDictWildcard(OreDictUtil.PLANK_WOOD, block);
 		}
 
 		slabs = BlockArbSlab.create(false, false);
@@ -88,7 +89,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			BlockArbSlab slabDouble = slabsDouble.get(i);
 			registerBlock(slab, new ItemBlockWoodSlab(slab, slab, slabDouble), "slabs." + slab.getBlockNumber());
 			registerBlock(slabDouble, new ItemBlockWoodSlab(slabDouble, slab, slabDouble), "slabs.double." + slabDouble.getBlockNumber());
-			registerOreDictWildcard("slabWood", slab);
+			registerOreDictWildcard(OreDictUtil.SLAB_WOOD, slab);
 		}
 
 		slabsFireproof = BlockArbSlab.create(true, false);
@@ -98,19 +99,19 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			BlockArbSlab slabDouble = slabsDoubleFireproof.get(i);
 			registerBlock(slab, new ItemBlockWoodSlab(slab, slab, slabDouble), "slabs.fireproof." + slab.getBlockNumber());
 			registerBlock(slabDouble, new ItemBlockWoodSlab(slabDouble, slab, slabDouble), "slabs.double.fireproof." + slabDouble.getBlockNumber());
-			registerOreDictWildcard("slabWood", slab);
+			registerOreDictWildcard(OreDictUtil.SLAB_WOOD, slab);
 		}
 
 		fences = BlockArbFence.create(false);
 		for (BlockArbFence block : fences) {
 			registerBlock(block, new ItemBlockWood(block), "fences." + block.getBlockNumber());
-			registerOreDictWildcard("fenceWood", block);
+			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
 		}
 
 		fencesFireproof = BlockArbFence.create(true);
 		for (BlockArbFence block : fencesFireproof) {
 			registerBlock(block, new ItemBlockWood(block), "fences.fireproof." + block.getBlockNumber());
-			registerOreDictWildcard("fenceWood", block);
+			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
 		}
 		
 		fenceGates = new ArrayList<>();
@@ -118,12 +119,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			BlockArbFenceGate fenceGate = new BlockArbFenceGate(false, woodType);
 			registerBlock(fenceGate, new ItemBlockWood(fenceGate), "fence.gates." + woodType);
-			registerOreDictWildcard("fenceGateWood", fenceGate);
+			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGate);
 			fenceGates.add(fenceGate);
 
 			BlockArbFenceGate fenceGateFireproof = new BlockArbFenceGate(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood(fenceGateFireproof), "fence.gates.fireproof." + woodType);
-			registerOreDictWildcard("fenceGateWood", fenceGateFireproof);
+			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);
 			fenceGatesFireproof.add(fenceGateFireproof);
 		}
 
@@ -135,7 +136,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 				BlockArbStairs stair = new BlockArbStairs(false, blockState, woodType);
 				registerBlock(stair, new ItemBlockWood(stair), "stairs." + woodType);
-				registerOreDictWildcard("stairWood", stair);
+				registerOreDictWildcard(OreDictUtil.STAIR_WOOD, stair);
 				stairs.add(stair);
 			}
 		}
@@ -148,7 +149,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 				BlockArbStairs stair = new BlockArbStairs(true, blockState, woodType);
 				registerBlock(stair, new ItemBlockWood(stair), "stairs.fireproof." + woodType);
-				registerOreDictWildcard("stairWood", stair);
+				registerOreDictWildcard(OreDictUtil.STAIR_WOOD, stair);
 				stairsFireproof.add(stair);
 			}
 		}
@@ -157,7 +158,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			BlockArbDoor door = new BlockArbDoor(woodType);
 			registerBlock(door, new ItemBlockWoodDoor(door), "doors." + woodType);
-			registerOreDictWildcard("doorWood", door);
+			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);
 			doors.add(door);
 		}
 		
@@ -165,18 +166,18 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
 		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "saplingGE");
-		registerOreDictWildcard("treeSapling", saplingGE);
+		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
 		
 		// Leaves
 		leaves = new BlockForestryLeaves();
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
-		registerOreDictWildcard("treeLeaves", leaves);
+		registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
 		leavesDecorative = BlockDecorativeLeaves.create();
 		speciesToLeavesDecorative = new HashMap<>();
 		for (BlockDecorativeLeaves leaves : leavesDecorative) {
 			registerBlock(leaves, new ItemBlockDecorativeLeaves(leaves), "leaves.decorative." + leaves.getBlockNumber());
-			registerOreDictWildcard("treeLeaves", leaves);
+			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
 			for (IBlockState state : leaves.getBlockState().getValidStates()) {
 				TreeDefinition treeDefinition = state.getValue(leaves.getVariant());
