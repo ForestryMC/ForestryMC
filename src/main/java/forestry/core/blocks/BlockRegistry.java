@@ -11,7 +11,6 @@
 package forestry.core.blocks;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
