@@ -31,6 +31,8 @@ archivesBaseName = "forestry_" + mcversion
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
+ext.apiRedstoneFlux = "./src/api/java/cofh"
+
 // java version
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -48,7 +50,7 @@ minecraft {
 sourceSets {
 	main {
 		java {
-
+			srcDir project.apiRedstoneFlux
 		}
 		resources {
 			srcDir project.dirLang
@@ -106,7 +108,10 @@ allprojects {
 }
 
 jar {
-
+	// Copy various READMEs and Licensing files into the jar
+	into ('cofh/api') {
+		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
+	}
 }
 
 task sourcesJar(type: Jar) {
