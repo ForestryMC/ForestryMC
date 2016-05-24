@@ -82,11 +82,7 @@ public enum BlockGreenhouseType {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 
 		for (BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES) {
-			if (sprite == BlockGreenhouseSprites.PLAIN) {
-				sprites.put(sprite, map.getAtlasSprite("minecraft:blocks/brick"));
-			} else if (sprite == BlockGreenhouseSprites.GLASS) {
-				sprites.put(sprite, map.getAtlasSprite("minecraft:blocks/glass_green"));
-			} else {
+			if (sprite != BlockGreenhouseSprites.PLAIN && sprite != BlockGreenhouseSprites.GLASS) {
 				ResourceLocation location = new ResourceLocation(Constants.RESOURCE_ID, "blocks/greenhouse/" + sprite.spriteName);
 				TextureAtlasSprite textureAtlasSprite = map.registerSprite(location);
 				sprites.put(sprite, textureAtlasSprite);
@@ -103,11 +99,12 @@ public enum BlockGreenhouseType {
 		if (world != null && pos != null) {
 			tile = world.getTileEntity(pos);
 		}
+		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 		switch (type) {
 			case PLAIN:
-				return sprites.get(BlockGreenhouseSprites.PLAIN);
+				return map.getAtlasSprite("minecraft:blocks/brick");
 			case GLASS:
-				return sprites.get(BlockGreenhouseSprites.GLASS);
+				return map.getAtlasSprite("minecraft:blocks/glass_green");
 			case GEARBOX:
 				return sprites.get(BlockGreenhouseSprites.GEARS);
 			case VALVE:
