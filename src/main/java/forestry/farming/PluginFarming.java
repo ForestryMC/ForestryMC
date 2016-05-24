@@ -102,8 +102,8 @@ public class PluginFarming extends BlankForestryPlugin {
 
 		Farmables.farmables.putAll("farmOrchard", Arrays.asList(
 				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7),
-				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockPotato.AGE, 7),
-				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCarrot.AGE, 7),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7),
 				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3)
 		));
 
@@ -124,8 +124,8 @@ public class PluginFarming extends BlankForestryPlugin {
 
 		Farmables.farmables.put("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
-		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockPotato.AGE, 7));
-		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCarrot.AGE, 7));
+		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7));
+		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
 
 		proxy.initializeModels();

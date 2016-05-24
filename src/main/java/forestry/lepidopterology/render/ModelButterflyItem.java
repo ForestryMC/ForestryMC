@@ -24,8 +24,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IRetexturableModel;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +40,7 @@ import forestry.core.models.TRSRBakedModel;
 public class ModelButterflyItem extends BlankItemModel {
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)
-	private IRetexturableModel modelButterfly;
+	private IModel modelButterfly;
 
 	@Override
 	protected ItemOverrideList createOverrides() {
@@ -49,8 +50,8 @@ public class ModelButterflyItem extends BlankItemModel {
 	private IBakedModel bakeModel(IButterfly butterfly) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		textures.put("butterfly", butterfly.getGenome().getSecondary().getItemTexture());
-		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
-		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.0F, -0.03125F, butterfly.getSize() * 1.5F);
+		IModel retexturedModel =  ModelProcessingHelper.retexture(modelButterfly, textures.build());
+		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.0F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {
@@ -62,7 +63,7 @@ public class ModelButterflyItem extends BlankItemModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			if (modelButterfly == null) {
 				try {
-					modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterflyGE"));
+					modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterflyGE"));
 				} catch (Exception e) {
 					return null;
 				}

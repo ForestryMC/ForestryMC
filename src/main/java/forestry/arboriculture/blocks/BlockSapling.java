@@ -42,7 +42,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.blocks.property.PropertyTree;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.models.SaplingStateMapper;
+import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;

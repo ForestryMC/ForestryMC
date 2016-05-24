@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITree;
@@ -52,6 +54,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
+import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -63,12 +66,14 @@ import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
+import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
+import forestry.arboriculture.tiles.TilePile;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.PluginCore;
 import forestry.core.config.Config;
@@ -80,6 +85,7 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.VillagerTradeLists;
 import forestry.factory.recipes.FabricatorRecipe;
 import forestry.plugins.BlankForestryPlugin;
@@ -171,6 +177,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
+		GameRegistry.registerTileEntity(TilePile.class, "forestry.Piles");
 
 		blocks.treeChest.init();
 
@@ -243,7 +250,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			fireproofPlanks.stackSize = 4;
 			fireproofLogs.stackSize = 1;
 			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
-
+			
 			slabs.stackSize = 6;
 			planks.stackSize = 1;
 			RecipeUtil.addPriorityRecipe(slabs.copy(),
@@ -371,6 +378,18 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'#', "blockGlass",
 				'X', "treeSapling",
 				'Y', "chestWood");
+		
+		//Wood Piles
+		for(ITree tree : TreeManager.treeRoot.getIndividualTemplates()){
+			ItemStack log = tree.getGenome().getPrimary().getWoodProvider().getWoodStack().copy();
+			log.stackSize = 1;
+			ItemStack woodPile = BlockPile.createWoodPile(tree);
+			RecipeUtil.addShapelessRecipe(woodPile, log, log, log, log);
+		}
+		
+		//Dirt Pile Block
+		RecipeUtil.addShapelessRecipe(new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.DIRT)), OreDictUtil.DUST_ASH, Items.CLAY_BALL, OreDictUtil.DUST_ASH, OreDictUtil.DIRT, OreDictUtil.DIRT, OreDictUtil.DIRT, OreDictUtil.TREE_LEAVES, Items.CLAY_BALL, OreDictUtil.TREE_LEAVES);
+		
 	}
 
 	private static void createAlleles() {
@@ -387,7 +406,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			@Nullable
 			@Override
 			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
-				if (!leafBlockState.getValue(BlockOldLeaf.DECAYABLE)) {
+				if (!leafBlockState.getValue(BlockLeaves.DECAYABLE)) {
 					return null;
 				}
 				switch (leafBlockState.getValue(BlockOldLeaf.VARIANT)) {
@@ -407,7 +426,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			@Nullable
 			@Override
 			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
-				if (!leafBlockState.getValue(BlockNewLeaf.DECAYABLE)) {
+				if (!leafBlockState.getValue(BlockLeaves.DECAYABLE)) {
 					return null;
 				}
 				switch (leafBlockState.getValue(BlockNewLeaf.VARIANT)) {
@@ -481,6 +500,10 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			if (items.sapling == item) {
 				return 100;
+			}
+			
+			if(items.charcoal == item){
+				return ItemGermlingGE.getBurnTime(fuel);
 			}
 			
 			Block block = Block.getBlockFromItem(item);

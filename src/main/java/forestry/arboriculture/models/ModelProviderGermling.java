@@ -24,27 +24,37 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 
 	private final String name;
 
-	private ModelResourceLocation model;
+	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
+	private ModelResourceLocation charcoalModel;
 
 	public ModelProviderGermling(String uid) {
 		this.name = uid.substring("forestry.".length());
 	}
 
 	@Override
-	public void registerModels(Item item, IModelManager manager) {
-		model = manager.getModelLocation("germlings/sapling." + name);
-		manager.registerVariant(item, new ResourceLocation("forestry:germlings/sapling." + name));
-		pollenModel = manager.getModelLocation("pollen");
-		manager.registerVariant(item, new ResourceLocation("forestry:pollen"));
+	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
+		if(type == EnumGermlingType.SAPLING){
+			germlingModel = manager.getModelLocation("germlings/sapling." + name);
+			manager.registerVariant(item, new ResourceLocation("forestry:germlings/sapling." + name));
+		}else if(type == EnumGermlingType.POLLEN){
+			pollenModel = manager.getModelLocation("pollen");
+			manager.registerVariant(item, new ResourceLocation("forestry:pollen"));
+		}else if(type == EnumGermlingType.CHARCOAL){
+			charcoalModel = manager.getModelLocation("charcoal");
+			manager.registerVariant(item, new ResourceLocation("forestry:charcoal"));
+		}
 	}
 
 	@Nonnull
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if (type == EnumGermlingType.POLLEN) {
+		if(type == EnumGermlingType.POLLEN){
 			return pollenModel;
+		}else if(type == EnumGermlingType.CHARCOAL){
+			return charcoalModel;
+		}else{
+			return germlingModel;
 		}
-		return model;
 	}
 }

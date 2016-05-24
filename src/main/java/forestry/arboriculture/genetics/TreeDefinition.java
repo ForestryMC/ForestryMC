@@ -43,6 +43,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutationCustom;
+import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -108,6 +109,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FRUITS, AlleleFruit.fruitApple);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -131,6 +134,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -153,6 +158,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 		}
 
 		@Override
@@ -176,6 +182,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWER);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 			//Allele.helper.set(alleles, EnumTreeChromosome.EFFECT, Allele.leavesBrimstone);
 		}
 
@@ -212,6 +219,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 21);
 		}
 
 		@Override
@@ -239,6 +247,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 21);
 		}
 
 		@Override
@@ -341,6 +350,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -364,6 +374,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 		}
 
 		@Override
@@ -387,6 +398,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -460,6 +472,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWEST);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 4);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 3);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 18);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.TRUE);
 		}
 
@@ -484,6 +498,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FRUITS, AlleleFruit.fruitCocoa);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FAST);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
 		}
 
 		@Override
@@ -577,6 +592,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 3);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -644,7 +660,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
-
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -667,6 +683,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.PLANT, AllelePlantType.plantTypeDesert);
+			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -974,8 +991,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermlingVanilla(vanillaMeta);
+		IWoodProvider woodProvider = new WoodProviderVanilla(vanillaMeta);
 
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, woodProvider, this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 
@@ -994,8 +1012,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermling(uid);
+		IWoodProvider woodProvider = new WoodProvider(woodType.toString().toLowerCase(Locale.ENGLISH), woodType);
 
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, woodProvider, this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 

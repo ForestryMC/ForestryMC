@@ -1,0 +1,7 @@
+{
+    "variants": {
+      "type=ash": { "model": "forestry:ashPile" },
+      "type=dirt": { "model": "forestry:dirtPile" },
+      "type=wood": { "model": "forestry:woodPile" }
+    }
+}

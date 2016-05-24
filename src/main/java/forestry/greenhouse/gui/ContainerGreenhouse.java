@@ -15,7 +15,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.ContainerTile;
-import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouse;

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -57,6 +57,13 @@ public class PacketActiveUpdate extends PacketCoordinates implements IForestryPa
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IActivatable) {
 			((IActivatable) tile).setActive(active);
+		}else{
+			if(tile instanceof IMultiblockComponent){
+				IMultiblockComponent component = (IMultiblockComponent) tile;
+				if(component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable){
+					((IActivatable)component.getMultiblockLogic().getController()).setActive(active);
+				}
+			}
 		}
 	}
 }

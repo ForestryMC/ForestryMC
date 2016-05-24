@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,7 +54,9 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	 */
 	@Nonnull
 	String getModID();
-
+	
+	IWoodProvider getWoodProvider();
+	
 	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)
 	@Nonnull
@@ -69,6 +70,6 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	ModelResourceLocation getGermlingModel(EnumGermlingType type);
 	
 	@SideOnly(Side.CLIENT)
-	void registerModels(Item item, IModelManager manager);
+	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
 
 }

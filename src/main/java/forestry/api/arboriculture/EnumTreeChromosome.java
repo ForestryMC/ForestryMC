@@ -66,8 +66,16 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 * Amount of random ticks which need to elapse before a sapling will grow into a tree.
 	 */
 	MATURATION(IAlleleInteger.class),
-
+	
 	GIRTH(IAlleleInteger.class),
+	/**
+	 * The combustibility of the wood, when it burn to charcoal and the combustibility of the charcoal.
+	 */
+	COMBUSTIBILITY(IAlleleInteger.class),
+	/**
+	 * The amount of charcoal that a wood pile ash drop;
+	 */
+	CARBONIZATION(IAlleleInteger.class),
 	/**
 	 * Determines if the tree can burn.
 	 */

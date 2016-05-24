@@ -13,17 +13,20 @@ package forestry.arboriculture.blocks;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-
+import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
+import forestry.arboriculture.items.ItemBlockPile;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
@@ -53,6 +56,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
+	public final Map<EnumPileType, BlockPile> piles;
 
 	public final BlockArboriculture treeChest;
 
@@ -185,6 +189,11 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 				int meta = leaves.getMetaFromState(state);
 				speciesToLeavesDecorative.put(speciesUid, new ItemStack(leaves, 1, meta));
 			}
+		}
+		
+		piles = BlockPile.create();
+		for(Entry<EnumPileType, BlockPile> pile : piles.entrySet()){
+			registerBlock(pile.getValue(), new ItemBlockPile(pile.getValue()), "pile_" + pile.getKey().name().toLowerCase(Locale.ENGLISH));
 		}
 		
 		// Pods

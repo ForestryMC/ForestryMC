@@ -126,7 +126,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		manager.registerItemModel(item, new GermlingMeshDefinition());
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).registerModels(item, manager);
+				((IAlleleTreeSpecies) allele).registerModels(item, manager, type);
 			}
 		}
 	}
@@ -161,6 +161,14 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			}
 		}
 		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
+	}
+	
+	public static int getBurnTime(ItemStack fuel) {
+		if(TreeManager.treeRoot.isMember(fuel)){
+			ITree tree = TreeManager.treeRoot.getMember(fuel);
+			return tree.getGenome().getCombustibility() * 100;
+		}
+		return 0;
 	}
 
 	@Nonnull

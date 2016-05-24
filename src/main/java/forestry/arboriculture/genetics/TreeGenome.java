@@ -116,6 +116,16 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 	
 	@Override
+	public int getCombustibility(){
+		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.COMBUSTIBILITY)).getValue();
+	}
+	
+	@Override
+	public int getCarbonization(){
+		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.CARBONIZATION)).getValue();
+	}
+	
+	@Override
 	public IAlleleLeafEffect getEffect() {
 		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
 	}

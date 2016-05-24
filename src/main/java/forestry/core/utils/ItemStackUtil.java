@@ -416,7 +416,7 @@ public abstract class ItemStackUtil {
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
-		if (items.stackSize <= 0 || world.isRemote) {
+		if (items == null || items.stackSize <= 0 || world.isRemote) {
 			return;
 		}
 

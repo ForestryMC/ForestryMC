@@ -29,6 +29,7 @@ import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
+import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
@@ -39,6 +40,8 @@ import forestry.core.genetics.alleles.AlleleSpecies;
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
 	@Nonnull
 	private final ITreeGenerator generator;
+	@Nonnull
+	private final IWoodProvider woodProvider;
 	@Nonnull
 	private final IGermlingModelProvider germlingModelProvider;
 	@Nonnull
@@ -64,11 +67,13 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull String modelName,
 			@Nonnull ILeafSpriteProvider leafIconProvider,
 			@Nonnull IGermlingModelProvider germlingModelProvider,
+			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
+		this.woodProvider = woodProvider;
 		this.leafSpriteProvider = leafIconProvider;
 		
 		this.modID = modID;
@@ -139,15 +144,22 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getGermlingColour(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.SAPLING) {
+		if (type != EnumGermlingType.POLLEN) {
 			return 0xFFFFFF;
 		}
 		return getSpriteColour(renderPass);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerModels(Item item, IModelManager manager) {
-		germlingModelProvider.registerModels(item, manager);
+	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
+		germlingModelProvider.registerModels(item, manager, type);
+	}
+	
+	@Override
+	@Nonnull
+	public IWoodProvider getWoodProvider() {
+		return woodProvider;
 	}
 
 	@Nonnull

@@ -19,6 +19,7 @@ import forestry.core.utils.OreDictUtil;
 public class ItemRegistryArboriculture extends ItemRegistry {
 	public final ItemGermlingGE sapling;
 	public final ItemGermlingGE pollenFertile;
+	public final ItemGermlingGE charcoal;
 	public final ItemGrafter grafter;
 	public final ItemGrafter grafterProven;
 
@@ -27,6 +28,7 @@ public class ItemRegistryArboriculture extends ItemRegistry {
 		OreDictionary.registerOre(OreDictUtil.TREE_SAPLING, sapling.getWildcard());
 		
 		pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+		charcoal = registerItem(new ItemGermlingGE(EnumGermlingType.CHARCOAL), "charcoal");
 		grafter = registerItem(new ItemGrafter(4), "grafter");
 		grafterProven = registerItem(new ItemGrafter(149), "grafterProven");
 	}

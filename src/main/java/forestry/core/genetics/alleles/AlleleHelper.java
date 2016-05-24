@@ -91,8 +91,17 @@ public class AlleleHelper implements IAlleleHelper {
 			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
 					EnumTreeChromosome.GIRTH,
+					EnumTreeChromosome.CARBONIZATION,
+					EnumTreeChromosome.COMBUSTIBILITY,
 					EnumButterflyChromosome.METABOLISM,
 					EnumButterflyChromosome.FERTILITY
+			);
+			integers.put(i, alleleInteger);
+		}
+		for (int i = 11; i <= 25; i++) {
+			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
+			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
+					EnumTreeChromosome.COMBUSTIBILITY
 			);
 			integers.put(i, alleleInteger);
 		}

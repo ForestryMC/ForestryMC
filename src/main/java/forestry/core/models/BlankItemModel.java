@@ -33,7 +33,7 @@ public abstract class BlankItemModel implements IBakedModel {
 	}
 	
 	protected ItemOverrideList createOverrides(){
-		return new ItemOverrideList(Collections.emptyList());
+		return ItemOverrideList.NONE;
 	}
 	
 	@Override

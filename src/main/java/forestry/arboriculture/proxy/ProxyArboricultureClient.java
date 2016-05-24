@@ -12,11 +12,15 @@ package forestry.arboriculture.proxy;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
-
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import forestry.api.arboriculture.EnumPileType;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
+import forestry.arboriculture.models.ModelWoodPile;
+import forestry.arboriculture.render.CharcoalPileRenderer;
+import forestry.arboriculture.tiles.TilePile;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
 
@@ -38,6 +42,14 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModeLocation, new ModelDecorativeLeaves(), leaves);
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
+		
+		{
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:pile", "type=wood");
+			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:woodPile", "inventory");
+			BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
+			Proxies.render.registerBlockModel(blockModelIndex);
+		}
+		ClientRegistry.bindTileEntitySpecialRenderer(TilePile.class, new CharcoalPileRenderer());
 	}
 
 	@Override

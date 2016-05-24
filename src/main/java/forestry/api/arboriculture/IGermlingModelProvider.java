@@ -18,7 +18,7 @@ import forestry.api.core.IModelManager;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingModelProvider {
-	void registerModels(Item item, IModelManager manager);
+	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
 
 	@Nonnull
 	ModelResourceLocation getModel(EnumGermlingType type);

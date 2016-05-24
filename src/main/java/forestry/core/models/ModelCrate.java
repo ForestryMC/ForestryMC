@@ -59,7 +59,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankItemModel {
 
-	private static final Map<String, IBakedModel> crates = Maps.newHashMap();
+	private static final Map<String, IBakedModel> cache = Maps.newHashMap();
 
 	private static IModel crateModel;
 	private static ModelBlock MODEL_GENERATED;
@@ -76,7 +76,7 @@ public class ModelCrate extends BlankItemModel {
 		} catch (Exception e) {
 			Log.error("Failed to init the crate model.", e);
 		}
-		ModelCrate.crates.clear();
+		ModelCrate.cache.clear();
 	}
 
 	/**
@@ -211,16 +211,16 @@ public class ModelCrate extends BlankItemModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
 			String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
-			if (crates.get(crateUID) == null) {
+			if (cache.get(crateUID) == null) {
 				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 				//Set the crate color index to 100
 				for (BakedQuad quad : baseBaked.getQuads(null, null, 0)) {
 					ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
 				}
 				
-				crates.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeModel(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
+				cache.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeModel(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
 			}
-			return crates.get(crateUID);
+			return cache.get(crateUID);
 		}
 		
 	}

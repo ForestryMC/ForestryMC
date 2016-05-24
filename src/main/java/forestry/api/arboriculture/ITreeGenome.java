@@ -45,6 +45,10 @@ public interface ITreeGenome extends IGenome {
 	int getMaturationTime();
 
 	int getGirth();
+	
+	int getCombustibility();
+	
+	int getCarbonization();
 
 	IAlleleLeafEffect getEffect();
 }

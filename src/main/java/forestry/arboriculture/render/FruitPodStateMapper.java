@@ -1,4 +1,4 @@
-package forestry.arboriculture.models;
+package forestry.arboriculture.render;
 
 import java.util.Map;
 

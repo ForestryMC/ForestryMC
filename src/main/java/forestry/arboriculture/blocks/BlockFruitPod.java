@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
-import forestry.arboriculture.models.FruitPodStateMapper;
+import forestry.arboriculture.render.FruitPodStateMapper;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;

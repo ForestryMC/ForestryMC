@@ -66,6 +66,7 @@ public class OreDictUtil {
 	public static final String INGOT_GOLD = "ingotGold";
 	public static final String INGOT_IRON = "ingotIron";
 	public static final String STONE = "stone";
+	public static final String DIRT = "dirt";
 	public static final String BLOCK_GLASS = "blockGlass";
 	public static final String GEM_QUARTZ = "gemQuartz";
 	public static final String CHEST_WOOD = "chestWood";

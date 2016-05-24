@@ -133,6 +133,8 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return EnumGermlingType.SAPLING;
 		} else if (PluginArboriculture.items.pollenFertile == item) {
 			return EnumGermlingType.POLLEN;
+		} else if (PluginArboriculture.items.charcoal == item) {
+			return EnumGermlingType.CHARCOAL;
 		}
 
 		return null;
@@ -192,6 +194,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 				break;
 			case POLLEN:
 				germlingItem = PluginArboriculture.items.pollenFertile;
+				break;
+			case CHARCOAL:
+				germlingItem = PluginArboriculture.items.charcoal;
 				break;
 			default:
 				throw new RuntimeException("Cannot instantiate a tree of type " + type);
