@@ -130,8 +130,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
 
 		fuelBurnTime--;
-		resourceTank.drain(fuelCurrentFerment, true);
-		fermentationTime -= this.fuelCurrentFerment;
+		resourceTank.drain(fermented, true);
+		fermentationTime -= fermented;
 
 		// Not done yet
 		if (fermentationTime > 0) {
@@ -215,14 +215,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		checkRecipe();
 		checkFuel();
 
+		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
+
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
 		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
-		boolean hasFluidResource = resourceTank.canDrain(fuelCurrentFerment);
+		boolean hasFluidResource = resourceTank.canDrain(fermented);
 		boolean hasFluidSpace = true;
 
 		if (hasRecipe) {
-			int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 			hasFluidSpace = productTank.canFill(currentRecipe.getOutput(), productAmount);
 		}
