@@ -463,6 +463,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new PileStateMapper());
 	}
