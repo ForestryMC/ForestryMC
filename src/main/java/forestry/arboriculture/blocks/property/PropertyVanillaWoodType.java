@@ -24,7 +24,7 @@ public class PropertyVanillaWoodType extends PropertyWoodType<EnumVanillaWoodTyp
 	public static PropertyVanillaWoodType[] create(@Nonnull String name, int variantsPerBlock) {
 		final int variantCount = (int) Math.ceil((float) EnumVanillaWoodType.VALUES.length / variantsPerBlock);
 		PropertyVanillaWoodType[] variants = new PropertyVanillaWoodType[variantCount];
-		for (int variantNumber = 0; variantNumber < variantCount;  variantNumber++) {
+		for (int variantNumber = 0; variantNumber < variantCount; variantNumber++) {
 			WoodTypePredicate filter = new WoodTypePredicate(variantNumber, variantsPerBlock);
 			Collection<EnumVanillaWoodType> allowedValues = Collections2.filter(Lists.newArrayList(EnumVanillaWoodType.class.getEnumConstants()), filter);
 			variants[variantNumber] = new PropertyVanillaWoodType(name, EnumVanillaWoodType.class, allowedValues);

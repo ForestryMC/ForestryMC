@@ -13,7 +13,7 @@ public class PropertyForestryWoodType extends PropertyWoodType<EnumForestryWoodT
 	public static PropertyForestryWoodType[] create(@Nonnull String name, int variantsPerBlock) {
 		final int variantCount = (int) Math.ceil((float) EnumForestryWoodType.VALUES.length / variantsPerBlock);
 		PropertyForestryWoodType[] variants = new PropertyForestryWoodType[variantCount];
-		for (int variantNumber = 0; variantNumber < variantCount;  variantNumber++) {
+		for (int variantNumber = 0; variantNumber < variantCount; variantNumber++) {
 			WoodTypePredicate filter = new WoodTypePredicate(variantNumber, variantsPerBlock);
 			Collection<EnumForestryWoodType> allowedValues = Collections2.filter(Lists.newArrayList(EnumForestryWoodType.class.getEnumConstants()), filter);
 			variants[variantNumber] = new PropertyForestryWoodType(name, EnumForestryWoodType.class, allowedValues);
