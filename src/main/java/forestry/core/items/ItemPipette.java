@@ -47,7 +47,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = PipetteContents.create(itemstack);
-		return contained != null && !contained.isFull();
+		return contained == null || !contained.isFull();
 	}
 
 	@Override
