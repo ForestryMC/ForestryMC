@@ -10,34 +10,43 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.IWoodProvider;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ITextureManager;
-import forestry.core.render.ForestryResource;
-import forestry.core.render.TextureManager;
+import javax.annotation.Nonnull;
+import java.util.Locale;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import forestry.api.arboriculture.EnumForestryWoodType;
+import forestry.api.arboriculture.IWoodProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.ITextureManager;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
 
 public class WoodProvider implements IWoodProvider {
 
 	private final String name;
-	private final EnumWoodType woodType;
-	private  TextureAtlasSprite woodTop;
-	private  TextureAtlasSprite woodBark;
+	private final EnumForestryWoodType woodType;
+	private TextureAtlasSprite woodTop;
+	private TextureAtlasSprite woodBark;
 
-	public WoodProvider(String name, EnumWoodType woodType) {
-		this.name = name;
+	public WoodProvider(EnumForestryWoodType woodType) {
+		this.name = woodType.toString().toLowerCase(Locale.ENGLISH);
 		this.woodType = woodType;
 	}
 	
 	@Override
 	public void registerSprites(Item item, ITextureManager manager) {
-		woodTop = TextureManager.registerSprite(new ForestryResource("blocks/wood/heart." + name));
-		woodBark = TextureManager.registerSprite(new ForestryResource("blocks/wood/bark." + name));
+		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
+		woodTop = textureMap.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/wood/heart." + name));
+		woodBark = textureMap.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/wood/bark." + name));
 	}
 
+	@Nonnull
 	@Override
 	public TextureAtlasSprite getSprite(boolean isTop) {
 		if(isTop){
@@ -49,7 +58,7 @@ public class WoodProvider implements IWoodProvider {
 	
 	@Override
 	public ItemStack getWoodStack() {
-		return TreeManager.woodAccess.getLog(woodType, false);
+		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 	}
 
 }

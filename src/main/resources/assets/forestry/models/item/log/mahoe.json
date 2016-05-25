@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/mahoe",
+    "parent": "forestry:block/arboriculture/log/mahoe",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

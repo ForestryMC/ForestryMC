@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Random;
 
 import net.minecraft.block.BlockDoor;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,8 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
@@ -37,9 +37,9 @@ import forestry.arboriculture.WoodHelper;
 import forestry.core.proxy.Proxies;
 
 public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
-	private final EnumWoodType woodType;
+	private final EnumForestryWoodType woodType;
 
-	public BlockArbDoor(EnumWoodType woodType) {
+	public BlockArbDoor(EnumForestryWoodType woodType) {
 		super(MaterialArbWood.ARB_WOOD);
 		this.woodType = woodType;
 
@@ -62,8 +62,8 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 
 	@Nonnull
 	@Override
-	public String getBlockKind() {
-		return "doors";
+	public WoodBlockKind getBlockKind() {
+		return WoodBlockKind.DOOR;
 	}
 
 	@Override
@@ -73,20 +73,20 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 
 	@Nonnull
 	@Override
-	public EnumWoodType getWoodType(int meta) {
+	public EnumForestryWoodType getWoodType(int meta) {
 		return woodType;
 	}
 
 	@Nonnull
 	@Override
-	public Collection<EnumWoodType> getWoodTypes() {
+	public Collection<EnumForestryWoodType> getWoodTypes() {
 		return Collections.singleton(woodType);
 	}
 
 	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
-		EnumWoodType woodType = getWoodType(meta);
+		EnumForestryWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();
 	}
 
@@ -105,6 +105,6 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	}
 
 	private Item getItem() {
-		return TreeManager.woodAccess.getDoor(woodType).getItem();
+		return TreeManager.woodAccess.getStack(woodType, getBlockKind(), false).getItem();
 	}
 }

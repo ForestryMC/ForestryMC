@@ -16,11 +16,7 @@ import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -30,11 +26,12 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
@@ -44,7 +41,9 @@ import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutationCustom;
 import forestry.api.arboriculture.IWoodProvider;
+import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
@@ -52,8 +51,7 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
-import forestry.arboriculture.models.ModelProviderGermling;
-import forestry.arboriculture.models.ModelProviderGermlingVanilla;
+import forestry.arboriculture.models.ModelProviderFactory;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
 import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
@@ -98,7 +96,7 @@ import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
-	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK)) {
+	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenOak(tree);
@@ -123,7 +121,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	DarkOak(TreeBranchDefinition.QUERCUS, "darkOak", "velutina", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 5, Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK)) {
+	DarkOak(TreeBranchDefinition.QUERCUS, "darkOak", "velutina", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.DARK_OAK) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenDarkOak(tree);
@@ -148,7 +146,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Birch(TreeBranchDefinition.BETULA, "silverBirch", "pendula", false, EnumLeafType.DECIDUOUS, new Color(8431445), new Color(0xb0c648), 2, Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.BIRCH)) {
+	Birch(TreeBranchDefinition.BETULA, "silverBirch", "pendula", false, EnumLeafType.DECIDUOUS, new Color(8431445), new Color(0xb0c648), EnumVanillaWoodType.BIRCH) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenBirch(tree);
@@ -171,7 +169,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Lime(TreeBranchDefinition.TILIA, "silverLime", "pendula", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0x5ea107).brighter(), EnumWoodType.LIME) {
+	Lime(TreeBranchDefinition.TILIA, "silverLime", "pendula", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0x5ea107).brighter(), EnumForestryWoodType.LIME) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenSilverLime(tree);
@@ -198,7 +196,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Birch, Oak, 15);
 		}
 	},
-	Walnut(TreeBranchDefinition.JUGLANS, "commonWalnut", "regia", true, EnumLeafType.DECIDUOUS, new Color(0x798c55), new Color(0xb0c648), EnumWoodType.WALNUT) {
+	Walnut(TreeBranchDefinition.JUGLANS, "commonWalnut", "regia", true, EnumLeafType.DECIDUOUS, new Color(0x798c55), new Color(0xb0c648), EnumForestryWoodType.WALNUT) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenWalnut(tree);
@@ -227,7 +225,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Lime, Cherry, 10);
 		}
 	},
-	Chestnut(TreeBranchDefinition.CASTANEA, "sweetChestnut", "sativa", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0xb0c648), EnumWoodType.CHESTNUT) {
+	Chestnut(TreeBranchDefinition.CASTANEA, "sweetChestnut", "sativa", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0xb0c648), EnumForestryWoodType.CHESTNUT) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenChestnut(tree);
@@ -256,7 +254,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Walnut, Cherry, 10);
 		}
 	},
-	Cherry(TreeBranchDefinition.PRUNUS, "hillCherry", "serrulata", true, EnumLeafType.DECIDUOUS, new Color(0xe691da), new Color(0xe63e59), EnumWoodType.CHERRY) {
+	Cherry(TreeBranchDefinition.PRUNUS, "hillCherry", "serrulata", true, EnumLeafType.DECIDUOUS, new Color(0xe691da), new Color(0xe63e59), EnumForestryWoodType.CHERRY) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenCherry(tree);
@@ -283,7 +281,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Lime, Birch, 10);
 		}
 	},
-	Lemon(TreeBranchDefinition.CITRUS, "lemon", "limon", true, EnumLeafType.DECIDUOUS, new Color(0x88af54), new Color(0xa3b850), EnumWoodType.CITRUS) {
+	Lemon(TreeBranchDefinition.CITRUS, "lemon", "limon", true, EnumLeafType.DECIDUOUS, new Color(0x88af54), new Color(0xa3b850), EnumForestryWoodType.CITRUS) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenLemon(tree);
@@ -308,7 +306,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Lime, Cherry, 5);
 		}
 	},
-	Plum(TreeBranchDefinition.PRUNUS, "plum", "domestica", true, EnumLeafType.DECIDUOUS, new Color(0x589246), new Color(0xa3b850), EnumWoodType.PLUM) {
+	Plum(TreeBranchDefinition.PRUNUS, "plum", "domestica", true, EnumLeafType.DECIDUOUS, new Color(0x589246), new Color(0xa3b850), EnumForestryWoodType.PLUM) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPlum(tree);
@@ -333,7 +331,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Lemon, Cherry, 5);
 		}
 	},
-	Maple(TreeBranchDefinition.ACER, "sugarMaple", "saccharum", true, EnumLeafType.MAPLE, new Color(0xd4f425), new Color(0x619a3c), EnumWoodType.MAPLE) {
+	Maple(TreeBranchDefinition.ACER, "sugarMaple", "saccharum", true, EnumLeafType.MAPLE, new Color(0xd4f425), new Color(0x619a3c), EnumForestryWoodType.MAPLE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenMaple(tree);
@@ -358,7 +356,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Spruce, Larch, 5);
 		}
 	},
-	Spruce(TreeBranchDefinition.PICEA, "redSpruce", "abies", false, EnumLeafType.CONIFERS, new Color(6396257), new Color(0x539d12), 1, Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE)) {
+	Spruce(TreeBranchDefinition.PICEA, "redSpruce", "abies", false, EnumLeafType.CONIFERS, new Color(6396257), new Color(0x539d12), EnumVanillaWoodType.SPRUCE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenSpruce(tree);
@@ -382,7 +380,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Larch(TreeBranchDefinition.LARIX, "mundaneLarch", "decidua", true, EnumLeafType.CONIFERS, new Color(0x698f90), new Color(0x569896), EnumWoodType.LARCH) {
+	Larch(TreeBranchDefinition.LARIX, "mundaneLarch", "decidua", true, EnumLeafType.CONIFERS, new Color(0x698f90), new Color(0x569896), EnumForestryWoodType.LARCH) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenLarch(tree);
@@ -407,7 +405,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Spruce, Oak, 10);
 		}
 	},
-	Pine(TreeBranchDefinition.PINUS, "bullPine", "sabiniana", true, EnumLeafType.CONIFERS, new Color(0xfeff8f), new Color(0xffd98f), EnumWoodType.PINE) {
+	Pine(TreeBranchDefinition.PINUS, "bullPine", "sabiniana", true, EnumLeafType.CONIFERS, new Color(0xfeff8f), new Color(0xffd98f), EnumForestryWoodType.PINE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPine(tree);
@@ -430,7 +428,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Spruce, Larch, 10);
 		}
 	},
-	Sequoia(TreeBranchDefinition.SEQUOIA, "coastSequoia", "sempervirens", false, EnumLeafType.CONIFERS, new Color(0x418e71), new Color(0x569896), EnumWoodType.SEQUOIA) {
+	Sequoia(TreeBranchDefinition.SEQUOIA, "coastSequoia", "sempervirens", false, EnumLeafType.CONIFERS, new Color(0x418e71), new Color(0x569896), EnumForestryWoodType.SEQUOIA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenSequoia(tree);
@@ -455,7 +453,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Larch, Pine, 5);
 		}
 	},
-	Gigant(TreeBranchDefinition.SEQUOIADENDRON, "giantSequoia", "giganteum", false, EnumLeafType.CONIFERS, new Color(0x738434), new Color(0x738434).brighter(), EnumWoodType.GIGANTEUM) {
+	Gigant(TreeBranchDefinition.SEQUOIADENDRON, "giantSequoia", "giganteum", false, EnumLeafType.CONIFERS, new Color(0x738434), new Color(0x738434).brighter(), EnumForestryWoodType.GIGANTEUM) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenGiganteum(tree);
@@ -482,7 +480,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// only available by rare villager trade
 		}
 	},
-	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), 3, Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE)) {
+	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), EnumVanillaWoodType.JUNGLE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenJungle(tree);
@@ -506,7 +504,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Teak(TreeBranchDefinition.TECTONA, "teak", "grandis", true, EnumLeafType.JUNGLE, new Color(0xfeff8f), new Color(0xffd98f), EnumWoodType.TEAK) {
+	Teak(TreeBranchDefinition.TECTONA, "teak", "grandis", true, EnumLeafType.JUNGLE, new Color(0xfeff8f), new Color(0xffd98f), EnumForestryWoodType.TEAK) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenTeak(tree);
@@ -527,7 +525,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(DarkOak, Jungle, 10);
 		}
 	},
-	Ipe(TreeBranchDefinition.TABEBUIA, "ipe", "serratifolia", true, EnumLeafType.JUNGLE, new Color(0xfdd207), new Color(0xad8f04), EnumWoodType.IPE) {
+	Ipe(TreeBranchDefinition.TABEBUIA, "ipe", "serratifolia", true, EnumLeafType.JUNGLE, new Color(0xfdd207), new Color(0xad8f04), EnumForestryWoodType.IPE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenIpe(tree);
@@ -550,7 +548,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Teak, DarkOak, 10);
 		}
 	},
-	Kapok(TreeBranchDefinition.CEIBA, "kapok", "pentandra", true, EnumLeafType.JUNGLE, new Color(0x89987b), new Color(0x89aa9e), EnumWoodType.KAPOK) {
+	Kapok(TreeBranchDefinition.CEIBA, "kapok", "pentandra", true, EnumLeafType.JUNGLE, new Color(0x89987b), new Color(0x89aa9e), EnumForestryWoodType.KAPOK) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenKapok(tree);
@@ -574,7 +572,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Jungle, Teak, 10);
 		}
 	},
-	Ebony(TreeBranchDefinition.EBONY, "myrtleEbony", "pentamera", true, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), EnumWoodType.EBONY) {
+	Ebony(TreeBranchDefinition.EBONY, "myrtleEbony", "pentamera", true, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), EnumForestryWoodType.EBONY) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenEbony(tree);
@@ -600,7 +598,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(DarkOak, Kapok, 10);
 		}
 	},
-	Zebrawood(TreeBranchDefinition.ASTRONIUM, "zebrawood", "graveolens", false, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), EnumWoodType.ZEBRAWOOD) {
+	Zebrawood(TreeBranchDefinition.ASTRONIUM, "zebrawood", "graveolens", false, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), EnumForestryWoodType.ZEBRAWOOD) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenZebrawood(tree);
@@ -622,7 +620,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Ebony, Poplar, 5);
 		}
 	},
-	Mahogony(TreeBranchDefinition.MAHOGANY, "yellowMeranti", "gibbosa", true, EnumLeafType.JUNGLE, new Color(0x8ab154), new Color(0xa9b154), EnumWoodType.MAHOGANY) {
+	Mahogony(TreeBranchDefinition.MAHOGANY, "yellowMeranti", "gibbosa", true, EnumLeafType.JUNGLE, new Color(0x8ab154), new Color(0xa9b154), EnumForestryWoodType.MAHOGANY) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenMahogany(tree);
@@ -646,7 +644,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Kapok, Ebony, 10);
 		}
 	},
-	AcaciaVanilla(TreeBranchDefinition.ACACIA, "acacia", "aneura", true, EnumLeafType.DECIDUOUS, new Color(0x616101), new Color(0xb3b302), 4, Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA)) {
+	AcaciaVanilla(TreeBranchDefinition.ACACIA, "acacia", "aneura", true, EnumLeafType.DECIDUOUS, new Color(0x616101), new Color(0xb3b302), EnumVanillaWoodType.ACACIA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenAcaciaVanilla(tree);
@@ -668,7 +666,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumWoodType.ACACIA) {
+	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumForestryWoodType.ACACIA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenAcacia(tree);
@@ -691,7 +689,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Teak, Balsa, 10);
 		}
 	},
-	Padauk(TreeBranchDefinition.PTEROCARPUS, "padauk", "soyauxii", true, EnumLeafType.DECIDUOUS, new Color(0xd0df8c), new Color(0x435c32), EnumWoodType.PADAUK) {
+	Padauk(TreeBranchDefinition.PTEROCARPUS, "padauk", "soyauxii", true, EnumLeafType.DECIDUOUS, new Color(0xd0df8c), new Color(0x435c32), EnumForestryWoodType.PADAUK) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPadauk(tree);
@@ -713,7 +711,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(AcaciaVanilla, Jungle, 10);
 		}
 	},
-	Balsa(TreeBranchDefinition.OCHROMA, "balsa", "pyramidale", true, EnumLeafType.DECIDUOUS, new Color(0x59ac00), new Color(0xfeff8f), EnumWoodType.BALSA) {
+	Balsa(TreeBranchDefinition.OCHROMA, "balsa", "pyramidale", true, EnumLeafType.DECIDUOUS, new Color(0x59ac00), new Color(0xfeff8f), EnumForestryWoodType.BALSA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenBalsa(tree);
@@ -737,7 +735,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Teak, AcaciaVanilla, 10);
 		}
 	},
-	Cocobolo(TreeBranchDefinition.DALBERGIA, "cocobolo", "retusa", false, EnumLeafType.DECIDUOUS, new Color(0x6aa17a), new Color(0x487d4c), EnumWoodType.COCOBOLO) {
+	Cocobolo(TreeBranchDefinition.DALBERGIA, "cocobolo", "retusa", false, EnumLeafType.DECIDUOUS, new Color(0x6aa17a), new Color(0x487d4c), EnumForestryWoodType.COCOBOLO) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenCocobolo(tree);
@@ -758,7 +756,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Acacia, DarkOak, 10);
 		}
 	},
-	Wenge(TreeBranchDefinition.MILLETTIA, "wenge", "laurentii", true, EnumLeafType.DECIDUOUS, new Color(0xada157), new Color(0xad8a57), EnumWoodType.WENGE) {
+	Wenge(TreeBranchDefinition.MILLETTIA, "wenge", "laurentii", true, EnumLeafType.DECIDUOUS, new Color(0xada157), new Color(0xad8a57), EnumForestryWoodType.WENGE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenWenge(tree);
@@ -781,7 +779,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Cocobolo, Balsa, 10);
 		}
 	},
-	Baobab(TreeBranchDefinition.ADANSONIA, "grandidierBaobab", "digitata", true, EnumLeafType.DECIDUOUS, new Color(0xfeff8f), new Color(0xffd98f), EnumWoodType.BAOBAB) {
+	Baobab(TreeBranchDefinition.ADANSONIA, "grandidierBaobab", "digitata", true, EnumLeafType.DECIDUOUS, new Color(0xfeff8f), new Color(0xffd98f), EnumForestryWoodType.BAOBAB) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenBaobab(tree);
@@ -807,7 +805,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Balsa, Wenge, 10);
 		}
 	},
-	Mahoe(TreeBranchDefinition.TALIPARITI, "blueMahoe", "elatum", true, EnumLeafType.DECIDUOUS, new Color(0xa0ba1b), new Color(0x79a175), EnumWoodType.MAHOE) {
+	Mahoe(TreeBranchDefinition.TALIPARITI, "blueMahoe", "elatum", true, EnumLeafType.DECIDUOUS, new Color(0xa0ba1b), new Color(0x79a175), EnumForestryWoodType.MAHOE) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenMahoe(tree);
@@ -832,7 +830,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Balsa, Acacia, 5);
 		}
 	},
-	Willow(TreeBranchDefinition.SALIX, "whiteWillow", "alba", true, EnumLeafType.WILLOW, new Color(0xa3b8a5), new Color(0xa3b850), EnumWoodType.WILLOW) {
+	Willow(TreeBranchDefinition.SALIX, "whiteWillow", "alba", true, EnumLeafType.WILLOW, new Color(0xa3b8a5), new Color(0xa3b850), EnumForestryWoodType.WILLOW) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenWillow(tree);
@@ -865,7 +863,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 					.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
-	Sipiri(TreeBranchDefinition.CHLOROCARDIUM, "sipiri", "rodiei", true, EnumLeafType.DECIDUOUS, new Color(0x678911), new Color(0x79a175), EnumWoodType.GREENHEART) {
+	Sipiri(TreeBranchDefinition.CHLOROCARDIUM, "sipiri", "rodiei", true, EnumLeafType.DECIDUOUS, new Color(0x678911), new Color(0x79a175), EnumForestryWoodType.GREENHEART) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenGreenheart(tree);
@@ -891,7 +889,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 					.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
-	Papaya(TreeBranchDefinition.CARICA, "papaya", "papaya", true, EnumLeafType.PALM, new Color(0x6d9f58), new Color(0x75E675), EnumWoodType.PAPAYA) {
+	Papaya(TreeBranchDefinition.CARICA, "papaya", "papaya", true, EnumLeafType.PALM, new Color(0x6d9f58), new Color(0x75E675), EnumForestryWoodType.PAPAYA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPapaya(tree);
@@ -916,7 +914,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Jungle, Cherry, 5);
 		}
 	},
-	Date(TreeBranchDefinition.PHOENIX, "datePalm", "dactylifera", true, EnumLeafType.PALM, new Color(0xcbcd79), new Color(0xB3F370), EnumWoodType.PALM) {
+	Date(TreeBranchDefinition.PHOENIX, "datePalm", "dactylifera", true, EnumLeafType.PALM, new Color(0xcbcd79), new Color(0xB3F370), EnumForestryWoodType.PALM) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenDate(tree);
@@ -942,7 +940,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Jungle, Papaya, 5);
 		}
 	},
-	Poplar(TreeBranchDefinition.POPULUS, "whitePoplar", "alba", true, EnumLeafType.DECIDUOUS, new Color(0xa3b8a5), new Color(0x539d12), EnumWoodType.POPLAR) {
+	Poplar(TreeBranchDefinition.POPULUS, "whitePoplar", "alba", true, EnumLeafType.DECIDUOUS, new Color(0xa3b8a5), new Color(0x539d12), EnumForestryWoodType.POPLAR) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPoplar(tree);
@@ -974,52 +972,27 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	private final TreeBranchDefinition branch;
 	private final IAlleleTreeSpecies species;
 
-	private final EnumWoodType woodType; // for forestry trees
-	private final IBlockState vanillaWood; // for vanilla trees
+	private final IWoodType woodType;
 
 	private IAllele[] template;
 	private ITreeGenome genome;
 
-	// vanilla tree constructor
-	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, int vanillaMeta, IBlockState vanillaWood) {
-		String uid = "forestry.tree" + this;
-		String unlocalizedDescription = "for.description.tree" + this;
-		String unlocalizedName = "for.trees.species." + speciesName;
-		String modelName = uid.substring("forestry.".length());
-
-		this.branch = branch;
-
-		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
-		IGermlingModelProvider germlingIconProvider = new ModelProviderGermlingVanilla(vanillaMeta);
-		IWoodProvider woodProvider = new WoodProviderVanilla(vanillaMeta);
-
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, woodProvider, this);
-		setSpeciesProperties(speciesBuilder);
-		this.species = speciesBuilder.build();
-
-		this.woodType = null;
-		this.vanillaWood = vanillaWood;
-	}
-
-	// forestry tree constructor
-	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, EnumWoodType woodType) {
+	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, IWoodType woodType) {
 		String uid = Constants.MOD_ID + ".tree" + this;
 		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
-		String modelName = uid.substring("forestry.".length());
 
 		this.branch = branch;
 
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
-		IGermlingModelProvider germlingIconProvider = new ModelProviderGermling(uid);
-		IWoodProvider woodProvider = new WoodProvider(woodType.toString().toLowerCase(Locale.ENGLISH), woodType);
+		IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid);
+		IWoodProvider woodProvider = WoodProviderFactory.create(woodType);
 
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, modelName, leafIconProvider, germlingIconProvider, woodProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, leafIconProvider, germlingIconProvider, woodProvider, this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 
 		this.woodType = woodType;
-		this.vanillaWood = null;
 	}
 
 	protected abstract void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies);
@@ -1030,14 +1003,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
-		IBlockState logBlock;
-		if (woodType == null) {
-			logBlock = vanillaWood;
-		} else {
-			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
-			boolean fireproof = fireproofAllele.getValue();
-			logBlock = TreeManager.woodAccess.getLogBlock(woodType, fireproof);
-		}
+		AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
+		boolean fireproof = fireproofAllele.getValue();
+		IBlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
+
 		BlockLog.EnumAxis axis = BlockLog.EnumAxis.fromFacingAxis(facing.getAxis());
 		return world.setBlockState(pos, logBlock.withProperty(BlockLog.LOG_AXIS, axis));
 	}

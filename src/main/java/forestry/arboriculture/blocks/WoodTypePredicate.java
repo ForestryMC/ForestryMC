@@ -2,9 +2,9 @@ package forestry.arboriculture.blocks;
 
 import com.google.common.base.Predicate;
 
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.IWoodType;
 
-public class WoodTypePredicate implements Predicate<EnumWoodType> {
+public class WoodTypePredicate implements Predicate<IWoodType> {
 	private final int minWoodTypeMeta;
 	private final int maxWoodTypeMeta;
 
@@ -14,7 +14,7 @@ public class WoodTypePredicate implements Predicate<EnumWoodType> {
 	}
 
 	@Override
-	public boolean apply(EnumWoodType woodType) {
+	public boolean apply(IWoodType woodType) {
 		return woodType.getMetadata() >= minWoodTypeMeta && woodType.getMetadata() <= maxWoodTypeMeta;
 	}
 }

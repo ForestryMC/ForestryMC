@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import java.awt.Color;
-
 import javax.annotation.Nonnull;
+import java.awt.Color;
 
 import forestry.api.genetics.IClassification;
 
@@ -25,14 +24,13 @@ public interface ITreeFactory {
 	 * @param branch Classification of this species
 	 * @param binomial Binomial name of the species sans genus. "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names or null.
 	 * @param modID The modID from the mod of the species
-	 * @param modelName The model name for this species
 	 * @param leafSpriteProvider The leaf sprite provider for this species
 	 * @param germlingModelProvider The germling model provider for this species
 	 * @param woodProvider The wood texture provider. It is used to get wood textures for the charcoal pile.
 	 * @param generator The tree generator
 	 * @return a new tree species allele.
 	 */
-	IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, String modelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, @Nonnull IWoodProvider woodProvider, ITreeGenerator generator);
+	IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, @Nonnull IWoodProvider woodProvider, ITreeGenerator generator);
 
 	/** Get one of the built-in Forestry leaf types. Default type is deciduous. */
 	ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated);

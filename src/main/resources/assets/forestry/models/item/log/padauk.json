@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/padauk",
+    "parent": "forestry:block/arboriculture/log/padauk",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

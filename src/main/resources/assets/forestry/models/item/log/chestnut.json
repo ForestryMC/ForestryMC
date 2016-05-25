@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/chestnut",
+    "parent": "forestry:block/arboriculture/log/chestnut",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

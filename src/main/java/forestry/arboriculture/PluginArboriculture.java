@@ -13,6 +13,7 @@ package forestry.arboriculture;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -39,12 +40,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ILeafTranslator;
@@ -52,10 +56,10 @@ import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.arboriculture.blocks.BlockArbLog;
-import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.blocks.log.BlockArbLog;
+import forestry.arboriculture.blocks.slab.BlockArbSlab;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -152,6 +156,13 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		WoodAccess.registerFenceGates(blocks.fenceGatesFireproof);
 		WoodAccess.registerStairs(blocks.stairsFireproof);
 
+		WoodAccess.registerLogs(blocks.logsVanillaFireproof);
+		WoodAccess.registerPlanks(blocks.planksVanillaFireproof);
+		WoodAccess.registerSlabs(blocks.slabsVanillaFireproof);
+		WoodAccess.registerFences(blocks.fencesVanillaFireproof);
+		WoodAccess.registerFenceGates(blocks.fenceGatesVanillaFireproof);
+		WoodAccess.registerStairs(blocks.stairsVanillaFireproof);
+
 		// Init rendering
 		proxy.initializeModels();
 
@@ -227,35 +238,69 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			RecipeUtil.addSmelting(logInput, coalOutput, 0.15F);
 		}
 
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			ItemStack planks = TreeManager.woodAccess.getPlanks(woodType, false);
-			ItemStack logs = TreeManager.woodAccess.getLog(woodType, false);
-			ItemStack slabs = TreeManager.woodAccess.getSlab(woodType, false);
-			ItemStack fences = TreeManager.woodAccess.getFence(woodType, false);
-			ItemStack fenceGates = TreeManager.woodAccess.getFenceGate(woodType, false);
-			ItemStack stairs = TreeManager.woodAccess.getStairs(woodType, false);
-			ItemStack doors = TreeManager.woodAccess.getDoor(woodType);
+		List<IWoodType> allWoodTypes = new ArrayList<>();
+		Collections.addAll(allWoodTypes, EnumForestryWoodType.VALUES);
+		Collections.addAll(allWoodTypes, EnumVanillaWoodType.VALUES);
 
-			ItemStack fireproofPlanks = TreeManager.woodAccess.getPlanks(woodType, true);
-			ItemStack fireproofLogs = TreeManager.woodAccess.getLog(woodType, true);
-			ItemStack fireproofSlabs = TreeManager.woodAccess.getSlab(woodType, true);
-			ItemStack fireproofFences = TreeManager.woodAccess.getFence(woodType, true);
-			ItemStack fireproofFenceGates = TreeManager.woodAccess.getFenceGate(woodType, true);
-			ItemStack fireproofStairs = TreeManager.woodAccess.getStairs(woodType, true);
+		for (IWoodType woodType : allWoodTypes) {
+			ItemStack planks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
+			ItemStack logs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
+			ItemStack slabs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.SLAB, false);
+			ItemStack fences = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE, false);
+			ItemStack fenceGates = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE_GATE, false);
+			ItemStack stairs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.STAIRS, false);
+			ItemStack doors = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.DOOR, false);
 
-			planks.stackSize = 4;
-			logs.stackSize = 1;
-			RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
+			ItemStack fireproofPlanks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, true);
+			ItemStack fireproofLogs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, true);
+			ItemStack fireproofSlabs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.SLAB, true);
+			ItemStack fireproofFences = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE, true);
+			ItemStack fireproofFenceGates = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE_GATE, true);
+			ItemStack fireproofStairs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.STAIRS, true);
+
+			if (woodType instanceof EnumForestryWoodType) {
+				planks.stackSize = 4;
+				logs.stackSize = 1;
+				RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
+
+				slabs.stackSize = 6;
+				planks.stackSize = 1;
+				RecipeUtil.addPriorityRecipe(slabs.copy(), "###", '#', planks.copy());
+
+				fences.stackSize = 3;
+				planks.stackSize = 1;
+				RecipeUtil.addRecipe(fences.copy(),
+						"#X#",
+						"#X#",
+						'#', planks.copy(), 'X', "stickWood");
+
+				fenceGates.stackSize = 1;
+				planks.stackSize = 1;
+				RecipeUtil.addRecipe(fenceGates.copy(),
+						"X#X",
+						"X#X",
+						'#', planks.copy(), 'X', "stickWood");
+
+				stairs.stackSize = 4;
+				planks.stackSize = 1;
+				RecipeUtil.addPriorityRecipe(stairs.copy(),
+						"#  ",
+						"## ",
+						"###",
+						'#', planks.copy());
+
+				doors.stackSize = 3;
+				planks.stackSize = 1;
+				RecipeUtil.addPriorityRecipe(doors.copy(),
+						"## ",
+						"## ",
+						"## ",
+						'#', planks.copy());
+			}
 
 			fireproofPlanks.stackSize = 4;
 			fireproofLogs.stackSize = 1;
 			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
-			
-			slabs.stackSize = 6;
-			planks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(slabs.copy(),
-					"###",
-					'#', planks.copy());
 
 			fireproofSlabs.stackSize = 6;
 			fireproofPlanks.stackSize = 1;
@@ -263,26 +308,12 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					"###",
 					'#', fireproofPlanks.copy());
 
-			fences.stackSize = 3;
-			planks.stackSize = 1;
-			RecipeUtil.addRecipe(fences.copy(),
-					"#X#",
-					"#X#",
-					'#', planks.copy(), 'X', "stickWood");
-
 			fireproofFences.stackSize = 3;
 			fireproofPlanks.stackSize = 1;
 			RecipeUtil.addRecipe(fireproofFences.copy(),
 					"#X#",
 					"#X#",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
-			
-			fenceGates.stackSize = 1;
-			planks.stackSize = 1;
-			RecipeUtil.addRecipe(fenceGates.copy(),
-					"X#X",
-					"X#X",
-					'#', planks.copy(), 'X', "stickWood");
 
 			fireproofFenceGates.stackSize = 1;
 			fireproofPlanks.stackSize = 1;
@@ -291,14 +322,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					"X#X",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
-			stairs.stackSize = 4;
-			planks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(stairs.copy(),
-					"#  ",
-					"## ",
-					"###",
-					'#', planks.copy());
-
 			fireproofStairs.stackSize = 4;
 			fireproofPlanks.stackSize = 1;
 			RecipeUtil.addPriorityRecipe(fireproofStairs.copy(),
@@ -306,14 +329,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					"## ",
 					"###",
 					'#', fireproofPlanks.copy());
-
-			doors.stackSize = 3;
-			planks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(doors.copy(),
-					"## ",
-					"## ",
-					"## ",
-					'#', planks.copy());
 
 			doors.stackSize = 3;
 			fireproofPlanks.stackSize = 1;

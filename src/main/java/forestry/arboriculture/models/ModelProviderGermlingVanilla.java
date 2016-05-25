@@ -14,42 +14,44 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
-	private final int vanillaMap;
+	private final EnumVanillaWoodType woodType;
 
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
 	private ModelResourceLocation charcoalModel;
 
-	public ModelProviderGermlingVanilla(int vanillaMap) {
-		this.vanillaMap = vanillaMap;
+	public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType) {
+		this.woodType = woodType;
 	}
 
 	@Override
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
 		if(type == EnumGermlingType.SAPLING){
-			switch (vanillaMap) {
-				case 0:
+			switch (woodType) {
+				case OAK:
 					germlingModel = manager.getModelLocation("minecraft", "oak_sapling");
 					break;
-				case 1:
+				case SPRUCE:
 					germlingModel = manager.getModelLocation("minecraft", "spruce_sapling");
 					break;
-				case 2:
+				case BIRCH:
 					germlingModel = manager.getModelLocation("minecraft", "birch_sapling");
 					break;
-				case 3:
+				case JUNGLE:
 					germlingModel = manager.getModelLocation("minecraft", "jungle_sapling");
 					break;
-				case 4:
+				case ACACIA:
 					germlingModel = manager.getModelLocation("minecraft", "acacia_sapling");
 					break;
-				case 5:
+				case DARK_OAK:
 					germlingModel = manager.getModelLocation("minecraft", "dark_oak_sapling");
 					break;
 			}

@@ -19,9 +19,20 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
+import forestry.arboriculture.blocks.fence.BlockArbFence;
+import forestry.arboriculture.blocks.fence.BlockFireproofVanillaFence;
+import forestry.arboriculture.blocks.log.BlockArbLog;
+import forestry.arboriculture.blocks.log.BlockFireproofVanillaLog;
+import forestry.arboriculture.blocks.planks.BlockArbPlanks;
+import forestry.arboriculture.blocks.planks.BlockFireproofVanillaPlanks;
+import forestry.arboriculture.blocks.slab.BlockArbSlab;
+import forestry.arboriculture.blocks.slab.BlockFireproofVanillaSlab;
+import forestry.arboriculture.blocks.slab.BlockForestrySlab;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
@@ -37,18 +48,25 @@ import forestry.core.utils.OreDictUtil;
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
 	public final List<BlockArbLog> logsFireproof;
+	public final List<BlockFireproofVanillaLog> logsVanillaFireproof;
 	public final List<BlockArbPlanks> planks;
 	public final List<BlockArbPlanks> planksFireproof;
+	public final List<BlockFireproofVanillaPlanks> planksVanillaFireproof;
 	public final List<BlockArbSlab> slabs;
 	public final List<BlockArbSlab> slabsDouble;
 	public final List<BlockArbSlab> slabsFireproof;
 	public final List<BlockArbSlab> slabsDoubleFireproof;
+	public final List<BlockFireproofVanillaSlab> slabsVanillaFireproof;
+	public final List<BlockFireproofVanillaSlab> slabsVanillaDoubleFireproof;
 	public final List<BlockArbFence> fences;
 	public final List<BlockArbFence> fencesFireproof;
-	public final List<BlockArbFenceGate> fenceGates;
-	public final List<BlockArbFenceGate> fenceGatesFireproof;
-	public final List<BlockArbStairs> stairs;
-	public final List<BlockArbStairs> stairsFireproof;
+	public final List<BlockFireproofVanillaFence> fencesVanillaFireproof;
+	public final List<BlockForestryFenceGate> fenceGates;
+	public final List<BlockForestryFenceGate> fenceGatesFireproof;
+	public final List<BlockForestryFenceGate> fenceGatesVanillaFireproof;
+	public final List<BlockForestryStairs> stairs;
+	public final List<BlockForestryStairs> stairsFireproof;
+	public final List<BlockForestryStairs> stairsVanillaFireproof;
 	public final List<BlockArbDoor> doors;
 
 	public final BlockSapling saplingGE;
@@ -74,6 +92,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerOreDictWildcard(OreDictUtil.LOG_WOOD, block);
 		}
 
+		logsVanillaFireproof = BlockFireproofVanillaLog.create();
+		for (BlockFireproofVanillaLog block : logsVanillaFireproof) {
+			registerBlock(block, new ItemBlockWood(block), "logs.vanilla.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.LOG_WOOD, block);
+		}
+
 		planks = BlockArbPlanks.create(false);
 		for (BlockArbPlanks block : planks) {
 			registerBlock(block, new ItemBlockWood(block), "planks." + block.getBlockNumber());
@@ -83,6 +107,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		planksFireproof = BlockArbPlanks.create(true);
 		for (BlockArbPlanks block : planksFireproof) {
 			registerBlock(block, new ItemBlockWood(block), "planks.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.PLANK_WOOD, block);
+		}
+
+		planksVanillaFireproof = BlockFireproofVanillaPlanks.create();
+		for (BlockFireproofVanillaPlanks block : planksVanillaFireproof) {
+			registerBlock(block, new ItemBlockWood(block), "planks.vanilla.fireproof." + block.getBlockNumber());
 			registerOreDictWildcard(OreDictUtil.PLANK_WOOD, block);
 		}
 
@@ -106,6 +136,16 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerOreDictWildcard(OreDictUtil.SLAB_WOOD, slab);
 		}
 
+		slabsVanillaFireproof = BlockFireproofVanillaSlab.create(false);
+		slabsVanillaDoubleFireproof = BlockFireproofVanillaSlab.create(true);
+		for (int i = 0; i < slabsVanillaFireproof.size(); i++) {
+			BlockForestrySlab slab = slabsVanillaFireproof.get(i);
+			BlockForestrySlab slabDouble = slabsVanillaDoubleFireproof.get(i);
+			registerBlock(slab, new ItemBlockWoodSlab(slab, slab, slabDouble), "slabs.vanilla.fireproof." + slab.getBlockNumber());
+			registerBlock(slabDouble, new ItemBlockWoodSlab(slabDouble, slab, slabDouble), "slabs.vanilla.double.fireproof." + slabDouble.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.SLAB_WOOD, slab);
+		}
+
 		fences = BlockArbFence.create(false);
 		for (BlockArbFence block : fences) {
 			registerBlock(block, new ItemBlockWood(block), "fences." + block.getBlockNumber());
@@ -117,17 +157,31 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerBlock(block, new ItemBlockWood(block), "fences.fireproof." + block.getBlockNumber());
 			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
 		}
+
+		fencesVanillaFireproof = BlockFireproofVanillaFence.create();
+		for (BlockFireproofVanillaFence block : fencesVanillaFireproof) {
+			registerBlock(block, new ItemBlockWood(block), "fences.vanilla.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
+		}
 		
 		fenceGates = new ArrayList<>();
 		fenceGatesFireproof = new ArrayList<>();
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			BlockArbFenceGate fenceGate = new BlockArbFenceGate(false, woodType);
+		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
+			BlockForestryFenceGate fenceGate = new BlockForestryFenceGate<>(false, woodType);
 			registerBlock(fenceGate, new ItemBlockWood(fenceGate), "fence.gates." + woodType);
 			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGate);
 			fenceGates.add(fenceGate);
 
-			BlockArbFenceGate fenceGateFireproof = new BlockArbFenceGate(true, woodType);
+			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate<>(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood(fenceGateFireproof), "fence.gates.fireproof." + woodType);
+			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);
+			fenceGatesFireproof.add(fenceGateFireproof);
+		}
+
+		fenceGatesVanillaFireproof = new ArrayList<>();
+		for (EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
+			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate<>(true, woodType);
+			registerBlock(fenceGateFireproof, new ItemBlockWood(fenceGateFireproof), "fence.gates.vanilla.fireproof." + woodType);
 			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);
 			fenceGatesFireproof.add(fenceGateFireproof);
 		}
@@ -136,9 +190,9 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		for (BlockArbPlanks plank : planks) {
 			for (IBlockState blockState : plank.getBlockState().getValidStates()) {
 				int meta = plank.getMetaFromState(blockState);
-				EnumWoodType woodType = plank.getWoodType(meta);
+				EnumForestryWoodType woodType = plank.getWoodType(meta);
 
-				BlockArbStairs stair = new BlockArbStairs(false, blockState, woodType);
+				BlockForestryStairs stair = new BlockForestryStairs<>(false, blockState, woodType);
 				registerBlock(stair, new ItemBlockWood(stair), "stairs." + woodType);
 				registerOreDictWildcard(OreDictUtil.STAIR_WOOD, stair);
 				stairs.add(stair);
@@ -149,17 +203,30 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		for (BlockArbPlanks plank : planksFireproof) {
 			for (IBlockState blockState : plank.getBlockState().getValidStates()) {
 				int meta = plank.getMetaFromState(blockState);
-				EnumWoodType woodType = plank.getWoodType(meta);
+				EnumForestryWoodType woodType = plank.getWoodType(meta);
 
-				BlockArbStairs stair = new BlockArbStairs(true, blockState, woodType);
+				BlockForestryStairs stair = new BlockForestryStairs<>(true, blockState, woodType);
 				registerBlock(stair, new ItemBlockWood(stair), "stairs.fireproof." + woodType);
 				registerOreDictWildcard(OreDictUtil.STAIR_WOOD, stair);
 				stairsFireproof.add(stair);
 			}
 		}
 
+		stairsVanillaFireproof = new ArrayList<>();
+		for (BlockFireproofVanillaPlanks plank : planksVanillaFireproof) {
+			for (IBlockState blockState : plank.getBlockState().getValidStates()) {
+				int meta = plank.getMetaFromState(blockState);
+				EnumVanillaWoodType woodType = plank.getWoodType(meta);
+
+				BlockForestryStairs stair = new BlockForestryStairs<>(true, blockState, woodType);
+				registerBlock(stair, new ItemBlockWood(stair), "stairs.vanilla.fireproof." + woodType);
+				registerOreDictWildcard(OreDictUtil.STAIR_WOOD, stair);
+				stairsVanillaFireproof.add(stair);
+			}
+		}
+
 		doors = new ArrayList<>();
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
 			BlockArbDoor door = new BlockArbDoor(woodType);
 			registerBlock(door, new ItemBlockWoodDoor(door), "doors." + woodType);
 			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);

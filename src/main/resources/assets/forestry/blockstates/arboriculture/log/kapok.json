@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/kapok" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/kapok_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/kapok_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/kapok_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/kapok" },
+    "axis=z":   { "model": "forestry:arboriculture/log/kapok_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/kapok_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/kapok_bark" }
   }
 }

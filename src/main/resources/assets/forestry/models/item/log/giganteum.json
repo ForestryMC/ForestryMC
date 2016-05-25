@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/giganteum",
+    "parent": "forestry:block/arboriculture/log/giganteum",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

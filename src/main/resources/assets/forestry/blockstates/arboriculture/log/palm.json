@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/palm" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/palm_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/palm_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/palm_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/palm" },
+    "axis=z":   { "model": "forestry:arboriculture/log/palm_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/palm_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/palm_bark" }
   }
 }

@@ -28,8 +28,8 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	private ModelResourceLocation pollenModel;
 	private ModelResourceLocation charcoalModel;
 
-	public ModelProviderGermling(String uid) {
-		this.name = uid.substring("forestry.".length());
+	public ModelProviderGermling(String modelUid) {
+		this.name = modelUid.substring("forestry.".length());
 	}
 
 	@Override

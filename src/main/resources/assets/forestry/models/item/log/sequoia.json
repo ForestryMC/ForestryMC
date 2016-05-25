@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/sequoia",
+    "parent": "forestry:block/arboriculture/log/sequoia",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

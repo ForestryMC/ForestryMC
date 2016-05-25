@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/wenge" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/wenge_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/wenge_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/wenge_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/wenge" },
+    "axis=z":   { "model": "forestry:arboriculture/log/wenge_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/wenge_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/wenge_bark" }
   }
 }

@@ -1,0 +1,17 @@
+{
+    "multipart": [
+        {   "apply": { "model": "forestry:arboriculture/fence/walnut_post" }},
+        {   "when": { "north": "true" },
+            "apply": { "model": "forestry:arboriculture/fence/walnut_side", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "forestry:arboriculture/fence/walnut_side", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "forestry:arboriculture/fence/walnut_side", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "forestry:arboriculture/fence/walnut_side", "y": 270, "uvlock": true }
+        }
+    ]
+}

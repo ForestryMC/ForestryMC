@@ -3,20 +3,20 @@ package forestry.arboriculture.items;
 import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.blocks.BlockArbSlab;
+import forestry.arboriculture.blocks.slab.BlockForestrySlab;
 
 public class ItemBlockWoodSlab extends ItemSlab {
-	public ItemBlockWoodSlab(BlockArbSlab block, BlockArbSlab slab, BlockArbSlab doubleSlab) {
+	public ItemBlockWoodSlab(BlockForestrySlab block, BlockForestrySlab slab, BlockForestrySlab doubleSlab) {
 		super(block, slab, doubleSlab);
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		BlockArbSlab wood = (BlockArbSlab) getBlock();
+		BlockForestrySlab<?> wood = (BlockForestrySlab) getBlock();
 		int meta = itemstack.getMetadata();
-		EnumWoodType woodType = wood.getWoodType(meta);
+		IWoodType woodType = wood.getWoodType(meta);
 		return WoodHelper.getDisplayName(wood, woodType);
 	}
 }

@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/ebony" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/ebony_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/ebony_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/ebony_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/ebony" },
+    "axis=z":   { "model": "forestry:arboriculture/log/ebony_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/ebony_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/ebony_bark" }
   }
 }

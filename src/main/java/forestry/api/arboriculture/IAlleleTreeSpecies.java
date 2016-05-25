@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,12 +43,6 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	 */
 	@Nonnull
 	ITreeGenerator getGenerator();
-	
-	/**
-	 * @return The name of the model from the tree.
-	 */
-	@Nonnull
-	String getModelName();
 	
 	/**
 	 * @return The modid from the mod of the species.

@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/cherry" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/cherry_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/cherry_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/cherry_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/cherry" },
+    "axis=z":   { "model": "forestry:arboriculture/log/cherry_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/cherry_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/cherry_bark" }
   }
 }

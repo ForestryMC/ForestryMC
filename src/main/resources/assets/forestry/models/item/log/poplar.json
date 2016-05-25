@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/poplar",
+    "parent": "forestry:block/arboriculture/log/poplar",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

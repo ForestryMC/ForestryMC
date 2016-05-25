@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/greenheart" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/greenheart_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/greenheart_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/greenheart_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/greenheart" },
+    "axis=z":   { "model": "forestry:arboriculture/log/greenheart_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/greenheart_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/greenheart_bark" }
   }
 }

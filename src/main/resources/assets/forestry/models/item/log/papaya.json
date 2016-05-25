@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/papaya",
+    "parent": "forestry:block/arboriculture/log/papaya",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

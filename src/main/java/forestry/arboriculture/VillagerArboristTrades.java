@@ -13,9 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -47,8 +48,8 @@ public class VillagerArboristTrades {
 				j = this.emeraldPriceInfo.getPrice(random);
 			}
 
-			EnumWoodType woodType = EnumWoodType.getRandom(random);
-			ItemStack sellStack = TreeManager.woodAccess.getLog(woodType, false);
+			EnumForestryWoodType woodType = EnumForestryWoodType.getRandom(random);
+			ItemStack sellStack = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 			sellStack.stackSize = i;
 
 			ItemStack emeralds = new ItemStack(Items.EMERALD, j);
@@ -80,8 +81,8 @@ public class VillagerArboristTrades {
 				j = this.emeraldPriceInfo.getPrice(random);
 			}
 
-			EnumWoodType woodType = EnumWoodType.getRandom(random);
-			ItemStack sellStack = TreeManager.woodAccess.getPlanks(woodType, false);
+			EnumForestryWoodType woodType = EnumForestryWoodType.getRandom(random);
+			ItemStack sellStack = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
 			sellStack.stackSize = i;
 
 			ItemStack emeralds = new ItemStack(Items.EMERALD, j);

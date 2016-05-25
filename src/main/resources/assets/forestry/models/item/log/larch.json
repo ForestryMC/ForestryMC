@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/larch",
+    "parent": "forestry:block/arboriculture/log/larch",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

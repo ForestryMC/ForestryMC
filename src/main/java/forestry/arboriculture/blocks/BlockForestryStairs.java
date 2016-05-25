@@ -1,0 +1,105 @@
+package forestry.arboriculture.blocks;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodHelper;
+import forestry.core.proxy.Proxies;
+
+public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockStairs implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
+	private final boolean fireproof;
+	private final T woodType;
+
+	public BlockForestryStairs(boolean fireproof, IBlockState modelState, T woodType) {
+		super(modelState);
+		this.fireproof = fireproof;
+		this.woodType = woodType;
+		setCreativeTab(Tabs.tabArboriculture);
+		setHarvestLevel("axe", 0);
+	}
+
+	@Override
+	public Material getMaterial(IBlockState state) {
+		return MaterialArbWood.ARB_WOOD;
+	}
+
+	/* MODELS */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
+		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerStateMapper() {
+		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
+	}
+
+	@Override
+	public boolean isFireproof() {
+		return fireproof;
+	}
+
+	@Nonnull
+	@Override
+	public WoodBlockKind getBlockKind() {
+		return WoodBlockKind.STAIRS;
+	}
+
+	@Nonnull
+	@Override
+	public T getWoodType(int meta) {
+		return woodType;
+	}
+
+	@Nonnull
+	@Override
+	public Collection<T> getWoodTypes() {
+		return Collections.singleton(woodType);
+	}
+
+	@Override
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+		int meta = getMetaFromState(blockState);
+		T woodType = getWoodType(meta);
+		return woodType.getHardness();
+	}
+
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (fireproof) {
+			return 0;
+		}
+		return 20;
+	}
+
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (fireproof) {
+			return 0;
+		}
+		return 5;
+	}
+}

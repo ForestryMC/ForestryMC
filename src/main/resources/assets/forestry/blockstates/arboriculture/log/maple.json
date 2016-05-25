@@ -1,8 +1,8 @@
 {
   "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/logs/maple" },
-    "axis=z":   { "model": "forestry:arboriculture/logs/maple_side" },
-    "axis=x":   { "model": "forestry:arboriculture/logs/maple_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/logs/maple_bark" }
+    "axis=y":  { "model": "forestry:arboriculture/log/maple" },
+    "axis=z":   { "model": "forestry:arboriculture/log/maple_side" },
+    "axis=x":   { "model": "forestry:arboriculture/log/maple_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/log/maple_bark" }
   }
 }

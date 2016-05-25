@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/balsa",
+    "parent": "forestry:block/arboriculture/log/balsa",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

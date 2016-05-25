@@ -13,17 +13,18 @@ package forestry.arboriculture;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
 
 public interface IWoodTyped {
 	@Nonnull
-	String getBlockKind();
+	WoodBlockKind getBlockKind();
 
 	boolean isFireproof();
 
 	@Nonnull
-	EnumWoodType getWoodType(int meta);
+	IWoodType getWoodType(int meta);
 
 	@Nonnull
-	Collection<EnumWoodType> getWoodTypes();
+	Collection<? extends IWoodType> getWoodTypes();
 }

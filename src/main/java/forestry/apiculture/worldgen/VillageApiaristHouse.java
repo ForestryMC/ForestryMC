@@ -21,7 +21,6 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStairs;
@@ -47,9 +46,12 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
-import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.EnumForestryWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
+import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -92,40 +94,22 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	private void createBuildingBlocks(Random random) {
+		boolean fireproof = random.nextInt(4) == 0;
+		IWoodType woodType;
+
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-
-			boolean fireproof = random.nextInt(4) == 0;
-
-			EnumWoodType woodType = EnumWoodType.getRandom(random);
-
-			IWoodAccess woodAccess = TreeManager.woodAccess;
-			this.logs = woodAccess.getLogBlock(woodType, fireproof).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
-			this.planks = woodAccess.getPlanksBlock(woodType, fireproof);
-			this.stairs = woodAccess.getStairsBlock(woodType, fireproof);
-			this.fence = woodAccess.getFenceBlock(woodType, fireproof);
-			this.door = woodAccess.getDoorBlock(woodType);
-			this.fenceGate = woodAccess.getFenceGateBlock(woodType, fireproof);
+			woodType = EnumForestryWoodType.getRandom(random);
 		} else {
-			if (random.nextInt(6) < 4) {
-				this.logs = getRandomVariant(random, Blocks.LOG.getDefaultState(), BlockOldLog.VARIANT);
-			} else {
-				this.logs = getRandomVariant(random, Blocks.LOG2.getDefaultState(), BlockNewLog.VARIANT);
-			}
-			this.planks = getRandomVariant(random, Blocks.PLANKS.getDefaultState(), BlockPlanks.VARIANT);
-
-			List<Block> stairs = Arrays.asList(
-					Blocks.ACACIA_STAIRS, Blocks.BIRCH_STAIRS, Blocks.DARK_OAK_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.SPRUCE_STAIRS
-			);
-			this.stairs = stairs.get(random.nextInt(stairs.size())).getDefaultState();
-
-			List<Block> fences = Arrays.asList(
-				Blocks.ACACIA_FENCE, Blocks.BIRCH_FENCE, Blocks.DARK_OAK_FENCE, Blocks.JUNGLE_FENCE, Blocks.SPRUCE_FENCE
-			);
-			this.fence = fences.get(random.nextInt(fences.size())).getDefaultState();
-
-			this.door = Blocks.OAK_DOOR.getDefaultState();
-			this.fenceGate = Blocks.OAK_FENCE_GATE.getDefaultState();
+			woodType = EnumVanillaWoodType.getRandom(random);
 		}
+
+		IWoodAccess woodAccess = TreeManager.woodAccess;
+		this.logs = woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
+		this.planks = woodAccess.getBlock(woodType, WoodBlockKind.PLANKS, fireproof);
+		this.stairs = woodAccess.getBlock(woodType, WoodBlockKind.STAIRS, fireproof);
+		this.fence = woodAccess.getBlock(woodType, WoodBlockKind.FENCE, fireproof);
+		this.door = woodAccess.getBlock(woodType, WoodBlockKind.DOOR, false);
+		this.fenceGate = woodAccess.getBlock(woodType, WoodBlockKind.FENCE_GATE, fireproof);
 	}
 
 	private static <T extends Comparable<T>> IBlockState getRandomVariant(Random random, IBlockState defaultState, IProperty<T> variantProperty) {

@@ -49,8 +49,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Nonnull
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 	@Nonnull
-	private final String modelName;
-	@Nonnull
 	private final String modID;
 	@Nonnull
 	private EnumPlantType nativeType = EnumPlantType.Plains;
@@ -64,7 +62,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IClassification branch,
 			@Nonnull String binomial,
 			@Nonnull String modID,
-			@Nonnull String modelName,
 			@Nonnull ILeafSpriteProvider leafIconProvider,
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
@@ -77,7 +74,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		this.leafSpriteProvider = leafIconProvider;
 		
 		this.modID = modID;
-		this.modelName = modelName;
 	}
 
 	@Override
@@ -166,12 +162,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public String getModID() {
 		return modID;
-	}
-	
-	@Nonnull
-	@Override
-	public String getModelName() {
-		return modelName;
 	}
 	
 	@Override

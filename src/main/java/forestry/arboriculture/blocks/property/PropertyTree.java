@@ -11,6 +11,7 @@
 package forestry.arboriculture.blocks.property;
 
 import com.google.common.base.Objects;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.blocks.propertys.PropertyAllele;
+import forestry.core.config.Constants;
 
 public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 
@@ -54,7 +56,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 
 	@Override
 	public String getName(IAlleleTreeSpecies value) {
-		return value.getModelName().replace("tree", "").toLowerCase(Locale.ENGLISH);
+		return value.getUID().replace(Constants.MOD_ID + ".tree", "").toLowerCase(Locale.ENGLISH);
 	}
 	
 }

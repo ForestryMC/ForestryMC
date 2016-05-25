@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/ipe",
+    "parent": "forestry:block/arboriculture/log/ipe",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

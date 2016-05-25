@@ -10,71 +10,77 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import forestry.api.arboriculture.IWoodProvider;
-import forestry.api.core.ITextureManager;
-import forestry.core.render.TextureManager;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.ITextureManager;
+import forestry.core.proxy.Proxies;
+
 public class WoodProviderVanilla implements IWoodProvider {
 
-	private final int vanillaMap;
-	private  TextureAtlasSprite woodTop;
-	private  TextureAtlasSprite woodBark;
+	private final EnumVanillaWoodType woodType;
+	private TextureAtlasSprite woodTop;
+	private TextureAtlasSprite woodBark;
 
-	public WoodProviderVanilla(int vanillaMap) {
-		this.vanillaMap = vanillaMap;
+	public WoodProviderVanilla(EnumVanillaWoodType woodType) {
+		this.woodType = woodType;
 	}
 	
 	@Override
 	public void registerSprites(Item item, ITextureManager manager) {
-		String name = "";
-		switch (vanillaMap) {
-		case 0:
-			name = "oak";
-			break;
-		case 1:
-			name = "spruce";
-			break;
-		case 2:
-			name = "birch";
-			break;
-		case 3:
-			name = "jungle";
-			break;
-		case 4:
-			name = "acacia";
-			break;
-		case 5:
-			name = "big_oak";
-			break;
-	}
-		woodTop = TextureManager.registerSprite(new ResourceLocation("minecraft:blocks/log_" + name + "_top"));
-		woodBark =  TextureManager.registerSprite(new ResourceLocation("minecraft:blocks/log_" + name));
+		String name;
+		switch (woodType) {
+			case OAK:
+				name = "oak";
+				break;
+			case SPRUCE:
+				name = "spruce";
+				break;
+			case BIRCH:
+				name = "birch";
+				break;
+			case JUNGLE:
+				name = "jungle";
+				break;
+			case ACACIA:
+				name = "acacia";
+				break;
+			case DARK_OAK:
+				name = "big_oak";
+				break;
+			default:
+				return;
+		}
+
+		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
+		woodTop = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name + "_top"));
+		woodBark = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name));
 	}
 
+	@Nonnull
 	@Override
 	public TextureAtlasSprite getSprite(boolean isTop) {
-		if(isTop){
+		if (isTop) {
 			return woodTop;
-		}else{
+		} else {
 			return woodBark;
 		}
 	}
 	
 	@Override
 	public ItemStack getWoodStack() {
-		Block block;
-		if(vanillaMap < 4){
-			block = Blocks.LOG;
-		}else{
-			block = Blocks.LOG2;
-		}
-		return new ItemStack(block, 1, vanillaMap >= 4? vanillaMap - 4 : vanillaMap);
+		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 	}
 	
 }

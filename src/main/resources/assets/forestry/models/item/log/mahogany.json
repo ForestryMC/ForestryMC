@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/arboriculture/logs/mahogany",
+    "parent": "forestry:block/arboriculture/log/mahogany",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],
