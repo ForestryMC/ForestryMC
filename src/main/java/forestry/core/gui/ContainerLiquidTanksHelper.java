@@ -68,7 +68,8 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 		} else {
 			FluidStack potential = pipette.drain(itemstack, pipette.getCapacity(itemstack), false);
 			if (potential != null) {
-				pipette.drain(itemstack, tank.fill(potential, true), true);
+				int fill = tank.fill(potential, true);
+				pipette.drain(itemstack, fill, true);
 				player.updateHeldItem();
 			}
 		}

@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,19 +30,11 @@ import forestry.api.core.IToolPipette;
 import forestry.core.config.Constants;
 import forestry.core.fluids.PipetteContents;
 
-public class ItemPipette extends ItemForestry implements IToolPipette {
+public class ItemPipette extends ItemForestry implements IToolPipette, IFluidContainerItem {
 
 	public ItemPipette() {
 		setMaxStackSize(1);
 		setFull3D();
-	}
-
-	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over SMP.
-	 */
-	@Override
-	public boolean getShareTag() {
-		return true;
 	}
 
 	@Override
@@ -157,6 +150,15 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		}
 
 		return new FluidStack(contained.getContents(), drained);
+	}
+
+	@Override
+	public FluidStack getFluid(ItemStack container) {
+		PipetteContents contained = PipetteContents.create(container);
+		if (contained == null) {
+			return null;
+		}
+		return contained.getContents();
 	}
 
 	@Override
