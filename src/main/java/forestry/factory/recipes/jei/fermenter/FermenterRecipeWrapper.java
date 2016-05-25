@@ -44,7 +44,9 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 	@Nonnull
 	@Override
 	public List<FluidStack> getFluidInputs() {
-		return Collections.singletonList(getRecipe().getFluidResource());
+		FluidStack input = getRecipe().getFluidResource().copy();
+		input.amount = getRecipe().getFermentationValue();
+		return Collections.singletonList(input);
 	}
 
 	@Nonnull

@@ -69,8 +69,8 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		guiItemStacks.init(resourceSlot, true, 50, 4);
 		guiItemStacks.init(fuelSlot, true, 40, 38);
 		
-		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 5000, false, tankOverlay);
+		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 5000, false, tankOverlay);
 		
 		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
 		
