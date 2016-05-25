@@ -46,7 +46,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);
 		IDrawableStatic progressBarDrawable1 = guiHelper.createDrawable(guiTexture, 176, 78, 4, 18);
 		this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
-		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
+		this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
 	}
 	
 	@Nonnull
@@ -69,8 +69,8 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		guiItemStacks.init(resourceSlot, true, 50, 4);
 		guiItemStacks.init(fuelSlot, true, 40, 38);
 		
-		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 5000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 5000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 3000, false, tankOverlay);
+		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 3000, false, tankOverlay);
 		
 		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
 		

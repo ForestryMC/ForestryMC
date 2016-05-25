@@ -78,67 +78,63 @@ public class TankWidget extends Widget {
 		}
 
 		FluidStack contents = tank.getFluid();
-		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
-			return;
-		}
-		
-		Fluid fluid = contents.getFluid();
-		if (fluid == null) {
-			return;
-		}
+		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+			Fluid fluid = contents.getFluid();
+			if (fluid != null) {
+				TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
+				ResourceLocation fluidStill = fluid.getStill();
+				TextureAtlasSprite fluidStillSprite = null;
+				if (fluidStill != null) {
+					fluidStillSprite = textureMapBlocks.getTextureExtry(fluidStill.toString());
+				}
+				if (fluidStillSprite == null) {
+					fluidStillSprite = textureMapBlocks.getMissingSprite();
+				}
 
-		TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
-		ResourceLocation fluidStill = fluid.getStill();
-		TextureAtlasSprite fluidStillSprite = null;
-		if (fluidStill != null) {
-			fluidStillSprite = textureMapBlocks.getTextureExtry(fluidStill.toString());
-		}
-		if (fluidStillSprite == null) {
-			fluidStillSprite = textureMapBlocks.getMissingSprite();
-		}
+				int fluidColor = fluid.getColor(contents);
 
-		int fluidColor = fluid.getColor(contents);
+				int scaledAmount = contents.amount * height / tank.getCapacity();
+				if (contents.amount > 0 && scaledAmount < 1) {
+					scaledAmount = 1;
+				}
+				if (scaledAmount > height) {
+					scaledAmount = height;
+				}
 
-		int scaledAmount = contents.amount * height / tank.getCapacity();
-		if (contents.amount > 0 && scaledAmount < 1) {
-			scaledAmount = 1;
-		}
-		if (scaledAmount > height) {
-			scaledAmount = height;
-		}
+				Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				setGLColorFromInt(fluidColor);
 
-		Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		setGLColorFromInt(fluidColor);
+				final int xTileCount = width / 16;
+				final int xRemainder = width - xTileCount * 16;
+				final int yTileCount = scaledAmount / 16;
+				final int yRemainder = scaledAmount - yTileCount * 16;
 
-		final int xTileCount = width / 16;
-		final int xRemainder = width - xTileCount * 16;
-		final int yTileCount = scaledAmount / 16;
-		final int yRemainder = scaledAmount - yTileCount * 16;
+				final int yStart = startY + height;
 
-		final int yStart = startY + height;
+				for (int xTile = 0; xTile <= xTileCount; xTile++) {
+					for (int yTile = 0; yTile <= yTileCount; yTile++) {
+						int width = xTile == xTileCount ? xRemainder : 16;
+						int height = yTile == yTileCount ? yRemainder : 16;
+						int x = startX + xTile * 16;
+						int y = yStart - (yTile + 1) * 16;
+						if (width > 0 && height > 0) {
+							int maskTop = 16 - height;
+							int maskRight = 16 - width;
 
-		for (int xTile = 0; xTile <= xTileCount; xTile++) {
-			for (int yTile = 0; yTile <= yTileCount; yTile++) {
-				int width = xTile == xTileCount ? xRemainder : 16;
-				int height = yTile == yTileCount ? yRemainder : 16;
-				int x = startX + xTile * 16;
-				int y = yStart - (yTile + 1) * 16;
-				if (width > 0 && height > 0) {
-					int maskTop = 16 - height;
-					int maskRight = 16 - width;
-
-					drawFluidTexture(x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, 100);
+							drawFluidTexture(x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, 100);
+						}
+					}
 				}
 			}
 		}
-		
+
 		if (drawOverlay) {
 			GlStateManager.disableDepth();
 			Proxies.render.bindTexture(manager.gui.textureFile);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			GlStateManager.enableDepth();
 		}
-		
+
 		GlStateManager.color(1, 1, 1, 1);
 	}
 
