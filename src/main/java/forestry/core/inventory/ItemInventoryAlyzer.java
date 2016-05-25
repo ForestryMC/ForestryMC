@@ -12,6 +12,7 @@ package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,6 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.PluginCore;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.utils.GeneticsUtil;
@@ -45,7 +45,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 	public static final int SLOT_ANALYZE_4 = 5;
 	public static final int SLOT_ANALYZE_5 = 6;
 
-	public ItemInventoryAlyzer(EntityPlayer player, ItemStack itemstack) {
+	public ItemInventoryAlyzer(@Nonnull EntityPlayer player, ItemStack itemstack) {
 		super(player, 7, itemstack);
 	}
 
@@ -69,14 +69,14 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 			return isAlyzingFuel(itemStack);
 		}
 
-		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
-		if (speciesRoot == null) {
+		// only allow one slot to be used at a time
+		if (hasSpecimen() && getStackInSlot(slotIndex) == null) {
 			return false;
 		}
 
-		// only allow one slot to be used at a time
-		if (hasSpecimen() && getStackInSlot(slotIndex) == null) {
+		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
+		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		if (speciesRoot == null) {
 			return false;
 		}
 
@@ -90,20 +90,13 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 	
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
-		if(!hasSpecimen() && slotIndex == SLOT_SPECIMEN){
-			ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-			if(ersatz != null){
-				super.setInventorySlotContents(slotIndex, ersatz);
-				return;
-			}
-		}
 		super.setInventorySlotContents(slotIndex, itemStack);
+		if (slotIndex == SLOT_SPECIMEN) {
+			analyzeSpecimen(itemStack);
+		}
 	}
-	
-	@Override
-	public void onSlotClick(int slotIndex, EntityPlayer player) {
-		// Source slot to analyze empty
-		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+
+	private void analyzeSpecimen(ItemStack specimen) {
 		if (specimen == null) {
 			return;
 		}
@@ -125,32 +118,32 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 
 		// Analyze if necessary
 		if (!individual.isAnalyzed()) {
-
-			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			final boolean requiresEnergy = ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE);
+			if (requiresEnergy) {
 				// Requires energy
 				if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
 					return;
 				}
 			}
-
-			individual.analyze();
-			if (player != null) {
+			
+			if (individual.analyze()) {
 				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
+
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				individual.writeToNBT(nbttagcompound);
+				specimen.setTagCompound(nbttagcompound);
+
+				if (requiresEnergy) {
+					// Decrease energy
+					decrStackSize(SLOT_ENERGY, 1);
+				}
 			}
-
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			individual.writeToNBT(nbttagcompound);
-			specimen.setTagCompound(nbttagcompound);
-
-			// Decrease energy
-			decrStackSize(SLOT_ENERGY, 1);
 		}
 
 		setInventorySlotContents(SLOT_ANALYZE_1, specimen);
 		setInventorySlotContents(SLOT_SPECIMEN, null);
-		PluginCore.items.portableAlyzer.openGui(player);
 	}
 
 	@Override

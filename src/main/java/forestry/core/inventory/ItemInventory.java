@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,11 +36,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private static final Random rand = new Random();
 
 	private final IItemHandler itemHandler = new InvWrapper(this);
-	private final EntityPlayer player;
+	@Nonnull
+	protected final EntityPlayer player;
 	private final ItemStack parent;
 	private final ItemStack[] inventoryStacks;
 
-	public ItemInventory(EntityPlayer player, int size, ItemStack parent) {
+	public ItemInventory(@Nonnull EntityPlayer player, int size, ItemStack parent) {
 		this.player = player;
 		this.parent = parent;
 		this.inventoryStacks = new ItemStack[size];
