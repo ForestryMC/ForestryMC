@@ -26,7 +26,6 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
-	private ModelResourceLocation charcoalModel;
 
 	public ModelProviderGermling(String modelUid) {
 		this.name = modelUid.substring("forestry.".length());
@@ -40,9 +39,6 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 		}else if(type == EnumGermlingType.POLLEN){
 			pollenModel = manager.getModelLocation("pollen");
 			manager.registerVariant(item, new ResourceLocation("forestry:pollen"));
-		}else if(type == EnumGermlingType.CHARCOAL){
-			charcoalModel = manager.getModelLocation("charcoal");
-			manager.registerVariant(item, new ResourceLocation("forestry:charcoal"));
 		}
 	}
 
@@ -51,8 +47,6 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if(type == EnumGermlingType.POLLEN){
 			return pollenModel;
-		}else if(type == EnumGermlingType.CHARCOAL){
-			return charcoalModel;
 		}else{
 			return germlingModel;
 		}

@@ -162,14 +162,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
 	}
-	
-	public static int getBurnTime(ItemStack fuel) {
-		if(TreeManager.treeRoot.isMember(fuel)){
-			ITree tree = TreeManager.treeRoot.getMember(fuel);
-			return tree.getGenome().getCombustibility() * 100;
-		}
-		return 0;
-	}
 
 	@Nonnull
 	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, BlockPos pos, ITree tree) {

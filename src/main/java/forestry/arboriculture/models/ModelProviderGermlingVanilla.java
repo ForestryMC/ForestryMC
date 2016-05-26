@@ -57,8 +57,6 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 			}
 		}else if(type == EnumGermlingType.POLLEN){
 			pollenModel = manager.getModelLocation("pollen");
-		}else if(type == EnumGermlingType.CHARCOAL){
-			charcoalModel = manager.getModelLocation("minecraft", "charcoal");
 		}
 	}
 
@@ -67,8 +65,6 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if(type == EnumGermlingType.POLLEN){
 			return pollenModel;
-		}else if(type == EnumGermlingType.CHARCOAL){
-			return charcoalModel;
 		}else{
 			return germlingModel;
 		}
