@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
@@ -48,7 +48,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public boolean isGoodBiome(BiomeGenBase biome) {
+	public boolean isGoodBiome(Biome biome) {
 		return true;
 	}
 

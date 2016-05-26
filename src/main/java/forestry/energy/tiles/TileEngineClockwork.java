@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -77,10 +79,12 @@ public class TileEngineClockwork extends TileEngine {
 		tension = nbttagcompound.getFloat("Wound");
 	}
 	
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		nbttagcompound.setFloat("Wound", tension);
+		return nbttagcompound;
 	}
 	
 	@Override
@@ -157,7 +161,7 @@ public class TileEngineClockwork extends TileEngine {
 	}
 
 	@Override
-	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
 	}
 
 	@Override

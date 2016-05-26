@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
@@ -57,9 +58,10 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		sockets.writeToNBT(nbttagcompound);
 
@@ -74,6 +76,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 			}
 		}
 		nbttagcompound.setTag("PendingProducts", nbttaglist);
+		return nbttagcompound;
 	}
 
 	@Override

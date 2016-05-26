@@ -7,7 +7,7 @@ package forestry.api.apiculture;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -47,7 +47,7 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource {
 	/** Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12 */
 	World getWorldObj();
 
-	BiomeGenBase getBiome();
+	Biome getBiome();
 
 	GameProfile getOwner();
 

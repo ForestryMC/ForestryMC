@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
@@ -37,11 +38,13 @@ public class TileSapling extends TileTreeContainer {
 		timesTicked = nbttagcompound.getInteger("TT");
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("TT", timesTicked);
+		return nbttagcompound;
 	}
 
 	@Override

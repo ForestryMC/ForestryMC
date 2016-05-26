@@ -46,11 +46,11 @@ public class FarmHelper {
 		BlockPos.MutableBlockPos edge = new BlockPos.MutableBlockPos(start);
 
 		while (world.getTileEntity(edge) instanceof IFarmComponent) {
-			edge.offsetMutable(direction.getFacing());
+			edge.move(direction.getFacing());
 		}
 
 		FarmDirection oppositeDirection = getOpposite(direction);
-		edge.offsetMutable(oppositeDirection.getFacing());
+		edge.move(oppositeDirection.getFacing());
 		return edge.toImmutable();
 	}
 

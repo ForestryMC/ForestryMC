@@ -151,8 +151,8 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		return nbttagcompound;
 	}
 
 	@Override

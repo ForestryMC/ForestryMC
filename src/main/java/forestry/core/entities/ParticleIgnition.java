@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
@@ -20,17 +20,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityFXSmoke extends EntityFX {
+public class ParticleIgnition extends Particle {
 	private final float ignitionParticleScale;
 
-	public EntityFXSmoke(World world, double x, double y, double z) {
+	public ParticleIgnition(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
 		this.motionX *= 0.8;
 		this.motionY *= 0.8;
 		this.motionZ *= 0.8;
-		this.motionY = this.rand.nextFloat() * 0.2F + 0.05F;
+		this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-		this.particleScale *= this.rand.nextFloat() / 4;
+		this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
 		this.ignitionParticleScale = this.particleScale;
 		this.particleMaxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
 		this.setParticleTextureIndex(49);
@@ -39,8 +39,9 @@ public class EntityFXSmoke extends EntityFX {
 	@Override
 	public int getBrightnessForRender(float p_70070_1_) {
 		int i = super.getBrightnessForRender(p_70070_1_);
+		short short1 = 240;
 		int j = i >> 16 & 255;
-		return 240 | j << 16;
+		return short1 | j << 16;
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class EntityFXSmoke extends EntityFX {
 		float f = (float) this.particleAge / (float) this.particleMaxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 
 		this.motionY -= 0.03D;

@@ -136,7 +136,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		NBTTagCompound hasFlowerCacheNBT = new NBTTagCompound();
 
 		if (!flowerCoords.isEmpty()) {
@@ -155,6 +155,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 		hasFlowerCacheNBT.setInteger(nbtKeyCooldown, cooldown);
 
 		nbttagcompound.setTag(nbtKey, hasFlowerCacheNBT);
+		return nbttagcompound;
 	}
 
 	@Override

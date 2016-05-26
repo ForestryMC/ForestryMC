@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -33,7 +35,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
 
 		queensTotal = nbttagcompound.getInteger("QueensTotal");
 		princessesTotal = nbttagcompound.getInteger("PrincessesTotal");
@@ -43,15 +45,16 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setInteger("QueensTotal", queensTotal);
 		nbttagcompound.setInteger("PrincessesTotal", princessesTotal);
 		nbttagcompound.setInteger("DronesTotal", dronesTotal);
 
-		super.writeToNBT(nbttagcompound);
-
+		nbttagcompound = super.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

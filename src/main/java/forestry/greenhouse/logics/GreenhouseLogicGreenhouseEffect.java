@@ -48,9 +48,10 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("workTimer", workTimer);
 		nbt.setFloat("lightTransmittance", lightTransmittance);
+		return nbt;
 	}
 
 	@Override

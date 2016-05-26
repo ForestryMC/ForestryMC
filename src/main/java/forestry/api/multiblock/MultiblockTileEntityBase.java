@@ -5,9 +5,10 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -46,10 +47,12 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 		multiblockLogic.readFromNBT(data);
 	}
 	
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		multiblockLogic.writeToNBT(data);
+		return data;
 	}
 
 	@Override
@@ -72,19 +75,34 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 
 	/* Network Communication */
 
+	@Nonnull
 	@Override
-	public final Packet getDescriptionPacket() {
-		NBTTagCompound packetData = new NBTTagCompound();
-		multiblockLogic.encodeDescriptionPacket(packetData);
-		this.encodeDescriptionPacket(packetData);
-		return new SPacketUpdateTileEntity(getPos(), 0, packetData);
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
 	}
-	
+
+	@Nonnull
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound updateTag = super.getUpdateTag();
+		multiblockLogic.encodeDescriptionPacket(updateTag);
+		this.encodeDescriptionPacket(updateTag);
+		return updateTag;
+	}
+
 	@Override
 	public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
+		super.onDataPacket(network, packet);
 		NBTTagCompound nbtData = packet.getNbtCompound();
 		multiblockLogic.decodeDescriptionPacket(nbtData);
 		this.decodeDescriptionPacket(nbtData);
+	}
+
+	@Override
+	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		multiblockLogic.decodeDescriptionPacket(tag);
+		this.decodeDescriptionPacket(tag);
 	}
 
 	/**

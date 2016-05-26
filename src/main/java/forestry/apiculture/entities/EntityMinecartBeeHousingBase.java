@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -105,8 +105,8 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	}
 
 	@Override
-	public BiomeGenBase getBiome() {
-		return worldObj.getBiomeGenForCoords(getPosition());
+	public Biome getBiome() {
+		return worldObj.getBiome(getPosition());
 	}
 
 	@Override

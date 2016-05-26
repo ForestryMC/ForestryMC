@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,10 +35,8 @@ import forestry.core.proxy.Proxies;
  */
 public class ParticleHelper {
 
-	private static final Random rand = new Random();
-
 	@SideOnly(Side.CLIENT)
-	public static boolean addBlockHitEffects(World world, BlockPos pos, EnumFacing side, EffectRenderer effectRenderer, Callback callback) {
+	public static boolean addBlockHitEffects(World world, BlockPos pos, EnumFacing side, ParticleManager effectRenderer, Callback callback) {
 		IBlockState iblockstate = world.getBlockState(pos);
 		if(iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
 			int x = pos.getX();
@@ -75,7 +71,7 @@ public class ParticleHelper {
 				px = x + axisalignedbb.maxX + f;
 			}
 
-			EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
+			ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
 			callback.addHitEffects(fx, world, pos, iblockstate);
 			effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		}
@@ -91,7 +87,7 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, IBlockState state, BlockPos pos, EffectRenderer effectRenderer, Callback callback) {
+	public static boolean addDestroyEffects(World world, Block block, IBlockState state, BlockPos pos, ParticleManager effectRenderer, Callback callback) {
 		if (block != state.getBlock()) {
 			return true;
 		}
@@ -103,9 +99,8 @@ public class ParticleHelper {
 					double px = pos.getX() + (i + 0.5D) / iterations;
 					double py = pos.getY() + (j + 0.5D) / iterations;
 					double pz = pos.getZ() + (k + 0.5D) / iterations;
-					int random = rand.nextInt(6);
 
-					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
+					ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
 					callback.addDestroyEffects(fx, world, pos, state);
 					effectRenderer.addEffect(fx.setBlockPos(pos));
 				}
@@ -118,10 +113,10 @@ public class ParticleHelper {
 	public interface Callback {
 
 		@SideOnly(Side.CLIENT)
-		void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
+		void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state);
 
 		@SideOnly(Side.CLIENT)
-		void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
+		void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state);
 	}
 
 	public static class DefaultCallback<B extends Block> implements ParticleHelper.Callback {
@@ -134,18 +129,18 @@ public class ParticleHelper {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+		public void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
 			setTexture(fx, world, pos, state);
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+		public void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
 			setTexture(fx, world, pos, state);
 		}
 
 		@SideOnly(Side.CLIENT)
-		protected void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+		protected void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
 			Minecraft minecraft = Proxies.common.getClientInstance();
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();

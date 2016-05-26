@@ -69,5 +69,5 @@ public interface IMultiblockLogic extends INbtWritable {
 	 * Use this in Tile.writeToNBT()
 	 */
 	@Override
-	void writeToNBT(NBTTagCompound nbttagcompound);
+	NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound);
 }

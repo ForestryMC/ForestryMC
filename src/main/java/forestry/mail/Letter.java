@@ -66,7 +66,7 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setBoolean("PRC", isProcessed);
 
@@ -84,6 +84,7 @@ public class Letter implements ILetter {
 		nbttagcompound.setString("TXT", this.text);
 		nbttagcompound.setString("UID", this.uid);
 		inventory.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

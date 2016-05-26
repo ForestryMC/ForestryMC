@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -57,6 +58,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, AlleleButterflyCocoon.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 	
+	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, COCOON, AlleleButterflyCocoon.AGE);
@@ -64,7 +66,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if(cocoon != null){
 			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon()).withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
@@ -121,13 +123,12 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	public int getMetaFromState(IBlockState state){
         return 0;
     }
-    
-    @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-    	IBlockState stateUp = worldIn.getBlockState(pos.up());
-    	if(stateUp.getBlock().isAir(stateUp, worldIn, pos.up())){
-    		worldIn.setBlockToAir(pos);
-    	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		if (worldIn.isAirBlock(pos.up())) {
+			worldIn.setBlockToAir(pos);
+		}
     }
     
     @Override

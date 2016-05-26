@@ -144,7 +144,7 @@ public class FarmLogicCocoa extends FarmLogic {
 				}
 			}
 
-			current.offsetMutable(EnumFacing.UP);
+			current.move(EnumFacing.UP);
 			if (current.getY() - position.getY() > 1) {
 				break;
 			}

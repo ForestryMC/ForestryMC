@@ -22,7 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -56,7 +56,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
-	private BiomeGenBase cachedBiome;
+	private Biome cachedBiome;
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
 
@@ -292,14 +292,15 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 
 		data.setFloat("TempChange", tempChange);
 		data.setFloat("HumidChange", humidChange);
 
 		beekeepingLogic.writeToNBT(data);
 		inventory.writeToNBT(data);
+		return data;
 	}
 
 	@Override
@@ -390,10 +391,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public BiomeGenBase getBiome() {
+	public Biome getBiome() {
 		if (cachedBiome == null) {
 			BlockPos coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords);
+			cachedBiome = worldObj.getBiome(coords);
 		}
 		return cachedBiome;
 	}

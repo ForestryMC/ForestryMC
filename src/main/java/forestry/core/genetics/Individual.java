@@ -45,8 +45,9 @@ public abstract class Individual implements IIndividual {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setBoolean("IsAnalyzed", isAnalyzed);
+		return nbttagcompound;
 	}
 
 	/* IDENTIFICATION */

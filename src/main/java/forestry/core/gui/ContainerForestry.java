@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -97,7 +97,7 @@ public abstract class ContainerForestry extends Container {
 	protected abstract boolean canAccess(EntityPlayer player);
 
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
-		for (ICrafting listener : listeners) {
+		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayer) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
 			} else {

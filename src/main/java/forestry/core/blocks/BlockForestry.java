@@ -78,9 +78,9 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
 		try {
-			TileEntity tile = world.getTileEntity(pos);
+			TileEntity tile = worldIn.getTileEntity(pos);
 			if (tile instanceof TileForestry) {
 				((TileForestry) tile).onNeighborBlockChange(state.getBlock());
 			}

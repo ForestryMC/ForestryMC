@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -145,10 +146,12 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return workCounter * i / ticksPerWorkCycle;
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 		energyManager.writeToNBT(nbt);
+		return nbt;
 	}
 
 	@Override

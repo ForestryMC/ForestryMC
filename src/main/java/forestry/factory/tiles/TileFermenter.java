@@ -15,7 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,9 +71,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("FermentationTime", fermentationTime);
 		nbttagcompound.setInteger("FermentationTotalTime", fermentationTotalTime);
@@ -82,6 +83,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		nbttagcompound.setInteger("FuelCurrentFerment", fuelCurrentFerment);
 
 		tankManager.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -282,7 +284,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, fuelBurnTime);
 		iCrafting.sendProgressBarUpdate(container, 1, fuelTotalTime);
 		iCrafting.sendProgressBarUpdate(container, 2, fermentationTime);

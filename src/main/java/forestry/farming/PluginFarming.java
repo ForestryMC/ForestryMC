@@ -14,10 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.BlockBeetroot;
-import net.minecraft.block.BlockCarrot;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.BlockPotato;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

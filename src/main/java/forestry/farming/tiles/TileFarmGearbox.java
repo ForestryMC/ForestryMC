@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
@@ -45,13 +47,15 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 		previousDelays = nbttagcompound.getInteger("PrevDelays");
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		energyManager.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("ActivationDelay", activationDelay);
 		nbttagcompound.setInteger("PrevDelays", previousDelays);
+		return nbttagcompound;
 	}
 
 	@Override

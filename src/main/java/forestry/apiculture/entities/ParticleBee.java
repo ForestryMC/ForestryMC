@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ParticleBee extends EntityFX {
+public class ParticleBee extends Particle {
 	private final double originX;
 	private final double originY;
 	private final double originZ;

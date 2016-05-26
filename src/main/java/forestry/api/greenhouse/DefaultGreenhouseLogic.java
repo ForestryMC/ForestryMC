@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import forestry.api.multiblock.IGreenhouseController;
 import net.minecraft.nbt.NBTTagCompound;
+
+import forestry.api.multiblock.IGreenhouseController;
 
 public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 
@@ -19,7 +20,8 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		return nbt;
 	}
 
 	@Override

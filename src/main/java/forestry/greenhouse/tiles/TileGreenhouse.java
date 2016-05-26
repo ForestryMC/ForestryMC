@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -78,16 +79,16 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
-
-
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("CamouflageBlock", nbtTag);
 		}
+		return data;
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -75,13 +75,15 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	/* SAVING & LOADING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("Heat", heat);
 		tankManager.writeToNBT(nbttagcompound);
 		craftingInventory.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -296,7 +298,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, heat);
 		iCrafting.sendProgressBarUpdate(container, 1, getMeltingPoint());
 	}

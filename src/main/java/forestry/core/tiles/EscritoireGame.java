@@ -59,12 +59,13 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("bountyLevel", bountyLevel);
 		nbttagcompound.setLong("lastUpdate", lastUpdate);
 		gameBoard.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("Status", status.ordinal());
+		return nbttagcompound;
 	}
 
 	@Override

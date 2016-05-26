@@ -15,13 +15,13 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -61,10 +61,12 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		tankManager = new TankManager(this, resourceTank);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		tankManager.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -94,7 +96,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
+		Biome biome = worldObj.getBiome(getPos());
 		errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
 
 		BlockPos posAbove = getPos().up();
@@ -149,7 +151,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, fillingTime);
 	}
 

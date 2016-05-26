@@ -3,21 +3,21 @@ package forestry.api.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeHelper {
 
-	private static final Map<BiomeGenBase, Boolean> isBiomeHellishCache = new HashMap<>();
+	private static final Map<Biome, Boolean> isBiomeHellishCache = new HashMap<>();
 
 	/**
-	 * Determines if a given BiomeGenBase is of HELLISH temperature, since it is treated separately from actual temperature values.
+	 * Determines if a given Biome is of HELLISH temperature, since it is treated separately from actual temperature values.
 	 * Uses the BiomeDictionary.
-	 * @param biomeGen BiomeGenBase of the biome in question
-	 * @return true, if the BiomeGenBase is a Nether-type biome; false otherwise.
+	 * @param biomeGen Biome of the biome in question
+	 * @return true, if the Biome is a Nether-type biome; false otherwise.
 	 */
-	public static boolean isBiomeHellish(BiomeGenBase biomeGen) {
+	public static boolean isBiomeHellish(Biome biomeGen) {
 		if (isBiomeHellishCache.containsKey(biomeGen)) {
 			return isBiomeHellishCache.get(biomeGen);
 		}

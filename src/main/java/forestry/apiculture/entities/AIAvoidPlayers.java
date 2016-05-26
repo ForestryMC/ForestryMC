@@ -14,7 +14,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.Vec3d;
 
@@ -26,7 +26,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 	private final float nearSpeed;
 	private final float minDistance;
 
-	private PathEntity pathing;
+	private Path path;
 
 	private final PathNavigate pathNavigator;
 
@@ -65,8 +65,8 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 		}
 
-		pathing = pathNavigator.getPathToXYZ(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord);
-		return pathing != null && pathing.isDestinationSame(randomTarget);
+		path = pathNavigator.getPathToXYZ(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord);
+		return path != null && path.isDestinationSame(randomTarget);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		this.pathNavigator.setPath(pathing, farSpeed);
+		this.pathNavigator.setPath(path, farSpeed);
 	}
 
 	@Override

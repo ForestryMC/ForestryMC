@@ -30,7 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -107,7 +107,7 @@ import forestry.core.PluginFluids;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.entities.EntityFXSnow;
+import forestry.core.entities.ParticleSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
@@ -937,9 +937,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
-		EntityFXSnow.sprites = new TextureAtlasSprite[3];
-		for (int i = 0; i < EntityFXSnow.sprites.length; i++) {
-			EntityFXSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+		ParticleSnow.sprites = new TextureAtlasSprite[3];
+		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
+			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
 		ParticleBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
@@ -947,7 +947,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
 		public boolean isAcceptableFlower(String flowerType, World world, BlockPos pos) {
-			BiomeGenBase biomeGenForCoords = world.getBiomeGenForCoords(pos);
+			Biome biomeGenForCoords = world.getBiome(pos);
 			return BiomeDictionary.isBiomeOfType(biomeGenForCoords, BiomeDictionary.Type.END);
 		}
 	}

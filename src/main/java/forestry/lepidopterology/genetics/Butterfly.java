@@ -24,7 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -135,7 +135,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return false;
 		}
 
-		BiomeGenBase biome = world.getBiomeGenForCoordsBody(new BlockPos(x, 0, z));
+		Biome biome = world.getBiome(new BlockPos(x, 0, z));
 		if (!getGenome().getPrimary().getSpawnBiomes().isEmpty()) {
 			boolean noneMatched = true;
 
@@ -182,7 +182,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(x, y, z));
+		Biome biome = world.getBiome(new BlockPos(x, y, z));
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, new BlockPos(x, y, z));
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, new BlockPos(x, y, z)));
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,

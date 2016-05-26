@@ -17,7 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -271,7 +271,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* Particles */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
 		}
@@ -280,7 +280,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			IBlockState blockState = world.getBlockState(pos);
 			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);

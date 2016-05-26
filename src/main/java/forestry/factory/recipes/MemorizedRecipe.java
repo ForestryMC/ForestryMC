@@ -126,11 +126,12 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(craftMatrix, nbttagcompound);
 		nbttagcompound.setLong("LastUsed", lastUsed);
 		nbttagcompound.setBoolean("Locked", locked);
 		nbttagcompound.setInteger("SelectedRecipe", selectedRecipe);
+		return nbttagcompound;
 	}
 
 	/* IStreamable */

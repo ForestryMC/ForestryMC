@@ -59,7 +59,8 @@ public class PipetteContents implements INbtWritable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		contents.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 }

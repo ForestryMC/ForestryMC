@@ -135,7 +135,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString("TP", type.toString());
 
 		if (gameProfile != null) {
@@ -143,5 +143,6 @@ public class MailAddress implements INbtWritable, IMailAddress {
 			PlayerUtil.writeGameProfile(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);
 		}
+		return nbttagcompound;
 	}
 }

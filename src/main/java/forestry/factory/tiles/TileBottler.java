@@ -60,10 +60,12 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	/* SAVING & LOADING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		tankManager.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -279,9 +281,10 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
 			nbttagcompound.setString("EngineFuelItem", ItemStackUtil.getItemNameFromRegistryAsString(fuelItem));
@@ -291,6 +294,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		nbttagcompound.setInteger("EngineBurnTime", burnTime);
 		nbttagcompound.setInteger("EngineTotalTime", totalBurnTime);
 		nbttagcompound.setInteger("AshProduction", ashProduction);
+		return nbttagcompound;
 	}
 
 	// / SMP GUI
@@ -317,7 +321,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	@Override
-	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);

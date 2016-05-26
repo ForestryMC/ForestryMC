@@ -103,7 +103,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("BreedingTime", beeProgress);
 		nbttagcompound.setInteger("Throttle", queenWorkCycleThrottle);
 
@@ -126,6 +126,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			nbttaglist.appendTag(nbttagcompound1);
 		}
 		nbttagcompound.setTag("Offspring", nbttaglist);
+		return nbttagcompound;
 	}
 
 	@Override

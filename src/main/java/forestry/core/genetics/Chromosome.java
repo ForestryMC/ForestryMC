@@ -46,9 +46,10 @@ public class Chromosome implements IChromosome {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString(UID0_TAG, primary.getUID());
 		nbttagcompound.setString(UID1_TAG, secondary.getUID());
+		return nbttagcompound;
 	}
 
 	@Override

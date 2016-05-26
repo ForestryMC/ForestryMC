@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -35,7 +35,7 @@ public class MutationConditionBiome implements IMutationCondition {
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiome(pos);
 		for (BiomeDictionary.Type type : validBiomeTypes) {
 			if (BiomeDictionary.isBiomeOfType(biome, type)) {
 				return 1;

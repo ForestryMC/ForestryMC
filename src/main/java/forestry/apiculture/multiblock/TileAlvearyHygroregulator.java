@@ -127,9 +127,10 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		tankManager.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("TransferTime", transferTime);
@@ -138,6 +139,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			currentRecipe.liquid.writeToNBT(subcompound);
 			nbttagcompound.setTag("CurrentLiquid", subcompound);
 		}
+		return nbttagcompound;
 	}
 
 	/* ILIQUIDTANKCONTAINER */

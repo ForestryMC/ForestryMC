@@ -47,7 +47,7 @@ public class HiveGenTree extends HiveGen {
 		// get to the bottom of the leaves
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
 		do {
-			pos.offsetMutable(EnumFacing.DOWN);
+			pos.move(EnumFacing.DOWN);
 			blockState = world.getBlockState(pos);
 		} while (isTreeBlock(blockState, world, pos));
 

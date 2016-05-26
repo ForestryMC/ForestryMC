@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -85,14 +86,16 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 //		if (ic2EnergySink != null) {
 //			ic2EnergySink.writeToNBT(nbttagcompound);
 //		}
 		sockets.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -253,7 +256,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	}
 
 	@Override
-	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
 		// handled by IStreamableGui
 	}
 

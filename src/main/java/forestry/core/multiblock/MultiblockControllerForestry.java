@@ -95,8 +95,9 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	/* INbtWritable */
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		accessHandler.writeToNBT(data);
+		return data;
 	}
 
 	@Override

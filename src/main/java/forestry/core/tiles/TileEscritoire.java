@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,10 +48,12 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		game.readFromNBT(nbttagcompound);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		game.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* GAME */

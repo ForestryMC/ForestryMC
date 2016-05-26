@@ -18,7 +18,7 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
@@ -85,7 +85,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		locatorLogic.startBiomeSearch(bee, player);
 	}
 
-	public Set<BiomeGenBase> getBiomesToSearch() {
+	public Set<Biome> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
 	}
 

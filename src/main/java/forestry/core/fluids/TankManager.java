@@ -23,7 +23,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -90,7 +90,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		NBTTagList tagList = new NBTTagList();
 		for (byte slot = 0; slot < tanks.size(); slot++) {
 			StandardTank tank = tanks.get(slot);
@@ -102,6 +102,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			}
 		}
 		data.setTag("tanks", tagList);
+		return data;
 	}
 
 	@Override
@@ -132,12 +133,12 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void containerAdded(Container container, ICrafting player) {
+	public void containerAdded(Container container, IContainerListener player) {
 		if (!(player instanceof EntityPlayerMP)) {
 			return;
 		}
 
-		List<ICrafting> crafters = Collections.singletonList(player);
+		List<IContainerListener> crafters = Collections.singletonList(player);
 
 		for (StandardTank tank : tanks) {
 			sendTankUpdate(container, tank, crafters);
@@ -152,13 +153,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<ICrafting> crafters) {
+	public void updateGuiData(Container container, List<IContainerListener> crafters) {
 		for (StandardTank tank : tanks) {
 			updateGuiData(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	private void updateGuiData(Container container, List<ICrafting> crafters, int tankIndex) {
+	private void updateGuiData(Container container, List<IContainerListener> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		if (tank == null) {
 			return;
@@ -173,11 +174,11 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		sendTankUpdate(container, tank, crafters);
 	}
 
-	private void sendTankUpdate(Container container, StandardTank tank, Iterable<ICrafting> crafters) {
+	private void sendTankUpdate(Container container, StandardTank tank, Iterable<IContainerListener> crafters) {
 		int tankIndex = tank.getTankIndex();
 		FluidStack fluid = tank.getFluid();
 		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
-		for (ICrafting crafter : crafters) {
+		for (IContainerListener crafter : crafters) {
 			if (crafter instanceof EntityPlayerMP) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayerMP) crafter);
 			}

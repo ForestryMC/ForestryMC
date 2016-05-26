@@ -58,10 +58,11 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		for (int i = 0; i < collectedPostage.length; i++) {
 			nbttagcompound.setInteger("CPS" + i, collectedPostage[i]);
 		}
+		return nbttagcompound;
 	}
 
 	/* TRADE STATION MANAGMENT */

@@ -27,7 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -84,7 +84,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	private float tempChange;
 	private float humidChange;
-	private BiomeGenBase cachedBiome;
+	private Biome cachedBiome;
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final EnergyManager energyManager;
@@ -117,10 +117,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		return EnumTemperature.getFromValue(getExactTemperature());
 	}
 	
-	private BiomeGenBase getBiome() {
+	private Biome getBiome() {
 		if (cachedBiome == null) {
 			BlockPos coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords);
+			cachedBiome = worldObj.getBiome(coords);
 		}
 		return cachedBiome;
 	}
@@ -186,8 +186,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	/* SAVING & LOADING */
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		
 		data.setFloat("Temperature", tempChange);
 		data.setFloat("Humidity", humidChange);
@@ -204,6 +204,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			logic.writeToNBT(nbtTag);
 			data.setTag("logic" + logic.getName(), nbtTag);
 		}
+
+		return data;
 	}
 	
 	@Override

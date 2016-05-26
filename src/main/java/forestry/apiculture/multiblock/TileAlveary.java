@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -84,7 +84,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 
 	/* IHousing */
 	@Override
-	public BiomeGenBase getBiome() {
+	public Biome getBiome() {
 		return getMultiblockLogic().getController().getBiome();
 	}
 

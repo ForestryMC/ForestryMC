@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.IClimateControlled;
@@ -78,10 +80,12 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 		setActive(workingTime > 0);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("Heating", workingTime);
+		return nbttagcompound;
 	}
 	
 	/* Network */

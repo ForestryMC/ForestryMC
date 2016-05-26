@@ -143,7 +143,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("state", state.ordinal());
 
 		if (tokenStack != null) {
@@ -151,6 +151,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			tokenStack.writeToNBT(stackcompound);
 			nbttagcompound.setTag("tokenStack", stackcompound);
 		}
+		return nbttagcompound;
 	}
 
 	/* IStreamable */

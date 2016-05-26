@@ -20,7 +20,7 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
@@ -179,7 +179,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		super.detectAndSendChanges();
 
 		if (needsSynch) {
-			for (ICrafting crafter : listeners) {
+			for (IContainerListener crafter : listeners) {
 				crafter.sendProgressBarUpdate(this, 0, stationIndex);
 				crafter.sendProgressBarUpdate(this, 1, stations.size());
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);

@@ -121,12 +121,11 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	public int getMetaFromState(IBlockState state){
         return 0;
     }
-    
-    @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-    	IBlockState stateUp = worldIn.getBlockState(pos.up());
-    	if(stateUp.getBlock().isAir(stateUp, worldIn, pos.up())){
-    		worldIn.setBlockToAir(pos);
+
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		if (worldIn.isAirBlock(pos.up())) {
+			worldIn.setBlockToAir(pos);
     	}
     }
     

@@ -37,9 +37,9 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 
-		super.writeToNBT(nbttagcompound);
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("Health", health);
 		nbttagcompound.setInteger("MaxH", maxHealth);
@@ -54,7 +54,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 			getMate().writeToNBT(nbtMate);
 			nbttagcompound.setTag("Mate", nbtMate);
 		}
-
+		return nbttagcompound;
 	}
 
 	/* GENERATION */

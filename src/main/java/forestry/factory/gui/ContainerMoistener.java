@@ -11,7 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -63,7 +63,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (ICrafting crafter : listeners) {
+		for (IContainerListener crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

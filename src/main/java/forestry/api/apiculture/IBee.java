@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorState;
@@ -71,7 +71,7 @@ public interface IBee extends IIndividualLiving {
 	 */
 	Set<IErrorState> getCanWork(IBeeHousing housing);
 
-	List<BiomeGenBase> getSuitableBiomes();
+	List<Biome> getSuitableBiomes();
 
 	ItemStack[] getProduceList();
 

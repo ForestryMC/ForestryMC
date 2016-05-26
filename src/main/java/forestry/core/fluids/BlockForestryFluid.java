@@ -17,7 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.entities.EntityFXColoredDripParticle;
+import forestry.core.entities.ParticleColoredDripParticle;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
@@ -120,7 +120,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
 
-				EntityFX fx = new EntityFXColoredDripParticle(worldIn, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
+				Particle fx = new ParticleColoredDripParticle(worldIn, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 			}
 		}

@@ -22,7 +22,7 @@ import java.util.Set;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -89,7 +89,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);
-		for (BiomeGenBase biome : inventory.getBiomesToSearch()) {
+		for (Biome biome : inventory.getBiomesToSearch()) {
 			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
 		}
 

@@ -72,11 +72,13 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		tankManager.writeToNBT(nbttagcompound);
 		sockets.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

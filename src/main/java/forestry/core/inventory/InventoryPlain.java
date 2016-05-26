@@ -142,8 +142,9 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(this, nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* Fields */

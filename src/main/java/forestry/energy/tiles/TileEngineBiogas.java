@@ -15,7 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -244,11 +244,13 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		tankManager.readFromNBT(nbt);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 		nbt.setBoolean("shutdown", shutdown);
 		tankManager.writeToNBT(nbt);
+		return nbt;
 	}
 
 	/* NETWORK */
@@ -286,7 +288,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);

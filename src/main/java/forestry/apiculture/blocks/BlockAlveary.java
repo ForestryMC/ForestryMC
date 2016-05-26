@@ -249,10 +249,8 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-		super.onNeighborBlockChange(world, pos, state, neighborBlock);
-		
-		TileEntity tileEntity = world.getTileEntity(pos);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity instanceof TileAlveary) {
 			TileAlveary tileAlveary = (TileAlveary) tileEntity;
 
@@ -260,7 +258,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
 			alveary.reassemble();
 			if(alveary.getReferenceCoord() != null){
-				Proxies.net.sendNetworkPacket(new PacketAlveryChange(alveary), world);
+				Proxies.net.sendNetworkPacket(new PacketAlveryChange(alveary), worldIn);
 			}
 		}
 	}

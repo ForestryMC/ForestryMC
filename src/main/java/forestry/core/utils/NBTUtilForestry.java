@@ -12,6 +12,7 @@ package forestry.core.utils;
 
 import com.google.common.collect.ForwardingList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,15 @@ import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
 
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -89,4 +99,35 @@ public abstract class NBTUtilForestry {
 		}
 
 	}
+
+	public static NBTTagCompound writeStreamableToNbt(IStreamable streamable, NBTTagCompound nbt) {
+		ByteBufOutputStream buf = new ByteBufOutputStream(Unpooled.buffer());
+		DataOutputStreamForestry data = new DataOutputStreamForestry(buf);
+		try {
+			streamable.writeData(data);
+		} catch (IOException e) {
+			Log.error("Failed to write streamable data", e);
+			return nbt;
+		}
+
+		ByteBuf buffer = buf.buffer();
+		byte[] bytes = new byte[buffer.readableBytes()];
+		buf.buffer().getBytes(0, bytes);
+		nbt.setByteArray("dataBytes", bytes);
+		return nbt;
+	}
+
+	public static void readStreamableFromNbt(IStreamable streamable, NBTTagCompound nbt) {
+		if (nbt.hasKey("dataBytes")) {
+			byte[] bytes = nbt.getByteArray("dataBytes");
+			ByteBufInputStream buf = new ByteBufInputStream(Unpooled.wrappedBuffer(bytes));
+			DataInputStreamForestry data = new DataInputStreamForestry(buf);
+			try {
+				streamable.readData(data);
+			} catch (IOException e) {
+				Log.error("Failed to read streamable data", e);
+			}
+		}
+	}
+
 }

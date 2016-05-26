@@ -74,7 +74,7 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		return nbttagcompound;
 	}
 }

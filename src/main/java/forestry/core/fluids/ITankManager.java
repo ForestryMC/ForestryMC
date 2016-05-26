@@ -13,16 +13,16 @@ package forestry.core.fluids;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
 public interface ITankManager extends IFluidHandler {
-	void containerAdded(Container container, ICrafting crafter);
+	void containerAdded(Container container, IContainerListener crafter);
 
-	void updateGuiData(Container container, List<ICrafting> crafters);
+	void updateGuiData(Container container, List<IContainerListener> crafters);
 
 	void containerRemoved(Container container);
 

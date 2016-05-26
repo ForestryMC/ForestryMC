@@ -132,15 +132,15 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
 		if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER) {
 			BlockPos blockpos = pos.down();
 			IBlockState iblockstate = worldIn.getBlockState(blockpos);
 
 			if (iblockstate.getBlock() != this) {
 				worldIn.setBlockToAir(pos);
-			} else if (neighborBlock != this) {
-				this.onNeighborBlockChange(worldIn, blockpos, iblockstate, neighborBlock);
+			} else if (blockIn != this) {
+				iblockstate.neighborChanged(worldIn, blockpos, blockIn);
 			}
 		} else {
 			boolean flag1 = false;
@@ -152,7 +152,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				flag1 = true;
 			}
 
-			if (!worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
+			if (!worldIn.getBlockState(pos.down()).isFullyOpaque()) {
 				worldIn.setBlockToAir(pos);
 				flag1 = true;
 
@@ -168,7 +168,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 			} else {
 				boolean flag = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos1);
 
-				if ((flag || neighborBlock.canProvidePower(state)) && neighborBlock != this && flag != iblockstate1.getValue(POWERED)) {
+				if (blockIn != this && (flag || blockIn.getDefaultState().canProvidePower()) && flag != iblockstate1.getValue(POWERED)) {
 					worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, flag), 2);
 
 					if (flag != state.getValue(OPEN)) {

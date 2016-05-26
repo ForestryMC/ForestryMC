@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
@@ -140,7 +141,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
 
 		if (nbttagcompound.hasKey(MODE_NAME_KEY)) {
 			modeName = nbttagcompound.getString(MODE_NAME_KEY);
@@ -151,9 +152,11 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		readValuesFromNBT(nbttagcompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		writeToNBT(nbttagcompound, discoveredSpecies, discoveredMutations, researchedMutations);
+		return nbttagcompound;
 	}
 
 	private void writeToNBT(NBTTagCompound nbtTagCompound, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {

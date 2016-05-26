@@ -176,7 +176,7 @@ public final class AccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data.setInteger("Access", access.ordinal());
 
 		if (this.owner != null) {
@@ -184,5 +184,6 @@ public final class AccessHandler implements IAccessHandler {
 			PlayerUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
+		return data;
 	}
 }

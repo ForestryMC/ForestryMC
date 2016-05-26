@@ -18,7 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,7 +69,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(player.getPosition());
+		Biome currentBiome = player.worldObj.getBiome(player.getPosition());
 
 		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.worldObj, player.getPosition());
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);

@@ -98,7 +98,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		if (owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			PlayerUtil.writeGameProfile(nbt, owner);
@@ -114,6 +114,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		nbttagcompound.setBoolean("VRT", this.isVirtual);
 		nbttagcompound.setBoolean("IVL", this.isInvalid);
 		inventory.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* INVALIDATING */

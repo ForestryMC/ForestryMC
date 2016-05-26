@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class EntityFXSnow extends EntityFX {
+public class ParticleSnow extends Particle {
 
 	public static TextureAtlasSprite sprites[];
 
-	public EntityFXSnow(World world, double x, double y, double z) {
+	public ParticleSnow(World world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		this.setParticleTexture(sprites[rand.nextInt(sprites.length)]);

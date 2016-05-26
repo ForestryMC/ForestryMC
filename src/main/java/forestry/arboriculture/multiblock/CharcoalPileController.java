@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -22,11 +28,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CharcoalPileController extends RectangularMultiblockControllerBase implements ICharcoalPileControllerInternal {
 
@@ -334,10 +335,11 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 	}*/
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		data.setInteger("BurnTime", burnTime);
 		data.setBoolean("IsActive", active);
+		return data;
 	}
 
 	@Override

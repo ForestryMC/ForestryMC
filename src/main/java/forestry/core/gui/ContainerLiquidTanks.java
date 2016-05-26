@@ -13,7 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.IFluidTank;
@@ -46,7 +46,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	}
 	
 	@Override
-	public void addListener(ICrafting crafting) {
+	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		tile.getTankManager().containerAdded(this, crafting);
 	}

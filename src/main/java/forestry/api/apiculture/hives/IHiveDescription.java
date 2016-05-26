@@ -8,7 +8,7 @@ package forestry.api.apiculture.hives;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -29,7 +29,7 @@ public interface IHiveDescription {
 	 * returns true if the hive can be generated in these conditions.
 	 * Used as a fast early-elimination check for hives that have no hope of spawning in the area.
 	 */
-	boolean isGoodBiome(BiomeGenBase biome);
+	boolean isGoodBiome(Biome biome);
 
 	boolean isGoodHumidity(EnumHumidity humidity);
 

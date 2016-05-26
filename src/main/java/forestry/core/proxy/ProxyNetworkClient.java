@@ -18,9 +18,9 @@ public class ProxyNetworkClient extends ProxyNetwork {
 
 	@Override
 	public void sendToServer(IForestryPacketServer packet) {
-		NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getNetHandler();
+		NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getConnection();
 		if (netHandler != null) {
-			netHandler.addToSendQueue(packet.getPacket());
+			netHandler.sendPacket(packet.getPacket());
 		}
 	}
 }

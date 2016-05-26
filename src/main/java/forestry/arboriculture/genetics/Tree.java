@@ -92,8 +92,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		NBTTagCompound nbtGenome = new NBTTagCompound();
 		genome.writeToNBT(nbtGenome);
@@ -104,6 +104,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			mate.writeToNBT(nbtMate);
 			nbttagcompound.setTag("Mate", nbtMate);
 		}
+		return nbttagcompound;
 	}
 
 	/* INTERACTION */

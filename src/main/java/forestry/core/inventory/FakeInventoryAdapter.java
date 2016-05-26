@@ -134,8 +134,8 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		return nbttagcompound;
 	}
 
 	@Override

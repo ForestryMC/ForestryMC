@@ -11,6 +11,7 @@
 package forestry.apiculture.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ITickable;
@@ -29,7 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -186,11 +187,13 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		beeLogic.readFromNBT(nbttagcompound);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		contained.writeToNBT(nbttagcompound);
 		beeLogic.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -252,10 +255,11 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		}
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		beeLogic.syncToClient();
-		return super.getDescriptionPacket();
+		return super.getUpdatePacket();
 	}
 
 	@Override
@@ -305,8 +309,8 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	}
 
 	@Override
-	public BiomeGenBase getBiome() {
-		return getWorld().getBiomeGenForCoords(getPos());
+	public Biome getBiome() {
+		return getWorld().getBiome(getPos());
 	}
 
 	@Override

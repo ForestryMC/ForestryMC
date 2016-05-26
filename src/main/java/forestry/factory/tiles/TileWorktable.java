@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.ForgeHooks;
+
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
@@ -49,12 +51,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		craftingDisplay.writeToNBT(nbttagcompound);
 		recipeMemory.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

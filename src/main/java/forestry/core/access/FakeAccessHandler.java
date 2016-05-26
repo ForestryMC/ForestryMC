@@ -105,8 +105,8 @@ public class FakeAccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		return nbttagcompound;
 	}
 
 	@Override

@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -36,7 +36,7 @@ import forestry.core.tiles.TileBase;
 
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
 	private final IBeekeepingLogic beeLogic;
-	private BiomeGenBase cachedBiome;
+	private Biome cachedBiome;
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
@@ -52,10 +52,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		beeLogic.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -64,10 +66,11 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		beeLogic.readFromNBT(nbttagcompound);
 	}
 
+	@Nonnull
 	@Override
-	public Packet getDescriptionPacket() {
+	public NBTTagCompound getUpdateTag() {
 		beeLogic.syncToClient();
-		return super.getDescriptionPacket();
+		return super.getUpdateTag();
 	}
 
 	/* ICLIMATISED */
@@ -142,9 +145,9 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	// / IBEEHOUSING
 	@Override
-	public BiomeGenBase getBiome() {
+	public Biome getBiome() {
 		if (cachedBiome == null) {
-			cachedBiome = worldObj.getBiomeGenForCoordsBody(getPos());
+			cachedBiome = worldObj.getBiome(getPos());
 		}
 		return cachedBiome;
 	}

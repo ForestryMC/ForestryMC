@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
 import java.util.Map.Entry;
 import java.util.Stack;
 
@@ -168,9 +169,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("Active", active);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -184,6 +186,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 			}
 		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
+		return nbttagcompound;
 	}
 
 	@Override

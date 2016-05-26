@@ -36,7 +36,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -141,7 +141,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	// tick updates can come from multiple gearboxes so keep track of them here
 	private int farmWorkTicks = 0;
 
-	private BiomeGenBase cachedBiome;
+	private Biome cachedBiome;
 
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
@@ -178,10 +178,10 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return tankManager;
 	}
 
-	private BiomeGenBase getBiome() {
+	private Biome getBiome() {
 		if (cachedBiome == null) {
 			BlockPos coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords);
+			cachedBiome = worldObj.getBiome(coords);
 		}
 		return cachedBiome;
 	}
@@ -306,13 +306,14 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		sockets.writeToNBT(data);
 		hydrationManager.writeToNBT(data);
 		tankManager.writeToNBT(data);
 		fertilizerManager.writeToNBT(data);
 		inventory.writeToNBT(data);
+		return data;
 	}
 
 	@Override

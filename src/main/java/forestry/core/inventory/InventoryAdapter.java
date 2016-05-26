@@ -195,8 +195,9 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(this, nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

@@ -10,19 +10,20 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
 import forestry.api.core.IClimateManager;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class ClimateManager implements IClimateManager{
 
 	@Override
 	public float getTemperature(World world, BlockPos pos) {
 		IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiome(pos);
 		
 		if(state != null){
 			return state.getExactTemperature();
@@ -33,7 +34,7 @@ public class ClimateManager implements IClimateManager{
 	@Override
 	public float getHumidity(World world, BlockPos pos) {
 		IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiome(pos);
 		
 		if(state != null){
 			return state.getExactHumidity();

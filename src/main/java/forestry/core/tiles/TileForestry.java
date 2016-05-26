@@ -11,6 +11,7 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
@@ -19,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -47,6 +48,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.NBTUtilForestry;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
@@ -118,17 +120,32 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		accessHandler.readFromNBT(data);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		inventory.writeToNBT(data);
 		accessHandler.writeToNBT(data);
+		return data;
+	}
+
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
+	}
+
+	@Nonnull
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound tag = super.getUpdateTag();
+		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		PacketTileStream packet = new PacketTileStream(this);
-		return packet.getPacket();
+	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
 	/* INetworkedEntity */

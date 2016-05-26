@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -34,9 +34,9 @@ public class HabitatLocatorLogic {
 	private static final int spacing = 20;
 	private static final int minBiomeRadius = 8;
 
-	private static final Set<BiomeGenBase> waterBiomes = new HashSet<>();
-	private static final Set<BiomeGenBase> netherBiomes = new HashSet<>();
-	private static final Set<BiomeGenBase> endBiomes = new HashSet<>();
+	private static final Set<Biome> waterBiomes = new HashSet<>();
+	private static final Set<Biome> netherBiomes = new HashSet<>();
+	private static final Set<Biome> endBiomes = new HashSet<>();
 
 	static {
 		Collections.addAll(waterBiomes, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.BEACH));
@@ -48,7 +48,7 @@ public class HabitatLocatorLogic {
 		Collections.addAll(endBiomes, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.END));
 	}
 
-	private Set<BiomeGenBase> targetBiomes = new HashSet<>();
+	private Set<Biome> targetBiomes = new HashSet<>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
@@ -58,7 +58,7 @@ public class HabitatLocatorLogic {
 		return biomeFound;
 	}
 
-	public Set<BiomeGenBase> getTargetBiomes() {
+	public Set<Biome> getTargetBiomes() {
 		return targetBiomes;
 	}
 
@@ -69,7 +69,7 @@ public class HabitatLocatorLogic {
 		this.biomeFound = false;
 		this.searchCenter = player.getPosition();
 
-		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter);
+		Biome currentBiome = player.worldObj.getBiome(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
@@ -99,7 +99,7 @@ public class HabitatLocatorLogic {
 		}
 	}
 
-	private BlockPos findNearestBiome(Entity player, Collection<BiomeGenBase> biomesToSearch) {
+	private BlockPos findNearestBiome(Entity player, Collection<Biome> biomesToSearch) {
 		BlockPos playerPos = player.getPosition();
 
 		// If we are in a valid spot, we point to ourselves.
@@ -150,30 +150,30 @@ public class HabitatLocatorLogic {
 		return null;
 	}
 
-	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<BiomeGenBase> biomesToSearch) {
-		BiomeGenBase biome;
+	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<Biome> biomesToSearch) {
+		Biome biome;
 
-		biome = world.getBiomeGenForCoords(pos);
+		biome = world.getBiome(pos);
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.add(-minBiomeRadius, 0, 0));
+		biome = world.getBiome(pos.add(-minBiomeRadius, 0, 0));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.add(minBiomeRadius, 0, 0));
+		biome = world.getBiome(pos.add(minBiomeRadius, 0, 0));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.add(0, 0, -minBiomeRadius));
+		biome = world.getBiome(pos.add(0, 0, -minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.add(0, 0, minBiomeRadius));
+		biome = world.getBiome(pos.add(0, 0, minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
@@ -181,7 +181,7 @@ public class HabitatLocatorLogic {
 		return pos;
 	}
 
-	private static void removeInvalidBiomes(BiomeGenBase currentBiome, Set<BiomeGenBase> biomesToSearch) {
+	private static void removeInvalidBiomes(Biome currentBiome, Set<Biome> biomesToSearch) {
 
 		biomesToSearch.removeAll(waterBiomes);
 

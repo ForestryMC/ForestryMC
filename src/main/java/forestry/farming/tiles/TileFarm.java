@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -79,10 +81,12 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(nbttagcompound);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		farmBlockTexture.saveToCompound(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* CONSTRUCTION MATERIAL */

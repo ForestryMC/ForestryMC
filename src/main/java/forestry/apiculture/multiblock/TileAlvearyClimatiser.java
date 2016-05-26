@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
@@ -75,11 +77,13 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		setActive(workingTime > 0);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		energyManager.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("Heating", workingTime);
+		return nbttagcompound;
 	}
 
 	/* Network */

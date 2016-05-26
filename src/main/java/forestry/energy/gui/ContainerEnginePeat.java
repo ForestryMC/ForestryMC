@@ -11,7 +11,7 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
@@ -42,7 +42,7 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (ICrafting crafter : listeners) {
+		for (IContainerListener crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

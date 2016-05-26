@@ -50,8 +50,9 @@ public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implem
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("workTimer", workTimer);
+		return nbt;
 	}
 
 	@Override

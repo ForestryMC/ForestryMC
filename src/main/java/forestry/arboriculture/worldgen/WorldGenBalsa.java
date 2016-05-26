@@ -42,18 +42,18 @@ public class WorldGenBalsa extends WorldGenTree {
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		WorldGenHelper.addBlock(world, leafCenter, leaf, WorldGenHelper.EnumReplaceMode.AIR);
-		leafCenter.offsetMutable(EnumFacing.DOWN);
+		leafCenter.move(EnumFacing.DOWN);
 		WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
-		leafCenter.offsetMutable(EnumFacing.DOWN);
+		leafCenter.move(EnumFacing.DOWN);
 
 		if (height > 10) {
 			WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
-			leafCenter.offsetMutable(EnumFacing.DOWN);
+			leafCenter.move(EnumFacing.DOWN);
 		}
 
 		while (leafCenter.getY() > 6) {
 			WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
-			leafCenter.offsetMutable(EnumFacing.DOWN);
+			leafCenter.move(EnumFacing.DOWN);
 		}
 	}
 }

@@ -31,6 +31,7 @@ import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
+import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
@@ -71,7 +72,7 @@ public class ProxyRender {
 	}
 
 	@Nullable
-	public TileEntitySpecialRenderer getRendererAnalyzer() {
+	public TileEntitySpecialRenderer<TileAnalyzer> getRendererAnalyzer() {
 		return null;
 	}
 

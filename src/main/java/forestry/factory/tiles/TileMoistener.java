@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,9 +71,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("BurnTime", burnTime);
 		nbttagcompound.setInteger("TotalTime", totalTime);
@@ -92,6 +93,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			currentProduct.writeToNBT(nbttagcompoundP);
 			nbttagcompound.setTag("CurrentProduct", nbttagcompoundP);
 		}
+		return nbttagcompound;
 	}
 
 	@Override
@@ -533,7 +535,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(container, 1, totalTime);
 		iCrafting.sendProgressBarUpdate(container, 2, productionTime);

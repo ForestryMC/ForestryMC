@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,15 +64,17 @@ public class TileTrader extends TileBase {
 	}
 
 	/* SAVING & LOADING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		if (address != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			address.writeToNBT(nbt);
 			nbttagcompound.setTag("address", nbt);
 		}
+		return nbttagcompound;
 	}
 
 	@Override

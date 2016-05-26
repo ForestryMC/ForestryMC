@@ -13,7 +13,7 @@ package forestry.core.fluids;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.Fluid;
@@ -31,12 +31,12 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
-	public void containerAdded(Container container, ICrafting player) {
+	public void containerAdded(Container container, IContainerListener player) {
 
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<ICrafting> crafters) {
+	public void updateGuiData(Container container, List<IContainerListener> crafters) {
 
 	}
 

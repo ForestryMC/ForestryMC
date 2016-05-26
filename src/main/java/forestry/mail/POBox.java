@@ -52,13 +52,14 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		if (this.address != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			this.address.writeToNBT(nbt);
 			nbttagcompound.setTag("address", nbt);
 		}
 		letters.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	public boolean storeLetter(ItemStack letterstack) {

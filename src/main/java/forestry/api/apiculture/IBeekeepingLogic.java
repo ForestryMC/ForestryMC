@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.INbtReadable;
@@ -39,7 +40,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 
 	/**
 	 * Call this when the housing comes into view of the client.
-	 * (i.e. when tile.getDescriptionPacket() is called)
+	 * (i.e. when {@link TileEntity#getUpdateTag()} is called)
 	 */
 	void syncToClient();
 

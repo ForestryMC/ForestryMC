@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,9 +36,9 @@ import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.NBTUtilForestry;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 
@@ -74,8 +75,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		if (allele != null) {
 			nbttagcompound.setString("UID", allele.getUID());
@@ -83,6 +84,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 		nbttagcompound.setShort("MT", maturity);
 		nbttagcompound.setFloat("SP", sappiness);
+		return nbttagcompound;
 	}
 
 	/* UPDATING */
@@ -122,9 +124,23 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	/* NETWORK */
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
-		return new PacketTileStream(this).getPacket();
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
+	}
+
+	@Nonnull
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound tag = super.getUpdateTag();
+		return NBTUtilForestry.writeStreamableToNbt(this, tag);
+	}
+
+	@Override
+	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
 	/* IFRUITBEARER */

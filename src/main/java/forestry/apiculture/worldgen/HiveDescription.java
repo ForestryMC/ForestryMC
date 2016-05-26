@@ -19,7 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -63,7 +63,7 @@ public enum HiveDescription implements IHiveDescription {
 	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
 	END(IHiveRegistry.HiveType.END, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
-		public boolean isGoodBiome(BiomeGenBase biome) {
+		public boolean isGoodBiome(Biome biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
 		}
 	},
@@ -122,7 +122,7 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public boolean isGoodBiome(BiomeGenBase biome) {
+	public boolean isGoodBiome(Biome biome) {
 		return !BiomeHelper.isBiomeHellish(biome);
 	}
 

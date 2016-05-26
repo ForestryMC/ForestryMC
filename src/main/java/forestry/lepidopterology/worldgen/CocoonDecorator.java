@@ -20,7 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -67,7 +67,7 @@ public abstract class CocoonDecorator {
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
+		Biome biome = world.getBiome(new BlockPos(worldX, 0, worldZ));
 		
 		Type[] types = BiomeDictionary.getTypesForBiome(biome);
 		EnumSet<Type> speciesTypes = butterfly.getGenome().getPrimary().getSpawnBiomes();

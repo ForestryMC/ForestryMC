@@ -112,12 +112,13 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		if (isMultiblockSaveDelegate() && isConnected()) {
 			NBTTagCompound multiblockData = new NBTTagCompound();
 			this.controller.writeToNBT(multiblockData);
 			data.setTag("multiblockData", multiblockData);
 		}
+		return data;
 	}
 
 	public final void assertDetached(IMultiblockComponent part) {

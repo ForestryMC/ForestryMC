@@ -89,9 +89,10 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("HydrationDelay", hydrationDelay);
 		nbttagcompound.setInteger("TicksSinceRainfall", ticksSinceRainfall);
+		return nbttagcompound;
 	}
 
 	@Override

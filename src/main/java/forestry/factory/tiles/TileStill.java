@@ -61,9 +61,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 		tankManager.writeToNBT(nbttagcompound);
 
 		if (bufferedLiquid != null) {
@@ -71,7 +72,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			bufferedLiquid.writeToNBT(buffer);
 			nbttagcompound.setTag("Buffer", buffer);
 		}
-
+		return nbttagcompound;
 	}
 
 	@Override

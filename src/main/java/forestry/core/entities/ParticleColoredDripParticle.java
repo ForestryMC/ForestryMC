@@ -14,19 +14,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityFXColoredDripParticle extends EntityFX {
+public class ParticleColoredDripParticle extends Particle {
 
 	/**
 	 * The height of the current bob
 	 */
 	private int bobTimer;
 
-	public EntityFXColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue) {
+	public ParticleColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue) {
 		super(world, x, y, z);
 		this.particleRed = red;
 		this.particleGreen = green;

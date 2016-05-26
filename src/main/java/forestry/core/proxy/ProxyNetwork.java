@@ -12,7 +12,7 @@ package forestry.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.management.PlayerManager;
+import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -31,7 +31,7 @@ public class ProxyNetwork {
 		}
 
 		WorldServer worldServer = (WorldServer) world;
-		PlayerManager playerManager = worldServer.getPlayerChunkMap();
+		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
 		int chunkX = packet.getPos().getX() >> 4;
 		int chunkZ = packet.getPos().getZ() >> 4;

@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -247,14 +248,16 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		forceCooldown = nbt.getBoolean("ForceCooldown");
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 		energyManager.writeToNBT(nbt);
 
 		nbt.setInteger("EngineHeat", heat);
 		nbt.setFloat("EngineProgress", progress);
 		nbt.setBoolean("ForceCooldown", forceCooldown);
+		return nbt;
 	}
 
 	/* NETWORK */
@@ -281,7 +284,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	public abstract void getGUINetworkData(int i, int j);
 
 	@Deprecated //use packets
-	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
+	public abstract void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting);
 
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {

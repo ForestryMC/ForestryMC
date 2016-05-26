@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -64,15 +66,17 @@ public class TileMillRainmaker extends TileMill {
 		reverse = nbttagcompound.getBoolean("Reverse");
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("Charge", charge);
 		nbttagcompound.setFloat("Progress", progress);
 		nbttagcompound.setInteger("Stage", stage);
 		nbttagcompound.setInteger("Duration", duration);
 		nbttagcompound.setBoolean("Reverse", reverse);
+		return nbttagcompound;
 	}
 
 	public void addCharge(RainSubstrate substrate) {

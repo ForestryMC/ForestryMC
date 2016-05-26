@@ -15,7 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -66,15 +66,17 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 //		if (ic2EnergySource != null) {
 //			ic2EnergySource.writeToNBT(nbttagcompound);
 //		}
 
 		tankManager.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -186,7 +188,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		}
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
 //		if (ic2EnergySource != null) {
 //			iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
 //		}

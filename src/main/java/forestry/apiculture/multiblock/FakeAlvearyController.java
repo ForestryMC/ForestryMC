@@ -14,7 +14,7 @@ import java.util.Collections;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -81,7 +81,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public BiomeGenBase getBiome() {
+	public Biome getBiome() {
 		return null;
 	}
 

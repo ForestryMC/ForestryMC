@@ -106,10 +106,10 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
-
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 
 		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
@@ -122,6 +122,8 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			PlayerUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
+
+		return data;
 	}
 	
 	/* IMultiblockComponent */
@@ -296,8 +298,9 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 	}
 	
+	@Nonnull
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
 			return getOutwardsTile().getCapability(capability, facing);
 		}
@@ -305,7 +308,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
 			return getOutwardsTile().hasCapability(capability, facing);
 		}

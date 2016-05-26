@@ -97,9 +97,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound) {
-		super.writeToNBT(nbtTagCompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+		nbtTagCompound = super.writeToNBT(nbtTagCompound);
 
 		nbtTagCompound.setInteger("RT", getRipeningTime());
 		nbtTagCompound.setInteger("ENC", damage);
@@ -111,6 +112,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			caterpillar.writeToNBT(caterpillarNbt);
 			nbtTagCompound.setTag("CATER", caterpillarNbt);
 		}
+		return nbtTagCompound;
 	}
 
 	@Override

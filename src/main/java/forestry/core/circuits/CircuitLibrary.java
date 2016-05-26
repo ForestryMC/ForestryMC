@@ -22,11 +22,12 @@ public class CircuitLibrary extends WorldSavedData implements ICircuitLibrary {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound var1) {
+	public void readFromNBT(NBTTagCompound nbt) {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound var1) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		return nbt;
 	}
 
 }

@@ -13,10 +13,11 @@ package forestry.apiculture.worldgen;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -55,7 +56,7 @@ public final class Hive {
 		hiveDescription.postGen(world, pos);
 	}
 
-	public boolean isGoodBiome(BiomeGenBase biome) {
+	public boolean isGoodBiome(Biome biome) {
 		return hiveDescription.isGoodBiome(biome);
 	}
 

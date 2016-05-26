@@ -232,7 +232,7 @@ public class ItemResearchNote extends ItemForestry {
 			}
 		}
 
-		public void writeToNBT(NBTTagCompound compound) {
+		public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 			if (this.researcher != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				PlayerUtil.writeGameProfile(nbt, researcher);
@@ -240,6 +240,7 @@ public class ItemResearchNote extends ItemForestry {
 			}
 			compound.setByte("TYP", (byte) type.ordinal());
 			compound.setTag("INN", inner);
+			return compound;
 		}
 
 		public void addTooltip(List<String> list) {

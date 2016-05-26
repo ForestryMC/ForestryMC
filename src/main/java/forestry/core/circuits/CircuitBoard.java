@@ -97,7 +97,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setShort("T", (short) type.ordinal());
 
@@ -115,7 +115,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 
 			nbttagcompound.setString("CA.I" + i, circuit.getUID());
 		}
-
+		return nbttagcompound;
 	}
 
 	@Override

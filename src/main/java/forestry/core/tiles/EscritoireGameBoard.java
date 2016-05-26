@@ -190,7 +190,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		if (tokenCount > 0) {
 			nbttagcompound.setInteger("TokenCount", tokenCount);
 			NBTTagList nbttaglist = new NBTTagList();
@@ -211,6 +211,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		} else {
 			nbttagcompound.setInteger("TokenCount", 0);
 		}
+		return nbttagcompound;
 	}
 
 	/* IStreamable */

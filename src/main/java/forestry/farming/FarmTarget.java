@@ -59,7 +59,7 @@ public class FarmTarget {
 			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
 				break;
 			}
-			position.offsetMutable(getDirection().getFacing());
+			position.move(getDirection().getFacing());
 		}
 
 		yOffset = platformPosition.getY() + 1 - getStart().getY();

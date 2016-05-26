@@ -1,6 +1,17 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
@@ -14,14 +25,6 @@ import forestry.arboriculture.multiblock.EnumPilePosition;
 import forestry.arboriculture.multiblock.MultiblockLogicCharcoalPile;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.tiles.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharcoalPile> implements ICharcoalPileComponent<MultiblockLogicCharcoalPile>{
 
@@ -145,16 +148,17 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		}
 	}
 	
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 		
 		if (containedTree != null) {
 			NBTTagCompound subcompound = new NBTTagCompound();
 			containedTree.writeToNBT(subcompound);
 			data.setTag("ContainedTree", subcompound);
 		}
-		
+		return data;
 	}
 	
 	@Override

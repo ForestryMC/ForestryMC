@@ -27,7 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -120,9 +120,9 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 
-		super.writeToNBT(nbttagcompound);
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		if (!isNatural) {
 			nbttagcompound.setBoolean("NA", false);
@@ -131,6 +131,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (generation > 0) {
 			nbttagcompound.setInteger("GEN", generation);
 		}
+		return nbttagcompound;
 	}
 
 	@Override
@@ -247,7 +248,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public Set<IErrorState> getCanWork(IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		BiomeGenBase biome = housing.getBiome();
+		Biome biome = housing.getBiome();
 		BlockPos housingCoords = housing.getCoordinates();
 
 		Set<IErrorState> errorStates = new HashSet<>();
@@ -336,7 +337,7 @@ public class Bee extends IndividualLiving implements IBee {
 		return genome.getToleratesRain() || beeModifier.isSealed();
 	}
 
-	private boolean isSuitableBiome(BiomeGenBase biome) {
+	private boolean isSuitableBiome(Biome biome) {
 		if (biome == null) {
 			return false;
 		}
@@ -353,9 +354,9 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public ArrayList<BiomeGenBase> getSuitableBiomes() {
-		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<>();
-		for (BiomeGenBase biome : BiomeGenBase.REGISTRY) {
+	public ArrayList<Biome> getSuitableBiomes() {
+		ArrayList<Biome> suitableBiomes = new ArrayList<>();
+		for (Biome biome : Biome.REGISTRY) {
 			if (isSuitableBiome(biome)) {
 				suitableBiomes.add(biome);
 			}

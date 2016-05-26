@@ -147,13 +147,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 		return tree.canStay(world, pos);
 	}
-	
+
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-		super.onNeighborBlockChange(world, pos, state, neighborBlock);
-		if (!world.isRemote && !canBlockStay(world, pos)) {
-			dropAsSapling(world, pos);
-			world.setBlockToAir(pos);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		super.neighborChanged(state, worldIn, pos, blockIn);
+		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
+			dropAsSapling(worldIn, pos);
+			worldIn.setBlockToAir(pos);
 		}
 	}
 

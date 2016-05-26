@@ -13,7 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 
 import forestry.core.gui.slots.SlotFilteredInventory;
@@ -50,7 +50,7 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 	
 	@Override
-	public void addListener(ICrafting listener) {
+	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
 		
 		tile.increaseNumPlayersUsing();

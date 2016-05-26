@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
@@ -337,7 +337,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private static IBee getRandomVillageBee(World world, BlockPos pos) {
 
 		// Get current biome
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiome(pos);
 
 		List<IBeeGenome> candidates;
 		if (BeeManager.uncommonVillageBees != null && !BeeManager.uncommonVillageBees.isEmpty() && world.rand.nextDouble() < 0.2) {

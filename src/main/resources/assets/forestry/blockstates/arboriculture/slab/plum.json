@@ -1,6 +1,5 @@
 {
 	"variants": {
-		//plum
         "half=bottom": { "model": "forestry:arboriculture/slab/plum_half" },
         "half=top": { "model": "forestry:arboriculture/slab/plum_upper" }
     }

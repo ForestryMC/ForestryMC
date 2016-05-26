@@ -18,7 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 import net.minecraftforge.common.util.EnumHelper;
@@ -66,7 +66,7 @@ public abstract class HiveDecorator {
 				Log.error("tried to generate a hive in an unloaded area.");
 				return;
 			}
-			BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+			Biome biome = world.getBiome(pos);
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 			for (Hive hive : hives) {
@@ -84,7 +84,7 @@ public abstract class HiveDecorator {
 	private static void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
 		int worldX = (chunkX << 4) + 8;
 		int worldZ = (chunkZ << 4) + 8;
-		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(chunkX, 0, chunkZ));
+		Biome biome = world.getBiome(new BlockPos(chunkX, 0, chunkZ));
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		for (int x = 0; x < 16; x++) {
@@ -113,7 +113,7 @@ public abstract class HiveDecorator {
 			return false;
 		}
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(hivePos);
+		Biome biome = world.getBiome(hivePos);
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;

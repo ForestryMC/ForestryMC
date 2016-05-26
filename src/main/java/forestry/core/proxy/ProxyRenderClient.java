@@ -18,8 +18,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -44,10 +44,10 @@ import forestry.apiculture.entities.ParticleBee;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.entities.EntityFXHoneydust;
-import forestry.core.entities.EntityFXIgnition;
-import forestry.core.entities.EntityFXSmoke;
-import forestry.core.entities.EntityFXSnow;
+import forestry.core.entities.ParticleHoneydust;
+import forestry.core.entities.ParticleIgnition;
+import forestry.core.entities.ParticleSmoke;
+import forestry.core.entities.ParticleSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
@@ -195,8 +195,8 @@ public class ProxyRenderClient extends ProxyRender {
 
 		if (!flowerPositions.isEmpty()) {
 			BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
-			EntityFX particle = new ParticleBee(world, x, y, z, color, destination);
-			EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+			Particle particle = new ParticleBee(world, x, y, z, color, destination);
+			ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
 			effectRenderer.addEffect(particle);
 		}
 	}
@@ -207,8 +207,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new EntityFXHoneydust(world, x, y, z, 0, 0, 0));
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
 	@Override
@@ -217,9 +217,9 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		EntityFX entityfx = effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), x, y, z, 0, 0, 0);
-		effectRenderer.addEffect(entityfx);
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		Particle Particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), x, y, z, 0, 0, 0);
+		effectRenderer.addEffect(Particle);
 	}
 
 	@Override
@@ -228,8 +228,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new EntityFXSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
 	}
 
 	@Override
@@ -238,8 +238,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new EntityFXIgnition(world, x, y, z));
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleIgnition(world, x, y, z));
 	}
 
 	@Override
@@ -248,8 +248,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new EntityFXSmoke(world, x, y, z));
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleSmoke(world, x, y, z));
 	}
 
 	@Override
@@ -262,11 +262,11 @@ public class ProxyRenderClient extends ProxyRender {
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
 		
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		EntityFX entityfx = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
-		entityfx.setRBGColorF(red, green, blue);
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		Particle Particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
+		Particle.setRBGColorF(red, green, blue);
 
-		effectRenderer.addEffect(entityfx);
+		effectRenderer.addEffect(Particle);
 	}
 
 	private static class BlockModeStateMapper extends StateMapperBase {

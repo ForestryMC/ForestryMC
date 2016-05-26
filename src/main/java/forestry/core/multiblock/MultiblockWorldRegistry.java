@@ -10,7 +10,7 @@ import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -315,7 +315,7 @@ public class MultiblockWorldRegistry {
 		if (worldObj.getChunkProvider().getLoadedChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4) == null) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
-			long chunkHash = ChunkCoordIntPair.chunkXZ2Int(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);
+			long chunkHash = ChunkPos.chunkXZ2Int(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (!partsAwaitingChunkLoad.containsKey(chunkHash)) {
 					partSet = new HashSet<>();
@@ -340,7 +340,7 @@ public class MultiblockWorldRegistry {
 	public void onPartRemovedFromWorld(IMultiblockComponent part) {
 		BlockPos coord = part.getCoordinates();
 		if (coord != null) {
-			long hash = ChunkCoordIntPair.chunkXZ2Int(coord.getX() >> 4, coord.getZ() >> 4);
+			long hash = ChunkPos.chunkXZ2Int(coord.getX() >> 4, coord.getZ() >> 4);
 			
 			if (partsAwaitingChunkLoad.containsKey(hash)) {
 				synchronized (partsAwaitingChunkLoadMutex) {
@@ -396,7 +396,7 @@ public class MultiblockWorldRegistry {
 	 * @param chunkZ Chunk Z coordinate (world coordate >> 4) of the chunk that was loaded
 	 */
 	public void onChunkLoaded(int chunkX, int chunkZ) {
-		long chunkHash = ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ);
+		long chunkHash = ChunkPos.chunkXZ2Int(chunkX, chunkZ);
 		if (partsAwaitingChunkLoad.containsKey(chunkHash)) {
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (partsAwaitingChunkLoad.containsKey(chunkHash)) {

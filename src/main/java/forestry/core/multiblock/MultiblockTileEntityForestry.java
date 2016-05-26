@@ -61,9 +61,10 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		getInternalInventory().readFromNBT(data);
 	}
 
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		data = super.writeToNBT(data);
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -72,6 +73,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		}
 
 		getInternalInventory().writeToNBT(data);
+		return data;
 	}
 
 	/* INVENTORY */

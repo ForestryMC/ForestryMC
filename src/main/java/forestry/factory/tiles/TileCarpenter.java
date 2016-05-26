@@ -80,12 +80,14 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	/* LOADING & SAVING */
+	@Nonnull
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+		nbttagcompound = super.writeToNBT(nbttagcompound);
 
 		tankManager.writeToNBT(nbttagcompound);
 		craftingInventory.writeToNBT(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	@Override

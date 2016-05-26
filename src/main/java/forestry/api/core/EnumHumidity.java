@@ -5,13 +5,18 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import net.minecraft.world.biome.Biome;
+
 /**
  *  Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
  *
  *  This enum concerns humidity. 
  */
 public enum EnumHumidity {
-	ARID("Arid"), NORMAL("Normal"), DAMP("Damp");
+	ARID("Arid"),
+	NORMAL("Normal"),
+	/** matches {@link Biome#isHighHumidity()} */
+	DAMP("Damp");
 
 	public final String name;
 
@@ -25,12 +30,13 @@ public enum EnumHumidity {
 
 	/**
 	 * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall.
-	 * To check if rainfall is possible in a biome, use BiomeHelper.canRainOrSnow().
+	 * To check if rainfall is possible in a biome, use {@link Biome#canRain()}.
+	 *
 	 * @param rawHumidity raw rainfall value
 	 * @return EnumHumidity corresponding to rainfall value
 	 */
 	public static EnumHumidity getFromValue(float rawHumidity) {
-		if (rawHumidity > 0.85f) { // matches BiomeGenBase.isHighHumidity()
+		if (rawHumidity > 0.85f) {
 			return DAMP;
 		} else if (rawHumidity >= 0.3f) {
 			return NORMAL;
