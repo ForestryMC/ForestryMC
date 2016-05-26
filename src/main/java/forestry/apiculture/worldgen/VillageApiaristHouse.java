@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -19,9 +19,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -57,6 +57,7 @@ import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.log.BlockArbLog;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockCore;
 import forestry.core.config.Constants;
@@ -70,6 +71,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private int averageGroundLevel = -1;
 	private boolean isInDesert = false;
 	private IBlockState planks;
+	private IBlockState slabs;
 	private IBlockState logs;
 	private IBlockState stairs;
 	private IBlockState fence;
@@ -102,17 +104,11 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		IWoodAccess woodAccess = TreeManager.woodAccess;
 		this.logs = woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
 		this.planks = woodAccess.getBlock(woodType, WoodBlockKind.PLANKS, fireproof);
+		this.slabs = woodAccess.getBlock(woodType, WoodBlockKind.SLAB, fireproof);
 		this.stairs = woodAccess.getBlock(woodType, WoodBlockKind.STAIRS, fireproof);
 		this.fence = woodAccess.getBlock(woodType, WoodBlockKind.FENCE, fireproof);
 		this.door = woodAccess.getBlock(woodType, WoodBlockKind.DOOR, false);
 		this.fenceGate = woodAccess.getBlock(woodType, WoodBlockKind.FENCE_GATE, fireproof);
-	}
-
-	private static <T extends Comparable<T>> IBlockState getRandomVariant(Random random, IBlockState defaultState, IProperty<T> variantProperty) {
-		Collection<T> allowedValues = variantProperty.getAllowedValues();
-		List<T> allowedValuesList = new ArrayList<>(allowedValues);
-		T randomValue = allowedValuesList.get(random.nextInt(allowedValuesList.size()));
-		return defaultState.withProperty(variantProperty, randomValue);
 	}
 
 	public static VillageApiaristHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> par1List, Random random, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
@@ -125,7 +121,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	@Override
-	public boolean addComponentParts(World world, Random random, StructureBoundingBox structBoundingBox) {
+	public boolean addComponentParts(@Nonnull World world, @Nonnull Random random, @Nonnull StructureBoundingBox structBoundingBox) {
 
 		if (averageGroundLevel < 0) {
 			averageGroundLevel = getAverageGroundLevel(world, structBoundingBox);
@@ -158,18 +154,30 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		buildApiaries(world, structBoundingBox);
 
 		// Floor
-		fillWithBlocks(world, structBoundingBox, 1, 0, 1, 7, 0, 4, Blocks.PLANKS.getDefaultState(), Blocks.PLANKS.getDefaultState(), false);
+		IBlockState slabFloor = slabs.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
+		fillWithBlocks(world, structBoundingBox, 2, 0, 1, 6, 0, 4, slabFloor, slabFloor, false);
+		fillWithBlocks(world, structBoundingBox, 1, 0, 1, 1, 0, 4, planks, planks, false);
+		fillWithBlocks(world, structBoundingBox, 7, 0, 1, 7, 0, 4, planks, planks, false);
 
 		IBlockState cobblestoneState = Blocks.COBBLESTONE.getDefaultState();
-		fillWithBlocks(world, structBoundingBox, 0, 0, 0, 0, 3, 5, cobblestoneState, cobblestoneState, false);
-		fillWithBlocks(world, structBoundingBox, 8, 0, 0, 8, 3, 5, cobblestoneState, cobblestoneState, false);
+		fillWithBlocks(world, structBoundingBox, 0, 0, 0, 0, 2, 5, cobblestoneState, cobblestoneState, false);
+		fillWithBlocks(world, structBoundingBox, 8, 0, 0, 8, 2, 5, cobblestoneState, cobblestoneState, false);
 		fillWithBlocks(world, structBoundingBox, 1, 0, 0, 7, 1, 0, cobblestoneState, cobblestoneState, false);
 		fillWithBlocks(world, structBoundingBox, 1, 0, 5, 7, 1, 5, cobblestoneState, cobblestoneState, false);
 
+		fillWithBlocks(world, structBoundingBox, 0, 3, 0, 0, 3, 5, planks, planks, false);
+		fillWithBlocks(world, structBoundingBox, 8, 3, 0, 8, 3, 5, planks, planks, false);
 		fillWithBlocks(world, structBoundingBox, 1, 2, 0, 7, 3, 0, planks, planks, false);
 		fillWithBlocks(world, structBoundingBox, 1, 2, 5, 7, 3, 5, planks, planks, false);
-		fillWithBlocks(world, structBoundingBox, 0, 4, 1, 8, 4, 1, planks, planks, false);
-		fillWithBlocks(world, structBoundingBox, 0, 4, 4, 8, 4, 4, planks, planks, false);
+		
+		// Ceiling
+		IBlockState slabCeiling = slabs.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
+		fillWithBlocks(world, structBoundingBox, 1, 4, 1, 7, 4, 4, slabCeiling, slabCeiling, false);
+
+		IBlockState logBracing = logs.withProperty(BlockArbLog.LOG_AXIS, BlockLog.EnumAxis.X);
+		fillWithBlocks(world, structBoundingBox, 0, 4, 1, 8, 4, 1, logBracing, logBracing, false);
+		fillWithBlocks(world, structBoundingBox, 0, 4, 4, 8, 4, 4, logBracing, logBracing, false);
+
 		fillWithBlocks(world, structBoundingBox, 0, 5, 2, 8, 5, 3, planks, planks, false);
 
 		setBlockState(world, planks, 0, 4, 2, structBoundingBox);
@@ -179,23 +187,36 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		buildRoof(world, structBoundingBox);
 
-		setBlockState(world, logs, 0, 2, 1, structBoundingBox);
-		setBlockState(world, logs, 0, 2, 4, structBoundingBox);
-		setBlockState(world, logs, 8, 2, 1, structBoundingBox);
-		setBlockState(world, logs, 8, 2, 4, structBoundingBox);
+		// sides of windows
+		setBlockState(world, planks, 0, 2, 1, structBoundingBox);
+		setBlockState(world, planks, 0, 2, 4, structBoundingBox);
+		setBlockState(world, planks, 8, 2, 1, structBoundingBox);
+		setBlockState(world, planks, 8, 2, 4, structBoundingBox);
 		
 		IBlockState glassPaneState = Blocks.GLASS_PANE.getDefaultState();
+
+		// Windows on east side
 		setBlockState(world, glassPaneState, 0, 2, 2, structBoundingBox);
 		setBlockState(world, glassPaneState, 0, 2, 3, structBoundingBox);
+		// stairs over window
+		IBlockState eastStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.EAST);
+		setBlockState(world, eastStairs, -1, 3, 2, structBoundingBox);
+		setBlockState(world, eastStairs, -1, 3, 3, structBoundingBox);
 
+		// Windows on west side
 		setBlockState(world, glassPaneState, 8, 2, 2, structBoundingBox);
 		setBlockState(world, glassPaneState, 8, 2, 3, structBoundingBox);
+		// stairs over window
+		IBlockState westStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.WEST);
+		setBlockState(world, westStairs, 9, 3, 2, structBoundingBox);
+		setBlockState(world, westStairs, 9, 3, 3, structBoundingBox);
 
 		// Windows garden side
 		setBlockState(world, glassPaneState, 2, 2, 5, structBoundingBox);
 		setBlockState(world, glassPaneState, 3, 2, 5, structBoundingBox);
 		setBlockState(world, glassPaneState, 4, 2, 5, structBoundingBox);
 
+		// Windows front side
 		setBlockState(world, glassPaneState, 5, 2, 0, structBoundingBox);
 		setBlockState(world, glassPaneState, 6, 2, 5, structBoundingBox);
 
@@ -213,7 +234,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		this.setBlockState(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 3, 1, structBoundingBox);
 
 		if (isAirBlockAtCurrentPosition(world, new BlockPos(2, 0, -1), structBoundingBox) && !isAirBlockAtCurrentPosition(world, new BlockPos(2, -1, -1), structBoundingBox)) {
-			setBlockState(world, Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH), 2, 0, -1, structBoundingBox);
+			setBlockState(world, stairs.withProperty(BlockStairs.FACING, EnumFacing.NORTH), 2, 0, -1, structBoundingBox);
 		}
 
 		setBlockState(world, airState, 6, 1, 5, structBoundingBox);
@@ -231,7 +252,13 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 			}
 		}
 
-		generateChest(world, structBoundingBox, random, 7, 1, 4, Constants.VILLAGE_NATURALIST_LOOT_KEY);
+		generateChest(world, structBoundingBox, random, 7, 1, 3, Constants.VILLAGE_NATURALIST_LOOT_KEY);
+
+		// Inside Corners
+		fillWithBlocks(world, structBoundingBox, 1, 1, 1, 1, 3, 1, fence, fence, false);
+		fillWithBlocks(world, structBoundingBox, 1, 1, 4, 1, 3, 4, fence, fence, false);
+		fillWithBlocks(world, structBoundingBox, 7, 1, 1, 7, 3, 1, fence, fence, false);
+		fillWithBlocks(world, structBoundingBox, 7, 1, 4, 7, 3, 4, fence, fence, false);
 
 		spawnVillagers(world, boundingBox, 2, 1, 2, 2);
 
@@ -239,13 +266,13 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	private void buildRoof(World world, StructureBoundingBox structBoundingBox) {
-		for (int i = -1; i <= 2; ++i) {
-			for (int j = 0; j <= 8; ++j) {
+		for (int z = -1; z <= 2; ++z) {
+			for (int x = 0; x <= 8; ++x) {
 				IBlockState northStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
-				setBlockState(world, northStairs, j, 4 + i, i, structBoundingBox);
+				setBlockState(world, northStairs, x, 4 + z, z, structBoundingBox);
 
 				IBlockState southStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
-				setBlockState(world, southStairs, j, 4 + i, 5 - i, structBoundingBox);
+				setBlockState(world, southStairs, x, 4 + z, 5 - z, structBoundingBox);
 			}
 		}
 	}
