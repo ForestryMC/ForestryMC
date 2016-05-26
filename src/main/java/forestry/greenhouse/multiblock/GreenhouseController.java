@@ -138,7 +138,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().getRainfall() + tempChange;
+		return getBiome().getRainfall() + humidChange;
 	}
 	
 	@Override
