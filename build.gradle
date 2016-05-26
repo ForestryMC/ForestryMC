@@ -31,8 +31,6 @@ archivesBaseName = "forestry_" + mcversion
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
-ext.apiRedstoneFlux = "./src/api/java/cofh"
-
 // java version
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -49,9 +47,6 @@ minecraft {
 
 sourceSets {
 	main {
-		java {
-			srcDir project.apiRedstoneFlux
-		}
 		resources {
 			srcDir project.dirLang
 		}
@@ -108,14 +103,17 @@ allprojects {
 }
 
 jar {
-	// Copy various READMEs and Licensing files into the jar
-	into ('cofh/api') {
-		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
+	// Copy redstone api into the jar, should shade this as a maven dep...
+	from (sourceSets.api.allSource) {
+		include 'cofh/**/*.txt'
+	}
+	from (sourceSets.api.output.classesDir) {
+		include 'cofh/**/*.*'
 	}
 }
 
 task sourcesJar(type: Jar) {
-	from sourceSets.main.allJava
+	from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
 	classifier = 'sources'
 }
 
