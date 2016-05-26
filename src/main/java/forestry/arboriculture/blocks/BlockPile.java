@@ -392,8 +392,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 				ArrayList<ItemStack> list = new ArrayList<ItemStack>();
 				if (getPileType() == EnumPileType.ASH) {
 					if(pile.getTree() != null){
-						ItemStack charcoal = TreeManager.treeRoot.getMemberStack(pile.getTree(), EnumGermlingType.CHARCOAL);
-						charcoal.stackSize = pile.getTree().getGenome().getCarbonization();
+						ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, pile.getTree().getGenome().getCarbonization(), pile.getTree().getGenome().getCombustibility());
 						list.add(charcoal);
 						list.add(new ItemStack(PluginCore.items.ash, 3));
 					}else{
