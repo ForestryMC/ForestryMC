@@ -649,7 +649,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 
 		if (internalBlocks.isEmpty()) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
 		}
 
 		int hatches = 0;
@@ -659,7 +659,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		if (hatches > 1) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.butterflyhatch.toomany"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.butterflyhatch.toomany"));
 		}
 	}
 
@@ -690,7 +690,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos maxPos = getMaximumCoord();
 				
 				if (minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()) {
-					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
+					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
 				}
 				
 				TileEntity tileFace = worldObj.getTileEntity(posFacing);
