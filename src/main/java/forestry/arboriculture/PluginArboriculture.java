@@ -530,6 +530,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					return 0;
 				} else if (block instanceof BlockArbSlab) {
 					return 150;
+				}else{
+					return 300;
 				}
 			}
 
