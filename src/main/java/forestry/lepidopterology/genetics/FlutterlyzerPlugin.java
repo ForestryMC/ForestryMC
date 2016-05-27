@@ -218,7 +218,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 		int x = GuiAlyzer.COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
-			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, gui.guiLeft + x, gui.guiTop + textLayout.getLineY());
+			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, gui.getGuiLeft() + x, gui.getGuiTop() + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {
 				x = GuiAlyzer.COLUMN_0;
@@ -234,7 +234,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 		x = GuiAlyzer.COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
-			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, gui.guiLeft + x, gui.guiTop + textLayout.getLineY());
+			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, gui.getGuiLeft() + x, gui.getGuiTop() + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {
 				x = GuiAlyzer.COLUMN_0;
