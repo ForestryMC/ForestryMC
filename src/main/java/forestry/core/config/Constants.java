@@ -13,6 +13,7 @@ package forestry.core.config;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.api.core.IForestryConstants;
+import net.minecraftforge.fluids.Fluid;
 
 public class Constants implements IForestryConstants {
 	// System
@@ -25,7 +26,6 @@ public class Constants implements IForestryConstants {
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;
 
-	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
 	public static final int[] SLOTS_NONE = new int[0];
@@ -63,7 +63,7 @@ public class Constants implements IForestryConstants {
 	public static final int APIARY_BREEDING_TIME = 100;
 
 	// Energy
-	public static final int ENGINE_TANK_CAPACITY = 10 * BUCKET_VOLUME;
+	public static final int ENGINE_TANK_CAPACITY = 10 * Fluid.BUCKET_VOLUME;
 	public static final int ENGINE_CYCLE_DURATION_WATER = 1000;
 	public static final int ENGINE_CYCLE_DURATION_JUICE = 2500;
 	public static final int ENGINE_CYCLE_DURATION_HONEY = 2500;
@@ -101,7 +101,7 @@ public class Constants implements IForestryConstants {
 	public static final int ENGINE_TIN_MAX_EU_BATTERY = 100;
 
 	// Factory
-	public static final int PROCESSOR_TANK_CAPACITY = 10 * BUCKET_VOLUME;
+	public static final int PROCESSOR_TANK_CAPACITY = 10 * Fluid.BUCKET_VOLUME;
 
 	public static final int MACHINE_MAX_ENERGY = 5000;
 
@@ -117,7 +117,7 @@ public class Constants implements IForestryConstants {
 	public static final float ICE_COOLING_MULTIPLIER = 6f; // multiple of water's cooling value
 
 	// Storage
-	public static final int RAINTANK_TANK_CAPACITY = 30 * BUCKET_VOLUME;
+	public static final int RAINTANK_TANK_CAPACITY = 30 * Fluid.BUCKET_VOLUME;
 	public static final int RAINTANK_AMOUNT_PER_UPDATE = 10;
 	public static final int RAINTANK_FILLING_TIME = 12;
 	public static final int CARPENTER_CRATING_CYCLES = 5;

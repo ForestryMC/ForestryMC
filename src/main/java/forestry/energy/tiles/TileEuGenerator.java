@@ -20,16 +20,15 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
@@ -43,7 +42,7 @@ import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 
 // TODO: IC2 for 1.9
-public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
+public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
 	private static final int maxEnergy = 30000;
 
 	private final TankManager tankManager;
@@ -58,7 +57,9 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 		setInternalInventory(new InventoryGenerator(this));
 
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
+		resourceTank.setFilters(FuelManager.generatorFuel.keySet());
+
 		tankManager = new TankManager(this, resourceTank);
 
 //		if (PluginIC2.instance.isAvailable()) {
@@ -137,7 +138,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //
 //		if (resourceTank.getFluidAmount() > 0) {
 //			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
-//			if (resourceTank.canDrain(fuel.fuelConsumed) && ic2EnergySource.getFreeCapacity() >= fuel.eu) {
+//			if (resourceTank.canDrainFluidType(fuel.fuelConsumed) && ic2EnergySource.getFreeCapacity() >= fuel.eu) {
 //				ic2EnergySource.addEnergy(fuel.eu);
 //				this.tickCount++;
 //
@@ -194,43 +195,6 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //		}
 	}
 
-	/* ILiquidTankTile */
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
-	}
-
-	@Nonnull
-	@Override
-	public TankManager getTankManager() {
-		return tankManager;
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
-	}
-
 	@Override
 	public Object getGui(EntityPlayer player, int data) {
 		return new GuiGenerator(player.inventory, this);
@@ -239,5 +203,30 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerGenerator(player.inventory, this);
+	}
+
+	@Nonnull
+	@Override
+	public ITankManager getTankManager() {
+		return tankManager;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 }

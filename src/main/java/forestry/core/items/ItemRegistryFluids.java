@@ -10,51 +10,36 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import java.util.EnumMap;
+import java.util.Map;
 
 import forestry.core.fluids.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class ItemRegistryFluids extends ItemRegistry {
-	public final ItemLiquidContainer canEmpty;
-	public final ItemLiquidContainer waxCapsuleEmpty;
-	public final ItemLiquidContainer refractoryEmpty;
+	public final ItemFluidContainerForestry canEmpty;
+	public final ItemFluidContainerForestry waxCapsuleEmpty;
+	public final ItemFluidContainerForestry refractoryEmpty;
 
-	private final Table<EnumContainerType, String, ItemLiquidContainer> containers = HashBasedTable.create();
+	private final Map<EnumContainerType, ItemFluidContainerForestry> containers = new EnumMap<>(EnumContainerType.class);
 
-	public ItemLiquidContainer getContainer(EnumContainerType type, Fluids fluid) {
-		return containers.get(type, fluid.getFluid().getName());
+	public ItemStack getContainer(EnumContainerType type, Fluids fluid) {
+		ItemStack container = new ItemStack(containers.get(type));
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		fluidHandler.fill(fluid.getFluid(Integer.MAX_VALUE), true);
+		return container;
 	}
 
 	public ItemRegistryFluids() {
-		canEmpty = registerEmptyContainer(EnumContainerType.CAN, "can.empty");
-		waxCapsuleEmpty = registerEmptyContainer(EnumContainerType.CAPSULE, "capsule.empty");
-		refractoryEmpty = registerEmptyContainer(EnumContainerType.REFRACTORY, "refractory.empty");
+		canEmpty = registerItem(new ItemFluidContainerForestry(EnumContainerType.CAN), "can");
+		waxCapsuleEmpty = registerItem(new ItemFluidContainerForestry(EnumContainerType.CAPSULE), "capsule");
+		refractoryEmpty = registerItem(new ItemFluidContainerForestry(EnumContainerType.REFRACTORY), "refractory");
 
-		for (Fluids fluidType : Fluids.values()) {
-			if (fluidType.getFluid() == null) {
-				continue;
-			}
-			for (EnumContainerType type : fluidType.getContainerTypes()) {
-				int color = fluidType.getColor().getRGB();
-
-				DrinkProperties drinkProperties = fluidType.getDrinkProperties();
-				ItemLiquidContainer liquidContainer;
-				if (drinkProperties == null) {
-					liquidContainer = new ItemLiquidContainer(type, color);
-				} else {
-					liquidContainer = new ItemLiquidContainerDrinkable(type, color, drinkProperties);
-				}
-
-				String name = type.getName() + '.' + fluidType.getTag();
-				registerItem(liquidContainer, name);
-
-				containers.put(type, fluidType.getFluid().getName(), liquidContainer);
-			}
-		}
+		containers.put(EnumContainerType.CAN, canEmpty);
+		containers.put(EnumContainerType.CAPSULE, waxCapsuleEmpty);
+		containers.put(EnumContainerType.REFRACTORY, refractoryEmpty);
 	}
 
-	private static ItemLiquidContainer registerEmptyContainer(EnumContainerType type, String name) {
-		return registerItem(new ItemLiquidContainer(type, 0), name);
-	}
 }

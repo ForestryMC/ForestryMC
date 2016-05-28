@@ -19,10 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
@@ -41,7 +41,7 @@ import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
 
-public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
 	private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
@@ -98,22 +98,25 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	@Override
 	public boolean workCycle() {
-		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid());
+		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), true);
 		return status == FluidHelper.FillStatus.SUCCESS;
 	}
 
 	private void checkRecipe() {
 		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN);
 		FluidStack resource = resourceTank.getFluid();
+		if (resource == null) {
+			return;
+		}
 
 		if (currentRecipe == null || !currentRecipe.matches(emptyCan, resource)) {
-			currentRecipe = BottlerRecipe.getRecipe(resource, emptyCan);
+			currentRecipe = BottlerRecipe.create(resource.getFluid(), emptyCan);
 			if (currentRecipe != null) {
 				float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
 				viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 				int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
-				float fillTime = fillAmount / (float) Constants.BUCKET_VOLUME;
+				float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
 				fillTime *= viscosityMultiplier;
 
 				setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -164,33 +167,22 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 
 	/* ITRIGGERPROVIDER */

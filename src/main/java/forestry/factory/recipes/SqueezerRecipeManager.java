@@ -48,12 +48,11 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 
 	@Nullable
 	public static ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
-		ItemStack emptyContainer = FluidHelper.getEmptyContainer(filledContainer);
-		if (emptyContainer == null) {
+		if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
 			return null;
 		}
 
-		return containerRecipes.get(emptyContainer);
+		return containerRecipes.get(new ItemStack(filledContainer.getItem()));
 	}
 
 	public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {

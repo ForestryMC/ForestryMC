@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,7 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.api.core.IToolPipette;
-import forestry.core.config.Constants;
 import forestry.core.fluids.PipetteContents;
 
 public class ItemPipette extends ItemForestry implements IToolPipette, IFluidContainerItem {
@@ -163,6 +163,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 
 	@Override
 	public int getCapacity(ItemStack pipette) {
-		return Constants.BUCKET_VOLUME;
+		return Fluid.BUCKET_VOLUME;
 	}
 }

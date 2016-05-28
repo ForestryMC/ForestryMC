@@ -21,10 +21,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -36,7 +36,6 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.render.TankRenderInfo;
@@ -47,7 +46,7 @@ import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
 
-public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
@@ -64,10 +63,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		super("fermenter", 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
-		resourceTank.tankMode = StandardTank.TankMode.INPUT;
-		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
-		productTank.tankMode = StandardTank.TankMode.OUTPUT;
+
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
+		resourceTank.setFilters(FermenterRecipeManager.recipeFluidInputs);
+
+		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
+		productTank.setFilters(FermenterRecipeManager.recipeFluidOutputs);
+
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
@@ -120,7 +122,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid());
+				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
 			}
 		}
 	}
@@ -129,7 +131,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	public boolean workCycle() {
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-		productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
+		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), true);
 
 		fuelBurnTime--;
 		resourceTank.drain(fermented, true);
@@ -222,12 +224,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
 		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
-		boolean hasFluidResource = resourceTank.canDrain(fermented);
+		FluidStack drained = resourceTank.drain(fermented, false);
+		boolean hasFluidResource = drained != null && drained.amount == fermented;
 		boolean hasFluidSpace = true;
 
 		if (hasRecipe) {
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-			hasFluidSpace = productTank.canFill(currentRecipe.getOutput(), productAmount);
+			Fluid output = currentRecipe.getOutput();
+			FluidStack fluidStack = new FluidStack(output, productAmount);
+			hasFluidSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -291,41 +296,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		iCrafting.sendProgressBarUpdate(container, 3, fermentationTotalTime);
 	}
 
-	/* ILiquidTankTile */
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return resourceTank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int quantityMax, boolean doEmpty) {
-		return tankManager.drain(from, quantityMax, doEmpty);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
 	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */
@@ -347,5 +321,24 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerFermenter(player.inventory, this);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 }

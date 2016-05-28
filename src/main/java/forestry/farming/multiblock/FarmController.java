@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import forestry.core.fluids.FluidHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -146,7 +147,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+
 		this.tankManager = new TankManager(this, resourceTank);
 
 		this.inventory = new InventoryFarm(this);
@@ -790,7 +792,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		return resourceTank.canDrain(liquid);
+		FluidStack drained = resourceTank.drainInternal(liquid, false);
+		return FluidHelper.areFluidStacksEqual(drained, liquid);
 	}
 
 	@Override

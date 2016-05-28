@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.item.EnumRarity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fluids.Fluid;
@@ -33,41 +32,38 @@ public class FilteredTank extends StandardTank {
 
 	private final Set<String> filters = new HashSet<>(); // FluidNames
 
-	public FilteredTank(int capacity, Fluid... filters) {
-		this(capacity, Arrays.asList(filters), null);
+	public FilteredTank(int capacity) {
+		super(capacity);
 	}
 
-	public FilteredTank(int capacity, Collection<Fluid> filters) {
-		this(capacity, filters, null);
+	public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
+		super(capacity, canFill, canDrain);
 	}
 
-	public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
-		super(capacity, tile);
-		setFilters(filters);
+	public FilteredTank setFilters(Fluid... filters) {
+		return setFilters(Arrays.asList(filters));
 	}
 
-	public void setFilters(Collection<Fluid> filters) {
+	public FilteredTank setFilters(Collection<Fluid> filters) {
 		this.filters.clear();
 		for (Fluid fluid : filters) {
 			this.filters.add(fluid.getName());
 		}
+		return this;
 	}
 
 	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		if (liquidMatchesFilter(resource)) {
-			return super.fill(resource, doFill);
-		}
-		return 0;
+	public boolean canFillFluidType(FluidStack fluid) {
+		return fluidMatchesFilter(fluid);
 	}
 
 	@Override
-	public boolean accepts(Fluid fluid) {
-		return filters.contains(fluid.getName());
+	public boolean canDrainFluidType(FluidStack fluid) {
+		return fluidMatchesFilter(fluid);
 	}
 
-	private boolean liquidMatchesFilter(FluidStack resource) {
-		if (resource == null || filters == null) {
+	private boolean fluidMatchesFilter(FluidStack resource) {
+		if (resource == null || resource.getFluid() == null) {
 			return false;
 		}
 		return filters.contains(resource.getFluid().getName());

@@ -13,7 +13,8 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.fluids.FluidHelper;
@@ -37,10 +38,10 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
 		if (slotIndex == SLOT_RESOURCE) {
 			return FermenterRecipeManager.isResource(itemStack);
 		} else if (slotIndex == SLOT_INPUT) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
+			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
+			return tile.getTankManager().canFillFluidType(fluid);
 		} else if (slotIndex == SLOT_CAN_INPUT) {
-			return FluidHelper.isFillableContainer(itemStack);
+			return FluidHelper.isFillableContainerWithRoom(itemStack);
 		} else if (slotIndex == SLOT_FUEL) {
 			return FuelManager.fermenterFuel.containsKey(itemStack);
 		}

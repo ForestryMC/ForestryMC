@@ -20,11 +20,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -44,7 +44,7 @@ import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
 
-public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
 	private final StandardTank burnTank;
@@ -57,12 +57,10 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 
-		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
-		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
-		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
-		heatingTank.tankMode = StandardTank.TankMode.INPUT;
-		burnTank = new StandardTank(Constants.BUCKET_VOLUME);
-		burnTank.tankMode = StandardTank.TankMode.INTERNAL;
+		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY).setFilters(FuelManager.bronzeEngineFuel.keySet());
+		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(FluidRegistry.LAVA);
+		burnTank = new StandardTank(Fluid.BUCKET_VOLUME, false, false);
+
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
@@ -103,7 +101,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		currentOutput = 0;
 
-		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Constants.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Fluid.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
 
 			double heatStage = getHeatLevel();
 
@@ -126,7 +124,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 					currentOutput = determineFuelValue(drained.getFluid());
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					FluidStack fuel = fuelTank.drain(Constants.BUCKET_VOLUME, true);
+					FluidStack fuel = fuelTank.drain(Fluid.BUCKET_VOLUME, true);
 					int burnTime = determineBurnTime(fuel.getFluid());
 					fuel.amount = burnTime;
 					burnTank.setCapacity(burnTime);
@@ -295,35 +293,23 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		iCrafting.sendProgressBarUpdate(containerEngine, 3, burnTank.getCapacity());
 	}
 
-	// IFluidHandler
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 
 	@Override

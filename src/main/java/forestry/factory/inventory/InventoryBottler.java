@@ -15,6 +15,7 @@ import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -32,9 +33,9 @@ public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_INPUT_EMPTY_CAN) {
-			return FluidHelper.isFillableContainer(itemStack);
+			return FluidHelper.isFillableContainerWithRoom(itemStack);
 		} else if (slotIndex == SLOT_INPUT_FULL_CAN) {
-			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemStack);
+			FluidStack fluidStack = FluidUtil.getFluidContained(itemStack);
 			return fluidStack != null && FluidRegistry.isFluidRegistered(fluidStack.getFluid());
 		}
 		return false;

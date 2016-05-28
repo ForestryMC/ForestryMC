@@ -17,10 +17,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
@@ -36,7 +36,7 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IFluidHandler, IAlvearyComponent.Climatiser {
+public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
 	private final HygroregulatorRecipe[] recipes;
 
 	private final TankManager tankManager;
@@ -55,7 +55,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		Fluid lava = Fluids.LAVA.getFluid();
 		Fluid liquidIce = Fluids.ICE.getFluid();
 
-		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
+		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(water, lava, liquidIce);
+
 		this.tankManager = new TankManager(this, liquidTank);
 
 		this.recipes = new HygroregulatorRecipe[]{new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
@@ -91,7 +92,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			currentRecipe = getRecipe(liquidTank.getFluid());
 
 			if (currentRecipe != null) {
-				liquidTank.drain(currentRecipe.liquid.amount, true);
+				liquidTank.drainInternal(currentRecipe.liquid.amount, true);
 				transferTime = currentRecipe.transferTime;
 			}
 		}
@@ -150,33 +151,22 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 
 	@Override
