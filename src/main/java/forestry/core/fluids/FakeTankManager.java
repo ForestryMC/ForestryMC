@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -51,37 +51,34 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
+	public boolean accepts(Fluid fluid) {
+		return false;
+	}
+
+	@Override
 	public void processTankUpdate(int tankIndex, FluidStack contents) {
 
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+	public FluidTankInfo[] getTankInfo() {
+		return FakeTank.INFO;
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
 		return FakeTank.INSTANCE.fill(resource, doFill);
 	}
 
+	@Nullable
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return FakeTank.INSTANCE.drain(resource.amount, doDrain);
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		return FakeTank.INSTANCE.drain(resource, doDrain);
 	}
 
+	@Nullable
 	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return FakeTank.INSTANCE.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return FakeTank.INFO;
 	}
 }

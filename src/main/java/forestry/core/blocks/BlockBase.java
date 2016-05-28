@@ -20,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,7 +39,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,7 +52,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
-import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.MachineParticleCallback;
 import forestry.core.render.MachineStateMapper;
@@ -139,10 +139,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* INTERACTION */
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (playerIn.isSneaking()) {
-			return false;
-		}
-
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile == null) {
 			return false;
@@ -154,9 +150,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 		IAccessHandler access = tile.getAccessHandler();
 
-		if (heldItem != null && heldItem.getItem() != Items.BUCKET && tile instanceof IFluidHandler && access.allowsAlteration(playerIn)) {
-			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, playerIn, true, tile.canDrainWithBucket())) {
-				return true;
+		if (!playerIn.isSneaking()) {
+			if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+				IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+				if (FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn)) {
+					return true;
+				}
 			}
 		}
 

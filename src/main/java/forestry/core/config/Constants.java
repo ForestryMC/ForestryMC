@@ -12,6 +12,8 @@ package forestry.core.config;
 
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
@@ -26,7 +28,7 @@ public class Constants implements IForestryConstants {
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;
 
-	public static final int BUCKET_VOLUME = 1000;
+	public static final int BUCKET_VOLUME = FluidContainerRegistry.BUCKET_VOLUME;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
 	public static final int[] SLOTS_NONE = new int[0];

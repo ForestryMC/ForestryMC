@@ -21,10 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -47,7 +46,7 @@ import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
 
-public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
@@ -291,41 +290,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		iCrafting.sendProgressBarUpdate(container, 3, fermentationTotalTime);
 	}
 
-	/* ILiquidTankTile */
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return resourceTank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int quantityMax, boolean doEmpty) {
-		return tankManager.drain(from, quantityMax, doEmpty);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
 	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */
@@ -347,5 +315,24 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerFermenter(player.inventory, this);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 }

@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+
 import forestry.core.items.DrinkProperties;
 import forestry.core.items.EnumContainerType;
 import forestry.core.proxy.Proxies;
@@ -367,7 +368,7 @@ public enum Fluids {
 	}
 
 	/**
-	 * Get the properties for an ItemLiquidContainer before it gets registered.
+	 * Get the properties for an ItemFluidContainerForestry before it gets registered.
 	 */
 	@Nullable
 	public DrinkProperties getDrinkProperties() {

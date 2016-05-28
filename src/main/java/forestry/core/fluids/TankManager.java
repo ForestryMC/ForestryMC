@@ -14,6 +14,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +27,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -206,7 +206,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+	public int fill(FluidStack resource, boolean doFill) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
 				return fill(tank.getTankIndex(), resource, doFill);
@@ -250,8 +250,9 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		}
 	}
 
+	@Nullable
 	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(int maxDrain, boolean doDrain) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrain(tank)) {
 				return drain(tank.getTankIndex(), maxDrain, doDrain);
@@ -283,31 +284,12 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return drain(resource, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing direction) {
+	public FluidTankInfo[] getTankInfo() {
 		FluidTankInfo[] info = new FluidTankInfo[tanks.size()];
 		for (int i = 0; i < tanks.size(); i++) {
 			info[i] = tanks.get(i).getInfo();
 		}
 		return info;
-	}
-
-	public FluidTankInfo[] getTankInfo() {
-		return getTankInfo(null);
 	}
 
 	public FluidTankInfo getTankInfo(int tankIndex) {
@@ -322,6 +304,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		return tanks.get(tankIndex).getFluidAmount();
 	}
 
+	@Override
 	public boolean accepts(Fluid fluid) {
 		if (fluid == null) {
 			return false;

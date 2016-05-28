@@ -30,7 +30,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemLiquidContainer;
+import forestry.core.items.ItemFluidContainerForestry;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
@@ -105,7 +105,7 @@ public class PluginFluids extends BlankForestryPlugin {
 			}
 
 			for (EnumContainerType type : EnumContainerType.values()) {
-				ItemLiquidContainer container = items.getContainer(type, fluidType);
+				ItemFluidContainerForestry container = items.getContainer(type, fluidType);
 				if (container == null) {
 					continue;
 				}

@@ -15,9 +15,10 @@ import java.util.List;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public interface ITankManager extends IFluidHandler {
 	void containerAdded(Container container, IContainerListener crafter);
@@ -27,6 +28,8 @@ public interface ITankManager extends IFluidHandler {
 	void containerRemoved(Container container);
 
 	IFluidTank getTank(int tankIndex);
+
+	boolean accepts(Fluid fluid);
 
 	/**
 	 * For updating tanks on the client

@@ -13,10 +13,10 @@ import net.minecraft.util.FoodStats;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemLiquidContainerDrinkable extends ItemLiquidContainer {
+public class ItemFluidContainerForestryDrinkable extends ItemFluidContainerForestry {
 	private final DrinkProperties properties;
 
-	public ItemLiquidContainerDrinkable(EnumContainerType type, int color, DrinkProperties properties) {
+	public ItemFluidContainerForestryDrinkable(EnumContainerType type, int color, DrinkProperties properties) {
 		super(type, color);
 		this.properties = properties;
 	}

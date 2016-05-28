@@ -16,13 +16,13 @@ import com.google.common.collect.Table;
 import forestry.core.fluids.Fluids;
 
 public class ItemRegistryFluids extends ItemRegistry {
-	public final ItemLiquidContainer canEmpty;
-	public final ItemLiquidContainer waxCapsuleEmpty;
-	public final ItemLiquidContainer refractoryEmpty;
+	public final ItemFluidContainerForestry canEmpty;
+	public final ItemFluidContainerForestry waxCapsuleEmpty;
+	public final ItemFluidContainerForestry refractoryEmpty;
 
-	private final Table<EnumContainerType, String, ItemLiquidContainer> containers = HashBasedTable.create();
+	private final Table<EnumContainerType, String, ItemFluidContainerForestry> containers = HashBasedTable.create();
 
-	public ItemLiquidContainer getContainer(EnumContainerType type, Fluids fluid) {
+	public ItemFluidContainerForestry getContainer(EnumContainerType type, Fluids fluid) {
 		return containers.get(type, fluid.getFluid().getName());
 	}
 
@@ -39,11 +39,11 @@ public class ItemRegistryFluids extends ItemRegistry {
 				int color = fluidType.getColor().getRGB();
 
 				DrinkProperties drinkProperties = fluidType.getDrinkProperties();
-				ItemLiquidContainer liquidContainer;
+				ItemFluidContainerForestry liquidContainer;
 				if (drinkProperties == null) {
-					liquidContainer = new ItemLiquidContainer(type, color);
+					liquidContainer = new ItemFluidContainerForestry(type, color);
 				} else {
-					liquidContainer = new ItemLiquidContainerDrinkable(type, color, drinkProperties);
+					liquidContainer = new ItemFluidContainerForestryDrinkable(type, color, drinkProperties);
 				}
 
 				String name = type.getName() + '.' + fluidType.getTag();
@@ -54,7 +54,7 @@ public class ItemRegistryFluids extends ItemRegistry {
 		}
 	}
 
-	private static ItemLiquidContainer registerEmptyContainer(EnumContainerType type, String name) {
-		return registerItem(new ItemLiquidContainer(type, 0), name);
+	private static ItemFluidContainerForestry registerEmptyContainer(EnumContainerType type, String name) {
+		return registerItem(new ItemFluidContainerForestry(type, 0), name);
 	}
 }
