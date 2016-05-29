@@ -258,15 +258,14 @@ public class PluginFactory extends ForestryPlugin {
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			ItemRegistryApiculture beeItems = PluginApiculture.items;
-			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME * 4);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{
 						"#", "X",
 						'#', dyes[i],
 						'X', beeItems.propolis.getWildcard()});
 			}
-			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.glass, 1, 0), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.glass, 4, 0), new Object[]{
 					"#", "X",
 					'X', beeItems.propolis.getWildcard()});
 		}
