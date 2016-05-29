@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -221,12 +222,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
 		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
-		boolean hasFluidResource = resourceTank.canDrain(fermented);
+		FluidStack drained = resourceTank.drain(fermented, false);
+		boolean hasFluidResource = drained != null && drained.amount == fermented;
 		boolean hasFluidSpace = true;
 
 		if (hasRecipe) {
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-			hasFluidSpace = productTank.canFill(currentRecipe.getOutput(), productAmount);
+			Fluid output = currentRecipe.getOutput();
+			FluidStack fluidStack = new FluidStack(output, productAmount);
+			hasFluidSpace = productTank.fill(fluidStack, false) == fluidStack.amount;
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();

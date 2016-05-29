@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
+import forestry.core.fluids.FluidHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -143,7 +144,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
-		if (moltenTank.canFill(smeltFluid)) {
+		if (moltenTank.fill(smeltFluid, false) == smeltFluid.amount) {
 			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
 			moltenTank.fill(smeltFluid, true);
 			meltingPoint = smelt.getMeltingPoint();
@@ -214,7 +215,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		if (!moltenTank.canDrain(liquid)) {
+		FluidStack drained = moltenTank.drain(liquid, false);
+		if (!FluidHelper.areFluidStacksEqual(drained, liquid)) {
 			return;
 		}
 
@@ -248,7 +250,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		if (recipe != null) {
 			ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, null, false);
-			hasLiquidResources = moltenTank.canDrain(recipe.getLiquid());
+			FluidStack toDrain = recipe.getLiquid();
+			FluidStack drained = moltenTank.drain(toDrain, false);
+			hasLiquidResources = FluidHelper.areFluidStacksEqual(drained, toDrain);
 		} else {
 			hasRecipe = false;
 		}

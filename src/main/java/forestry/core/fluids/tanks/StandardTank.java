@@ -143,28 +143,6 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return false;
 	}
 
-	public boolean canFill(Fluid fluid, int amount) {
-		if (fluid == null) {
-			return false;
-		}
-		FluidStack fluidStack = new FluidStack(fluid, amount);
-		return canFill(fluidStack);
-	}
-
-	public boolean canFill(FluidStack fluidStack) {
-		return fill(fluidStack, false) == fluidStack.amount;
-	}
-
-	public boolean canDrain(int amount) {
-		FluidStack drained = drain(amount, false);
-		return drained != null && drained.amount == amount;
-	}
-
-	public boolean canDrain(FluidStack toDrain) {
-		FluidStack drained = drain(toDrain.amount, false);
-		return FluidHelper.areFluidStacksEqual(drained, toDrain);
-	}
-
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if (maxDrain <= 0) {

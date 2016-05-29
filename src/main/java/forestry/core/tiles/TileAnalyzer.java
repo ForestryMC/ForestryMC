@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
@@ -107,7 +108,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		if (!specimenToAnalyze.isAnalyzed()) {
-			if (!resourceTank.canDrain(HONEY_REQUIRED)) {
+			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
+			if (drained == null || drained.amount != HONEY_REQUIRED) {
 				return false;
 			}
 			resourceTank.drain(HONEY_REQUIRED, true);
@@ -180,7 +182,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
 			if (!specimenToAnalyze.isAnalyzed()) {
-				hasResource = resourceTank.canDrain(HONEY_REQUIRED);
+				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
+				hasResource = drained != null && drained.amount == HONEY_REQUIRED;
 			}
 		}
 
