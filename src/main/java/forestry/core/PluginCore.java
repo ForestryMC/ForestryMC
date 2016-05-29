@@ -63,7 +63,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ClimateUtil;
-import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -128,7 +127,8 @@ public class PluginCore extends BlankForestryPlugin {
 		blocks.analyzer.init();
 		blocks.escritoire.init();
 
-		ForestryModEnvWarningCallable.register();
+		//TODO: 1.9.4 This causes a crash on forge version 1.9.4-12.17.0.1925-27 see issue on #2924 on forge github
+		//ForestryModEnvWarningCallable.register();
 
 		AlleleHelper.instance.init();
 
