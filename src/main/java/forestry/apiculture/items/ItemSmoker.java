@@ -50,7 +50,8 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 			EnumHand activeHand = entityLivingBase.getActiveHand();
 			EnumHandSide handSide = entityLivingBase.getPrimaryHand();
 			if (activeHand == EnumHand.OFF_HAND) {
-				handSide = handSide.opposite();
+				// TODO: use EnumHandSide.opposite() when it's no longer client-only
+				handSide = handSide == EnumHandSide.LEFT ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
 			}
 			return handSide;
 		}
