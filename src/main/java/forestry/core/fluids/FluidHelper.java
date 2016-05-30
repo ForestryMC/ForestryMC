@@ -130,14 +130,6 @@ public final class FluidHelper {
 			return false;
 		}
 
-		// consume forestry containers if there is only one slot
-		if (outputSlot == inputSlot && drainedItem != null) {
-			Item item = drainedItem.getItem();
-			if (PluginFluids.items.canEmpty == item || PluginFluids.items.waxCapsuleEmpty == item || PluginFluids.items.refractoryEmpty == item) {
-				drainedItem = null;
-			}
-		}
-
 		if (!hasRoomForDrainedContainer(input, output, drainedItem, inputSlot, outputSlot)) {
 			return false;
 		}
@@ -219,6 +211,10 @@ public final class FluidHelper {
 		}
 
 		fluidHandler.drain(drainAmount, true);
+		if (container.stackSize <= 0) {
+			return null;
+		}
+
 		return container;
 	}
 
@@ -256,17 +252,7 @@ public final class FluidHelper {
 	}
 
 	public static FluidStack getFluidStackInContainer(ItemStack stack) {
-		if (stack.stackSize > 1) {
-			stack = stack.copy();
-			stack.stackSize = 1;
-		}
-
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
-		if (fluidHandler == null) {
-			return null;
-		}
-
-		return fluidHandler.drain(Integer.MAX_VALUE, false);
+		return FluidUtil.getFluidContained(stack);
 	}
 
 	public static Fluid getFluidInContainer(ItemStack stack) {

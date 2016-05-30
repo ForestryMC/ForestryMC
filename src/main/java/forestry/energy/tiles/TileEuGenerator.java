@@ -136,7 +136,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //
 //		if (resourceTank.getFluidAmount() > 0) {
 //			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
-//			if (resourceTank.canDrain(fuel.fuelConsumed) && ic2EnergySource.getFreeCapacity() >= fuel.eu) {
+//			if (resourceTank.canDrainFluidType(fuel.fuelConsumed) && ic2EnergySource.getFreeCapacity() >= fuel.eu) {
 //				ic2EnergySource.addEnergy(fuel.eu);
 //				this.tickCount++;
 //

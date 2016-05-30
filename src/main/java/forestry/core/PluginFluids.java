@@ -10,17 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -28,15 +17,20 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.fluids.LiquidRegistryHelper;
-import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemFluidContainerForestry;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
@@ -99,25 +93,6 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
-		for (Fluids fluidType : Fluids.values()) {
-			if (fluidType.getFluid() == null) {
-				continue;
-			}
-
-			for (EnumContainerType type : EnumContainerType.values()) {
-				ItemFluidContainerForestry container = items.getContainer(type, fluidType);
-				if (container == null) {
-					continue;
-				}
-
-				LiquidRegistryHelper.registerLiquidContainer(fluidType, container.getItemStack());
-			}
-
-			for (ItemStack filledContainer : fluidType.getOtherContainers()) {
-				LiquidRegistryHelper.registerLiquidContainer(fluidType, filledContainer);
-			}
-		}
-
 		if (RecipeManagers.squeezerManager != null) {
 			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), PluginCore.items.ingotTin.copy(), 0.05f);
 			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), PluginCore.items.beeswax.getItemStack(), 0.10f);

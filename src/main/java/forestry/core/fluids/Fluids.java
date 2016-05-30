@@ -345,6 +345,21 @@ public enum Fluids {
 		return Fluids.WATER.getColor();
 	}
 
+	@Nullable
+	public static Fluids getFluidDefinition(FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (fluid != null) {
+				Fluids fluidDefinition = tagToFluid.get(fluid.getName());
+				if (fluidDefinition != null) {
+					return fluidDefinition;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	/** FluidBlock and Container registration */
 	@Nonnull
 	public EnumSet<EnumContainerType> getContainerTypes() {
