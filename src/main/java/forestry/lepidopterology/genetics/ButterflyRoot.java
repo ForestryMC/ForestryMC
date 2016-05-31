@@ -208,7 +208,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	private BlockPos getNextPos(World world, BlockPos pos){
 		IBlockState blockState;
 		do {
-			pos.down();
+			pos = pos.down();
 			blockState = world.getBlockState(pos);
 		} while (!BlockUtil.canReplace(blockState, world, pos));
 
