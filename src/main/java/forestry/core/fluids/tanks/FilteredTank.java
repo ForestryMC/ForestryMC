@@ -62,8 +62,13 @@ public class FilteredTank extends StandardTank {
 	}
 
 	@Override
-	public boolean accepts(Fluid fluid) {
-		return filters.contains(fluid.getName());
+	public boolean canFillFluidType(FluidStack fluid) {
+		return filters.contains(fluid.getFluid().getName());
+	}
+
+	@Override
+	public boolean canDrainFluidType(FluidStack fluid) {
+		return filters.contains(fluid.getFluid().getName());
 	}
 
 	private boolean liquidMatchesFilter(FluidStack resource) {

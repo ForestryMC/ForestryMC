@@ -15,7 +15,6 @@ import java.util.List;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -29,7 +28,9 @@ public interface ITankManager extends IFluidHandler {
 
 	IFluidTank getTank(int tankIndex);
 
-	boolean accepts(Fluid fluid);
+	boolean canFillFluidType(FluidStack fluidStack);
+
+	boolean canDrainFluidType(FluidStack fluidStack);
 
 	/**
 	 * For updating tanks on the client

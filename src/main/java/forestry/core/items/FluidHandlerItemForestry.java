@@ -1,7 +1,7 @@
 package forestry.core.items;
 
-import forestry.core.fluids.Fluids;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
@@ -14,10 +14,32 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 		this.containerType = containerType;
 	}
 
+	private boolean contentsAllowed(FluidStack fluidStack) {
+		if (fluidStack == null) {
+			return false;
+		}
+
+		Fluid fluid = fluidStack.getFluid();
+		if (fluid == null) {
+			return false;
+		}
+
+		switch (containerType) {
+			case CAPSULE:
+				return fluid.getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
+			default:
+				return true;
+		}
+	}
+
 	@Override
 	public boolean canFillFluidType(FluidStack fluid) {
-		Fluids fluidDefinition = Fluids.getFluidDefinition(fluid);
-		return fluidDefinition != null && fluidDefinition.getContainerTypes().contains(containerType);
+		return contentsAllowed(fluid);
+	}
+
+	@Override
+	public boolean canDrainFluidType(FluidStack fluid) {
+		return contentsAllowed(fluid);
 	}
 
 	@Override

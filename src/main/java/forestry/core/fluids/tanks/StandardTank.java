@@ -19,9 +19,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.core.fluids.FakeTankUpdateHandler;
-import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankUpdateHandler;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.tooltips.ToolTip;
@@ -34,16 +34,11 @@ import forestry.core.utils.Translator;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandardTank extends FluidTank implements IStreamable {
-	// defines how the tank responds to IFluidHandler requests
-	public enum TankMode {
-		DEFAULT, OUTPUT, INPUT, INTERNAL
-	}
-
-	public TankMode tankMode = TankMode.DEFAULT;
 	private static final int DEFAULT_COLOR = 0xFFFFFF;
 	@Nonnull
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
+	public TankInteractionType tankMode = TankInteractionType.OPEN;
 
 	public StandardTank(int capacity) {
 		super(capacity);
@@ -103,15 +98,6 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public int fill(final FluidStack resource, final boolean doFill) {
-		if (resource == null) {
-			return 0;
-		}
-		if (resource.amount <= 0) {
-			return 0;
-		}
-		if (!accepts(resource.getFluid())) {
-			return 0;
-		}
 		int filled = super.fill(resource, doFill);
 		if (doFill && filled > 0) {
 			tankUpdateHandler.updateTankLevels(this);
@@ -119,35 +105,28 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return filled;
 	}
 
-	public boolean accepts(Fluid fluid) {
-		return fluid != null;
-	}
-
-	@SuppressWarnings("incomplete-switch")
 	public boolean canBeFilledExternally() {
 		switch (tankMode) {
-			case DEFAULT:
-			case INPUT:
+			case OPEN:
+			case FILL_ONLY:
 				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	public boolean canBeDrainedExternally() {
 		switch (tankMode) {
-			case DEFAULT:
-			case OUTPUT:
+			case OPEN:
+			case DRAIN_ONLY:
 				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if (maxDrain <= 0) {
-			return null;
-		}
 		FluidStack drained = super.drain(maxDrain, doDrain);
 		if (doDrain && drained != null && drained.amount > 0) {
 			tankUpdateHandler.updateTankLevels(this);

@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -58,11 +59,11 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		setInternalInventory(new InventoryEngineBiogas(this));
 
 		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
-		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
+		fuelTank.tankMode = TankInteractionType.OPEN;
 		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
-		heatingTank.tankMode = StandardTank.TankMode.INPUT;
+		heatingTank.tankMode = TankInteractionType.FILL_ONLY;
 		burnTank = new StandardTank(Constants.BUCKET_VOLUME);
-		burnTank.tankMode = StandardTank.TankMode.INTERNAL;
+		burnTank.tankMode = TankInteractionType.CLOSED;
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 

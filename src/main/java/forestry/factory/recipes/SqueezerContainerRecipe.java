@@ -13,9 +13,9 @@ package forestry.factory.recipes;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
@@ -57,7 +57,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		if (filledContainer == null) {
 			return null;
 		}
-		FluidStack fluidOutput = FluidHelper.getFluidStackInContainer(filledContainer);
+		FluidStack fluidOutput = FluidUtil.getFluidContained(filledContainer);
 		if (fluidOutput == null) {
 			return null;
 		}

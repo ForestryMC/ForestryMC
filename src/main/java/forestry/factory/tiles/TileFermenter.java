@@ -25,6 +25,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -36,7 +37,6 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.render.TankRenderInfo;
@@ -65,9 +65,9 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
-		resourceTank.tankMode = StandardTank.TankMode.INPUT;
+		resourceTank.tankMode = TankInteractionType.FILL_ONLY;
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
-		productTank.tankMode = StandardTank.TankMode.OUTPUT;
+		productTank.tankMode = TankInteractionType.DRAIN_ONLY;
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
