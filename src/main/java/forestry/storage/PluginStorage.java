@@ -367,9 +367,13 @@ public class PluginStorage extends BlankForestryPlugin {
 
 			List<String> oreDictNameList = new ArrayList<>();
 			for (String name : OreDictionary.getOreNames()) {
-				for (String regex : backpackConf.getStringList()) {
-					if (name.matches(regex)) {
-						oreDictNameList.add(name);
+				if (name == null) {
+					Log.error("Found a null oreName in the ore dictionary");
+				} else {
+					for (String regex : backpackConf.getStringList()) {
+						if (name.matches(regex)) {
+							oreDictNameList.add(name);
+						}
 					}
 				}
 			}
