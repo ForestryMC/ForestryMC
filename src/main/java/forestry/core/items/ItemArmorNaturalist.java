@@ -36,7 +36,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, 
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return Constants.RESOURCE_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
+		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 
 	@SideOnly(Side.CLIENT)

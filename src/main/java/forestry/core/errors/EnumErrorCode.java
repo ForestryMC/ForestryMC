@@ -112,7 +112,7 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprite() {
-		texture = TextureManager.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "gui/errors/" + iconName));
+		texture = TextureManager.registerSprite(new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName));
 	}
 
 	@SideOnly(Side.CLIENT)

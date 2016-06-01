@@ -48,10 +48,10 @@ public class TextureLeaves {
 
 	private TextureLeaves(EnumLeafType enumLeafType) {
 		String ident = enumLeafType.toString().toLowerCase(Locale.ENGLISH);
-		this.plain = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".plain");
-		this.fancy = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".fancy");
-		this.pollinatedPlain = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed.plain");
-		this.pollinatedFancy = new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed");
+		this.plain = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".plain");
+		this.fancy = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".fancy");
+		this.pollinatedPlain = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".changed.plain");
+		this.pollinatedFancy = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".changed");
 	}
 
 	private void registerSprites() {

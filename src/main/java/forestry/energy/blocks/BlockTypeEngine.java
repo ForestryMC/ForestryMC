@@ -46,12 +46,12 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 
 	protected static IMachinePropertiesTesr<?> createEngineProperties(@Nonnull Class<? extends TileEngine> teClass, @Nonnull String name, @Nonnull String textureName) {
 		TileEntitySpecialRenderer<TileEngine> renderer = PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesEngine<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
+		return new MachinePropertiesEngine<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
 	}
 
 	protected static IMachinePropertiesTesr<?> createMachineProperties(@Nonnull Class<? extends TileBase> teClass, @Nonnull String name, @Nonnull String textureName) {
 		TileEntitySpecialRenderer<TileBase> renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesTesr<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
+		return new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
 	}
 
 	@Nonnull

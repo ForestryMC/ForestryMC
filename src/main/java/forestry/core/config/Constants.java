@@ -16,8 +16,7 @@ import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
 	// System
-	public static final String MOD_ID = "Forestry";
-	public static final String RESOURCE_ID = "forestry";
+	public static final String MOD_ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
 	public static final String VERSION = "@VERSION@";
@@ -41,15 +40,15 @@ public class Constants implements IForestryConstants {
 	public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_1.png";
 	public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_2.png";
 	public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/naturalist_armor_1.png";
-	public static final String TEXTURE_SKIN_BEEKPEEPER = RESOURCE_ID + ":" + TEXTURE_PATH_ENTITIES + "/beekeeper.png";
-	public static final String TEXTURE_SKIN_LUMBERJACK = RESOURCE_ID + ":" + TEXTURE_PATH_ENTITIES + "/lumberjack.png";
+	public static final String TEXTURE_SKIN_BEEKPEEPER = Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/beekeeper.png";
+	public static final String TEXTURE_SKIN_LUMBERJACK = Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/lumberjack.png";
 
 	// Villagers
-	public static final String ID_VILLAGER_APIARIST = RESOURCE_ID + ":apiarist";
-	public static final String ID_VILLAGER_ARBORIST = RESOURCE_ID + ":arborist";
+	public static final String ID_VILLAGER_APIARIST = Constants.MOD_ID + ":apiarist";
+	public static final String ID_VILLAGER_ARBORIST = Constants.MOD_ID + ":arborist";
 
 	// Village Loot Key
-	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(RESOURCE_ID, "chests/village_naturalist");
+	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(Constants.MOD_ID, "chests/village_naturalist");
 
 	// Item Ids
 

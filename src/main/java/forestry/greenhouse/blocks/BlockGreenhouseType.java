@@ -83,7 +83,7 @@ public enum BlockGreenhouseType {
 
 		for (BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES) {
 			if (sprite != BlockGreenhouseSprites.PLAIN && sprite != BlockGreenhouseSprites.GLASS) {
-				ResourceLocation location = new ResourceLocation(Constants.RESOURCE_ID, "blocks/greenhouse/" + sprite.spriteName);
+				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "blocks/greenhouse/" + sprite.spriteName);
 				TextureAtlasSprite textureAtlasSprite = map.registerSprite(location);
 				sprites.put(sprite, textureAtlasSprite);
 			}

@@ -75,7 +75,7 @@ public enum MothDefinition implements IButterflyDefinition {
 
 		String texture = "butterflies/" + uid;
 
-		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.RESOURCE_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.MOD_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
 		speciesBuilder.setRarity(rarity);
 		speciesBuilder.setNocturnal();
 		setSpeciesProperties(speciesBuilder);

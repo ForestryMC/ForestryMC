@@ -25,7 +25,7 @@ public class FruitPodStateMapper extends ForestryStateMapper {
 			String modID = fruit.getModID();
 			if (Constants.MOD_ID.equals(modID)) {
 				String modelName = fruit.getModelName();
-				String resourcePath = Constants.RESOURCE_ID + ":pods/" + modelName;
+				String resourcePath = Constants.MOD_ID + ":pods/" + modelName;
 				for (IBlockState state : block.getBlockState().getValidStates()) {
 					String propertyString = getPropertyString(state.getProperties());
 					mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));

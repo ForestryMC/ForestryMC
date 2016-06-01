@@ -78,7 +78,7 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	
 	@Override
 	public ModelResourceLocation getCocoonItemModel(int age) {
-		return new ModelResourceLocation(Constants.RESOURCE_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
+		return new ModelResourceLocation(Constants.MOD_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
 	}
 
 	@Override

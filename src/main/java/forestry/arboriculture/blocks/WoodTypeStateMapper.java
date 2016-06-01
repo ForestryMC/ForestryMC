@@ -82,7 +82,7 @@ public class WoodTypeStateMapper extends StateMapperBase {
 	private ModelResourceLocation getForestryModelResourceLocation(IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties) {
 		String resourceLocation = "arboriculture/" + blockPath + '/' + woodType;
 		String propertyString = this.getPropertyString(properties);
-		return new ModelResourceLocation(Constants.RESOURCE_ID + ':' + resourceLocation, propertyString);
+		return new ModelResourceLocation(Constants.MOD_ID + ':' + resourceLocation, propertyString);
 	}
 
 	private ModelResourceLocation getVanillaModelResourceLocation(Block block, IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties) {

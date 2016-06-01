@@ -56,7 +56,7 @@ public class WoodHelper {
 		WoodBlockKind blockKind = typed.getBlockKind();
 		for (IWoodType woodType : typed.getWoodTypes()) {
 			if (woodType instanceof EnumForestryWoodType) {
-				resourceLocations.add(new ResourceLocation(Constants.RESOURCE_ID, blockKind + "/" + woodType));
+				resourceLocations.add(new ResourceLocation(Constants.MOD_ID, blockKind + "/" + woodType));
 			} else if (woodType instanceof EnumVanillaWoodType) {
 				resourceLocations.add(new ResourceLocation("minecraft", woodType + "_" + blockKind));
 			}

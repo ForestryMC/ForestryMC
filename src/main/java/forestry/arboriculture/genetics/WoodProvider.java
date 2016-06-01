@@ -42,8 +42,8 @@ public class WoodProvider implements IWoodProvider {
 	@Override
 	public void registerSprites(Item item, ITextureManager manager) {
 		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
-		woodTop = textureMap.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/wood/heart." + name));
-		woodBark = textureMap.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/wood/bark." + name));
+		woodTop = textureMap.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/wood/heart." + name));
+		woodBark = textureMap.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/wood/bark." + name));
 	}
 
 	@Nonnull

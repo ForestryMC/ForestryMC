@@ -59,7 +59,7 @@ public class TextureManager implements ITextureManager {
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String identifier : defaultIconNames) {
-			ResourceLocation resourceLocation = new ResourceLocation(Constants.RESOURCE_ID, "gui/" + identifier);
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "gui/" + identifier);
 			TextureAtlasSprite icon = registerSprite(resourceLocation);
 			defaultIcons.put(identifier, icon);
 		}

@@ -26,7 +26,7 @@ public class CocoonStateMapper extends ForestryStateMapper {
 				if(allele instanceof IAlleleButterflyCocoon){
 					for(int age = 0;age < 3;age++){
 						IAlleleButterflyCocoon cocoon = (IAlleleButterflyCocoon) allele;
-						String resourcePath = Constants.RESOURCE_ID + ":cocoons/cocoon_" + cocoon.getCocoonName();
+						String resourcePath = Constants.MOD_ID + ":cocoons/cocoon_" + cocoon.getCocoonName();
 						IBlockState state = block.getDefaultState().withProperty(AlleleButterflyCocoon.COCOON, cocoon).withProperty(AlleleButterflyCocoon.AGE, age);
 						String propertyString = "age=" + age;
 						mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));

@@ -102,7 +102,7 @@ public class EventHandlerCore {
 			return;
 		}
 
-		ResourceLocation resourceLocation = new ResourceLocation(Constants.RESOURCE_ID, event.getName().getResourcePath());
+		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath());
 		LootTable forestryChestAdditions = LootTableLoader.loadBuiltinLootTable(resourceLocation);
 		if (forestryChestAdditions != null) {
 			for (String poolName : PluginManager.getLootPoolNames()) {

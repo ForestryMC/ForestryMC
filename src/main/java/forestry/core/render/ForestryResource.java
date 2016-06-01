@@ -17,7 +17,7 @@ import forestry.core.config.Constants;
 public class ForestryResource extends ResourceLocation {
 
 	public ForestryResource(String path) {
-		super(Constants.RESOURCE_ID, path);
+		super(Constants.MOD_ID, path);
 	}
 
 }
