@@ -95,11 +95,11 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 				break;
 			}
 			case TIN: {
-				drops.add(OreDictUtil.getFirstSuitableOre(OreDictUtil.ORE_TIN));
+				drops.add(new ItemStack(this, 1, damageDropped(state)));
 				break;
 			}
 			case COPPER: {
-				drops.add(OreDictUtil.getFirstSuitableOre(OreDictUtil.ORE_COPPER));
+				drops.add(new ItemStack(this, 1, damageDropped(state)));
 				break;
 			}
 		}

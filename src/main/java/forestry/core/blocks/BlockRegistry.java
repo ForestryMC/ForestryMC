@@ -48,14 +48,4 @@ public abstract class BlockRegistry {
 		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
-	@Nonnull
-	public static ItemStack registerOreDictIfFirst(String oreName, ItemStack oreItem) {
-		ItemStack firstSuitableOre = OreDictUtil.getFirstSuitableOre(oreName);
-		if (firstSuitableOre != null) {
-			return firstSuitableOre;
-		}
-
-		OreDictionary.registerOre(oreName, oreItem);
-		return oreItem;
-	}
 }

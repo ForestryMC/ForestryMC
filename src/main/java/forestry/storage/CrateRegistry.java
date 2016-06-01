@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
@@ -53,9 +54,13 @@ public class CrateRegistry implements ICrateRegistry {
 
 	@Override
 	public void registerCrate(@Nonnull String oreDictName) {
-		ItemStack stack = OreDictUtil.getFirstSuitableOre(oreDictName);
-		if (stack != null) {
-			registerCrate(stack, oreDictName);
+		if (OreDictionary.doesOreNameExist(oreDictName)) {
+			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+				if (stack != null) {
+					registerCrate(stack, oreDictName);
+					break;
+				}
+			}
 		}
 	}
 
