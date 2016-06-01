@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -97,7 +98,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	@Override
 	public boolean workCycle() {
-		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid());
+		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), true);
 		return status == FluidHelper.FillStatus.SUCCESS;
 	}
 
@@ -115,7 +116,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 				int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
-				float fillTime = fillAmount / (float) Constants.BUCKET_VOLUME;
+				float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
 				fillTime *= viscosityMultiplier;
 
 				setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));

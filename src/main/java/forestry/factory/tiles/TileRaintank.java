@@ -56,7 +56,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		super("raintank");
 		setInternalInventory(new InventoryRaintank(this));
 
-		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
+		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+
 		tankManager = new TankManager(this, resourceTank);
 	}
 
@@ -125,7 +126,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		} else {
 			fillingTime--;
 			if (fillingTime <= 0) {
-				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid());
+				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid(), true);
 				if (filled == FluidHelper.FillStatus.SUCCESS) {
 					fillingTime = 0;
 				}

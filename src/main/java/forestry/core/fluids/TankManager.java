@@ -223,7 +223,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
-		if (!tank.canBeFilledExternally()) {
+		if (!tank.canFill()) {
 			return 0;
 		}
 
@@ -268,7 +268,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
-		if (!tank.canBeDrainedExternally()) {
+		if (!tank.canDrain()) {
 			return null;
 		}
 
@@ -339,14 +339,14 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		if (fluidStack == null) {
 			return false;
 		}
-		if (!tank.canBeFilledExternally()) {
+		if (!tank.canFill()) {
 			return false;
 		}
 		return tank.fill(fluidStack, false) > 0;
 	}
 
 	private static boolean tankCanDrain(StandardTank tank) {
-		if (!tank.canBeDrainedExternally()) {
+		if (!tank.canDrain()) {
 			return false;
 		}
 		FluidStack drained = tank.drain(1, false);

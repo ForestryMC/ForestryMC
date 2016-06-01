@@ -82,6 +82,6 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		if (getStackInSlot(SLOT_CAN_INPUT) == null || fluidStack == null) {
 			return;
 		}
-		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
+		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
 	}
 }

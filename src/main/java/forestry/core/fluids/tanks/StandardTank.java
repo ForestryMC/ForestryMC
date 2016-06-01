@@ -14,12 +14,10 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.item.EnumRarity;
-import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.core.fluids.FakeTankUpdateHandler;
 import forestry.core.fluids.ITankUpdateHandler;
@@ -38,26 +36,15 @@ public class StandardTank extends FluidTank implements IStreamable {
 	@Nonnull
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
-	public TankInteractionType tankMode = TankInteractionType.OPEN;
+
+	public StandardTank(int capacity, boolean canFill, boolean canDrain) {
+		super(capacity);
+		setCanFill(canFill);
+		setCanDrain(canDrain);
+	}
 
 	public StandardTank(int capacity) {
 		super(capacity);
-	}
-
-	public StandardTank(FluidStack fluid, int capacity) {
-		this(capacity);
-		setFluid(fluid);
-	}
-
-	public StandardTank(int capacity, TileEntity tile) {
-		this(capacity);
-		this.tile = tile;
-	}
-
-	public StandardTank(FluidStack fluid, int capacity, TileEntity tile) {
-		this(capacity);
-		this.tile = tile;
-		setFluid(fluid);
 	}
 
 	public void setTankIndex(int index) {
@@ -103,26 +90,6 @@ public class StandardTank extends FluidTank implements IStreamable {
 			tankUpdateHandler.updateTankLevels(this);
 		}
 		return filled;
-	}
-
-	public boolean canBeFilledExternally() {
-		switch (tankMode) {
-			case OPEN:
-			case FILL_ONLY:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	public boolean canBeDrainedExternally() {
-		switch (tankMode) {
-			case OPEN:
-			case DRAIN_ONLY:
-				return true;
-			default:
-				return false;
-		}
 	}
 
 	@Override

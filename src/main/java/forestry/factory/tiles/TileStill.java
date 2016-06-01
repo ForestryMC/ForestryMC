@@ -21,7 +21,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
@@ -53,10 +52,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	public TileStill() {
 		super("still", 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidInputs);
-		resourceTank.tankMode = TankInteractionType.FILL_ONLY;
-		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidOutputs);
-		productTank.tankMode = TankInteractionType.DRAIN_ONLY;
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
+		resourceTank.setFilters(StillRecipeManager.recipeFluidInputs);
+
+		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
+		productTank.setFilters(StillRecipeManager.recipeFluidOutputs);
+
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
@@ -106,7 +107,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid());
+				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
 	}

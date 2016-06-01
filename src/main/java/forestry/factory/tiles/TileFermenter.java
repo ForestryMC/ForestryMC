@@ -25,7 +25,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -64,10 +63,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		super("fermenter", 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
-		resourceTank.tankMode = TankInteractionType.FILL_ONLY;
-		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
-		productTank.tankMode = TankInteractionType.DRAIN_ONLY;
+
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
+		resourceTank.setFilters(FermenterRecipeManager.recipeFluidInputs);
+
+		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
+		productTank.setFilters(FermenterRecipeManager.recipeFluidOutputs);
+
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
@@ -120,7 +122,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid());
+				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
 			}
 		}
 	}

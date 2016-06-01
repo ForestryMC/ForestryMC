@@ -64,7 +64,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	public TileMoistener() {
 		super("moistener");
 		setInternalInventory(new InventoryMoistener(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		tankManager = new TankManager(this, resourceTank);
 	}
 

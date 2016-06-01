@@ -22,7 +22,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -66,8 +65,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		super("squeezer", 1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
-		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
-		this.productTank.tankMode = TankInteractionType.DRAIN_ONLY;
+		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
 		this.tankManager = new TankManager(this, productTank);
 	}
 

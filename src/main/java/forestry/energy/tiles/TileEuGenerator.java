@@ -57,7 +57,9 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 		setInternalInventory(new InventoryGenerator(this));
 
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
+		resourceTank.setFilters(FuelManager.generatorFuel.keySet());
+
 		tankManager = new TankManager(this, resourceTank);
 
 //		if (PluginIC2.instance.isAvailable()) {

@@ -55,7 +55,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		Fluid lava = Fluids.LAVA.getFluid();
 		Fluid liquidIce = Fluids.ICE.getFluid();
 
-		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
+		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(water, lava, liquidIce);
+
 		this.tankManager = new TankManager(this, liquidTank);
 
 		this.recipes = new HygroregulatorRecipe[]{new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),

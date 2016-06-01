@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.core.utils.InventoryUtil;
 
@@ -39,12 +38,6 @@ public final class FluidHelper {
 		SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE
 	}
 
-	@Deprecated
-	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
-		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, true);
-	}
-
-	@Deprecated
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
 		if (fluidToFill == null) {
 			return FillStatus.INVALID_INPUT;
@@ -145,15 +138,12 @@ public final class FluidHelper {
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
-			TankInteractionType interactionType = properties.getInteractionType();
-			if (interactionType == TankInteractionType.OPEN || interactionType == TankInteractionType.FILL_ONLY) {
-				if (properties.getCapacity() > 0) {
-					FluidStack contents = properties.getContents();
-					if (contents == null) {
-						return true;
-					} else if (contents.amount < properties.getCapacity()) {
-						return true;
-					}
+			if (properties.canFill() && properties.getCapacity() > 0) {
+				FluidStack contents = properties.getContents();
+				if (contents == null) {
+					return true;
+				} else if (contents.amount < properties.getCapacity()) {
+					return true;
 				}
 			}
 		}
@@ -169,8 +159,7 @@ public final class FluidHelper {
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
-			TankInteractionType interactionType = properties.getInteractionType();
-			if (interactionType == TankInteractionType.CLOSED || interactionType == TankInteractionType.DRAIN_ONLY) {
+			if (!properties.canFill()) {
 				return false;
 			}
 
@@ -191,8 +180,7 @@ public final class FluidHelper {
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
-			TankInteractionType interactionType = properties.getInteractionType();
-			if (interactionType == TankInteractionType.CLOSED || interactionType == TankInteractionType.FILL_ONLY) {
+			if (!properties.canDrain()) {
 				return false;
 			}
 

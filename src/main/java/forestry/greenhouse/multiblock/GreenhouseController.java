@@ -100,7 +100,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.tempChange = 0;
 		this.humidChange = 0;
 		
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
 		this.energyManager = new EnergyManager(2000, 100000);
 		this.inventory = new InventoryGreenhouse(this);

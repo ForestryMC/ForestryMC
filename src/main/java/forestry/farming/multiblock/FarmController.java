@@ -147,7 +147,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+
 		this.tankManager = new TankManager(this, resourceTank);
 
 		this.inventory = new InventoryFarm(this);

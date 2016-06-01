@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
@@ -242,8 +243,8 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = PluginApiculture.items;
-			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
-			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME * 4);
+			FluidStack liquidGlass = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME);
+			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME * 4);
 			for (int i = 0; i < 16; i++) {
 				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
 						"#", "X",

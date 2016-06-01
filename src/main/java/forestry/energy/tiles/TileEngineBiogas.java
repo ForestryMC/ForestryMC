@@ -25,7 +25,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.TankInteractionType;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -58,12 +57,10 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 
-		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
-		fuelTank.tankMode = TankInteractionType.OPEN;
-		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
-		heatingTank.tankMode = TankInteractionType.FILL_ONLY;
-		burnTank = new StandardTank(Constants.BUCKET_VOLUME);
-		burnTank.tankMode = TankInteractionType.CLOSED;
+		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY).setFilters(FuelManager.bronzeEngineFuel.keySet());
+		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(FluidRegistry.LAVA);
+		burnTank = new StandardTank(Fluid.BUCKET_VOLUME, false, false);
+
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
@@ -104,7 +101,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		currentOutput = 0;
 
-		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Constants.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Fluid.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
 
 			double heatStage = getHeatLevel();
 
@@ -127,7 +124,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 					currentOutput = determineFuelValue(drained.getFluid());
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					FluidStack fuel = fuelTank.drain(Constants.BUCKET_VOLUME, true);
+					FluidStack fuel = fuelTank.drain(Fluid.BUCKET_VOLUME, true);
 					int burnTime = determineBurnTime(fuel.getFluid());
 					fuel.amount = burnTime;
 					burnTank.setCapacity(burnTime);
