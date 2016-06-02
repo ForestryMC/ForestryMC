@@ -166,7 +166,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		BlockPos maxPos = minPos.add(area);
 
 		List<BlockPos> flowerCoords = new ArrayList<>();
-		for (BlockPos.MutableBlockPos posBlock : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
+		for (BlockPos.MutableBlockPos posBlock : VectUtil.getAllInBoxFromCenterMutable(world, minPos, beeHousing.getCoordinates(), maxPos)) {
 			IBlockState blockState = world.getBlockState(posBlock);
 			if (blockState.getBlock().isAir(blockState, world, posBlock)) {
 				continue;

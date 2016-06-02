@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.collect.AbstractIterator;
+
+import java.util.Iterator;
 import java.util.Random;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 public final class VectUtil {
 	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
@@ -51,6 +55,106 @@ public final class VectUtil {
 			return EnumFacing.SOUTH;
 		} else {
 			return EnumFacing.UP;
+		}
+	}
+
+	public static Iterable<BlockPos.MutableBlockPos> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
+		final BlockPos minPos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
+		final BlockPos maxPos = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
+
+		return new Iterable<BlockPos.MutableBlockPos>() {
+			@Override
+			public Iterator<BlockPos.MutableBlockPos> iterator() {
+				return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
+			}
+		};
+	}
+
+	private static class MutableBlockPosSpiralIterator extends AbstractIterator<BlockPos.MutableBlockPos> {
+		private final World world;
+		private final BlockPos center;
+		private final BlockPos maxPos;
+		private final BlockPos minPos;
+		private int spiralLayer;
+		private final int maxSpiralLayers;
+		private int direction;
+
+		private BlockPos.MutableBlockPos theBlockPos;
+
+		public MutableBlockPosSpiralIterator(World world, BlockPos center, BlockPos maxPos, BlockPos minPos) {
+			this.world = world;
+			this.center = center;
+			this.maxPos = maxPos;
+			this.minPos = minPos;
+
+			int xDiameter = maxPos.getX() - minPos.getX();
+			int zDiameter = maxPos.getZ() - minPos.getZ();
+			this.maxSpiralLayers = Math.max(xDiameter, zDiameter) / 2;
+			this.spiralLayer = 1;
+		}
+
+		@Override
+		protected BlockPos.MutableBlockPos computeNext() {
+			BlockPos.MutableBlockPos pos;
+
+			do {
+				pos = nextPos();
+			}
+			while (pos != null && (pos.getX() > maxPos.getX() || pos.getZ() > maxPos.getZ() || pos.getX() < minPos.getX() || pos.getZ() < minPos.getZ()));
+
+			return pos;
+		}
+
+		protected BlockPos.MutableBlockPos nextPos() {
+			if (this.theBlockPos == null) {
+				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
+				int y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+				this.theBlockPos.setY(y);
+				return this.theBlockPos;
+			} else if (spiralLayer > maxSpiralLayers) {
+				return this.endOfData();
+			} else {
+				int x = this.theBlockPos.getX();
+				int y = this.theBlockPos.getY();
+				int z = this.theBlockPos.getZ();
+
+				if (y > minPos.getY() && y > 0) {
+					y--;
+				} else {
+					switch (direction) {
+						case 0:
+							++x;
+							if (x == center.getX() + spiralLayer) {
+								++direction;
+							}
+							break;
+						case 1:
+							++z;
+							if (z == center.getZ() + spiralLayer) {
+								++direction;
+							}
+							break;
+						case 2:
+							--x;
+							if (x == center.getX() - spiralLayer) {
+								++direction;
+							}
+							break;
+						case 3:
+							--z;
+							if (z == center.getZ() - spiralLayer) {
+								direction = 0;
+								++spiralLayer;
+							}
+							break;
+					}
+
+					this.theBlockPos.setPos(x, y, z);
+					y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+				}
+
+				return this.theBlockPos.setPos(x, y, z);
+			}
 		}
 	}
 }
