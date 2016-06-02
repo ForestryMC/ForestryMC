@@ -2,6 +2,7 @@ package forestry.arboriculture.blocks;
 
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -18,9 +19,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -383,34 +386,48 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (!world.isRemote) {
-			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof ICharcoalPileComponent) {
-				ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;
-				ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-				if (getPileType() == EnumPileType.ASH) {
-					if(pile.getTree() != null){
-						ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, pile.getTree().getGenome().getCarbonization(), pile.getTree().getGenome().getCombustibility());
-						list.add(charcoal);
-						list.add(new ItemStack(PluginCore.items.ash, 3));
-					}else{
-						list.add(new ItemStack(Blocks.DIRT, 2));
-						list.add(new ItemStack(PluginCore.items.ash, 2));
-					}
-				} else if (getPileType() == EnumPileType.DIRT) {
-					list.add(new ItemStack(this));
-				}	else {
-					list.add(createWoodPile(pile.getTree()));
-				}
-				drop.set(list);
-			}
+			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
+			drop.set(getPileDrop(world, pos, state, fortune));
 		}
 	}
 	
+	@Nonnull
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = drop.get();
 		drop.remove();
+
+		// not harvested, get drops normally
+		if (drops == null) {
+			drops = getPileDrop(world, pos, state, fortune);
+		}
+
 		return drops;
+	}
+
+	@Nonnull
+	private List<ItemStack> getPileDrop(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof ICharcoalPileComponent) {
+			ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;
+
+			if (getPileType() == EnumPileType.ASH) {
+				if (pile.getTree() != null) {
+					ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, pile.getTree().getGenome().getCarbonization(), pile.getTree().getGenome().getCombustibility());
+					list.add(charcoal);
+					list.add(new ItemStack(PluginCore.items.ash, 3));
+				} else {
+					list.add(new ItemStack(Blocks.DIRT, 2));
+					list.add(new ItemStack(PluginCore.items.ash, 2));
+				}
+			} else if (getPileType() == EnumPileType.DIRT) {
+				list.add(new ItemStack(this));
+			} else {
+				list.add(createWoodPile(pile.getTree()));
+			}
+		}
+		return list;
 	}
 	
 	@Override
