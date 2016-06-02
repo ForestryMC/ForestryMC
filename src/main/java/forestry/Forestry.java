@@ -46,7 +46,7 @@ import forestry.plugins.PluginManager;
  */
 @Mod(
 		modid = Constants.MOD_ID,
-		name = Constants.MOD_ID,
+		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[12.17.0.1932,);"
