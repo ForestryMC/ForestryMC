@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +60,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
@@ -81,6 +83,15 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	private final Multimap<String, String> backpackOreDictRegexpDefaults = HashMultimap.create();
 	private final Multimap<String, String> backpackItemDefaults = HashMultimap.create();
+
+	private final List<String> forestryBackpackUids = Arrays.asList(
+			BackpackManager.MINER_UID,
+			BackpackManager.DIGGER_UID,
+			BackpackManager.FORESTER_UID,
+			BackpackManager.HUNTER_UID,
+			BackpackManager.ADVENTURER_UID,
+			BackpackManager.BUILDER_UID
+	);
 
 	@Override
 	public void setupAPI() {
@@ -143,12 +154,9 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		setDefaultsForConfig();
 
-		handleBackpackConfig(config, BackpackManager.MINER_UID);
-		handleBackpackConfig(config, BackpackManager.DIGGER_UID);
-		handleBackpackConfig(config, BackpackManager.FORESTER_UID);
-		handleBackpackConfig(config, BackpackManager.HUNTER_UID);
-		handleBackpackConfig(config, BackpackManager.ADVENTURER_UID);
-		handleBackpackConfig(config, BackpackManager.BUILDER_UID);
+		for (String backpackUid : forestryBackpackUids)  {
+			handleBackpackConfig(config, backpackUid);
+		}
 
 		config.save();
 	}
@@ -213,8 +221,8 @@ public class PluginStorage extends BlankForestryPlugin {
 				"plankWood",
 				"stairWood",
 				"slabWood",
-				"fenceWood",
-				"fenceGateWood",
+				OreDictUtil.FENCE_WOOD,
+				OreDictUtil.FENCE_GATE_WOOD,
 				"glass",
 				"paneGlass",
 				"torch",
@@ -365,22 +373,35 @@ public class PluginStorage extends BlankForestryPlugin {
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
 			)));
 		}
+
+		// include everything added via the API
+		for (String backpackUid : forestryBackpackUids)  {
+			BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(backpackUid);
+
+			Collection<String> oreDictDefaults = backpackOreDictRegexpDefaults.get(backpackUid);
+			for (int oreId : backpackDefinition.getValidOreIds()) {
+				String oreName = OreDictionary.getOreName(oreId);
+				oreDictDefaults.add(oreName);
+			}
+
+			backpackItemDefaults.get(backpackUid).addAll(backpackDefinition.getValidItemStacks());
+		}
 	}
 
 	// Should be ore dicted in Forge at some point.
-	private void registerFenceAndFenceGatesToOreDict() {
-		OreDictionary.registerOre("fenceWood", Blocks.OAK_FENCE);
-		OreDictionary.registerOre("fenceWood", Blocks.SPRUCE_FENCE);
-		OreDictionary.registerOre("fenceWood", Blocks.BIRCH_FENCE);
-		OreDictionary.registerOre("fenceWood", Blocks.JUNGLE_FENCE);
-		OreDictionary.registerOre("fenceWood", Blocks.DARK_OAK_FENCE);
-		OreDictionary.registerOre("fenceWood", Blocks.ACACIA_FENCE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.OAK_FENCE_GATE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.SPRUCE_FENCE_GATE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.BIRCH_FENCE_GATE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.JUNGLE_FENCE_GATE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.DARK_OAK_FENCE_GATE);
-		OreDictionary.registerOre("fenceGateWood", Blocks.ACACIA_FENCE_GATE);
+	private static void registerFenceAndFenceGatesToOreDict() {
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.OAK_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.SPRUCE_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.BIRCH_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.JUNGLE_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.DARK_OAK_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.ACACIA_FENCE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.OAK_FENCE_GATE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.SPRUCE_FENCE_GATE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.BIRCH_FENCE_GATE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.JUNGLE_FENCE_GATE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.DARK_OAK_FENCE_GATE);
+		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.ACACIA_FENCE_GATE);
 	}
 
 	@Nonnull
