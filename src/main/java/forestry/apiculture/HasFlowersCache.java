@@ -129,6 +129,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 					BlockPos flowerPos = new BlockPos(flowersList[i], flowersList[i + 1], flowersList[i + 2]);
 					flowerCoords.add(flowerPos);
 				}
+				needsSync = true;
 			}
 		}
 
