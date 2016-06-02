@@ -11,6 +11,7 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -126,13 +127,22 @@ public class WoodAccess implements IWoodAccess {
 
 	private static void registerVanilla() {
 		IBlockState defaultLogState = Blocks.LOG.getDefaultState();
-		register(EnumVanillaWoodType.OAK, WoodBlockKind.LOG, false, defaultLogState.withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK), new ItemStack(Blocks.LOG, 1, 0));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.LOG, false, defaultLogState.withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.BIRCH), new ItemStack(Blocks.LOG, 1, 1));
-		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.LOG, false, defaultLogState.withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE), new ItemStack(Blocks.LOG, 1, 2));
-		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.LOG, false, defaultLogState.withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE), new ItemStack(Blocks.LOG, 1, 3));
+		List<EnumVanillaWoodType> oldLogTypes = Arrays.asList(EnumVanillaWoodType.OAK, EnumVanillaWoodType.SPRUCE, EnumVanillaWoodType.BIRCH, EnumVanillaWoodType.JUNGLE);
+		for (EnumVanillaWoodType woodType : oldLogTypes) {
+			BlockPlanks.EnumType vanillaType = woodType.getVanillaType();
+			ItemStack itemStack = new ItemStack(Blocks.LOG, 1, vanillaType.getMetadata());
+			IBlockState blockState = defaultLogState.withProperty(BlockOldLog.VARIANT, vanillaType);
+			register(woodType, WoodBlockKind.LOG, false, blockState, itemStack);
+		}
+
 		IBlockState defaultLog2State = Blocks.LOG2.getDefaultState();
-		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, defaultLog2State.withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA), new ItemStack(Blocks.LOG2, 1, 0));
-		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, defaultLog2State.withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK), new ItemStack(Blocks.LOG2, 1, 1));
+		List<EnumVanillaWoodType> newLogTypes = Arrays.asList(EnumVanillaWoodType.ACACIA, EnumVanillaWoodType.DARK_OAK);
+		for (EnumVanillaWoodType woodType : newLogTypes) {
+			BlockPlanks.EnumType vanillaType = woodType.getVanillaType();
+			ItemStack itemStack = new ItemStack(Blocks.LOG2, 1, vanillaType.getMetadata() - 4);
+			IBlockState blockState = defaultLog2State.withProperty(BlockNewLog.VARIANT, vanillaType);
+			register(woodType, WoodBlockKind.LOG, false, blockState, itemStack);
+		}
 
 		IBlockState defaultPlanksState = Blocks.PLANKS.getDefaultState();
 		IBlockState defaultSlabState = Blocks.WOODEN_SLAB.getDefaultState();
@@ -149,29 +159,29 @@ public class WoodAccess implements IWoodAccess {
 		}
 
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.FENCE, false, Blocks.OAK_FENCE.getDefaultState(), new ItemStack(Blocks.OAK_FENCE));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE, false, Blocks.BIRCH_FENCE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.FENCE, false, Blocks.SPRUCE_FENCE.getDefaultState(), new ItemStack(Blocks.SPRUCE_FENCE));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE, false, Blocks.BIRCH_FENCE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE));
 		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.FENCE, false, Blocks.JUNGLE_FENCE.getDefaultState(), new ItemStack(Blocks.JUNGLE_FENCE));
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.FENCE, false, Blocks.ACACIA_FENCE.getDefaultState(), new ItemStack(Blocks.ACACIA_FENCE));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.FENCE, false, Blocks.DARK_OAK_FENCE.getDefaultState(), new ItemStack(Blocks.DARK_OAK_FENCE));
 
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.FENCE_GATE, false, Blocks.OAK_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.OAK_FENCE_GATE));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE_GATE, false, Blocks.BIRCH_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE_GATE));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.FENCE_GATE, false, Blocks.SPRUCE_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.SPRUCE_FENCE_GATE));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE_GATE, false, Blocks.BIRCH_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE_GATE));
 		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.FENCE_GATE, false, Blocks.JUNGLE_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.JUNGLE_FENCE_GATE));
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.FENCE_GATE, false, Blocks.ACACIA_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.ACACIA_FENCE_GATE));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.FENCE_GATE, false, Blocks.DARK_OAK_FENCE_GATE.getDefaultState(), new ItemStack(Blocks.DARK_OAK_FENCE_GATE));
 
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.STAIRS, false, Blocks.OAK_STAIRS.getDefaultState(), new ItemStack(Blocks.OAK_STAIRS));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.STAIRS, false, Blocks.BIRCH_STAIRS.getDefaultState(), new ItemStack(Blocks.BIRCH_STAIRS));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.STAIRS, false, Blocks.SPRUCE_STAIRS.getDefaultState(), new ItemStack(Blocks.SPRUCE_STAIRS));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.STAIRS, false, Blocks.BIRCH_STAIRS.getDefaultState(), new ItemStack(Blocks.BIRCH_STAIRS));
 		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.STAIRS, false, Blocks.JUNGLE_STAIRS.getDefaultState(), new ItemStack(Blocks.JUNGLE_STAIRS));
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.STAIRS, false, Blocks.ACACIA_STAIRS.getDefaultState(), new ItemStack(Blocks.ACACIA_STAIRS));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.STAIRS, false, Blocks.DARK_OAK_STAIRS.getDefaultState(), new ItemStack(Blocks.DARK_OAK_STAIRS));
 
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.DOOR, false, Blocks.OAK_DOOR.getDefaultState(), new ItemStack(Items.OAK_DOOR));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.DOOR, false, Blocks.BIRCH_DOOR.getDefaultState(), new ItemStack(Items.BIRCH_DOOR));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.DOOR, false, Blocks.SPRUCE_DOOR.getDefaultState(), new ItemStack(Items.SPRUCE_DOOR));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.DOOR, false, Blocks.BIRCH_DOOR.getDefaultState(), new ItemStack(Items.BIRCH_DOOR));
 		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.DOOR, false, Blocks.JUNGLE_DOOR.getDefaultState(), new ItemStack(Items.JUNGLE_DOOR));
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.DOOR, false, Blocks.ACACIA_DOOR.getDefaultState(), new ItemStack(Items.ACACIA_DOOR));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.DOOR, false, Blocks.DARK_OAK_DOOR.getDefaultState(), new ItemStack(Items.DARK_OAK_DOOR));
