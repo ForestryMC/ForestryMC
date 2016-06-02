@@ -130,6 +130,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	
 	@Override
 	public void preInit() {
+		registerFenceAndFenceGatesToOreDict();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -154,6 +155,7 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	private void setDefaultsForConfig() {
 		backpackOreDictRegexpDefaults.get(BackpackManager.MINER_UID).addAll(Arrays.asList(
+				"obsidian",
 				"ore[A-Z].*",
 				"dust[A-Z].*",
 				"gem[A-Z].*",
@@ -166,9 +168,24 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		backpackOreDictRegexpDefaults.get(BackpackManager.DIGGER_UID).addAll(Arrays.asList(
 				"cobblestone",
+				"dirt",
+				"gravel",
+				"netherrack",
 				"stone",
 				"stone[A-Z].*",
 				"sand"
+		));
+
+		backpackOreDictRegexpDefaults.get(BackpackManager.HUNTER_UID).addAll(Arrays.asList(
+				"bone",
+				"egg",
+				"enderpearl",
+				"feather",
+				"fish[A-Z].*",
+				"gunpowder",
+				"leather",
+				"slimeball",
+				"string"
 		));
 
 		backpackOreDictRegexpDefaults.get(BackpackManager.FORESTER_UID).addAll(Arrays.asList(
@@ -176,7 +193,10 @@ public class PluginStorage extends BlankForestryPlugin {
 				"stickWood",
 				"woodStick",
 				"saplingTree",
+				"treeSapling",
 				"vine",
+				"sugarcane",
+				"blockCactus",
 				"crop[A-Z].*",
 				"seed[A-Z].*",
 				"tree[A-Z].*"
@@ -189,6 +209,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"stainedClay[A-Z].*",
 				"stainedGlass[A-Z].*",
 				"stone",
+				"sandstone",
 				"plankWood",
 				"stairWood",
 				"slabWood",
@@ -204,7 +225,6 @@ public class PluginStorage extends BlankForestryPlugin {
 		));
 
 		backpackItemDefaults.get(BackpackManager.MINER_UID).addAll(getItemStrings(Arrays.asList(
-				new ItemStack(Blocks.OBSIDIAN),
 				new ItemStack(Blocks.COAL_ORE),
 				new ItemStack(Items.COAL),
 				PluginCore.items.bronzePickaxe.getItemStack(),
@@ -214,11 +234,10 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		backpackItemDefaults.get(BackpackManager.DIGGER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE),
-				new ItemStack(Blocks.GRAVEL),
 				new ItemStack(Items.FLINT),
-				new ItemStack(Blocks.NETHERRACK),
 				new ItemStack(Blocks.SANDSTONE, 1, 0),
 				new ItemStack(Items.CLAY_BALL),
+				new ItemStack(Items.SNOWBALL),
 				new ItemStack(Blocks.SOUL_SAND),
 				PluginCore.items.bronzeShovel.getItemStack(),
 				PluginCore.items.kitShovel.getItemStack(),
@@ -228,49 +247,55 @@ public class PluginStorage extends BlankForestryPlugin {
 		backpackItemDefaults.get(BackpackManager.FORESTER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.RED_MUSHROOM),
 				new ItemStack(Blocks.BROWN_MUSHROOM),
-				new ItemStack(Blocks.RED_FLOWER),
+				new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.YELLOW_FLOWER),
-				new ItemStack(Blocks.CACTUS),
 				new ItemStack(Blocks.TALLGRASS, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Blocks.DOUBLE_PLANT, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.PUMPKIN),
 				new ItemStack(Blocks.MELON_BLOCK),
 				new ItemStack(Items.GOLDEN_APPLE),
 				new ItemStack(Items.NETHER_WART),
+				new ItemStack(Items.WHEAT_SEEDS),
 				new ItemStack(Items.PUMPKIN_SEEDS),
-				new ItemStack(Items.MELON_SEEDS)
+				new ItemStack(Items.MELON_SEEDS),
+				new ItemStack(Items.BEETROOT_SEEDS),
+				new ItemStack(Items.BEETROOT),
+				new ItemStack(Items.CHORUS_FRUIT),
+				new ItemStack(Items.APPLE)
 		)));
 
 		backpackItemDefaults.get(BackpackManager.HUNTER_UID).addAll(getItemStrings(Arrays.asList(
-				new ItemStack(Items.FEATHER),
-				new ItemStack(Items.GUNPOWDER),
 				new ItemStack(Items.BLAZE_POWDER),
 				new ItemStack(Items.BLAZE_ROD),
-				new ItemStack(Items.BONE),
-				new ItemStack(Items.STRING),
 				new ItemStack(Items.ROTTEN_FLESH),
+				new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.GHAST_TEAR),
 				new ItemStack(Items.GOLD_NUGGET),
 				new ItemStack(Items.ARROW),
+				new ItemStack(Items.SPECTRAL_ARROW),
+				new ItemStack(Items.TIPPED_ARROW),
 				new ItemStack(Items.PORKCHOP),
 				new ItemStack(Items.COOKED_PORKCHOP),
 				new ItemStack(Items.BEEF),
 				new ItemStack(Items.COOKED_BEEF),
 				new ItemStack(Items.CHICKEN),
 				new ItemStack(Items.COOKED_CHICKEN),
-				new ItemStack(Items.LEATHER),
-				new ItemStack(Items.EGG),
-				new ItemStack(Items.ENDER_PEARL),
+				new ItemStack(Items.MUTTON),
+				new ItemStack(Items.COOKED_MUTTON),
+				new ItemStack(Items.RABBIT),
+				new ItemStack(Items.COOKED_RABBIT),
+				new ItemStack(Items.RABBIT_FOOT),
+				new ItemStack(Items.RABBIT_HIDE),
 				new ItemStack(Items.SPIDER_EYE),
 				new ItemStack(Items.FERMENTED_SPIDER_EYE),
-				new ItemStack(Items.SLIME_BALL),
 				new ItemStack(Items.DYE, 1, 0),
 				new ItemStack(Blocks.HAY_BLOCK),
 				new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.ENDER_EYE),
 				new ItemStack(Items.MAGMA_CREAM),
 				new ItemStack(Items.SPECKLED_MELON),
-				new ItemStack(Items.FISH),
-				new ItemStack(Items.COOKED_FISH),
+				new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Items.COOKED_FISH, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.LEAD),
 				new ItemStack(Items.FISHING_ROD),
 				new ItemStack(Items.NAME_TAG),
@@ -283,15 +308,16 @@ public class PluginStorage extends BlankForestryPlugin {
 		backpackItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.REDSTONE_TORCH),
 				new ItemStack(Blocks.REDSTONE_LAMP),
+				new ItemStack(Blocks.SEA_LANTERN),
+				new ItemStack(Blocks.END_ROD),
 				new ItemStack(Blocks.STONEBRICK, 1, OreDictionary.WILDCARD_VALUE),
-				new ItemStack(Blocks.SANDSTONE, 1, 1),
-				new ItemStack(Blocks.SANDSTONE, 1, 2),
 				new ItemStack(Blocks.BRICK_BLOCK),
 				new ItemStack(Blocks.CLAY),
 				new ItemStack(Blocks.HARDENED_CLAY, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.PACKED_ICE),
 				new ItemStack(Blocks.NETHER_BRICK),
+				new ItemStack(Blocks.NETHER_BRICK_FENCE),
 				new ItemStack(Blocks.CRAFTING_TABLE),
 				new ItemStack(Blocks.FURNACE),
 				new ItemStack(Blocks.LEVER),
@@ -300,15 +326,27 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Blocks.LADDER),
 				new ItemStack(Blocks.IRON_BARS),
 				new ItemStack(Blocks.QUARTZ_BLOCK, 1, OreDictionary.WILDCARD_VALUE),
-				new ItemStack(Blocks.COBBLESTONE_WALL),
+				new ItemStack(Blocks.QUARTZ_STAIRS),
+				new ItemStack(Blocks.SANDSTONE_STAIRS),
+				new ItemStack(Blocks.RED_SANDSTONE_STAIRS),
+				new ItemStack(Blocks.COBBLESTONE_WALL, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.STONE_BUTTON),
 				new ItemStack(Blocks.WOODEN_BUTTON),
-				new ItemStack(Blocks.STONE_SLAB),
-				new ItemStack(Blocks.WOODEN_SLAB),
+				new ItemStack(Blocks.STONE_SLAB, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Blocks.STONE_SLAB2, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Blocks.WOODEN_SLAB, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Blocks.PURPUR_BLOCK),
+				new ItemStack(Blocks.PURPUR_PILLAR),
+				new ItemStack(Blocks.PURPUR_STAIRS),
+				new ItemStack(Blocks.PURPUR_SLAB),
+				new ItemStack(Blocks.END_BRICKS),
+				new ItemStack(Blocks.CARPET, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.TRAPDOOR),
 				new ItemStack(Blocks.IRON_TRAPDOOR),
 				new ItemStack(Blocks.STONE_PRESSURE_PLATE),
 				new ItemStack(Blocks.WOODEN_PRESSURE_PLATE),
+				new ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
+				new ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE),
 				new ItemStack(Items.SIGN),
 				new ItemStack(Items.ITEM_FRAME),
 				new ItemStack(Items.ACACIA_DOOR),
@@ -327,6 +365,22 @@ public class PluginStorage extends BlankForestryPlugin {
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
 			)));
 		}
+	}
+
+	// Should be ore dicted in Forge at some point.
+	private void registerFenceAndFenceGatesToOreDict() {
+		OreDictionary.registerOre("fenceWood", Blocks.OAK_FENCE);
+		OreDictionary.registerOre("fenceWood", Blocks.SPRUCE_FENCE);
+		OreDictionary.registerOre("fenceWood", Blocks.BIRCH_FENCE);
+		OreDictionary.registerOre("fenceWood", Blocks.JUNGLE_FENCE);
+		OreDictionary.registerOre("fenceWood", Blocks.DARK_OAK_FENCE);
+		OreDictionary.registerOre("fenceWood", Blocks.ACACIA_FENCE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.OAK_FENCE_GATE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.SPRUCE_FENCE_GATE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.BIRCH_FENCE_GATE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.JUNGLE_FENCE_GATE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.DARK_OAK_FENCE_GATE);
+		OreDictionary.registerOre("fenceGateWood", Blocks.ACACIA_FENCE_GATE);
 	}
 
 	@Nonnull
