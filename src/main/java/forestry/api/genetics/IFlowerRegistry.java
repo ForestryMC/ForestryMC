@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,14 +30,14 @@ public interface IFlowerRegistry {
 	void registerGrowthRule(IFlowerGrowthRule rule, String... flowerTypes);
 
 	/**
-	 * Registers an accepted flower with any meta value.
+	 * Registers an accepted flower with any state.
 	 */
-	void registerAcceptableFlower(Block flowerBlock, String... flowerTypes);
+	void registerAcceptableFlower(Block block, String... flowerTypes);
 
 	/**
-	 * Registers an accepted flower with a specific meta value.
+	 * Registers an accepted flower with a particular state.
 	 */
-	void registerAcceptableFlower(Block flowerBlock, int flowerMeta, String... flowerTypes);
+	void registerAcceptableFlower(IBlockState blockState, String... flowerTypes);
 
 	/**
 	 * Registers custom logic for accepted flowers.
@@ -53,7 +54,7 @@ public interface IFlowerRegistry {
 	 * @param weight Weight for the Flower (Vanilla = 1.0, Modded flowers < 1.0)
 	 * @param flowerTypes See {@link forestry.api.apiculture.FlowerManager}.FlowerTypeXXX
 	 */
-	void registerPlantableFlower(Block flowerBlock, int flowerMeta, double weight, String... flowerTypes);
+	void registerPlantableFlower(IBlockState blockState, double weight, String... flowerTypes);
 
 	/**
 	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
