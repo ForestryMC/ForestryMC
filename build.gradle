@@ -157,12 +157,12 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	toRef =  "HEAD"
 	templateContent = """
 Alpha version, still buggy. Do not create a world you care about with this version, it can and will break things severely.<br/>
-Please help the project by trying it out and <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a>
+Please help the project by trying it out and <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a><br/>
 {{#tags}}
   <h3>{{name}}</h3>
   <ul>
     {{#commits}}
-    <li>{{{message}}} <small>- {{authorName}}</small></li>
+    <li>{{{message}}} - {{authorName}}</li>
     {{/commits}}
   </ul>
   <br/>
@@ -178,7 +178,6 @@ curseforge {
 		changelog = file('changelog.html')
 		changelogType = 'html'
 		releaseType = 'alpha'
-		addGameVersion '1.9' // works on 1.9 in addition to 1.9.4
 	}
 }
 
