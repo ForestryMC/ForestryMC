@@ -165,8 +165,6 @@ Please help the project by trying it out and <a href="https://github.com/Forestr
     <li>{{{message}}} - {{authorName}}</li>
     {{/commits}}
   </ul>
-  <br/>
-  <hr/>
 {{/tags}}
 """
 }
