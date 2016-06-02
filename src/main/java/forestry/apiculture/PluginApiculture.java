@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -328,14 +329,21 @@ public class PluginApiculture extends BlankForestryPlugin {
 		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
 
 		// Register plantable plants
-		BlockRedFlower blockRedFlower = (BlockRedFlower) Blocks.RED_FLOWER;
-		IBlockState defaultState = blockRedFlower.getDefaultState();
-		for (BlockFlower.EnumFlowerType flowerType : BlockFlower.EnumFlowerType.getTypes(BlockFlower.EnumFlowerColor.RED)) {
-			IBlockState blockState = defaultState.withProperty(blockRedFlower.getTypeProperty(), flowerType);
+		for (BlockFlower.EnumFlowerType flowerType : BlockFlower.EnumFlowerType.values()) {
+			IBlockState blockState;
+			switch (flowerType.getBlockType()) {
+				case RED:
+					blockState = Blocks.RED_FLOWER.getDefaultState().withProperty(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
+					break;
+				case YELLOW:
+					blockState = Blocks.YELLOW_FLOWER.getDefaultState().withProperty(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
+					break;
+				default:
+					continue;
+			}
 			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		}
 
-		flowerRegistry.registerPlantableFlower(Blocks.YELLOW_FLOWER.getDefaultState(), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
