@@ -11,7 +11,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.speciesSteadfast"
+                            "speciesUid": "forestry.speciesSteadfast"
                         }
                     ],
                     "weight": 1
@@ -23,7 +23,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.speciesTropical"
+                            "speciesUid": "forestry.speciesTropical"
                         },
                         {
                             "function": "set_count",
@@ -51,7 +51,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treeSipiri"
+                            "speciesUid": "forestry.treeSipiri"
                         }
                     ],
                     "weight": 1

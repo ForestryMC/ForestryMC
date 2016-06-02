@@ -55,7 +55,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.speciesForest"
+                            "speciesUid": "forestry.speciesForest"
                         }
                     ],
                     "weight": 6
@@ -67,7 +67,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.speciesCommon"
+                            "speciesUid": "forestry.speciesCommon"
                         }
                     ],
                     "weight": 6
@@ -79,7 +79,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.speciesMeadows"
+                            "speciesUid": "forestry.speciesMeadows"
                         }
                     ],
                     "weight": 6
@@ -106,7 +106,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treeLime"
+                            "speciesUid": "forestry.treeLime"
                         },
                         {
                             "function": "set_count",
@@ -125,7 +125,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treeCherry"
+                            "speciesUid": "forestry.treeCherry"
                         },
                         {
                             "function": "set_count",
@@ -144,7 +144,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treeLarch"
+                            "speciesUid": "forestry.treeLarch"
                         },
                         {
                             "function": "set_count",
@@ -163,7 +163,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treeTeak"
+                            "speciesUid": "forestry.treeTeak"
                         },
                         {
                             "function": "set_count",
@@ -179,7 +179,7 @@
                     "functions": [
                         {
                             "function": "set_species_nbt",
-                            "speciesUid": "Forestry.treePadauk"
+                            "speciesUid": "forestry.treePadauk"
                         },
                         {
                             "function": "set_count",
