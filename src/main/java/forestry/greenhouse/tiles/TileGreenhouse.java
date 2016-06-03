@@ -41,6 +41,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ITitled;
+import forestry.core.utils.ItemStackUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
@@ -93,15 +94,17 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
-		this.camouflageBlock = camouflageBlock;
-		
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
+			this.camouflageBlock = camouflageBlock;
+			
+			if (worldObj != null) {
+				if (worldObj.isRemote) {
+					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+				}
 			}
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 		}
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 	}
 	
 	@Override

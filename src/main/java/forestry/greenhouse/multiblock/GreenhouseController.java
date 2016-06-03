@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -64,6 +65,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
@@ -288,35 +290,52 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	/* CAMOUFLAGE */
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+		ItemStack oldCamouflageBlock;
 		switch (type) {
-			case DEFAULT:
-				camouflagePlainBlock = camouflageBlock;
-				break;
-			case GLASS:
-				camouflageGlassBlock = camouflageBlock;
-				break;
-			case DOOR:
-				camouflageDoorBlock = camouflageBlock;
-				break;
-			default:
-				return;
+		case DEFAULT:
+			oldCamouflageBlock = camouflagePlainBlock;
+			break;
+		case GLASS:
+			oldCamouflageBlock = camouflageGlassBlock;
+			break;
+		case DOOR:
+			oldCamouflageBlock = camouflageDoorBlock;
+			break;
+		default:
+			return;
 		}
 		
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				for (IMultiblockComponent comp : connectedParts) {
-					if (comp instanceof ICamouflagedTile) {
-						ICamouflagedTile camBlock = (ICamouflagedTile) comp;
-						if (camBlock.getCamouflageType() == type) {
-							worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)){
+			switch (type) {
+				case DEFAULT:
+					camouflagePlainBlock = camouflageBlock;
+					break;
+				case GLASS:
+					camouflageGlassBlock = camouflageBlock;
+					break;
+				case DOOR:
+					camouflageDoorBlock = camouflageBlock;
+					break;
+				default:
+					return;
+			}
+			
+			if (worldObj != null) {
+				if (worldObj.isRemote) {
+					for (IMultiblockComponent comp : connectedParts) {
+						if (comp instanceof ICamouflagedTile) {
+							ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+							if (camBlock.getCamouflageType() == type) {
+								worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+							}
 						}
 					}
+					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 				}
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 			}
+			
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
 		}
-		
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
 	}
 	
 	@Override
