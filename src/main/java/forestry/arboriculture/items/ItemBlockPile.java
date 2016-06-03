@@ -73,14 +73,16 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
 		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
 
-		if(block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)){
-			if (block.hasTileEntity(newState)) {
-				if (stack.hasTagCompound()) {
-					TilePile tile = TileUtil.getTile(world, pos, TilePile.class);
-					if (tile != null) {
-						tile.readFromNBT(stack.getTagCompound());
-						tile.setPos(pos);
-						tile.markDirty();
+		if (placed) {
+			if (block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)) {
+				if (block.hasTileEntity(newState)) {
+					if (stack.hasTagCompound()) {
+						TilePile tile = TileUtil.getTile(world, pos, TilePile.class);
+						if (tile != null) {
+							tile.readFromNBT(stack.getTagCompound());
+							tile.setPos(pos);
+							tile.markDirty();
+						}
 					}
 				}
 			}
