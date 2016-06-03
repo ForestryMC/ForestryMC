@@ -100,7 +100,7 @@ public final class VectUtil {
 			do {
 				pos = nextPos();
 			}
-			while (pos != null && (pos.getX() > maxPos.getX() || pos.getZ() > maxPos.getZ() || pos.getX() < minPos.getX() || pos.getZ() < minPos.getZ()));
+			while (pos != null && (pos.getX() > maxPos.getX() || pos.getY() > maxPos.getY() || pos.getZ() > maxPos.getZ() || pos.getX() < minPos.getX() || pos.getY() < minPos.getY() || pos.getZ() < minPos.getZ()));
 
 			return pos;
 		}
