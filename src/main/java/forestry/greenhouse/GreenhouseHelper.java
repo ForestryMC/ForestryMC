@@ -19,6 +19,7 @@ import forestry.api.greenhouse.IInternalBlock;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
+import forestry.greenhouse.multiblock.InternalBlockCheck;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
@@ -28,7 +29,7 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 			for (IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)) {
 				if (controllerInternal instanceof IGreenhouseControllerInternal) {
 					if (controllerInternal.isAssembled()) {
-						if (isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)) {
+						if (isPositionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)) {
 							return ((IGreenhouseControllerInternal) controllerInternal).createState();
 						}
 					}
@@ -38,13 +39,9 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 		return null;
 	}
 	
-	private static boolean isPosiotionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos) {
-		for (IInternalBlock internalBlock : controller.getInternalBlocks()) {
-			if (internalBlock.getPos().equals(pos)) {
-				return true;
-			}
-		}
-		return false;
+	private static boolean isPositionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos) {
+		IInternalBlock checkBlock = new InternalBlockCheck(pos);
+		return controller.getInternalBlocks().contains(checkBlock);
 	}
 
 }
