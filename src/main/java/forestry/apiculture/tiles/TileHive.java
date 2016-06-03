@@ -21,6 +21,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -74,7 +75,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Nonnull
 	private final IErrorLogic errorLogic;
 	private IBee containedBee = null;
-	private boolean active = true;
+	private boolean active = false;
 	private boolean angry = false;
 	private int calmTime;
 
@@ -97,7 +98,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		}
 
 		if (worldObj.isRemote) {
-			if (!updatedLight && worldObj.getWorldTime() % 20 == 0) {
+			if (!updatedLight && worldObj.getWorldTime() % 100 == 0) {
 				updatedLight = worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
 			}
 			if (active && worldObj.rand.nextInt(4) == 0) {
@@ -119,19 +120,13 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 							attack(entity, 2);
 						}
 						beeLogic.doWork();
-						setActive(true);
-					} else {
-						setActive(false);
 					}
 				} else {
 					calmTime--;
-					if (calmTime == 0) {
-						setActive(true);
-					} else {
-						setActive(false);
-					}
 				}
 			}
+
+			setActive(calmTime == 0);
 		}
 	}
 
@@ -263,8 +258,30 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		beeLogic.syncToClient();
-		return super.getUpdatePacket();
+		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+	}
+
+	@Nonnull
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setBoolean("active", calmTime == 0);
+		beeLogic.writeToNBT(nbt);
+		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		setActive(tag.getBoolean("active"));
+		beeLogic.readFromNBT(tag);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		NBTTagCompound nbt = pkt.getNbtCompound();
+		handleUpdateTag(nbt);
 	}
 
 	@Override
