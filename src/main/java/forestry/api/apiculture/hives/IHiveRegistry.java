@@ -17,14 +17,14 @@ public interface IHiveRegistry {
 
 	/* Forestry Hive Names */
 	enum HiveType implements IStringSerializable {
-		FOREST("Forestry:forest", "Forestry.speciesForest"),
-		MEADOWS("Forestry:meadows", "Forestry.speciesMeadows"),
-		DESERT("Forestry:desert", "Forestry.speciesModest"),
-		JUNGLE("Forestry:jungle", "Forestry.speciesTropical"),
-		END("Forestry:end", "Forestry.speciesEnded"),
-		SNOW("Forestry:snow", "Forestry.speciesWintry"),
-		SWAMP("Forestry:swamp", "Forestry.speciesMarshy"),
-		SWARM("Forestry:swarm", "Forestry.speciesForest");
+		FOREST("forestry:forest", "forestry.speciesForest"),
+		MEADOWS("forestry:meadows", "forestry.speciesMeadows"),
+		DESERT("forestry:desert", "forestry.speciesModest"),
+		JUNGLE("forestry:jungle", "forestry.speciesTropical"),
+		END("forestry:end", "forestry.speciesEnded"),
+		SNOW("forestry:snow", "forestry.speciesWintry"),
+		SWAMP("forestry:swamp", "forestry.speciesMarshy"),
+		SWARM("forestry:swarm", "forestry.speciesForest");
 		
 		public static final HiveType[] VALUES = values();
 
