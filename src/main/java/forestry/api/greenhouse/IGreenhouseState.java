@@ -6,7 +6,7 @@
 package forestry.api.greenhouse;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -22,7 +22,7 @@ public interface IGreenhouseState {
 
 	float getExactHumidity();
 	
-	List<IInternalBlock> getInternalBlocks();
+	Set<IInternalBlock> getInternalBlocks();
 	
 	Collection<IMultiblockComponent> getGreenhouseComponents();
 	

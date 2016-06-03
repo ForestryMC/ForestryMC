@@ -11,7 +11,7 @@
 package forestry.greenhouse;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -24,10 +24,10 @@ public final class GreenhouseState implements IGreenhouseState {
 
 	private final float humidity;
 	private final float temperature;
-	private final List<IInternalBlock> internalBlocks;
+	private final Set<IInternalBlock> internalBlocks;
 	private final Collection<IMultiblockComponent> greenhouseComponents;
 	
-	public GreenhouseState(float humidity, float temperature, List<IInternalBlock> internalBlocks, Collection<IMultiblockComponent> greenhouseComponents) {
+	public GreenhouseState(float humidity, float temperature, Set<IInternalBlock> internalBlocks, Collection<IMultiblockComponent> greenhouseComponents) {
 		this.humidity = humidity;
 		this.temperature = temperature;
 		this.internalBlocks = internalBlocks;
@@ -59,7 +59,7 @@ public final class GreenhouseState implements IGreenhouseState {
 	}
 
 	@Override
-	public List<IInternalBlock> getInternalBlocks() {
+	public Set<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
 	}
 	

@@ -12,7 +12,7 @@ package forestry.greenhouse;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -45,8 +45,8 @@ public class FakeGreenhouseState implements IGreenhouseState {
 	}
 
 	@Override
-	public List<IInternalBlock> getInternalBlocks() {
-		return Collections.emptyList();
+	public Set<IInternalBlock> getInternalBlocks() {
+		return Collections.emptySet();
 	}
 
 	@Override

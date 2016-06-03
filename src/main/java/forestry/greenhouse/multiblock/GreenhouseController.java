@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -78,7 +77,7 @@ import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 
 public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, ILiquidTankTile {
 
-	private final List<IInternalBlock> internalBlocks = new ArrayList<>();
+	private final Set<IInternalBlock> internalBlocks = new HashSet<>();
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
@@ -745,7 +744,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
-	public List<IInternalBlock> getInternalBlocks() {
+	public Set<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
 	}
 	
