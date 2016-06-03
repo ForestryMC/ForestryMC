@@ -208,6 +208,14 @@ public class ProxyRenderClient extends ProxyRender {
 
 		Vec3d particleStart = housing.getBeeFXCoordinates();
 
+		// Avoid rendering bee particles that are too far away, they're very small.
+		// At 32+ distance, have no bee particles. Make more particles up close.
+		BlockPos playerPosition = Proxies.common.getPlayer().getPosition();
+		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.xCoord, particleStart.yCoord, particleStart.zCoord);
+		if (world.rand.nextInt(1024) < playerDistanceSq) {
+			return;
+		}
+
 		int color = genome.getPrimary().getSpriteColour(0);
 
 		if (!flowerPositions.isEmpty()) {
