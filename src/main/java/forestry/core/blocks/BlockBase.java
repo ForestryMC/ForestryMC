@@ -124,6 +124,14 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return definition.getBoundingBox(pos, blockState);
 	}
 
+	@Nonnull
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		IMachineProperties definition = getDefinition();
+		return definition.getBoundingBox(pos, state).offset(pos);
+	}
+
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
 		IMachineProperties definition = getDefinition();
