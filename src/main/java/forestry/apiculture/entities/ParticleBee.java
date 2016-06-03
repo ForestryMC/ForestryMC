@@ -22,6 +22,7 @@ public class ParticleBee extends Particle {
 	private final double originY;
 	private final double originZ;
 	private final BlockPos destination;
+	private final int brightness;
 	
 	public static TextureAtlasSprite beeSprite;
 
@@ -48,6 +49,9 @@ public class ParticleBee extends Particle {
 		this.motionX *= 0.9D;
 		this.motionY *= 0.015D;
 		this.motionZ *= 0.9D;
+
+		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+		this.brightness = this.worldObj.isBlockLoaded(blockpos) ? this.worldObj.getCombinedLight(blockpos, 0) : 0;
 	}
 
 	/**
@@ -122,6 +126,12 @@ public class ParticleBee extends Particle {
 		worldRendererIn.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		worldRendererIn.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		worldRendererIn.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+	}
+
+	// avoid calculating lighting for bees, it is too much processing
+	@Override
+	public int getBrightnessForRender(float p_189214_1_) {
+		return this.brightness;
 	}
 
 	// avoid calculating collisions for bees, it is too much processing
