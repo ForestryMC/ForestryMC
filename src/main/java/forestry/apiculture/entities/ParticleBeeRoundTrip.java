@@ -22,7 +22,6 @@ import forestry.apiculture.PluginApiculture;
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;
 	private final BlockPos destination;
-	private final int brightness;
 
 	public ParticleBeeRoundTrip(World world, Vec3d origin, BlockPos destination, int color) {
 		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
@@ -45,9 +44,6 @@ public class ParticleBeeRoundTrip extends Particle {
 		this.motionX *= 0.9D;
 		this.motionY *= 0.015D;
 		this.motionZ *= 0.9D;
-
-		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-		this.brightness = this.worldObj.isBlockLoaded(blockpos) ? this.worldObj.getCombinedLight(blockpos, 0) : 0;
 	}
 
 	/**
@@ -127,7 +123,7 @@ public class ParticleBeeRoundTrip extends Particle {
 	// avoid calculating lighting for bees, it is too much processing
 	@Override
 	public int getBrightnessForRender(float p_189214_1_) {
-		return this.brightness;
+		return 15728880;
 	}
 
 	@Override

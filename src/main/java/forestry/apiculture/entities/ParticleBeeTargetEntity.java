@@ -20,10 +20,8 @@ import net.minecraft.world.World;
 import forestry.apiculture.PluginApiculture;
 
 public class ParticleBeeTargetEntity extends Particle {
-
 	private final Vec3d origin;
 	private final Entity entity;
-	private final int brightness;
 
 	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
 		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
@@ -47,9 +45,6 @@ public class ParticleBeeTargetEntity extends Particle {
 		this.motionX *= 0.9D;
 		this.motionY *= 0.9D;
 		this.motionZ *= 0.9D;
-
-		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-		this.brightness = this.worldObj.isBlockLoaded(blockpos) ? this.worldObj.getCombinedLight(blockpos, 0) : 0;
 	}
 
 	/**
@@ -126,7 +121,7 @@ public class ParticleBeeTargetEntity extends Particle {
 	// avoid calculating lighting for bees, it is too much processing
 	@Override
 	public int getBrightnessForRender(float p_189214_1_) {
-		return this.brightness;
+		return 15728880;
 	}
 
 	// avoid calculating collisions
