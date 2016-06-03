@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockRedFlower;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
@@ -71,7 +69,6 @@ import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.apiculture.entities.ParticleBee;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -130,6 +127,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
 	public static String beekeepingMode = "NORMAL";
+	public static TextureAtlasSprite beeSprite;
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
 	public static boolean fancyRenderedBees = false;
@@ -850,7 +848,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
 			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		ParticleBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

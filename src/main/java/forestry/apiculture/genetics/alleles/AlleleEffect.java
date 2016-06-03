@@ -17,7 +17,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
 import forestry.api.apiculture.BeeManager;
@@ -105,16 +104,14 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		Vec3d origin = housing.getBeeFXCoordinates();
 		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
 		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
 
-		int beeColor = genome.getPrimary().getSpriteColour(0);
-		Proxies.render.addBeeHiveFX(housing.getWorldObj(), origin.xCoord, origin.yCoord, origin.zCoord, beeColor, flowerPositions);
+		Proxies.render.addBeeHiveFX(housing, genome, flowerPositions);
 		return storedData;
 	}
 
-	protected Vec3i getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
+	public static Vec3i getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 

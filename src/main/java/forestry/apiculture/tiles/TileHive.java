@@ -204,6 +204,11 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	}
 
 	@Override
+	public boolean isAngry() {
+		return angry;
+	}
+
+	@Override
 	public void onAttack(World world, BlockPos pos, EntityPlayer player) {
 		if (calmTime == 0) {
 			angry = true;

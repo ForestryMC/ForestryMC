@@ -11,6 +11,8 @@ public interface IHiveTile {
 	 */
 	void calmBees();
 
+	boolean isAngry();
+
 	/**
 	 * Called when the hive is attacked.
 	 */
