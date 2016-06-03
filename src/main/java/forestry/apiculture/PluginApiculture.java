@@ -92,6 +92,7 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -127,7 +128,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
 	public static String beekeepingMode = "NORMAL";
-	public static TextureAtlasSprite beeSprite;
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
 	public static boolean fancyRenderedBees = false;
@@ -848,7 +848,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
 			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		ProxyApicultureClient.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

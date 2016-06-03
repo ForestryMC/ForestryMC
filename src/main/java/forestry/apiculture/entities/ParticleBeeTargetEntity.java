@@ -13,11 +13,10 @@ package forestry.apiculture.entities;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 
 public class ParticleBeeTargetEntity extends Particle {
 	private final Vec3d origin;
@@ -25,7 +24,7 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
 		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(PluginApiculture.beeSprite);
+		setParticleTexture(ProxyApicultureClient.beeSprite);
 
 		this.origin = origin;
 		this.entity = entity;

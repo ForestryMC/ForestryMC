@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+
 public class ProxyApicultureClient extends ProxyApiculture {
+
+	public static TextureAtlasSprite beeSprite;
 
 	@Override
 	public void initializeRendering() {
