@@ -108,7 +108,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		} else {
 			boolean canWork = beeLogic.canWork(); // must be called every tick to stay updated
 
-			if (worldObj.rand.nextInt(angry ? 10 : 80) == 0) {
+			if (worldObj.rand.nextInt(angry ? 10 : 200) == 0) {
 				if (calmTime == 0) {
 					if (canWork) {
 						AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
