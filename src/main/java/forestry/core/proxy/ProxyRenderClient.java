@@ -233,7 +233,7 @@ public class ProxyRenderClient extends ProxyRender {
 				}
 			}
 
-			if (randomInt < 50) {
+			if (randomInt < 75) {
 				BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
 				Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
 				effectRenderer.addEffect(particle);
