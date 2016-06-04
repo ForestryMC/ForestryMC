@@ -84,8 +84,8 @@ public class StandardTank extends FluidTank implements IStreamable {
 	}
 
 	@Override
-	public int fill(final FluidStack resource, final boolean doFill) {
-		int filled = super.fill(resource, doFill);
+	public int fillInternal(FluidStack resource, boolean doFill) {
+		int filled = super.fillInternal(resource, doFill);
 		if (doFill && filled > 0) {
 			tankUpdateHandler.updateTankLevels(this);
 		}
@@ -93,8 +93,8 @@ public class StandardTank extends FluidTank implements IStreamable {
 	}
 
 	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		FluidStack drained = super.drain(maxDrain, doDrain);
+	public FluidStack drainInternal(int maxDrain, boolean doDrain) {
+		FluidStack drained = super.drainInternal(maxDrain, doDrain);
 		if (doDrain && drained != null && drained.amount > 0) {
 			tankUpdateHandler.updateTankLevels(this);
 		}

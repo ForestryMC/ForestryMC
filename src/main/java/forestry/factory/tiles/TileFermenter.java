@@ -131,7 +131,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	public boolean workCycle() {
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-		productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
+		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), true);
 
 		fuelBurnTime--;
 		resourceTank.drain(fermented, true);
@@ -232,7 +232,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 			Fluid output = currentRecipe.getOutput();
 			FluidStack fluidStack = new FluidStack(output, productAmount);
-			hasFluidSpace = productTank.fill(fluidStack, false) == fluidStack.amount;
+			hasFluidSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();

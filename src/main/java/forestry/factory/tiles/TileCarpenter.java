@@ -160,12 +160,12 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		FluidStack fluid = currentRecipe.getFluidResource();
 		if (fluid != null) {
-			FluidStack drained = resourceTank.drain(fluid, false);
+			FluidStack drained = resourceTank.drainInternal(fluid, false);
 			if (!FluidHelper.areFluidStacksEqual(drained, fluid)) {
 				return false;
 			}
 			if (doRemove) {
-				resourceTank.drain(fluid, true);
+				resourceTank.drainInternal(fluid, true);
 			}
 		}
 

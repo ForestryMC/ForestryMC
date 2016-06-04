@@ -106,7 +106,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		errorLogic.setCondition(!worldObj.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 		if (!errorLogic.hasErrors()) {
-			resourceTank.fill(STACK_WATER, true);
+			resourceTank.fillInternal(STACK_WATER, true);
 		}
 		
 		if (!ItemStackUtil.isIdenticalItem(usedEmpty, getStackInSlot(InventoryRaintank.SLOT_RESOURCE))) {

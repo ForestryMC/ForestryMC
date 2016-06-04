@@ -144,9 +144,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
-		if (moltenTank.fill(smeltFluid, false) == smeltFluid.amount) {
+		if (moltenTank.fillInternal(smeltFluid, false) == smeltFluid.amount) {
 			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
-			moltenTank.fill(smeltFluid, true);
+			moltenTank.fillInternal(smeltFluid, true);
 			meltingPoint = smelt.getMeltingPoint();
 		}
 	}
@@ -215,7 +215,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		FluidStack drained = moltenTank.drain(liquid, false);
+		FluidStack drained = moltenTank.drainInternal(liquid, false);
 		if (!FluidHelper.areFluidStacksEqual(drained, liquid)) {
 			return;
 		}
@@ -251,7 +251,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, null, false);
 			FluidStack toDrain = recipe.getLiquid();
-			FluidStack drained = moltenTank.drain(toDrain, false);
+			FluidStack drained = moltenTank.drainInternal(toDrain, false);
 			hasLiquidResources = FluidHelper.areFluidStacksEqual(drained, toDrain);
 		} else {
 			hasRecipe = false;

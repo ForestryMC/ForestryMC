@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
@@ -60,17 +61,21 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 			if (liquidAmount > 0) {
-				FluidStack fillAmount = tank.drain(1000, false);
-				int filled = pipette.fill(itemstack, fillAmount, true);
-				tank.drain(filled, true);
-				player.updateHeldItem();
+				if (tank instanceof FluidTank) {
+					FluidStack fillAmount = ((FluidTank) tank).drainInternal(1000, false);
+					int filled = pipette.fill(itemstack, fillAmount, true);
+					tank.drain(filled, true);
+					player.updateHeldItem();
+				}
 			}
 		} else {
 			FluidStack potential = pipette.drain(itemstack, pipette.getCapacity(itemstack), false);
 			if (potential != null) {
-				int fill = tank.fill(potential, true);
-				pipette.drain(itemstack, fill, true);
-				player.updateHeldItem();
+				if (tank instanceof FluidTank) {
+					int fill = ((FluidTank) tank).fillInternal(potential, true);
+					pipette.drain(itemstack, fill, true);
+					player.updateHeldItem();
+				}
 			}
 		}
 	}
