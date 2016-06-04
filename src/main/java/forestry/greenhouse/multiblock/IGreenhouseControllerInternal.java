@@ -12,7 +12,7 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Set;
 
 import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
@@ -53,7 +53,7 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	IGreenhouseState createState();
 	
 	/**
-	 * @return A list with all internal block's of the greenhouse.
+	 * @return All internal blocks of the greenhouse.
 	 */
-	List<IInternalBlock> getInternalBlocks();
+	Set<IInternalBlock> getInternalBlocks();
 }

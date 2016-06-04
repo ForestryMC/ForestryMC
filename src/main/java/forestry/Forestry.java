@@ -46,10 +46,10 @@ import forestry.plugins.PluginManager;
  */
 @Mod(
 		modid = Constants.MOD_ID,
-		name = Constants.MOD_ID,
+		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[12.17.0.1922,);"
+		dependencies = "required-after:Forge@[12.17.0.1941,);"
 				+ "after:Buildcraft|Core@[7.2,);"
 				+ "after:BuildCraft|Energy@[7.2,);"
 				+ "after:ExtrabiomesXL;"
@@ -83,7 +83,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
-		configFolder = new File(event.getModConfigurationDirectory(), Constants.RESOURCE_ID);
+		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		Config.load();
 
 		PluginManager.runSetup(event);

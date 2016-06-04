@@ -28,7 +28,7 @@ public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleB
 	}
 
 	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
-		super(Constants.RESOURCE_ID, "bf", valueName, isDominant);
+		super(Constants.MOD_ID, "bf", valueName, isDominant);
 	}
 
 	@Override

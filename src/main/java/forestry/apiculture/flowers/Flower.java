@@ -12,19 +12,15 @@ package forestry.apiculture.flowers;
 
 import com.google.common.base.Objects;
 
-import net.minecraft.block.Block;
-
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.block.state.IBlockState;
 
 public final class Flower {
 
-	private final Block block;
-	private final int meta;
+	private final IBlockState blockState;
 	private Double weight;
 
-	public Flower(Block block, int meta, double weight) {
-		this.block = block;
-		this.meta = meta;
+	public Flower(IBlockState blockState, double weight) {
+		this.blockState = blockState;
 		this.weight = weight;
 	}
 
@@ -40,20 +36,16 @@ public final class Flower {
 
 		Flower flower = (Flower) obj;
 
-		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
+		return this.blockState == flower.getBlockState();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(block);
+		return Objects.hashCode(blockState);
 	}
 
-	public Block getBlock() {
-		return block;
-	}
-
-	public int getMeta() {
-		return meta;
+	public IBlockState getBlockState() {
+		return blockState;
 	}
 
 	public double getWeight() {
@@ -66,7 +58,7 @@ public final class Flower {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("block", block).add("meta", meta).add("weight", weight).toString();
+		return Objects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
 	}
 
 }

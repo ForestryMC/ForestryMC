@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,7 +41,7 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	private final EnumForestryWoodType woodType;
 
 	public BlockArbDoor(EnumForestryWoodType woodType) {
-		super(MaterialArbWood.ARB_WOOD);
+		super(Material.WOOD);
 		this.woodType = woodType;
 
 		setHarvestLevel("axe", 0);

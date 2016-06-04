@@ -23,11 +23,14 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
@@ -115,7 +118,7 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(@Nonnull World world, double x, double y, double z, int color, @Nonnull List<BlockPos> flowerPositions) {
+	public void addBeeHiveFX(@Nonnull IBeeHousing housing, @Nonnull IBeeGenome genome, @Nonnull List<BlockPos> flowerPositions) {
 	}
 
 	public void addEntityHoneyDustFX(World world, double x, double y, double z) {

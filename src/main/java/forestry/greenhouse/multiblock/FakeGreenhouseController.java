@@ -13,6 +13,7 @@ package forestry.greenhouse.multiblock;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -97,8 +98,8 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 	
 	@Override
-	public List<IInternalBlock> getInternalBlocks() {
-		return Collections.emptyList();
+	public Set<IInternalBlock> getInternalBlocks() {
+		return Collections.emptySet();
 	}
 
 	@Override

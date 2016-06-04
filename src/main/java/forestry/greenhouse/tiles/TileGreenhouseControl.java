@@ -42,7 +42,7 @@ public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouse
 		
 		@Override
 		public <G extends IGreenhouseController & IGreenhouseHousing> boolean canWork(G greenhouse, boolean canWork) {
-			return canWork && hasRedstoneSignal();
+			return canWork && !hasRedstoneSignal();
 		}
 
 		private boolean hasRedstoneSignal() {

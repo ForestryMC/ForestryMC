@@ -41,7 +41,7 @@ public class CreativeTabForestry extends CreativeTabs {
 		}
 	}
 
-	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, Constants.RESOURCE_ID);
+	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, Constants.MOD_ID);
 
 	private final int icon;
 

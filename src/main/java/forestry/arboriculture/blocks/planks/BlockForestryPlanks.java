@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -50,6 +51,7 @@ public abstract class BlockForestryPlanks<T extends Enum<T> & IWoodType> extends
 
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
+		setSoundType(SoundType.WOOD);
 		setCreativeTab(Tabs.tabArboriculture);
 	}
 

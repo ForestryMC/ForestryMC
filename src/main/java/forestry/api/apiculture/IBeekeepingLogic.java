@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -39,8 +40,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	/* CLIENT */
 
 	/**
-	 * Call this when the housing comes into view of the client.
-	 * (i.e. when {@link TileEntity#getUpdateTag()} is called)
+	 * Sync to client by using {@link #writeToNBT(NBTTagCompound)} in your {@link TileEntity#getUpdateTag()}
 	 */
 	void syncToClient();
 

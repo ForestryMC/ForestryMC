@@ -12,30 +12,26 @@ package forestry.apiculture.entities;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleBee extends Particle {
-	private final double originX;
-	private final double originY;
-	private final double originZ;
-	private final BlockPos destination;
-	
-	public static TextureAtlasSprite beeSprite;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 
-	public ParticleBee(World world, double x, double y, double z, int color, BlockPos destination) {
-		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(beeSprite);
-		this.originX = x;
-		this.originY = y;
-		this.originZ = z;
+public class ParticleBeeTargetEntity extends Particle {
+	private final Vec3d origin;
+	private final Entity entity;
 
-		this.destination = destination;
-		this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;
-		this.motionY = (destination.getY() + 0.5 - this.posY) * 0.015;
-		this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.015;
+	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
+		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
+		setParticleTexture(ProxyApicultureClient.beeSprite);
+
+		this.origin = origin;
+		this.entity = entity;
+
+		this.motionX = (entity.posX - this.posX) * 0.015;
+		this.motionY = (entity.posY + 1.62F - this.posY) * 0.015;
+		this.motionZ = (entity.posZ - this.posZ) * 0.015;
 
 		particleRed = (color >> 16 & 255) / 255.0F;
 		particleGreen = (color >> 8 & 255) / 255.0F;
@@ -46,7 +42,7 @@ public class ParticleBee extends Particle {
 		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
 		this.motionX *= 0.9D;
-		this.motionY *= 0.015D;
+		this.motionY *= 0.9D;
 		this.motionZ *= 0.9D;
 	}
 
@@ -61,34 +57,31 @@ public class ParticleBee extends Particle {
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
-			this.motionX = (this.originX - this.posX) * 0.03;
-			this.motionY = (this.originY - this.posY) * 0.03;
-			this.motionZ = (this.originZ - this.posZ) * 0.03;
+			this.motionX = (origin.xCoord - this.posX) * 0.03;
+			this.motionY = (origin.yCoord - this.posY) * 0.03;
+			this.motionZ = (origin.zCoord - this.posZ) * 0.03;
 		}
 
-		if (this.particleAge < this.particleMaxAge * 0.25) {
-			// venture out
-			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
-		} else if (this.particleAge < this.particleMaxAge * 0.5) {
-			// get to flower destination
-			this.motionX = (destination.getX() + 0.5 - this.posX) * 0.03;
-			this.motionY = (destination.getY() + 0.5 - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.03;
+		if (this.particleAge < this.particleMaxAge * 0.5) {
+			// fly near the entity
+			this.motionX = (entity.posX - this.posX) * 0.09;
+			this.motionX = (this.motionX + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionY = (entity.posY + 1.62F - this.posY) * 0.03;
+			this.motionY = (this.motionY + 0.4 * (-0.5 + rand.nextFloat())) / 4;
+			this.motionZ = (entity.posZ - this.posZ) * 0.09;
+			this.motionZ = (this.motionZ + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 		} else if (this.particleAge < this.particleMaxAge * 0.75) {
 			// venture back
 			this.motionX *= 0.95;
-			this.motionY = (this.originY - this.posY) * 0.03;
+			this.motionY = (origin.yCoord - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
 			// get to origin
-			this.motionX = (this.originX - this.posX) * 0.03;
-			this.motionY = (this.originY - this.posY) * 0.03;
+			this.motionX = (origin.xCoord - this.posX) * 0.03;
+			this.motionY = (origin.yCoord - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ = (this.originZ - this.posZ) * 0.03;
+			this.motionZ = (origin.zCoord - this.posZ) * 0.03;
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {
@@ -124,7 +117,13 @@ public class ParticleBee extends Particle {
 		worldRendererIn.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 	}
 
-	// avoid calculating collisions for bees, it is too much processing
+	// avoid calculating lighting for bees, it is too much processing
+	@Override
+	public int getBrightnessForRender(float p_189214_1_) {
+		return 15728880;
+	}
+
+	// avoid calculating collisions
 	@Override
 	public void moveEntity(double x, double y, double z) {
 		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));

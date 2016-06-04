@@ -21,7 +21,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -37,7 +38,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -47,7 +47,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -70,8 +69,6 @@ import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.apiculture.entities.ParticleBee;
-import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -95,6 +92,7 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -114,11 +112,8 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.Stack;
-import forestry.core.utils.Translator;
 import forestry.core.utils.VillagerTradeLists;
 import forestry.food.PluginFood;
 import forestry.food.items.ItemRegistryFood;
@@ -208,18 +203,16 @@ public class PluginApiculture extends BlankForestryPlugin {
 	@Override
 	public void doInit() {
 		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-		if (!configFile.exists()) {
-			setDefaultsForConfig();
-		}
 
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "2.0.0");
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "3.0.0");
 		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
 			boolean deleted = configFile.delete();
 			if (deleted) {
-				config = new LocalizedConfiguration(configFile, "2.0.0");
-				setDefaultsForConfig();
+				config = new LocalizedConfiguration(configFile, "3.0.0");
 			}
 		}
+
+		initFlowerRegistry();
 
 		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
 		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
@@ -231,34 +224,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 		Log.debug("Beekeeping mode read from config: " + beekeepingMode);
 
 		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
-
-		String acceptedFlowerMessage = Translator.translateToLocal("for.config.beekeeping.flowers.accepted.comment");
-		String plantableFlowerMessage = Translator.translateToLocal("for.config.beekeeping.flowers.plantable.comment");
-
-		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
-
-		for (String flowerType : flowerRegistry.getFlowerTypes()) {
-			String[] defaultAccepted = defaultAcceptedFlowers.get(flowerType);
-			if (defaultAccepted == null) {
-				defaultAccepted = Constants.EMPTY_STRINGS;
-			}
-			Property property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
-			property.setComment(acceptedFlowerMessage);
-			parseAcceptedFlowers(property.getStringList(), flowerType);
-
-			String[] defaultPlantable = defaultPlantableFlowers.get(flowerType);
-			if (defaultPlantable == null) {
-				defaultPlantable = Constants.EMPTY_STRINGS;
-			}
-			property = config.get("beekeeping.flowers." + flowerType, "plantable", defaultPlantable);
-			property.setComment(plantableFlowerMessage);
-			parsePlantableFlowers(property, flowerType);
-
-			Set<Flower> acceptableFlowers = flowerRegistry.getAcceptableFlowers(flowerType);
-			if (acceptableFlowers == null || acceptableFlowers.isEmpty()) {
-				Log.error("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
-			}
-		}
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
 		parseBeeBlacklist(blacklist);
@@ -346,8 +311,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		registerDungeonLoot();
 	}
 
-	private void setDefaultsForConfig() {
-		
+	private void initFlowerRegistry() {
 		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 
 		flowerRegistry.registerAcceptableFlowerRule(new EndFlowerAcceptableRule(), FlowerManager.FlowerTypeEnd);
@@ -361,53 +325,26 @@ public class PluginApiculture extends BlankForestryPlugin {
 		flowerRegistry.registerAcceptableFlower(Blocks.MELON_STEM, FlowerManager.FlowerTypeGourd);
 		flowerRegistry.registerAcceptableFlower(Blocks.NETHER_WART, FlowerManager.FlowerTypeNether);
 		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
-		
-		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		
+
 		// Register plantable plants
-		for (int meta = 0; meta <= 8; meta++) {
-			flowerRegistry.registerPlantableFlower(Blocks.RED_FLOWER, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		}
-
-		flowerRegistry.registerPlantableFlower(Blocks.YELLOW_FLOWER, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.CACTUS, 0, 1.0, FlowerManager.FlowerTypeCacti);
-
-		for (String flowerType : flowerRegistry.getFlowerTypes()) {
-			Set<Flower> flowers = flowerRegistry.getAcceptableFlowers(flowerType);
-			List<String> acceptedFlowerNames = new ArrayList<>();
-			List<String> plantableFlowerNames = new ArrayList<>();
-			if (flowers != null) {
-				for (Flower flower : flowers) {
-					String name = ItemStackUtil.getBlockNameFromRegistryAsSting(flower.getBlock());
-					if (name == null) {
-						Log.warning("Could not find name for flower: " + flower + " with type: " + flowerType);
-						continue;
-					}
-
-					int meta = flower.getMeta();
-					if (flower.getMeta() != OreDictionary.WILDCARD_VALUE) {
-						name = name + ':' + meta;
-					}
-
-					if (flower.isPlantable()) {
-						plantableFlowerNames.add(name);
-					} else {
-						acceptedFlowerNames.add(name);
-					}
-				}
+		for (BlockFlower.EnumFlowerType flowerType : BlockFlower.EnumFlowerType.values()) {
+			IBlockState blockState;
+			switch (flowerType.getBlockType()) {
+				case RED:
+					blockState = Blocks.RED_FLOWER.getDefaultState().withProperty(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
+					break;
+				case YELLOW:
+					blockState = Blocks.YELLOW_FLOWER.getDefaultState().withProperty(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
+					break;
+				default:
+					continue;
 			}
-
-			String[] acceptedFlowerNamesArray = acceptedFlowerNames.toArray(new String[acceptedFlowerNames.size()]);
-			defaultAcceptedFlowers.put(flowerType, acceptedFlowerNamesArray);
-
-			String[] plantableFlowerNamesArray = plantableFlowerNames.toArray(new String[plantableFlowerNames.size()]);
-			defaultPlantableFlowers.put(flowerType, plantableFlowerNamesArray);
+			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		}
+
+		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
 	}
 
 	@Override
@@ -866,36 +803,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 		}
 	}
 
-	private static void parseAcceptedFlowers(String[] acceptedFlowers, String flowerType) {
-		List<Stack> acceptedFlowerItemStacks = Stack.parseStackStrings(acceptedFlowers, OreDictionary.WILDCARD_VALUE);
-		for (Stack acceptedFlower : acceptedFlowerItemStacks) {
-			Block acceptedFlowerBlock = acceptedFlower.getBlock();
-			int meta = acceptedFlower.getMeta();
-			if (acceptedFlowerBlock != null) {
-				FlowerManager.flowerRegistry.registerAcceptableFlower(acceptedFlowerBlock, meta, flowerType);
-			} else {
-				Log.warning("No block found for '" + acceptedFlower + "' in apiculture config for '" + flowerType + "'.");
-			}
-		}
-	}
-
-	private static void parsePlantableFlowers(Property property, String flowerType) {
-		for (String string : property.getStringList()) {
-			Stack plantableFlower = Stack.parseStackString(string, OreDictionary.WILDCARD_VALUE);
-			if (plantableFlower == null) {
-				continue;
-			}
-
-			Block plantableFlowerBlock = plantableFlower.getBlock();
-			int meta = plantableFlower.getMeta();
-			if (plantableFlowerBlock != null) {
-				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, 1.0, flowerType);
-			} else {
-				Log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
-			}
-		}
-	}
-
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerApiculture();
@@ -941,12 +848,12 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
 			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		ParticleBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		ProxyApicultureClient.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
-		public boolean isAcceptableFlower(String flowerType, World world, BlockPos pos) {
+		public boolean isAcceptableFlower(IBlockState blockState, World world, BlockPos pos, String flowerType) {
 			Biome biomeGenForCoords = world.getBiome(pos);
 			return BiomeDictionary.isBiomeOfType(biomeGenForCoords, BiomeDictionary.Type.END);
 		}

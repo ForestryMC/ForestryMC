@@ -40,7 +40,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 
 	public TileGreenhouseSprinkler() {
 		super(definition);
-		asm = Proxies.render.loadAnimationState(new ResourceLocation(Constants.RESOURCE_ID, "asms/block/sprinkler.json"), ImmutableMap.of(
+		asm = Proxies.render.loadAnimationState(new ResourceLocation(Constants.MOD_ID, "asms/block/sprinkler.json"), ImmutableMap.of(
 				"cycle_length", cycleLength,
 				"click_time", clickTime
 		));

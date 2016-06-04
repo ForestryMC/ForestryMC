@@ -47,6 +47,7 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -140,15 +141,17 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	/* CONSTRUCTION MATERIAL */
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
-		this.camouflageBlock = camouflageBlock;
-		
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
+			this.camouflageBlock = camouflageBlock;
+			
+			if (worldObj != null) {
+				if (worldObj.isRemote) {
+					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+				}
 			}
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 		}
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 	}
 	
 	@Override

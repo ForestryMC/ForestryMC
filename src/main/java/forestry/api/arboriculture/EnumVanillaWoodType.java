@@ -8,8 +8,8 @@ import net.minecraft.block.BlockPlanks;
 
 public enum EnumVanillaWoodType implements IWoodType {
 	OAK(BlockPlanks.EnumType.OAK),
-	BIRCH(BlockPlanks.EnumType.BIRCH),
 	SPRUCE(BlockPlanks.EnumType.SPRUCE),
+	BIRCH(BlockPlanks.EnumType.BIRCH),
 	JUNGLE(BlockPlanks.EnumType.JUNGLE),
 	ACACIA(BlockPlanks.EnumType.ACACIA),
 	DARK_OAK(BlockPlanks.EnumType.DARK_OAK);

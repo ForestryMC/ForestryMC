@@ -71,24 +71,4 @@ public class OreDictUtil {
 	public static final String GEM_QUARTZ = "gemQuartz";
 	public static final String CHEST_WOOD = "chestWood";
 	public static final String LEATHER = "leather";
-
-	/**
-	 * Used for ores and metals where conflicts are common.
-	 * This way, Forestry can choose whatever is first in the oreDictionary instead of its own metals.
-	 * If more mods do this, they will automatically unify on one set of metals.
-	 */
-	@Nullable
-	public static ItemStack getFirstSuitableOre(String oreName) {
-		if (OreDictionary.doesOreNameExist(oreName)) {
-			List<ItemStack> ores = OreDictionary.getOres(oreName);
-			for (ItemStack ore : ores) {
-				if (ore != null && ore.getItem() != null && ore.getMetadata() != OreDictionary.WILDCARD_VALUE) {
-					ItemStack oreCopy = ore.copy();
-					oreCopy.stackSize = 1;
-					return oreCopy;
-				}
-			}
-		}
-		return null;
-	}
 }

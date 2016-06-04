@@ -40,9 +40,9 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (stack != null && stack.getItem() == PluginApiculture.items.apiaristLegs) {
-			return Constants.RESOURCE_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
+			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
-			return Constants.RESOURCE_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
+			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
 	}
 

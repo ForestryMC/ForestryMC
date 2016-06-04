@@ -28,11 +28,14 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
@@ -40,7 +43,13 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
-import forestry.apiculture.entities.ParticleBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IHiveTile;
+import forestry.apiculture.entities.ParticleBeeExplore;
+import forestry.apiculture.entities.ParticleBeeRoundTrip;
+import forestry.apiculture.entities.ParticleBeeTargetEntity;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -62,6 +71,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.utils.VectUtil;
 
 public class ProxyRenderClient extends ProxyRender {
 
@@ -188,16 +198,52 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(@Nonnull World world, double x, double y, double z, int color, @Nonnull List<BlockPos> flowerPositions) {
+	public void addBeeHiveFX(@Nonnull IBeeHousing housing, @Nonnull IBeeGenome genome, @Nonnull List<BlockPos> flowerPositions) {
+		World world = housing.getWorldObj();
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+
+		Vec3d particleStart = housing.getBeeFXCoordinates();
+
+		// Avoid rendering bee particles that are too far away, they're very small.
+		// At 32+ distance, have no bee particles. Make more particles up close.
+		BlockPos playerPosition = Proxies.common.getPlayer().getPosition();
+		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.xCoord, particleStart.yCoord, particleStart.zCoord);
+		if (world.rand.nextInt(1024) < playerDistanceSq) {
+			return;
+		}
+
+		int color = genome.getPrimary().getSpriteColour(0);
+
 		if (!flowerPositions.isEmpty()) {
-			BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
-			Particle particle = new ParticleBee(world, x, y, z, color, destination);
-			ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-			effectRenderer.addEffect(particle);
+			int randomInt = world.rand.nextInt(100);
+
+			if (housing instanceof IHiveTile) {
+				if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
+					List<EntityLivingBase> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, EntityLivingBase.class);
+					if (!entitiesInRange.isEmpty()) {
+						EntityLivingBase entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
+						Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
+						effectRenderer.addEffect(particle);
+						return;
+					}
+				}
+			}
+
+			if (randomInt < 75) {
+				BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
+				Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
+				effectRenderer.addEffect(particle);
+			} else {
+				Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
+				Vec3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+				BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
+				Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
+				effectRenderer.addEffect(particle);
+			}
 		}
 	}
 

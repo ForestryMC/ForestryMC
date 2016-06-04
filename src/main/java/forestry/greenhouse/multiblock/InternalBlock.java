@@ -74,4 +74,9 @@ public class InternalBlock implements IInternalBlock {
 		IInternalBlock internalBlock = (IInternalBlock) obj;
 		return internalBlock.getPos().equals(getPos());
 	}
+
+	@Override
+	public int hashCode() {
+		return pos.hashCode();
+	}
 }

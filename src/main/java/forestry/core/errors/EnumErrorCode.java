@@ -39,7 +39,7 @@ public enum EnumErrorCode implements IErrorState {
 	NO_RESOURCE_LIQUID("noResourceLiquid", "noLiquid"), // More liquid resources need to be supplied for operation.
 	NO_RECIPE("noRecipe"), // No matching recipe was found for the supplied resources.
 	NO_SPACE_INVENTORY("noSpace"), // Empty this machine's inventory.
-	NO_SPACE_TANK("noSpaceTank", "noLiquid"), // Empty this machine's liquid tank.
+	NO_SPACE_TANK("noSpaceTank"), // Empty this machine's liquid tank.
 	NO_POWER("noPower"), // This machine requires RF energy from an engine to function.
 	NO_REDSTONE("noRedstone", "disabled"), // This machine requires a redstone signal to activate it.
 	DISABLED_BY_REDSTONE("disabledRedstone", "disabled"), // This machine is being disabled by a redstone signal.
@@ -112,7 +112,7 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprite() {
-		texture = TextureManager.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "gui/errors/" + iconName));
+		texture = TextureManager.registerSprite(new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName));
 	}
 
 	@SideOnly(Side.CLIENT)

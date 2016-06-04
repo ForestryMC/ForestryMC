@@ -69,8 +69,15 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
-		beeLogic.syncToClient();
-		return super.getUpdateTag();
+		NBTTagCompound updateTag = super.getUpdateTag();
+		beeLogic.writeToNBT(updateTag);
+		return updateTag;
+	}
+
+	@Override
+	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		beeLogic.readFromNBT(tag);
 	}
 
 	/* ICLIMATISED */

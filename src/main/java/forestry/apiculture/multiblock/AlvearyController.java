@@ -317,12 +317,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public void formatDescriptionPacket(NBTTagCompound data) {
 		writeToNBT(data);
-		beekeepingLogic.syncToClient();
+		beekeepingLogic.writeToNBT(data);
 	}
 
 	@Override
 	public void decodeDescriptionPacket(NBTTagCompound data) {
 		readFromNBT(data);
+		beekeepingLogic.readFromNBT(data);
 	}
 
 	/* IActivatable */

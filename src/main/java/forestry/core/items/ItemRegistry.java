@@ -19,7 +19,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.OreDictUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class ItemRegistry {
@@ -42,12 +41,6 @@ public abstract class ItemRegistry {
 	@Nonnull
 	public static ItemStack createItemForOreName(String oreName) {
 		ItemStack oreItem = new ItemStack(registerItem(new ItemForestry(), oreName));
-
-		ItemStack firstSuitableOre = OreDictUtil.getFirstSuitableOre(oreName);
-		if (firstSuitableOre != null) {
-			return firstSuitableOre;
-		}
-
 		OreDictionary.registerOre(oreName, oreItem);
 		return oreItem;
 	}

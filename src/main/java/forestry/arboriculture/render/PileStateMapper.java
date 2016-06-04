@@ -27,7 +27,7 @@ public class PileStateMapper extends ForestryStateMapper {
 
 	@Override
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
-		String location = Constants.RESOURCE_ID + ":pile";
+		String location = Constants.MOD_ID + ":pile";
 		
 		IBlockState woodPileState = PluginArboriculture.blocks.piles.get(EnumPileType.WOOD).getDefaultState();
 		mapStateModelLocations.put(woodPileState, new ModelResourceLocation(location, "type=wood"));

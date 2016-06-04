@@ -64,6 +64,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
@@ -76,7 +77,7 @@ import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 
 public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, ILiquidTankTile {
 
-	private final List<IInternalBlock> internalBlocks = new ArrayList<>();
+	private final Set<IInternalBlock> internalBlocks = new HashSet<>();
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
@@ -288,35 +289,52 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	/* CAMOUFLAGE */
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+		ItemStack oldCamouflageBlock;
 		switch (type) {
-			case DEFAULT:
-				camouflagePlainBlock = camouflageBlock;
-				break;
-			case GLASS:
-				camouflageGlassBlock = camouflageBlock;
-				break;
-			case DOOR:
-				camouflageDoorBlock = camouflageBlock;
-				break;
-			default:
-				return;
+		case DEFAULT:
+			oldCamouflageBlock = camouflagePlainBlock;
+			break;
+		case GLASS:
+			oldCamouflageBlock = camouflageGlassBlock;
+			break;
+		case DOOR:
+			oldCamouflageBlock = camouflageDoorBlock;
+			break;
+		default:
+			return;
 		}
 		
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				for (IMultiblockComponent comp : connectedParts) {
-					if (comp instanceof ICamouflagedTile) {
-						ICamouflagedTile camBlock = (ICamouflagedTile) comp;
-						if (camBlock.getCamouflageType() == type) {
-							worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)){
+			switch (type) {
+				case DEFAULT:
+					camouflagePlainBlock = camouflageBlock;
+					break;
+				case GLASS:
+					camouflageGlassBlock = camouflageBlock;
+					break;
+				case DOOR:
+					camouflageDoorBlock = camouflageBlock;
+					break;
+				default:
+					return;
+			}
+			
+			if (worldObj != null) {
+				if (worldObj.isRemote) {
+					for (IMultiblockComponent comp : connectedParts) {
+						if (comp instanceof ICamouflagedTile) {
+							ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+							if (camBlock.getCamouflageType() == type) {
+								worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+							}
 						}
 					}
+					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 				}
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 			}
+			
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
 		}
-		
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
 	}
 	
 	@Override
@@ -515,10 +533,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		int minX = getSizeLimits().getMinimumXSize();
 		int minY = getSizeLimits().getMinimumYSize();
 		int minZ = getSizeLimits().getMinimumZSize();
-
-		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
-		}
 		
 		BlockPos maximumCoord = getMaximumCoord();
 		BlockPos minimumCoord = getMinimumCoord();
@@ -549,6 +563,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 		if (deltaZ < minZ) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
+		}
+
+		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed", minX, minY, minZ));
 		}
 
 		// Now we run a simple check on each block within that volume.
@@ -649,7 +667,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 
 		if (internalBlocks.isEmpty()) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
 		}
 
 		int hatches = 0;
@@ -659,7 +677,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		if (hatches > 1) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.butterflyhatch.toomany"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.butterflyhatch.toomany"));
 		}
 	}
 
@@ -690,7 +708,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos maxPos = getMaximumCoord();
 				
 				if (minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()) {
-					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
+					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
 				}
 				
 				TileEntity tileFace = worldObj.getTileEntity(posFacing);
@@ -726,7 +744,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
-	public List<IInternalBlock> getInternalBlocks() {
+	public Set<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
 	}
 	

@@ -92,14 +92,14 @@ public class ModelLeaves extends ModelBlockDefault<BlockForestryLeaves> {
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 		
 		// Render the plain leaf block.
-		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, leafSprite, 0);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leafSprite, 0);
 
 		// Render overlay for fruit leaves.
 		ResourceLocation fruitSpriteLocation = tile.getFruitSprite();
 
 		if (fruitSpriteLocation != null) {
 			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, fruitSprite, 1);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitSprite, 1);
 		}
 		
 		// Set the particle sprite

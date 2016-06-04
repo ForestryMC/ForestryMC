@@ -55,10 +55,17 @@ public class BlockRegistryCore extends BlockRegistry {
 		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
 
-		resourceStorageApatite = registerOreDictIfFirst(OreDictUtil.BLOCK_APATITE, resourceStorage.get(EnumResourceType.APATITE));
-		resourceStorageCopper = registerOreDictIfFirst(OreDictUtil.BLOCK_COPPER, resourceStorage.get(EnumResourceType.COPPER));
-		resourceStorageTin = registerOreDictIfFirst(OreDictUtil.BLOCK_TIN, resourceStorage.get(EnumResourceType.TIN));
-		resourceStorageBronze = registerOreDictIfFirst(OreDictUtil.BLOCK_BRONZE, resourceStorage.get(EnumResourceType.BRONZE));
+		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
+		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
+
+		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
+		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
+
+		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
+		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
+
+		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
+		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);

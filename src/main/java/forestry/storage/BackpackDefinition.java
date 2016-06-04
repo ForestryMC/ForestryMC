@@ -45,6 +45,14 @@ public class BackpackDefinition implements IBackpackDefinition {
 		this.secondaryColor = secondaryColor.getRGB();
 	}
 
+	public Set<Integer> getValidOreIds() {
+		return validOreIds;
+	}
+
+	public Set<String> getValidItemStacks() {
+		return validItemStacks;
+	}
+
 	@Override
 	public String getName(ItemStack backpack) {
 		Item item = backpack.getItem();
