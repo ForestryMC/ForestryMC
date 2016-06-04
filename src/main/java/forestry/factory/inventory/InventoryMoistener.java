@@ -13,10 +13,10 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.fuels.FuelManager;
-import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.MoistenerRecipeManager;
@@ -46,8 +46,8 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 		}
 
 		if (slotIndex == SLOT_PRODUCT) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
+			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
+			return tile.getTankManager().canFillFluidType(fluid);
 		}
 
 		return false;

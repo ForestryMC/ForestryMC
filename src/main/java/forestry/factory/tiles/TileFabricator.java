@@ -23,20 +23,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -55,7 +54,7 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
-public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, IFluidHandler, ISidedInventory {
+public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
 	private static final int MAX_HEAT = 5000;
 
 	private final InventoryAdapterTile craftingInventory;
@@ -69,8 +68,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		setEnergyPerWorkCycle(200);
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
-		moltenTank = new FilteredTank(8 * Constants.BUCKET_VOLUME, Fluids.GLASS.getFluid());
-		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
+
+		moltenTank = new FilteredTank(8 * Fluid.BUCKET_VOLUME, false, false).setFilters(Fluids.GLASS.getFluid());
+
 		tankManager = new TankManager(this, moltenTank);
 	}
 
@@ -144,9 +144,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
-		if (moltenTank.canFill(smeltFluid)) {
+		if (moltenTank.fillInternal(smeltFluid, false) == smeltFluid.amount) {
 			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
-			moltenTank.fill(smeltFluid, true);
+			moltenTank.fillInternal(smeltFluid, true);
 			meltingPoint = smelt.getMeltingPoint();
 		}
 	}
@@ -215,7 +215,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		if (!moltenTank.canDrain(liquid)) {
+		FluidStack drained = moltenTank.drainInternal(liquid, false);
+		if (!FluidHelper.areFluidStacksEqual(drained, liquid)) {
 			return;
 		}
 
@@ -249,7 +250,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		if (recipe != null) {
 			ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, null, false);
-			hasLiquidResources = moltenTank.canDrain(recipe.getLiquid());
+			FluidStack toDrain = recipe.getLiquid();
+			FluidStack drained = moltenTank.drainInternal(toDrain, false);
+			hasLiquidResources = FluidHelper.areFluidStacksEqual(drained, toDrain);
 		} else {
 			hasRecipe = false;
 		}
@@ -310,7 +313,6 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		return craftingInventory;
 	}
 
-	/* ILIQUIDCONTAINER */
 	@Nonnull
 	@Override
 	public TankManager getTankManager() {
@@ -318,33 +320,22 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 
 	@Override

@@ -19,10 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -49,7 +48,7 @@ import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
-public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, IFluidHandler, ISpeedUpgradable {
+public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 2000;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
@@ -66,8 +65,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		super("squeezer", 1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
-		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
-		this.productTank.tankMode = StandardTank.TankMode.OUTPUT;
+		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
 		this.tankManager = new TankManager(this, productTank);
 	}
 
@@ -138,7 +136,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
-		productTank.fill(resultFluid, true);
+		productTank.fillInternal(resultFluid, true);
 
 		if (currentRecipe.getRemnants() != null && worldObj.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
@@ -186,7 +184,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			hasRecipe = currentRecipe != null;
 			if (hasRecipe) {
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
-				canFill = productTank.canFill(resultFluid);
+				canFill = productTank.fillInternal(resultFluid, false) == resultFluid.amount;
 
 				if (currentRecipe.getRemnants() != null) {
 					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);
@@ -208,41 +206,10 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		return new TankRenderInfo(productTank);
 	}
 
-	/* ILIQUIDCONTAINER IMPLEMENTATION */
 	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
-	}
-
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return tankManager.fill(from, resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return tankManager.getTankInfo(from);
 	}
 
 	/* ISocketable */
@@ -287,6 +254,25 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.MACHINE;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+		}
+		return null;
 	}
 
 	@Override

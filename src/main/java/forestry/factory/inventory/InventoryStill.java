@@ -13,7 +13,8 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -31,10 +32,10 @@ public class InventoryStill extends InventoryAdapterTile<TileStill> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			return FluidHelper.isEmptyContainer(itemStack);
+			return FluidHelper.isFillableEmptyContainer(itemStack);
 		} else if (slotIndex == SLOT_CAN) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
+			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
+			return tile.getTankManager().canFillFluidType(fluid);
 		}
 		return false;
 	}

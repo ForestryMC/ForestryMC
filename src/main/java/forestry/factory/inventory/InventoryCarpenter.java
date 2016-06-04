@@ -13,9 +13,9 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
-import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CarpenterRecipeManager;
@@ -36,8 +36,8 @@ public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN_INPUT) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
+			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
+			return tile.getTankManager().canFillFluidType(fluid);
 		} else if (slotIndex == SLOT_BOX) {
 			return CarpenterRecipeManager.isBox(itemStack);
 		} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {

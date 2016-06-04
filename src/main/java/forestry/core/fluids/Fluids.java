@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,10 +29,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+
 import forestry.core.items.DrinkProperties;
-import forestry.core.items.EnumContainerType;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 
@@ -44,31 +44,11 @@ public enum Fluids {
 		public Block makeBlock() {
 			return new BlockForestryFluid(this, 300, true);
 		}
-
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
 	},
 	BIOMASS(new Color(100, 132, 41), 400, 6560) {
 		@Override
 		public Block makeBlock() {
 			return new BlockForestryFluid(this, 100, true);
-		}
-
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
 		}
 	},
 	GLASS(new Color(164, 164, 164), 2400, 10000) {
@@ -88,16 +68,6 @@ public enum Fluids {
 			return new BlockForestryFluid(this);
 		}
 
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
-
 		@Override
 		public DrinkProperties getDrinkProperties() {
 			return new DrinkProperties(2, 0.2f, 64);
@@ -113,31 +83,11 @@ public enum Fluids {
 		public Block makeBlock() {
 			return new BlockForestryFluid(this);
 		}
-
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
 	},
 	JUICE(new Color(168, 201, 114)) {
 		@Override
 		public Block makeBlock() {
 			return new BlockForestryFluid(this);
-		}
-
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
 		}
 
 		@Override
@@ -164,16 +114,6 @@ public enum Fluids {
 		public Block makeBlock() {
 			return new BlockForestryFluid(this, 2, true);
 		}
-
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
 	},
 	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200) {
 		@Override
@@ -182,50 +122,11 @@ public enum Fluids {
 		}
 	},
 	// Vanilla
-	WATER(new Color(0x2432ec)) {
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
-	},
-	LAVA(new Color(0xfd461f)) {
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.REFRACTORY
-			);
-		}
-	},
+	WATER(new Color(0x2432ec)),
+	LAVA(new Color(0xfd461f)),
 	// BuildCraft
-	FUEL(new Color(0xffff00)) {
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
-	},
-	OIL(new Color(0x404040)) {
-		@Nonnull
-		@Override
-		public EnumSet<EnumContainerType> getContainerTypes() {
-			return EnumSet.of(
-					EnumContainerType.CAN,
-					EnumContainerType.CAPSULE,
-					EnumContainerType.REFRACTORY
-			);
-		}
-	},
+	FUEL(new Color(0xffff00)),
+	OIL(new Color(0x404040)),
 	// Railcraft
 	CREOSOTE(new Color(0x635c03)),
 	STEAM(new Color(0x91938F));
@@ -309,7 +210,8 @@ public enum Fluids {
 	}
 
 	public final boolean isContained(ItemStack containerStack) {
-		return containerStack != null && FluidHelper.containsFluid(containerStack, getFluid());
+		FluidStack fluidStackInContainer = FluidUtil.getFluidContained(containerStack);
+		return fluidStackInContainer != null && fluidStackInContainer.getFluid() == getFluid();
 	}
 
 	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
@@ -344,10 +246,19 @@ public enum Fluids {
 		return Fluids.WATER.getColor();
 	}
 
-	/** FluidBlock and Container registration */
-	@Nonnull
-	public EnumSet<EnumContainerType> getContainerTypes() {
-		return EnumSet.noneOf(EnumContainerType.class);
+	@Nullable
+	public static Fluids getFluidDefinition(FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (fluid != null) {
+				Fluids fluidDefinition = tagToFluid.get(fluid.getName());
+				if (fluidDefinition != null) {
+					return fluidDefinition;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -367,7 +278,7 @@ public enum Fluids {
 	}
 
 	/**
-	 * Get the properties for an ItemLiquidContainer before it gets registered.
+	 * Get the properties for an ItemFluidContainerForestry before it gets registered.
 	 */
 	@Nullable
 	public DrinkProperties getDrinkProperties() {

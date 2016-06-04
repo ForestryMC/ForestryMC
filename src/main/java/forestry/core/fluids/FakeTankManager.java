@@ -14,16 +14,12 @@ import java.util.List;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
-import forestry.core.fluids.tanks.FakeTank;
-
-public class FakeTankManager implements ITankManager {
+public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 	public static final FakeTankManager instance = new FakeTankManager();
 
 	private FakeTankManager() {
@@ -47,41 +43,21 @@ public class FakeTankManager implements ITankManager {
 
 	@Override
 	public IFluidTank getTank(int tankIndex) {
-		return FakeTank.INSTANCE;
+		return EmptyFluidHandler.INSTANCE;
+	}
+
+	@Override
+	public boolean canFillFluidType(FluidStack fluidStack) {
+		return false;
+	}
+
+	@Override
+	public boolean canDrainFluidType(FluidStack fluidStack) {
+		return false;
 	}
 
 	@Override
 	public void processTankUpdate(int tankIndex, FluidStack contents) {
 
-	}
-
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return FakeTank.INSTANCE.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return FakeTank.INSTANCE.drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return FakeTank.INSTANCE.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return FakeTank.INFO;
 	}
 }

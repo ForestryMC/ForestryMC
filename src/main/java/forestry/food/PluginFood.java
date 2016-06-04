@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.food;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
@@ -18,10 +17,7 @@ import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.recipes.RecipeUtil;
-import forestry.food.items.EnumBeverage;
 import forestry.food.items.ItemRegistryFood;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -48,7 +44,7 @@ public class PluginFood extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
-		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.GLASS_BOTTLE));
+//		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.GLASS_BOTTLE));
 
 		ItemRegistryApiculture beeItems = PluginApiculture.items;
 		if (beeItems != null) {

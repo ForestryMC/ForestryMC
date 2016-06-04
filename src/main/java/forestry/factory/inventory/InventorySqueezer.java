@@ -40,11 +40,11 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN_INPUT) {
-			return FluidHelper.isEmptyContainer(itemStack);
+			return FluidHelper.isFillableEmptyContainer(itemStack);
 		}
 
 		if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-			if (FluidHelper.isEmptyContainer(itemStack)) {
+			if (FluidHelper.isFillableEmptyContainer(itemStack)) {
 				return false;
 			}
 
@@ -82,6 +82,6 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		if (getStackInSlot(SLOT_CAN_INPUT) == null || fluidStack == null) {
 			return;
 		}
-		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
+		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
 	}
 }

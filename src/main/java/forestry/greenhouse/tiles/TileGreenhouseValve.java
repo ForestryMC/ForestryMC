@@ -14,50 +14,35 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileGreenhouseValve extends TileGreenhouse implements ILiquidTankTile, IFluidHandler {
-
-	/* ILIQUIDTANKCONTAINER */
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return getTankManager().fill(from, resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return getTankManager().drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return getTankManager().drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return getTankManager().canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return getTankManager().canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return getTankManager().getTankInfo(from);
-	}
-
+public class TileGreenhouseValve extends TileGreenhouse implements ILiquidTankTile {
 	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return getMultiblockLogic().getController().getTankManager();
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return true;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
+		}
+		return null;
 	}
 }

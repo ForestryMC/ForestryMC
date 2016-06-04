@@ -297,7 +297,7 @@ public class Config {
 		try {
 			InputStream hintStream = Config.class.getResourceAsStream("/config/forestry/hints.properties");
 			prop.load(hintStream);
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			Log.error("Failed to load hints file.", e);
 		}
 

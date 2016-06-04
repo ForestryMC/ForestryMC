@@ -19,7 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmInventory;
@@ -75,8 +76,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return farmController.getTankManager().accepts(fluid);
+			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
+			return farmController.getTankManager().canFillFluidType(fluid);
 		}
 		return false;
 	}
