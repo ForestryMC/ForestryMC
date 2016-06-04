@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -304,16 +305,20 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Nonnull
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
-			return getOutwardsTile().getCapability(capability, facing);
+		if(getOutwardsTile() != null){
+			if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+				return getOutwardsTile().getCapability(capability, facing);
+			}
 		}
 		return super.getCapability(capability, facing);
 	}
 	
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
-			return getOutwardsTile().hasCapability(capability, facing);
+		if(getOutwardsTile() != null){
+			if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+				return getOutwardsTile().hasCapability(capability, facing);
+			}
 		}
 		return super.hasCapability(capability, facing);
 	}
