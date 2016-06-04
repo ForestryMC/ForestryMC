@@ -191,6 +191,11 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 	}
 	
 	public void onBlockTick() {
+		if (caterpillar == null) {
+			worldObj.setBlockToAir(getPos());
+			return;
+		}
+
 		maturationTime++;
 
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
