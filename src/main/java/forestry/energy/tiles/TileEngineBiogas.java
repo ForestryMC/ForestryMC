@@ -113,18 +113,18 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			{
 				if (heatingTank.getFluidAmount() > 0 && Fluids.LAVA.is(heatingTank.getFluid())) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
-					heatingTank.drain(1, true);
+					heatingTank.drainInternal(1, true);
 				}
 			}
 
 			// We need a minimum temperature to generate energy
 			if (heatStage > 0.2) {
 				if (burnTank.getFluidAmount() > 0) {
-					FluidStack drained = burnTank.drain(1, true);
+					FluidStack drained = burnTank.drainInternal(1, true);
 					currentOutput = determineFuelValue(drained.getFluid());
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					FluidStack fuel = fuelTank.drain(Fluid.BUCKET_VOLUME, true);
+					FluidStack fuel = fuelTank.drainInternal(Fluid.BUCKET_VOLUME, true);
 					int burnTime = determineBurnTime(fuel.getFluid());
 					fuel.amount = burnTime;
 					burnTank.setCapacity(burnTime);
