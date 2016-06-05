@@ -292,6 +292,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	}
 
 	@Override
+	public Map<String, ItemStack> getIconStacks() {
+		return iconStacks;
+	}
+
+	@Override
 	public List<String> getHints() {
 		return Config.hints.get("treealyzer");
 	}

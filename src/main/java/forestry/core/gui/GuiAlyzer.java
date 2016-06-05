@@ -51,8 +51,6 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	public static final int COLUMN_1 = 90;
 	public static final int COLUMN_2 = 155;
 
-	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
-
 	public GuiAlyzer(EntityPlayer player, ItemInventoryAlyzer inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(inventory, player), inventory);
 
@@ -103,6 +101,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		textLayout.drawLine(text0, textLayout.column0);
 		int columnwidth = textLayout.column2 - textLayout.column1 - 2;
+
+		Map<String, ItemStack> iconStacks = chromosome.getSpeciesRoot().getAlyzerPlugin().getIconStacks();
 
 		GuiUtil.drawItemStack(this, iconStacks.get(primary.getUID()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
 		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getUID()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
@@ -335,6 +335,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	public void drawMutationInfo(IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
 
+		Map<String, ItemStack> iconStacks = combination.getRoot().getAlyzerPlugin().getIconStacks();
+		
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 

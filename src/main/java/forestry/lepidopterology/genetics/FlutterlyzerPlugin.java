@@ -244,6 +244,11 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 		textLayout.endPage();
 	}
+
+	@Override
+	public Map<String, ItemStack> getIconStacks() {
+		return iconStacks;
+	}
 	
 	@Override
 	public List<String> getHints() {
