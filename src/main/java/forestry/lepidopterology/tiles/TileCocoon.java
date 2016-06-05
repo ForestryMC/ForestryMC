@@ -19,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +46,15 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.multiblock.GreenhouseController;
 import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyDefinition;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IButterflyCocoon {
+	private int age;
+	private int maturationTime;
+	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.getIndividual();
+	private GameProfile owner;
+	private BlockPos nursery;
+	private boolean isSolid;
 
 	public TileCocoon() {
 	}
@@ -57,14 +65,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 			this.age = 2;
 		}
 	}
-	
-	private int age;
-	private int maturationTime;
-	private IButterfly caterpillar;
-	private GameProfile owner;
-	private BlockPos nursery;
-	private boolean isSolid;
-	
+
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -190,6 +191,13 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		NBTTagCompound nbt = pkt.getNbtCompound();
+		handleUpdateTag(nbt);
+	}
+
 	public void onBlockTick() {
 		if (caterpillar == null) {
 			worldObj.setBlockToAir(getPos());
