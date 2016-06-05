@@ -126,6 +126,13 @@ public class ParticleBeeRoundTrip extends Particle {
 		return 15728880;
 	}
 
+	// avoid calculating collisions
+	@Override
+	public void moveEntity(double x, double y, double z) {
+		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+		this.resetPositionToBB();
+	}
+
 	@Override
 	public int getFXLayer() {
 		return 1;
