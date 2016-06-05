@@ -112,7 +112,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	public static VillageApiaristHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> par1List, Random random, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
-		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(structureMinX, structureMinY, structureMinZ, 0, 0, 0, 10, 9, 11, facing);
+		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(structureMinX, structureMinY, structureMinZ, -4, 0, 0, 12, 9, 12, facing);
 		if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(par1List, bbox) != null) {
 			return null;
 		}
@@ -129,7 +129,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 				return true;
 			}
 
-			boundingBox.offset(0, averageGroundLevel - boundingBox.maxY + 8 - 1, 0);
+			boundingBox.offset(0, averageGroundLevel - boundingBox.maxY + 9 - 1, 0);
 		}
 
 		fillWithBlocks(world, structBoundingBox, 1, 1, 1, 7, 4, 4, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
