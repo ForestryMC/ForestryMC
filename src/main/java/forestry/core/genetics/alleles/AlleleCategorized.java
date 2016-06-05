@@ -9,9 +9,9 @@ import forestry.core.utils.Translator;
  * For example, temperature tolerances or speeds are categories with several values.
  *
  * This class helps localization by allowing specific names like
- * Forestry.allele.speed.fast
+ * forestry.allele.speed.fast
  * and can fall back on generic names like
- * Forestry.allele.fast
+ * forestry.allele.fast
  */
 public abstract class AlleleCategorized extends Allele {
 	protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
