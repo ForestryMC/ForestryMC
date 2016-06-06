@@ -17,7 +17,6 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEuGenerator;
 
-// TODO: IC2 for 1.9
 public class GuiGenerator extends GuiForestryTitled<ContainerGenerator, TileEuGenerator> {
 
 	public GuiGenerator(InventoryPlayer inventory, TileEuGenerator tile) {
@@ -25,14 +24,14 @@ public class GuiGenerator extends GuiForestryTitled<ContainerGenerator, TileEuGe
 		widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
 	}
 
-//	@Override
-//	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-//		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-//
-//		int progress = inventory.getStoredScaled(49);
-//		if (progress > 0) {
-//			drawTexturedModalRect(guiLeft + 108, guiTop + 38, 176, 91, progress, 18);
-//		}
-//	}
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+
+		int progress = inventory.getStoredScaled(49);
+		if (progress > 0) {
+			drawTexturedModalRect(guiLeft + 108, guiTop + 38, 176, 91, progress, 18);
+		}
+	}
 
 }
