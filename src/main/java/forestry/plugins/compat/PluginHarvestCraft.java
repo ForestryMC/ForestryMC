@@ -89,7 +89,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				"persimmon",
 				"avocado",
 				"coconut",
-				"durian"
+				"durian",
+				"gooseberry"
 		);
 
 		ImmutableList<String> trees = ImmutableList.of(
@@ -112,7 +113,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ImmutableList<String> spices = ImmutableList.of(
 				"ginger",
-				"spiceleaf"
+				"spiceleaf",
+				"curryleaf"
 				//"mustardseed" Mustard is inconsistent and annoying.
 		);
 
@@ -149,7 +151,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				"wintersquash",
 				"zucchini",
 				"bambooshoot",
-				"spinach"
+				"spinach",
+				"waterchestnut"
 		);
 
 		ImmutableList<String> grains = ImmutableList.of(
@@ -159,7 +162,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 		);
 
 		ImmutableList<String> cropNuts = ImmutableList.of(
-				"peanut"
+				"peanut",
+				"sesameseeds"
 		);
 
 		ImmutableList<String> nuts = ImmutableList.of(
