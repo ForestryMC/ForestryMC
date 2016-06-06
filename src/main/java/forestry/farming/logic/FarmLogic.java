@@ -19,7 +19,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -53,18 +52,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public ItemStack getStack() {
-		return new ItemStack(getItem(), 1, getMetadata());
-	}
-
-	@SideOnly(Side.CLIENT)
-	public abstract Item getItem();
-
-	@SideOnly(Side.CLIENT)
-	public int getMetadata() {
-		return 0;
-	}
+	public abstract ItemStack getIconItemStack();
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 

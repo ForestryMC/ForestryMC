@@ -21,14 +21,9 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -49,22 +44,8 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem() {
-		if (active) {
-			return PluginIC2.resin.getItem();
-		} else {
-			return Items.GUNPOWDER;
-		}
-	}
-
-	@Override
-	public int getMetadata() {
-		if (active) {
-			return PluginIC2.resin.getMetadata();
-		} else {
-			return super.getMetadata();
-		}
+	public ItemStack getIconItemStack() {
+		return PluginIC2.resin;
 	}
 
 	@Override
