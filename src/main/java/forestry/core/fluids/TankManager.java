@@ -275,6 +275,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		return tank.drain(maxDrain, doDrain);
 	}
 
+	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrainFluid(tank, resource)) {

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -20,7 +18,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.OreDictUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {

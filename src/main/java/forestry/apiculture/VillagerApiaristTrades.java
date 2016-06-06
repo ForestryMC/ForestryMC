@@ -1,5 +1,6 @@
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class VillagerApiaristTrades {
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void modifyMerchantRecipeList(@Nonnull MerchantRecipeList recipeList, @Nonnull Random random) {
 			int sellAmount = 1;
 			if (this.priceInfo != null) {
 				sellAmount = this.priceInfo.getPrice(random);

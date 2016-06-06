@@ -1,12 +1,5 @@
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 public class OreDictUtil {
 	public static final String ORE_COPPER = "oreCopper";
 	public static final String ORE_TIN = "oreTin";

@@ -2,11 +2,8 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
-import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.items.ItemForestry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

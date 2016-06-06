@@ -16,8 +16,4 @@ public class ProxyApicultureClient extends ProxyApiculture {
 
 	public static TextureAtlasSprite beeSprite;
 
-	@Override
-	public void initializeRendering() {
-		// TODO: remove unused bee entity model completely
-	}
 }

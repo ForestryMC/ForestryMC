@@ -25,7 +25,6 @@ import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.OreDictUtil;
 
 public class CrateRegistry implements ICrateRegistry {
 

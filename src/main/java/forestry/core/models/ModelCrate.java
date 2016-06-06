@@ -178,7 +178,7 @@ public class ModelCrate extends BlankItemModel {
 	 * Bake the crate model.
 	 */
 	private List<IBakedModel> bakeModel(ItemCrated crateItem, IBakedModel crateModel) {
-		List<IBakedModel> models = new ArrayList();
+		List<IBakedModel> models = new ArrayList<>();
 
 		IBakedModel containedModel = getModel(crateItem.getContained());
 
@@ -235,7 +235,7 @@ public class ModelCrate extends BlankItemModel {
 		
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			List<BakedQuad> quads = new ArrayList();
+			List<BakedQuad> quads = new ArrayList<>();
 			for(IBakedModel bakedModel : models){
 				quads.addAll(bakedModel.getQuads(null, side, rand++));	
 			}

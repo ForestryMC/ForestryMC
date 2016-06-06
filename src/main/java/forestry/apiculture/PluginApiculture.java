@@ -298,8 +298,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 			);
 		}
 
-		proxy.initializeRendering();
-
 		blocks.apiary.init();
 		blocks.beeHouse.init();
 		blocks.beeChest.init();
