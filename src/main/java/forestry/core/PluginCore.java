@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
@@ -61,6 +62,7 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -133,6 +135,8 @@ public class PluginCore extends BlankForestryPlugin {
 		AlleleHelper.instance.init();
 
 		Proxies.render.initRendering();
+
+		RecipeSorter.register("forestry:shaped", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "");
 	}
 
 	@Override
