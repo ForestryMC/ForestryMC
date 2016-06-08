@@ -22,6 +22,12 @@ public class RainmakerRecipeHandler implements IRecipeHandler<RainmakerRecipeWra
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull RainmakerRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.RAINMAKER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull RainmakerRecipeWrapper recipe) {
 		return recipe;
 	}

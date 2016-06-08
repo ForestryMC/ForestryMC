@@ -24,6 +24,12 @@ public class BottlerRecipeHandler implements IRecipeHandler<BottlerRecipeWrapper
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull BottlerRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.BOTTLER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull BottlerRecipeWrapper recipe) {
 		return recipe;
 	}

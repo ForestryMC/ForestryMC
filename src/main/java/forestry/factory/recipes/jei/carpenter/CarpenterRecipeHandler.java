@@ -24,6 +24,12 @@ public class CarpenterRecipeHandler implements IRecipeHandler<CarpenterRecipeWra
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull CarpenterRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.CARPENTER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull CarpenterRecipeWrapper recipe) {
 		return recipe;
 	}

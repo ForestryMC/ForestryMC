@@ -24,6 +24,12 @@ public class FermenterRecipeHandler implements IRecipeHandler<FermenterRecipeWra
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull FermenterRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.FERMENTER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull FermenterRecipeWrapper recipe) {
 		return recipe;
 	}
