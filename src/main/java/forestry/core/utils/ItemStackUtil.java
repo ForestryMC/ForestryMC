@@ -23,12 +23,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ItemStackUtil {
@@ -68,8 +68,8 @@ public abstract class ItemStackUtil {
 		if (item == null) {
 			return null;
 		}
-		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
-		return itemRegistry.getNameForObject(item);
+		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
+		return itemRegistry.getKey(item);
 	}
 	
 	/**
@@ -125,12 +125,8 @@ public abstract class ItemStackUtil {
 		if (itemName == null) {
 			return null;
 		}
-		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
-		int registryID = itemRegistry.getId(itemName);
-		if (registryID == -1) {
-			return null;
-		}
-		return itemRegistry.getRaw(registryID);
+		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
+		return itemRegistry.getValue(itemName);
 	}
 	
 	/**
@@ -141,8 +137,8 @@ public abstract class ItemStackUtil {
 		if (block == null) {
 			return null;
 		}
-		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
-		return blockRegistry.getNameForObject(block);
+		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
+		return blockRegistry.getKey(block);
 	}
 	
 	/**
@@ -169,12 +165,8 @@ public abstract class ItemStackUtil {
 		if (itemName == null) {
 			return null;
 		}
-		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
-		int registryID = blockRegistry.getId(itemName);
-		if (registryID == -1) {
-			return null;
-		}
-		return blockRegistry.getRaw(registryID);
+		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
+		return blockRegistry.getValue(itemName);
 	}
 
 	/**
