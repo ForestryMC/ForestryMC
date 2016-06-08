@@ -130,15 +130,11 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static String beekeepingMode = "NORMAL";
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
-	public static boolean fancyRenderedBees = false;
 
 	public static ItemRegistryApiculture items;
 	public static BlockRegistryApiculture blocks;
 
 	public static HiveRegistry hiveRegistry;
-
-	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<>();
-	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
 
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
 
