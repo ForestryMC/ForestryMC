@@ -275,9 +275,18 @@ public class PluginApiculture extends BlankForestryPlugin {
 			villagerRegistry.register(villagerApiarist);
 
 			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
+			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
 			ItemStack apiary = new ItemStack(blocks.apiary);
 			ItemStack provenFrames = items.frameProven.getItemStack();
 			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+			ItemStack propolis = new ItemStack(PluginApiculture.items.propolis,1);
+			ItemStack forestDrone = BeeDefinition.FOREST.getMemberStack(EnumBeeType.DRONE);
+			ItemStack meadowsDrone = BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.DRONE);
+			ItemStack modestDrone = BeeDefinition.MODEST.getMemberStack(EnumBeeType.DRONE);
+			ItemStack tropicalDrone = BeeDefinition.TROPICAL.getMemberStack(EnumBeeType.DRONE);
+			ItemStack wintryDrone = BeeDefinition.WINTRY.getMemberStack(EnumBeeType.DRONE);
+			ItemStack marshyDrone = BeeDefinition.MARSHY.getMemberStack(EnumBeeType.DRONE);
 
 			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
 			apiaristCareer.addTrade(1,
@@ -291,10 +300,17 @@ public class PluginApiculture extends BlankForestryPlugin {
 			);
 			apiaristCareer.addTrade(3,
 					new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
-					new VillagerTradeLists.GiveItemForEmeralds(new EntityVillager.PriceInfo(1, 2), provenFrames, new EntityVillager.PriceInfo(1, 6))
+					new VillagerTradeLists.GiveItemForEmeralds(new EntityVillager.PriceInfo(1, 2), provenFrames, new EntityVillager.PriceInfo(1, 6)),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), forestDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), meadowsDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), modestDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), tropicalDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), wintryDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4), marshyDrone, null)
 			);
 			apiaristCareer.addTrade(4,
-					new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new EntityVillager.PriceInfo(10, 64), monasticDrone, null)
+					new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new EntityVillager.PriceInfo(10, 64), monasticDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null,new ItemStack(Items.ENDER_EYE),new EntityVillager.PriceInfo(12, 16),endDrone, null)
 			);
 		}
 

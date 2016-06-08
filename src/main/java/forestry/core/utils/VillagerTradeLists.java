@@ -174,4 +174,59 @@ public class VillagerTradeLists {
 			recipeList.add(new MerchantRecipe(randomLog, new ItemStack(Items.EMERALD, emeraldsAmount), itemToSell));
 		}
 	}
+	public static class GiveItemForTwoItems implements EntityVillager.ITradeList {
+		@Nonnull
+		public ItemStack buyingItemStack;
+		@Nullable
+		public EntityVillager.PriceInfo buyingPriceInfo;
+		@Nonnull
+		public ItemStack buyingItemStackTwo;
+		@Nullable
+		public EntityVillager.PriceInfo buyingItemTwoInfo;
+		@Nonnull
+		public ItemStack sellingItemstack;
+		@Nullable
+		public EntityVillager.PriceInfo sellingPriceInfo;
+
+		public GiveItemForTwoItems(
+				@Nonnull ItemStack buyingItemStack,
+				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
+				@Nonnull ItemStack buyingItemStackTwo,
+				@Nullable EntityVillager.PriceInfo buyingItemTwoInfo,
+				@Nonnull ItemStack sellingItemstack,
+				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
+			this.buyingItemStack = buyingItemStack;
+			this.buyingPriceInfo = buyingPriceInfo;
+			this.buyingItemStackTwo = buyingItemStackTwo;
+			this.buyingItemTwoInfo = buyingItemTwoInfo;
+			this.sellingItemstack = sellingItemstack;
+			this.sellingPriceInfo = sellingPriceInfo;
+		}
+
+		@Override
+		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+			int buyAmount = 1;
+			if (this.buyingPriceInfo != null) {
+				buyAmount = this.buyingPriceInfo.getPrice(random);
+			}
+
+			int buyTwoAmount = 1;
+			if (this.buyingItemTwoInfo != null) {
+				buyTwoAmount = this.buyingItemTwoInfo.getPrice(random);
+			}
+
+			int sellAmount = 1;
+			if (this.sellingPriceInfo != null) {
+				sellAmount = this.sellingPriceInfo.getPrice(random);
+			}
+
+			ItemStack buyItemStack = this.buyingItemStack.copy();
+			buyItemStack.stackSize = buyAmount;
+			ItemStack buyItemStackTwo = this.buyingItemStackTwo.copy();
+			buyItemStackTwo.stackSize = buyTwoAmount;
+			ItemStack sellItemStack = this.sellingItemstack.copy();
+			sellItemStack.stackSize = sellAmount;
+			recipeList.add(new MerchantRecipe(buyItemStack, buyItemStackTwo, sellItemStack));
+		}
+	}
 }
