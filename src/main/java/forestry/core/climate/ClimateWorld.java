@@ -1,15 +1,12 @@
 package forestry.core.climate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
-import forestry.api.greenhouse.IInternalBlock;
-import net.minecraft.block.state.BlockPistonStructureHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -22,6 +19,7 @@ public class ClimateWorld implements IClimateWorld{
 	protected Map<ChunkPos, ClimateChunk> climateChunks = new ConcurrentHashMap();
 	protected List<ClimateChunk> dirtyClimateChunks = new ArrayList<>();
 	
+	@Override
 	public void addPosition(BlockPos pos){
 		Biome biome = world.getBiome(pos);
 		addPosition(new ClimatedPosition(this, pos, biome.getTemperature(), biome.getRainfall()));
@@ -58,6 +56,10 @@ public class ClimateWorld implements IClimateWorld{
 	
 	@Override
 	public IClimatedPosition getPosition(BlockPos pos) {
+		ClimateChunk climateChunk = climateChunks.get(new ChunkPos(pos));
+		if(climateChunk != null){
+			return climateChunk.getClimates().get(pos);
+		}
 		return null;
 	}
 	

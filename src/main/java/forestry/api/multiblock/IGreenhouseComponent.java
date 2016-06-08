@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import forestry.api.core.climate.IClimateControlled;
-import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import net.minecraft.item.ItemStack;

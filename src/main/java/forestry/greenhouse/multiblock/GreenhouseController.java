@@ -27,16 +27,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.core.climate.IClimateMap;
+import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
@@ -52,8 +51,7 @@ import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
-import forestry.core.climate.ClimateMap;
-import forestry.core.climate.ClimatedPosition;
+import forestry.core.climate.ClimateWorld;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -124,13 +122,42 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	@Override
 	public float getExactTemperature() {
-		BlockPos coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords) + tempChange;
+		int dimensionID = worldObj.provider.getDimension();
+		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
+		if(climateWorld == null){
+			climateWorld = new ClimateWorld();
+			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
+		}
+		
+		float temperature = 0.0F;
+		
+		for(IInternalBlock internalBlock : internalBlocks){
+			IClimatedPosition position = climateWorld.getPosition(internalBlock.getPos());
+			if(position != null){
+				temperature+=position.getTemperature();
+			}
+		}
+		return temperature / internalBlocks.size();
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().getRainfall() + humidChange;
+		int dimensionID = worldObj.provider.getDimension();
+		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
+		if(climateWorld == null){
+			climateWorld = new ClimateWorld();
+			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
+		}
+		
+		float humidity = 0.0F;
+		
+		for(IInternalBlock internalBlock : internalBlocks){
+			IClimatedPosition position = climateWorld.getPosition(internalBlock.getPos());
+			if(position != null){
+				humidity+=position.getHumidity();
+			}
+		}
+		return humidity / internalBlocks.size();
 	}
 
 	@Override
@@ -372,7 +399,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		if (isAssembled()) {
-			return inventory;2
+			return inventory;
 		} else {
 			return FakeInventoryAdapter.instance();
 		}
@@ -384,6 +411,18 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineAssembled();
 		
 		createLogics();
+		int dimensionID = worldObj.provider.getDimension();
+		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
+		if(climateWorld == null){
+			climateWorld = new ClimateWorld();
+			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
+		}
+		 
+		for(IInternalBlock internalBlock : internalBlocks){
+			if(climateWorld.getPosition(internalBlock.getPos()) != null){
+				climateWorld.addPosition(internalBlock.getPos());
+			}
+		}
 	}
 	
 	@Override

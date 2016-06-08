@@ -1,12 +1,7 @@
 package forestry.core.climate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimateWorld.ClimateChunk;

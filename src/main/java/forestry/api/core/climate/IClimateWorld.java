@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.climate.IClimateWorld.ClimateChunk;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;

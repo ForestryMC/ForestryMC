@@ -11,7 +11,6 @@
 package forestry.core.climate;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -21,12 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimateWorld;
-import forestry.api.core.climate.IClimateWorld.ClimateChunk;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseState;
-import forestry.arboriculture.PluginArboriculture;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginManager;
 
 public class ClimateManager implements IClimateManager{
 

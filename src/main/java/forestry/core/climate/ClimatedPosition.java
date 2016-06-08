@@ -15,12 +15,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import forestry.api.core.climate.IClimateMap;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.tiles.TileEngine;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;

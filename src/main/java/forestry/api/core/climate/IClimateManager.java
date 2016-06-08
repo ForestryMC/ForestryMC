@@ -7,7 +7,6 @@ package forestry.api.core.climate;
 
 import java.util.Map;
 
-import forestry.api.core.climate.IClimateWorld.ClimateChunk;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

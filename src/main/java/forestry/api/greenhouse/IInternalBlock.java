@@ -8,12 +8,9 @@ package forestry.api.greenhouse;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import forestry.api.core.EnumHumidity;
-
 import java.util.Collection;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public interface IInternalBlock {
 	
