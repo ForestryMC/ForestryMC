@@ -19,6 +19,7 @@ import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.greenhouse.multiblock.GreenhouseController;
+import net.minecraft.util.math.BlockPos;
 
 public final class GreenhouseState implements IGreenhouseState {
 

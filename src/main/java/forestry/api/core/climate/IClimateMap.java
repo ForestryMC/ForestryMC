@@ -3,15 +3,25 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.core;
+package forestry.api.core.climate;
 
+import java.util.List;
+import java.util.Stack;
+
+import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IClimateManager {
+public interface IClimateMap {
 
-	float getTemperature(World world, BlockPos pos);
+	List<IClimatedPosition> getPositions();
 	
-	float getHumidity(World world, BlockPos pos);
+	World getWorld();
+	
+	BlockPos getMinimumPos();
+	
+	BlockPos getMaximumPos();
+	
+	void updateClimate();
 	
 }

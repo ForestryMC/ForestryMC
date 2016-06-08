@@ -36,6 +36,8 @@ import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedTile;
+import forestry.api.core.climate.IClimateMap;
+import forestry.api.core.climate.IClimatedPosition;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
@@ -50,6 +52,8 @@ import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
+import forestry.core.climate.ClimateMap;
+import forestry.core.climate.ClimatedPosition;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -83,9 +87,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
 	private final List<IGreenhouseLogic> logics = new ArrayList<>();
 	
-	private float tempChange;
-	private float humidChange;
-	private Biome cachedBiome;
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final EnergyManager energyManager;
@@ -98,8 +99,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	public GreenhouseController(World world) {
 		super(world, GreenhouseMultiblockSizeLimits.instance);
-		this.tempChange = 0;
-		this.humidChange = 0;
 		
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
@@ -117,14 +116,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		BlockPos coords = getReferenceCoord();
 		return EnumTemperature.getFromValue(getExactTemperature());
 	}
-	
-	private Biome getBiome() {
-		if (cachedBiome == null) {
-			BlockPos coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiome(coords);
-		}
-		return cachedBiome;
-	}
 
 	@Override
 	public EnumHumidity getHumidity() {
@@ -140,38 +131,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public float getExactHumidity() {
 		return getBiome().getRainfall() + humidChange;
-	}
-	
-	@Override
-	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		BlockPos coordinates = getCoordinates();
-
-		float temperature = getBiome().getFloatTemperature(coordinates);
-
-		tempChange += change;
-		tempChange = Math.max(boundaryDown - temperature, tempChange);
-		tempChange = Math.min(boundaryUp - temperature, tempChange);
-	}
-
-	@Override
-	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-		float humidity = getBiome().getRainfall();
-
-		humidChange += change;
-		humidChange = Math.max(boundaryDown - humidity, humidChange);
-		humidChange = Math.min(boundaryUp - humidity, humidChange);
-	}
-	
-	private static float equalizeChange(float change) {
-		if (change == 0) {
-			return 0;
-		}
-
-		change *= 0.95f;
-		if (change <= 0.001f && change >= -0.001f) {
-			change = 0;
-		}
-		return change;
 	}
 
 	@Override
@@ -190,8 +149,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
 		
-		data.setFloat("Temperature", tempChange);
-		data.setFloat("Humidity", humidChange);
 		tankManager.writeToNBT(data);
 		energyManager.writeToNBT(data);
 		inventory.writeToNBT(data);
@@ -213,8 +170,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 		
-		tempChange = data.getFloat("Temperature");
-		humidChange = data.getFloat("Humidity");
 		tankManager.readFromNBT(data);
 		energyManager.readFromNBT(data);
 		inventory.readFromNBT(data);
@@ -264,8 +219,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	/* GUI DATA */
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		data.writeVarInt(Math.round(tempChange * 100));
-		data.writeVarInt(Math.round(humidChange * 100));
 		tankManager.writeData(data);
 		energyManager.writeData(data);
 		inventory.writeData(data);
@@ -276,8 +229,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		tempChange = data.readVarInt() / 100.0F;
-		humidChange = data.readVarInt() / 100.0F;
 		tankManager.readData(data);
 		energyManager.readData(data);
 		inventory.readData(data);
@@ -421,7 +372,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		if (isAssembled()) {
-			return inventory;
+			return inventory;2
 		} else {
 			return FakeInventoryAdapter.instance();
 		}
@@ -475,57 +426,31 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	protected boolean updateServer(int tickCount) {
-		if (!isAssembled()) {
-			boolean hasChangeClima = false;
-			if (updateOnInterval(45)) {
-				if (humidChange > 0F) {
-					if (humidChange > 0.25F) {
-						humidChange = -0.25F;
-					} else {
-						humidChange = 0F;
-					}
-					hasChangeClima = true;
-				}
-				if (tempChange > 0F) {
-					if (tempChange > 0.25F) {
-						tempChange = -0.25F;
-					} else {
-						tempChange = 0F;
-					}
-					hasChangeClima = true;
-				}
-			}
-			return hasChangeClima;
-		} else {
-			if (updateOnInterval(20)) {
-				inventory.drainCan(tankManager);
-			}
-			
-			for (IGreenhouseLogic logic : logics) {
-				logic.work();
-			}
-			
-			for (IGreenhouseComponent.Active activeComponent : activeComponents) {
-				activeComponent.updateServer(tickCount);
-			}
-			
-			boolean canWork = true;
-			for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
-				canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
-			}
-			
-			if (canWork) {
-
-				for (IGreenhouseComponent.Climatiser climatiser : climatiserComponents) {
-					climatiser.changeClimate(tickCount, this);
-				}
-
-				tempChange = equalizeChange(tempChange);
-				humidChange = equalizeChange(humidChange);
-			}
-
-			return canWork;
+		if (updateOnInterval(20)) {
+			inventory.drainCan(tankManager);
 		}
+		
+		for (IGreenhouseLogic logic : logics) {
+			logic.work();
+		}
+		
+		for (IGreenhouseComponent.Active activeComponent : activeComponents) {
+			activeComponent.updateServer(tickCount);
+		}
+		
+		boolean canWork = true;
+		for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
+			canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
+		}
+		
+		if (canWork) {
+
+			for (IGreenhouseComponent.Climatiser climatiser : climatiserComponents) {
+				climatiser.changeClimate(tickCount, this);
+			}
+		}
+
+		return canWork;
 	}
 	
 	@Override

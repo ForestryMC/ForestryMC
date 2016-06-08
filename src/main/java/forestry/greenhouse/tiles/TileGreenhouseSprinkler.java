@@ -20,8 +20,7 @@ import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-
-import forestry.api.core.IClimateControlled;
+import forestry.api.core.climate.IClimateControlled;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.config.Constants;

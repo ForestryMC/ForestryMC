@@ -83,14 +83,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public void onChange(EnumGreenhouseEventType type, Object event) {
 	}
 
-	@Override
-	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-	}
-
-	@Override
-	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-	}
-
 	@Nonnull
 	@Override
 	public IGreenhouseState createState() {

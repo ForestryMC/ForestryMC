@@ -11,7 +11,12 @@
 package forestry;
 
 import java.io.File;
+import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -76,6 +81,16 @@ public class Forestry {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		List<BlockPos> POS = Lists.newArrayList();
+		List<BlockPos> POS2 = Lists.newArrayList();
+		for(BlockPos pos : BlockPos.getAllInBox(new BlockPos(0, 10, 0), new BlockPos(20, 10, 20))){
+			double p = pos.getDistance(10, 10, 10);
+			if(p <= 2){
+				POS.add(pos);
+			}
+			POS2.add(pos);
+		}
+		
 		packetHandler = new PacketHandler();
 
 		// Register event handler
@@ -89,7 +104,7 @@ public class Forestry {
 		PluginManager.runSetup(event);
 
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
-
+		
 		PluginManager.runPreInit();
 		
 		Proxies.render.registerModels();

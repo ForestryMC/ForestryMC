@@ -3,27 +3,22 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.api.core.climate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Map;
 
-import forestry.api.core.EnumHumidity;
-
-import java.util.Collection;
-
+import forestry.api.core.climate.IClimateWorld.ClimateChunk;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IInternalBlock {
-	
-	@Nonnull
-	BlockPos getPos();
-	
-	@Nullable
-	IInternalBlock getRoot();
-	
-	@Nonnull
-	Collection<IInternalBlockFace> getFaces();
+public interface IClimateManager {
 
+	float getTemperature(World world, BlockPos pos);
+	
+	float getHumidity(World world, BlockPos pos);
+	
+	void registerWorld(IClimateWorld climateWorld);
+	
+	Map<Integer, IClimateWorld> getClimateWorlds();
+	
 }

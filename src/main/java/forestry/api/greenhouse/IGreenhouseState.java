@@ -8,14 +8,20 @@ package forestry.api.greenhouse;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.IMultiblockComponent;
+import net.minecraft.util.math.BlockPos;
 
 public interface IGreenhouseState {
 	
+	@Nonnull
 	EnumTemperature getTemperature();
 
+	@Nonnull
 	EnumHumidity getHumidity();
 
 	float getExactTemperature();

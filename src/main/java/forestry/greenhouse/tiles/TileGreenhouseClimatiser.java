@@ -13,8 +13,7 @@ package forestry.greenhouse.tiles;
 import javax.annotation.Nonnull;
 
 import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.core.IClimateControlled;
+import forestry.api.core.climate.IClimateControlled;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;

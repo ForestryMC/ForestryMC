@@ -45,6 +45,7 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
+import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
