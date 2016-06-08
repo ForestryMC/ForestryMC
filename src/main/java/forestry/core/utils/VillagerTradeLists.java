@@ -182,7 +182,7 @@ public class VillagerTradeLists {
 		@Nonnull
 		public ItemStack buyingItemStackTwo;
 		@Nullable
-		public EntityVillager.PriceInfo buyingItemTwoInfo;
+		public EntityVillager.PriceInfo buyingPriceItemTwoInfo;
 		@Nonnull
 		public ItemStack sellingItemstack;
 		@Nullable
@@ -192,13 +192,13 @@ public class VillagerTradeLists {
 				@Nonnull ItemStack buyingItemStack,
 				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
 				@Nonnull ItemStack buyingItemStackTwo,
-				@Nullable EntityVillager.PriceInfo buyingItemTwoInfo,
+				@Nullable EntityVillager.PriceInfo buyingPriceItemTwoInfo,
 				@Nonnull ItemStack sellingItemstack,
 				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
 			this.buyingItemStackTwo = buyingItemStackTwo;
-			this.buyingItemTwoInfo = buyingItemTwoInfo;
+			this.buyingPriceItemTwoInfo = buyingPriceItemTwoInfo;
 			this.sellingItemstack = sellingItemstack;
 			this.sellingPriceInfo = sellingPriceInfo;
 		}
@@ -211,8 +211,8 @@ public class VillagerTradeLists {
 			}
 
 			int buyTwoAmount = 1;
-			if (this.buyingItemTwoInfo != null) {
-				buyTwoAmount = this.buyingItemTwoInfo.getPrice(random);
+			if (this.buyingPriceItemTwoInfo != null) {
+				buyTwoAmount = this.buyingPriceItemTwoInfo.getPrice(random);
 			}
 
 			int sellAmount = 1;
