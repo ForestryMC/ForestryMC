@@ -54,7 +54,7 @@ import forestry.plugins.PluginManager;
 				+ "after:BuildCraft|Energy@[7.2,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"
-				+ "after:IC2@[2.3.235,);"
+				+ "after:IC2@[2.5.10,);"
 				+ "after:Natura@[2.2.0,);"
 				+ "after:HardcoreEnderExpansion;"
 				+ "after:JEI@[3.6.0,);"

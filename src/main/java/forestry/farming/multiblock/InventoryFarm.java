@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.farming.FarmDirection;
+import forestry.api.farming.Fertilizers;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
@@ -137,7 +138,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		}
 
 		Item item = itemstack.getItem();
-		return PluginCore.items.fertilizerCompound == item;
+		return Fertilizers.fertilizers.containsKey(item);
 	}
 
 	@Override
@@ -203,6 +204,19 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		}
 
 		return added;
+	}
+
+	public int getFertilizerValue() {
+		ItemStack fertilizer = getStackInSlot(SLOT_FERTILIZER);
+		if (fertilizer == null || fertilizer.stackSize <= 0) {
+			return 0;
+		}
+
+		if (!acceptsAsFertilizer(fertilizer)) {
+			return 0;
+		}
+
+		return Fertilizers.fertilizers.get(fertilizer.getItem());
 	}
 
 	public boolean useFertilizer() {

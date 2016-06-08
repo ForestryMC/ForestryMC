@@ -23,12 +23,15 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
+import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
+import forestry.api.farming.Fertilizers;
 import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
@@ -42,6 +45,7 @@ import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
@@ -74,6 +78,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 
 	private static ItemStack rubberSapling;
 	private static ItemStack rubber;
+	private static ItemStack ic2Fertilizer;
 	public static ItemStack rubberWood;
 	public static ItemStack resin;
 
@@ -114,6 +119,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 		resin = IC2Items.getItem("misc_resource", "resin");
 		rubberSapling = IC2Items.getItem("sapling");
 		rubber = IC2Items.getItem("crafting", "rubber");
+		ic2Fertilizer = IC2Items.getItem("crop_res", "fertilizer");
 
 		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", new FarmLogicRubber());
 
@@ -254,6 +260,17 @@ public class PluginIC2 extends BlankForestryPlugin {
 			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", imc);
 		}
 
+		if (Config.isIC2FertilizerEnabled()) {
+			if (ic2Fertilizer != null) {
+				if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
+					Fertilizers.fertilizers.put(ic2Fertilizer.getItem(), ForestryAPI.activeMode.getIntegerSetting("farms.ic2fertilizer.value"));
+				}
+
+				FuelManager.fermenterFuel.put(ic2Fertilizer, new FermenterFuel(ic2Fertilizer,
+						ForestryAPI.activeMode.getIntegerSetting("fermenter.value.ic2fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.ic2fertilizer")));
+			}
+
+		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ENERGY)) {
 			FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000);

@@ -36,10 +36,12 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
+import forestry.api.farming.Fertilizers;
 import forestry.core.PluginCore;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
 import forestry.farming.blocks.BlockMushroom;
@@ -125,6 +127,9 @@ public class PluginFarming extends BlankForestryPlugin {
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7));
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
+
+		// Fertilizers
+		Fertilizers.fertilizers.put(PluginCore.items.fertilizerCompound, ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value"));
 
 		proxy.initializeModels();
 
