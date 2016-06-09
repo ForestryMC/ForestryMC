@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -47,6 +48,7 @@ public class CropBasicAgriCraft extends Crop {
 		harvest.remove(0);
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
 		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+		harvest.removeAll(Collections.singleton(null)); //sanatize nulls that get thru from Agricraft+Harvestcraft (sesameseed)
 		return harvest;
 	}
 

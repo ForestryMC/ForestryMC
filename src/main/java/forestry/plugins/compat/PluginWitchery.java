@@ -77,7 +77,7 @@ public class PluginWitchery extends ForestryPlugin {
 
 		Item saplingItem = GameRegistry.findItem(Witch, "witchsapling");
 		ItemStack saplingStack = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
-		RecipeUtil.addFermenterRecipes(saplingStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(saplingStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
 		FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 

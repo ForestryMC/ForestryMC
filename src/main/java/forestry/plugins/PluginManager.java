@@ -57,6 +57,7 @@ import forestry.plugins.compat.PluginHarvestCraft;
 import forestry.plugins.compat.PluginIC2;
 import forestry.plugins.compat.PluginImmersiveEngineering;
 import forestry.plugins.compat.PluginMagicalCrops;
+import forestry.plugins.compat.PluginMineFactoryReloaded;
 import forestry.plugins.compat.PluginNatura;
 import forestry.plugins.compat.PluginPlantMegaPack;
 import forestry.plugins.compat.PluginRotaryCraft;
@@ -115,6 +116,7 @@ public class PluginManager {
 		IMMERSIVEENGINEERING(new PluginImmersiveEngineering()),
 		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
+		MINEFACTORYRELOADED(new PluginMineFactoryReloaded()),
 		NATURA(new PluginNatura()),
 		PLANTMEGAPACK(new PluginPlantMegaPack()),
 		ROTARYCRAFT(new PluginRotaryCraft()),
