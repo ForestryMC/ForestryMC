@@ -79,7 +79,7 @@ public class VillagerApiaristTrades {
 				buyTwoAmount = this.buyingPriceItemTwoInfo.getPrice(random);
 			}
 			BeeDefinition [] forestryMundane = new BeeDefinition[] { BeeDefinition.FOREST, BeeDefinition.MEADOWS, BeeDefinition.MODEST, BeeDefinition.WINTRY, BeeDefinition.TROPICAL, BeeDefinition.MARSHY };
-			ItemStack randomHiveDrone = forestryMundane[random.nextInt(forestryMundane.length-1)].getMemberStack(EnumBeeType.DRONE);
+			ItemStack randomHiveDrone = forestryMundane[random.nextInt(forestryMundane.length)].getMemberStack(EnumBeeType.DRONE);
 			ItemStack buyItemStack = this.buyingItemStack.copy();
 			buyItemStack.stackSize = buyAmount;
 			ItemStack buyItemStackTwo = this.buyingItemStackTwo.copy();
