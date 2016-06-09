@@ -33,7 +33,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
@@ -51,7 +50,6 @@ import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
 import forestry.core.climate.ClimateManager;
-import forestry.core.climate.ClimateWorld;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -396,14 +394,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineAssembled();
 		
 		createLogics();
-		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
-		 
-		for(IInternalBlock internalBlock : internalBlocks){
-			if(climateWorld.getPosition(internalBlock.getPos()) != null){
-				climateWorld.addPosition(internalBlock.getPos());
-			}
-		}
 	}
 	
 	@Override
@@ -718,6 +708,55 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	@Override
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+	}
+
+	@Override
+	public BlockPos getPos() {
+		return getReferenceCoord();
+	}
+
+	@Override
+	public IClimateWorld getWorld() {
+		return ClimateManager.getOrCreateWorld(worldObj);
+	}
+	
+	@Override
+	public boolean canHandle(IClimatedPosition position) {
+		return true;
+	}
+	
+	@Override
+	public void updateClimate(IClimatedPosition position) {
+		for(EnumFacing facing : EnumFacing.VALUES){
+			BlockPos facePos = position.getPos().offset(facing);
+			if(isInternalBlock(facePos)){
+				IClimatedPosition climatedPosition = position.getClimateWorld().getPosition(facePos);
+				if(climatedPosition != null){
+					if(position.getTemperature() > climatedPosition.getTemperature() + 0.01F){
+						position.setTemperature(position.getTemperature() - 0.01F);
+						climatedPosition.setTemperature(climatedPosition.getTemperature() + 0.01F);
+					}
+					if(position.getHumidity() > climatedPosition.getHumidity() + 0.01F){
+						position.setHumidity(position.getHumidity()-0.01F);
+						climatedPosition.setHumidity(climatedPosition.getHumidity() + 0.01F);
+					}
+				}
+			}
+		}
+	}
+	
+	public boolean isInternalBlock(BlockPos pos){
+		for(IInternalBlock internalBlock : internalBlocks){
+			if(internalBlock != null && internalBlock.getPos().equals(pos)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canHoldClimate(IClimatedPosition position) {
+		return isInternalBlock(position.getPos());
 	}
 
 }

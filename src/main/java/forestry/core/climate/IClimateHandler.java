@@ -12,6 +12,8 @@ public interface IClimateHandler {
 	
 	boolean canHandle(IClimatedPosition position);
 	
+	void updateClimate(IClimatedPosition position);
+	
 	boolean canHoldClimate(IClimatedPosition position);
 	
 }

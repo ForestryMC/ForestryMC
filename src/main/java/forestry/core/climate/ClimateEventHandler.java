@@ -2,7 +2,7 @@ package forestry.core.climate;
 
 import java.util.HashMap;
 import java.util.Map;
-import forestry.api.core.ForestryAPI;
+import java.util.Map.Entry;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimateWorld.ClimateChunk;
 import forestry.api.core.climate.IClimatedPosition;
@@ -22,10 +22,11 @@ public class ClimateEventHandler {
 		 int dimensionID = event.getWorld().provider.getDimension();
 		 World world = event.getWorld();
 		 Chunk chunk = event.getChunk();
+		 ChunkPos chunkPos = new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition);
 		 IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(world);
 		 
 		 if(climateWorld != null){
-			ClimateChunk climateChunk = climateWorld.getClimateChunks().get(new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition));
+			ClimateChunk climateChunk = climateWorld.getClimateChunks().get(chunkPos);
 			if(climateChunk != null){
 				NBTTagCompound forestryTag = new NBTTagCompound();
 				event.getData().setTag("Forestry", forestryTag);
@@ -45,10 +46,13 @@ public class ClimateEventHandler {
 				}
 				
 				forestryTag.setTag("Positions", forestryTag);
+				if(!chunk.isLoaded()){
+					climateWorld.removeChunk(chunkPos);
+				}
 			}
 		 }
 	 }
-	  
+	 
 	 @SubscribeEvent
 	 public void chunkLoad(ChunkDataEvent.Load event){
 		 int dimensionID = event.getWorld().provider.getDimension();
@@ -82,11 +86,14 @@ public class ClimateEventHandler {
 			 if(climateChunk == null){
 				 climateChunk = new ClimateChunk(climateWorld, chunkPos);
 			 }else{
-				 climateChunk.getClimates().clear();
+				 for(Entry<BlockPos, IClimatedPosition> entry : positions.entrySet()){
+					 climateChunk.getClimates().replace(entry.getKey(), entry.getValue());
+				 }
 			 }
 			 
-			 climateChunk.getClimates().putAll(positions);
-			 climateWorld.setChunk(climateChunk);
+			 climateWorld.addChunk(climateChunk);
+		 }else{
+			 climateWorld.addChunk(new ClimateChunk(climateWorld, chunkPos));
 		 }
 	 }
 	

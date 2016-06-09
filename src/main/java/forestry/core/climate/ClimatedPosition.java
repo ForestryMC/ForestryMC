@@ -11,22 +11,20 @@
 package forestry.core.climate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
 import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
@@ -38,6 +36,7 @@ public class ClimatedPosition implements IClimatedPosition {
 	protected final BlockPos pos;
 	protected float temperature;
 	protected float humidity;
+	protected List<IClimateHandler> handlers;
 	
 	public ClimatedPosition(IClimateWorld climateWorld, BlockPos pos) {
 		this.climateWorld = climateWorld;
@@ -102,6 +101,22 @@ public class ClimatedPosition implements IClimatedPosition {
 	}
 	
 	@Override
+	public void addHandler(IClimateHandler climateHandler) {
+		if(climateHandler == null){
+			return;
+		}
+		handlers.add(climateHandler);
+	}
+	
+	@Override
+	public void removeHandler(IClimateHandler climateHandler) {
+		if(climateHandler == null){
+			return;
+		}
+		handlers.remove(climateHandler);
+	}
+	
+	@Override
 	public void updateClimate() {
 		boolean canHold = false;
 		for(IClimateHandler handler : getHandlers()){
@@ -112,22 +127,7 @@ public class ClimatedPosition implements IClimatedPosition {
 				}
 			}
 		}
-		if(canHold){
-			for(EnumFacing facing : EnumFacing.VALUES){
-				BlockPos facePos = pos.offset(facing);
-				IClimatedPosition climatedPosition = climateWorld.getPosition(facePos);
-				if(climatedPosition != null){
-					if(temperature > climatedPosition.getTemperature() + 0.01F){
-						temperature-= 0.01F;
-						climatedPosition.setTemperature(climatedPosition.getTemperature() + 0.01F);
-					}
-					if(humidity > climatedPosition.getHumidity() + 0.01F){
-						humidity-= 0.01F;
-						climatedPosition.setHumidity(climatedPosition.getHumidity() + 0.01F);
-					}
-				}
-			}
-		}else{
+		if(!canHold){
 			Biome biome = climateWorld.getWorld().getBiome(pos);
 			float biomeTemperature = biome.getTemperature();
 			float biomeHumidity = biome.getRainfall();
@@ -145,6 +145,13 @@ public class ClimatedPosition implements IClimatedPosition {
 					humidity-=0.01F;
 				}else{
 					humidity+=0.01F;
+				}
+			}
+		}
+		for(IClimateHandler handler : getHandlers()){
+			if(handler != null){
+				if(handler.canHandle(this)){
+					handler.updateClimate(this);
 				}
 			}
 		}
@@ -166,8 +173,17 @@ public class ClimatedPosition implements IClimatedPosition {
 				}
 			}
 			IGreenhouseController greenhouse = GreenhouseManager.greenhouseHelper.getGreenhouseController(climateWorld.getWorld(), pos);
+			
 			if(greenhouse != null){
 				handlers.add(greenhouse);
+			}
+		}
+		handlers.addAll(this.handlers);
+		Iterator<IClimateHandler> iHandlers = handlers.iterator();
+		while(iHandlers.hasNext()){
+			IClimateHandler handler = iHandlers.next();
+			if(!handler.canHandle(this)){
+				iHandlers.remove();
 			}
 		}
 		return handlers;

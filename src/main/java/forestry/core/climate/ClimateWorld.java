@@ -21,8 +21,7 @@ public class ClimateWorld implements IClimateWorld{
 	
 	@Override
 	public void addPosition(BlockPos pos){
-		Biome biome = world.getBiome(pos);
-		addPosition(new ClimatedPosition(this, pos, biome.getTemperature(), biome.getRainfall()));
+		addPosition(createPosition(pos));
 	}
 	
 	protected ClimateChunk getOrCreateChunk(ChunkPos chunkPos){
@@ -32,6 +31,12 @@ public class ClimateWorld implements IClimateWorld{
 			climateChunks.put(chunkPos, chunk);
 		}
 		return chunk;
+	}
+	
+	@Override
+	public IClimatedPosition createPosition(BlockPos pos) {
+		Biome biome = world.getBiome(pos);
+		return new ClimatedPosition(this, pos, biome.getTemperature(), biome.getRainfall());
 	}
 
 	@Override
@@ -78,6 +83,14 @@ public class ClimateWorld implements IClimateWorld{
 			return;
 		}
 		climateChunks.put(climateChunk.getChunkPos(), climateChunk);
+	}
+	
+	@Override
+	public void removeChunk(ChunkPos chunkPos) {
+		if(chunkPos == null){
+			return;
+		}
+		climateChunks.remove(chunkPos);
 	}
 
 	@Override

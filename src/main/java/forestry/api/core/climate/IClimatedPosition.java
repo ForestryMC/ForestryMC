@@ -22,6 +22,10 @@ public interface IClimatedPosition extends INbtReadable, INbtWritable {
 	@Nonnull 
 	BlockPos getPos();
 	
+	void addHandler(IClimateHandler climateHandler);
+	
+	void removeHandler(IClimateHandler climateHandler);
+	
 	void setTemperature(float temperature);
 	
 	float getTemperature();

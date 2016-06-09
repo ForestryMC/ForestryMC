@@ -36,17 +36,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	}
 	
 	protected interface IClimitiserDefinition {
-		float getChangePerTransfer();
-
-		float getBoundaryUp();
-
-		float getBoundaryDown();
-		
-		float getMaxChange();
+		float getChange();
 		
 		int getClimitiseRange();
-		
-		float getClimitiseBonus();
 		
 		ClimitiserType getType();
 	}
@@ -130,9 +122,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 						int maxDistance = definition.getClimitiseRange();
 						if(distance <= maxDistance){
 							if (definition.getType() == ClimitiserType.TEMPERATURE) {
-								position.setTemperature(position.getTemperature() + (float) (definition.getMaxChange() / (distance / definition.getClimitiseBonus())));
+								position.setTemperature(position.getTemperature() + (float) (definition.getChange() / distance));
 							}else{
-								position.setHumidity(position.getHumidity() + (float) (definition.getMaxChange() / (distance / definition.getClimitiseBonus())));
+								position.setHumidity(position.getHumidity() + (float) (definition.getChange() / distance));
 							}
 						}
 					}

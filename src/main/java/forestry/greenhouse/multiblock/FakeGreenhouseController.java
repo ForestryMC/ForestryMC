@@ -104,12 +104,17 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
+	public boolean canHoldClimate(IClimatedPosition position) {
+		return false;
+	}
+
+	@Override
 	public boolean canHandle(IClimatedPosition position) {
 		return false;
 	}
 
 	@Override
-	public boolean canHoldClimate(IClimatedPosition position) {
-		return false;
+	public void updateClimate(IClimatedPosition position) {
+		
 	}
 }

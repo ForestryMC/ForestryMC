@@ -20,9 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimateWorld;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.multiblock.IGreenhouseController;
-import forestry.plugins.ForestryPluginUids;
 
 public class ClimateManager implements IClimateManager{
 
@@ -64,6 +61,9 @@ public class ClimateManager implements IClimateManager{
 	}
 	
 	public static IClimateWorld getOrCreateWorld(World world){
+		if(world == null){
+			return null;
+		}
 		 IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(world.provider.getDimension()));
 		 
 		 if(climateWorld == null){

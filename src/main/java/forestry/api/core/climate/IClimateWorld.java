@@ -29,7 +29,11 @@ public interface IClimateWorld {
 	
 	IClimatedPosition getPosition(BlockPos pos);
 	
-	void setChunk(ClimateChunk climateChunk);
+	IClimatedPosition createPosition(BlockPos pos);
+	
+	void addChunk(ClimateChunk climateChunk);
+	  
+	void removeChunk(ChunkPos pos);
 	
 	@Nonnull 
 	Map<ChunkPos, ClimateChunk> getClimateChunks();
@@ -52,6 +56,14 @@ public interface IClimateWorld {
 			this.world = world;
 			this.chunkPos = chunkPos;
 			climates = new HashMap<>();
+			for(int x = chunkPos.getXStart();x < chunkPos.getXEnd();x++){
+				for(int y = 0;y < world.getWorld().getActualHeight();y++){
+					for(int z = chunkPos.getZStart();z < chunkPos.getZEnd();z++){
+						BlockPos pos = new BlockPos(x, y, z);
+						climates.put(pos, world.createPosition(pos));
+					}
+				}
+			}
 		}
 		
 		public void addPosition(IClimatedPosition position){
