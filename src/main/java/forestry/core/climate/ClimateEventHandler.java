@@ -22,7 +22,7 @@ public class ClimateEventHandler {
 		 int dimensionID = event.getWorld().provider.getDimension();
 		 World world = event.getWorld();
 		 Chunk chunk = event.getChunk();
-		 IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
+		 IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(world);
 		 
 		 if(climateWorld != null){
 			ClimateChunk climateChunk = climateWorld.getClimateChunks().get(new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition));
@@ -55,12 +55,7 @@ public class ClimateEventHandler {
 		 World world = event.getWorld();
 		 Chunk chunk = event.getChunk();
 		 
-		 IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
-		 
-		 if(climateWorld == null){
-			 climateWorld = new ClimateWorld();
-			 ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
-		 }
+		 IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(world);
 		 
 		 ChunkPos chunkPos = new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition);
 		 NBTTagCompound chunkTag = event.getData();

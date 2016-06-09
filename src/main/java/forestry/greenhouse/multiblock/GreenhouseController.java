@@ -43,7 +43,6 @@ import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -51,6 +50,7 @@ import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
+import forestry.core.climate.ClimateManager;
 import forestry.core.climate.ClimateWorld;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
@@ -70,7 +70,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
-import forestry.greenhouse.GreenhouseState;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.inventory.InventoryGreenhouse;
@@ -123,11 +122,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public float getExactTemperature() {
 		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
-		if(climateWorld == null){
-			climateWorld = new ClimateWorld();
-			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
-		}
+		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
 		
 		float temperature = 0.0F;
 		
@@ -143,11 +138,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public float getExactHumidity() {
 		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
-		if(climateWorld == null){
-			climateWorld = new ClimateWorld();
-			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
-		}
+		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
 		
 		float humidity = 0.0F;
 		
@@ -311,7 +302,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				}
 			}
 			
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, null, this, type));
 		}
 	}
 	
@@ -344,12 +335,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	/* GREENHOUSE */
-	@Nonnull
-	@Override
-	public IGreenhouseState createState() {
-		return new GreenhouseState(this);
-	}
-	
 	@Override
 	public void onChange(EnumGreenhouseEventType type, Object event) {
 		for (IGreenhouseLogic logic : logics) {
@@ -412,11 +397,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		
 		createLogics();
 		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(dimensionID));
-		if(climateWorld == null){
-			climateWorld = new ClimateWorld();
-			ForestryAPI.climateManager.getClimateWorlds().put(Integer.valueOf(dimensionID), climateWorld);
-		}
+		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
 		 
 		for(IInternalBlock internalBlock : internalBlocks){
 			if(climateWorld.getPosition(internalBlock.getPos()) != null){
@@ -661,7 +642,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		
 		isBlockGoodForInterior(worldObj, posRoot);
 		for (IInternalBlockFace faceToCheck : blockToCheck.getFaces()) {
-			CheckInternalBlockFaceEvent checkEvent = new CheckInternalBlockFaceEvent(createState(), blockToCheck, faceToCheck);
+			CheckInternalBlockFaceEvent checkEvent = new CheckInternalBlockFaceEvent(this, blockToCheck, faceToCheck);
 			MinecraftForge.EVENT_BUS.post(checkEvent);
 			
 			if (!faceToCheck.isTested()) {
@@ -699,7 +680,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	private IInternalBlock createInternalBlock(IInternalBlock internalBlock) {
-		CreateInternalBlockEvent createEvent = new CreateInternalBlockEvent(createState(), internalBlock);
+		CreateInternalBlockEvent createEvent = new CreateInternalBlockEvent(this, internalBlock);
 		
 		MinecraftForge.EVENT_BUS.post(createEvent);
 		
@@ -713,11 +694,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	public static ButterflyHatch getGreenhouseButterflyHatch(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos) == null) {
+		if (GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
 			return null;
 		}
-		IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
-		for (IMultiblockComponent greenhouse : state.getGreenhouseComponents()) {
+		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
+		for (IMultiblockComponent greenhouse : controller.getComponents()) {
 			if (greenhouse instanceof ButterflyHatch) {
 				return (ButterflyHatch) greenhouse;
 			}

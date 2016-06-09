@@ -17,7 +17,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
@@ -58,10 +57,8 @@ import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.log.BlockArbLog;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.BlockCore;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.plugins.ForestryPluginUids;

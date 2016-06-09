@@ -15,8 +15,12 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.core.climate.IClimatedPosition;
+import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
 import net.minecraft.nbt.NBTTagCompound;
@@ -160,6 +164,10 @@ public class ClimatedPosition implements IClimatedPosition {
 				if(logic.getController() instanceof IClimateHandler){
 					handlers.add((IClimateHandler) logic.getController());
 				}
+			}
+			IGreenhouseController greenhouse = GreenhouseManager.greenhouseHelper.getGreenhouseController(climateWorld.getWorld(), pos);
+			if(greenhouse != null){
+				handlers.add(greenhouse);
 			}
 		}
 		return handlers;

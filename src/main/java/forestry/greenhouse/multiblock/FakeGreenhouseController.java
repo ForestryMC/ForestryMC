@@ -19,9 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.climate.IClimateWorld;
+import forestry.api.core.climate.IClimatedPosition;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
@@ -29,7 +30,6 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
-import forestry.greenhouse.FakeGreenhouseState;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -82,12 +82,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public void onChange(EnumGreenhouseEventType type, Object event) {
 	}
-
-	@Nonnull
-	@Override
-	public IGreenhouseState createState() {
-		return FakeGreenhouseState.instance;
-	}
 	
 	@Override
 	public Set<IInternalBlock> getInternalBlocks() {
@@ -97,5 +91,25 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public String getUnlocalizedType() {
 		return "for.multiblock.greenhouse.type";
+	}
+
+	@Override
+	public BlockPos getPos() {
+		return null;
+	}
+
+	@Override
+	public IClimateWorld getWorld() {
+		return null;
+	}
+
+	@Override
+	public boolean canHandle(IClimatedPosition position) {
+		return false;
+	}
+
+	@Override
+	public boolean canHoldClimate(IClimatedPosition position) {
+		return false;
 	}
 }

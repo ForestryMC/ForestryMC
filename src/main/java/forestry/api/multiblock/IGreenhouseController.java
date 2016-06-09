@@ -11,8 +11,9 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.core.climate.IClimateHandler;
 
-public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler {
+public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateHandler {
 	
 	/**
 	 * Handle change events.

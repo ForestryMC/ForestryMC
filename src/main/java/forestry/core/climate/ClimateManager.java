@@ -21,7 +21,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimateWorld;
 import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.multiblock.IGreenhouseController;
 import forestry.plugins.ForestryPluginUids;
 
 public class ClimateManager implements IClimateManager{
@@ -34,27 +34,25 @@ public class ClimateManager implements IClimateManager{
 	
 	@Override
 	public float getTemperature(World world, BlockPos pos) {
-		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.GREENHOUSE)){
-			IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
-			
-			if(state != null){
-				return state.getExactTemperature();
-			}
-		}
+		IClimateWorld climateWorld = getOrCreateWorld(world);
 		Biome biome = world.getBiome(pos);
+		
+		if(climateWorld.getPosition(pos) != null){
+			return climateWorld.getPosition(pos).getTemperature();
+		}
+		
 		return biome.getTemperature();
 	}
 
 	@Override
 	public float getHumidity(World world, BlockPos pos) {
-		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.GREENHOUSE)){
-			IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
-			
-			if(state != null){
-				return state.getExactHumidity();
-			}
-		}
+		IClimateWorld climateWorld = getOrCreateWorld(world);
 		Biome biome = world.getBiome(pos);
+		
+		if(climateWorld.getPosition(pos) != null){
+			return climateWorld.getPosition(pos).getHumidity();
+		}
+		
 		return biome.getRainfall();
 	}
 	
@@ -64,6 +62,17 @@ public class ClimateManager implements IClimateManager{
 			climateWorlds.put(climateWorld.getDimensionID(), climateWorld);
 		}
 	}
+	
+	public static IClimateWorld getOrCreateWorld(World world){
+		 IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(world.provider.getDimension()));
+		 
+		 if(climateWorld == null){
+			 climateWorld = new ClimateWorld();
+			 ForestryAPI.climateManager.registerWorld(climateWorld);
+		 }
+		 return climateWorld;
+	}
+	
 	
 	@Override
 	public Map<Integer, IClimateWorld> getClimateWorlds() {

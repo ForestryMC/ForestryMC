@@ -5,14 +5,15 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
+import forestry.api.multiblock.IGreenhouseController;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IGreenhouseHelper {
 
 	/**
-	 * @return A {@link IGreenhouseState} of a greenhouse, when the pos is a greenhouse
+	 * @return A {@link IGreenhouseController} of a greenhouse, when the pos is a greenhouse
 	 */
-	IGreenhouseState getGreenhouseState(World world, BlockPos pos);
+	IGreenhouseController getGreenhouseController(World world, BlockPos pos);
 	
 }

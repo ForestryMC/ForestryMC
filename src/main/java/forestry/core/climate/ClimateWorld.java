@@ -73,7 +73,7 @@ public class ClimateWorld implements IClimateWorld{
 	}
 	
 	@Override
-	public void setChunk(ClimateChunk climateChunk) {
+	public void addChunk(ClimateChunk climateChunk) {
 		if(climateChunk == null){
 			return;
 		}

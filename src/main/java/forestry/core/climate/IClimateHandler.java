@@ -10,6 +10,8 @@ public interface IClimateHandler {
 	
 	IClimateWorld getWorld();
 	
+	boolean canHandle(IClimatedPosition position);
+	
 	boolean canHoldClimate(IClimatedPosition position);
 	
 }
