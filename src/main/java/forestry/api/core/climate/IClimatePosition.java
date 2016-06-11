@@ -5,37 +5,30 @@
  ******************************************************************************/
 package forestry.api.core.climate;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.climate.IClimateHandler;
 import net.minecraft.util.math.BlockPos;
 
-public interface IClimatedPosition extends INbtReadable, INbtWritable {
+public interface IClimatePosition extends INbtReadable, INbtWritable {
 	
 	@Nonnull 
-	IClimateWorld getClimateWorld();
+	IClimateRegion getClimateRegion();
 	
 	@Nonnull 
 	BlockPos getPos();
 	
-	void addHandler(IClimateHandler climateHandler);
-	
-	void removeHandler(IClimateHandler climateHandler);
-	
 	void setTemperature(float temperature);
+	
+	void addTemperature(float temperature);
 	
 	float getTemperature();
 
 	void setHumidity(float humidity);
 	
+	void addHumidity(float humidity);
+	
 	float getHumidity();
-	
-	List<IClimateHandler> getHandlers();
-	
-	void updateClimate();
 
 }

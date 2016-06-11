@@ -14,69 +14,102 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateManager;
-import forestry.api.core.climate.IClimateWorld;
+import forestry.api.core.climate.IClimatePosition;
+import forestry.api.core.climate.IClimateRegion;
 
 public class ClimateManager implements IClimateManager{
 
-	public Map<Integer, IClimateWorld> climateWorlds;
+	protected Map<Integer, List<IClimateRegion>> regions;
 	
 	public ClimateManager() {
-		climateWorlds = new ConcurrentHashMap<>();
+		regions = new HashMap<>();
+	}
+	
+	@Override
+	public void addRegion(IClimateRegion region) {
+		if(region == null){
+			return;
+		}
+		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
+		List<BlockPos> positions = (List<BlockPos>) region.getPositions().keySet();
+		for(IClimateRegion otherRegion : regions){
+			for(BlockPos pos : otherRegion.getPositions().keySet()){
+				if(positions.contains(pos)){
+					return;
+				}
+			}
+		}
+		if(!regions.contains(region)){
+			regions.add(region);
+		}
+	}
+	
+	@Override
+	public void removeRegion(IClimateRegion region) {
+		if(region == null){
+			return;
+		}
+		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
+		if(regions.contains(region)){
+			regions.remove(region);
+		}
 	}
 	
 	@Override
 	public float getTemperature(World world, BlockPos pos) {
-		IClimateWorld climateWorld = getOrCreateWorld(world);
 		Biome biome = world.getBiome(pos);
-		
-		if(climateWorld.getPosition(pos) != null){
-			return climateWorld.getPosition(pos).getTemperature();
+		IClimateRegion region = getRegionForPos(world, pos);
+		if(region!= null){
+			IClimatePosition position = region.getPositions().get(pos);
+			
+			if(position != null){
+				return position.getTemperature();
+			}
 		}
-		
 		return biome.getTemperature();
 	}
 
 	@Override
 	public float getHumidity(World world, BlockPos pos) {
-		IClimateWorld climateWorld = getOrCreateWorld(world);
 		Biome biome = world.getBiome(pos);
-		
-		if(climateWorld.getPosition(pos) != null){
-			return climateWorld.getPosition(pos).getHumidity();
+		IClimateRegion region = getRegionForPos(world, pos);
+		if(region!= null){
+			IClimatePosition position = region.getPositions().get(pos);
+			
+			if(position != null){
+				return position.getHumidity();
+			}
 		}
-		
 		return biome.getRainfall();
 	}
 	
 	@Override
-	public void registerWorld(IClimateWorld climateWorld) {
-		if(!climateWorlds.containsKey(Integer.valueOf(climateWorld.getDimensionID()))){
-			climateWorlds.put(climateWorld.getDimensionID(), climateWorld);
-		}
+	public Map<Integer, List<IClimateRegion>> getRegions() {
+		return regions;
 	}
-	
-	public static IClimateWorld getOrCreateWorld(World world){
-		if(world == null){
-			return null;
-		}
-		 IClimateWorld climateWorld = ForestryAPI.climateManager.getClimateWorlds().get(Integer.valueOf(world.provider.getDimension()));
-		 
-		 if(climateWorld == null){
-			 climateWorld = new ClimateWorld();
-			 ForestryAPI.climateManager.registerWorld(climateWorld);
-		 }
-		 return climateWorld;
-	}
-	
 	
 	@Override
-	public Map<Integer, IClimateWorld> getClimateWorlds() {
-		return climateWorlds;
+	public IClimateRegion getRegionForPos(World world, BlockPos pos){
+		for(IClimateRegion region : getOrCreateRegions(world)){
+			if(region.getPositions().keySet().contains(pos)){
+				return region;
+			}
+		}
+		return null;
+	}
+	
+	public List<IClimateRegion> getOrCreateRegions(World world){
+		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(world.provider.getDimension()));
+		if(regions == null){
+			regions = new ArrayList<>();
+			this.regions.put(Integer.valueOf(world.provider.getDimension()), regions);
+		}
+		return regions;
 	}
 
 }

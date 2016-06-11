@@ -20,10 +20,9 @@ import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-import forestry.api.core.climate.IClimateWorld;
-import forestry.api.core.climate.IClimatedPosition;
+import forestry.api.core.climate.IClimatePosition;
+import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.climate.ClimateManager;
 import forestry.core.config.Constants;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
@@ -57,10 +56,10 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) greenhouse;
 			if (workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
 				int dimensionID = worldObj.provider.getDimension();
-				IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
+				IClimateRegion region = greenhouse.getRegion();
 				
 				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
-					IClimatedPosition position = climateWorld.getPosition(pos);
+					IClimatePosition position = region.getPositions().get(pos);
 					if(position != null){
 						if(position.getHumidity() >= 2.0F){
 							if(position.getHumidity() > 2.0F){

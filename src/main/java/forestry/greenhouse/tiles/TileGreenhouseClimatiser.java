@@ -15,13 +15,12 @@ import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import forestry.api.core.climate.IClimateWorld;
-import forestry.api.core.climate.IClimatedPosition;
+import forestry.api.core.climate.IClimatePosition;
+import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
-import forestry.core.climate.ClimateManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
@@ -87,10 +86,10 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) greenhouse;
 			if (workingTime == 0 && greenhouseInternal.getEnergyManager().consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
 				int dimensionID = worldObj.provider.getDimension();
-				IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
+				IClimateRegion region = greenhouse.getRegion();
 				
 				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
-					IClimatedPosition position = climateWorld.getPosition(pos);
+					IClimatePosition position = region.getPositions().get(pos);
 					if(position != null){
 						if (definition.getType() == ClimitiserType.TEMPERATURE) {
 							if(position.getTemperature() >= 2.0F){

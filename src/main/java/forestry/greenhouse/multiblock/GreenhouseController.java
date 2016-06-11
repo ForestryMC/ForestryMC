@@ -14,11 +14,12 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -33,9 +34,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.core.climate.IClimateWorld;
-import forestry.api.core.climate.IClimatedPosition;
+import forestry.api.core.climate.IClimatePosition;
+import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
@@ -49,7 +51,8 @@ import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
-import forestry.core.climate.ClimateManager;
+import forestry.core.climate.ClimateRoom;
+import forestry.core.climate.ClimatedPosition;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -91,6 +94,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private ItemStack camouflagePlainBlock;
 	private ItemStack camouflageGlassBlock;
 	private ItemStack camouflageDoorBlock;
+	private ClimateRoom region;
 	
 	public GreenhouseController(World world) {
 		super(world, GreenhouseMultiblockSizeLimits.instance);
@@ -120,12 +124,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public float getExactTemperature() {
 		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
 		
 		float temperature = 0.0F;
 		
 		for(IInternalBlock internalBlock : internalBlocks){
-			IClimatedPosition position = climateWorld.getPosition(internalBlock.getPos());
+			IClimatePosition position = region.getPositions().get(internalBlock.getPos());
 			if(position != null){
 				temperature+=position.getTemperature();
 			}
@@ -136,12 +139,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public float getExactHumidity() {
 		int dimensionID = worldObj.provider.getDimension();
-		IClimateWorld climateWorld = ClimateManager.getOrCreateWorld(worldObj);
-		
 		float humidity = 0.0F;
 		
 		for(IInternalBlock internalBlock : internalBlocks){
-			IClimatedPosition position = climateWorld.getPosition(internalBlock.getPos());
+			IClimatePosition position = region.getPositions().get(internalBlock.getPos());
 			if(position != null){
 				humidity+=position.getHumidity();
 			}
@@ -178,6 +179,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			logic.writeToNBT(nbtTag);
 			data.setTag("logic" + logic.getName(), nbtTag);
 		}
+		
+		if(region != null){
+			data.setTag("Region", region.writeToNBT(data));
+		}
 
 		return data;
 	}
@@ -200,6 +205,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		
 		for (IGreenhouseLogic logic : getLogics()) {
 			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
+		}
+		
+		if(data.hasKey("Region")){
+			NBTTagCompound nbtTag = data.getCompoundTag("Region");
+			region = new ClimateRoom(this, nbtTag);
 		}
 	}
 	
@@ -394,6 +404,24 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineAssembled();
 		
 		createLogics();
+		if(region != null){
+			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
+			for(IInternalBlock block : internalBlocks){
+				if(block != null){
+					internalPositions.put(block.getPos(), new ClimatedPosition(region, block.getPos()));
+				}
+			}
+			region = new ClimateRoom(region, internalPositions);
+		}else{
+			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
+			for(IInternalBlock block : internalBlocks){
+				if(block != null){
+					internalPositions.put(block.getPos(), new ClimatedPosition(region, block.getPos()));
+				}
+			}
+			region = new ClimateRoom(this, internalPositions);
+			ForestryAPI.climateManager.addRegion(region);
+		}
 	}
 	
 	@Override
@@ -711,52 +739,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 
 	@Override
-	public BlockPos getPos() {
-		return getReferenceCoord();
-	}
-
-	@Override
-	public IClimateWorld getWorld() {
-		return ClimateManager.getOrCreateWorld(worldObj);
-	}
-	
-	@Override
-	public boolean canHandle(IClimatedPosition position) {
-		return true;
-	}
-	
-	@Override
-	public void updateClimate(IClimatedPosition position) {
-		for(EnumFacing facing : EnumFacing.VALUES){
-			BlockPos facePos = position.getPos().offset(facing);
-			if(isInternalBlock(facePos)){
-				IClimatedPosition climatedPosition = position.getClimateWorld().getPosition(facePos);
-				if(climatedPosition != null){
-					if(position.getTemperature() > climatedPosition.getTemperature() + 0.01F){
-						position.setTemperature(position.getTemperature() - 0.01F);
-						climatedPosition.setTemperature(climatedPosition.getTemperature() + 0.01F);
-					}
-					if(position.getHumidity() > climatedPosition.getHumidity() + 0.01F){
-						position.setHumidity(position.getHumidity()-0.01F);
-						climatedPosition.setHumidity(climatedPosition.getHumidity() + 0.01F);
-					}
-				}
-			}
-		}
-	}
-	
-	public boolean isInternalBlock(BlockPos pos){
-		for(IInternalBlock internalBlock : internalBlocks){
-			if(internalBlock != null && internalBlock.getPos().equals(pos)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canHoldClimate(IClimatedPosition position) {
-		return isInternalBlock(position.getPos());
+	public IClimateRegion getRegion() {
+		return region;
 	}
 
 }

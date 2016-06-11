@@ -19,8 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.EnumCamouflageType;
-import forestry.api.core.climate.IClimateWorld;
-import forestry.api.core.climate.IClimatedPosition;
+import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
@@ -92,29 +91,9 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public String getUnlocalizedType() {
 		return "for.multiblock.greenhouse.type";
 	}
-
+	
 	@Override
-	public BlockPos getPos() {
+	public IClimateRegion getRegion() {
 		return null;
-	}
-
-	@Override
-	public IClimateWorld getWorld() {
-		return null;
-	}
-
-	@Override
-	public boolean canHoldClimate(IClimatedPosition position) {
-		return false;
-	}
-
-	@Override
-	public boolean canHandle(IClimatedPosition position) {
-		return false;
-	}
-
-	@Override
-	public void updateClimate(IClimatedPosition position) {
-		
 	}
 }
