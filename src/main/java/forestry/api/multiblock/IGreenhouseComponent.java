@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
+import forestry.api.core.climate.IClimateSource;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import net.minecraft.item.ItemStack;
@@ -20,8 +21,7 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 	interface Door extends IGreenhouseComponent {
 	}
 
-	interface Climatiser extends IGreenhouseComponent {
-		void changeClimate(int tickCount, IGreenhouseController controller);
+	interface Climatiser extends IGreenhouseComponent, IClimateSource {
 	}
 	
 	interface ButterflyHatch extends IGreenhouseComponent {

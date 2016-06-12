@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
+import forestry.core.climate.ClimateEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -81,6 +82,7 @@ public class Forestry {
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+		MinecraftForge.EVENT_BUS.register(new ClimateEventHandler());
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		Config.load();

@@ -23,6 +23,7 @@ import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -95,5 +96,14 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public IClimateRegion getRegion() {
 		return null;
+	}
+
+	@Override
+	public void clearRegion() {
+	}
+
+	@Override
+	public Set<Listener> getListenerComponents() {
+		return Collections.emptySet();
 	}
 }

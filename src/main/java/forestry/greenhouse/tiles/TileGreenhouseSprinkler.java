@@ -22,7 +22,8 @@ import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
-import forestry.api.multiblock.IGreenhouseController;
+import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.api.multiblock.IMultiblockController;
 import forestry.core.config.Constants;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
@@ -51,12 +52,18 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 	}
 	
 	@Override
-	public void changeClimate(int tick, IGreenhouseController greenhouse) {
-		if(minPos != null && maxPos != null){
-			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) greenhouse;
-			if (workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
+	public void changeClimate(int tick, IClimateRegion region) {
+		IMultiblockController controller = getMultiblockLogic().getController();
+		if(getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && minPos != null && maxPos != null && region != null){
+			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
+			boolean canWork = true;
+			for (IGreenhouseComponent.Listener listenerComponent : greenhouseInternal.getListenerComponents()) {
+				if(canWork){
+					canWork = listenerComponent.getGreenhouseListener().canWork(greenhouseInternal, canWork);
+				}
+			}
+			if (canWork && workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
 				int dimensionID = worldObj.provider.getDimension();
-				IClimateRegion region = greenhouse.getRegion();
 				
 				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
 					IClimatePosition position = region.getPositions().get(pos);

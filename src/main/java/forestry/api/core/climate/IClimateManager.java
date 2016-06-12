@@ -24,10 +24,17 @@ public interface IClimateManager {
 	
 	void removeRegion(IClimateRegion region);
 	
+	void addSource(IClimateSource source);
+	
+	void removeSource(IClimateSource source);
+	
 	@Nullable
 	IClimateRegion getRegionForPos(World world, BlockPos pos);
 	
 	@Nonnull
 	Map<Integer, List<IClimateRegion>> getRegions();
+	
+	@Nonnull
+	Map<Integer, List<IClimateSource>> getSources();
 	
 }

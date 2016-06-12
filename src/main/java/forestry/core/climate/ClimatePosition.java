@@ -17,7 +17,7 @@ import forestry.api.core.climate.IClimatePosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class ClimatedPosition implements IClimatePosition {
+public class ClimatePosition implements IClimatePosition {
 
 	@Nonnull 
 	protected final IClimateRegion climateRegion;
@@ -26,12 +26,12 @@ public class ClimatedPosition implements IClimatePosition {
 	protected float temperature;
 	protected float humidity;
 	
-	public ClimatedPosition(IClimateRegion climateRegion, BlockPos pos) {
+	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos) {
 		this.climateRegion = climateRegion;
 		this.pos = pos;
 	}
 	
-	public ClimatedPosition(@Nonnull IClimateRegion climateRegion, @Nonnull BlockPos pos, float temperature, float humidity) {
+	public ClimatePosition(@Nonnull IClimateRegion climateRegion, @Nonnull BlockPos pos, float temperature, float humidity) {
 		this.climateRegion = climateRegion;
 		this.pos = pos;
 		this.temperature = temperature;

@@ -123,7 +123,7 @@ public class ClimateRoom implements IClimateRegion {
 			int yPos = positionTag.getInteger("YPos");
 			int zPos = positionTag.getInteger("ZPos");
 			BlockPos pos = new BlockPos(xPos, yPos, zPos);
-			ClimatedPosition position = new ClimatedPosition(this, pos);
+			ClimatePosition position = new ClimatePosition(this, pos);
 			position.readFromNBT(positionTag);
 			positions.put(pos, position);
 		}

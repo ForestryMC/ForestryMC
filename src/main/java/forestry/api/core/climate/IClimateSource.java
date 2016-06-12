@@ -5,6 +5,19 @@
  ******************************************************************************/
 package forestry.api.core.climate;
 
+import net.minecraft.util.math.BlockPos;
+
+/**
+ * A climate source is used to change the climate in a region.
+ */
 public interface IClimateSource {
+	
+	/**
+	 * @param tickCount The current tick count.
+	 * @param region The climate region, in that the source stands.
+	 */
+	void changeClimate(int tickCount, IClimateRegion region);
+	
+	BlockPos getPos();
 
 }

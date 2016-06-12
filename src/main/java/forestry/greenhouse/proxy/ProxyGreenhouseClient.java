@@ -15,13 +15,14 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-
+import forestry.api.core.ForestryAPI;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.models.ModelGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
+import forestry.plugins.ForestryPluginUids;
 
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
@@ -33,6 +34,10 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 			} else if (greenhouseType == BlockGreenhouseType.SPRINKLER) {
 				ClientRegistry.bindTileEntitySpecialRenderer(TileGreenhouseSprinkler.class, new AnimationTESR<>());
 				continue;
+			}else if(greenhouseType == BlockGreenhouseType.BUTTERFLY_HATCH){
+				if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)){
+					continue;
+				}
 			}
 			Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType),
 					new ModelResourceLocation("forestry:greenhouse", "inventory"), new ModelGreenhouse(),

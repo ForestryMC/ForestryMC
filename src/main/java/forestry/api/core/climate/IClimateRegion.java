@@ -19,6 +19,9 @@ public interface IClimateRegion extends INbtReadable, INbtWritable {
 	@Nonnull
 	World getWorld();
 	
+	/**
+	 * Update the climate in a region, all 20 world ticks.
+	 */
 	void updateClimate();
 	
 	@Nonnull

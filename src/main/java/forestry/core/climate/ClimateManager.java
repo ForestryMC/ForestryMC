@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
@@ -36,7 +38,7 @@ public class ClimateManager implements IClimateManager{
 			return;
 		}
 		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
-		List<BlockPos> positions = (List<BlockPos>) region.getPositions().keySet();
+		Set<BlockPos> positions = region.getPositions().keySet();
 		for(IClimateRegion otherRegion : regions){
 			for(BlockPos pos : otherRegion.getPositions().keySet()){
 				if(positions.contains(pos)){
