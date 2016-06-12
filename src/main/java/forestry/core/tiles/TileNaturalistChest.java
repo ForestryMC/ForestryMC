@@ -68,7 +68,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		prevLidAngle = lidAngle;
 
 		if (numPlayersUsing > 0 && lidAngle == 0.0F) {
-			playLidSound("random.chestopen");
+			playLidSound(SoundEvents.BLOCK_CHEST_OPEN);
 		}
 
 		if (numPlayersUsing == 0 && lidAngle > 0.0F || numPlayersUsing > 0 && lidAngle < 1.0F) {
@@ -83,13 +83,13 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 			lidAngle = Math.max(Math.min(lidAngle, 1), 0);
 
 			if (lidAngle < 0.5F && oldAngle >= 0.5F) {
-				playLidSound("random.chestclosed");
+				playLidSound(SoundEvents.BLOCK_CHEST_CLOSE);
 			}
 		}
 	}
 
-	private void playLidSound(String sound) {
-		this.worldObj.playSound(null, getPos(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+	private void playLidSound(SoundEvent sound) {
+		this.worldObj.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
