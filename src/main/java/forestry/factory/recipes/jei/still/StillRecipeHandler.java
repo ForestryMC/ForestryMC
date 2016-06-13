@@ -24,6 +24,12 @@ public class StillRecipeHandler implements IRecipeHandler<StillRecipeWrapper> {
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull StillRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.STILL;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull StillRecipeWrapper recipe) {
 		return recipe;
 	}

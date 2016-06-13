@@ -131,9 +131,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
 
-		NBTTagCompound bio = new NBTTagCompound();
-		contained.writeToNBT(bio);
-		nbttagcompound.setTag("BTFLY", bio);
+		if (contained != null) {
+			NBTTagCompound bio = new NBTTagCompound();
+			contained.writeToNBT(bio);
+			nbttagcompound.setTag("BTFLY", bio);
+		}
 
 		if (pollen != null) {
 			NBTTagCompound pln = new NBTTagCompound();

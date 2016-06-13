@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -26,8 +27,17 @@ import forestry.plugins.compat.PluginIC2;
 public class CropRubber extends CropDestroy {
 
 	public CropRubber(World world, IBlockState blockState, BlockPos position) {
-		//TODO IC2 for 1.9: check that this is setting the right state for replanting.
-		super(world, blockState, position, blockState.getBlock().getDefaultState());
+		super(world, blockState, position, getReplantState(blockState));
+	}
+
+	/**
+	 * Convert a "wet" rubber log blockstate into the dry version.
+	 * Total hack since we don't have access to the blockstates.
+	 */
+	private static IBlockState getReplantState(IBlockState sappyState) {
+		Block block = sappyState.getBlock();
+		int sappyMeta = block.getMetaFromState(sappyState);
+		return block.getStateFromMeta(sappyMeta - 4);
 	}
 
 	@Override

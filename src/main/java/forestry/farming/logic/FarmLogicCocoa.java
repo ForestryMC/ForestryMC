@@ -25,14 +25,10 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -43,15 +39,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem() {
-		return Items.DYE;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getMetadata() {
-		return 3;
+	public ItemStack getIconItemStack() {
+		return new ItemStack(Items.DYE, 1, 3);
 	}
 
 	@Override

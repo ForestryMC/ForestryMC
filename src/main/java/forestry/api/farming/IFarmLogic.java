@@ -38,6 +38,8 @@ public interface IFarmLogic {
 	
 	String getName();
 	
-	@SideOnly(Side.CLIENT)
-	ItemStack getStack();
+	/**
+	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.
+	 */
+	ItemStack getIconItemStack();
 }

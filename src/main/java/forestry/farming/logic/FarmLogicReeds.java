@@ -16,13 +16,9 @@ import java.util.Stack;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -35,9 +31,8 @@ public class FarmLogicReeds extends FarmLogic {
 	private final Collection<IFarmable> germlings = Farmables.farmables.get("farmPoales");
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem() {
-		return Items.REEDS;
+	public ItemStack getIconItemStack() {
+		return new ItemStack(Items.REEDS);
 	}
 
 	@Override

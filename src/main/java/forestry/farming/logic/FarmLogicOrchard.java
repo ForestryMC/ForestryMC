@@ -22,14 +22,10 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -126,9 +122,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem() {
-		return PluginCore.items.fruits;
+	public ItemStack getIconItemStack() {
+		return new ItemStack(PluginCore.items.fruits);
 	}
 
 	@Override

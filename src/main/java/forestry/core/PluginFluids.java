@@ -10,6 +10,16 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -23,14 +33,6 @@ import forestry.core.utils.Log;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
@@ -62,14 +64,20 @@ public class PluginFluids extends BlankForestryPlugin {
 				if (fluidBlock != null) {
 					String name = "fluid." + forestryFluid.getTag();
 					fluidBlock.setUnlocalizedName("forestry." + name);
-					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, name);
+					fluidBlock.setRegistryName(name);
+					GameRegistry.register(fluidBlock);
+
+					ItemBlock itemBlock = new ItemBlock(fluidBlock);
+					itemBlock.setRegistryName(name);
+					GameRegistry.register(itemBlock);
+
 					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					if (forestryFluid.getOtherContainers().isEmpty()) {
 						FluidRegistry.addBucketForFluid(fluid);
 					}
 				}
 			} else {
-				ResourceLocation resourceLocation = GameData.getBlockRegistry().getNameForObject(fluidBlock);
+				ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(fluidBlock);
 				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
 						+ "this may cause issues if the server/client have different mod load orders, "
 						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getResourceDomain(), resourceLocation.getResourcePath(), fluid.getName());

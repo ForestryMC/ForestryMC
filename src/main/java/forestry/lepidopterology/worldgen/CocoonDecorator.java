@@ -38,7 +38,7 @@ import forestry.lepidopterology.tiles.TileCocoon;
 
 public abstract class CocoonDecorator {
 
-	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_COCOONS", new Class[0], new Object[0]);
+	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_COCOONS", new Class[0]);
 
 	public static void decorateCocoons(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {

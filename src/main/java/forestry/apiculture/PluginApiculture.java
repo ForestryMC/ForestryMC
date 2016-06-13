@@ -130,15 +130,11 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static String beekeepingMode = "NORMAL";
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
-	public static boolean fancyRenderedBees = false;
 
 	public static ItemRegistryApiculture items;
 	public static BlockRegistryApiculture blocks;
 
 	public static HiveRegistry hiveRegistry;
-
-	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<>();
-	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
 
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
 
@@ -275,9 +271,12 @@ public class PluginApiculture extends BlankForestryPlugin {
 			villagerRegistry.register(villagerApiarist);
 
 			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
+			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
 			ItemStack apiary = new ItemStack(blocks.apiary);
 			ItemStack provenFrames = items.frameProven.getItemStack();
 			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+			ItemStack propolis = new ItemStack(PluginApiculture.items.propolis,1);
 
 			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
 			apiaristCareer.addTrade(1,
@@ -287,18 +286,18 @@ public class PluginApiculture extends BlankForestryPlugin {
 			);
 			apiaristCareer.addTrade(2,
 					new VillagerTradeLists.GiveItemForEmeralds(new EntityVillager.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-					new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new EntityVillager.PriceInfo(1, 1), new EntityVillager.PriceInfo(16, 32), new EntityVillager.PriceInfo(1, 2))
+					new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new EntityVillager.PriceInfo(1, 1), new EntityVillager.PriceInfo(16, 32), new EntityVillager.PriceInfo(1, 2)),
+					new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new EntityVillager.PriceInfo(2, 4))
 			);
 			apiaristCareer.addTrade(3,
 					new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
 					new VillagerTradeLists.GiveItemForEmeralds(new EntityVillager.PriceInfo(1, 2), provenFrames, new EntityVillager.PriceInfo(1, 6))
 			);
 			apiaristCareer.addTrade(4,
-					new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new EntityVillager.PriceInfo(10, 64), monasticDrone, null)
+					new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new EntityVillager.PriceInfo(10, 64), monasticDrone, null),
+					new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null,new ItemStack(Items.ENDER_EYE),new EntityVillager.PriceInfo(12, 16),endDrone, null)
 			);
 		}
-
-		proxy.initializeRendering();
 
 		blocks.apiary.init();
 		blocks.beeHouse.init();

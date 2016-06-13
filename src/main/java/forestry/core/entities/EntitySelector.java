@@ -33,11 +33,6 @@ public abstract class EntitySelector<T extends Entity> implements Predicate<T> {
 		T castEntity = entityClass.cast(entity);
 		return isEntityApplicableTyped(castEntity);
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
-	}
 
 	protected abstract boolean isEntityApplicableTyped(T entity);
 }

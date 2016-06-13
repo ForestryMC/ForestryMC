@@ -57,6 +57,7 @@ import forestry.plugins.PluginManager;
 				+ "after:IC2@[2.3.235,);"
 				+ "after:Natura@[2.2.0,);"
 				+ "after:HardcoreEnderExpansion;"
+				+ "after:JEI@[3.6.0,);"
 				+ "after:basemetals;")
 public class Forestry {
 

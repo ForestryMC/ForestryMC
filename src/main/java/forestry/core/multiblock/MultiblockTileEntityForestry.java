@@ -194,7 +194,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	/* IMultiblockComponent */
-	@Nullable
+	@Nonnull
 	@Override
 	public final GameProfile getOwner() {
 		return owner;

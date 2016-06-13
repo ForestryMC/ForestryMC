@@ -115,11 +115,15 @@ public abstract class Genome implements IGenome {
 	 * Quickly gets the species without loading the whole genome.
 	 * We need this because the client uses the species for rendering.
 	 */
-	protected static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
+	public static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
 		}
+		return getSpeciesDirectly(nbtTagCompound);
+	}
+
+	public static IAlleleSpecies getSpeciesDirectly(@Nonnull NBTTagCompound nbtTagCompound) {
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
 		if (genomeNBT == null) {

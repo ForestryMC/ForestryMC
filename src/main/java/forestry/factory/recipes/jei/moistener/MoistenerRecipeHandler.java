@@ -24,6 +24,12 @@ public class MoistenerRecipeHandler implements IRecipeHandler<MoistenerRecipeWra
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull MoistenerRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.MOISTENER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull MoistenerRecipeWrapper recipe) {
 		return recipe;
 	}

@@ -21,14 +21,9 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -39,23 +34,18 @@ import forestry.plugins.compat.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 
-	private boolean inActive;
+	private boolean active = true;
 
 	public FarmLogicRubber() {
 		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
 			Log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
-			inActive = true;
+			active = false;
 		}
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem() {
-		if (!inActive) {
-			return PluginIC2.resin.getItem();
-		} else {
-			return Items.GUNPOWDER;
-		}
+	public ItemStack getIconItemStack() {
+		return PluginIC2.resin;
 	}
 
 	@Override
@@ -102,7 +92,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		if (inActive) {
+		if (!active) {
 			return null;
 		}
 
@@ -135,7 +125,7 @@ public class FarmLogicRubber extends FarmLogic {
 		}
 
 		int meta = block.getMetaFromState(blockState);
-		if (meta >= 2 && meta <= 5) {
+		if (meta >= 7 && meta <= 10) {
 			crops.push(new CropDestroy(world, blockState, position, null));
 		}
 
@@ -172,7 +162,7 @@ public class FarmLogicRubber extends FarmLogic {
 			Block block = blockState.getBlock();
 			if (ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
 				int meta = block.getMetaFromState(blockState);
-				if (meta >= 2 && meta <= 5) {
+				if (meta >= 7 && meta <= 10) {
 					crops.push(new CropRubber(world, blockState, candidate));
 				}
 				candidates.add(candidate);

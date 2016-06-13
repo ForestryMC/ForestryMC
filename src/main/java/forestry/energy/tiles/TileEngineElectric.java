@@ -27,6 +27,7 @@ import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -36,8 +37,10 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
+import forestry.plugins.compat.PluginIC2;
 
-// TODO: IC2 for 1.9
+import ic2.api.energy.prefab.BasicSink;
+
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory, IStreamableGui {
 	protected static class EuConfig {
 
@@ -55,16 +58,16 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig();
 
-//	private BasicSink ic2EnergySink;
+	private BasicSink ic2EnergySink;
 
 	public TileEngineElectric() {
 		super("engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
 
 		setInternalInventory(new InventoryEngineElectric(this));
 
-//		if (PluginIC2.instance.isAvailable()) {
-//			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
-//		}
+		if (PluginIC2.instance.isAvailable()) {
+			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+		}
 	}
 
 	// / SAVING / LOADING
@@ -72,9 +75,9 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-//		if (ic2EnergySink != null) {
-//			ic2EnergySink.readFromNBT(nbttagcompound);
-//		}
+		if (ic2EnergySink != null) {
+			ic2EnergySink.readFromNBT(nbttagcompound);
+		}
 		sockets.readFromNBT(nbttagcompound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
@@ -91,27 +94,27 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 
-//		if (ic2EnergySink != null) {
-//			ic2EnergySink.writeToNBT(nbttagcompound);
-//		}
+		if (ic2EnergySink != null) {
+			ic2EnergySink.writeToNBT(nbttagcompound);
+		}
 		sockets.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}
 
 	@Override
 	public void onChunkUnload() {
-//		if (ic2EnergySink != null) {
-//			ic2EnergySink.onChunkUnload();
-//		}
+		if (ic2EnergySink != null) {
+			ic2EnergySink.onChunkUnload();
+		}
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-//		if (ic2EnergySink != null) {
-//			ic2EnergySink.invalidate();
-//		}
+		if (ic2EnergySink != null) {
+			ic2EnergySink.invalidate();
+		}
 
 		super.invalidate();
 	}
@@ -159,11 +162,11 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// No work to be done if IC2 is unavailable.
-//		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NO_ENERGY_NET)) {
-//			return;
-//		}
-//
-//		ic2EnergySink.update();
+		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NO_ENERGY_NET)) {
+			return;
+		}
+
+		ic2EnergySink.update();
 
 		super.updateServerSide();
 
@@ -180,8 +183,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-//		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
-//		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NO_FUEL);
+		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
+		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NO_FUEL);
 	}
 
 	@Override
@@ -193,10 +196,10 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-//		if (ic2EnergySink.useEnergy(euConfig.euForCycle)) {
-//			currentOutput = euConfig.rfPerCycle;
-//			energyManager.generateEnergy(euConfig.rfPerCycle);
-//		}
+		if (ic2EnergySink.useEnergy(euConfig.euForCycle)) {
+			currentOutput = euConfig.rfPerCycle;
+			energyManager.generateEnergy(euConfig.rfPerCycle);
+		}
 
 	}
 
@@ -205,23 +208,22 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-//		ic2EnergySink.discharge(getStackInSlot(slot), euConfig.euForCycle * 3);
+		ic2EnergySink.discharge(getStackInSlot(slot), euConfig.euForCycle * 3);
 	}
 
 	// / STATE INFORMATION
 	@Override
 	protected boolean isBurning() {
-		// TODO: IC2 for 1.9
-		return mayBurn();// && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
+		return mayBurn() && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
 	}
 
-//	public int getStorageScaled(int i) {
-//		if (ic2EnergySink == null) {
-//			return 0;
-//		}
-//
-//		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
-//	}
+	public int getStorageScaled(int i) {
+		if (ic2EnergySink == null) {
+			return 0;
+		}
+
+		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
+	}
 
 	// / SMP GUI
 	@Override
@@ -230,11 +232,11 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		data.writeVarInt(heat);
 		sockets.writeData(data);
 		energyManager.writeData(data);
-//		final boolean hasIc2EnergySink = (ic2EnergySink != null);
-//		data.writeBoolean(hasIc2EnergySink);
-//		if (hasIc2EnergySink) {
-//			data.writeVarInt((int) ic2EnergySink.getEnergyStored());
-//		}
+		final boolean hasIc2EnergySink = (ic2EnergySink != null);
+		data.writeBoolean(hasIc2EnergySink);
+		if (hasIc2EnergySink) {
+			data.writeVarInt((int) ic2EnergySink.getEnergyStored());
+		}
 	}
 
 	@Override
@@ -243,11 +245,11 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		heat = data.readVarInt();
 		sockets.readData(data);
 		energyManager.readData(data);
-//		final boolean hasIc2EnergySink = data.readBoolean();
-//		if (hasIc2EnergySink) {
-//			final int energyStored = data.readVarInt();
-//			ic2EnergySink.setEnergyStored(energyStored);
-//		}
+		final boolean hasIc2EnergySink = data.readBoolean();
+		if (hasIc2EnergySink) {
+			final int energyStored = data.readVarInt();
+			ic2EnergySink.setEnergyStored(energyStored);
+		}
 	}
 
 	@Override
@@ -266,9 +268,9 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		euConfig.rfPerCycle += rfChange;
 		euConfig.euStorage += storageChange;
 
-//		if (ic2EnergySink != null) {
-//			ic2EnergySink.setCapacity(euConfig.euStorage);
-//		}
+		if (ic2EnergySink != null) {
+			ic2EnergySink.setCapacity(euConfig.euStorage);
+		}
 	}
 
 	/* ISocketable */

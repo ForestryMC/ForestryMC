@@ -11,6 +11,7 @@
 package forestry.core.models.baker;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,14 +57,14 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	public ModelBakerModel(IModelState modelState) {
 		models = new ArrayList<>();
-		faceQuads = new HashMap<>();
+		faceQuads = new EnumMap<>(EnumFacing.class);
 		generalQuads = new ArrayList<>();
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
 		
 		for(EnumFacing face : EnumFacing.VALUES){
-			faceQuads.put(face, new ArrayList());
+			faceQuads.put(face, new ArrayList<>());
 		}
 	}
 

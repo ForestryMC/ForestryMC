@@ -33,6 +33,12 @@ public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements I
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull R recipe) {
+		return ForestryRecipeCategoryUid.SQUEEZER;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull R recipe) {
 		return recipe;
 	}

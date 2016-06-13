@@ -16,6 +16,10 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6ddc9f307918a66671aa307635bfce8f15b546d3
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;

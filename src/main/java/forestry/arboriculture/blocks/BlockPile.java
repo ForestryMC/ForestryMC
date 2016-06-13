@@ -191,7 +191,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	
     @Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end){
-        List<RayTraceResult> list = Lists.<RayTraceResult>newArrayList();
+        List<RayTraceResult> list = Lists.newArrayList();
 
         for (AxisAlignedBB axisalignedbb : getCollisionBoxList(this.getActualState(blockState, worldIn, pos)))
         {
@@ -228,7 +228,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
     }
 
     private static List<AxisAlignedBB> getCollisionBoxList(IBlockState state){
-        List<AxisAlignedBB> list = Lists.<AxisAlignedBB>newArrayList();
+        List<AxisAlignedBB> list = Lists.newArrayList();
         EnumPilePosition position = state.getValue(PILE_POSITION);
         
         if(position != EnumPilePosition.INTERIOR){
@@ -311,15 +311,15 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			float f2 = pos.getZ() + 0.5F;
 			float f3 = 0.52F;
 			float f4 = rand.nextFloat() * 0.6F - 0.3F;
-			world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3 - 0.5, f1 + 0.5, f2 + f4, 0.0D, 0.0D, 0.0D, new int[0]);
+			world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3 - 0.5, f1 + 0.5, f2 + f4, 0.0D, 0.0D, 0.0D);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) {
 		if(getPileType() == EnumPileType.WOOD){
-			List<ItemStack> woodPiles = new ArrayList();
+			List<ItemStack> woodPiles = new ArrayList<>();
 			for(ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
 				woodPiles.add(createWoodPile(tree));
 			}
@@ -406,7 +406,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 
 	@Nonnull
 	private List<ItemStack> getPileDrop(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		List<ItemStack> list = new ArrayList<>();
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof ICharcoalPileComponent) {
 			ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;

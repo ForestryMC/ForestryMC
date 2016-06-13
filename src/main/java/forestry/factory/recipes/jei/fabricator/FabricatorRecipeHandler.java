@@ -24,6 +24,12 @@ public class FabricatorRecipeHandler implements IRecipeHandler<FabricatorRecipeW
 
 	@Nonnull
 	@Override
+	public String getRecipeCategoryUid(@Nonnull FabricatorRecipeWrapper recipe) {
+		return ForestryRecipeCategoryUid.FABRICATOR;
+	}
+
+	@Nonnull
+	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull FabricatorRecipeWrapper recipe) {
 		return recipe;
 	}

@@ -28,13 +28,6 @@ public class WorldGenPoplar extends WorldGenTree {
 		super(tree, 8, 3);
 	}
 
-	@Nonnull
-	@Override
-	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
-		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
-		return Collections.emptySet();
-	}
-
 	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafSpawn = height + 1;
