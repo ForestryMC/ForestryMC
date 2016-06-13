@@ -103,7 +103,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 				}
 			}
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 		}
 	}
 	

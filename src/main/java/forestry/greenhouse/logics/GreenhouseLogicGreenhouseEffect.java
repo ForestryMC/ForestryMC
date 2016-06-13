@@ -36,7 +36,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 	
 	@Override
 	public void work() {
-		/*if (controller == null || !controller.isAssembled()) {
+		if (controller == null || !controller.isAssembled()) {
 			return;
 		}
 		if (controller.getWorldObj().isDaytime()) {
@@ -44,7 +44,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 				controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
 				workTimer = 0;
 			}
-		}*/
+		}
 	}
 
 	@Override

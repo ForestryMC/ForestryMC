@@ -7,7 +7,6 @@ package forestry.api.core;
 
 import java.util.Set;
 
-import forestry.api.core.climate.IClimateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

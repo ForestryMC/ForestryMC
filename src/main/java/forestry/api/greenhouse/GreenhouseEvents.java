@@ -18,15 +18,14 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.multiblock.IGreenhouseController;
 
 public class GreenhouseEvents extends Event {
 	
 	@Nullable
-	public final IGreenhouseController controller;
+	public final IGreenhouseState state;
 	
-	public GreenhouseEvents(@Nullable IGreenhouseController state) {
-		this.controller = state;
+	public GreenhouseEvents(@Nullable IGreenhouseState state) {
+		this.state = state;
 	}
 	
 	public static class CamouflageChangeEvent extends GreenhouseEvents{
@@ -38,8 +37,8 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public final EnumCamouflageType camouflageType;
 		
-		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
-			super(controller);
+		public CamouflageChangeEvent(IGreenhouseState state, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
+			super(state);
 			
 			this.camouflagedBlock = camouflagedBlock;
 			this.camouflageHandler = camouflageHandler;
@@ -52,8 +51,8 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public IInternalBlock internalBlock;
 		
-		public InternalBlockEvent(IGreenhouseController controller, @Nonnull IInternalBlock internalBlock) {
-			super(controller);
+		public InternalBlockEvent(IGreenhouseState state, @Nonnull IInternalBlock internalBlock) {
+			super(state);
 			
 			this.internalBlock = internalBlock;
 		}	
@@ -61,8 +60,8 @@ public class GreenhouseEvents extends Event {
 	
 	public static class CreateInternalBlockEvent extends InternalBlockEvent{
 
-		public CreateInternalBlockEvent(IGreenhouseController controller, IInternalBlock internalBlock) {
-			super(controller, internalBlock);
+		public CreateInternalBlockEvent(IGreenhouseState state, IInternalBlock internalBlock) {
+			super(state, internalBlock);
 		}
 	}
 	
@@ -71,8 +70,8 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public final IInternalBlockFace face;
 		
-		public CheckInternalBlockFaceEvent(IGreenhouseController controller, IInternalBlock internalBlock, @Nonnull IInternalBlockFace face) {
-			super(controller, internalBlock);
+		public CheckInternalBlockFaceEvent(IGreenhouseState state, IInternalBlock internalBlock, @Nonnull IInternalBlockFace face) {
+			super(state, internalBlock);
 			
 			this.face = face;
 		}

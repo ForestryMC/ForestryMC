@@ -10,7 +10,7 @@ import forestry.api.multiblock.IGreenhouseController;
 public class DefaultGreenhouseListener implements IGreenhouseListener {
 
 	@Override
-	public boolean canWork(IGreenhouseController greenhouse, boolean canWork) {
+	public <G extends IGreenhouseController & IGreenhouseHousing> boolean canWork(G greenhouse, boolean canWork) {
 		return true;
 	}
 

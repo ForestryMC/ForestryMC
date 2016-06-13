@@ -14,8 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.greenhouse.IGreenhouseHelper;
+import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
@@ -24,13 +24,13 @@ import forestry.greenhouse.multiblock.InternalBlockCheck;
 public class GreenhouseHelper implements IGreenhouseHelper {
 
 	@Override
-	public IGreenhouseController getGreenhouseController(World world, BlockPos pos) {
+	public IGreenhouseState getGreenhouseState(World world, BlockPos pos) {
 		if (MultiblockRegistry.getControllersFromWorld(world) != null) {
 			for (IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)) {
 				if (controllerInternal instanceof IGreenhouseControllerInternal) {
 					if (controllerInternal.isAssembled()) {
 						if (isPositionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)) {
-							return (IGreenhouseController) controllerInternal;
+							return ((IGreenhouseControllerInternal) controllerInternal).createState();
 						}
 					}
 				}

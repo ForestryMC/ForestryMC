@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.fluids.ITankManager;
@@ -45,15 +45,15 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	@Nullable
 	EnergyManager getEnergyManager();
 	
+	
+	/**
+	 * @return The current state of the greenhouse controller.
+	 */
+	@Nonnull
+	IGreenhouseState createState();
+	
 	/**
 	 * @return All internal blocks of the greenhouse.
 	 */
 	Set<IInternalBlock> getInternalBlocks();
-	
-	/**
-	 * Set the region to null.
-	 */
-	void clearRegion();
-	
-	Set<IGreenhouseComponent.Listener> getListenerComponents();
 }

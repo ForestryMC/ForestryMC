@@ -151,7 +151,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 				}
 			}
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 		}
 	}
 	

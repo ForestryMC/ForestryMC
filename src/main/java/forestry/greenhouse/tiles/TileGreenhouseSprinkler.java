@@ -14,16 +14,16 @@ import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-import forestry.api.core.climate.IClimatePosition;
-import forestry.api.core.climate.IClimateRegion;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IMultiblockController;
+
+import forestry.api.core.IClimateControlled;
+import forestry.api.greenhouse.IGreenhouseHousing;
+import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.config.Constants;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
@@ -52,54 +52,19 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 	}
 	
 	@Override
-	public void changeClimate(int tick, IClimateRegion region) {
-		IMultiblockController controller = getMultiblockLogic().getController();
-		if(getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && minPos != null && maxPos != null && region != null){
-			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
-			boolean canWork = true;
-			for (IGreenhouseComponent.Listener listenerComponent : greenhouseInternal.getListenerComponents()) {
-				if(canWork){
-					canWork = listenerComponent.getGreenhouseListener().canWork(greenhouseInternal, canWork);
-				}
-			}
-			if (canWork && workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
-				int dimensionID = worldObj.provider.getDimension();
-				
-				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
-					IClimatePosition position = region.getPositions().get(pos);
-					if(position != null){
-						if(position.getHumidity() >= 2.0F){
-							if(position.getHumidity() > 2.0F){
-								position.setHumidity(2.0F);
-							}
-							continue;
-						}else if(position.getHumidity() <= 0.0F){
-							if(position.getHumidity() < 0.0F){
-								position.setHumidity(0.0F);
-							}
-							continue;
-						}
-						
-						double distance = pos.distanceSq(pos);
-						int maxDistance = definition.getClimitiseRange();
-						if(distance <= maxDistance){
-							position.setHumidity(position.getHumidity() + (float) (definition.getChange() / distance));
-						}
-					}
-				}
-				
-				// one tick of work for every 10 RF
-				workingTime +=  WATER_PER_OPERATION * 2;
-			}
-	
-			if (workingTime > 0) {
-				workingTime--;
-			}
-	
-			setActive(workingTime > 0);
-		}else if(isActive()){
-			setActive(false);
+	public <G extends IGreenhouseController & IGreenhouseHousing & IClimateControlled> void changeClimate(int tick, G greenhouse) {
+		IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) greenhouse;
+		if (workingTime < 20 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
+			// one tick of work for every 10 RF
+			workingTime += WATER_PER_OPERATION * 2;
 		}
+
+		if (workingTime > 0) {
+			workingTime--;
+			greenhouse.addHumidityChange(definition.getChangePerTransfer(), definition.getBoundaryDown(), definition.getBoundaryUp());
+		}
+
+		setActive(workingTime > 0);
 	}
 	
 	@Override
@@ -158,20 +123,25 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
     }
 
 	private static class SprinklerDefinition implements IClimitiserDefinition {
+
+		@Override
+		public float getChangePerTransfer() {
+			return 0.02f;
+		}
+
+		@Override
+		public float getBoundaryUp() {
+			return 2.5f;
+		}
+
+		@Override
+		public float getBoundaryDown() {
+			return 0.05f;
+		}
 		
 		@Override
 		public ClimitiserType getType() {
 			return ClimitiserType.HUMIDITY;
-		}
-
-		@Override
-		public float getChange() {
-			return 0.5F;
-		}
-
-		@Override
-		public int getClimitiseRange() {
-			return 9;
 		}
 	}
 

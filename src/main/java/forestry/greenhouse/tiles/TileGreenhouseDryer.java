@@ -21,13 +21,18 @@ public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 	private static class DryerDefinition implements IClimitiserDefinition {
 
 		@Override
-		public float getChange() {
-			return 0.15F;
+		public float getChangePerTransfer() {
+			return -0.01f;
 		}
 
 		@Override
-		public int getClimitiseRange() {
-			return 5;
+		public float getBoundaryUp() {
+			return 2.5f;
+		}
+
+		@Override
+		public float getBoundaryDown() {
+			return 0.05f;
 		}
 		
 		@Override
