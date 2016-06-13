@@ -35,6 +35,6 @@ public interface IClimateManager {
 	Map<Integer, List<IClimateRegion>> getRegions();
 	
 	@Nonnull
-	Map<Integer, List<IClimateSource>> getSources();
+	Map<Integer, Map<BlockPos, IClimateSource>> getSources();
 	
 }

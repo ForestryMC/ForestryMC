@@ -30,7 +30,7 @@ public class ClimateEventHandler {
 					region.updateClimate();
 				}
 			}
-			for(IClimateSource source : ForestryAPI.climateManager.getSources().get(Integer.valueOf(dim))){
+			for(IClimateSource source : ForestryAPI.climateManager.getSources().get(Integer.valueOf(dim)).values()){
 				source.changeClimate(ticks, ForestryAPI.climateManager.getRegionForPos(event.world, source.getPos()));
 			}
 			serverTicks.put(Integer.valueOf(dim), ticks+1);

@@ -23,10 +23,12 @@ import java.util.Set;
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
+import forestry.api.core.climate.IClimateSource;
 
 public class ClimateManager implements IClimateManager{
 
 	protected Map<Integer, List<IClimateRegion>> regions;
+	protected Map<Integer, Map<BlockPos, IClimateSource>> sources;
 	
 	public ClimateManager() {
 		regions = new HashMap<>();
@@ -59,6 +61,26 @@ public class ClimateManager implements IClimateManager{
 		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
 		if(regions.contains(region)){
 			regions.remove(region);
+		}
+	}
+	
+	@Override
+	public void removeSource(IClimateSource source) {
+		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())) == null){
+			sources.put(Integer.valueOf(source.getWorld().provider.getDimension()), new HashMap<>());
+		}
+		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).keySet().contains(source.getPos())){
+			sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).remove(source.getPos(), source);
+		}
+	}
+	
+	@Override
+	public void addSource(IClimateSource source) {
+		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())) == null){
+			sources.put(Integer.valueOf(source.getWorld().provider.getDimension()), new HashMap<>());
+		}
+		if(!sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).keySet().contains(source.getPos())){
+			sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).put(source.getPos(), source);
 		}
 	}
 	
@@ -112,6 +134,11 @@ public class ClimateManager implements IClimateManager{
 			this.regions.put(Integer.valueOf(world.provider.getDimension()), regions);
 		}
 		return regions;
+	}
+	
+	@Override
+	public Map<Integer, Map<BlockPos, IClimateSource>> getSources() {
+		return sources;
 	}
 
 }
