@@ -35,8 +35,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawableAnimated arrow;
 	@Nonnull
 	private final IDrawable tankOverlay;
-	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-	
+
 	public SqueezerRecipeCategory(@Nonnull IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "tile.for.squeezer.name");
 		
@@ -70,7 +69,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 
 		guiItemStacks.init(craftOutputSlot, false, 87, 43);
 		guiItemStacks.set(craftOutputSlot, wrapper.getOutputs());
-		tooltip.clearTooltip();
+		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 		tooltip.addChanceTooltip(craftOutputSlot, chance);
 		setIngredients(guiItemStacks, wrapper.getInputs());
 

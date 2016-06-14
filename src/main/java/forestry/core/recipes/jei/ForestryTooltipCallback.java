@@ -16,18 +16,6 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 
 	private final ArrayListMultimap<Integer, String> tooltips = ArrayListMultimap.create();
 	
-	public void addToTooltip(int index, List<String> tooltip) {
-		tooltips.get(index).addAll(tooltip);
-	}
-	
-	public void addToTooltip(int index, String tooltip) {
-		tooltips.get(index).add(tooltip);
-	}
-	
-	public List<String> getTooltip(int index) {
-		return tooltips.get(index);
-	}
-	
 	@Override
 	public void onTooltip(int index, boolean input, ItemStack ingredient, List<String> tooltip) {
 		List<String> tip = tooltips.get(index);
@@ -36,20 +24,18 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		}
 	}
 	
-	public void clearTooltip(){
-		tooltips.clear();
-	}
-	
 	public void addChanceTooltip(int index, float chance) {
-		if (chance <= 0.0F) {
-			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.never")));
-		} else if (chance < 0.01F) {
-			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.lessThan1")));
-		} else if (chance != 1.0F) {
-			NumberFormat percentFormat = NumberFormat.getPercentInstance();
-			percentFormat.setMaximumFractionDigits(2);
-			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), String.valueOf(percentFormat.format(chance))));
+		if (chance < 0) {
+			chance = 0;
+		} else if (chance > 1.0) {
+			chance = 1.0f;
 		}
+		
+		NumberFormat percentFormat = NumberFormat.getPercentInstance();
+		percentFormat.setMaximumFractionDigits(2);
+		String chanceString = String.valueOf(percentFormat.format(chance));
+
+		tooltips.get(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.chance", chanceString));
 	}
 
 }
