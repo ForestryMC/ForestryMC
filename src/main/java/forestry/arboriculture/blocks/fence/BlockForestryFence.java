@@ -35,7 +35,6 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.blocks.MaterialArbWood;
 import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.core.proxy.Proxies;
@@ -48,7 +47,7 @@ public abstract class BlockForestryFence<T extends Enum<T> & IWoodType> extends 
 	private final int blockNumber;
 
 	protected BlockForestryFence(boolean fireproof, int blockNumber) {
-		super(MaterialArbWood.ARB_WOOD, BlockPlanks.EnumType.OAK.getMapColor());
+		super(Material.WOOD, BlockPlanks.EnumType.OAK.getMapColor());
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 

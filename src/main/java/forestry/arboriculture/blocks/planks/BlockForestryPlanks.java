@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,7 +30,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.blocks.MaterialArbWood;
 import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.core.proxy.Proxies;
@@ -42,7 +42,7 @@ public abstract class BlockForestryPlanks<T extends Enum<T> & IWoodType> extends
 	private final int blockNumber;
 
 	protected BlockForestryPlanks(boolean fireproof, int blockNumber) {
-		super(MaterialArbWood.ARB_WOOD);
+		super(Material.WOOD);
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 

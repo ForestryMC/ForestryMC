@@ -60,11 +60,6 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
     }
     
     @Override
-    public Material getMaterial(IBlockState state) {
-    	return MaterialArbWood.ARB_WOOD;
-    }
-    
-    @Override
     public boolean isFireproof() {
     	return fireproof;
     }

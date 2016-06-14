@@ -38,11 +38,6 @@ public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockSta
 		setHarvestLevel("axe", 0);
 	}
 
-	@Override
-	public Material getMaterial(IBlockState state) {
-		return MaterialArbWood.ARB_WOOD;
-	}
-
 	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
