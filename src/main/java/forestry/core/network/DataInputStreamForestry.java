@@ -32,7 +32,7 @@ public class DataInputStreamForestry extends DataInputStream {
 
 		if (!itemName.isEmpty()) {
 			Item item = ItemStackUtil.getItemFromRegistry(itemName);
-			byte stackSize = readByte();
+			int stackSize = readVarInt();
 			int meta = readVarInt();
 			itemstack = new ItemStack(item, stackSize, meta);
 

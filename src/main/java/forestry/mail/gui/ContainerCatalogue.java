@@ -47,7 +47,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	// for display on client
 	private int stationCount;
 
-	private boolean needsSynch = true;
+	private boolean needsSync = true;
 	private int currentFilter = 1;
 
 	private static final String[] FILTER_NAMES = new String[]{"all", "online", "offline"};
@@ -158,7 +158,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		} else {
 			setTradeInfo(null);
 		}
-		needsSynch = true;
+		needsSync = true;
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		if (needsSynch) {
+		if (needsSync) {
 			for (IContainerListener crafter : listeners) {
 				crafter.sendProgressBarUpdate(this, 0, stationIndex);
 				crafter.sendProgressBarUpdate(this, 1, stations.size());
@@ -186,7 +186,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 			}
 
 			Proxies.net.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
-			needsSynch = false;
+			needsSync = false;
 		}
 	}
 
@@ -225,6 +225,6 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 				break;
 		}
 
-		needsSynch = true;
+		needsSync = true;
 	}
 }
