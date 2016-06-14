@@ -30,7 +30,7 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		} else if (chance > 1.0) {
 			chance = 1.0f;
 		}
-		
+
 		NumberFormat percentFormat = NumberFormat.getPercentInstance();
 		percentFormat.setMaximumFractionDigits(2);
 		String chanceString = String.valueOf(percentFormat.format(chance));
