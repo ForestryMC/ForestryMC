@@ -22,6 +22,8 @@ public class ContainerBeeHousing extends ContainerTile<TileBeeHousingBase> imple
 	public ContainerBeeHousing(InventoryPlayer player, TileBeeHousingBase tile, boolean hasFrames) {
 		super(tile, player, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
+
+		tile.getBeekeepingLogic().clearCachedValues();
 	}
 
 	private int beeProgress = -1;

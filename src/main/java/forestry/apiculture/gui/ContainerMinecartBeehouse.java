@@ -21,6 +21,8 @@ public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBee
 	public ContainerMinecartBeehouse(InventoryPlayer player, EntityMinecartBeeHousingBase entity, boolean hasFrames) {
 		super(entity, player, 8, 108);
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
+
+		entity.getBeekeepingLogic().clearCachedValues();
 	}
 
 	private int beeProgress = -1;
