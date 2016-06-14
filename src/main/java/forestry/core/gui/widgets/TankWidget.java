@@ -32,6 +32,7 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
+import forestry.factory.gui.ContainerDistillVat;
 import forestry.farming.gui.ContainerFarm;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 
@@ -65,6 +66,8 @@ public class TankWidget extends Widget {
 			return ((ContainerFarm) container).getTank(slot);
 		}else if (container instanceof ContainerGreenhouse) {
 			return ((ContainerGreenhouse) container).getTank(slot);
+		}else if (container instanceof ContainerDistillVat) {
+			return ((ContainerDistillVat) container).getTank(slot);
 		}
 		return null;
 	}

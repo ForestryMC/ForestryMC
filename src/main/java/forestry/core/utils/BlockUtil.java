@@ -41,7 +41,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockUtil {
 
-	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
+	private static final int slabWoodId = OreDictionary.getOreID(OreDictUtil.SLAB_WOOD);
+	private static final int blockGlassId = OreDictionary.getOreID(OreDictUtil.BLOCK_GLASS);
 
 	public static List<ItemStack> getBlockDrops(World world, BlockPos posBlock) {
 		IBlockState blockState = world.getBlockState(posBlock);
@@ -105,6 +106,23 @@ public abstract class BlockUtil {
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
 		for (int oreId : oreIds) {
 			if (oreId == slabWoodId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isGlassBlock(IBlockState blockState, Block block, IBlockAccess world, BlockPos pos) {
+		if (blockState == null || block == null || block.isAir(blockState, world, pos)) {
+			return false;
+		}
+		if(Item.getItemFromBlock(block) == null){
+			return false;
+		}
+		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
+		for (int oreId : oreIds) {
+			if (oreId == blockGlassId) {
 				return true;
 			}
 		}

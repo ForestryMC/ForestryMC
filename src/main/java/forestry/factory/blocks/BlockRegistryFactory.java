@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
@@ -27,6 +31,8 @@ public class BlockRegistryFactory extends BlockRegistry {
 	public final BlockFactoryPlain fabricator;
 	public final BlockFactoryPlain raintank;
 	public final BlockFactoryPlain worktable;
+
+	private final Map<BlockDistillVatType, BlockDistillVat> distillVatBlockMap;
 
 	public BlockRegistryFactory() {
 		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
@@ -61,5 +67,16 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 		worktable = new BlockFactoryPlain(BlockTypeFactoryPlain.WORKTABLE);
 		registerBlock(worktable, new ItemBlockNBT(worktable), "worktable");
+
+		distillVatBlockMap = BlockDistillVat.create();
+		for (BlockDistillVat block : distillVatBlockMap.values()) {
+			registerBlock(block, new ItemBlockForestry(block), "distillvat." + block.getDistillVatType());
+		}
+
+}
+	public ItemStack getDistillVatBlock(BlockDistillVatType type, int stacksize) {
+		BlockDistillVat distillVatBlock = distillVatBlockMap.get(type);
+		return new ItemStack(distillVatBlock, stacksize);
 	}
+
 }

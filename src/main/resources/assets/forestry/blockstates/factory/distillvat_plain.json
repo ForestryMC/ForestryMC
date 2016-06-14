@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "type=normal": { "model": "forestry:factory/distillvat_plain_normal" }
+	}
+}

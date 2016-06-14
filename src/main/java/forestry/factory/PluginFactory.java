@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -50,8 +51,10 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
+import forestry.factory.blocks.BlockDistillVatType;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
+import forestry.factory.multiblock.TileDistillVatPlain;
 import forestry.factory.network.PacketRegistryFactory;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.recipes.CentrifugeRecipeManager;
@@ -203,6 +206,8 @@ public class PluginFactory extends BlankForestryPlugin {
 		blocks.raintank.init();
 		blocks.worktable.init();
 
+		GameRegistry.registerTileEntity(TileDistillVatPlain.class, "forestry.DistillVat");
+
 		Circuit.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f, 4);
 		Circuit.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f, 4);
 		Circuit.machineEfficiencyUpgrade1 = new CircuitSpeedUpgrade("machine.efficiency.1", 0, -0.10f, 2);
@@ -277,6 +282,18 @@ public class PluginFactory extends BlankForestryPlugin {
 		// STILL
 		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
 				Fluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
+
+		// / Distillation Vat
+		ItemStack distillVatPlainBlock = blocks.getDistillVatBlock(BlockDistillVatType.PLAIN, 4);
+		RecipeUtil.addRecipe(distillVatPlainBlock,
+				"GSG",
+				"TCT",
+				"GSG",
+				'C', PluginCore.items.circuitboards.get(EnumCircuitBoardType.BASIC),
+				'G', PluginCore.items.gearBronze,
+				'S', PluginFactory.blocks.still,
+				'T', PluginCore.items.tubes.get(EnumElectronTube.DIAMOND,1));
+
 
 		// MOISTENER
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Blocks.MYCELIUM), 5000);
