@@ -48,7 +48,7 @@ public abstract class HiveDecorator {
 		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
 
 		if (Config.generateBeehivesDebug) {
-			decorateHivesDebug(world, chunkX, chunkZ, hives);
+			decorateHivesDebug(world, rand, chunkX, chunkZ, hives);
 			return;
 		}
 
@@ -72,7 +72,7 @@ public abstract class HiveDecorator {
 			for (Hive hive : hives) {
 				if (hive.genChance() * Config.getBeehivesAmount() >= rand.nextFloat() * 100.0f) {
 					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
-						if (tryGenHive(world, x, z, hive)) {
+						if (tryGenHive(world, rand, x, z, hive)) {
 							return;
 						}
 					}
@@ -81,7 +81,7 @@ public abstract class HiveDecorator {
 		}
 	}
 
-	private static void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
+	private static void decorateHivesDebug(World world, Random rand, int chunkX, int chunkZ, List<Hive> hives) {
 		int worldX = (chunkX << 4) + 8;
 		int worldZ = (chunkZ << 4) + 8;
 		Biome biome = world.getBiome(new BlockPos(chunkX, 0, chunkZ));
@@ -95,13 +95,13 @@ public abstract class HiveDecorator {
 						continue;
 					}
 
-					tryGenHive(world, worldX + x, worldZ + z, hive);
+					tryGenHive(world, rand, worldX + x, worldZ + z, hive);
 				}
 			}
 		}
 	}
 
-	public static boolean tryGenHive(World world, int x, int z, Hive hive) {
+	public static boolean tryGenHive(World world, Random rand, int x, int z, Hive hive) {
 
 		final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
@@ -123,10 +123,10 @@ public abstract class HiveDecorator {
 			return false;
 		}
 
-		return setHive(world, hivePos, hive);
+		return setHive(world, rand, hivePos, hive);
 	}
 
-	private static boolean setHive(World world, BlockPos pos, Hive hive) {
+	private static boolean setHive(World world, Random rand, BlockPos pos, Hive hive) {
 		IBlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
 		boolean placed = world.setBlockState(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
@@ -143,7 +143,7 @@ public abstract class HiveDecorator {
 		hiveBlock.onBlockAdded(world, pos, state);
 
 		if (!Config.generateBeehivesDebug) {
-			hive.postGen(world, pos);
+			hive.postGen(world, rand, pos);
 		}
 
 		if (Config.logHivePlacement) {
