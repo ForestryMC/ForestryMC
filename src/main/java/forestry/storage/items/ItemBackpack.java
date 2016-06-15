@@ -97,11 +97,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		// We only do this when shift is clicked
-		if (!player.isSneaking()) {
-			return EnumActionResult.FAIL;
+		if (player.isSneaking()) {
+			return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
 		}
-
-		return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
+		return super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand);
 	}
 
 	public static void tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -138,7 +137,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	private static IItemHandler getInventoryHit(World world, BlockPos pos, EnumFacing side) {
 		TileEntity targeted = world.getTileEntity(pos);
-		return TileUtil.getInventoryFromTile(targeted, side);
+		return TileUtil.getInventoryFromTile(targeted, null);
 	}
 
 	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
