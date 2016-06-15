@@ -27,10 +27,10 @@ public class ItemWrench extends ItemForestry {//implements IToolWrench {
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		Block block = world.getBlockState(pos).getBlock();
-		if (block.rotateBlock(world, pos, side)) {
-			player.swingArm(hand);
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		Block block = worldIn.getBlockState(pos).getBlock();
+		if (block.rotateBlock(worldIn, pos, facing)) {
+			playerIn.swingArm(hand);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;
