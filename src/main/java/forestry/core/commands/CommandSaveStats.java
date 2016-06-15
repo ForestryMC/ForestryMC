@@ -119,7 +119,7 @@ public final class CommandSaveStats extends SubCommand {
 			}
 		}
 
-		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD_ID + "/stats/" + player.getDisplayName() + '-' + saveHelper.getFileSuffix() + ".log");
+		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD_ID + "/stats/" + player.getDisplayNameString() + '-' + saveHelper.getFileSuffix() + ".log");
 		try {
 			File folder = file.getParentFile();
 			if (folder != null && !folder.exists()) {
