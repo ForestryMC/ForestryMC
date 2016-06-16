@@ -20,6 +20,7 @@ import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -119,7 +120,7 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
+		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 }

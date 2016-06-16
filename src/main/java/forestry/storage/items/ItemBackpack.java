@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -216,10 +217,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
 		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
 		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
 		manager.registerItemModel(item, new BackpackMeshDefinition());
 	}
 

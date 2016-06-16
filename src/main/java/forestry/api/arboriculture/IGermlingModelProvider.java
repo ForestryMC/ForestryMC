@@ -10,6 +10,9 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 
 /**
@@ -18,6 +21,7 @@ import forestry.api.core.IModelManager;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingModelProvider {
+	@SideOnly(Side.CLIENT)
 	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
 
 	@Nonnull

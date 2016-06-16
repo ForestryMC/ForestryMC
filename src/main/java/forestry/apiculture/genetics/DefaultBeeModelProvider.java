@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import java.util.Locale;
 
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -47,7 +48,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 		}
 
 		models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);
-		manager.registerVariant(item, new ResourceLocation("forestry:" + beeTypeNameBase));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}
 
 	@Override

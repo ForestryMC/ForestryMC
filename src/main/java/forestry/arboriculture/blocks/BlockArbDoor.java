@@ -18,6 +18,7 @@ import java.util.Random;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -51,7 +52,7 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
+		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 

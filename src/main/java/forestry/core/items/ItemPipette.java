@@ -13,6 +13,7 @@ package forestry.core.items;
 import java.util.List;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -106,8 +107,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 		models = new ModelResourceLocation[2];
 		models[0] = manager.getModelLocation("pipette.0");
 		models[1] = manager.getModelLocation("pipette.1");
-		manager.registerVariant(item, new ResourceLocation("forestry:pipette.0"));
-		manager.registerVariant(item, new ResourceLocation("forestry:pipette.1"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pipette.0"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pipette.1"));
 		manager.registerItemModel(item, new PipetteMeshDefinition());
 	}
 
