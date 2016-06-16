@@ -23,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.core.blocks.BlockBase;
+import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
@@ -171,8 +172,10 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		if (textureResourceTankLevel == null) {
 			return;
 		}
-
-		Color primaryTankColor = renderInfo.getFluidColor();
+		
+		// TODO: render fluid overlay on tank
+		Fluids fluidDefinition = Fluids.getFluidDefinition(renderInfo.getFluidStack());
+		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
 		GlStateManager.color(colors[0], colors[1], colors[2], 1.0f);

@@ -11,34 +11,33 @@
 package forestry.core.render;
 
 import javax.annotation.Nonnull;
-import java.awt.Color;
 
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.core.fluids.Fluids;
-
 public class TankRenderInfo {
-	public static final TankRenderInfo EMPTY = new TankRenderInfo(Fluids.WATER.getColor(), EnumTankLevel.EMPTY);
+	public static final TankRenderInfo EMPTY = new TankRenderInfo(new FluidStack(FluidRegistry.WATER, 0), EnumTankLevel.EMPTY);
 
 	@Nonnull
-	private final Color fluidColor;
+	private final FluidStack fluidStack;
 	@Nonnull
 	private final EnumTankLevel level;
 
 	public TankRenderInfo(@Nonnull IFluidTank fluidTank) {
-		this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(fluidTank));
+		this(fluidTank.getFluid(), EnumTankLevel.rateTankLevel(fluidTank));
 	}
-
-	public TankRenderInfo(@Nonnull Color fluidColor, @Nonnull EnumTankLevel level) {
-		this.fluidColor = fluidColor;
+	
+	public TankRenderInfo(@Nonnull FluidStack fluidStack, @Nonnull EnumTankLevel level) {
+		this.fluidStack = fluidStack;
 		this.level = level;
 	}
-
+	
 	@Nonnull
-	public Color getFluidColor() {
-		return fluidColor;
+	public FluidStack getFluidStack() {
+		return fluidStack;
 	}
-
+	
 	@Nonnull
 	public EnumTankLevel getLevel() {
 		return level;

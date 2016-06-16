@@ -51,7 +51,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	public BlockForestryFluid(Fluids forestryFluid, int flammability, boolean flammable) {
-		this(forestryFluid.getFluid(), flammability, flammable, forestryFluid.getColor());
+		this(forestryFluid.getFluid(), flammability, flammable, forestryFluid.getParticleColor());
 	}
 
 	private BlockForestryFluid(Fluid fluid, int flammability, boolean flammable, Color color) {
