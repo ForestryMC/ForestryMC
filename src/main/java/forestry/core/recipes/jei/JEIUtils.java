@@ -55,7 +55,7 @@ public class JEIUtils {
 			if (fluidStack == null && Block.getBlockFromItem(stack.getItem()) instanceof IFluidBlock) {
 				Fluid fluid = ((IFluidBlock) Block.getBlockFromItem(stack.getItem())).getFluid();
 				if (fluid != null) {
-					fluidStack = new FluidStack(fluid, 1000);
+					fluidStack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
 				}
 			}
 			return fluidStack;

@@ -32,6 +32,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
@@ -53,7 +55,6 @@ import forestry.core.IResupplyHandler;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.models.ModelCrate;
 import forestry.core.recipes.RecipeUtil;
@@ -477,7 +478,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private static void addCrating(@Nonnull ItemStack crateStack, @Nonnull Object uncrated) {
-		FluidStack water = Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
+		FluidStack water = new FluidStack(FluidRegistry.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
 		ItemStack box = items.crate.getItemStack();
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
 	}
@@ -543,7 +544,7 @@ public class PluginStorage extends BlankForestryPlugin {
 		// / CARPENTER
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CRATES
-			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, items.crate.getItemStack(24),
+			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), null, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");
 
 			// / BACKPACKS WOVEN
@@ -573,7 +574,7 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
 		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
-		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, new ItemStack(backpackT2),
+		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), null, new ItemStack(backpackT2),
 				"WXW",
 				"WTW",
 				"WWW",

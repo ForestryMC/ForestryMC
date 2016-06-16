@@ -17,11 +17,11 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
 
 public class FermenterRecipeManager implements IFermenterManager {
@@ -38,7 +38,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.getFluid(1000));
+		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
 	}
 
 	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {

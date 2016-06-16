@@ -32,7 +32,6 @@ import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
@@ -45,7 +44,7 @@ import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
-	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(Constants.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -119,14 +118,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 
 		if (!isFilling()) {
-			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid(), false);
+			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, FluidRegistry.WATER, false);
 			if (canFill == FluidHelper.FillStatus.SUCCESS) {
 				fillingTime = Constants.RAINTANK_FILLING_TIME;
 			}
 		} else {
 			fillingTime--;
 			if (fillingTime <= 0) {
-				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid(), true);
+				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, FluidRegistry.WATER, true);
 				if (filled == FluidHelper.FillStatus.SUCCESS) {
 					fillingTime = 0;
 				}

@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import forestry.core.fluids.FluidHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -62,7 +61,7 @@ import forestry.core.access.EnumAccess;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -632,7 +631,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		final int fertilizerConsumption = logic.getFertilizerConsumption();
 		int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-		FluidStack liquid = Fluids.WATER.getFluid(liquidConsumption);
+		FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
 
 		if (farmTargets != null) {
 			for (FarmTarget target : farmTargets) {
@@ -748,7 +747,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = Fluids.WATER.getFluid(waterConsumption);
+		FluidStack requiredLiquid = new FluidStack(FluidRegistry.WATER, waterConsumption);
 		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {

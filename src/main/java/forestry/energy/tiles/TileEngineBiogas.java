@@ -32,7 +32,6 @@ import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -111,7 +110,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			} else if (shutdown)
 
 			{
-				if (heatingTank.getFluidAmount() > 0 && Fluids.LAVA.is(heatingTank.getFluid())) {
+				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluid().getFluid() == FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, true);
 				}

@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -50,9 +51,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		super(BlockAlvearyType.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
-
-		Fluid water = Fluids.WATER.getFluid();
-		Fluid lava = Fluids.LAVA.getFluid();
+		
+		Fluid water = FluidRegistry.WATER;
+		Fluid lava = FluidRegistry.LAVA;
 		Fluid liquidIce = Fluids.ICE.getFluid();
 
 		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(water, lava, liquidIce);

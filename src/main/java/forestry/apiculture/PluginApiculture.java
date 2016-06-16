@@ -14,9 +14,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -38,6 +36,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -560,9 +559,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeydew.getItemStack()}, honeyDropFluid);
 
 			ItemStack phosphor = PluginCore.items.phosphor.getItemStack(2);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND, 1, 1)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.DIRT)}, Fluids.LAVA.getFluid(1600));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND)}, new FluidStack(FluidRegistry.WATER, 2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND, 1, 1)}, new FluidStack(FluidRegistry.LAVA, 2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.DIRT)}, new FluidStack(FluidRegistry.LAVA, 1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(50, Fluids.FOR_HONEY.getFluid(500), null, PluginCore.items.craftingMaterial.getScentedPaneling(),
@@ -571,14 +570,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 					'J', items.royalJelly,
 					'W', PluginCore.items.beeswax,
 					'P', items.pollenCluster.get(EnumPollenCluster.NORMAL, 1));
-
-			RecipeManagers.carpenterManager.addRecipe(30, Fluids.WATER.getFluid(600), null, blocks.candle.getUnlitCandle(24),
+			
+			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), null, blocks.candle.getUnlitCandle(24),
 					" X ",
 					"###",
 					"###",
 					'#', PluginCore.items.beeswax,
 					'X', Items.STRING);
-			RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(200), null, blocks.candle.getUnlitCandle(6),
+			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), null, blocks.candle.getUnlitCandle(6),
 					"#X#",
 					'#', PluginCore.items.beeswax,
 					'X', PluginCore.items.craftingMaterial.getSilkWisp());

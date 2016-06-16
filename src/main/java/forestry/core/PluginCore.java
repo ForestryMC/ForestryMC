@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import forestry.core.fluids.Fluids;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,6 +26,8 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -265,7 +266,7 @@ public class PluginCore extends BlankForestryPlugin {
 		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CARPENTER
-			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, PluginCore.items.portableAlyzer.getItemStack(),
+			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), null, PluginCore.items.portableAlyzer.getItemStack(),
 					"X#X", "X#X", "RDR",
 					'#', OreDictUtil.PANE_GLASS,
 					'X', OreDictUtil.INGOT_TIN,
@@ -340,9 +341,9 @@ public class PluginCore extends BlankForestryPlugin {
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 		if (bogEarthOutputCan > 0) {
 			ItemStack bogEarth = blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, Fluids.WATER);
-			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, Fluids.WATER);
-			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER);
+			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, FluidRegistry.WATER);
+			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, FluidRegistry.WATER);
+			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, FluidRegistry.WATER);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', OreDictUtil.SAND);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', OreDictUtil.SAND);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', OreDictUtil.SAND);
