@@ -13,7 +13,7 @@ package forestry.core.items;
 import java.util.List;
 import java.util.Locale;
 
-import forestry.core.fluids.Fluids;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,14 +22,16 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -40,9 +42,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
 import forestry.core.utils.Translator;
 
-public class ItemFluidContainerForestry extends ItemForestry implements IColoredItem {
+public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
@@ -54,8 +58,9 @@ public class ItemFluidContainerForestry extends ItemForestry implements IColored
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + "_empty");
-		manager.registerItemModel(item, 1, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH));
+		String identifier = "liquids/" + type.toString().toLowerCase(Locale.ENGLISH);
+		manager.registerItemModel(item, 0, identifier + "_empty");
+		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -71,16 +76,6 @@ public class ItemFluidContainerForestry extends ItemForestry implements IColored
 			if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
 				subItems.add(itemStack);
 			}
-		}
-	}
-
-	@Override
-	public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
-		if (tintIndex > 0) {
-			FluidStack fluidStack = getContained(itemStack);
-			return Fluids.getFluidColor(fluidStack).getRGB();
-		} else {
-			return 0xffffff;
 		}
 	}
 
