@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +26,9 @@ public class ParticleColoredDripParticle extends Particle {
 	private int bobTimer;
 
 	public ParticleColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue) {
-		super(world, x, y, z);
+		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		this.motionX = this.motionY = this.motionZ = 0.0D;
+		
 		this.particleRed = red;
 		this.particleGreen = green;
 		this.particleBlue = blue;
@@ -37,6 +38,7 @@ public class ParticleColoredDripParticle extends Particle {
 		this.particleGravity = 0.06F;
 		this.bobTimer = 40;
 		this.particleMaxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
+		this.motionX = this.motionY = this.motionZ = 0.0D;
 	}
 
 	/**
@@ -74,15 +76,21 @@ public class ParticleColoredDripParticle extends Particle {
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
 		}
-
-		IBlockState state = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)));
-		Block block = state.getBlock();
-		Material material = block.getMaterial(state);
-
+		
+		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+		IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+		Material material = iblockstate.getMaterial();
+		
 		if (material.isLiquid() || material.isSolid()) {
-			double d0 = MathHelper.floor_double(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(block.getMetaFromState(state));
-
-			if (this.posY < d0) {
+			double d0 = 0.0D;
+			
+			if (iblockstate.getBlock() instanceof BlockLiquid) {
+				d0 = BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL));
+			}
+			
+			double d1 = (double) (MathHelper.floor_double(this.posY) + 1) - d0;
+			
+			if (this.posY < d1) {
 				this.setExpired();
 			}
 		}

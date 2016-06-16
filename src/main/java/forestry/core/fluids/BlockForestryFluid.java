@@ -119,8 +119,8 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				double px = d0 + rand.nextFloat();
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
-
-				Particle fx = new ParticleColoredDripParticle(worldIn, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
+				
+				Particle fx = new ParticleColoredDripParticle(worldIn, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 			}
 		}
