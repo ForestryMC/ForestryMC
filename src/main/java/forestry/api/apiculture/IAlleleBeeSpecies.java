@@ -50,12 +50,4 @@ public interface IAlleleBeeSpecies extends IAlleleSpecies {
 	
 	@SideOnly(Side.CLIENT)
 	void registerModels(Item item, IModelManager manager);
-
-	/**
-	 * @deprecated since Forestry 3.6.
-	 * @return Path of the texture to use for entity rendering.
-	 */
-	@Deprecated
-	String getEntityTexture();
-
 }

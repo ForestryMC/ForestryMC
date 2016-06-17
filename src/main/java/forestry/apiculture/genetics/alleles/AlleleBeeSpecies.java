@@ -195,9 +195,4 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public int getSpriteColour(int renderPass) {
 		return beeSpriteColourProvider.getSpriteColour(renderPass);
 	}
-
-	@Override
-	public String getEntityTexture() {
-		return null;
-	}
 }

@@ -39,7 +39,7 @@ import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutationCustom;
+import forestry.api.arboriculture.ITreeMutationBuilder;
 import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -1056,7 +1056,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		TreeManager.treeRoot.registerTemplate(template);
 	}
 
-	protected final ITreeMutationCustom registerMutation(TreeDefinition parent1, TreeDefinition parent2, int chance) {
+	protected final ITreeMutationBuilder registerMutation(TreeDefinition parent1, TreeDefinition parent2, int chance) {
 		return TreeManager.treeMutationFactory.createMutation(parent1.species, parent2.species, getTemplate(), chance);
 	}
 

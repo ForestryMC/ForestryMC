@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,10 +26,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
-import forestry.api.genetics.IMutationCustom;
 
-public abstract class Mutation implements IMutationCustom {
+public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	private final int chance;
 
@@ -107,8 +109,8 @@ public abstract class Mutation implements IMutationCustom {
 	}
 
 	@Override
-	public Mutation requireResource(Block block, int meta) {
-		IMutationCondition mutationCondition = new MutationConditionRequiresResource(block, meta);
+	public Mutation requireResource(IBlockState blockState) {
+		IMutationCondition mutationCondition = new MutationConditionRequiresResource(blockState);
 		return addMutationCondition(mutationCondition);
 	}
 

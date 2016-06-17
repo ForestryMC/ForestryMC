@@ -15,18 +15,24 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutationCustom;
+import forestry.api.arboriculture.ITreeMutation;
+import forestry.api.arboriculture.ITreeMutationBuilder;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
-public class TreeMutation extends Mutation implements ITreeMutationCustom {
+public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutationBuilder {
 
 	public TreeMutation(IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IAllele[] template, int chance) {
 		super(allele0, allele1, template, chance);
 	}
-
+	
+	@Override
+	public ITreeMutation build() {
+		return this;
+	}
+	
 	@Override
 	public ITreeRoot getRoot() {
 		return TreeManager.treeRoot;

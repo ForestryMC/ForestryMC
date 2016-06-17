@@ -26,7 +26,7 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyMutationCustom;
+import forestry.api.lepidopterology.IButterflyMutationBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
@@ -351,7 +351,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		
 	}
 	
-	protected final IButterflyMutationCustom registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
+	protected final IButterflyMutationBuilder registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
 		IAlleleButterflySpecies species1 = null;
 		IAlleleButterflySpecies species2 = null;
 		if(parent1 instanceof ButterflyDefinition){

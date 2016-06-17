@@ -18,17 +18,23 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeeMutationCustom;
+import forestry.api.apiculture.IBeeMutation;
+import forestry.api.apiculture.IBeeMutationBuilder;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
-public class BeeMutation extends Mutation implements IBeeMutationCustom {
+public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationBuilder {
 
 	public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, IAllele[] result, int chance) {
 		super(bee0, bee1, result, chance);
 	}
-
+	
+	@Override
+	public IBeeMutation build() {
+		return this;
+	}
+	
 	@Override
 	public IBeeRoot getRoot() {
 		return BeeManager.beeRoot;

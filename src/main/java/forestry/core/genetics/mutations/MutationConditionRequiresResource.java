@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,30 +23,25 @@ import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
-	private final ItemStack blockRequired;
+	private final IBlockState requiredBlockState;
 
-	public MutationConditionRequiresResource(Block block, int meta) {
-		blockRequired = new ItemStack(block, 1, meta);
+	public MutationConditionRequiresResource(IBlockState requiredBlockState) {
+		this.requiredBlockState = requiredBlockState;
 	}
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		Block block;
-		int meta;
-		int i = 1;
+		IBlockState blockState;
 		do {
-			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - i, pos.getY());
-			IBlockState blockState = world.getBlockState(blockPos);
-			block = blockState.getBlock();
-			meta = block.getMetaFromState(blockState);
-			i++;
-		} while (block instanceof IBeeHousing);
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+		} while (blockState.getBlock() instanceof IBeeHousing);
 
-		return ItemStackUtil.equals(block, meta, blockRequired) ? 1 : 0;
+		return this.requiredBlockState == blockState ? 1 : 0;
 	}
 
 	@Override
 	public String getDescription() {
-		return Translator.translateToLocalFormatted("for.mutation.condition.resource", blockRequired.getDisplayName());
+		return Translator.translateToLocalFormatted("for.mutation.condition.resource", requiredBlockState.getBlock().getLocalizedName());
 	}
 }
