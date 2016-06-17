@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -27,77 +32,79 @@ import forestry.core.tiles.TileEscritoire;
 public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> {
 
 	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
-	private final ModelEscritoire modelEscritoire;
-
-	public RenderEscritoire() {
-		modelEscritoire = new ModelEscritoire();
-
-	}
+	private final ModelEscritoire modelEscritoire = new ModelEscritoire();
+	private final EntityItem dummyEntityItem = new EntityItem(null);
+	private long lastTick;
 	
 	/**
 	 * @param escritoire If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityAt(@Nullable TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (escritoire != null) {
-			IBlockState blockState = escritoire.getWorldObj().getBlockState(escritoire.getPos());
+			World world = escritoire.getWorldObj();
+			IBlockState blockState = world.getBlockState(escritoire.getPos());
 			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
 				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), facing, x, y, z);
+				render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), world, facing, x, y, z);
 				return;
 			}
 		}
-		render(null, EnumFacing.SOUTH, x, y, z);
+		render(null, null, EnumFacing.SOUTH, x, y, z);
 	}
-
-	private void render(ItemStack itemstack, EnumFacing orientation, double x, double y, double z) {
+	
+	private void render(@Nullable ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
 		float factor = (float) (1.0 / 16.0);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
-
-		float[] angle = {(float) Math.PI, 0, 0};
-
-		if (orientation == null) {
-			orientation = EnumFacing.WEST;
+		{
+			GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
+			
+			float[] angle = {(float) Math.PI, 0, 0};
+			
+			if (orientation == null) {
+				orientation = EnumFacing.WEST;
+			}
+			switch (orientation) {
+				case EAST:
+					angle[1] = (float) Math.PI / 2;
+					break;
+				case SOUTH:
+					break;
+				case NORTH:
+					angle[1] = (float) Math.PI;
+					break;
+				case WEST:
+				default:
+					angle[1] = -(float) Math.PI / 2;
+					break;
+			}
+			
+			Proxies.render.bindTexture(texture);
+			modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
 		}
-		switch (orientation) {
-			case EAST:
-				angle[1] = (float) Math.PI / 2;
-				break;
-			case SOUTH:
-				break;
-			case NORTH:
-				angle[1] = (float) Math.PI;
-				break;
-			case WEST:
-			default:
-				angle[1] = -(float) Math.PI / 2;
-				break;
-		}
-
-		Proxies.render.bindTexture(texture);
-		modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
-
 		GlStateManager.popMatrix();
-
-		/*
-		if(itemstack != null) {
-			float renderScale = 1.0f;
+		
+		if (itemstack != null && world != null) {
+			dummyEntityItem.worldObj = world;
+			
+			float renderScale = 0.75f;
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate((float) x, (float) y, (float) z);
-			GlStateManager.translate(0.6f, 0.8f, 0.5f);
-			GlStateManager.rotate(90.0f, 1.0F, 0.0F, 0.0F);
-			GlStateManager.scale(renderScale, renderScale, renderScale);
-
-			RenderItem.renderInFrame = true;
-			dummyEntityItem.setEntityItemStack(itemstack);
-			customRenderItem.doRenderItem(dummyEntityItem, 0, 0, 0, 0, 0);
-			RenderItem.renderInFrame = false;
+			{
+				GlStateManager.translate((float) x + 0.6f, (float) y + 0.6f, (float) z + 0.5f);
+				GlStateManager.scale(renderScale, renderScale, renderScale);
+				dummyEntityItem.setEntityItemStack(itemstack);
+				
+				if (world.getTotalWorldTime() != lastTick) {
+					lastTick = world.getTotalWorldTime();
+					dummyEntityItem.onUpdate();
+				}
+				
+				RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
+				rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+			}
 			GlStateManager.popMatrix();
 		}
-		 */
-
 	}
 }
