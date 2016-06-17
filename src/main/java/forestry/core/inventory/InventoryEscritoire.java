@@ -42,7 +42,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 		}
 
 		if (slotIndex == SLOT_ANALYZE) {
-			return AlleleManager.alleleRegistry.isIndividual(itemStack);
+			return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
 		}
 
 		return false;
@@ -75,17 +75,16 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		super.setInventorySlotContents(slotIndex, itemstack);
-		if (tile.getWorld() == null) {
-			return;
-		}
-		if (slotIndex == SLOT_ANALYZE && !tile.getWorld().isRemote) {
+		if (slotIndex == SLOT_ANALYZE) {
 			if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
 				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
 				if (ersatz != null) {
-					setInventorySlotContents(SLOT_ANALYZE, ersatz);
+					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}
 			}
-			tile.getGame().initialize(getStackInSlot(SLOT_ANALYZE));
+			if (tile.getWorld() != null && !tile.getWorld().isRemote) {
+				tile.getGame().initialize(getStackInSlot(SLOT_ANALYZE));
+			}
 		}
 	}
 }
