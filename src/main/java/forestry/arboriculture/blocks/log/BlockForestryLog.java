@@ -8,6 +8,7 @@ import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -29,7 +30,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.blocks.MaterialArbWood;
 import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.core.proxy.Proxies;
@@ -65,11 +65,6 @@ public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends Bl
 
 	public final int getBlockNumber() {
 		return blockNumber;
-	}
-
-	@Override
-	public final Material getMaterial(IBlockState state) {
-		return MaterialArbWood.ARB_WOOD;
 	}
 
 	private static EnumAxis getAxis(int meta) {
@@ -187,7 +182,7 @@ public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends Bl
 	@SideOnly(Side.CLIENT)
 	@Override
 	public final void registerModel(Item item, IModelManager manager) {
-		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
+		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 

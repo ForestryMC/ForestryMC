@@ -34,7 +34,8 @@ public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueez
 	@Nonnull
 	@Override
 	public List<ItemStack> getOutputs() {
-		return Collections.singletonList(getRecipe().getRemnants());
+		ItemStack remnants = getRecipe().getRemnants();
+		return remnants == null ? Collections.emptyList() : Collections.singletonList(remnants);
 	}
 
 	@Override

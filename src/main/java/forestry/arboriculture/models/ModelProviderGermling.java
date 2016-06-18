@@ -12,9 +12,13 @@ package forestry.arboriculture.models;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
@@ -31,14 +35,15 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 		this.name = modelUid.substring("forestry.".length());
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
 		if(type == EnumGermlingType.SAPLING){
 			germlingModel = manager.getModelLocation("germlings/sapling." + name);
-			manager.registerVariant(item, new ResourceLocation("forestry:germlings/sapling." + name));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
 		}else if(type == EnumGermlingType.POLLEN){
 			pollenModel = manager.getModelLocation("pollen");
-			manager.registerVariant(item, new ResourceLocation("forestry:pollen"));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
 		}
 	}
 

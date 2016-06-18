@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
@@ -62,7 +63,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 			if (liquidAmount > 0) {
 				if (tank instanceof FluidTank) {
-					FluidStack fillAmount = ((FluidTank) tank).drainInternal(1000, false);
+					FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, false);
 					int filled = pipette.fill(itemstack, fillAmount, true);
 					tank.drain(filled, true);
 					player.updateHeldItem();

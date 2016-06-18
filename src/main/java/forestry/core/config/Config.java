@@ -242,8 +242,8 @@ public class Config {
 
 	private static void loadConfigFluids(File configFile) {
 		configFluid = new LocalizedConfiguration(configFile, "1.0.0");
-
-		for (Fluids fluid : Fluids.FORESTRY_FLUIDs) {
+		
+		for (Fluids fluid : Fluids.values()) {
 			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());

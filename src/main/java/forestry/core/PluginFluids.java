@@ -92,7 +92,7 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	@Override
 	public void registerItemsAndBlocks() {
-		for (Fluids fluidType : Fluids.FORESTRY_FLUIDs) {
+		for (Fluids fluidType : Fluids.values()) {
 			createFluid(fluidType);
 		}
 

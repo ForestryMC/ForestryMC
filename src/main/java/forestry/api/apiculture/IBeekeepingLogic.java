@@ -36,6 +36,12 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 */
 	void doWork();
 
+	/**
+	 * Force the logic to refresh any cached values and error states.
+	 * Call this when a player opens the gui so that all errors are up to date.
+	 */
+	void clearCachedValues();
+
 
 	/* CLIENT */
 

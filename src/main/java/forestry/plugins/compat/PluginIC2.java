@@ -18,8 +18,8 @@ import java.util.Set;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
@@ -52,7 +52,6 @@ import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
 import forestry.energy.PluginEnergy;
 import forestry.energy.blocks.BlockRegistryEnergy;
-import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
@@ -256,11 +255,11 @@ public class PluginIC2 extends BlankForestryPlugin {
 
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ENERGY)) {
-			FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000);
+			Fluid biogas = FluidRegistry.getFluid("ic2biogas");
 			if (biogas != null) {
 				int burnDuration = Math.round(Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas"));
 				EngineBronzeFuel bronzeFuel = new EngineBronzeFuel(Fluids.BIOMASS.getFluid(), Constants.ENGINE_FUEL_VALUE_BIOMASS, burnDuration, 1);
-				FuelManager.bronzeEngineFuel.put(biogas.getFluid(), bronzeFuel);
+				FuelManager.bronzeEngineFuel.put(biogas, bronzeFuel);
 			}
 		}
 

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import javax.annotation.Nonnull;
+
 import static forestry.arboriculture.multiblock.EnumPilePosition.BACK;
 import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_BACK_LEFT;
 import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_BACK_RIGHT;
@@ -46,8 +48,12 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TilePile pile, double x, double y, double z, float p_147500_8_, int destroyStage) {
+	public void renderTileEntityAt(@Nonnull TilePile pile, double x, double y, double z, float p_147500_8_, int destroyStage) {
 		IBlockState state = pile.getWorld().getBlockState(pile.getPos());
+		if (!(state.getBlock() instanceof BlockPile)) {
+			return;
+		}
+
 		EnumPilePosition pilePosition = state.getValue(BlockPile.PILE_POSITION);
 		MultiblockLogic<ICharcoalPileControllerInternal> logic = pile.getMultiblockLogic();
 		if (pilePosition != EnumPilePosition.INTERIOR && logic.isConnected() && logic.getController() != null) {

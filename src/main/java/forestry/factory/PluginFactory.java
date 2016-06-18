@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
@@ -152,7 +153,7 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
-		FuelManager.bronzeEngineFuel.put(Fluids.WATER.getFluid(), new EngineBronzeFuel(Fluids.WATER.getFluid(),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.WATER, new EngineBronzeFuel(FluidRegistry.WATER,
 				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
 		FuelManager.bronzeEngineFuel.put(Fluids.MILK.getFluid(), new EngineBronzeFuel(Fluids.MILK.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
@@ -269,8 +270,8 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.WHEAT_SEEDS)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.PUMPKIN_SEEDS)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.MELON_SEEDS)}, seedOil);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.COBBLESTONE)}, Fluids.LAVA.getFluid(1600));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.CACTUS)}, Fluids.WATER.getFluid(500));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.COBBLESTONE)}, new FluidStack(FluidRegistry.LAVA, 1600));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.CACTUS)}, new FluidStack(FluidRegistry.WATER, 500));
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.SNOWBALL), PluginCore.items.craftingMaterial.getIceShard(4)}, Fluids.ICE.getFluid(4000));
 
 		// STILL
@@ -323,30 +324,30 @@ public class PluginFactory extends BlankForestryPlugin {
 				"#",
 				"#",
 				'#', "logWood");
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(250), null,
+		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 250), null,
 				PluginCore.items.woodPulp.getItemStack(4),
 				"#",
 				'#', "logWood");
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(250), null,
+		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 250), null,
 				new ItemStack(Items.PAPER, 1),
 				"#",
 				"#",
 				'#', "pulpWood");
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
+		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), null,
 				new ItemStack(PluginCore.blocks.humus, 9),
 				"###",
 				"#X#",
 				"###",
 				'#', Blocks.DIRT,
 				'X', PluginCore.items.mulch);
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
+		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), null,
 				PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 8),
 				"#X#",
 				"XYX", "#X#",
 				'#', Blocks.DIRT,
 				'X', "sand",
 				'Y', PluginCore.items.mulch);
-		RecipeManagers.carpenterManager.addRecipe(75, Fluids.WATER.getFluid(5000), null, PluginCore.items.hardenedCasing.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(75, new FluidStack(FluidRegistry.WATER, 5000), null, PluginCore.items.hardenedCasing.getItemStack(),
 				"# #",
 				" Y ",
 				"# #",
@@ -355,21 +356,21 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		// / CHIPSETS
 		ItemCircuitBoard circuitBoard = PluginCore.items.circuitboards;
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}),
+		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}),
 				"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}),
+		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}),
+		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}),
+		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, PluginCore.items.solderingIron.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(FluidRegistry.WATER, 1000), null, PluginCore.items.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
 
 		// RAIN SUBSTRATES
 		ItemRegistryApiculture beeItems = PluginApiculture.items;
 		if (beeItems != null) {
-			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.iodineCharge.getItemStack(),
+			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), null, PluginCore.items.iodineCharge.getItemStack(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
@@ -377,7 +378,7 @@ public class PluginFactory extends BlankForestryPlugin {
 					'X', Items.GUNPOWDER,
 					'Y', PluginFluids.items.canEmpty,
 					'Z', beeItems.honeyDrop);
-			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
+			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
@@ -392,14 +393,14 @@ public class PluginFactory extends BlankForestryPlugin {
 				PluginCore.items.craftingMaterial.getPulsatingMesh());
 
 		// Woven Silk
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(500), null, PluginCore.items.craftingMaterial.getWovenSilk(),
+		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 500), null, PluginCore.items.craftingMaterial.getWovenSilk(),
 				"###",
 				"###",
 				"###",
 				'#', PluginCore.items.craftingMaterial.getSilkWisp());
 
 		// Boxes
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.carton.getItemStack(2),
+		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), null, PluginCore.items.carton.getItemStack(2),
 				" # ", "# #", " # ", '#', "pulpWood");
 
 		// Assembly Kits

@@ -11,7 +11,7 @@ public interface ITreeMutationFactory {
 	/**
 	 * Creates a new tree mutation.
 	 * Automatically registered with TreeManager.treeRoot.registerMutation()
-	 * See ITreeMutationCustom and IMutationCustom for adding additional properties to the returned mutation.
+	 * See ITreeMutationBuilder and IMutationBuilder for adding additional properties to the returned mutation.
 	 *
 	 * @param parentTree0 A parent tree for this mutation
 	 * @param parentTree1 A parent tree for this mutation
@@ -19,5 +19,5 @@ public interface ITreeMutationFactory {
 	 * @param chance The chance that breeding the two parent trees will result in this mutation
 	 * @return a new tree mutation.
 	 */
-	ITreeMutationCustom createMutation(IAlleleTreeSpecies parentTree0, IAlleleTreeSpecies parentTree1, IAllele[] result, int chance);
+	ITreeMutationBuilder createMutation(IAlleleTreeSpecies parentTree0, IAlleleTreeSpecies parentTree1, IAllele[] result, int chance);
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.INbtWritable;
@@ -48,7 +49,7 @@ public class PipetteContents implements INbtWritable {
 	}
 
 	public boolean isFull() {
-		return contents.amount >= 1000;
+		return contents.amount >= Fluid.BUCKET_VOLUME;
 	}
 
 	public void addTooltip(List<String> list) {

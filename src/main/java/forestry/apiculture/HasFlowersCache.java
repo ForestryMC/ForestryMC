@@ -97,6 +97,11 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 		return returnVal;
 	}
 
+	public void clear() {
+		flowerCoords.clear();
+		cooldown = 0;
+	}
+
 	@Nonnull
 	public List<BlockPos> getFlowerCoords() {
 		return Collections.unmodifiableList(flowerCoords);

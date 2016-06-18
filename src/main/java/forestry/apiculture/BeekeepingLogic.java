@@ -197,6 +197,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (!ItemStack.areItemStacksEqual(this.queenStack, queenStack)) {
 			this.queen = BeeManager.beeRoot.getMember(queenStack);
 			this.queenStack = queenStack;
+			hasFlowersCache.clear();
+			queenCanWorkCache.clear();
 		}
 
 		if (errorLogic.setCondition(queen == null, EnumErrorCode.NO_QUEEN)) {
@@ -233,6 +235,13 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		} else if (beeType == EnumBeeType.QUEEN) {
 			queenWorkTick(queen);
 		}
+	}
+
+	@Override
+	public void clearCachedValues() {
+		hasFlowersCache.clear();
+		queenCanWorkCache.clear();
+		canWork();
 	}
 
 	private void queenWorkTick(IBee queen) {
@@ -504,6 +513,11 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			}
 
 			return queenCanWorkCached;
+		}
+
+		public void clear() {
+			queenCanWorkCached.clear();
+			queenCanWorkCooldown = 0;
 		}
 	}
 

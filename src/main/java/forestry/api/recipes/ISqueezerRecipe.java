@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -24,6 +26,7 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	/**
 	 * @return Item stack representing the possible remnants from this recipe. (i.e. tin left over from tin cans)
 	 */
+	@Nullable
 	ItemStack getRemnants();
 
 	/**

@@ -137,7 +137,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		int x = getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40;
 		int z = getPos().getZ() + worldObj.rand.nextInt(40 * 2) - 40;
 
-		if (HiveDecorator.tryGenHive(worldObj, x, z, hive)) {
+		if (HiveDecorator.tryGenHive(worldObj, worldObj.rand, x, z, hive)) {
 			pendingSpawns.pop();
 		}
 	}

@@ -22,6 +22,8 @@ public class ContainerAlveary extends ContainerTile<TileAlveary> {
 	public ContainerAlveary(InventoryPlayer player, TileAlveary tile) {
 		super(tile, player, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, false);
+
+		tile.getBeekeepingLogic().clearCachedValues();
 	}
 
 	private int beeProgress = -1;

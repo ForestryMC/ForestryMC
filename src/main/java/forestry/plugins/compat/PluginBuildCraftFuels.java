@@ -34,7 +34,7 @@ public class PluginBuildCraftFuels extends BlankForestryPlugin {
 //	@Override
 //	public void doInit() {
 //		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
-//		ICoolant waterCoolant = coolantManager.getCoolant(Fluids.WATER.getFluid());
+	//		ICoolant waterCoolant = coolantManager.getCoolant(FluidRegistry.WATER);
 //		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
 //
 //		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);

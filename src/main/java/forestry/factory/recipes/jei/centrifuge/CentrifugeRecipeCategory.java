@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,6 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.gui.ingredients.GuiItemStackGroup;
 
 public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 
@@ -41,8 +41,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket.png");
 	@Nonnull
 	private final IDrawableAnimated arrow;
-	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-	
+
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 25, 18, 126, 54), "tile.for.centrifuge.name");
 		
@@ -68,17 +67,17 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 		guiItemStacks.init(inputSlot, true, 4, 18);
 		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
 		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
-		tooltip.clearTooltip();
-		setResults(centrifugeWrapper.getRecipe().getAllProducts(), (GuiItemStackGroup) guiItemStacks);
+		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
+		setResults(tooltip, centrifugeWrapper.getRecipe().getAllProducts(), guiItemStacks);
 		guiItemStacks.addTooltipCallback(tooltip);
 	}
 	
-	private void setResults(Map<ItemStack, Float> outputs, GuiItemStackGroup guiItemStacks) {
+	private static void setResults(ForestryTooltipCallback tooltip, Map<ItemStack, Float> outputs, IGuiItemStackGroup guiItemStacks) {
 		Set<Entry<ItemStack, Float>> entrySet = outputs.entrySet();
 		if (entrySet.isEmpty()) {
 			return;
 		}
-		PriorityQueue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<>(entrySet.size(), highestChanceComparator);
+		Queue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<>(entrySet.size(), highestChanceComparator);
 		sortByChance.addAll(entrySet);
 
 		int i = 0;
@@ -89,10 +88,10 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 			}
 			int x = 72 + OUTPUTS[i][0] * 18;
 			int y = OUTPUTS[i][1] * 18;
-			int ID = outputSlot + i;
-			guiItemStacks.init(ID, false, x, y);
-			guiItemStacks.set(ID, stack.getKey());
-			tooltip.addChanceTooltip(ID + 1, stack.getValue());
+			int slotIndex = outputSlot + i;
+			guiItemStacks.init(slotIndex, false, x, y);
+			guiItemStacks.set(slotIndex, stack.getKey());
+			tooltip.addChanceTooltip(slotIndex, stack.getValue());
 			i++;
 		}
 	}

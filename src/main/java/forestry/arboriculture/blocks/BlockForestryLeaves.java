@@ -214,17 +214,16 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		String speciesUid = TreeDefinition.Oak.getUID();
+
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (leaves == null) {
-			return null;
+		if (leaves != null) {
+			ITree tree = leaves.getTree();
+			if (tree != null) {
+				speciesUid = tree.getGenome().getPrimary().getUID();
+			}
 		}
-
-		ITree tree = leaves.getTree();
-		if (tree == null) {
-			return null;
-		}
-
-		String speciesUid = tree.getGenome().getPrimary().getUID();
+		
 		return Collections.singletonList(PluginArboriculture.blocks.getDecorativeLeaves(speciesUid));
 	}
 	

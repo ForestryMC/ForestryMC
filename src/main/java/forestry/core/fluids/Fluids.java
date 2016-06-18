@@ -120,19 +120,8 @@ public enum Fluids {
 		public Block makeBlock() {
 			return new BlockForestryFluid(this);
 		}
-	},
-	// Vanilla
-	WATER(new Color(0x2432ec)),
-	LAVA(new Color(0xfd461f)),
-	// BuildCraft
-	FUEL(new Color(0xffff00)),
-	OIL(new Color(0x404040)),
-	// Railcraft
-	CREOSOTE(new Color(0x635c03)),
-	STEAM(new Color(0x91938F));
-
-	public static final Fluids[] FORESTRY_FLUIDs = {BIO_ETHANOL, BIOMASS, GLASS, FOR_HONEY, ICE, JUICE, MILK, SEED_OIL, SHORT_MEAD};
-
+	};
+	
 	private static final Map<String, Fluids> tagToFluid = new HashMap<>();
 
 	static {
@@ -144,17 +133,17 @@ public enum Fluids {
 	private final String tag;
 	private final int density, viscosity;
 	@Nonnull
-	private final Color color;
+	private final Color particleColor;
 
 	private final ResourceLocation[] resources = new ResourceLocation[2];
-
-	Fluids(@Nonnull Color color) {
-		this(color, 1000, 1000);
+	
+	Fluids(@Nonnull Color particleColor) {
+		this(particleColor, 1000, 1000);
 	}
-
-	Fluids(@Nonnull Color color, int density, int viscosity) {
+	
+	Fluids(@Nonnull Color particleColor, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
-		this.color = color;
+		this.particleColor = particleColor;
 		this.density = density;
 		this.viscosity = viscosity;
 
@@ -197,8 +186,8 @@ public enum Fluids {
 	}
 
 	@Nonnull
-	public final Color getColor() {
-		return color;
+	public final Color getParticleColor() {
+		return particleColor;
 	}
 
 	public final boolean is(Fluid fluid) {
@@ -229,21 +218,6 @@ public enum Fluids {
 			return false;
 		}
 		return a.isFluidEqual(b);
-	}
-
-	@Nonnull
-	public static Color getFluidColor(FluidStack fluidStack) {
-		if (fluidStack != null) {
-			Fluid fluid = fluidStack.getFluid();
-			if (fluid != null) {
-				Fluids fluidDefinition = tagToFluid.get(fluid.getName());
-				if (fluidDefinition != null) {
-					return fluidDefinition.getColor();
-				}
-			}
-		}
-
-		return Fluids.WATER.getColor();
 	}
 
 	@Nullable

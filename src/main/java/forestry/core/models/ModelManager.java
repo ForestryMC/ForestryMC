@@ -143,12 +143,7 @@ public class ModelManager implements IModelManager {
 	public void registerItemModel(Item item, ItemMeshDefinition definition) {
 		ModelLoader.setCustomMeshDefinition(item, definition);
 	}
-
-	@Override
-	public void registerVariant(Item item, ResourceLocation... resources) {
-		ModelBakery.registerItemVariants(item, resources);
-	}
-
+	
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
 		String itemName = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();

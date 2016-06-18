@@ -15,6 +15,7 @@ import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -181,7 +182,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 					if (allele instanceof IAlleleButterflyCocoon) {
 						for(int age = 0;age < 3;age++){
-							manager.registerVariant(this, ((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+							ModelBakery.registerItemVariants(this, ((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
 						}
 					}
 				}

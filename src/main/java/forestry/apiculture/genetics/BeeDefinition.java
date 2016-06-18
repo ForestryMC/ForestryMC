@@ -29,7 +29,7 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeMutationCustom;
+import forestry.api.apiculture.IBeeMutationBuilder;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
@@ -1035,7 +1035,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		BeeManager.beeRoot.registerTemplate(template);
 	}
 
-	protected final IBeeMutationCustom registerMutation(BeeDefinition parent1, BeeDefinition parent2, int chance) {
+	protected final IBeeMutationBuilder registerMutation(BeeDefinition parent1, BeeDefinition parent2, int chance) {
 		return BeeManager.beeMutationFactory.createMutation(parent1.species, parent2.species, getTemplate(), chance);
 	}
 

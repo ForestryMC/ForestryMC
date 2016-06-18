@@ -11,6 +11,7 @@
 package forestry;
 
 import java.io.File;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -57,7 +58,7 @@ import forestry.plugins.PluginManager;
 				+ "after:IC2@[2.3.235,);"
 				+ "after:Natura@[2.2.0,);"
 				+ "after:HardcoreEnderExpansion;"
-				+ "after:JEI@[3.6.0,);"
+				+ "after:JEI@[3.6.4,);"
 				+ "after:basemetals;")
 public class Forestry {
 
@@ -91,7 +92,7 @@ public class Forestry {
 		PluginManager.runSetup(event);
 
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
-		
+
 		PluginManager.runPreInit();
 		
 		Proxies.render.registerModels();

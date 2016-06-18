@@ -30,6 +30,4 @@ public interface IModelManager {
 	
 	void registerItemModel(Item item, ItemMeshDefinition definition);
 	
-	void registerVariant(Item item, ResourceLocation... resources);
-	
 }

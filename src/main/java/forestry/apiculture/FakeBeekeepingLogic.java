@@ -38,6 +38,11 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
+	public void clearCachedValues() {
+
+	}
+
+	@Override
 	public void syncToClient() {
 
 	}

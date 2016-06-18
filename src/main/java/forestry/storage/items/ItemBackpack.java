@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -97,11 +98,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		// We only do this when shift is clicked
-		if (!player.isSneaking()) {
-			return EnumActionResult.FAIL;
+		if (player.isSneaking()) {
+			return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
 		}
-
-		return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
+		return super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand);
 	}
 
 	public static void tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -138,7 +138,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	private static IItemHandler getInventoryHit(World world, BlockPos pos, EnumFacing side) {
 		TileEntity targeted = world.getTileEntity(pos);
-		return TileUtil.getInventoryFromTile(targeted, side);
+		return TileUtil.getInventoryFromTile(targeted, null);
 	}
 
 	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
@@ -217,10 +217,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
 		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
 		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
-		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
 		manager.registerItemModel(item, new BackpackMeshDefinition());
 	}
 

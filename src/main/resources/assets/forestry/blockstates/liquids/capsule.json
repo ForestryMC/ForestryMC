@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "inventory": {
+            "model": "forge:forgebucket",
+            "textures": {
+                "base": "forestry:items/liquids/capsule.bottle",
+                "fluid": "forestry:items/liquids/capsule.contents"
+            },
+            "transform": "forge:default-item"
+        }
+    }
+}

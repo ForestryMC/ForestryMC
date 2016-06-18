@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -21,10 +23,11 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 	private final int processingTime;
 	private final ItemStack[] resources;
 	private final FluidStack fluidOutput;
+	@Nullable
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerRecipe(int processingTime, ItemStack[] resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
+	public SqueezerRecipe(int processingTime, ItemStack[] resources, FluidStack fluidOutput, @Nullable ItemStack remnants, float remnantsChance) {
 		this.processingTime = processingTime;
 		this.resources = resources;
 		this.fluidOutput = fluidOutput;
@@ -38,6 +41,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 	}
 
 	@Override
+	@Nullable
 	public ItemStack getRemnants() {
 		return remnants;
 	}

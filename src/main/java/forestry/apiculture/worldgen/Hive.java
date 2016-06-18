@@ -13,6 +13,7 @@ package forestry.apiculture.worldgen;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -52,8 +53,8 @@ public final class Hive {
 		return hiveDescription.getGenChance();
 	}
 
-	public void postGen(World world, BlockPos pos) {
-		hiveDescription.postGen(world, pos);
+	public void postGen(World world, Random rand, BlockPos pos) {
+		hiveDescription.postGen(world, rand, pos);
 	}
 
 	public boolean isGoodBiome(Biome biome) {

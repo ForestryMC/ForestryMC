@@ -110,6 +110,8 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 		}
 
 		type = EnumAddressee.fromString(data.readUTF());
+		tradeInfo = null;
+		address = null;
 
 		if (type == EnumAddressee.PLAYER) {
 			if (data.readShort() < 0) {

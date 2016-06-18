@@ -154,27 +154,21 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	/* ISIDEDINVENTORY */
-	private int[][] slotMap;
+	private int[] slotMap;
 	
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		if (allowAutomation) {
-			return slotMap[side.ordinal()];
+			return slotMap;
 		}
 		return Constants.SLOTS_NONE;
 	}
 
 	private void configureSided() {
-		slotMap = new int[6][0];
-
 		int count = getSizeInventory();
-		int[] slots = new int[count];
+		slotMap = new int[count];
 		for (int i = 0; i < count; i++) {
-			slots[i] = i;
-		}
-
-		for (EnumFacing side : EnumFacing.VALUES) {
-			slotMap[side.getIndex()] = slots;
+			slotMap[i] = i;
 		}
 	}
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -100,13 +101,13 @@ public class LetterProperties {
 		models = new ModelResourceLocation[3][4];
 		for (int i = 0; i < 3; i++) {
 			models[i][0] = new ModelResourceLocation("forestry:mail/letter." + i + ".fresh", "inventory");
-			manager.registerVariant(item, new ResourceLocation("forestry:mail/letter." + i + ".fresh"));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:mail/letter." + i + ".fresh"));
 			models[i][1] = new ModelResourceLocation("forestry:mail/letter." + i + ".stamped", "inventory");
-			manager.registerVariant(item, new ResourceLocation("forestry:mail/letter." + i + ".stamped"));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:mail/letter." + i + ".stamped"));
 			models[i][2] = new ModelResourceLocation("forestry:mail/letter." + i + ".opened", "inventory");
-			manager.registerVariant(item, new ResourceLocation("forestry:mail/letter." + i + ".opened"));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:mail/letter." + i + ".opened"));
 			models[i][3] = new ModelResourceLocation("forestry:mail/letter." + i + ".emptied", "inventory");
-			manager.registerVariant(item, new ResourceLocation("forestry:mail/letter." + i + ".emptied"));
+			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:mail/letter." + i + ".emptied"));
 		}
 		manager.registerItemModel(item, new LetterMeshDefinition());
 	}

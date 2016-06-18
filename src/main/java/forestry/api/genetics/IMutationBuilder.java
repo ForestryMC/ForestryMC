@@ -6,6 +6,7 @@
 package forestry.api.genetics;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -13,40 +14,42 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
 /** Set custom mutation requirements */
-public interface IMutationCustom extends IMutation {
+public interface IMutationBuilder {
 
+	IMutation build();
+	
 	/** Prevent this mutation from being shown in the analyzers */
-	IMutationCustom setIsSecret();
+	IMutationBuilder setIsSecret();
 
 	/** Require a specific temperature for this mutation to occur */
-	IMutationCustom restrictTemperature(EnumTemperature temperature);
+	IMutationBuilder restrictTemperature(EnumTemperature temperature);
 
-	IMutationCustom restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature);
+	IMutationBuilder restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature);
 
 	/** Require a specific humidity for this mutation to occur */
-	IMutationCustom restrictHumidity(EnumHumidity humidity);
+	IMutationBuilder restrictHumidity(EnumHumidity humidity);
 
-	IMutationCustom restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity);
+	IMutationBuilder restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity);
 
 	/**
 	 * Restrict this mutation to certain types of biomes.
 	 * @param types The types of biomes this mutation can occur.
 	 */
-	IMutationCustom restrictBiomeType(BiomeDictionary.Type... types);
+	IMutationBuilder restrictBiomeType(BiomeDictionary.Type... types);
 
 	/** Restrict the days of the year that this mutation can occur */
-	IMutationCustom restrictDateRange(int startMonth, int startDay, int endMonth, int endDay);
+	IMutationBuilder restrictDateRange(int startMonth, int startDay, int endMonth, int endDay);
 
 	/** Restrict the time of day that this mutation can occur */
-	IMutationCustom requireDay();
+	IMutationBuilder requireDay();
 
-	IMutationCustom requireNight();
+	IMutationBuilder requireNight();
 
 	/** Require a specific resource to be under the location of the mutation */
-	IMutationCustom requireResource(Block block, int meta);
+	IMutationBuilder requireResource(IBlockState requiredBlockState);
 
-	IMutationCustom requireResource(String oreDictName);
+	IMutationBuilder requireResource(String oreDictName);
 
 	/** Require some other custom mutation condition */
-	IMutationCustom addMutationCondition(IMutationCondition mutationCondition);
+	IMutationBuilder addMutationCondition(IMutationCondition mutationCondition);
 }
