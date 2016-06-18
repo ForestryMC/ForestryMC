@@ -12,14 +12,18 @@ package forestry.greenhouse.tiles;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -112,7 +116,6 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 			} else if (asm.currentState().equals("default") && isActive()) {
 				float time = Animation.getWorldTime(getWorld(), Animation.getPartialTickTime());
 				clickTime.setValue(time);
-
 				asm.transition("starting");
 			}
 		}
@@ -166,7 +169,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 
 		@Override
 		public float getChange() {
-			return 0.5F;
+			return 0.0005F;
 		}
 
 		@Override

@@ -19,23 +19,25 @@ public class ClimateEventHandler {
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
-		int dim = event.world.provider.getDimension();
+		Integer dim = Integer.valueOf(event.world.provider.getDimension());
 		if (event.phase == TickEvent.Phase.END) {
-			if(!serverTicks.containsKey(Integer.valueOf(dim))){
-				serverTicks.put(Integer.valueOf(dim), 1);
+			if(!serverTicks.containsKey(dim)){
+				serverTicks.put(dim, 1);
 			}
-			int ticks = serverTicks.get(Integer.valueOf(dim));
+			int ticks = serverTicks.get(dim);
 			if(ticks % 20 == 0){
-				for(IClimateRegion region : ForestryAPI.climateManager.getRegions().get(Integer.valueOf(dim))){
-					region.updateClimate();
+				if(ForestryAPI.climateManager.getRegions() != null && ForestryAPI.climateManager.getRegions().get(dim) != null){
+					for(IClimateRegion region : ForestryAPI.climateManager.getRegions().get(dim)){
+						region.updateClimate();
+					}
 				}
 			}
-			if(ForestryAPI.climateManager.getSources().get(Integer.valueOf(dim)) != null){
-				for(IClimateSource source : ForestryAPI.climateManager.getSources().get(Integer.valueOf(dim)).values()){
+			if(ForestryAPI.climateManager.getSources() != null && ForestryAPI.climateManager.getSources().get(dim) != null){
+				for(IClimateSource source : ForestryAPI.climateManager.getSources().get(dim).values()){
 					source.changeClimate(ticks, ForestryAPI.climateManager.getRegionForPos(event.world, source.getPos()));
 				}
 			}
-			serverTicks.put(Integer.valueOf(dim), ticks+1);
+			serverTicks.put(dim, ticks+1);
 		}
 	}
 	

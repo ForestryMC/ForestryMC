@@ -13,6 +13,7 @@ package forestry.core.climate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class ClimateManager implements IClimateManager{
 	
 	public ClimateManager() {
 		regions = new HashMap<>();
+		sources = new HashMap<>();
 	}
 	
 	@Override
@@ -121,6 +123,8 @@ public class ClimateManager implements IClimateManager{
 	public IClimateRegion getRegionForPos(World world, BlockPos pos){
 		for(IClimateRegion region : getOrCreateRegions(world)){
 			if(region.getPositions().keySet().contains(pos)){
+				return region;
+			}else if(region.getOtherPositions().contains(pos)){
 				return region;
 			}
 		}

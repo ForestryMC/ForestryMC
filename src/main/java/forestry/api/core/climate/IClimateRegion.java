@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.core.climate;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -26,5 +27,7 @@ public interface IClimateRegion extends INbtReadable, INbtWritable {
 	
 	@Nonnull
 	Map<BlockPos, IClimatePosition> getPositions();
+	
+	List<BlockPos> getOtherPositions();
 	
 }

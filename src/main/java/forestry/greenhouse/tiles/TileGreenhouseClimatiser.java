@@ -122,13 +122,13 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 							}
 						}
 						
-						double distance = pos.distanceSq(pos);
+						double distance = pos.distanceSq(this.pos);
 						int maxDistance = definition.getClimitiseRange();
 						if(distance <= maxDistance){
 							if (definition.getType() == ClimitiserType.TEMPERATURE) {
-								position.setTemperature(position.getTemperature() + (float) (definition.getChange() / distance));
+								position.addTemperature((float) (definition.getChange() / distance));
 							}else{
-								position.setHumidity(position.getHumidity() + (float) (definition.getChange() / distance));
+								position.addHumidity((float) (definition.getChange() / distance));
 							}
 						}
 					}

@@ -181,7 +181,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 		
 		if(region != null){
-			data.setTag("Region", region.writeToNBT(data));
+			data.setTag("Region", region.writeToNBT(new NBTTagCompound()));
 		}
 
 		return data;
@@ -251,6 +251,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.writeCamouflageBlockToData(data, this, EnumCamouflageType.DEFAULT);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, EnumCamouflageType.GLASS);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, EnumCamouflageType.DOOR);
+		if(region != null){
+			data.writeBoolean(true);
+			region.writeData(data);
+		}else{
+			data.writeBoolean(false);
+		}
 	}
 
 	@Override
@@ -261,6 +267,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
+		if(data.readBoolean()){
+			region.readData(data);
+		}
 	}
 	
 	/* CAMOUFLAGE */
@@ -406,22 +415,34 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		createLogics();
 		if(region != null){
 			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
+			List<BlockPos> wallPositions = new ArrayList<>();
+			for(IMultiblockComponent comp : connectedParts){
+				if(comp != null){
+					wallPositions.add(comp.getCoordinates());
+				}
+			}
 			for(IInternalBlock block : internalBlocks){
 				if(block != null){
 					internalPositions.put(block.getPos(), new ClimatePosition(region, block.getPos()));
 				}
 			}
 			ForestryAPI.climateManager.removeRegion(region);
-			region = new ClimateRoom(region, internalPositions);
+			region = new ClimateRoom(region, internalPositions, wallPositions);
 			ForestryAPI.climateManager.addRegion(region);
 		}else{
 			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
+			List<BlockPos> wallPositions = new ArrayList<>();
+			for(IMultiblockComponent comp : connectedParts){
+				if(comp != null){
+					wallPositions.add(comp.getCoordinates());
+				}
+			}
+			region = new ClimateRoom(this, internalPositions, wallPositions);
 			for(IInternalBlock block : internalBlocks){
 				if(block != null){
 					internalPositions.put(block.getPos(), new ClimatePosition(region, block.getPos()));
 				}
 			}
-			region = new ClimateRoom(this, internalPositions);
 			ForestryAPI.climateManager.addRegion(region);
 		}
 	}
@@ -462,7 +483,13 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			IGreenhouseControllerInternal internal = (IGreenhouseControllerInternal) assimilated;
 			if(region != null){
 				ForestryAPI.climateManager.removeRegion(region);
-				region = new ClimateRoom(region,internal.getRegion().getPositions());
+				List<BlockPos> wallPositions = new ArrayList<>();
+				for(IMultiblockComponent comp : connectedParts){
+					if(comp != null){
+						wallPositions.add(comp.getCoordinates());
+					}
+				}
+				region = new ClimateRoom(region,internal.getRegion().getPositions(), wallPositions);
 				ForestryAPI.climateManager.addRegion(region);
 			}
 		}

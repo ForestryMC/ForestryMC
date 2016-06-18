@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 	
 	private static final DryerDefinition definition = new DryerDefinition();
@@ -22,7 +27,7 @@ public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 
 		@Override
 		public float getChange() {
-			return 0.15F;
+			return 0.015F;
 		}
 
 		@Override

@@ -23,7 +23,7 @@ public class TileGreenhouseFan extends TileGreenhouseClimatiser {
 
 		@Override
 		public float getChange() {
-			return 0.15F;
+			return 0.015F;
 		}
 
 		@Override

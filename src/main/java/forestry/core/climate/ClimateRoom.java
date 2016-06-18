@@ -1,12 +1,17 @@
 package forestry.core.climate;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseController;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -14,18 +19,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class ClimateRoom implements IClimateRegion {
+public class ClimateRoom implements IClimateRegion, IStreamable {
 	
 	protected World world;
 	protected IGreenhouseController controller;
 	protected Map<BlockPos, IClimatePosition> positions;
+	protected List<BlockPos> wallPositions;
 	
-	public ClimateRoom(ClimateRoom room, Map<BlockPos, IClimatePosition> innerPositions) {
-		this.world = room.getWorld();
-		this.controller = room.controller;
+	public ClimateRoom(ClimateRoom oldRoom, Map<BlockPos, IClimatePosition> innerPositions, List<BlockPos> wallPositions) {
+		this.world = oldRoom.getWorld();
+		this.controller = oldRoom.controller;
 		Map<BlockPos, IClimatePosition> newPositions = new HashMap<>();
 		for(Entry<BlockPos, IClimatePosition> positionEntry : innerPositions.entrySet()){
-			IClimatePosition position = this.positions.get(positionEntry.getKey());
+			IClimatePosition position = oldRoom.getPositions().get(positionEntry.getKey());
 			if(position == null){
 				newPositions.put(positionEntry.getKey(), positionEntry.getValue());
 			}else{
@@ -33,12 +39,14 @@ public class ClimateRoom implements IClimateRegion {
 			}
 		}
 		this.positions = newPositions;
+		this.wallPositions = wallPositions;
 	}
 	
-	public ClimateRoom(IGreenhouseController controller, Map<BlockPos, IClimatePosition> innerPositions) {
+	public ClimateRoom(IGreenhouseController controller, Map<BlockPos, IClimatePosition> innerPositions, List<BlockPos> wallPositions) {
 		this.world = controller.getWorldObj();
 		this.controller = controller;
 		this.positions = innerPositions;
+		this.wallPositions = wallPositions;
 	}
 	
 	public ClimateRoom(IGreenhouseController controller, NBTTagCompound nbtTag) {
@@ -87,6 +95,28 @@ public class ClimateRoom implements IClimateRegion {
 			BlockPos facePos = pos.offset(facing);
 			IClimatePosition climatedInfoFace = positions.get(facePos);
 			if(climatedInfoFace != null){
+				if(climatedInfoFace.getTemperature() >= 2.0F){
+					if(climatedInfoFace.getTemperature() > 2.0F){
+						climatedInfoFace.setTemperature(2.0F);
+					}
+					continue;
+				}else if(climatedInfoFace.getTemperature() <= 0.0F){
+					if(climatedInfoFace.getTemperature() < 0.0F){
+						climatedInfoFace.setTemperature(0.0F);
+					}
+					continue;
+				}
+				if(climatedInfoFace.getHumidity() >= 2.0F){
+					if(climatedInfoFace.getHumidity() > 2.0F){
+						climatedInfoFace.setHumidity(2.0F);
+					}
+					continue;
+				}else if(climatedInfoFace.getHumidity() <= 0.0F){
+					if(climatedInfoFace.getHumidity() < 0.0F){
+						climatedInfoFace.setHumidity(0.0F);
+					}
+					continue;
+				}
 				if(climatedInfo.getTemperature() > climatedInfoFace.getTemperature() + 0.01F){
 					climatedInfo.addTemperature(-0.01F);
 					climatedInfoFace.addTemperature(0.01F);
@@ -137,6 +167,23 @@ public class ClimateRoom implements IClimateRegion {
 	@Override
 	public Map<BlockPos, IClimatePosition> getPositions() {
 		return positions;
+	}
+	
+	@Override
+	public List<BlockPos> getOtherPositions() {
+		return wallPositions;
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		NBTTagCompound nbtTag = new NBTTagCompound();
+		data.writeNBTTagCompound(writeToNBT(nbtTag));
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		NBTTagCompound nbtTag = data.readNBTTagCompound();
+		readFromNBT(nbtTag);
 	}
 
 }

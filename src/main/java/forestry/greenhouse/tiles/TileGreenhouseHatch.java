@@ -60,7 +60,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IFluidHandler, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
@@ -366,60 +366,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			return 0;
 		}
 		return provider.extractEnergy(from, maxExtract, simulate);
-	}
-
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return 0;
-		}
-		return handler.fill(from, resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return false;
-		}
-		return handler.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return false;
-		}
-		return handler.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.getTankInfo(from);
 	}
 	
 	
