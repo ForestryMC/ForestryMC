@@ -559,102 +559,15 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed", minX, minY, minZ));
 		}
-
-		// Now we run a simple check on each block within that volume.
-		// Any block deviating = NO DEAL SIR
-		TileEntity te;
-		IMultiblockComponent part;
-		boolean isNextRoof = false;
-		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
-		
-		height:
-		for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
-			for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
-				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
-					// Okay, figure out what sort of block this should be.
-					BlockPos pos = new BlockPos(x, y, z);
-					te = this.worldObj.getTileEntity(pos);
-					if (te instanceof IMultiblockComponent) {
-						part = (IMultiblockComponent) te;
-					} else {
-						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors
-						part = null;
-					}
-					
-					// Validate block type against both part-level and material-level validators.
-					int extremes = 0;
-					int sides = 0;
-
-					if (x == minimumCoord.getX()) {
-						extremes++;
-						sides++;
-					}
-					if (y == minimumCoord.getY()) {
-						extremes++;
-					}
-					if (z == minimumCoord.getZ()) {
-						extremes++;
-						sides++;
-					}
-					
-					if (x == maximumCoord.getX()) {
-						extremes++;
-						sides++;
-					}
-					if (z == maximumCoord.getZ()) {
-						extremes++;
-						sides++;
-					}
-					
-					
-					if (extremes >= 1) {
-						// Side
-						BlockPos posUp = pos.up();
-						TileEntity tileUp = worldObj.getTileEntity(posUp);
-						if (sides >= 1 && !(tileUp instanceof IGreenhouseComponent)) {
-							int delta = y - minimumCoord.getY();
-							if (delta + 1 >= minY) {
-								isNextRoof = true;
-							}
-							break height;
-						}
-						
-						int exteriorLevel = y - minimumCoord.getY();
-						if (part != null) {
-							// Ensure this part should actually be allowed within a cube of this controller's type
-							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
-							}
-							isGoodForExteriorLevel(part, exteriorLevel);
-						} else {
-							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, pos);
-						}
-					} else {
-						if (part != null) {
-							IBlockState state = worldObj.getBlockState(part.getCoordinates());
-							if (state.getBlock() instanceof BlockGreenhouse && ((BlockGreenhouse) state.getBlock()).getGreenhouseType() == BlockGreenhouseType.SPRINKLER || !myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-								isGoodForInterior(part);
-							} else {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
-							}
-						} else {
-							isBlockGoodForInterior(this.worldObj, pos);
-						}
-					}
-				}
-			}
-		}
 		internalBlocks.clear();
 		
-		if (isNextRoof) {
-			Stack<IInternalBlock> blocksToCheck = new Stack<>();
-			IInternalBlock internalBlock = createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)));
-			blocksToCheck.add(internalBlock);
-			while (!blocksToCheck.isEmpty()) {
-				IInternalBlock blockToCheck = blocksToCheck.pop();
-				List<IInternalBlock> newBlocksToCheck = checkInternalBlock(blockToCheck);
-				blocksToCheck.addAll(newBlocksToCheck);
-			}
+		Stack<IInternalBlock> blocksToCheck = new Stack<>();
+		IInternalBlock internalBlock = createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)));
+		blocksToCheck.add(internalBlock);
+		while (!blocksToCheck.isEmpty()) {
+			IInternalBlock blockToCheck = blocksToCheck.pop();
+			List<IInternalBlock> newBlocksToCheck = checkInternalBlock(blockToCheck);
+			blocksToCheck.addAll(newBlocksToCheck);
 		}
 
 		if (internalBlocks.isEmpty()) {
