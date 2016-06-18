@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.access;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,7 +91,7 @@ public class FakeAccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public void setOwner(GameProfile owner) {
+	public void setOwner(@Nonnull GameProfile owner) {
 
 	}
 

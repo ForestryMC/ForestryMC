@@ -130,7 +130,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void setOwner(@Nullable GameProfile owner) {
+	public void setOwner(@Nonnull GameProfile owner) {
 		this.owner = owner;
 	}
 

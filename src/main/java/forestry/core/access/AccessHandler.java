@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.access;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,7 @@ public final class AccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public void setOwner(GameProfile owner) {
+	public void setOwner(@Nonnull GameProfile owner) {
 		this.owner = owner;
 		for (IAccessOwnerListener listener : accessOwnerListeners) {
 			listener.onOwnerSet(owner);

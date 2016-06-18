@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
-import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -126,7 +126,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
-		if (recipient == null || recipient.isTrader()) {
+		if (recipient == null || recipient.getType() == EnumAddressee.TRADER) {
 			updateTradeInfo(player.worldObj, recipient);
 		}
 		
@@ -134,12 +134,13 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
 	}
 
+	@Nullable
 	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
 		switch (type) {
 			case PLAYER: {
 				GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(recipientName);
 				if (gameProfile == null) {
-					gameProfile = new GameProfile(new UUID(0, 0), recipientName);
+					return null;
 				}
 				return PostManager.postRegistry.getMailAddress(gameProfile);
 			}

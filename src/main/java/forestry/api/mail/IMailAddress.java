@@ -17,9 +17,5 @@ public interface IMailAddress extends INbtWritable {
 
 	boolean isValid();
 
-	boolean isPlayer();
-
-	boolean isTrader();
-
 	GameProfile getPlayerProfile();
 }
