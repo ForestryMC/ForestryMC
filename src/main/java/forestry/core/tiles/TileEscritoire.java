@@ -25,16 +25,20 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.gui.GuiEscritoire;
+import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.packets.PacketItemStackDisplay;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
 
-public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui {
+public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
 	private final EscritoireGame game = new EscritoireGame();
+	private ItemStack individualOnDisplayClient;
 
 	public TileEscritoire() {
 		super("escritoire");
@@ -116,15 +120,39 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		game.readData(data);
 	}
-
+	
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		ItemStack displayStack = getIndividualOnDisplay();
+		data.writeItemStack(displayStack);
+	}
+	
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		individualOnDisplayClient = data.readItemStack();
+	}
+	
 	/* ISlotPickupWatcher */
 	@Override
 	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
+			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+			Proxies.net.sendNetworkPacket(packet, worldObj);
 		}
 	}
-
+	
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+		super.setInventorySlotContents(slotIndex, itemstack);
+		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
+			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+			Proxies.net.sendNetworkPacket(packet, worldObj);
+		}
+	}
+	
 	@Override
 	public Object getGui(EntityPlayer player, int data) {
 		return new GuiEscritoire(player, this);
@@ -133,5 +161,20 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerEscritoire(player, this);
+	}
+	
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
+			individualOnDisplayClient = itemStack;
+			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		}
+	}
+	
+	public ItemStack getIndividualOnDisplay() {
+		if (worldObj.isRemote) {
+			return individualOnDisplayClient;
+		}
+		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 	}
 }

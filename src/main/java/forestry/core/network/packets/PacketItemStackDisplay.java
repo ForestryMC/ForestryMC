@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,8 +31,8 @@ public class PacketItemStackDisplay extends PacketCoordinates implements IForest
 
 	public PacketItemStackDisplay() {
 	}
-
-	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
+	
+	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, @Nullable ItemStack itemStack) {
 		super(tile);
 		this.itemStack = itemStack;
 	}
