@@ -92,7 +92,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 
 			GlStateManager.pushMatrix();
 			{
-				GlStateManager.translate((float) x + 0.6f, (float) y + 0.6f, (float) z + 0.5f);
+				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
 				GlStateManager.scale(renderScale, renderScale, renderScale);
 				dummyEntityItem.setEntityItemStack(itemstack);
 				
