@@ -34,6 +34,7 @@ public class OreDictUtil {
 	public static final String FENCE_GATE_WOOD = "fenceGateWood";
 	public static final String STAIR_WOOD = "stairWood";
 	public static final String DOOR_WOOD = "doorWood";
+	public static final String TRAPDOOR_WOOD = "trapdoorWood";
 	public static final String TREE_LEAVES = "treeLeaves";
 
 	public static final String EMPTIED_LETTER_ORE_DICT = "emptiedLetter";
