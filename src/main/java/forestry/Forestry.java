@@ -49,7 +49,7 @@ import forestry.plugins.PluginManager;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[12.17.0.1949,);"
+		dependencies = "required-after:Forge@[12.17.0.1963,);"
 				+ "after:Buildcraft|Core@[7.2,);"
 				+ "after:BuildCraft|Energy@[7.2,);"
 				+ "after:ExtrabiomesXL;"
