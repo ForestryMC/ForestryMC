@@ -31,11 +31,10 @@ public class WorldGenEbony extends WorldGenTree {
 	@Nonnull
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
-		int offset = (girth - 1) / 2;
 		int trunksGenerated = 0;
 
-		for (int x = -offset; x < -offset + girth; x++) {
-			for (int z = -offset; z < -offset + girth; z++) {
+		for (int x = 0; x < girth; x++) {
+			for (int z = 0; z < girth; z++) {
 				if (rand.nextFloat() < 0.6f) {
 					for (int y = 0; y < height; y++) {
 						WorldGenHelper.addBlock(world, startPos.add(x, y, z), wood, WorldGenHelper.EnumReplaceMode.ALL);
@@ -68,8 +67,8 @@ public class WorldGenEbony extends WorldGenTree {
 				h = height / 2 + rand.nextInt(height / 2);
 			}
 
-			int x_off = -girth + rand.nextInt(2 * girth);
-			int y_off = -girth + rand.nextInt(2 * girth);
+			int x_off = rand.nextInt(girth);
+			int y_off = rand.nextInt(girth);
 
 			BlockPos center = startPos.add(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(girth);
