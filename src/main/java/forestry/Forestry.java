@@ -49,7 +49,7 @@ import forestry.plugins.PluginManager;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[12.17.0.1963,);"
+		dependencies = "required-after:Forge@[12.18.0.1981,);"
 				+ "after:Buildcraft|Core@[7.2,);"
 				+ "after:BuildCraft|Energy@[7.2,);"
 				+ "after:ExtrabiomesXL;"
@@ -57,7 +57,7 @@ import forestry.plugins.PluginManager;
 				+ "after:IC2@[2.3.235,);"
 				+ "after:Natura@[2.2.0,);"
 				+ "after:HardcoreEnderExpansion;"
-				+ "after:JEI@[3.6.4,);"
+				+ "after:JEI@[3.7.0,);"
 				+ "after:basemetals;")
 public class Forestry {
 

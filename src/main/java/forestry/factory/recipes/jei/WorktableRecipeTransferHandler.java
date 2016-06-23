@@ -6,19 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.recipes.MemorizedRecipe;
-
+import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import mezz.jei.gui.ingredients.IGuiIngredient;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler {
 	@Override
