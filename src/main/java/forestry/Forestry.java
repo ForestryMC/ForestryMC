@@ -49,16 +49,9 @@ import forestry.plugins.PluginManager;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[12.18.0.1981,);"
-				+ "after:Buildcraft|Core@[7.2,);"
-				+ "after:BuildCraft|Energy@[7.2,);"
-				+ "after:ExtrabiomesXL;"
-				+ "after:BiomesOPlenty;"
-				+ "after:IC2@[2.3.235,);"
-				+ "after:Natura@[2.2.0,);"
-				+ "after:HardcoreEnderExpansion;"
-				+ "after:JEI@[3.7.0,);"
-				+ "after:basemetals;")
+		acceptedMinecraftVersions = "[1.10]",
+		dependencies = "required-after:Forge@[12.18.0.1984,);"
+				+ "after:JEI@[3.7.0,);")
 public class Forestry {
 
 	@Mod.Instance(Constants.MOD_ID)
