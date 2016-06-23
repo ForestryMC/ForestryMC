@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -44,12 +45,14 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		Block block;
 		int meta;
+		TileEntity tile;
 		int i = 1;
 		do {
 			block = world.getBlock(x, y - i, z);
 			meta = world.getBlockMetadata(x, y - i, z);
+			tile = world.getTileEntity(x, y-i, z);
 			i++;
-		} while (block instanceof IBeeHousing);
+		} while (tile instanceof IBeeHousing);
 
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block, 1, meta));
 		for (int oreId : oreIds) {
