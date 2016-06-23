@@ -203,7 +203,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public int getGirth(World world, BlockPos pos) {
+	public int getGirth() {
 		return genome.getGirth();
 	}
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import forestry.arboriculture.blocks.BlockSapling;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -61,6 +62,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 
 		if (genPos != null) {
+			clearSaplings(world, genPos);
 			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
 			Collections.sort(branchEnds, TopDownBlockPosComparator.INSTANCE);
 			generateLeaves(world, rand, leaf, branchEnds, genPos);
@@ -95,6 +97,18 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	@Nullable
 	public abstract BlockPos getValidGrowthPos(World world, BlockPos pos);
+
+	public void clearSaplings(World world, BlockPos genPos) {
+		int treeGirth = tree.getGirth();
+		for (int x = 0; x < treeGirth; x++) {
+			for (int z = 0; z < treeGirth; z++) {
+				BlockPos saplingPos = genPos.add(x, 0, z);
+				if (world.getBlockState(saplingPos).getBlock() instanceof BlockSapling) {
+					world.setBlockToAir(saplingPos);
+				}
+			}
+		}
+	}
 
 	public boolean hasPods() {
 		return tree.allowsFruitBlocks();

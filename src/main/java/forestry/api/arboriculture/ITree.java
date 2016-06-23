@@ -84,7 +84,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	 * @return Integer denoting the size of the tree trunk.
 	 */
 	@Override
-	int getGirth(World world, BlockPos pos);
+	int getGirth();
 
 	/**
 	 * @return Growth conditions at the given position.

@@ -18,7 +18,7 @@ import forestry.api.arboriculture.ITreeGenome;
 
 public interface ITreeGenData {
 
-	int getGirth(World world, BlockPos pos);
+	int getGirth();
 
 	float getHeightModifier();
 
