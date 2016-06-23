@@ -10,38 +10,63 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
-	private final IBlockState requiredBlockState;
+	private final Set<IBlockState> acceptedBlockStates = new HashSet<>();
+	private final String displayName;
 
-	public MutationConditionRequiresResource(IBlockState requiredBlockState) {
-		this.requiredBlockState = requiredBlockState;
+	public MutationConditionRequiresResource(String oreDictName) {
+		this.displayName = oreDictName;
+		for (ItemStack ore : OreDictionary.getOres(oreDictName)) {
+			if (ore != null) {
+				Item oreItem = ore.getItem();
+				if (oreItem != null) {
+					Block oreBlock = Block.getBlockFromItem(oreItem);
+					if (oreBlock != null) {
+						this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
+					}
+				}
+			}
+		}
+	}
+
+	public MutationConditionRequiresResource(IBlockState... acceptedBlockStates) {
+		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
+		this.displayName = acceptedBlockStates[0].getBlock().getLocalizedName();
 	}
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		IBlockState blockState;
+		TileEntity tile;
 		do {
 			pos = pos.down();
-			blockState = world.getBlockState(pos);
-		} while (blockState.getBlock() instanceof IBeeHousing);
+			tile = world.getTileEntity(pos);
+		} while (tile instanceof IBeeHousing);
 
-		return this.requiredBlockState == blockState ? 1 : 0;
+		IBlockState blockState = world.getBlockState(pos);
+		return this.acceptedBlockStates.contains(blockState) ? 1 : 0;
 	}
 
 	@Override
 	public String getDescription() {
-		return Translator.translateToLocalFormatted("for.mutation.condition.resource", requiredBlockState.getBlock().getLocalizedName());
+		return Translator.translateToLocalFormatted("for.mutation.condition.resource", displayName);
 	}
 }

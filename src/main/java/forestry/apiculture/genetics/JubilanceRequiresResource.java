@@ -10,33 +10,40 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.core.utils.ItemStackUtil;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
-	private final ItemStack blockRequired;
+	private final Set<IBlockState> acceptedBlockStates = new HashSet<>();
 
-	public JubilanceRequiresResource(Block block, int meta) {
-		this.blockRequired = new ItemStack(block, meta);
+	public JubilanceRequiresResource(IBlockState... acceptedBlockStates) {
+		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
 	}
 
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		BlockPos housingCoords = housing.getCoordinates();
+		BlockPos pos = housing.getCoordinates();
 
-		IBlockState state = world.getBlockState(housingCoords.down());
-		return ItemStackUtil.equals(state, blockRequired);
+		TileEntity tile;
+		do {
+			pos = pos.down();
+			tile = world.getTileEntity(pos);
+		} while (tile instanceof IBeeHousing && pos.getY() > 0);
+
+		IBlockState blockState = world.getBlockState(pos);
+		return this.acceptedBlockStates.contains(blockState);
 	}
 
 }
