@@ -47,12 +47,13 @@ public class WorldGenCherry extends WorldGenTree {
 
 	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		int leafSpawn = height + 1;
+		int leafSpawn = height + 2;
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
-		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, (float) 1 + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1 + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 
 		for (BlockPos branchEnd : branchEnds) {
-			WorldGenHelper.generateCircle(world, rand, branchEnd, 4, 3, 2, leaf, 1.0f, WorldGenHelper.EnumReplaceMode.AIR);
+			WorldGenHelper.generateCircle(world, rand, branchEnd.up(), 3, 3, 1, leaf, 1.0f, WorldGenHelper.EnumReplaceMode.AIR);
+			WorldGenHelper.generateCircle(world, rand, branchEnd, 4, 3, 1, leaf, 1.0f, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 	}
 }
