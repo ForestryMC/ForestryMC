@@ -1,11 +1,13 @@
 package forestry.core.climate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.core.climate.IClimateSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -25,16 +27,23 @@ public class ClimateEventHandler {
 				serverTicks.put(dim, 1);
 			}
 			int ticks = serverTicks.get(dim);
-			if(ticks % 20 == 0){
-				if(ForestryAPI.climateManager.getRegions() != null && ForestryAPI.climateManager.getRegions().get(dim) != null){
-					for(IClimateRegion region : ForestryAPI.climateManager.getRegions().get(dim)){
+			Map<Integer,  List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
+			if(regions != null && regions.containsKey(dim)){
+				for(IClimateRegion region : regions.get(dim)){
+					if(ticks % region.getTicksPerUpdate() == 0){
 						region.updateClimate();
 					}
 				}
 			}
-			if(ForestryAPI.climateManager.getSources() != null && ForestryAPI.climateManager.getSources().get(dim) != null){
-				for(IClimateSource source : ForestryAPI.climateManager.getSources().get(dim).values()){
-					source.changeClimate(ticks, ForestryAPI.climateManager.getRegionForPos(event.world, source.getPos()));
+			Map<Integer, Map<BlockPos, IClimateSource>> sources = ForestryAPI.climateManager.getSources();
+			if(sources != null && sources.containsKey(dim)){
+				for(IClimateSource source : sources.get(dim).values()){
+					IClimateRegion region = ForestryAPI.climateManager.getRegionForPos(event.world, source.getPos());
+					if(region != null){
+						if(ticks % source.getTicksForChange(region) == 0){
+							source.changeClimate(ticks, region);
+						}
+					}
 				}
 			}
 			serverTicks.put(dim, ticks+1);

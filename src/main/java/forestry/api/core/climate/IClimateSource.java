@@ -19,6 +19,11 @@ public interface IClimateSource {
 	 */
 	void changeClimate(int tickCount, IClimateRegion region);
 	
+	/**
+	 * @return The ticks that are required for one change.
+	 */
+	int getTicksForChange(IClimateRegion region);
+	
 	World getWorld();
 	
 	BlockPos getPos();

@@ -28,6 +28,8 @@ public interface IClimateRegion extends INbtReadable, INbtWritable {
 	@Nonnull
 	Map<BlockPos, IClimatePosition> getPositions();
 	
+	int getTicksPerUpdate();
+	
 	List<BlockPos> getOtherPositions();
 	
 }

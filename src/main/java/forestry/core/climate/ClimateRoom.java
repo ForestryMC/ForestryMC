@@ -1,6 +1,7 @@
 package forestry.core.climate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map.Entry;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseController;
+import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -160,6 +162,11 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 	}
 	
 	@Override
+	public int getTicksPerUpdate() {
+		return 20;
+	}
+	
+	@Override
 	public World getWorld() {
 		return world;
 	}
@@ -176,14 +183,36 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		data.writeNBTTagCompound(writeToNBT(nbtTag));
+		if(!positions.isEmpty()){
+			data.writeInt(positions.size());
+			for(IClimatePosition pos : positions.values()){
+				data.writeInt(pos.getPos().getX());
+				data.writeInt(pos.getPos().getY());
+				data.writeInt(pos.getPos().getZ());
+				data.writeFloat(pos.getTemperature());
+				data.writeFloat(pos.getHumidity());
+			}
+		}else{
+			data.writeInt(0);
+		}
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		NBTTagCompound nbtTag = data.readNBTTagCompound();
-		readFromNBT(nbtTag);
+		int size = data.readInt();
+		if(size != 0){
+			positions = new HashMap<>();
+			for(int index = 0;index < size;index++){
+				int xPos = data.readInt();
+				int yPos = data.readInt();
+				int zPos = data.readInt();
+				float temperature = data.readFloat();
+				float humidity = data.readFloat();
+				
+				BlockPos pos = new BlockPos(xPos, yPos, zPos);
+				positions.put(pos, new ClimatePosition(this, pos, temperature, humidity));
+			}
+		}
 	}
 
 }

@@ -101,7 +101,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
-		this.energyManager = new EnergyManager(2000, 100000);
+		this.energyManager = new EnergyManager(200, 100000);
 		this.inventory = new InventoryGreenhouse(this);
 		
 		camouflagePlainBlock = getDefaultCamouflageBlock(EnumCamouflageType.DEFAULT);

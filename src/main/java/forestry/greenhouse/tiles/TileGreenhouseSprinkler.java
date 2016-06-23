@@ -92,8 +92,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 					}
 				}
 				
-				// one tick of work for every 10 RF
-				workingTime +=  WATER_PER_OPERATION * 2;
+				workingTime += WATER_PER_OPERATION * 2;
 			}
 	
 			if (workingTime > 0) {

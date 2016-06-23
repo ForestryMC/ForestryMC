@@ -80,6 +80,11 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	}
 	
 	@Override
+	public int getTicksForChange(IClimateRegion region) {
+		return 20;
+	}
+	
+	@Override
 	public void changeClimate(int tick, IClimateRegion region) {
 		IMultiblockController controller = getMultiblockLogic().getController();
 		if(getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && minPos != null && maxPos != null && region != null){
@@ -134,8 +139,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 					}
 				}
 				
+				// TODO: Add config entry for a time modifier and a energy modifier.
 				// one tick of work for every 10 RF
-				workingTime += ENERGY_PER_OPERATION / 10;
+				workingTime += ENERGY_PER_OPERATION / 2.5F;
 			}
 	
 			if (workingTime > 0) {

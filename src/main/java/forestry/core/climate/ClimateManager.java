@@ -43,11 +43,9 @@ public class ClimateManager implements IClimateManager{
 		}
 		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
 		Set<BlockPos> positions = region.getPositions().keySet();
-		for(IClimateRegion otherRegion : regions){
-			for(BlockPos pos : otherRegion.getPositions().keySet()){
-				if(positions.contains(pos)){
-					return;
-				}
+		for(BlockPos pos : region.getPositions().keySet()){
+			if(getRegionForPos(region.getWorld(), pos) != null){
+				return;
 			}
 		}
 		if(!regions.contains(region)){

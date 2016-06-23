@@ -171,7 +171,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"GG ",
 				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS));
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(),
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(4),
 					" A ", "###", "RPR",
 					'#', "plankWood",
 					'A', "dustAsh",
