@@ -66,7 +66,8 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}"
+	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
+	runtime "mezz.jei:jei_${mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 }
 
