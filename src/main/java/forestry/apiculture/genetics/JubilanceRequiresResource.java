@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
@@ -33,9 +34,17 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
 		ChunkCoordinates housingCoords = housing.getCoordinates();
+		Block block;
+		TileEntity tile;
+		int meta;
+		int i = 1;
+		do {
+			block = world.getBlock(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
+			meta = world.getBlockMetadata(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
+			tile = world.getTileEntity(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
+			i++;
+		} while (tile instanceof IBeeHousing);
 
-		Block block = world.getBlock(housingCoords.posX, housingCoords.posY - 1, housingCoords.posZ);
-		int meta = world.getBlockMetadata(housingCoords.posX, housingCoords.posY - 1, housingCoords.posZ);
 		return ItemStackUtil.equals(block, meta, blockRequired);
 	}
 
