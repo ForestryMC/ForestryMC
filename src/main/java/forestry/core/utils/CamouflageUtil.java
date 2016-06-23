@@ -58,34 +58,30 @@ public class CamouflageUtil {
 		}
 	}
 	
-	public static ICamouflageHandler getCamouflageHandler(IBlockAccess world, BlockPos pos){
-		if(pos == null){
-			return null;
-		}
-		TileEntity tile = world.getTileEntity(pos);
-		
-		if(tile instanceof IMultiblockComponent){
-			IMultiblockComponent component = (IMultiblockComponent) tile;
-			if(component.getMultiblockLogic().getController() instanceof ICamouflageHandler){
-				return (ICamouflageHandler) component.getMultiblockLogic().getController();
-			}
-		}
-		if(tile instanceof ICamouflageHandler){
-			return (ICamouflageHandler) tile;
-		}
-		return null;
-	}
-	
 	public static ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos){
-		ICamouflageHandler handler = getCamouflageHandler(world, pos);
-		if(handler == null){
+		if(pos == null){
 			return null;
 		}
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof ICamouflagedTile){
 			ICamouflagedTile block = (ICamouflagedTile) tile;
-			
-			return handler.getCamouflageBlock(block.getCamouflageType());
+			EnumCamouflageType type = block.getCamouflageType();
+			ItemStack camouflageStack = null;
+			if(tile instanceof ICamouflageHandler){
+				ICamouflageHandler handler = (ICamouflageHandler) tile;
+				camouflageStack = handler.getCamouflageBlock(type);
+			}
+			if(camouflageStack == null && tile instanceof IMultiblockComponent){
+				IMultiblockComponent component = (IMultiblockComponent) tile;
+				if(component.getMultiblockLogic().getController() instanceof ICamouflageHandler){
+					ICamouflageHandler handler = (ICamouflageHandler) component.getMultiblockLogic().getController();
+					camouflageStack = handler.getCamouflageBlock(type);
+					if(camouflageStack == null){
+						camouflageStack = handler.getDefaultCamouflageBlock(type);
+					}
+				}
+			}
+			return camouflageStack;
 		}
 		return null;
 	}
