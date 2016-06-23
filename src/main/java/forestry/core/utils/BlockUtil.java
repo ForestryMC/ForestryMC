@@ -14,11 +14,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyReceiver;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -31,15 +37,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileEngine;
-
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
 
 public abstract class BlockUtil {
 
@@ -342,5 +340,18 @@ public abstract class BlockUtil {
 			return true;
 		}
 		return false;
+	}
+
+	@Nullable
+	public static <T extends Comparable<T>> IProperty<T> getProperty(Block block, String propertyName, Class<T> valueClass) {
+		for (IProperty<?> property : block.getDefaultState().getPropertyNames()) {
+			if (property.getName().equals(propertyName)) {
+				if (property.getValueClass().isAssignableFrom(valueClass)) {
+					//noinspection unchecked
+					return (IProperty<T>) property;
+				}
+			}
+		}
+		return null;
 	}
 }
