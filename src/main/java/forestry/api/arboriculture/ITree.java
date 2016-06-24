@@ -7,23 +7,18 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
+import forestry.api.world.ITreeGenData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.EnumPlantType;
-
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
-import forestry.api.world.ITreeGenData;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
@@ -38,8 +33,6 @@ public interface ITree extends IIndividual, ITreeGenData {
 	ITreeGenome getGenome();
 
 	ITreeGenome getMate();
-
-	EnumSet<EnumPlantType> getPlantTypes();
 
 	/**
 	 * @since Forestry 4.0
@@ -85,11 +78,6 @@ public interface ITree extends IIndividual, ITreeGenData {
 	 */
 	@Override
 	int getGirth();
-
-	/**
-	 * @return Growth conditions at the given position.
-	 */
-	EnumGrowthConditions getGrowthCondition(World world, BlockPos pos);
 
 	WorldGenerator getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
 

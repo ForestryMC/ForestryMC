@@ -10,4 +10,8 @@ public interface IWoodType extends IStringSerializable {
 	int getMetadata();
 
 	float getHardness();
+
+	int getCarbonization();
+
+	int getCombustability();
 }

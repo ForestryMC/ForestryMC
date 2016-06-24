@@ -17,34 +17,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockNewLeaf;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -95,6 +73,27 @@ import forestry.factory.recipes.FabricatorRecipe;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends BlankForestryPlugin {
@@ -395,10 +394,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'Y', "chestWood");
 		
 		//Wood Piles
-		for(ITree tree : TreeManager.treeRoot.getIndividualTemplates()){
-			ItemStack log = tree.getGenome().getPrimary().getWoodProvider().getWoodStack().copy();
+		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
+			IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
+			ItemStack log = treeSpecies.getWoodProvider().getWoodStack().copy();
 			log.stackSize = 1;
-			ItemStack woodPile = BlockPile.createWoodPile(tree);
+			ItemStack woodPile = BlockPile.createWoodPile(treeSpecies);
 			RecipeUtil.addShapelessRecipe(woodPile, log, log, log, log);
 		}
 		

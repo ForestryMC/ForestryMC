@@ -7,12 +7,12 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.ITextureManager;
 
 public interface IWoodProvider {
 	@SideOnly(Side.CLIENT)
@@ -30,4 +30,14 @@ public interface IWoodProvider {
 	 * @return A stack of wood from the tree to craft wood pile's or other things.
 	 */
 	ItemStack getWoodStack();
+
+	/**
+	 * @return how long this wood's charcoal burns / 1000
+	 */
+	int getCombustibility();
+
+	/**
+	 * The amount of charcoal dropped from a charcoal pile of this wood.
+	 */
+	int getCarbonization();
 }

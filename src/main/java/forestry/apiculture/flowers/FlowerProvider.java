@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.EnumSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.Translator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 public class FlowerProvider implements IFlowerProvider {
 
@@ -42,15 +38,15 @@ public class FlowerProvider implements IFlowerProvider {
 	@Override
 	public boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable) {
 
-		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
+		EnumPlantType plantType = pollinatable.getPlantType();
 
 		switch (flowerType) {
 			case FlowerManager.FlowerTypeNether:
-				return plantTypes.contains(EnumPlantType.Nether);
+				return plantType == EnumPlantType.Nether;
 			case FlowerManager.FlowerTypeCacti:
-				return plantTypes.contains(EnumPlantType.Desert);
+				return plantType == EnumPlantType.Desert;
 			default:
-				return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
+				return plantType != EnumPlantType.Nether;
 		}
 	}
 

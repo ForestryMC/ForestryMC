@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.pollination;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.ICheckPollinatable;
+import net.minecraftforge.common.EnumPlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
 
@@ -26,8 +23,8 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 	}
 
 	@Override
-	public EnumSet<EnumPlantType> getPlantType() {
-		return tree.getPlantTypes();
+	public EnumPlantType getPlantType() {
+		return tree.getGenome().getPrimary().getPlantType();
 	}
 
 	@Override
@@ -38,9 +35,6 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 	@Override
 	public boolean canMateWith(ITree pollen) {
 		if (tree.getMate() != null) {
-			return false;
-		}
-		if (!(pollen instanceof ITree)) {
 			return false;
 		}
 

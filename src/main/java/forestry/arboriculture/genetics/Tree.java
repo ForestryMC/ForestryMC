@@ -14,34 +14,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.IPlantable;
-
-import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
@@ -57,6 +39,18 @@ import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -65,13 +59,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 	@Nullable
 	private ITreeGenome mate;
 
-	private final EnumSet<EnumPlantType> plantTypes;
-	private EnumPlantType plantType;
-
 	public Tree(@Nonnull ITreeGenome genome) {
 		this.genome = genome;
-		plantTypes = genome.getPlantTypes();
-		plantTypes.add(genome.getPrimary().getPlantType());
 	}
 
 	public Tree(@Nonnull NBTTagCompound nbttagcompound) {
@@ -82,9 +71,6 @@ public class Tree extends Individual implements ITree, IPlantable {
 		} else {
 			this.genome = TreeDefinition.Oak.getGenome();
 		}
-
-		this.plantTypes = genome.getPlantTypes();
-		this.plantTypes.add(genome.getPrimary().getPlantType());
 
 		if (nbttagcompound.hasKey("Mate")) {
 			mate = new TreeGenome(nbttagcompound.getCompoundTag("Mate"));
@@ -164,12 +150,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 		}
 
 		Block block = blockState.getBlock();
-
-		for (EnumPlantType type : getPlantTypes()) {
-			this.plantType = type;
-			if (block.canSustainPlant(blockState, world, blockPos, EnumFacing.UP, this)) {
-				return true;
-			}
+		if (block.canSustainPlant(blockState, world, blockPos, EnumFacing.UP, this)) {
+			return true;
 		}
 
 		return false;
@@ -177,7 +159,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-		return plantType;
+		return genome.getPrimary().getPlantType();
 	}
 
 	@Override
@@ -188,18 +170,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 	@Override
 	@Nullable
 	public BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
-		IGrowthProvider growthProvider = genome.getGrowthProvider();
-		return growthProvider.canGrow(genome, world, pos, expectedGirth, expectedHeight);
+		return TreeGrowthHelper.canGrow(world, genome, pos, expectedGirth, expectedHeight);
 	}
 
 	@Override
 	public int getRequiredMaturity() {
 		return genome.getMaturationTime();
-	}
-
-	@Override
-	public EnumGrowthConditions getGrowthCondition(World world, BlockPos pos) {
-		return genome.getGrowthProvider().getGrowthConditions(getGenome(), world, pos);
 	}
 
 	@Override
@@ -276,11 +252,6 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public EnumSet<EnumPlantType> getPlantTypes() {
-		return plantTypes;
-	}
-
-	@Override
 	public void addTooltip(List<String> list) {
 
 		// No info 4 u!
@@ -302,8 +273,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
 		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
 		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
-		String combustibility = TextFormatting.DARK_GRAY + "CO: " + genome.getCombustibility();
-		String carbonization = TextFormatting.GRAY + "CA: " + genome.getCarbonization();
+		String combustibility = TextFormatting.DARK_GRAY + "CO: " + primary.getWoodProvider().getCombustibility();
+		String carbonization = TextFormatting.GRAY + "CA: " + secondary.getWoodProvider().getCarbonization();
 		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));
 		list.add(String.format("%s, %s", yield, sappiness));

@@ -17,15 +17,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map.Entry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -53,6 +45,11 @@ import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.SpeciesRoot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
@@ -371,7 +368,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IChromosomeType getKaryotypeKey() {
+	public IChromosomeType getSpeciesChromosomeType() {
 		return EnumBeeChromosome.SPECIES;
 	}
 

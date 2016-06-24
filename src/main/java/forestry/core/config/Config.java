@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import com.google.common.collect.LinkedListMultimap;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,13 +22,13 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraftforge.common.config.Property;
-
+import com.google.common.collect.LinkedListMultimap;
 import forestry.Forestry;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.mail.gui.GuiMailboxInfo;
+import net.minecraftforge.common.config.Property;
 
 public class Config {
 
@@ -54,7 +52,6 @@ public class Config {
 	public static boolean enableParticleFX = true;
 
 	// Genetics
-	public static boolean clearInvalidChromosomes = false;
 	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
 	public static float maxResearchMutationBoostPercent = 5.0f;
@@ -204,7 +201,6 @@ public class Config {
 			collectorStamps.addAll(Arrays.asList(defaultCollectors));
 		}
 
-		clearInvalidChromosomes = configCommon.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
 		pollinateVanillaTrees = configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
 		researchMutationBoostMultiplier = configCommon.getFloatLocalized("genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
 		maxResearchMutationBoostPercent = configCommon.getFloatLocalized("genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);

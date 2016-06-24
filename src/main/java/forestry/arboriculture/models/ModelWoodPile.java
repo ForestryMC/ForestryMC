@@ -7,11 +7,9 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
@@ -62,9 +60,9 @@ public class ModelWoodPile extends BlankItemModel{
 			if(pile == null){
 				return Collections.emptyList();
 			}
-			ITree tree = pile.getTree();
-			if (tree == null) {
-				tree = TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getDefaultTemplate());
+			IAlleleTreeSpecies treeSpecies = pile.getTreeSpecies();
+			if (treeSpecies == null) {
+				treeSpecies = (IAlleleTreeSpecies) TreeManager.treeRoot.getDefaultTemplate()[TreeManager.treeRoot.getSpeciesChromosomeType().ordinal()];
 			}
 			
 			if (modelWoodPileBlock == null) {
@@ -77,8 +75,8 @@ public class ModelWoodPile extends BlankItemModel{
 					return Collections.emptyList();
 				}
 			}
-			
-			IBakedModel model = bakeModel(tree, false);
+
+			IBakedModel model = bakeModel(treeSpecies, false);
 			return model.getQuads(state, side, rand);
 		}
 		return Collections.emptyList();
@@ -103,10 +101,9 @@ public class ModelWoodPile extends BlankItemModel{
 	protected ItemOverrideList createOverrides() {
 		return new PileItemOverrideList();
 	}
-	
-	private IBakedModel bakeModel(ITree tree, boolean isItem) {
+
+	private IBakedModel bakeModel(IAlleleTreeSpecies treeSpecies, boolean isItem) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
 		String treeUID = treeSpecies.getUID();
 		Map<String, IBakedModel> map = isItem ? itemCache : blockCache;
 		if(!map.containsKey(treeUID)){
@@ -135,14 +132,11 @@ public class ModelWoodPile extends BlankItemModel{
 					return null;
 				}
 			}
-			ITree tree = null;
-			if(stack.hasTagCompound()){
-				tree = new Tree(stack.getTagCompound().getCompoundTag("ContainedTree"));
+			IAlleleTreeSpecies treeSpecies = BlockPile.getTreeSpecies(stack);
+			if (treeSpecies == null) {
+				treeSpecies = (IAlleleTreeSpecies) TreeManager.treeRoot.getDefaultTemplate()[TreeManager.treeRoot.getSpeciesChromosomeType().ordinal()];
 			}
-			if (tree == null) {
-				tree = TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getDefaultTemplate());
-			}
-			return bakeModel(tree, true);
+			return bakeModel(treeSpecies, true);
 		}
 	}
 

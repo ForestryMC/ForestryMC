@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import com.google.common.base.Objects;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
+import com.google.common.base.Objects;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.Config;
-import forestry.core.utils.Log;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public abstract class Genome implements IGenome {
 
@@ -115,15 +112,12 @@ public abstract class Genome implements IGenome {
 	 * Quickly gets the species without loading the whole genome.
 	 * We need this because the client uses the species for rendering.
 	 */
-	public static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
+	@Nullable
+	public static IAlleleSpecies getSpeciesDirectly(@Nonnull ISpeciesRoot speciesRoot, @Nonnull ItemStack itemStack) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
 		}
-		return getSpeciesDirectly(nbtTagCompound);
-	}
-
-	public static IAlleleSpecies getSpeciesDirectly(@Nonnull NBTTagCompound nbtTagCompound) {
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
 		if (genomeNBT == null) {
@@ -136,7 +130,7 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
-		Chromosome chromosome = new Chromosome(chromosomeNBT);
+		Chromosome chromosome = Chromosome.create(null, null, speciesRoot.getSpeciesChromosomeType(), chromosomeNBT);
 
 		IAllele activeAllele = chromosome.getActiveAllele();
 		if (!(activeAllele instanceof IAlleleSpecies)) {
@@ -170,23 +164,21 @@ public abstract class Genome implements IGenome {
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
 		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
 
+		String primarySpeciesUid = null;
+		String secondarySpeciesUid = null;
+
 		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
 			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
 			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
 
 			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
-				Chromosome chromosome = new Chromosome(chromosomeNBT);
+				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
+				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
 				chromosomes[chromosomeOrdinal] = chromosome;
 
-				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
-				if (chromosome.hasInvalidAlleles(chromosomeType.getAlleleClass())) {
-					if (Config.clearInvalidChromosomes) {
-						Log.warning("Found Chromosome with invalid Alleles. Config is set to clear invalid chromosomes, replacing with the default.");
-						IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
-						return speciesRoot.templateAsChromosomes(defaultTemplate);
-					} else {
-						throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
-					}
+				if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
+					primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
+					secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
 				}
 			}
 		}

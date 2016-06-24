@@ -10,6 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import forestry.api.arboriculture.EnumPileType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.BlockPile;
+import forestry.arboriculture.tiles.TilePile;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,15 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.BlockPile;
-import forestry.arboriculture.tiles.TilePile;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Translator;
 
 public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 
@@ -52,12 +51,11 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 			if (!itemstack.hasTagCompound()) {
 				return "Unknown";
 			}
-			ITree tree = BlockPile.getTree(itemstack);
-			if (tree == null) {
+			IAlleleTreeSpecies species = BlockPile.getTreeSpecies(itemstack);
+			if (species == null) {
 				return "Unknown";
 			}
-			IAlleleSpecies species = tree.getGenome().getPrimary();
-	
+
 			String customTreeKey = "for.trees.custom.pile." + species.getUnlocalizedName().replace("trees.species.", "");
 			if (Translator.canTranslateToLocal(customTreeKey)) {
 				return Translator.translateToLocal(customTreeKey);

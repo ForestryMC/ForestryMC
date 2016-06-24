@@ -8,9 +8,8 @@ package forestry.api.multiblock;
 import javax.annotation.Nonnull;
 
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,11 +22,10 @@ public interface ICharcoalPileComponent<T extends IMultiblockLogicCharcoalPile> 
 	
 	@Override
 	T getMultiblockLogic();
-	
-	@Nonnull
-	ITree getTree();
-	
-	void setTree(@Nonnull ITree tree);
+
+	IAlleleTreeSpecies getTreeSpecies();
+
+	void setTreeSpecies(@Nonnull IAlleleTreeSpecies treeSpecies);
 	
 	@Override
 	@Nonnull
@@ -38,6 +36,6 @@ public interface ICharcoalPileComponent<T extends IMultiblockLogicCharcoalPile> 
 	EnumPileType getPileType();
 	
 	@SideOnly(Side.CLIENT)
-	ITree getNextWoodPile();
+	IAlleleTreeSpecies getNextWoodPile();
 
 }
