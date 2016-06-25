@@ -50,7 +50,7 @@ import forestry.plugins.PluginManager;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.10]",
-		dependencies = "required-after:Forge@[12.18.0.1984,);"
+		dependencies = "required-after:Forge@[12.18.0.1989,);"
 				+ "after:JEI@[3.7.0,);")
 public class Forestry {
 
