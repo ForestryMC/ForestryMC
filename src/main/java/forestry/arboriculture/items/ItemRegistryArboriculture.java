@@ -35,7 +35,7 @@ public class ItemRegistryArboriculture extends ItemRegistry {
 		registerOreDict(OreDictUtil.CHARCOAL, new ItemStack(charcoal, 1, OreDictionary.WILDCARD_VALUE));
 		registerOreDict(OreDictUtil.CHARCOAL, new ItemStack(Items.COAL, 1, 1));
 
-		grafter = registerItem(new ItemGrafter(4), "grafter");
+		grafter = registerItem(new ItemGrafter(9), "grafter");
 		grafterProven = registerItem(new ItemGrafter(149), "grafterProven");
 	}
 }
