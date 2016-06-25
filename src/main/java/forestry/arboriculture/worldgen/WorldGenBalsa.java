@@ -12,12 +12,9 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 import java.util.Random;
-<<<<<<< HEAD
-=======
 
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.WorldGenHelper;
->>>>>>> 09756f21fddae4c525098c399e7d0d71d18b9cb6
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

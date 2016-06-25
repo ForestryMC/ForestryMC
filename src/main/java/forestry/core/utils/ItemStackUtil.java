@@ -199,7 +199,7 @@ public abstract class ItemStackUtil {
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
 		ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());
 		if (stack.getTagCompound() != null) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound) stack.getTagCompound().copy();
+			NBTTagCompound nbttagcompound = stack.getTagCompound().copy();
 			split.setTagCompound(nbttagcompound);
 		}
 		return split;

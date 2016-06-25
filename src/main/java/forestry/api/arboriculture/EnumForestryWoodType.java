@@ -92,10 +92,12 @@ public enum EnumForestryWoodType implements IWoodType {
 		return VALUES[meta];
 	}
 
+	@Override
 	public int getCarbonization() {
 		return carbonization;
 	}
 
+	@Override
 	public int getCombustability() {
 		return combustability;
 	}

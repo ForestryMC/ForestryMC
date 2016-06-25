@@ -50,11 +50,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public String getSubtypeInfo(@Nonnull ItemStack itemStack) {
-<<<<<<< HEAD
-			IAlleleSpecies species = Genome.getSpeciesDirectly(itemStack);
-=======
 			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
->>>>>>> 09756f21fddae4c525098c399e7d0d71d18b9cb6
 			return species == null ? null : species.getUID();
 		}
 	}

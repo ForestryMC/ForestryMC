@@ -5,17 +5,12 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-<<<<<<< HEAD
 import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-=======
->>>>>>> 09756f21fddae4c525098c399e7d0d71d18b9cb6
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import net.minecraft.block.state.IBlockState;
-import net.minecraftforge.common.BiomeDictionary;
 
 /** Set custom mutation requirements */
 public interface IMutationBuilder {
