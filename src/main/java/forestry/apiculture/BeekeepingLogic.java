@@ -239,9 +239,11 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public void clearCachedValues() {
-		hasFlowersCache.clear();
-		queenCanWorkCache.clear();
-		canWork();
+		if (!housing.getWorldObj().isRemote) {
+			hasFlowersCache.clear();
+			queenCanWorkCache.clear();
+			canWork();
+		}
 	}
 
 	private void queenWorkTick(IBee queen) {

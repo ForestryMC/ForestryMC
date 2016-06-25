@@ -57,7 +57,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		beeModifier.addInformation(stack, playerIn, tooltip, advanced);
 		if (!stack.isItemDamaged()) {
-			tooltip.add(Translator.translateToLocalFormatted("item.for.frame.durability", stack.getMaxDamage()));
+			tooltip.add(Translator.translateToLocalFormatted("item.for.durability", stack.getMaxDamage()));
 		}
 	}
 

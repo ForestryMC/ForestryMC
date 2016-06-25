@@ -8,22 +8,29 @@ import net.minecraft.item.ItemStack;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.recipes.jei.JEIUtils;
+import forestry.core.utils.Log;
+import forestry.factory.recipes.jei.FactoryJeiPlugin;
+
+import mezz.jei.api.recipe.IStackHelper;
 
 public class FermenterRecipeMaker {
 
 	private FermenterRecipeMaker() {
 	}
 	
-	public static List<FermenterRecipeWrapper> getFermenterRecipes() {
+	public static List<FermenterRecipeWrapper> getFermenterRecipes(IStackHelper stackHelper) {
 		List<FermenterRecipeWrapper> recipes = new ArrayList<>();
 		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
-			if (recipe.getResource() != null && recipe.getResource().getItem() instanceof IVariableFermentable) {
-				for (ItemStack stack : JEIUtils.getItemVariations(recipe.getResource())) {
-					recipes.add(new FermenterRecipeWrapper(recipe, stack));
+			if (recipe.getResource() != null) {
+				if (recipe.getResource().getItem() instanceof IVariableFermentable) {
+					for (ItemStack stack : stackHelper.getSubtypes(recipe.getResource())) {
+						recipes.add(new FermenterRecipeWrapper(recipe, stack));
+					}
+				} else {
+					recipes.add(new FermenterRecipeWrapper(recipe, recipe.getResource()));
 				}
 			} else {
-				recipes.add(new FermenterRecipeWrapper(recipe, recipe.getResource()));
+				Log.error("Null resource for recipe");
 			}
 		}
 		return recipes;

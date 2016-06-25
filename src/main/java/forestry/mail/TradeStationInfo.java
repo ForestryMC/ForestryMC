@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
@@ -26,7 +27,7 @@ public class TradeStationInfo implements ITradeStationInfo {
 	private final EnumTradeStationState state;
 
 	public TradeStationInfo(IMailAddress address, GameProfile owner, ItemStack tradegood, ItemStack[] required, EnumTradeStationState state) {
-		if (!address.isTrader()) {
+		if (address.getType() != EnumAddressee.TRADER) {
 			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}
 		this.address = address;

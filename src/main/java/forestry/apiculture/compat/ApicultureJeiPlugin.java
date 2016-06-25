@@ -5,8 +5,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.Genome;
@@ -14,6 +13,7 @@ import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
+import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class ApicultureJeiPlugin extends BlankModPlugin {
@@ -50,7 +50,11 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public String getSubtypeInfo(@Nonnull ItemStack itemStack) {
+<<<<<<< HEAD
 			IAlleleSpecies species = Genome.getSpeciesDirectly(itemStack);
+=======
+			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
+>>>>>>> 09756f21fddae4c525098c399e7d0d71d18b9cb6
 			return species == null ? null : species.getUID();
 		}
 	}

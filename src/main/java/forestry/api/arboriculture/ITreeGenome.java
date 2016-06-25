@@ -6,9 +6,6 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.genetics.IGenome;
 
@@ -23,8 +20,6 @@ public interface ITreeGenome extends IGenome {
 	@Nonnull
 	IFruitProvider getFruitProvider();
 
-	IGrowthProvider getGrowthProvider();
-
 	float getHeight();
 
 	float getFertility();
@@ -37,18 +32,12 @@ public interface ITreeGenome extends IGenome {
 
 	float getSappiness();
 
-	EnumSet<EnumPlantType> getPlantTypes();
-
 	/**
 	 * @return Amount of random block ticks required for a sapling to mature into a fully grown tree.
 	 */
 	int getMaturationTime();
 
 	int getGirth();
-	
-	int getCombustibility();
-	
-	int getCarbonization();
 
 	IAlleleLeafEffect getEffect();
 }

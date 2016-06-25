@@ -18,10 +18,13 @@ import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.genetics.GrowthProvider;
-import forestry.arboriculture.genetics.GrowthProviderTropical;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
+/**
+ * @deprecated this is being removed to simplify trees
+ */
+@Deprecated
 public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 
 	public static IAlleleGrowth growthLightLevel;
@@ -32,7 +35,7 @@ public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 		List<IAlleleGrowth> growthAlleles = Arrays.asList(
 				growthLightLevel = new AlleleGrowth("lightlevel", new GrowthProvider()),
 				growthAcacia = new AlleleGrowth("acacia", new GrowthProvider()),
-				growthTropical = new AlleleGrowth("tropical", new GrowthProviderTropical())
+				growthTropical = new AlleleGrowth("tropical", new GrowthProvider())
 		);
 
 		for (IAlleleGrowth alleleGrowth : growthAlleles) {

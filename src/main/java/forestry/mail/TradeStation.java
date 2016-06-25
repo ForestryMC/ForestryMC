@@ -23,6 +23,7 @@ import net.minecraft.world.WorldSavedData;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.ILetter;
@@ -64,7 +65,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	public TradeStation(GameProfile owner, IMailAddress address) {
 		super(SAVE_NAME + address);
-		if (!address.isTrader()) {
+		if (address.getType() != EnumAddressee.TRADER) {
 			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}
 		this.owner = owner;

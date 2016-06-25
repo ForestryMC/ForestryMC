@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidPOBox(World world, IMailAddress address) {
-		return address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	public static POBox getPOBox(World world, IMailAddress address) {
@@ -88,7 +89,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, IMailAddress address) {
-		return address != null && address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address != null && address.getType() == EnumAddressee.TRADER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
@@ -173,13 +174,14 @@ public class PostRegistry implements IPostRegistry {
 		return office;
 	}
 
+	@Nonnull
 	@Override
-	public IMailAddress getMailAddress(GameProfile gameProfile) {
+	public IMailAddress getMailAddress(@Nonnull GameProfile gameProfile) {
 		return new MailAddress(gameProfile);
 	}
 
 	@Override
-	public IMailAddress getMailAddress(String traderName) {
+	public IMailAddress getMailAddress(@Nonnull String traderName) {
 		return new MailAddress(traderName);
 	}
 

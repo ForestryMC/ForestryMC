@@ -14,12 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Map;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -33,6 +28,9 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;
@@ -103,7 +101,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 		if (complexityOverride != null) {
 			return complexityOverride;
 		}
-		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotypeKey());
+		return GeneticsUtil.getResearchComplexity(this, getRoot().getSpeciesChromosomeType());
 	}
 
 	@Override

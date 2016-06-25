@@ -152,7 +152,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 	}
 
 	@Override
-	public void setOwner(GameProfile owner) {
+	public void setOwner(@Nonnull GameProfile owner) {
 		this.owner = owner;
 	}
 

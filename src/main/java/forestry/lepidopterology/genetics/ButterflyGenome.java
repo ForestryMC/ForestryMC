@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -29,6 +27,8 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
 
@@ -46,8 +46,8 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 		if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
 			return null;
 		}
-		
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+
+		IAlleleSpecies species = getSpeciesDirectly(ButterflyManager.butterflyRoot, itemStack);
 		if (species instanceof IAlleleButterflySpecies) {
 			return (IAlleleButterflySpecies) species;
 		}

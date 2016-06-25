@@ -74,7 +74,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	public final void preGenerate(World world, Random rand, BlockPos startPos) {
 		super.preGenerate(world, rand, startPos);
 		height = determineHeight(world, rand, baseHeight, heightVariation);
-		girth = tree.getGirth(world, startPos);
+		girth = tree.getGirth();
 	}
 
 	protected int modifyByHeight(World world, int val, int min, int max) {

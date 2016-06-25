@@ -69,5 +69,6 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);
+		OreDictionary.registerOre(OreDictUtil.TRAPDOOR_WOOD, Blocks.TRAPDOOR);
 	}
 }

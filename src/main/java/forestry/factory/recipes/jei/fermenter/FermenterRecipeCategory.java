@@ -23,7 +23,7 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class FermenterRecipeCategory extends ForestryRecipeCategory {
+public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
 
 	private static final int resourceSlot = 0;
 	private static final int fuelSlot = 1;
@@ -62,7 +62,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FermenterRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
@@ -72,18 +72,15 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 3000, false, tankOverlay);
 		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 3000, false, tankOverlay);
 		
-		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
-		
-		guiItemStacks.set(resourceSlot, wrapper.getFermentable());
+		guiItemStacks.set(resourceSlot, recipeWrapper.getFermentable());
 		List<ItemStack> fuels = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
 			fuels.add(fuel.item);
 		}
 		guiItemStacks.set(fuelSlot, fuels);
 		
-		guiFluidStacks.set(inputTank, wrapper.getFluidInputs());
-		guiFluidStacks.set(outputTank, wrapper.getFluidOutputs());
-		
+		guiFluidStacks.set(inputTank, recipeWrapper.getFluidInputs());
+		guiFluidStacks.set(outputTank, recipeWrapper.getFluidOutputs());
 	}
 
 }

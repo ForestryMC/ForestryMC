@@ -15,19 +15,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -59,6 +48,14 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -258,13 +255,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	/* IPOLLINATABLE */
 	@Override
-	public EnumSet<EnumPlantType> getPlantType() {
+	public EnumPlantType getPlantType() {
 		ITree tree = getTree();
 		if (tree == null) {
-			return EnumSet.noneOf(EnumPlantType.class);
+			return EnumPlantType.Plains;
 		}
 
-		return tree.getPlantTypes();
+		return tree.getGenome().getPrimary().getPlantType();
 	}
 
 	@Override

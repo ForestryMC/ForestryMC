@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -63,13 +65,16 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	@Override
 	public void updateServerSide() {
 		if (!isLinked) {
-			getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
+			GameProfile owner = getAccessHandler().getOwner();
+			if (owner != null) {
+				getOrCreateMailInventory(worldObj, owner);
+			}
 			isLinked = true;
 		}
 	}
 
 	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
+	public IInventory getOrCreateMailInventory(World world, @Nonnull GameProfile playerProfile) {
 		if (world.isRemote) {
 			return getInternalInventory();
 		}
@@ -93,8 +98,11 @@ public class TileMailbox extends TileBase implements IMailContainer {
 
 	@Override
 	public boolean hasMail() {
-
-		IInventory mailInventory = getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
+		GameProfile owner = getAccessHandler().getOwner();
+		if (owner == null) {
+			return false;
+		}
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, owner);
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
 			if (mailInventory.getStackInSlot(i) != null) {
 				return true;

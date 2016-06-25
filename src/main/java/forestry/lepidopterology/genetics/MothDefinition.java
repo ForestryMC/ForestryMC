@@ -33,7 +33,7 @@ import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 
 public enum MothDefinition implements IButterflyDefinition {
 	Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
-	LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticeHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
+	LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticedHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);

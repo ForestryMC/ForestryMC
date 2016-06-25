@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.WorldSavedData;
 
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
@@ -33,7 +34,7 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	public POBox(IMailAddress address) {
 		super(SAVE_NAME + address);
-		if (!address.isPlayer()) {
+		if (address.getType() != EnumAddressee.PLAYER) {
 			throw new IllegalArgumentException("POBox address must be a player");
 		}
 		this.address = address;
@@ -85,7 +86,7 @@ public class POBox extends WorldSavedData implements IInventory {
 				continue;
 			}
 			ILetter letter = new Letter(letters.getStackInSlot(i).getTagCompound());
-			if (letter.getSender().isPlayer()) {
+			if (letter.getSender().getType() == EnumAddressee.PLAYER) {
 				playerLetters++;
 			} else {
 				tradeLetters++;

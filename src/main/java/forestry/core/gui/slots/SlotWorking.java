@@ -31,7 +31,7 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public boolean getHasStack() {
+	public boolean canTakeStack(EntityPlayer stack) {
 		return false;
 	}
 

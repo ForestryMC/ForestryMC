@@ -10,22 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Locale;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -50,7 +39,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.models.ModelProviderFactory;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
@@ -94,6 +82,15 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
@@ -107,8 +104,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FRUITS, AlleleFruit.fruitApple);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -132,8 +127,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -156,7 +149,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 		}
 
 		@Override
@@ -180,7 +172,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWER);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 			//Allele.helper.set(alleles, EnumTreeChromosome.EFFECT, Allele.leavesBrimstone);
 		}
 
@@ -217,7 +208,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 21);
 		}
 
 		@Override
@@ -245,7 +235,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 2);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 21);
 		}
 
 		@Override
@@ -348,7 +337,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -372,7 +360,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 19);
 		}
 
 		@Override
@@ -396,7 +383,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -470,8 +456,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWEST);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 4);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 3);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 18);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.TRUE);
 		}
 
@@ -496,7 +480,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.FRUITS, AlleleFruit.fruitCocoa);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FAST);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.CARBONIZATION, 5);
 		}
 
 		@Override
@@ -590,7 +573,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWER);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GIRTH, 3);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -658,7 +640,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
+
 		}
 
 		@Override
@@ -681,7 +663,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.PLANT, AllelePlantType.plantTypeDesert);
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.COMBUSTIBILITY, 20);
 		}
 
 		@Override
@@ -876,7 +857,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
-			AlleleHelper.instance.set(alleles, EnumTreeChromosome.GROWTH, AlleleGrowth.growthTropical);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
 			AlleleHelper.instance.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOW);

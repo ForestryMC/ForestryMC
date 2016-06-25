@@ -29,6 +29,10 @@ public class FermenterRecipe implements IFermenterRecipe {
 		if (resource == null) {
 			throw new NullPointerException("Fermenter Resource cannot be null!");
 		}
+		
+		if (resource.getItem() == null) {
+			throw new NullPointerException("Fermenter Resource item cannot be null!");
+		}
 
 		if (output == null) {
 			throw new NullPointerException("Fermenter Output cannot be null!");

@@ -13,12 +13,6 @@ package forestry.arboriculture.genetics;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -26,6 +20,11 @@ import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class WoodProvider implements IWoodProvider {
 
@@ -59,6 +58,16 @@ public class WoodProvider implements IWoodProvider {
 	@Override
 	public ItemStack getWoodStack() {
 		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
+	}
+
+	@Override
+	public int getCombustibility() {
+		return woodType.getCombustability();
+	}
+
+	@Override
+	public int getCarbonization() {
+		return woodType.getCarbonization();
 	}
 
 }

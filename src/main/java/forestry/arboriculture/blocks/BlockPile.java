@@ -1,7 +1,5 @@
 package forestry.arboriculture.blocks;
 
-import com.google.common.collect.Lists;
-
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -9,6 +7,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.google.common.collect.Lists;
+import forestry.api.arboriculture.EnumPileType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.IWoodProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.ITextureManager;
+import forestry.api.core.Tabs;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.multiblock.ICharcoalPileComponent;
+import forestry.apiculture.blocks.BlockCandle;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.multiblock.EnumPilePosition;
+import forestry.arboriculture.multiblock.ICharcoalPileControllerInternal;
+import forestry.arboriculture.render.PileParticleCallback;
+import forestry.arboriculture.render.PileStateMapper;
+import forestry.arboriculture.tiles.TilePile;
+import forestry.core.PluginCore;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.multiblock.MultiblockLogic;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -40,41 +68,11 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.ITextureManager;
-import forestry.api.core.Tabs;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.multiblock.ICharcoalPileComponent;
-import forestry.apiculture.blocks.BlockCandle;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.genetics.Tree;
-import forestry.arboriculture.multiblock.EnumPilePosition;
-import forestry.arboriculture.multiblock.ICharcoalPileControllerInternal;
-import forestry.arboriculture.render.PileParticleCallback;
-import forestry.arboriculture.render.PileStateMapper;
-import forestry.arboriculture.tiles.TilePile;
-import forestry.core.PluginCore;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.multiblock.MultiblockLogic;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileUtil;
 
 public abstract class BlockPile extends BlockStructure implements ITileEntityProvider, IStateMapperRegister, ISpriteRegister {
 
@@ -318,13 +316,15 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			List<ItemStack> woodPiles = new ArrayList<>();
-			for(ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
-				woodPiles.add(createWoodPile(tree));
+			for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
+				IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
+				ItemStack woodPile = createWoodPile(treeSpecies);
+				woodPiles.add(woodPile);
 			}
 			subItems.addAll(woodPiles);
-		}else if(getPileType() == EnumPileType.DIRT){
+		} else if (getPileType() == EnumPileType.DIRT) {
 			super.getSubBlocks(item, tab, subItems);
 		}
 	}
@@ -412,8 +412,9 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;
 
 			if (getPileType() == EnumPileType.ASH) {
-				if (pile.getTree() != null) {
-					ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, pile.getTree().getGenome().getCarbonization(), pile.getTree().getGenome().getCombustibility());
+				if (pile.getTreeSpecies() != null) {
+					IWoodProvider woodProvider = pile.getTreeSpecies().getWoodProvider();
+					ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, woodProvider.getCarbonization(), woodProvider.getCombustibility());
 					list.add(charcoal);
 					list.add(new ItemStack(PluginCore.items.ash, 3));
 				} else {
@@ -423,7 +424,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			} else if (getPileType() == EnumPileType.DIRT) {
 				list.add(new ItemStack(this));
 			} else {
-				list.add(createWoodPile(pile.getTree()));
+				list.add(createWoodPile(pile.getTreeSpecies()));
 			}
 		}
 		return list;
@@ -485,7 +486,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		if(getPileType() == EnumPileType.WOOD){
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
-				return createWoodPile(((ICharcoalPileComponent) tile).getTree());
+				return createWoodPile(((ICharcoalPileComponent) tile).getTreeSpecies());
 			}
 		}else if(getPileType() == EnumPileType.DIRT){
 			return super.getPickBlock(state, target, world, pos, player);
@@ -528,10 +529,19 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		IBlockState blockState = world.getBlockState(pos);
 		return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
 	}
-	
-	public static ITree getTree(ItemStack stack){
+
+	public static IAlleleTreeSpecies getTreeSpecies(ItemStack stack) {
 		if (stack != null) {
-			return new Tree(stack.getTagCompound().getCompoundTag("ContainedTree"));
+			NBTTagCompound tagCompound = stack.getTagCompound();
+
+			// legacy
+			if (tagCompound.hasKey("ContainedTree")) {
+				ITree tree = new Tree(tagCompound.getCompoundTag("ContainedTree"));
+				return tree.getGenome().getPrimary();
+			}
+
+			String treeSpeciesUid = tagCompound.getString("TreeSpecies");
+			return (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
 		}
 		return null;
 	}
@@ -541,10 +551,9 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		if(getPileType() == EnumPileType.WOOD){
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
-				
-				ITree tree = ((ICharcoalPileComponent)tile).getTree();
-				if(tree != null){
-					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
+				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
+				if (tree != null) {
+					ItemStack wood = tree.getWoodProvider().getWoodStack();
 					if(wood != null){
 						Block block = Block.getBlockFromItem(wood.getItem());
 						return block.getFlammability(world, pos, face);
@@ -560,10 +569,9 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		if(getPileType() == EnumPileType.WOOD){
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
-				
-				ITree tree = ((ICharcoalPileComponent)tile).getTree();
+				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
 				if(tree != null){
-					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
+					ItemStack wood = tree.getWoodProvider().getWoodStack();
 					if(wood != null){
 						Block block = Block.getBlockFromItem(wood.getItem());
 						return block.getFireSpreadSpeed(world, pos, face);
@@ -580,11 +588,11 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		if(getPileType() == EnumPileType.WOOD){
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
-				
-				ITree tree = ((ICharcoalPileComponent)tile).getTree();
+
+				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
 				if(tree != null){
-					ItemStack wood = tree.getGenome().getPrimary().getWoodProvider().getWoodStack();
-					if(wood != null){
+					ItemStack wood = tree.getWoodProvider().getWoodStack();
+					if (wood != null) {
 						Block block = Block.getBlockFromItem(wood.getItem());
 						return block.getStateFromMeta(wood.getMetadata()).getBlockHardness(world, pos);
 					}
@@ -593,14 +601,12 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		}
 		return super.getBlockHardness(blockState, world, pos);
 	}
-	
-	public static ItemStack createWoodPile(ITree tree) {
-		if (tree != null) {
+
+	public static ItemStack createWoodPile(IAlleleTreeSpecies treeSpecies) {
+		if (treeSpecies != null) {
 			ItemStack stack = new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
-			NBTTagCompound nbtTag = new NBTTagCompound();
-			tree.writeToNBT(nbtTag);
 			NBTTagCompound nbtItem = new NBTTagCompound();
-			nbtItem.setTag("ContainedTree", nbtTag);
+			nbtItem.setString("TreeSpecies", treeSpecies.getUID());
 			stack.setTagCompound(nbtItem);
 			return stack;
 		}

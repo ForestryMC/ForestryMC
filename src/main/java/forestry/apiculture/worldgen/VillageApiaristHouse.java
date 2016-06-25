@@ -68,7 +68,6 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private static final Random random = new Random();
 
 	private int averageGroundLevel = -1;
-	private boolean isInDesert = false;
 	private IBlockState planks;
 	private IBlockState slabs;
 	private IBlockState logs;
@@ -84,8 +83,6 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 	public VillageApiaristHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, EnumFacing facing) {
 		super(startPiece, componentType, random, boundingBox, facing);
-
-		isInDesert = startPiece.inDesert;
 
 		createBuildingBlocks(random);
 	}
@@ -279,7 +276,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private void buildGarden(World world, StructureBoundingBox box) {
 
 		Block ground = Blocks.DIRT;
-		if (isInDesert) {
+		if (field_189928_h == 1) { // desert
 			ground = Blocks.SAND;
 		}
 
@@ -292,7 +289,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 	private void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
-		if (isInDesert) {
+		if (field_189928_h == 1) { // desert
 			setBlockState(world, Blocks.CACTUS.getDefaultState(), 4, 1, 7, box);
 			return;
 		}

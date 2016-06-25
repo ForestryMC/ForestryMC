@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.mail;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -18,9 +19,10 @@ public interface IPostRegistry {
 	IPostOffice getPostOffice(World world);
 
 	/* MAIL ADDRESSES */
-	IMailAddress getMailAddress(GameProfile gameProfile);
-
-	IMailAddress getMailAddress(String traderName);
+	@Nonnull
+	IMailAddress getMailAddress(@Nonnull GameProfile gameProfile);
+	
+	IMailAddress getMailAddress(@Nonnull String traderName);
 
 	/* LETTERS */
 	boolean isLetter(ItemStack itemstack);

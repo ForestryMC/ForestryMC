@@ -10,6 +10,10 @@ import javax.annotation.Nullable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * @deprecated this is being removed to simplify trees
+ */
+@Deprecated
 public interface IGrowthProvider {
 
 	/**
@@ -24,8 +28,6 @@ public interface IGrowthProvider {
 	 */
 	@Nullable
 	BlockPos canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight);
-
-	EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, BlockPos pos);
 
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.

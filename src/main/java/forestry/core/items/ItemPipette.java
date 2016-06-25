@@ -59,7 +59,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 			}
 
 			contained = new PipetteContents(new FluidStack(liquid, filled));
-			filled = liquid.amount;
 		} else {
 			if (contained.getContents().amount >= limit) {
 				return 0;
@@ -141,7 +140,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 			contained.getContents().amount -= drained;
 
 			if (contained.getContents().amount <= 0) {
-				pipette.setTagCompound(null);
+				pipette.setTagCompound(new NBTTagCompound());
 				pipette.setItemDamage(0);
 			} else {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();

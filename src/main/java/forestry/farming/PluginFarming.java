@@ -42,6 +42,7 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
@@ -207,7 +208,7 @@ public class PluginFarming extends BlankForestryPlugin {
 					"TDT",
 					'#', basic,
 					'T', "gearTin",
-					'D', Blocks.TRAPDOOR);
+					'D', OreDictUtil.TRAPDOOR_WOOD);
 
 			RecipeUtil.addRecipe(valve,
 					" # ",

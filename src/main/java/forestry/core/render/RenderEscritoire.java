@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.models.ModelEscritoire;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileEscritoire;
@@ -46,7 +45,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 			IBlockState blockState = world.getBlockState(escritoire.getPos());
 			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
 				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), world, facing, x, y, z);
+				render(escritoire.getIndividualOnDisplay(), world, facing, x, y, z);
 				return;
 			}
 		}
@@ -92,7 +91,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 
 			GlStateManager.pushMatrix();
 			{
-				GlStateManager.translate((float) x + 0.6f, (float) y + 0.6f, (float) z + 0.5f);
+				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
 				GlStateManager.scale(renderScale, renderScale, renderScale);
 				dummyEntityItem.setEntityItemStack(itemstack);
 				

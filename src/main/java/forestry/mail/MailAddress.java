@@ -90,20 +90,10 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	public boolean isValid() {
 		return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
 	}
-
-	@Override
-	public boolean isPlayer() {
-		return type == EnumAddressee.PLAYER;
-	}
-
-	@Override
-	public boolean isTrader() {
-		return type == EnumAddressee.TRADER;
-	}
-
+	
 	@Override
 	public GameProfile getPlayerProfile() {
-		if (!this.isPlayer()) {
+		if (this.type != EnumAddressee.PLAYER) {
 			return null;
 		}
 		return gameProfile;
@@ -127,7 +117,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	@Override
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
-		if (isPlayer()) {
+		if (getType() == EnumAddressee.PLAYER) {
 			return type + "-" + name + '-' + gameProfile.getId();
 		} else {
 			return type + "-" + name;

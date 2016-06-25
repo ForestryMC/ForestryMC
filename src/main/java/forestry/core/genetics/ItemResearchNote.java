@@ -14,19 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -38,6 +26,16 @@ import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -94,7 +92,7 @@ public class ItemResearchNote extends ItemForestry {
 				String species2 = encoded.getAllele1().getName();
 				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
-				String speciesResult = encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
+				String speciesResult = encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()].getName();
 
 				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.0"));
 				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
@@ -147,7 +145,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IAlleleSpecies species0 = encoded.getAllele0();
 				IAlleleSpecies species1 = encoded.getAllele1();
-				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
+				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()];
 
 				tracker.registerSpecies(species0);
 				tracker.registerSpecies(species1);

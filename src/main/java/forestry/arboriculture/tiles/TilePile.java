@@ -2,20 +2,9 @@ package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.ICharcoalPileComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.arboriculture.PluginArboriculture;
@@ -25,11 +14,18 @@ import forestry.arboriculture.multiblock.EnumPilePosition;
 import forestry.arboriculture.multiblock.MultiblockLogicCharcoalPile;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharcoalPile> implements ICharcoalPileComponent<MultiblockLogicCharcoalPile>{
 
-	@Nonnull
-	private ITree containedTree;
+	private IAlleleTreeSpecies treeSpecies;
 	@SideOnly(Side.CLIENT)
 	private BlockPos woodPos;
 
@@ -53,7 +49,7 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		Block newBlock = newState.getBlock();
-		return oldState.getBlock() != newState.getBlock() && newState.getBlock() != PluginArboriculture.blocks.piles.get(EnumPileType.ASH);
+		return oldState.getBlock() != newBlock && newBlock != PluginArboriculture.blocks.piles.get(EnumPileType.ASH);
 	}
 
 	@Override
@@ -131,20 +127,20 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		return getBlockType().getDefaultState().withProperty(BlockPile.PILE_POSITION, pileType);
 	}
 	
-	private static ITree getTree(String speciesUID) {
-		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-		if (treeTemplate == null) {
-			return null;
-		}
-		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
-	}
-	
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		
+
+		// legacy
 		if (data.hasKey("ContainedTree")) {
-			setTree(new Tree(data.getCompoundTag("ContainedTree")));
+			Tree containedTree = new Tree(data.getCompoundTag("ContainedTree"));
+			setTreeSpecies(containedTree.getGenome().getPrimary());
+		}
+
+		if (data.hasKey("TreeSpecies")) {
+			String treeSpeciesUid = data.getString("TreeSpecies");
+			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
+			setTreeSpecies(treeSpecies);
 		}
 	}
 	
@@ -152,11 +148,8 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
-		
-		if (containedTree != null) {
-			NBTTagCompound subcompound = new NBTTagCompound();
-			containedTree.writeToNBT(subcompound);
-			data.setTag("ContainedTree", subcompound);
+		if (treeSpecies != null) {
+			data.setString("TreeSpecies", treeSpecies.getUID());
 		}
 		return data;
 	}
@@ -164,18 +157,18 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
 		super.encodeDescriptionPacket(packetData);
-		if (containedTree != null) {
-			NBTTagCompound subcompound = new NBTTagCompound();
-			containedTree.writeToNBT(subcompound);
-			packetData.setTag("ContainedTree", subcompound);
+		if (treeSpecies != null) {
+			packetData.setString("TreeSpecies", treeSpecies.getUID());
 		}
 	}
 
 	@Override
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
-		if (packetData.hasKey("ContainedTree")) {
-			setTree(new Tree(packetData.getCompoundTag("ContainedTree")));
+		if (packetData.hasKey("TreeSpecies")) {
+			String treeSpeciesUid = packetData.getString("TreeSpecies");
+			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
+			setTreeSpecies(treeSpecies);
 		}
 	}
 	
@@ -183,17 +176,16 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	
 	/* CONTAINED TREE */
 	@Override
-	public void setTree(@Nonnull ITree tree) {
-		this.containedTree = tree;
+	public void setTreeSpecies(@Nonnull IAlleleTreeSpecies treeSpecies) {
+		this.treeSpecies = treeSpecies;
 		if (worldObj != null && worldObj.isRemote) {
 			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 	
 	@Override
-	@Nonnull
-	public ITree getTree() {
-		return this.containedTree;
+	public IAlleleTreeSpecies getTreeSpecies() {
+		return this.treeSpecies;
 	}
 	
 	@Override
@@ -204,13 +196,13 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ITree getNextWoodPile(){
+	public IAlleleTreeSpecies getNextWoodPile() {
 		if(woodPos == null){
 			woodPos = getNextWoodPilePos();
 		}
 		TilePile pile = TileUtil.getTile(worldObj, woodPos, TilePile.class);
-		if(pile != null){
-			return pile.getTree();
+		if (pile != null) {
+			return pile.getTreeSpecies();
 		}
 		return null;
 	}

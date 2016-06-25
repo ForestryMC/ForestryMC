@@ -270,6 +270,7 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.WHEAT_SEEDS)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.PUMPKIN_SEEDS)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.MELON_SEEDS)}, seedOil);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.BEETROOT_SEEDS)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.COBBLESTONE)}, new FluidStack(FluidRegistry.LAVA, 1600));
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.CACTUS)}, new FluidStack(FluidRegistry.WATER, 500));
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.SNOWBALL), PluginCore.items.craftingMaterial.getIceShard(4)}, Fluids.ICE.getFluid(4000));

@@ -12,12 +12,15 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 import java.util.Random;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+<<<<<<< HEAD
+=======
 
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.WorldGenHelper;
+>>>>>>> 09756f21fddae4c525098c399e7d0d71d18b9cb6
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class WorldGenBalsa extends WorldGenTree {
 
@@ -27,7 +30,8 @@ public class WorldGenBalsa extends WorldGenTree {
 
 	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		BlockPos.MutableBlockPos leafCenter = new BlockPos.MutableBlockPos(startPos.add(0, height, 0));
+		BlockPos topPos = startPos.add(0, height + 1, 0);
+		BlockPos.MutableBlockPos leafCenter = new BlockPos.MutableBlockPos(topPos);
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		WorldGenHelper.addBlock(world, leafCenter, leaf, WorldGenHelper.EnumReplaceMode.AIR);
@@ -40,7 +44,7 @@ public class WorldGenBalsa extends WorldGenTree {
 			leafCenter.move(EnumFacing.DOWN);
 		}
 
-		while (leafCenter.getY() > 6) {
+		while (leafCenter.getY() > topPos.getY() - 6) {
 			WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 			leafCenter.move(EnumFacing.DOWN);
 		}

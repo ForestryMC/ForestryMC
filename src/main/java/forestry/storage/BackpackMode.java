@@ -15,8 +15,8 @@ import javax.annotation.Nullable;
 public enum BackpackMode {
 	NORMAL(null),
 	LOCKED("for.storage.backpack.mode.locked"),
-	RECEIVE("for.storage.backpack.mode.locked"),
-	RESUPPLY("for.storage.backpack.mode.locked");
+	RECEIVE("for.storage.backpack.mode.receiving"),
+	RESUPPLY("for.storage.backpack.mode.resupply");
 
 	@Nullable
 	private final String unlocalizedInfo;

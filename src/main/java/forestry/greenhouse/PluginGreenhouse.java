@@ -26,6 +26,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.logics.GreenhouseLogicGreenhouseDoor;
@@ -88,7 +89,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"TXT",
 				"#H#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
-				'H', Blocks.TRAPDOOR,
+				'H', OreDictUtil.TRAPDOOR_WOOD,
 				'#', "gearTin",
 				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
 		
@@ -97,7 +98,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"#H#",
 				"TXT",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
-				'H', Blocks.TRAPDOOR,
+				'H', OreDictUtil.TRAPDOOR_WOOD,
 				'#', "gearTin",
 				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
 		

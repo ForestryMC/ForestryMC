@@ -92,7 +92,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes());
 		registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe());
 		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes());
-		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes());
+		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()));
 		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes());
 		registry.addRecipes(RainmakerRecipeMaker.getRecipes());
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes());
