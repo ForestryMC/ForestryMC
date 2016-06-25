@@ -34,6 +34,7 @@ import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.log.BlockArbLog;
@@ -49,6 +50,7 @@ import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemCharcoal;
+import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
@@ -79,12 +81,16 @@ import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
@@ -544,6 +550,33 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		TextureLeaves.registerAllSprites();
 		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
+		}
+	}
+
+	@SubscribeEvent
+	public void onHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
+		IBlockState state = event.getState();
+		Block block = state.getBlock();
+		if (block instanceof BlockLeaves && !(block instanceof BlockForestryLeaves)) {
+			EntityPlayer player = event.getHarvester();
+			if (player != null) {
+				ItemStack harvestingTool = player.getHeldItemMainhand();
+				if (harvestingTool != null && harvestingTool.getItem() instanceof ItemGrafter) {
+					if (event.getDrops().isEmpty()) {
+						World world = event.getWorld();
+						Item itemDropped = block.getItemDropped(state, world.rand, 3);
+						if (itemDropped != null) {
+							event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
+						}
+					}
+
+					harvestingTool.damageItem(1, player);
+					if (harvestingTool.stackSize <= 0) {
+						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, EnumHand.MAIN_HAND);
+						player.setHeldItem(EnumHand.MAIN_HAND, null);
+					}
+				}
+			}
 		}
 	}
 }
