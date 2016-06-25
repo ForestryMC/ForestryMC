@@ -136,8 +136,10 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void registerBlockModel(@Nonnull final BlockModelIndex index) {
 		ModelManager.getInstance().registerCustomBlockModel(index);
-		StateMapperBase ignoreState = new BlockModeStateMapper(index);
-		registerStateMapper(index.block, ignoreState);
+		if(index.addStateMapper){
+			StateMapperBase ignoreState = new BlockModeStateMapper(index);
+			registerStateMapper(index.block, ignoreState);
+		}
 	}
 	
 	@Override

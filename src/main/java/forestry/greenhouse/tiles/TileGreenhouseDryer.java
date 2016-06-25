@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 	
 	private static final DryerDefinition definition = new DryerDefinition();

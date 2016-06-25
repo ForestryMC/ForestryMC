@@ -18,7 +18,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResource implements IMutationCondition {

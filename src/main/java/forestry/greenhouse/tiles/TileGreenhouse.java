@@ -11,17 +11,16 @@
 package forestry.greenhouse.tiles;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
@@ -36,27 +35,33 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.ItemStackUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
+import forestry.greenhouse.blocks.BlockGreenhouseDoor;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
 
-	private ItemStack camouflageBlock;
+	protected ItemStack camouflageBlock;
 
 	protected TileGreenhouse() {
 		super(new MultiblockLogicGreenhouse());
 		camouflageBlock = null;
 	}
+	
+	@Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate){
+    	if(newSate.getBlock() instanceof BlockGreenhouseDoor && oldState.getBlock() instanceof BlockGreenhouseDoor){
+    		return false;
+    	}
+        return super.shouldRefresh(world, pos, oldState, newSate);
+    }
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
@@ -93,14 +98,14 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 
 	@Override
-	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			this.camouflageBlock = camouflageBlock;
 			
 			if (worldObj != null) {
 				if (worldObj.isRemote) {
-					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 				}
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
@@ -108,12 +113,17 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 	
 	@Override
-	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+	public boolean canHandleType(String type) {
+		return type.equals(getCamouflageType());
+	}
+	
+	@Override
+	public ItemStack getCamouflageBlock(String type) {
 		return camouflageBlock;
 	}
 	
 	@Override
-	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
 	}
 
@@ -141,28 +151,6 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public List<String> getHints() {
 		return Config.hints.get("greenhouse");
-	}
-
-	/* IStreamableGui */
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		getMultiblockLogic().getController().writeGuiData(data);
-		ItemStack camouflageBlock = getCamouflageBlock(getCamouflageType());
-		if (camouflageBlock != null) {
-			data.writeShort(1);
-			data.writeItemStack(camouflageBlock);
-		} else {
-			data.writeShort(0);
-		}
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		getMultiblockLogic().getController().readGuiData(data);
-		if (data.readShort() == 1) {
-			setCamouflageBlock(getCamouflageType(), data.readItemStack());
-		}
-		
 	}
 
 	/* IErrorLogicSource */
@@ -198,15 +186,18 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 	
 	@Override
-	public EnumCamouflageType getCamouflageType() {
+	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			return EnumCamouflageType.GLASS;
+			return CamouflageManager.GLASS;
+		}else if (((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.DOOR) {
+			return CamouflageManager.DOOR;
 		}
-		return EnumCamouflageType.DEFAULT;
+		return CamouflageManager.DEFAULT;
 	}
 	
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return getMultiblockLogic().getController().getInternalInventory();
 	}
+	
 }

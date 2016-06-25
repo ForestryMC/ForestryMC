@@ -24,15 +24,10 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
@@ -141,14 +136,14 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 
 	/* CONSTRUCTION MATERIAL */
 	@Override
-	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			this.camouflageBlock = camouflageBlock;
 			
 			if (worldObj != null) {
 				if (worldObj.isRemote) {
-					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 				}
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
@@ -156,13 +151,18 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 	
 	@Override
-	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getCamouflageBlock(String type) {
 		return camouflageBlock;
 	}
 	
 	@Override
-	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
+	}
+	
+	@Override
+	public boolean canHandleType(String type) {
+		return type.equals(getCamouflageType());
 	}
 
 	/* TILEFORESTRY */
@@ -207,11 +207,11 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 	
 	@Override
-	public EnumCamouflageType getCamouflageType() {
+	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			return EnumCamouflageType.GLASS;
+			return CamouflageManager.GLASS;
 		}
-		return EnumCamouflageType.DEFAULT;
+		return CamouflageManager.DEFAULT;
 	}
 	
 	private IItemHandler getOutwardsInventory() {
@@ -226,14 +226,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			return null;
 		}
 		return worldObj.getTileEntity(getPos().offset(outwards));
-	}
-	
-	private IFluidHandler getOutwardFluidHandler() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IFluidHandler)) {
-			return null;
-		}
-		return (IFluidHandler) tile;
 	}
 	
 	private IEnergyConnection getOutwardEnergyConnection() {

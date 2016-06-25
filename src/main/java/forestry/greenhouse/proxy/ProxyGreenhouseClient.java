@@ -30,6 +30,9 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 	public void initializeModels() {
 		for (BlockGreenhouseType greenhouseType : BlockGreenhouseType.VALUES) {
 			if (greenhouseType == BlockGreenhouseType.DOOR) {
+				Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
+						null, new ModelGreenhouse(),
+						Block.getBlockFromItem(PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType).getItem()), false));
 				continue;
 			} else if (greenhouseType == BlockGreenhouseType.SPRINKLER) {
 				ClientRegistry.bindTileEntitySpecialRenderer(TileGreenhouseSprinkler.class, new AnimationTESR<>());

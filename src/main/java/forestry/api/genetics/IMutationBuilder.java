@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.BiomeDictionary;

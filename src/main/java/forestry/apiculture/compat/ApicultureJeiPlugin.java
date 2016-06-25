@@ -9,8 +9,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.genetics.BeeGenome;
-
+import forestry.core.genetics.Genome;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
@@ -51,7 +50,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public String getSubtypeInfo(@Nonnull ItemStack itemStack) {
-			IAlleleSpecies species = BeeGenome.getSpeciesDirectly(itemStack);
+			IAlleleSpecies species = Genome.getSpeciesDirectly(itemStack);
 			return species == null ? null : species.getUID();
 		}
 	}

@@ -13,7 +13,11 @@ package forestry.greenhouse;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import forestry.api.greenhouse.IGreenhouseHelper;
+import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.IMultiblockControllerInternal;
@@ -23,6 +27,8 @@ import forestry.greenhouse.multiblock.InternalBlockCheck;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
+	private final List<Class<? extends IGreenhouseLogic>> greenhouseLogics = new ArrayList<>();
+	
 	@Override
 	public IGreenhouseController getGreenhouseController(World world, BlockPos pos) {
 		if (MultiblockRegistry.getControllersFromWorld(world) != null) {
@@ -42,6 +48,18 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 	private static boolean isPositionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos) {
 		IInternalBlock checkBlock = new InternalBlockCheck(pos);
 		return controller.getInternalBlocks().contains(checkBlock);
+	}
+	
+	@Override
+	public void addGreenhouseLogic(Class<? extends IGreenhouseLogic> logic) {
+		if(!greenhouseLogics.contains(logic)){
+			greenhouseLogics.add(logic);
+		}
+	}
+	
+	@Override
+	public List<Class<? extends IGreenhouseLogic>> getGreenhouseLogics() {
+		return greenhouseLogics;
 	}
 
 }

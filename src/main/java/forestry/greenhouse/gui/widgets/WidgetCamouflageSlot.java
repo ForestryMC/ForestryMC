@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.greenhouse.gui.widgets;
 
-import java.util.Locale;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderItem;
@@ -24,10 +20,9 @@ import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
@@ -38,9 +33,9 @@ import forestry.core.utils.Translator;
 public class WidgetCamouflageSlot extends Widget {
 	
 	private final ICamouflageHandler camouflageHandler;
-	private final EnumCamouflageType type;
+	private final String type;
 
-	public WidgetCamouflageSlot(WidgetManager manager, int xPos, int yPos, ICamouflageHandler camouflageHandler, EnumCamouflageType type) {
+	public WidgetCamouflageSlot(WidgetManager manager, int xPos, int yPos, ICamouflageHandler camouflageHandler, String type) {
 		super(manager, xPos, yPos);
 		
 		this.camouflageHandler = camouflageHandler;
@@ -67,14 +62,12 @@ public class WidgetCamouflageSlot extends Widget {
 		} else {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ItemStack stack = player.inventory.getItemStack();
-			if (stack != null && Block.getBlockFromItem(stack.getItem()) != null) {
-				Block block = Block.getBlockFromItem(stack.getItem());
-				if (!GreenhouseManager.greenhouseAccess.isOnCamouflageBlockBlackList(type, stack)) {
-					IBlockState stateFromMeta = block.getStateFromMeta(stack.getItemDamage());
-					if (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube(stateFromMeta) && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta, player.worldObj, camouflageHandler.getCoordinates())) {
-						camouflageHandler.setCamouflageBlock(type, stack);
-					} else if (type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack)) {
-						camouflageHandler.setCamouflageBlock(type, stack);
+			if (stack != null) {
+				if (!CamouflageManager.camouflageAccess.isItemBlackListed(type, stack)) {
+					for(ICamouflageItemHandler handler : CamouflageManager.camouflageAccess.getCamouflageItemHandler(type)){
+						if(handler != null && handler.canHandle(stack, camouflageHandler)){
+							camouflageHandler.setCamouflageBlock(type, stack.copy());
+						}
 					}
 				}
 			}
@@ -95,9 +88,8 @@ public class WidgetCamouflageSlot extends Widget {
 		@SideOnly(Side.CLIENT)
 		public void refresh() {
 			toolTip.clear();
-			String typeName = type.name().toLowerCase(Locale.ENGLISH);
 			if (camouflageHandler instanceof IMultiblockController) {
-				toolTip.add(Translator.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + typeName) + ": ");
+				toolTip.add(Translator.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + type) + ": ");
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.empty.slot.camouflage") + ": ");
 			}

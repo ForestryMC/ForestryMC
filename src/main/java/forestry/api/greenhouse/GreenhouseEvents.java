@@ -1,12 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright 2011-2014 SirSengir
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.greenhouse;
 
@@ -15,7 +10,6 @@ import javax.annotation.Nullable;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IGreenhouseController;
@@ -36,9 +30,9 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public ICamouflageHandler camouflageHandler;
 		@Nonnull
-		public final EnumCamouflageType camouflageType;
+		public final String camouflageType;
 		
-		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
+		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull String camouflageType) {
 			super(controller);
 			
 			this.camouflagedBlock = camouflagedBlock;

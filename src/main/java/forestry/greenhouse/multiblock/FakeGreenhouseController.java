@@ -17,8 +17,7 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-
-import forestry.api.core.EnumCamouflageType;
+import net.minecraft.world.World;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
@@ -55,18 +54,23 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getCamouflageBlock(String type) {
 		return null;
 	}
 	
 	@Override
-	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
 	}
 
 	@Override
-	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
 		
+	}
+	
+	@Override
+	public boolean canHandleType(String type) {
+		return false;
 	}
 
 	@Override
@@ -105,5 +109,10 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public Set<Listener> getListenerComponents() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public World getWorld() {
+		return null;
 	}
 }

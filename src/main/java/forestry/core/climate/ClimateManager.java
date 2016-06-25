@@ -13,8 +13,6 @@ package forestry.core.climate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.DimensionManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

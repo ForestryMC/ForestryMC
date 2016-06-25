@@ -88,7 +88,7 @@ public class ParticleColoredDripParticle extends Particle {
 				d0 = BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL));
 			}
 			
-			double d1 = (double) (MathHelper.floor_double(this.posY) + 1) - d0;
+			double d1 = MathHelper.floor_double(this.posY) + 1 - d0;
 			
 			if (this.posY < d1) {
 				this.setExpired();

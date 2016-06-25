@@ -15,8 +15,6 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
-import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
@@ -26,23 +24,23 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketCoordinates;
 
-public class PacketCamouflageUpdate extends PacketCoordinates implements IForestryPacketServer {
+public class PacketCamouflageUpdate extends PacketCoordinates implements IForestryPacketServer{
 
 	private ItemStack camouflageStack;
-	private EnumCamouflageType type;
+	private String type;
 	private boolean isMultiblock;
 
 	public PacketCamouflageUpdate() {
 	}
 
-	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type, boolean isMultiblock) {
+	public PacketCamouflageUpdate(ICamouflageHandler tile, String type, boolean isMultiblock) {
 		super(tile.getCoordinates());
 		this.camouflageStack = tile.getCamouflageBlock(type);
 		this.isMultiblock = isMultiblock;
 		this.type = type;
 	}
 	
-	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type) {
+	public PacketCamouflageUpdate(ICamouflageHandler tile, String type) {
 		super(tile.getCoordinates());
 		this.camouflageStack = tile.getCamouflageBlock(type);
 		this.isMultiblock = false;
@@ -58,7 +56,7 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(isMultiblock);
-		data.writeShort(type.ordinal());
+		data.writeUTF(type);
 		data.writeItemStack(camouflageStack);
 	}
 
@@ -66,7 +64,7 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		isMultiblock = data.readBoolean();
-		type = EnumCamouflageType.VALUES[data.readShort()];
+		type = data.readUTF();
 		camouflageStack = data.readItemStack();
 	}
 

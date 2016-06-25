@@ -1,7 +1,6 @@
 package forestry.core.climate;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Map.Entry;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;

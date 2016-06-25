@@ -11,8 +11,7 @@
 package forestry.greenhouse.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
@@ -33,9 +32,9 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 		widgetManager.add(new TankWidget(widgetManager, 152, 16, 0).setOverlayOrigin(176, 0));
 		
 		//Add the multiblock camouflage slots
-		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 16, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DEFAULT));
-		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 37, inventory.getMultiblockLogic().getController(), EnumCamouflageType.GLASS));
-		//widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 58, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DOOR));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 16, inventory.getMultiblockLogic().getController(), CamouflageManager.DEFAULT));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 37, inventory.getMultiblockLogic().getController(), CamouflageManager.GLASS));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 58, inventory.getMultiblockLogic().getController(), CamouflageManager.DOOR));
 		
 		//Add the tile camouflage slots
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 35, 37, inventory, tile.getCamouflageType()));

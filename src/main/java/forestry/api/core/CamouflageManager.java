@@ -5,8 +5,14 @@
  ******************************************************************************/
 package forestry.api.core;
 
-public enum EnumCamouflageType {
-	DEFAULT, GLASS, DOOR;
+public class CamouflageManager {
 	
-	public static final EnumCamouflageType[] VALUES = values();
+	public static ICamouflageAccess camouflageAccess;
+	
+	public static final String DEFAULT = "default";
+	
+	public static final String GLASS = "glass";
+	
+	public static final String DOOR = "door";
+
 }

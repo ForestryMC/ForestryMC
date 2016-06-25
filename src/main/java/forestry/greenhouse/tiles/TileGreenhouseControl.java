@@ -15,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.greenhouse.DefaultGreenhouseListener;
-import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
