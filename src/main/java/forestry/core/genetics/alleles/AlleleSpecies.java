@@ -11,7 +11,8 @@
 package forestry.core.genetics.alleles;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.mojang.authlib.GameProfile;
@@ -20,6 +21,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -111,20 +113,30 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		ItemStack research = null;
-		if (world.rand.nextFloat() < (float) 10 / bountyLevel) {
-			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
-			if (!combinations.isEmpty()) {
-				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
-				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
+		if (world.rand.nextFloat() < bountyLevel / 32.0f) {
+			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
+			if (!allMutations.isEmpty()) {
+				List<IMutation> unresearchedMutations = new ArrayList<>();
+				IBreedingTracker tracker = individual.getGenome().getSpeciesRoot().getBreedingTracker(world, researcher);
+				for (IMutation mutation : allMutations) {
+					if (!tracker.isResearched(mutation)) {
+						unresearchedMutations.add(mutation);
+					}
+				}
+
+				IMutation chosenMutation;
+				if (!unresearchedMutations.isEmpty()) {
+					chosenMutation = unresearchedMutations.get(world.rand.nextInt(unresearchedMutations.size()));
+				} else {
+					chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
+				}
+
+				ItemStack researchNote = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, chosenMutation);
+				return new ItemStack[]{researchNote};
 			}
 		}
 
-		if (research != null) {
-			return new ItemStack[]{research};
-		} else {
-			return ItemStackUtil.EMPTY_STACK_ARRAY;
-		}
+		return ItemStackUtil.EMPTY_STACK_ARRAY;
 	}
 
 	@Override
