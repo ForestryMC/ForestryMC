@@ -10,12 +10,12 @@ import forestry.api.multiblock.IGreenhouseController;
 public interface IGreenhouseListener  {
 
 	/**
-	 * Called before the greenhouse work.
+	 * Called before the greenhouse update the climate system.
 	 * 
-	 * @param greenhouse The greenhouse multiblock.
+	 * @param greenhouse The greenhouse of the listener.
 	 * @param canWork The actual {@link Boolean} value.
-	 * @return True if the greenhouse can work.
+	 * @return True if the greenhouse can update the climate.
 	 */
-	<G extends IGreenhouseController & IGreenhouseHousing> boolean canWork(G greenhouse, boolean canWork);
+	boolean canWork(IGreenhouseController greenhouse, boolean canWork);
 	
 }

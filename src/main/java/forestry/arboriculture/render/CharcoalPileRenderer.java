@@ -12,18 +12,10 @@ package forestry.arboriculture.render;
 
 import javax.annotation.Nonnull;
 
-import static forestry.arboriculture.multiblock.EnumPilePosition.BACK;
-import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_BACK_LEFT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_BACK_RIGHT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.FRONT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_FRONT_LEFT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.CORNER_FRONT_RIGHT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.SIDE_LEFT;
-import static forestry.arboriculture.multiblock.EnumPilePosition.SIDE_RIGHT;
+import static forestry.arboriculture.multiblock.EnumPilePosition.*;
 
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.multiblock.EnumPilePosition;
@@ -67,11 +59,10 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 			boolean isOnTop = logic.getController().getMaximumCoord().getY() == pile.getPos().getY();
 			// TODO Add brightness to the textures.
 			int brightness = state.getPackedLightmapCoords(pile.getWorld(), pile.getPos());
-			ITree tree = pile.getNextWoodPile();
-			if (tree == null) {
-				tree = TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getDefaultTemplate());
+			IAlleleTreeSpecies treeSpecies = pile.getNextWoodPile();
+			if (treeSpecies == null) {
+				treeSpecies = (IAlleleTreeSpecies) TreeManager.treeRoot.getDefaultTemplate()[TreeManager.treeRoot.getSpeciesChromosomeType().ordinal()];
 			}
-			IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
 			TextureAtlasSprite dirtSprite;
 			if(pile.getPileType() == EnumPileType.ASH){
 				dirtSprite = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/ash"));

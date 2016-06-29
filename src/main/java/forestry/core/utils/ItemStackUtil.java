@@ -199,7 +199,7 @@ public abstract class ItemStackUtil {
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
 		ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());
 		if (stack.getTagCompound() != null) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound) stack.getTagCompound().copy();
+			NBTTagCompound nbttagcompound = stack.getTagCompound().copy();
 			split.setTagCompound(nbttagcompound);
 		}
 		return split;
@@ -423,9 +423,15 @@ public abstract class ItemStackUtil {
 	}
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
-		int size = rand.nextInt(max);
+		int size = max <= 0 ? 0 : rand.nextInt(max);
 		ItemStack created = template.copy();
-		created.stackSize = size <= 0 ? 1 : size > created.getMaxStackSize() ? created.getMaxStackSize() : size;
+		if (size <= 0) {
+			created.stackSize = 1;
+		} else if (size > created.getMaxStackSize()) {
+			created.stackSize = created.getMaxStackSize();
+		} else {
+			created.stackSize = size;
+		}
 		return created;
 	}
 

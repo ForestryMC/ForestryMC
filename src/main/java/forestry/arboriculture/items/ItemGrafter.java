@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import java.util.List;
+
+import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
@@ -32,6 +35,14 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 		setCreativeTab(Tabs.tabArboriculture);
 		setHarvestLevel("grafter", 3);
 		setEfficiencyOnProperMaterial(4.0f);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		super.addInformation(stack, playerIn, tooltip, advanced);
+		if (!stack.isItemDamaged()) {
+			tooltip.add(Translator.translateToLocalFormatted("item.for.uses", stack.getMaxDamage() + 1));
+		}
 	}
 
 	@Override

@@ -7,16 +7,14 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
 
 public interface IBeeRoot extends ISpeciesRoot {
 
@@ -100,7 +98,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	/* MUTATIONS */
 	@Override
-	Collection<IBeeMutation> getMutations(boolean shuffle);
+	List<IBeeMutation> getMutations(boolean shuffle);
 
 	/* GAME MODE */
 	void resetBeekeepingMode();

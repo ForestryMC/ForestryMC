@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.genetics.IAllele;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -72,10 +73,10 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		tokenCount = getTokenCount(genome);
 
 		for (int i = 0; i < tokenCount / 2; i++) {
-			IIndividual token = root.templateAsIndividual(root.getRandomTemplate(rand));
-			ItemStack pair = root.getMemberStack(token, root.getIconType());
-			gameTokens.add(new EscritoireGameToken(pair));
-			gameTokens.add(new EscritoireGameToken(pair));
+			IAllele[] randomTemplate = root.getRandomTemplate(rand);
+			String speciesUid = randomTemplate[root.getSpeciesChromosomeType().ordinal()].getUID();
+			gameTokens.add(new EscritoireGameToken(speciesUid));
+			gameTokens.add(new EscritoireGameToken(speciesUid));
 		}
 		Collections.shuffle(gameTokens);
 		return true;

@@ -13,15 +13,15 @@ package forestry.greenhouse.logics;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
+import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
-import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.CamouflageAccess;
 import forestry.core.utils.CamouflageUtil;
 
 public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
@@ -36,7 +36,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 	
 	@Override
 	public void work() {
-		if (controller == null || !controller.isAssembled()) {
+		/*if (controller == null || !controller.isAssembled()) {
 			return;
 		}
 		if (controller.getWorldObj().isDaytime()) {
@@ -44,7 +44,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 				controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
 				workTimer = 0;
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -73,10 +73,11 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 			for (IMultiblockComponent component : controller.getComponents()) {
 				if (component instanceof ICamouflagedTile) {
 					ICamouflagedTile block = (ICamouflagedTile) component;
-					if (block.getCamouflageType() == EnumCamouflageType.GLASS) {
+					if (block.getCamouflageType() == CamouflageManager.GLASS) {
 						if (world.canBlockSeeSky(component.getCoordinates())) {
 							ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, component.getCoordinates());
-							float camouflageLightTransmittance = GreenhouseManager.greenhouseAccess.getGreenhouseGlassLightTransmittance(camouflageStack);
+							ICamouflageItemHandler handler = CamouflageAccess.getHandlerFromItem(camouflageStack, controller);
+							float camouflageLightTransmittance = handler.getLightTransmittance(camouflageStack, controller);
 							
 							if (camouflageLightTransmittance < 1 && camouflageLightTransmittance > 0) {
 								lightTransmittance = lightTransmittance + camouflageLightTransmittance;

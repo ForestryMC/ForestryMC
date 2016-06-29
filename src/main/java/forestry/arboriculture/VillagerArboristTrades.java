@@ -7,12 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.TreeManager;
@@ -22,6 +16,11 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 
 public class VillagerArboristTrades {
 
@@ -120,7 +119,7 @@ public class VillagerArboristTrades {
 				j = this.emeraldPriceInfo.getPrice(random);
 			}
 
-			IChromosomeType treeSpeciesType = TreeManager.treeRoot.getKaryotypeKey();
+			IChromosomeType treeSpeciesType = TreeManager.treeRoot.getSpeciesChromosomeType();
 			Collection<IAllele> registeredSpecies = AlleleManager.alleleRegistry.getRegisteredAlleles(treeSpeciesType);
 			List<IAlleleSpecies> potentialSpecies = new ArrayList<>();
 			for (IAllele allele : registeredSpecies) {

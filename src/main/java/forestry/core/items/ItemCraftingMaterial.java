@@ -94,6 +94,10 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 	
 	public ItemStack getCamouflagedPaneling() {
-		return new ItemStack(this, 1, 7);
+		return getCamouflagedPaneling(1);
+	}
+	
+	public ItemStack getCamouflagedPaneling(int stackSize) {
+		return new ItemStack(this, stackSize, 7);
 	}
 }

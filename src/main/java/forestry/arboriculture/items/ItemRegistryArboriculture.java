@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
@@ -28,8 +30,12 @@ public class ItemRegistryArboriculture extends ItemRegistry {
 		OreDictionary.registerOre(OreDictUtil.TREE_SAPLING, sapling.getWildcard());
 		
 		pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+
 		charcoal = registerItem(new ItemCharcoal(), "charcoal");
-		grafter = registerItem(new ItemGrafter(4), "grafter");
+		registerOreDict(OreDictUtil.CHARCOAL, new ItemStack(charcoal, 1, OreDictionary.WILDCARD_VALUE));
+		registerOreDict(OreDictUtil.CHARCOAL, new ItemStack(Items.COAL, 1, 1));
+
+		grafter = registerItem(new ItemGrafter(9), "grafter");
 		grafterProven = registerItem(new ItemGrafter(149), "grafterProven");
 	}
 }

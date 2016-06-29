@@ -16,6 +16,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IToolScoop;
+import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.IGrowable;
@@ -40,38 +63,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IToolScoop;
-import forestry.api.core.Tabs;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.arboriculture.LeafDecayHelper;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister, IColoredBlock {
 
@@ -137,17 +134,16 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
 		float saplingModifier = 1.0f;
 
-		if (!world.isRemote) {
-			ItemStack held = player.inventory.getCurrentItem();
-			if (held != null && held.getItem() instanceof IToolGrafter) {
-				saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, pos);
-				held.damageItem(1, player);
-				if (held.stackSize <= 0) {
-					net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, held, EnumHand.MAIN_HAND);
-					player.setHeldItem(EnumHand.MAIN_HAND, null);
-				}
+		ItemStack held = player.inventory.getCurrentItem();
+		if (held != null && held.getItem() instanceof IToolGrafter) {
+			saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, pos);
+			held.damageItem(1, player);
+			if (held.stackSize <= 0) {
+				net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, held, EnumHand.MAIN_HAND);
+				player.setHeldItem(EnumHand.MAIN_HAND, null);
 			}
 		}
+
 		GameProfile playerProfile = player.getGameProfile();
 		List<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
 		drops.set(leafDrops);

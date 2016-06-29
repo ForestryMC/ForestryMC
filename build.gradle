@@ -40,7 +40,6 @@ targetCompatibility = 1.8
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
-	useDepAts = true
 	mappings = mcp_mappings
 
 	replace '@VERSION@', project.version
@@ -66,7 +65,8 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}"
+	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
+	runtime "mezz.jei:jei_${mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 }
 

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.item.Item;

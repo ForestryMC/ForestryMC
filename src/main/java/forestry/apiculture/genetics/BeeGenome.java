@@ -10,17 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
 import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3i;
-
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -38,6 +33,9 @@ import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3i;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
@@ -90,7 +88,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 			return null;
 		}
 
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		IAlleleSpecies species = getSpeciesDirectly(BeeManager.beeRoot, itemStack);
 		if (species instanceof IAlleleBeeSpecies) {
 			return (IAlleleBeeSpecies) species;
 		}

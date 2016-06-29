@@ -104,8 +104,10 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public void killMinecart(DamageSource damageSource) {
 		super.killMinecart(damageSource);
-		Block block = getDisplayTile().getBlock();
-		entityDropItem(new ItemStack(block, 1, block.getMetaFromState(getDisplayTile())), 0.0F);
+		if (this.worldObj.getGameRules().getBoolean("doEntityDrops")) {
+			Block block = getDisplayTile().getBlock();
+			entityDropItem(new ItemStack(block), 0.0F);
+		}
 	}
 
 	// fix cart contents rendering as black in the End dimension

@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
+import forestry.api.genetics.IGenome;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -292,17 +293,9 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		RenderHelper.enableGUIStandardItemLighting();
 
-		HashMap<IMutation, IAllele> combinations = new HashMap<>();
-
-		ISpeciesRoot speciesRoot = individual.getGenome().getSpeciesRoot();
-
-		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getPrimary())) {
-			combinations.put(mutation, individual.getGenome().getPrimary());
-		}
-
-		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getSecondary())) {
-			combinations.put(mutation, individual.getGenome().getSecondary());
-		}
+		IGenome genome = individual.getGenome();
+		ISpeciesRoot speciesRoot = genome.getSpeciesRoot();
+		IAlleleSpecies species = genome.getPrimary();
 
 		int columnWidth = 50;
 		int x = 0;
@@ -310,17 +303,16 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		EntityPlayer player = Proxies.common.getPlayer();
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 
-		for (Map.Entry<IMutation, IAllele> mutation : combinations.entrySet()) {
-
-			if (breedingTracker.isDiscovered(mutation.getKey())) {
-				drawMutationInfo(mutation.getKey(), mutation.getValue(), COLUMN_0 + x, breedingTracker);
+		for (IMutation mutation : speciesRoot.getCombinations(species)) {
+			if (breedingTracker.isDiscovered(mutation)) {
+				drawMutationInfo(mutation, species, COLUMN_0 + x, breedingTracker);
 			} else {
 				// Do not display secret undiscovered mutations.
-				if (mutation.getKey().isSecret()) {
+				if (mutation.isSecret()) {
 					continue;
 				}
 
-				drawUnknownMutation(mutation.getKey(), COLUMN_0 + x, breedingTracker);
+				drawUnknownMutation(mutation, COLUMN_0 + x, breedingTracker);
 			}
 
 			x += columnWidth;

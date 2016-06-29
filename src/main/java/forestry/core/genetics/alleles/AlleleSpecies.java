@@ -11,20 +11,17 @@
 package forestry.core.genetics.alleles;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -33,6 +30,9 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;
@@ -103,7 +103,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 		if (complexityOverride != null) {
 			return complexityOverride;
 		}
-		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotypeKey());
+		return GeneticsUtil.getResearchComplexity(this, getRoot().getSpeciesChromosomeType());
 	}
 
 	@Override
@@ -113,20 +113,30 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		ItemStack research = null;
-		if (world.rand.nextFloat() < (float) 10 / bountyLevel) {
-			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
-			if (!combinations.isEmpty()) {
-				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
-				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
+		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
+			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
+			if (!allMutations.isEmpty()) {
+				List<IMutation> unresearchedMutations = new ArrayList<>();
+				IBreedingTracker tracker = individual.getGenome().getSpeciesRoot().getBreedingTracker(world, researcher);
+				for (IMutation mutation : allMutations) {
+					if (!tracker.isResearched(mutation)) {
+						unresearchedMutations.add(mutation);
+					}
+				}
+
+				IMutation chosenMutation;
+				if (!unresearchedMutations.isEmpty()) {
+					chosenMutation = unresearchedMutations.get(world.rand.nextInt(unresearchedMutations.size()));
+				} else {
+					chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
+				}
+
+				ItemStack researchNote = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, chosenMutation);
+				return new ItemStack[]{researchNote};
 			}
 		}
 
-		if (research != null) {
-			return new ItemStack[]{research};
-		} else {
-			return ItemStackUtil.EMPTY_STACK_ARRAY;
-		}
+		return ItemStackUtil.EMPTY_STACK_ARRAY;
 	}
 
 	@Override

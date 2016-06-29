@@ -9,8 +9,6 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.utils.Log;
-import forestry.factory.recipes.jei.FactoryJeiPlugin;
-
 import mezz.jei.api.recipe.IStackHelper;
 
 public class FermenterRecipeMaker {

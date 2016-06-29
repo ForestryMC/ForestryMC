@@ -160,7 +160,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if (getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.DOOR) {
+		if (getGreenhouseType() != BlockGreenhouseType.SPRINKLER) {
 			return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
 					.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 		}
@@ -186,7 +186,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			return super.getActualState(state, worldIn, pos);
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
@@ -209,10 +209,10 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 				return new TileGreenhouseFan();
 			case HEATER:
 				return new TileGreenhouseHeater();
-			case CONTROL:
-				return new TileGreenhouseControl();
 			case DOOR:
 				return new TileGreenhouseDoor();
+			case CONTROL:
+				return new TileGreenhouseControl();
 			case HATCH_INPUT:
 			case HATCH_OUTPUT:
 				return new TileGreenhouseHatch();
@@ -234,11 +234,13 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 			if (tintIndex < 100 && camouflageStack != null) {
 				Block block = Block.getBlockFromItem(camouflageStack.getItem());
-				IBlockState camouflageState = block.getStateFromMeta(camouflageStack.getItemDamage());
-				
-				int color = Minecraft.getMinecraft().getBlockColors().colorMultiplier(camouflageState, worldIn, pos, tintIndex);
-				if(color != -1){
-					return color;
+				if(block != null){
+					IBlockState camouflageState = block.getStateFromMeta(camouflageStack.getItemDamage());
+					
+					int color = Minecraft.getMinecraft().getBlockColors().colorMultiplier(camouflageState, worldIn, pos, tintIndex);
+					if(color != -1){
+						return color;
+					}
 				}
 			}
 		}

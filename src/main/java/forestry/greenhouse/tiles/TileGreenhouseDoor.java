@@ -10,60 +10,25 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemStack;
+import forestry.core.utils.ItemStackUtil;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-
-public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent.Door, IErrorLogicSource, IRestrictedAccess {
-
-	public TileGreenhouseDoor() {
-		super(new MultiblockLogicGreenhouse());
-	}
+public class TileGreenhouseDoor extends TileGreenhouse{
 	
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
-		markDirty();
-	}
-
-	@Override
-	public void onMachineBroken() {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
-		markDirty();
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
+			super.setCamouflageBlock(type, camouflageBlock);
+			TileGreenhouseDoor otherDoorTile = null;
+			if(worldObj.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.up());
+			}else if(worldObj.getTileEntity(pos.down()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.down());
+			}
+			if(otherDoorTile != null){
+				otherDoorTile.setCamouflageBlock(type, camouflageBlock);
+			}
+		}
 	}
 	
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return getMultiblockLogic().getController().getErrorLogic();
-	}
-
-	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
-	}
-
-	@Override
-	public Object getGui(EntityPlayer player, int data) {
-		return null;
-	}
-
-	@Override
-	public Object getContainer(EntityPlayer player, int data) {
-		return null;
-	}
-
 }

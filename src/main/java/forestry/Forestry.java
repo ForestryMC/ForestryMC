@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
+import forestry.core.climate.ClimateEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -49,16 +50,9 @@ import forestry.plugins.PluginManager;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[12.17.0.1963,);"
-				+ "after:Buildcraft|Core@[7.2,);"
-				+ "after:BuildCraft|Energy@[7.2,);"
-				+ "after:ExtrabiomesXL;"
-				+ "after:BiomesOPlenty;"
-				+ "after:IC2@[2.3.235,);"
-				+ "after:Natura@[2.2.0,);"
-				+ "after:HardcoreEnderExpansion;"
-				+ "after:JEI@[3.6.4,);"
-				+ "after:basemetals;")
+		acceptedMinecraftVersions = "[1.10]",
+		dependencies = "required-after:Forge@[12.18.0.1989,);"
+				+ "after:JEI@[3.7.0,);")
 public class Forestry {
 
 	@Mod.Instance(Constants.MOD_ID)
@@ -83,6 +77,7 @@ public class Forestry {
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+		MinecraftForge.EVENT_BUS.register(new ClimateEventHandler());
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		Config.load();

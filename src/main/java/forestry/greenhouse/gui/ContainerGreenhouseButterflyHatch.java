@@ -29,13 +29,6 @@ public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenho
 		addSlotToContainer(new SlotOutput(tile, 2, 101, 40));
 		addSlotToContainer(new SlotOutput(tile, 3, 80, 53));
 	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
 	
 	public IFluidTank getTank(int slot) {
 		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);

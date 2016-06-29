@@ -20,14 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import net.minecraft.item.ItemStack;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	
@@ -82,8 +81,8 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	/* MUTATIONS */
 	@Override
-	public Collection<? extends IMutation> getCombinations(IAllele other) {
-		ArrayList<IMutation> combinations = new ArrayList<>();
+	public List<IMutation> getCombinations(IAllele other) {
+		List<IMutation> combinations = new ArrayList<>();
 		for (IMutation mutation : getMutations(false)) {
 			if (mutation.isPartner(other)) {
 				combinations.add(mutation);

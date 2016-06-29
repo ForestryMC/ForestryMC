@@ -11,14 +11,15 @@
 package forestry.core.genetics;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
-
-import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.core.utils.Log;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.ISpeciesRoot;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Chromosome implements IChromosome {
 
@@ -30,7 +31,37 @@ public class Chromosome implements IChromosome {
 	@Nonnull
 	private final IAllele secondary;
 
-	// / CONSTRUCTOR
+	@Nonnull
+	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, @Nonnull IChromosomeType chromosomeType, @Nonnull NBTTagCompound nbt) {
+		IAllele primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
+		IAllele secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
+
+		primary = validateAllele(primarySpeciesUid, chromosomeType, primary);
+		secondary = validateAllele(secondarySpeciesUid, chromosomeType, secondary);
+
+		return new Chromosome(primary, secondary);
+	}
+
+	@Nonnull
+	private static IAllele validateAllele(@Nullable String speciesUid, @Nonnull IChromosomeType chromosomeType, @Nullable IAllele allele) {
+		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
+			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
+
+			IAllele[] template = null;
+
+			if (speciesUid != null) {
+				template = speciesRoot.getTemplate(speciesUid);
+			}
+
+			if (template == null) {
+				template = speciesRoot.getDefaultTemplate();
+			}
+
+			return template[chromosomeType.ordinal()];
+		}
+		return allele;
+	}
+
 	public Chromosome(@Nonnull IAllele allele) {
 		primary = secondary = allele;
 	}
@@ -38,11 +69,6 @@ public class Chromosome implements IChromosome {
 	public Chromosome(@Nonnull IAllele primary, @Nonnull IAllele secondary) {
 		this.primary = primary;
 		this.secondary = secondary;
-	}
-
-	public Chromosome(@Nonnull NBTTagCompound nbt) {
-		primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
-		secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
 	}
 
 	@Override
@@ -64,9 +90,6 @@ public class Chromosome implements IChromosome {
 
 	@Override
 	public IAllele getActiveAllele() {
-		if (primary == null || secondary == null) {
-			return null;
-		}
 		if (primary.isDominant()) {
 			return primary;
 		}
@@ -87,38 +110,6 @@ public class Chromosome implements IChromosome {
 		}
 		// Leaves only the case of both being dominant
 		return secondary;
-	}
-
-	public IAllele getRandomAllele(Random rand) {
-		if (rand.nextBoolean()) {
-			return primary;
-		} else {
-			return secondary;
-		}
-	}
-	
-	public boolean hasInvalidAlleles(Class<? extends IAllele> chromosomeClass) {
-		if (primary == null) {
-			Log.warning("Missing primary allele: {}", this);
-			return true;
-		}
-
-		if (!chromosomeClass.isInstance(primary)) {
-			Log.warning("Wrong primary allele for: {}. Should be: {}", this, chromosomeClass.getSimpleName());
-			return true;
-		}
-		
-		if (secondary == null) {
-			Log.warning("Missing secondary allele: {}", this);
-			return true;
-		}
-
-		if (!chromosomeClass.isInstance(secondary)) {
-			Log.warning("Wrong secondary allele for: {}. Should be: {}", this, chromosomeClass.getSimpleName());
-			return true;
-		}
-		
-		return false;
 	}
 
 	/* HELPER FUNCTIONS */

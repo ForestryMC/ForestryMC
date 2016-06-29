@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -46,7 +45,7 @@ public interface IMutationBuilder {
 	IMutationBuilder requireNight();
 
 	/** Require a specific resource to be under the location of the mutation */
-	IMutationBuilder requireResource(IBlockState requiredBlockState);
+	IMutationBuilder requireResource(IBlockState... acceptedBlockStates);
 
 	IMutationBuilder requireResource(String oreDictName);
 

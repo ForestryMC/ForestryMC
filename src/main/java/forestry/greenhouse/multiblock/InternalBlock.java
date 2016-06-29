@@ -18,7 +18,6 @@ import java.util.List;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 

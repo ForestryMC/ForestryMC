@@ -11,20 +11,12 @@
 package forestry.arboriculture.genetics;
 
 import javax.annotation.Nonnull;
-import java.util.EnumSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAlleleFloat;
@@ -33,7 +25,8 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
-import forestry.core.genetics.alleles.AllelePlantType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TreeGenome extends Genome implements ITreeGenome {
 
@@ -51,7 +44,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 			return null;
 		}
 
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		IAlleleSpecies species = getSpeciesDirectly(TreeManager.treeRoot, itemStack);
 		if (species instanceof IAlleleTreeSpecies) {
 			return (IAlleleTreeSpecies) species;
 		}
@@ -76,11 +69,6 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
-	public IGrowthProvider getGrowthProvider() {
-		return ((IAlleleGrowth) getActiveAllele(EnumTreeChromosome.GROWTH)).getProvider();
-	}
-
-	@Override
 	public float getHeight() {
 		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.HEIGHT)).getValue();
 	}
@@ -101,11 +89,6 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
-	public EnumSet<EnumPlantType> getPlantTypes() {
-		return ((AllelePlantType) getActiveAllele(EnumTreeChromosome.PLANT)).getPlantTypes();
-	}
-
-	@Override
 	public int getMaturationTime() {
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION)).getValue();
 	}
@@ -113,16 +96,6 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	@Override
 	public int getGirth() {
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
-	}
-	
-	@Override
-	public int getCombustibility(){
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.COMBUSTIBILITY)).getValue();
-	}
-	
-	@Override
-	public int getCarbonization(){
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.CARBONIZATION)).getValue();
 	}
 	
 	@Override

@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 /**
  * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.
@@ -105,9 +104,9 @@ public interface ISpeciesRoot {
 	void registerTemplate(String identifier, IAllele[] template);
 
 	/**
-	 * Retrieves a registered template using the passed identifier.
+	 * Retrieves a registered template using the passed species unique identifier.
 	 *
-	 * @param identifier
+	 * @param identifier species UID
 	 * @return Array of {@link IAllele} representing a genome.
 	 */
 	IAllele[] getTemplate(String identifier);
@@ -139,13 +138,13 @@ public interface ISpeciesRoot {
 	/**
 	 * @return All registered mutations.
 	 */
-	Collection<? extends IMutation> getMutations(boolean shuffle);
+	List<? extends IMutation> getMutations(boolean shuffle);
 
 	/**
 	 * @param other Allele to match mutations against.
 	 * @return All registered mutations the given allele is part of.
 	 */
-	Collection<? extends IMutation> getCombinations(IAllele other);
+	List<? extends IMutation> getCombinations(IAllele other);
 
 	/**
 	 * @since Forestry 3.7
@@ -170,14 +169,14 @@ public interface ISpeciesRoot {
 	void setResearchSuitability(ItemStack itemstack, float suitability);
 
 	/**
-	 * @return Array of {@link IChromosomeType} which are in this species genome
+	 * @return Array of all {@link IChromosomeType} which are in this species genome
 	 */
 	IChromosomeType[] getKaryotype();
 
 	/**
-	 * @return {@link IChromosomeType} which is the "key" for this species class, usually the species chromosome.
+	 * @return {@link IChromosomeType} which is the "key" for this species class, the species chromosome.
 	 */
-	IChromosomeType getKaryotypeKey();
+	IChromosomeType getSpeciesChromosomeType();
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer.

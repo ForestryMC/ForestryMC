@@ -13,17 +13,16 @@ package forestry.arboriculture.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.commands.ICommandModeHelper;
+import net.minecraft.world.World;
 
 public class TreeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String[] getModeNames() {
-		ArrayList<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
+		List<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
 		int modeStringCount = treekeepingModes.size();
 		List<String> modeStrings = new ArrayList<>(modeStringCount);
 		for (ITreekeepingMode mode : treekeepingModes) {

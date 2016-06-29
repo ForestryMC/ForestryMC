@@ -14,13 +14,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
@@ -109,14 +107,14 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Mutation requireResource(IBlockState blockState) {
-		IMutationCondition mutationCondition = new MutationConditionRequiresResource(blockState);
+	public Mutation requireResource(IBlockState... acceptedBlockStates) {
+		IMutationCondition mutationCondition = new MutationConditionRequiresResource(acceptedBlockStates);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
 	public Mutation requireResource(String oreName) {
-		IMutationCondition mutationCondition = new MutationConditionRequiresResourceOreDict(oreName);
+		IMutationCondition mutationCondition = new MutationConditionRequiresResource(oreName);
 		return addMutationCondition(mutationCondition);
 	}
 

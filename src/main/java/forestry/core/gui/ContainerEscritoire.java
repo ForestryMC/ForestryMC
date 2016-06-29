@@ -23,15 +23,10 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
-
-	private final EntityPlayer player;
-
 	private long lastUpdate;
 
 	public ContainerEscritoire(EntityPlayer player, TileEscritoire tile) {
 		super(tile, player.inventory, 34, 153);
-
-		this.player = player;
 
 		// Analyze slot
 		addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));
@@ -54,7 +49,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		long gameLastUpdate = tile.getGame().getLastUpdate();
 		if (lastUpdate != gameLastUpdate) {
 			lastUpdate = gameLastUpdate;
-			Proxies.net.sendToPlayer(new PacketGuiUpdate(tile), player);
+			sendPacketToListeners(new PacketGuiUpdate(tile));
 		}
 	}
 
