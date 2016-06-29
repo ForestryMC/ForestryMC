@@ -138,13 +138,13 @@ public interface ISpeciesRoot {
 	/**
 	 * @return All registered mutations.
 	 */
-	Collection<? extends IMutation> getMutations(boolean shuffle);
+	List<? extends IMutation> getMutations(boolean shuffle);
 
 	/**
 	 * @param other Allele to match mutations against.
 	 * @return All registered mutations the given allele is part of.
 	 */
-	Collection<? extends IMutation> getCombinations(IAllele other);
+	List<? extends IMutation> getCombinations(IAllele other);
 
 	/**
 	 * @since Forestry 3.7

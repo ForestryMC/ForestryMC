@@ -12,8 +12,8 @@ package forestry.lepidopterology.genetics;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.mojang.authlib.GameProfile;
@@ -264,7 +264,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* MUTATIONS */
-	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<>();
+	private static final List<IButterflyMutation> butterflyMutations = new ArrayList<>();
 
 	@Override
 	public void registerMutation(IMutation mutation) {
@@ -282,7 +282,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public Collection<IButterflyMutation> getMutations(boolean shuffle) {
+	public List<IButterflyMutation> getMutations(boolean shuffle) {
 		if (shuffle) {
 			Collections.shuffle(butterflyMutations);
 		}

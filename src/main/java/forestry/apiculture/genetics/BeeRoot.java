@@ -12,8 +12,8 @@ package forestry.apiculture.genetics;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -249,10 +249,10 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	/**
 	 * List of possible mutations on species alleles.
 	 */
-	private static final ArrayList<IBeeMutation> beeMutations = new ArrayList<>();
+	private static final List<IBeeMutation> beeMutations = new ArrayList<>();
 
 	@Override
-	public Collection<IBeeMutation> getMutations(boolean shuffle) {
+	public List<IBeeMutation> getMutations(boolean shuffle) {
 		if (shuffle) {
 			Collections.shuffle(beeMutations);
 		}

@@ -8,17 +8,16 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ISpeciesRoot;
 
 public interface ITreeRoot extends ISpeciesRoot {
 
@@ -82,7 +81,7 @@ public interface ITreeRoot extends ISpeciesRoot {
 	boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, BlockPos pos);
 
 	/* GAME MODE */
-	ArrayList<ITreekeepingMode> getTreekeepingModes();
+	List<ITreekeepingMode> getTreekeepingModes();
 
 	ITreekeepingMode getTreekeepingMode(World world);
 
@@ -98,6 +97,5 @@ public interface ITreeRoot extends ISpeciesRoot {
 
 	/* MUTATIONS */
 	@Override
-	Collection<ITreeMutation> getMutations(boolean shuffle);
-
+	List<ITreeMutation> getMutations(boolean shuffle);
 }

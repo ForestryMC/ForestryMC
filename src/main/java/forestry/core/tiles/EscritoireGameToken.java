@@ -14,17 +14,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
@@ -42,6 +44,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	private static final String[] OVERLAY_SELECTED = new String[]{"errors/unknown"};
 
 	@Nullable
+	private IIndividual tokenIndividual;
+	@Nullable
 	private ItemStack tokenStack;
 	@Nonnull
 	private State state = State.UNREVEALED;
@@ -51,8 +55,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		// required for IStreamable serialization
 	}
 
-	public EscritoireGameToken(@Nullable ItemStack tokenStack) {
-		this.tokenStack = tokenStack;
+	public EscritoireGameToken(@Nullable String speciesUid) {
+		setTokenSpecies(speciesUid);
 	}
 
 	public EscritoireGameToken(@Nonnull NBTTagCompound nbttagcompound) {
@@ -61,8 +65,29 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			state = State.values()[stateOrdinal];
 		}
 
+		// legacy
 		if (nbttagcompound.hasKey("tokenStack")) {
 			tokenStack = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("tokenStack"));
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(tokenStack);
+			tokenIndividual = speciesRoot.getMember(tokenStack);
+		}
+
+		if (nbttagcompound.hasKey("tokenSpecies")) {
+			String speciesUid = nbttagcompound.getString("tokenSpecies");
+			setTokenSpecies(speciesUid);
+		}
+	}
+
+	private void setTokenSpecies(String speciesUid) {
+		IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
+		if (allele instanceof IAlleleSpecies) {
+			IAlleleSpecies species = (IAlleleSpecies) allele;
+			ISpeciesRoot root = species.getRoot();
+			IAllele[] template = root.getTemplate(speciesUid);
+			if (template != null) {
+				this.tokenIndividual = root.templateAsIndividual(template);
+				this.tokenStack = root.getMemberStack(this.tokenIndividual, root.getIconType());
+			}
 		}
 	}
 
@@ -108,12 +133,11 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	public int getTokenColour() {
-		if (tokenStack == null || !isVisible()) {
+		if (tokenIndividual == null || !isVisible()) {
 			return 0xffffff;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(tokenStack);
-		int iconColor = individual.getGenome().getPrimary().getSpriteColour(0);
+		int iconColor = tokenIndividual.getGenome().getPrimary().getSpriteColour(0);
 
 		if (state == State.MATCHED) {
 			return ColourUtil.multiplyRGBComponents(iconColor, 0.7f);
@@ -146,10 +170,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("state", state.ordinal());
 
-		if (tokenStack != null) {
-			NBTTagCompound stackcompound = new NBTTagCompound();
-			tokenStack.writeToNBT(stackcompound);
-			nbttagcompound.setTag("tokenStack", stackcompound);
+		if (tokenIndividual != null) {
+			nbttagcompound.setString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getUID());
 		}
 		return nbttagcompound;
 	}
@@ -158,12 +180,20 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeEnum(state, State.VALUES);
-		data.writeItemStack(tokenStack);
+		if (tokenIndividual != null) {
+			data.writeBoolean(true);
+			data.writeUTF(tokenIndividual.getGenome().getPrimary().getUID());
+		} else {
+			data.writeBoolean(false);
+		}
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		state = data.readEnum(State.VALUES);
-		tokenStack = data.readItemStack();
+		if (data.readBoolean()) {
+			String speciesUid = data.readUTF();
+			setTokenSpecies(speciesUid);
+		}
 	}
 }
