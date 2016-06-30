@@ -11,6 +11,7 @@
 package forestry.energy.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -215,15 +216,16 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return true;
 		}
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
+	@Nonnull
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return super.getCapability(capability, facing);
 		}
