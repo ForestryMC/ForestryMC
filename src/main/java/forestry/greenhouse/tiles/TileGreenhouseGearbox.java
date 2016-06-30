@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.util.EnumFacing;
 
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
+import net.minecraftforge.common.capabilities.Capability;
 
 public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyReceiver, IEnergyHandler {
 
@@ -59,4 +63,25 @@ public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyRece
 		return getMultiblockLogic().getController().getEnergyManager();
 	}
 
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+		EnergyManager energyManager = getEnergyManager();
+		if (energyManager != null && energyManager.hasCapability(capability)) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+
+	@Nonnull
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+		EnergyManager energyManager = getEnergyManager();
+		if (energyManager != null) {
+			T energyCapability = energyManager.getCapability(capability);
+			if (energyCapability != null) {
+				return energyCapability;
+			}
+		}
+		return super.getCapability(capability, facing);
+	}
 }

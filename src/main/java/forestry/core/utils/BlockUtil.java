@@ -19,6 +19,7 @@ import cofh.api.energy.IEnergyReceiver;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileEngine;
+import forestry.energy.EnergyManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
@@ -51,12 +52,19 @@ public abstract class BlockUtil {
 	}
 	
 	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
-		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof TileEngine)) {
-			return false;
-		}
+		if (tile != null) {
+			if (EnergyManager.TESLA_CONSUMER != null) {
+				if (tile.hasCapability(EnergyManager.TESLA_CONSUMER, side)) {
+					return true;
+				}
+			}
 
-		IEnergyConnection receptor = (IEnergyConnection) tile;
-		return receptor.canConnectEnergy(side);
+			if (tile instanceof IEnergyReceiver || (tile instanceof TileEngine)) {
+				IEnergyConnection receptor = (IEnergyConnection) tile;
+				return receptor.canConnectEnergy(side);
+			}
+		}
+		return false;
 	}
 
 	public static boolean tryPlantCocoaPod(World world, BlockPos pos) {
