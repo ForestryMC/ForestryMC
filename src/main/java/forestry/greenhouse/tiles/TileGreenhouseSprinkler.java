@@ -35,7 +35,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 	private final TimeValues.VariableValue cycleLength = new TimeValues.VariableValue(4);
 	private final TimeValues.VariableValue clickTime = new TimeValues.VariableValue(Float.NEGATIVE_INFINITY);
 	
-	protected static final int WATER_PER_OPERATION = 2;
+	protected static final int WATER_PER_OPERATION = 25;
 	private static final SprinklerDefinition definition = new SprinklerDefinition();
 
 	public TileGreenhouseSprinkler() {
@@ -88,7 +88,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 					}
 				}
 				
-				workingTime += WATER_PER_OPERATION * 2;
+				workingTime += WATER_PER_OPERATION / 20;
 			}
 	
 			if (workingTime > 0) {
@@ -164,7 +164,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 
 		@Override
 		public float getChange() {
-			return 0.0005F;
+			return 0.005F;
 		}
 
 		@Override

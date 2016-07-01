@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotLiquidIn;
+import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouse;
 
 public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
@@ -24,6 +25,13 @@ public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 		super(tile, playerInventory, 8, 84);
 		
 		addSlotToContainer(new SlotLiquidIn(tile, 0, 125, 37));
+	}
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
 	}
 	
 	public IFluidTank getTank(int slot) {

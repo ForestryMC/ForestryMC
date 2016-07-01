@@ -11,6 +11,8 @@
 package forestry.greenhouse.tiles;
 
 import javax.annotation.Nonnull;
+
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -35,6 +37,9 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.ItemStackUtil;
@@ -46,7 +51,7 @@ import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
 
 	protected ItemStack camouflageBlock;
 
@@ -173,6 +178,17 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public String getUnlocalizedTitle() {
 		return "for.gui.greenhouse.title";
+	}
+	
+	/* IStreamableGui */
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().writeGuiData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	@Override

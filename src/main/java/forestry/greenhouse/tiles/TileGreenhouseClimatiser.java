@@ -221,6 +221,8 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 			} else {
 				inwards = EnumFacing.UP;
 			}
+		}else{
+			inwards = EnumFacing.DOWN;
 		}
 	}
 	

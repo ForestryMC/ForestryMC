@@ -12,6 +12,8 @@ package forestry.greenhouse.tiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -41,6 +43,9 @@ import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -55,7 +60,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
@@ -163,6 +168,17 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public boolean canHandleType(String type) {
 		return type.equals(getCamouflageType());
+	}
+	
+	/* IStreamableGui */
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().writeGuiData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	/* TILEFORESTRY */
