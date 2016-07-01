@@ -11,6 +11,7 @@
 package forestry.apiculture.multiblock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +23,7 @@ import forestry.core.tiles.IActivatable;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyReceiver;
+import net.minecraftforge.common.capabilities.Capability;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiver, IActivatable, IAlvearyComponent.Climatiser {
 
@@ -142,4 +144,18 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		return energyManager.canConnectEnergy(from);
 	}
 
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+	}
+
+	@Nonnull
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+		T energyCapability = energyManager.getCapability(capability);
+		if (energyCapability != null) {
+			return energyCapability;
+		}
+		return super.getCapability(capability, facing);
+	}
 }

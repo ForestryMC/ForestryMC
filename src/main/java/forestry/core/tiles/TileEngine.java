@@ -11,6 +11,7 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +34,7 @@ import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyConnection;
+import net.minecraftforge.common.capabilities.Capability;
 
 public abstract class TileEngine extends TileBase implements IEnergyConnection, IActivatable {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
@@ -293,5 +295,20 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 	public EnergyManager getEnergyManager() {
 		return energyManager;
+	}
+
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+	}
+
+	@Nonnull
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+		T energyCapability = energyManager.getCapability(capability);
+		if (energyCapability != null) {
+			return energyCapability;
+		}
+		return super.getCapability(capability, facing);
 	}
 }

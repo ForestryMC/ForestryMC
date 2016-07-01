@@ -11,6 +11,7 @@
 package forestry.farming.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +22,7 @@ import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
+import net.minecraftforge.common.capabilities.Capability;
 
 public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnergyHandler, IFarmComponent.Active {
 
@@ -117,4 +119,18 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 		return energyManager.canConnectEnergy(from);
 	}
 
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+	}
+
+	@Nonnull
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+		T energyCapability = energyManager.getCapability(capability);
+		if (energyCapability != null) {
+			return energyCapability;
+		}
+		return super.getCapability(capability, facing);
+	}
 }
