@@ -101,7 +101,6 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(getItem());
 	}
