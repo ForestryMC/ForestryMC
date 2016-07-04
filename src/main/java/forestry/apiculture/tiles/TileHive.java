@@ -293,6 +293,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		return Collections.emptyList();
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 		return Collections.singleton(beeListener);
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return beeInventory;

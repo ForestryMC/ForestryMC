@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -32,6 +34,7 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource {
 	 */
 	Iterable<IBeeListener> getBeeListeners();
 
+	@Nonnull
 	IBeeHousingInventory getBeeInventory();
 
 	IBeekeepingLogic getBeekeepingLogic();
