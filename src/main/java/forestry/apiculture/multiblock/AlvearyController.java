@@ -53,6 +53,7 @@ import forestry.core.utils.Translator;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 
+	@Nonnull
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
@@ -77,6 +78,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		this.beeModifiers.add(new AlvearyBeeModifier());
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;

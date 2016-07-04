@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 
 import net.minecraft.util.math.BlockPos;
@@ -45,6 +46,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 		return Collections.emptyList();
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return FakeBeeHousingInventory.instance;

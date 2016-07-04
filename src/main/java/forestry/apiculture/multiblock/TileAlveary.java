@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -99,6 +100,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 		return getMultiblockLogic().getController().getBeeListeners();
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return getMultiblockLogic().getController().getBeeInventory();
