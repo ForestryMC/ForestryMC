@@ -49,7 +49,6 @@ import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.access.EnumAccess;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -245,20 +244,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	protected void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
 		readFromNBT(data);
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			for (IMultiblockComponent part : connectedParts) {
-				if (part instanceof TileEntity) {
-					TileEntity tile = (TileEntity) part;
-					worldObj.notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
-				}
-			}
-			markDirty();
-		}
 	}
 	
 	/* GUI DATA */

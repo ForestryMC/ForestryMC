@@ -32,9 +32,7 @@ import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
 
-public class TileMailbox extends TileBase implements IMailContainer {
-
-	private boolean isLinked = false;
+public class TileMailbox extends TileBase {
 
 	public TileMailbox() {
 		super("mailbox");
@@ -61,18 +59,6 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		}
 	}
 
-	/* UPDATING */
-	@Override
-	public void updateServerSide() {
-		if (!isLinked) {
-			GameProfile owner = getAccessHandler().getOwner();
-			if (owner != null) {
-				getOrCreateMailInventory(worldObj, owner);
-			}
-			isLinked = true;
-		}
-	}
-
 	/* MAIL HANDLING */
 	public IInventory getOrCreateMailInventory(World world, @Nonnull GameProfile playerProfile) {
 		if (world.isRemote) {
@@ -95,31 +81,6 @@ public class TileMailbox extends TileBase implements IMailContainer {
 
 		return result;
 	}
-
-	@Override
-	public boolean hasMail() {
-		GameProfile owner = getAccessHandler().getOwner();
-		if (owner == null) {
-			return false;
-		}
-		IInventory mailInventory = getOrCreateMailInventory(worldObj, owner);
-		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
-			if (mailInventory.getStackInSlot(i) != null) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	// TODO: Buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(MailTriggers.triggerHasMail);
-//		return res;
-//	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

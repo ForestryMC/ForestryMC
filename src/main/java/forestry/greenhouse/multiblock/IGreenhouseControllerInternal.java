@@ -17,14 +17,14 @@ import java.util.Set;
 import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.access.IRestrictedAccess;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
 import forestry.energy.EnergyManager;
 
-public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui {
+public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IOwnedTile, IStreamableGui {
 
 	/**
 	 * @return The inventory of the controller.

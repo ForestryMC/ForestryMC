@@ -62,12 +62,6 @@ public class ProxyCommon {
 		return new File(".");
 	}
 
-	public boolean isOp(EntityPlayer player) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		UserListOpsEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		return userlistopsentry != null && userlistopsentry.getPermissionLevel() >= server.getOpPermissionLevel();
-	}
-
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		return 4f;
 	}

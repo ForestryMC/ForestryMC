@@ -10,17 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
+import com.google.common.base.Optional;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -36,10 +31,24 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.IStreamableGui;
+import forestry.core.owner.GameProfileDataSerializer;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
-public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
+public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
+	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecart.class, GameProfileDataSerializer.INSTANCE);
+
 	private static final Random random = new Random();
 	private static final int beeFXInterval = 4;
 	private static final int pollenFXInterval = 50;
@@ -49,6 +58,23 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	private final IBeekeepingLogic beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 	private final IErrorLogic errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
+	private final OwnerHandler ownerHandler = new OwnerHandler() {
+		@Override
+		public void setOwner(@Nonnull GameProfile owner) {
+			super.setOwner(owner);
+			dataManager.set(OWNER, Optional.of(owner));
+		}
+
+		@Override
+		public GameProfile getOwner() {
+			Optional<GameProfile> gameProfileOptional = dataManager.get(OWNER);
+			if (gameProfileOptional.isPresent()) {
+				return gameProfileOptional.get();
+			} else {
+				return null;
+			}
+		}
+	};
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
@@ -61,6 +87,18 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	public EntityMinecartBeeHousingBase(World world, double posX, double posY, double posZ) {
 		super(world, posX, posY, posZ);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(OWNER, Optional.absent());
+	}
+
+	/* IOwnedTile */
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
 	}
 
 	/* IBeeHousing */
@@ -111,7 +149,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public GameProfile getOwner() {
-		return getAccessHandler().getOwner();
+		return getOwnerHandler().getOwner();
 	}
 
 	@Override
@@ -174,11 +212,13 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readEntityFromNBT(nbtTagCompound);
 		beeLogic.readFromNBT(nbtTagCompound);
+		ownerHandler.readFromNBT(nbtTagCompound);
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeEntityToNBT(nbtTagCompound);
 		beeLogic.writeToNBT(nbtTagCompound);
+		ownerHandler.writeToNBT(nbtTagCompound);
 	}
 }

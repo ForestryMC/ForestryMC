@@ -36,7 +36,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	@Nonnull
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	@Nonnull
-	private final InventoryApiary inventory = new InventoryApiary(getAccessHandler());
+	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
 		super("apiary");

@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,9 +31,6 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
@@ -49,7 +48,7 @@ import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled, ICamouflageHandler, ICamouflagedTile {
 
 	private ItemStack camouflageBlock;
 
@@ -172,13 +171,8 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	public IOwnerHandler getOwnerHandler() {
+		return getMultiblockLogic().getController().getOwnerHandler();
 	}
 
 	/* ITitled */

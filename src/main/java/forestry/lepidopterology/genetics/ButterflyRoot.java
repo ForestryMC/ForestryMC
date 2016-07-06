@@ -196,7 +196,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 		TileCocoon cocoon = (TileCocoon) tile;
 		cocoon.setCaterpillar(nursery.getCaterpillar());
-		cocoon.setOwner(owner);
+		cocoon.getOwnerHandler().setOwner(owner);
 		cocoon.setNursery(nursery);
 		cocoon.setAge(age);
 

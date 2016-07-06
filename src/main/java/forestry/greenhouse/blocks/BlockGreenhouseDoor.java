@@ -112,22 +112,18 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 		if (!(tile instanceof TileGreenhouseDoor)) {
 			return false;
 		}
-		TileGreenhouseDoor door = (TileGreenhouseDoor) tile;
-		if (!door.getAccessHandler().allowsInteracting(playerIn)) {
+
+		BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
+		IBlockState iblockstate = pos.equals(blockpos) ? state : worldIn.getBlockState(blockpos);
+
+		if (iblockstate.getBlock() != this) {
 			return false;
 		} else {
-			BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
-			IBlockState iblockstate = pos.equals(blockpos) ? state : worldIn.getBlockState(blockpos);
-
-			if (iblockstate.getBlock() != this) {
-				return false;
-			} else {
-				state = iblockstate.cycleProperty(OPEN);
-				worldIn.setBlockState(blockpos, state, 2);
-				worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
-				worldIn.playEvent(playerIn, state.getValue(OPEN) ? 1005 : 1011, pos, 0);
-				return true;
-			}
+			state = iblockstate.cycleProperty(OPEN);
+			worldIn.setBlockState(blockpos, state, 2);
+			worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
+			worldIn.playEvent(playerIn, state.getValue(OPEN) ? 1005 : 1011, pos, 0);
+			return true;
 		}
 	}
 

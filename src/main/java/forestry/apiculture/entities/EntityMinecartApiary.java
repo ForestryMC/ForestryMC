@@ -42,7 +42,7 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	@Nonnull
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	@Nonnull
-	private final InventoryApiary inventory = new InventoryApiary(getAccessHandler());
+	private final InventoryApiary inventory = new InventoryApiary();
 
 	@SuppressWarnings("unused")
 	public EntityMinecartApiary(World world) {

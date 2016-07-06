@@ -66,7 +66,8 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegi
 			} else {
 				entityMinecart = new EntityMinecartApiary(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			}
-			entityMinecart.setOwner(playerIn.getGameProfile());
+
+			entityMinecart.getOwnerHandler().setOwner(playerIn.getGameProfile());
 
 			if (stack.hasDisplayName()) {
 				entityMinecart.setCustomNameTag(stack.getDisplayName());

@@ -10,11 +10,21 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
-
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.OwnerHandler;
+import forestry.core.tiles.ILocatable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -23,33 +33,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.access.AccessHandler;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
-import forestry.core.inventory.FakeInventoryAdapter;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.ILocatable;
-
-public abstract class MultiblockControllerForestry extends MultiblockControllerBase implements ISidedInventory, IRestrictedAccess, IErrorLogicSource, ILocatable {
-	private final AccessHandler accessHandler;
+public abstract class MultiblockControllerForestry extends MultiblockControllerBase implements ISidedInventory, IOwnedTile, IErrorLogicSource, ILocatable {
+	private final OwnerHandler ownerHandler;
 	private final IErrorLogic errorLogic;
 
 	protected MultiblockControllerForestry(World world) {
 		super(world);
 
-		this.accessHandler = new AccessHandler(this);
+		this.ownerHandler = new OwnerHandler();
 		this.errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return accessHandler;
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
 	}
 
 	@Override
@@ -90,19 +87,21 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 			}
 		}
 
-		getAccessHandler().setOwner(owner);
+		if (owner != null) {
+			getOwnerHandler().setOwner(owner);
+		}
 	}
 
 	/* INbtWritable */
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		accessHandler.writeToNBT(data);
+		ownerHandler.writeToNBT(data);
 		return data;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
-		accessHandler.readFromNBT(data);
+		ownerHandler.readFromNBT(data);
 	}
 
 	/* INVENTORY */

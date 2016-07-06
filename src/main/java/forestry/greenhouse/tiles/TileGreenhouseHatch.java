@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import forestry.core.owner.IOwnerHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -41,9 +42,7 @@ import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.MultiblockTileEntityBase;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
@@ -60,7 +59,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IFluidHandler, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile, IFluidHandler, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
@@ -197,13 +196,8 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	public IOwnerHandler getOwnerHandler() {
+		return getMultiblockLogic().getController().getOwnerHandler();
 	}
 	
 	@Override

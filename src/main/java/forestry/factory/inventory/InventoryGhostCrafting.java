@@ -12,10 +12,10 @@ package forestry.factory.inventory;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.access.IRestrictedAccess;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.inventory.InventoryAdapterTile;
 
-public class InventoryGhostCrafting<T extends TileEntity & IRestrictedAccess> extends InventoryAdapterTile<T> {
+public class InventoryGhostCrafting<T extends TileEntity> extends InventoryAdapterTile<T> {
 	public final static int SLOT_CRAFTING_1 = 0;
 	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_CRAFTING_RESULT = 9;

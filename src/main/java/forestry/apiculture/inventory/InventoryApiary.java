@@ -22,15 +22,14 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.InventoryBeeHousing;
-import forestry.core.access.IAccessHandler;
 import forestry.core.utils.SlotUtil;
 
 public class InventoryApiary extends InventoryBeeHousing implements IApiaryInventory {
 	public static final int SLOT_FRAMES_1 = 9;
 	public static final int SLOT_FRAMES_COUNT = 3;
 
-	public InventoryApiary(IAccessHandler accessHandler) {
-		super(12, accessHandler);
+	public InventoryApiary() {
+		super(12);
 	}
 
 	@Override

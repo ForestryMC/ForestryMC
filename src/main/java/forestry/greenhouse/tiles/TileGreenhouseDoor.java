@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 
-public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent.Door, IErrorLogicSource, IRestrictedAccess {
+public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent.Door, IErrorLogicSource, IOwnedTile {
 
 	public TileGreenhouseDoor() {
 		super(new MultiblockLogicGreenhouse());
@@ -47,13 +45,8 @@ public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockL
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	public IOwnerHandler getOwnerHandler() {
+		return getMultiblockLogic().getController().getOwnerHandler();
 	}
 
 	@Override

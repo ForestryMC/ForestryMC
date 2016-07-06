@@ -16,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;
-import forestry.core.access.IAccessHandler;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
@@ -27,8 +26,8 @@ public class InventoryBeeHousing extends InventoryAdapterRestricted implements I
 	public static final int SLOT_PRODUCT_1 = 2;
 	public static final int SLOT_PRODUCT_COUNT = 7;
 
-	public InventoryBeeHousing(int size, IAccessHandler accessHandler) {
-		super(size, "Items", accessHandler);
+	public InventoryBeeHousing(int size) {
+		super(size, "Items");
 	}
 
 	@Override

@@ -10,51 +10,30 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import forestry.core.access.IAccessHandler;
-import forestry.core.config.Constants;
-
 public class InventoryAdapterRestricted extends InventoryAdapter {
-	private final IAccessHandler accessHandler;
-
-	public InventoryAdapterRestricted(int size, String name, IAccessHandler accessHandler) {
+	public InventoryAdapterRestricted(int size, String name) {
 		super(size, name);
-		this.accessHandler = accessHandler;
 	}
 
-	public InventoryAdapterRestricted(int size, String name, int stackLimit, IAccessHandler accessHandler) {
+	public InventoryAdapterRestricted(int size, String name, int stackLimit) {
 		super(size, name, stackLimit);
-		this.accessHandler = accessHandler;
-	}
-
-	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return accessHandler.allowsViewing(player);
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
+		if (itemStack == null) {
 			return false;
 		}
 
 		return canSlotAccept(slotIndex, itemStack);
 	}
-	
-	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
-		if (!accessHandler.allowsPipeConnections()) {
-			return Constants.SLOTS_NONE;
-		}
-		return super.getSlotsForFace(side);
-	}
 
 	@Override
 	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
+		if (itemStack == null) {
 			return false;
 		}
 		return isItemValidForSlot(slotIndex, itemStack);
@@ -62,6 +41,6 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		return itemStack != null && accessHandler.allowsPipeConnections();
+		return itemStack != null;
 	}
 }

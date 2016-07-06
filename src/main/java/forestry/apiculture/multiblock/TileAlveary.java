@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -34,9 +36,6 @@ import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.apiculture.gui.GuiAlveary;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
@@ -47,7 +46,7 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IRestrictedAccess, IStreamableGui, ITitled, IClimatised, IHintSource {
+public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised, IHintSource {
 	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
@@ -143,13 +142,8 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	public IOwnerHandler getOwnerHandler() {
+		return getMultiblockLogic().getController().getOwnerHandler();
 	}
 
 	@Override

@@ -32,7 +32,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -57,7 +56,6 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.access.EnumAccess;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -340,20 +338,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public BlockPos getCoordinates() {
 		BlockPos coord = getReferenceCoord();
 		return new BlockPos(coord);
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			for (IMultiblockComponent part : connectedParts) {
-				if (part instanceof TileEntity) {
-					TileEntity tile = (TileEntity) part;
-					tile.getWorld().notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
-				}
-			}
-			markDirty();
-		}
 	}
 
 	@Override
@@ -789,7 +773,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
-		EntityPlayer player = PlayerUtil.getPlayer(world, getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(world, getOwnerHandler().getOwner());
 		return inventory.plantGermling(germling, player, pos);
 	}
 
