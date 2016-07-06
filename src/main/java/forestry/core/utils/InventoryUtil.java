@@ -36,15 +36,6 @@ import forestry.plugins.ForestryPluginUids;
 
 public abstract class InventoryUtil {
 
-	public static ItemStack depleteItem(ItemStack stack) {
-		if (stack.stackSize == 1) {
-			return stack.getItem().getContainerItem(stack);
-		} else {
-			stack.splitStack(1);
-			return stack;
-		}
-	}
-
 	public static boolean isWildcard(ItemStack stack) {
 		return stack.getItemDamage() == OreDictionary.WILDCARD_VALUE;
 	}

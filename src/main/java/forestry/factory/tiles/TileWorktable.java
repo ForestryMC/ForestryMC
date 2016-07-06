@@ -14,13 +14,6 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.ForgeHooks;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
@@ -36,6 +29,12 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeHooks;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private RecipeMemory recipeMemory;
@@ -157,30 +156,15 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public void onCraftingComplete(EntityPlayer player) {
-		IInventory craftingInventory = getCraftingDisplay();
-		for (int i = 0; i < craftingInventory.getSizeInventory(); ++i) {
-			ItemStack itemStack = craftingInventory.getStackInSlot(i);
-			if (itemStack == null) {
-				continue;
-			}
+		ForgeHooks.setCraftingPlayer(player);
+		ItemStack[] remainingItems = CraftingManager.getInstance().getRemainingItems(currentRecipe.getCraftMatrix(), player.worldObj);
+		ForgeHooks.setCraftingPlayer(null);
 
-			ItemStack container = null;
-
-			if (itemStack.getItem().hasContainerItem(itemStack)) {
-				container = ForgeHooks.getContainerItem(itemStack);
-			} else if (itemStack.stackSize > 1) {
-				// TerraFirmaCraft's crafting event handler does some tricky stuff with its tools.
-				// It sets the tool's stack size to 2 instead of using a container.
-				container = ItemStackUtil.createSplitStack(itemStack, itemStack.stackSize - 1);
-				itemStack.stackSize = 1;
-			}
-
-			if (container == null) {
-				continue;
-			}
-
-			if (!InventoryUtil.tryAddStack(this, container, true)) {
-				player.dropItem(container, false);
+		for (ItemStack remainingItem : remainingItems) {
+			if (remainingItem != null) {
+				if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
+					player.dropItem(remainingItem, false);
+				}
 			}
 		}
 		
