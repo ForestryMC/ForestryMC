@@ -38,7 +38,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 	public FarmLogicRubber() {
 		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
-			Log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
+			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
 			active = false;
 		}
 	}

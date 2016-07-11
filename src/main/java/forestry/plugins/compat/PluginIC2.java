@@ -141,8 +141,8 @@ public class PluginIC2 extends BlankForestryPlugin {
 		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
 		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
 
-			blocks.electricalEngine.init();
-			blocks.generator.init();
+		blocks.electricalEngine.init();
+		blocks.generator.init();
 	}
 
 	@Override
@@ -154,19 +154,20 @@ public class PluginIC2 extends BlankForestryPlugin {
 		}
 
 		IBackpackDefinition forester = BackpackManager.backpackInterface.getBackpack(BackpackManager.FORESTER_UID);
-
-		if (resin != null) {
-			forester.addValidItem(resin);
-		}
-		if (rubber != null) {
-			forester.addValidItem(rubber);
-		}
-		if (rubberSapling != null) {
-			forester.addValidItem(rubberSapling);
-		}
-		ItemStack rubberLeaves = IC2Items.getItem("leaves");
-		if (rubberLeaves != null) {
-			forester.addValidItem(rubberLeaves);
+		if (forester != null) {
+			if (resin != null) {
+				forester.addValidItem(resin);
+			}
+			if (rubber != null) {
+				forester.addValidItem(rubber);
+			}
+			if (rubberSapling != null) {
+				forester.addValidItem(rubberSapling);
+			}
+			ItemStack rubberLeaves = IC2Items.getItem("leaves");
+			if (rubberLeaves != null) {
+				forester.addValidItem(rubberLeaves);
+			}
 		}
 	}
 
