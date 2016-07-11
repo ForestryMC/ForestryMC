@@ -35,6 +35,11 @@ public class TileGreenhouseFan extends TileGreenhouseClimatiser {
 		public ClimitiserType getType() {
 			return ClimitiserType.TEMPERATURE;
 		}
+
+		@Override
+		public boolean isPositiv() {
+			return false;
+		}
 	}
 	
 }

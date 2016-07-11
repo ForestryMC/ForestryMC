@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;

@@ -36,7 +36,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidUtil;
@@ -50,7 +49,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
-import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.MachineParticleCallback;
@@ -60,7 +58,6 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.PlayerUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister {
 	/** use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order. */
@@ -148,35 +145,25 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
-		if (tile == null) {
-			return false;
-		}
+		if (tile != null) {
+			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-		if (!TileUtil.isUsableByPlayer(playerIn, tile)) {
-			return false;
-		}
-
-		IAccessHandler access = tile.getAccessHandler();
-
-		if (!playerIn.isSneaking()) {
-			if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
-				IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-				if (FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn)) {
-					return true;
+				if (!playerIn.isSneaking()) {
+					if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+						IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+						if (FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn)) {
+							return true;
+						}
+					}
 				}
+
+				if (!worldIn.isRemote) {
+					tile.openGui(playerIn, heldItem);
+				}
+				return true;
 			}
 		}
-
-		if (worldIn.isRemote) {
-			return true;
-		}
-
-		if (access.allowsViewing(playerIn)) {
-			tile.openGui(playerIn, heldItem);
-		} else {
-			playerIn.addChatMessage(new TextComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
-		}
-		return true;
+		return false;
 	}
 
 	public void rotateAfterPlacement(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {

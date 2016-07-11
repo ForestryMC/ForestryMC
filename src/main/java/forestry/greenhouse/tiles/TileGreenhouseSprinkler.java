@@ -63,7 +63,6 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 				}
 			}
 			if (canWork && workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
-				int dimensionID = worldObj.provider.getDimension();
 				
 				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
 					IClimatePosition position = region.getPositions().get(pos);
@@ -71,11 +70,6 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 						if(position.getHumidity() >= 2.0F){
 							if(position.getHumidity() > 2.0F){
 								position.setHumidity(2.0F);
-							}
-							continue;
-						}else if(position.getHumidity() <= 0.0F){
-							if(position.getHumidity() < 0.0F){
-								position.setHumidity(0.0F);
 							}
 							continue;
 						}
@@ -88,7 +82,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 					}
 				}
 				
-				workingTime += WATER_PER_OPERATION / 20;
+				workingTime += WATER_PER_OPERATION / 10;
 			}
 	
 			if (workingTime > 0) {
@@ -170,6 +164,11 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 		@Override
 		public int getClimitiseRange() {
 			return 9;
+		}
+
+		@Override
+		public boolean isPositiv() {
+			return true;
 		}
 	}
 

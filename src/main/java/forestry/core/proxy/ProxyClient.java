@@ -65,11 +65,6 @@ public class ProxyClient extends ProxyCommon {
 	}
 
 	@Override
-	public boolean isOp(EntityPlayer player) {
-		return false;
-	}
-
-	@Override
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		if (entityplayer instanceof EntityPlayerSP) {
 			return getClientInstance().playerController.getBlockReachDistance();

@@ -8,27 +8,33 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.access;
+package forestry.core.owner;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import javax.annotation.Nonnull;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.authlib.GameProfile;
 
-public enum EnumAccess {
-	SHARED("for.gui.rule.shared"), VIEWABLE("for.gui.rule.restricted"), PRIVATE("for.gui.rule.private");
+public class FakeOwnerHandler implements IOwnerHandler {
+	private static FakeOwnerHandler instance;
 
-	private final String unlocalizedName;
-	
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon;
-
-	EnumAccess(String unlocalizedName) {
-		this.unlocalizedName = unlocalizedName;
+	public static FakeOwnerHandler getInstance() {
+		if (instance == null) {
+			instance = new FakeOwnerHandler();
+		}
+		return instance;
 	}
 
-	public String getUnlocalizedName() {
-		return this.unlocalizedName;
+	private FakeOwnerHandler() {
+
 	}
 
+	@Override
+	public GameProfile getOwner() {
+		return null;
+	}
+
+	@Override
+	public void setOwner(@Nonnull GameProfile owner) {
+
+	}
 }

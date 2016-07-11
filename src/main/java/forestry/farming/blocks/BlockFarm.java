@@ -192,8 +192,7 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		IBlockState blockState = world.getBlockState(pos);
-		return blockState.getValue(META) == EnumFarmBlockType.CONTROL;
+		return state.getValue(META) == EnumFarmBlockType.CONTROL;
 	}
 
 	public ItemStack get(EnumFarmBlockType type, int amount) {

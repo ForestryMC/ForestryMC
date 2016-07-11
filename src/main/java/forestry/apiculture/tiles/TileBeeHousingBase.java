@@ -13,13 +13,7 @@ package forestry.apiculture.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -30,11 +24,19 @@ import forestry.apiculture.gui.IGuiBeeHousingInventory;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
-public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
+public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
+	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private final IBeekeepingLogic beeLogic;
 	private Biome cachedBiome;
 
@@ -57,6 +59,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 		beeLogic.writeToNBT(nbttagcompound);
+		ownerHandler.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}
 
@@ -64,6 +67,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		beeLogic.readFromNBT(nbttagcompound);
+		ownerHandler.readFromNBT(nbttagcompound);
 	}
 
 	@Nonnull
@@ -71,6 +75,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound updateTag = super.getUpdateTag();
 		beeLogic.writeToNBT(updateTag);
+		ownerHandler.writeToNBT(updateTag);
 		return updateTag;
 	}
 
@@ -78,6 +83,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		beeLogic.readFromNBT(tag);
+		ownerHandler.readFromNBT(tag);
+	}
+
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
 	}
 
 	/* ICLIMATISED */
@@ -171,7 +182,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public GameProfile getOwner() {
-		return getAccessHandler().getOwner();
+		return getOwnerHandler().getOwner();
 	}
 
 	@Override

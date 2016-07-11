@@ -13,7 +13,7 @@ package forestry.farming.multiblock;
 import javax.annotation.Nonnull;
 
 import forestry.api.multiblock.IFarmController;
-import forestry.core.access.IRestrictedAccess;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.IInventoryAdapter;
@@ -22,7 +22,7 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
-public interface IFarmControllerInternal extends IFarmController, IMultiblockControllerInternal, ISocketable, IClimatised, IRestrictedAccess, IStreamableGui {
+public interface IFarmControllerInternal extends IFarmController, IMultiblockControllerInternal, ISocketable, IClimatised, IOwnedTile, IStreamableGui {
 	IFarmLedgerDelegate getFarmLedgerDelegate();
 
 	IInventoryAdapter getInternalInventory();

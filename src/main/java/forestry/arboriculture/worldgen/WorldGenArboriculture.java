@@ -78,7 +78,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		if (tile == null) {
 			return null;
 		}
-		return tile.getOwner();
+		return tile.getOwnerHandler().getOwner();
 	}
 
 	public void preGenerate(World world, Random rand, BlockPos startPos) {

@@ -8,24 +8,16 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.access;
+package forestry.core.owner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
 
-public interface IOwnable {
-
-	boolean isOwned();
-	
+public interface IOwnerHandler {
 	@Nullable
 	GameProfile getOwner();
 	
 	void setOwner(@Nonnull GameProfile owner);
-
-	boolean isOwner(EntityPlayer player);
-
 }

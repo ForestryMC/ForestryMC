@@ -11,6 +11,7 @@
 package forestry.apiculture;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -233,7 +234,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (beeType == EnumBeeType.PRINCESS) {
 			tickBreed();
 		} else if (beeType == EnumBeeType.QUEEN) {
-			queenWorkTick(queen);
+			queenWorkTick(queen, queenStack);
 		}
 	}
 
@@ -246,7 +247,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 	}
 
-	private void queenWorkTick(IBee queen) {
+	private void queenWorkTick(@Nullable IBee queen, @Nonnull ItemStack queenStack) {
 		if (queen == null) {
 			beeProgress = 0;
 			beeProgressMax = 0;
@@ -272,7 +273,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			// Write the changed queen back into the item stack.
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			queen.writeToNBT(nbttagcompound);
-			housing.getBeeInventory().getQueen().setTagCompound(nbttagcompound);
+			queenStack.setTagCompound(nbttagcompound);
+			housing.getBeeInventory().setQueen(queenStack);
 		}
 
 		beeProgress = queen.getHealth();

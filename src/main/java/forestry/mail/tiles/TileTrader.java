@@ -13,6 +13,9 @@ package forestry.mail.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -40,14 +43,19 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
 
-public class TileTrader extends TileBase {
-
+public class TileTrader extends TileBase implements IOwnedTile {
+	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private IMailAddress address;
 
 	public TileTrader() {
 		super("trade.station");
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
+	}
+
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
 	}
 
 	@Override
@@ -74,6 +82,7 @@ public class TileTrader extends TileBase {
 			address.writeToNBT(nbt);
 			nbttagcompound.setTag("address", nbt);
 		}
+		ownerHandler.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}
 
@@ -84,6 +93,7 @@ public class TileTrader extends TileBase {
 		if (nbttagcompound.hasKey("address")) {
 			address = new MailAddress(nbttagcompound.getCompoundTag("address"));
 		}
+		ownerHandler.readFromNBT(nbttagcompound);
 	}
 
 	/* NETWORK */
@@ -91,22 +101,24 @@ public class TileTrader extends TileBase {
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		String name = null;
+		ownerHandler.writeData(data);
+		String addressName = null;
 		if (address != null) {
-			name = address.getName();
+			addressName = address.getName();
 		}
-		if (name == null) {
-			name = "";
+		if (addressName == null) {
+			addressName = "";
 		}
-		data.writeUTF(name);
+		data.writeUTF(addressName);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		String address = data.readUTF();
-		if (!address.isEmpty()) {
-			this.address = PostManager.postRegistry.getMailAddress(address);
+		ownerHandler.readData(data);
+		String addressName = data.readUTF();
+		if (!addressName.isEmpty()) {
+			address = PostManager.postRegistry.getMailAddress(addressName);
 		}
 	}
 
@@ -289,7 +301,7 @@ public class TileTrader extends TileBase {
 
 			if (hasValidTradeAddress & hasUniqueTradeAddress) {
 				this.address = address;
-				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
+				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerHandler().getOwner(), address);
 			}
 		} else {
 			this.address = address;
@@ -303,7 +315,7 @@ public class TileTrader extends TileBase {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerHandler().getOwner(), address);
 	}
 
 	// TODO: Buildcraft for 1.9

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import forestry.core.inventory.IInventoryAdapter;
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 	private static final IBeeListener beeListener = new DefaultBeeListener();
-	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9, getAccessHandler());
+	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9);
 
 	@SuppressWarnings("unused")
 	public EntityMinecartBeehouse(World world) {
@@ -72,6 +73,7 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 		return Collections.singleton(beeListener);
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return beeInventory;

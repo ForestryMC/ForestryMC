@@ -10,33 +10,23 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-
-import forestry.core.access.AccessHandler;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.gui.IHintSource;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
-public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IRestrictedAccess, IHintSource, IGuiHandlerEntity {
-	private final AccessHandler accessHandler = new AccessHandler(this);
+public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IHintSource, IGuiHandlerEntity {
 
 	@SuppressWarnings("unused")
 	public EntityMinecartForestry(World world) {
@@ -61,25 +51,9 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		return true;
 	}
 
-	public void setOwner(GameProfile owner) {
-		accessHandler.setOwner(owner);
-	}
-
 	@Override
 	public Type getType() {
 		return null;
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readEntityFromNBT(nbtTagCompound);
-		accessHandler.readFromNBT(nbtTagCompound);
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-		super.writeEntityToNBT(nbtTagCompound);
-		accessHandler.writeToNBT(nbtTagCompound);
 	}
 
 	/* EntityMinecart */
@@ -126,17 +100,6 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	public String getUnlocalizedTitle() {
 		ItemStack cartItem = getCartItem();
 		return cartItem.getUnlocalizedName() + ".name";
-	}
-
-	/* IRestrictedAccess */
-	@Override
-	public IAccessHandler getAccessHandler() {
-		return accessHandler;
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-
 	}
 	
 	@Override

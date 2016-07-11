@@ -15,26 +15,8 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
+import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -62,9 +44,41 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class TileHive extends TileEntity implements ITickable, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
+	private static final Predicate<EntityLivingBase> BEE_TARGET_PREDICATE = new Predicate<EntityLivingBase>() {
+		@Override
+		public boolean apply(@Nullable EntityLivingBase input) {
+			if (input != null && input.isEntityAlive() && !input.isInvisible()) {
+				if (input instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) input;
+					return !player.isSpectator() && !player.isCreative();
+				} else if (input instanceof IMob) {
+					return true;
+				}
+			}
+			return false;
+		}
+	};
 
 	@Nonnull
 	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
@@ -113,7 +127,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 				if (calmTime == 0) {
 					if (canWork) {
 						AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-						List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox);
+						List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, BEE_TARGET_PREDICATE);
 						if (!entities.isEmpty()) {
 							Collections.shuffle(entities);
 							EntityLivingBase entity = entities.get(0);
@@ -293,6 +307,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		return Collections.emptyList();
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;

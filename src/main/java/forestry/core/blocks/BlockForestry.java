@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -25,8 +27,6 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.access.IOwnable;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.Log;
 
@@ -39,20 +39,6 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IRestrictedAccess) {
-			IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
-			if (!restrictedAccessTile.getAccessHandler().allowsRemoval(player)) {
-				return false;
-			}
-		}
-		
-		return super.removedByPlayer(state, world, pos, player, willHarvest);
-	}
-
-	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
@@ -61,19 +47,12 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 		if (placer instanceof EntityPlayer) {
 			TileEntity tile = world.getTileEntity(pos);
 
-			IOwnable ownable;
-
-			if (tile instanceof IRestrictedAccess) {
-				ownable = ((IRestrictedAccess) tile).getAccessHandler();
-			} else if (tile instanceof IOwnable) {
-				ownable = (IOwnable) tile;
-			} else {
-				return;
+			if (tile instanceof IOwnedTile) {
+				IOwnerHandler ownerHandler = ((IOwnedTile) tile).getOwnerHandler();
+				EntityPlayer player = (EntityPlayer) placer;
+				GameProfile gameProfile = player.getGameProfile();
+				ownerHandler.setOwner(gameProfile);
 			}
-
-			EntityPlayer player = (EntityPlayer) placer;
-			GameProfile gameProfile = player.getGameProfile();
-			ownable.setOwner(gameProfile);
 		}
 	}
 

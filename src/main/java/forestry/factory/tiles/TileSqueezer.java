@@ -14,16 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -43,11 +33,18 @@ import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.PlayerUtil;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.recipes.SqueezerRecipeManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -131,8 +128,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	@Override
 	public boolean workCycle() {
-		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
-		if (!inventory.removeResources(currentRecipe.getResources(), player)) {
+		if (!inventory.removeResources(currentRecipe.getResources())) {
 			return false;
 		}
 

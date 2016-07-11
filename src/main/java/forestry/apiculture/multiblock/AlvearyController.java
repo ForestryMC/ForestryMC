@@ -18,7 +18,6 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -39,7 +38,6 @@ import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.AlvearyBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
-import forestry.core.access.EnumAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
@@ -53,6 +51,7 @@ import forestry.core.utils.Translator;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 
+	@Nonnull
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
@@ -71,12 +70,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	public AlvearyController(World world) {
 		super(world, AlvearyMultiblockSizeLimits.instance);
-		this.inventory = new InventoryBeeHousing(9, getAccessHandler());
+		this.inventory = new InventoryBeeHousing(9);
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
@@ -341,20 +341,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			for (IMultiblockComponent part : connectedParts) {
-				if (part instanceof TileEntity) {
-					TileEntity tile = (TileEntity) part;
-					worldObj.notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
-				}
-			}
-			markDirty();
-		}
-	}
-
-	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
 		return ForestryAPI.climateManager.getTemperature(getWorldObj(), coords) + tempChange;
@@ -383,7 +369,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public GameProfile getOwner() {
-		return getAccessHandler().getOwner();
+		return getOwnerHandler().getOwner();
 	}
 
 	@Override

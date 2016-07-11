@@ -219,15 +219,14 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TileSapling)) {
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+		if (sapling == null) {
 			world.setBlockToAir(pos);
 			return false;
 		}
 
-		TileSapling sapling = (TileSapling) tile;
 		sapling.setTree(tree.copy());
-		sapling.setOwner(owner);
+		sapling.getOwnerHandler().setOwner(owner);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 		Proxies.net.sendNetworkPacket(packet, world);

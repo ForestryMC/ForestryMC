@@ -27,7 +27,7 @@ import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivatable, IGreenhouseComponent.Climatiser {
 	
 	protected static final int WORK_CYCLES = 1;
-	protected static final int ENERGY_PER_OPERATION = 50;
+	protected static final int ENERGY_PER_OPERATION = 150;
 	
 	protected enum ClimitiserType {
 		TEMPERATURE, HUMIDITY
@@ -35,6 +35,8 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	
 	protected interface IClimitiserDefinition {
 		float getChange();
+		
+		boolean isPositiv();
 		
 		int getClimitiseRange();
 		
@@ -102,28 +104,36 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 					IClimatePosition position = region.getPositions().get(pos);
 					if(position != null){
 						if (definition.getType() == ClimitiserType.TEMPERATURE) {
-							if(position.getTemperature() >= 2.0F){
-								if(position.getTemperature() > 2.0F){
-									position.setTemperature(2.0F);
+							if(definition.isPositiv()){
+								if(position.getTemperature() >= 2.0F){
+									if(position.getTemperature() > 2.0F){
+										position.setTemperature(2.0F);
+									}
+									continue;
 								}
-								continue;
-							}else if(position.getTemperature() <= 0.0F){
-								if(position.getTemperature() < 0.0F){
-									position.setTemperature(0.0F);
+							}else{
+								if(position.getTemperature() <= 0.0F){
+									if(position.getTemperature() < 0.0F){
+										position.setTemperature(0.0F);
+									}
+									continue;
 								}
-								continue;
 							}
 						}else{
-							if(position.getHumidity() >= 2.0F){
-								if(position.getHumidity() > 2.0F){
-									position.setHumidity(2.0F);
+							if(definition.isPositiv()){
+								if(position.getHumidity() >= 2.0F){
+									if(position.getHumidity() > 2.0F){
+										position.setHumidity(2.0F);
+									}
+									continue;
 								}
-								continue;
-							}else if(position.getHumidity() <= 0.0F){
-								if(position.getHumidity() < 0.0F){
-									position.setHumidity(0.0F);
+							}else{ 
+								if(position.getHumidity() <= 0.0F){
+									if(position.getHumidity() < 0.0F){
+										position.setHumidity(0.0F);
+									}
+									continue;
 								}
-								continue;
 							}
 						}
 						
@@ -131,9 +141,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 						int maxDistance = definition.getClimitiseRange();
 						if(distance <= maxDistance){
 							if (definition.getType() == ClimitiserType.TEMPERATURE) {
-								position.addTemperature((float) (definition.getChange() / distance));
+								position.addTemperature((definition.isPositiv() ? +1 : -1) * (float) (definition.getChange() / distance));
 							}else{
-								position.addHumidity((float) (definition.getChange() / distance));
+								position.addHumidity((definition.isPositiv() ? +1 : -1) * (float) (definition.getChange() / distance));
 							}
 						}
 					}
@@ -141,7 +151,7 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 				
 				// TODO: Add config entry for a time modifier and a energy modifier.
 				// one tick of work for every 10 RF
-				workingTime += ENERGY_PER_OPERATION / 2.5F;
+				workingTime += ENERGY_PER_OPERATION / 25;
 			}
 	
 			if (workingTime > 0) {

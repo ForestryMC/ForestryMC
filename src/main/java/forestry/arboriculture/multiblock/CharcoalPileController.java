@@ -13,7 +13,6 @@ import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockPile;
-import forestry.core.access.EnumAccess;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.multiblock.MultiblockValidationException;
@@ -305,10 +304,6 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		burnTime = data.readInt();
 		active = data.readBoolean();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 	}
 
 	@Override

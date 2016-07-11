@@ -461,7 +461,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
-			ButterflyManager.butterflyRoot.plantCocoon(worldObj, this, getOwner(), 0);
+			ButterflyManager.butterflyRoot.plantCocoon(worldObj, this, getOwnerHandler().getOwner(), 0);
 			setCaterpillar(null);
 		} else if (!wasDestroyed && isDestroyed(tree, damage)) {
 			sendNetworkUpdate();

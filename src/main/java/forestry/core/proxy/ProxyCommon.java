@@ -18,14 +18,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
 import forestry.core.TickHandlerCoreServer;
@@ -60,12 +57,6 @@ public class ProxyCommon {
 
 	public File getForestryRoot() {
 		return new File(".");
-	}
-
-	public boolean isOp(EntityPlayer player) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		UserListOpsEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		return userlistopsentry.getPermissionLevel() >= server.getOpPermissionLevel();
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {

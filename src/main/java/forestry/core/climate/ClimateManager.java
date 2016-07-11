@@ -13,12 +13,9 @@ package forestry.core.climate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
@@ -39,14 +36,14 @@ public class ClimateManager implements IClimateManager{
 		if(region == null){
 			return;
 		}
-		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
-		Set<BlockPos> positions = region.getPositions().keySet();
-		for(BlockPos pos : region.getPositions().keySet()){
-			if(getRegionForPos(region.getWorld(), pos) != null){
-				return;
-			}
-		}
+		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
+		
 		if(!regions.contains(region)){
+			for(BlockPos pos : region.getPositions().keySet()){
+				if(getRegionForPos(region.getWorld(), pos) != null){
+					return;
+				}
+			}
 			regions.add(region);
 		}
 	}
@@ -56,7 +53,7 @@ public class ClimateManager implements IClimateManager{
 		if(region == null){
 			return;
 		}
-		List<IClimateRegion> regions = getOrCreateRegions(region.getWorld());
+		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
 		if(regions.contains(region)){
 			regions.remove(region);
 		}
@@ -77,7 +74,7 @@ public class ClimateManager implements IClimateManager{
 		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())) == null){
 			sources.put(Integer.valueOf(source.getWorld().provider.getDimension()), new HashMap<>());
 		}
-		if(!sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).keySet().contains(source.getPos())){
+		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).get(source.getPos()) == null){
 			sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).put(source.getPos(), source);
 		}
 	}
@@ -117,7 +114,8 @@ public class ClimateManager implements IClimateManager{
 	
 	@Override
 	public IClimateRegion getRegionForPos(World world, BlockPos pos){
-		for(IClimateRegion region : getOrCreateRegions(world)){
+		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(world.provider.getDimension()));
+		for(IClimateRegion region : regions){
 			if(region.getPositions().keySet().contains(pos)){
 				return region;
 			}else if(region.getOtherPositions().contains(pos)){
@@ -125,15 +123,6 @@ public class ClimateManager implements IClimateManager{
 			}
 		}
 		return null;
-	}
-	
-	public List<IClimateRegion> getOrCreateRegions(World world){
-		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(world.provider.getDimension()));
-		if(regions == null){
-			regions = new ArrayList<>();
-			this.regions.put(Integer.valueOf(world.provider.getDimension()), regions);
-		}
-		return regions;
 	}
 	
 	@Override

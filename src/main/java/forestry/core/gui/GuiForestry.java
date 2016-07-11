@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
 
+import forestry.core.owner.IOwnedTile;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,7 +28,6 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.config.Config;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.HintLedger;
@@ -106,8 +106,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			}
 		}
 
-		if (inventory instanceof IRestrictedAccess) {
-			ledgerManager.add(new OwnerLedger(ledgerManager, (IRestrictedAccess) inventory));
+		if (inventory instanceof IOwnedTile) {
+			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnedTile) inventory));
 		}
 	}
 

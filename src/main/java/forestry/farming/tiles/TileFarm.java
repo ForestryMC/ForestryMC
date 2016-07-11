@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,9 +28,6 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
@@ -44,7 +43,7 @@ import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 
-public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
+public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
 
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
@@ -166,13 +165,8 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return getMultiblockLogic().getController().getAccessHandler();
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	public IOwnerHandler getOwnerHandler() {
+		return getMultiblockLogic().getController().getOwnerHandler();
 	}
 
 	/* ITitled */

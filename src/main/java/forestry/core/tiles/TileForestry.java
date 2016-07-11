@@ -35,10 +35,6 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
-import forestry.core.access.AccessHandler;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -51,11 +47,9 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtilForestry;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
-	private static final EnumFacing[] forgeDirections = EnumFacing.values();
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable {
 	private static final Random rand = new Random();
 
-	private final AccessHandler accessHandler = new AccessHandler(this);
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	@Nonnull
@@ -115,9 +109,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-
 		inventory.readFromNBT(data);
-		accessHandler.readFromNBT(data);
 	}
 
 	@Nonnull
@@ -125,7 +117,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
 		inventory.writeToNBT(data);
-		accessHandler.writeToNBT(data);
 		return data;
 	}
 
@@ -199,20 +190,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public final IErrorLogic getErrorLogic() {
 		return errorHandler;
-	}
-
-	@Override
-	public final IAccessHandler getAccessHandler() {
-		return accessHandler;
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			worldObj.notifyBlockOfStateChange(getPos(), blockType);
-			markDirty();
-		}
 	}
 
 	/* NAME */

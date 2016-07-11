@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.entity.item.EntityItem;
@@ -35,15 +36,6 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.plugins.ForestryPluginUids;
 
 public abstract class InventoryUtil {
-
-	public static ItemStack depleteItem(ItemStack stack) {
-		if (stack.stackSize == 1) {
-			return stack.getItem().getContainerItem(stack);
-		} else {
-			stack.splitStack(1);
-			return stack;
-		}
-	}
 
 	public static boolean isWildcard(ItemStack stack) {
 		return stack.getItemDamage() == OreDictionary.WILDCARD_VALUE;
@@ -206,7 +198,7 @@ public abstract class InventoryUtil {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
-	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
+	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
 		ItemStack[] stock = getStacks(inventory);
 
 		if (doRemove) {
@@ -217,7 +209,7 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		ItemStack[] removed = new ItemStack[set.length];
 		ItemStack[] stock = getStacks(inventory);
 
@@ -247,7 +239,7 @@ public abstract class InventoryUtil {
 	/**
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
 	 */
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (stackInSlot == null) {
@@ -496,7 +488,7 @@ public abstract class InventoryUtil {
 		return added;
 	}
 
-	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, EntityPlayer player) {
+	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, @Nullable EntityPlayer player) {
 		if (!itemstack.getItem().hasContainerItem(itemstack)) {
 			return;
 		}

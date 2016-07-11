@@ -25,7 +25,7 @@ public class InventoryGreenhouse extends InventoryAdapterRestricted {
 	private final GreenhouseController greenhouseController;
 	
 	public InventoryGreenhouse(GreenhouseController greenhouseController) {
-		super(1, "Items", greenhouseController.getAccessHandler());
+		super(1, "Items");
 		this.greenhouseController = greenhouseController;
 	}
 	

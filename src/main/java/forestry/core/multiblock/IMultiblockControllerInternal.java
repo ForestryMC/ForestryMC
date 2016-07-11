@@ -13,6 +13,7 @@ package forestry.core.multiblock;
 import javax.annotation.Nonnull;
 import java.util.Set;
 
+import forestry.core.owner.IOwnedTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,12 +23,11 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 
 // internal implementation of IMultiblockController
-public interface IMultiblockControllerInternal extends IMultiblockController, INbtWritable, INbtReadable, IRestrictedAccess, IErrorLogicSource, IClimatised, IStreamableGui {
+public interface IMultiblockControllerInternal extends IMultiblockController, INbtWritable, INbtReadable, IOwnedTile, IErrorLogicSource, IClimatised, IStreamableGui {
 	/**
 	 * Attach a new part to this machine.
 	 * @param part The part to add.

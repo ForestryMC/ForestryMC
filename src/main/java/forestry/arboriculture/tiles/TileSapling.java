@@ -106,7 +106,7 @@ public class TileSapling extends TileTreeContainer {
 		}
 
 		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwner());
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwnerHandler().getOwner());
 			breedingTracker.registerBirth(tree);
 		}
 	}

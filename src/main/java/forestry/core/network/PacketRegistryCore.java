@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import forestry.core.network.packets.PacketAccessSwitch;
-import forestry.core.network.packets.PacketAccessSwitchEntity;
-import forestry.core.network.packets.PacketAccessUpdate;
-import forestry.core.network.packets.PacketAccessUpdateEntity;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
@@ -41,8 +37,6 @@ public class PacketRegistryCore extends PacketRegistry {
 		registerClientPacket(new PacketGuiLayoutSelect());
 		registerClientPacket(new PacketGuiEnergy());
 		registerClientPacket(new PacketSocketUpdate());
-		registerClientPacket(new PacketAccessUpdate());
-		registerClientPacket(new PacketAccessUpdateEntity());
 		registerClientPacket(new PacketTileStream());
 		registerClientPacket(new PacketItemStackDisplay());
 		registerClientPacket(new PacketFXSignal());
@@ -51,8 +45,6 @@ public class PacketRegistryCore extends PacketRegistry {
 
 		registerServerPacket(new PacketGuiSelectRequest());
 		registerServerPacket(new PacketPipetteClick());
-		registerServerPacket(new PacketAccessSwitch());
-		registerServerPacket(new PacketAccessSwitchEntity());
 		registerServerPacket(new PacketChipsetClick());
 		registerServerPacket(new PacketSolderingIronClick());
 	}

@@ -10,49 +10,30 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.util.Locale;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
-
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IAccessOwnerListener;
-import forestry.core.access.IRestrictedAccess;
-import forestry.core.proxy.Proxies;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Ledger displaying ownership information
  */
-public class OwnerLedger extends Ledger implements IAccessOwnerListener {
+public class OwnerLedger extends Ledger {
 
-	private final IAccessHandler accessHandler;
+	private final GameProfile owner;
 
-	public OwnerLedger(LedgerManager manager, IRestrictedAccess tile) {
+	public OwnerLedger(LedgerManager manager, IOwnedTile tile) {
 		super(manager, "owner");
 
-		this.accessHandler = tile.getAccessHandler();
-		accessHandler.addOwnerListener(this);
-		onOwnerSet(accessHandler.getOwner());
-	}
-
-	private boolean isAccessButton(int mouseX, int mouseY) {
-
-		int shiftX = currentShiftX;
-		int shiftY = currentShiftY + 44;
-
-		return mouseX >= shiftX && mouseX <= currentShiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + 12;
+		this.owner = tile.getOwnerHandler().getOwner();
+		this.maxHeight = 40;
 	}
 
 	@Override
 	public boolean isVisible() {
-		return accessHandler.isOwned();
+		return owner != null;
 	}
 
 	@Override
@@ -61,61 +42,18 @@ public class OwnerLedger extends Ledger implements IAccessOwnerListener {
 		drawBackground(x, y);
 
 		// Draw icon
-		EnumAccess accessType = accessHandler.getAccess();
-		TextureAtlasSprite accessIcon = TextureManager.getInstance().getDefault("misc/access." + accessType.toString().toLowerCase(Locale.ENGLISH));
+		TextureAtlasSprite accessIcon = TextureManager.getInstance().getDefault("misc/access.shared");
 		drawSprite(accessIcon, x + 3, y + 4);
 
 		// Draw description
-		if (!isFullyOpened()) {
-			return;
-		}
-
-		drawHeader(Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
-
-		drawText(PlayerUtil.getOwnerName(accessHandler), x + 22, y + 20);
-
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		boolean playerIsOwner = accessHandler.isOwner(minecraft.thePlayer);
-		if (playerIsOwner) {
-			drawSubheader(Translator.translateToLocal("for.gui.access") + ':', x + 22, y + 32);
-			// Access rules
-			drawSprite(accessIcon, x + 20, y + 40);
-			drawText(Translator.translateToLocal(accessType.getUnlocalizedName()), x + 38, y + 44);
+		if (isFullyOpened()) {
+			drawHeader(Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
+			drawText(PlayerUtil.getOwnerName(owner), x + 22, y + 20);
 		}
 	}
 
 	@Override
 	public String getTooltip() {
-		return Translator.translateToLocal("for.gui.owner") + ": " + PlayerUtil.getOwnerName(accessHandler);
-	}
-
-	@Override
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
-
-		if (isAccessButton(x, y)) {
-			Minecraft minecraft = Proxies.common.getClientInstance();
-			EntityPlayer player = minecraft.thePlayer;
-
-			return accessHandler.switchAccess(player);
-		}
-
-		return false;
-	}
-
-	@Override
-	public void onOwnerSet(GameProfile gameProfile) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		boolean playerIsOwner = PlayerUtil.isSameGameProfile(minecraft.thePlayer.getGameProfile(), gameProfile);
-		if (playerIsOwner) {
-			maxHeight = 60;
-		} else {
-			maxHeight = 36;
-		}
-	}
-
-	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		accessHandler.removeOwnerListener(this);
+		return Translator.translateToLocal("for.gui.owner") + ": " + PlayerUtil.getOwnerName(owner);
 	}
 }

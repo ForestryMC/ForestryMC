@@ -24,6 +24,11 @@ public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 		public float getChange() {
 			return 0.015F;
 		}
+		
+		@Override
+		public boolean isPositiv() {
+			return false;
+		}
 
 		@Override
 		public int getClimitiseRange() {

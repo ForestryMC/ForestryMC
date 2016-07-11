@@ -335,15 +335,15 @@ public abstract class ItemStackUtil {
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (isCraftingEquivalent(base, comparison)) {
-			return true;
-		}
-
 		if (base == null || comparison == null) {
 			return false;
 		}
 
 		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
+			return true;
+		}
+
+		if (isCraftingEquivalent(base, comparison)) {
 			return true;
 		}
 

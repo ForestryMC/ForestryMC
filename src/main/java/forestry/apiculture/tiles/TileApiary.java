@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,15 +31,19 @@ import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
+	@Nonnull
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
+	@Nonnull
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
-	private final InventoryApiary inventory = new InventoryApiary(getAccessHandler());
+	@Nonnull
+	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
 		super("apiary");
 		setInternalInventory(inventory);
 	}
 
+	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;

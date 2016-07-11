@@ -58,7 +58,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	private final IInventory fertilizerInventory;
 
 	public InventoryFarm(FarmController farmController) {
-		super(SLOT_COUNT, "Items", farmController.getAccessHandler());
+		super(SLOT_COUNT, "Items");
 		this.farmController = farmController;
 
 		this.resourcesInventory = new InventoryMapper(this, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT);
@@ -94,7 +94,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorldObj(), farmController.getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorldObj(), farmController.getOwnerHandler().getOwner());
 		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true, false, true);
 	}
 

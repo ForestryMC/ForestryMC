@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import forestry.core.owner.GameProfileDataSerializer;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -123,6 +124,8 @@ public class PluginCore extends BlankForestryPlugin {
 	public void preInit() {
 		super.preInit();
 		
+		GameProfileDataSerializer.register();
+
 		MinecraftForge.EVENT_BUS.register(this);
 
 		rootCommand.addChildCommand(new CommandPlugins());

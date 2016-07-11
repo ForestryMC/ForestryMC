@@ -13,7 +13,10 @@ package forestry.greenhouse.tiles;
 import net.minecraft.item.ItemStack;
 import forestry.core.utils.ItemStackUtil;
 
-public class TileGreenhouseDoor extends TileGreenhouse{
+public class TileGreenhouseDoor extends TileGreenhouse {
+
+	public TileGreenhouseDoor() {
+	}
 	
 	@Override
 	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
@@ -30,5 +33,5 @@ public class TileGreenhouseDoor extends TileGreenhouse{
 			}
 		}
 	}
-	
+
 }

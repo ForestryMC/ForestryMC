@@ -8,8 +8,8 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.mail.tiles;
+package forestry.core.owner;
 
-public interface IMailContainer {
-	boolean hasMail();
+public interface IOwnedTile {
+	IOwnerHandler getOwnerHandler();
 }

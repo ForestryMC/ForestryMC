@@ -34,6 +34,11 @@ public class TileGreenhouseHeater extends TileGreenhouseClimatiser {
 		public int getClimitiseRange() {
 			return 7;
 		}
+
+		@Override
+		public boolean isPositiv() {
+			return true;
+		}
 	}
 
 }

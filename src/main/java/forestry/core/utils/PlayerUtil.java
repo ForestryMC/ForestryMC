@@ -25,8 +25,6 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-import forestry.core.access.IOwnable;
-
 public abstract class PlayerUtil {
 
 	//TODO: use null everywhere instead of an emptyUUID
@@ -46,8 +44,7 @@ public abstract class PlayerUtil {
 		return player1.getName() != null && player1.getName().equals(player2.getName());
 	}
 
-	public static String getOwnerName(IOwnable ownable) {
-		GameProfile profile = ownable.getOwner();
+	public static String getOwnerName(GameProfile profile) {
 		if (profile == null) {
 			return Translator.translateToLocal("for.gui.derelict");
 		} else {

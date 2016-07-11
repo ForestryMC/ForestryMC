@@ -26,8 +26,6 @@ public enum PacketIdClient implements IPacketId {
 	GUI_LAYOUT_SELECT,
 	GUI_ENERGY,
 	SOCKET_UPDATE,
-	ACCESS_UPDATE,
-	ACCESS_UPDATE_ENTITY,
 
 	// Core Tile Entities
 	TILE_FORESTRY_UPDATE,

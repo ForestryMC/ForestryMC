@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 
 public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenhouseButterflyHatch> {

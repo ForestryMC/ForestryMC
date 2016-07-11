@@ -14,9 +14,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -25,8 +27,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
@@ -34,7 +34,6 @@ import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.core.access.IOwnable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -43,16 +42,15 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.multiblock.GreenhouseController;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 
-public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IButterflyCocoon {
+public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
+	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private int age;
 	private int maturationTime;
 	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.getIndividual();
-	private GameProfile owner;
 	private BlockPos nursery;
 	private boolean isSolid;
 
@@ -74,9 +72,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		if (nbttagcompound.hasKey("Caterpillar")) {
 			caterpillar = new Butterfly(nbttagcompound.getCompoundTag("Caterpillar"));
 		}
-		if (nbttagcompound.hasKey("owner")) {
-			owner = PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
-		}
+		ownerHandler.readFromNBT(nbttagcompound);
 		if (nbttagcompound.hasKey("nursery")) {
 			NBTTagCompound nbt = nbttagcompound.getCompoundTag("nursery");
 			int x = nbt.getInteger("x");
@@ -99,11 +95,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 			caterpillar.writeToNBT(subcompound);
 			nbttagcompound.setTag("Caterpillar", subcompound);
 		}
-		if (this.owner != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			PlayerUtil.writeGameProfile(nbt, owner);
-			nbttagcompound.setTag("owner", nbt);
-		}
+		ownerHandler.writeToNBT(nbttagcompound);
 		if (nursery != null) {
 			BlockPos pos = nursery;
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -145,25 +137,9 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
 	}
 
-	/* IOwnable */
 	@Override
-	public GameProfile getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(@Nonnull GameProfile owner) {
-		this.owner = owner;
-	}
-
-	@Override
-	public boolean isOwned() {
-		return owner != null;
-	}
-
-	@Override
-	public boolean isOwner(EntityPlayer player) {
-		return player != null && PlayerUtil.isSameGameProfile(player.getGameProfile(), owner);
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
 	}
 
 	@Override

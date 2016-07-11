@@ -32,7 +32,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -57,7 +56,6 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.access.EnumAccess;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -343,20 +341,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			for (IMultiblockComponent part : connectedParts) {
-				if (part instanceof TileEntity) {
-					TileEntity tile = (TileEntity) part;
-					tile.getWorld().notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
-				}
-			}
-			markDirty();
-		}
-	}
-
-	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		tankManager.writeData(data);
 		hydrationManager.writeData(data);
@@ -483,11 +467,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				continue;
 			}
 
-			// Allow listeners to cancel this cycle.
-			if (isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
-				continue;
-			}
-
 			// Always try to collect windfall.
 			if (collectWindfall(logic)) {
 				farmWorkStatus.didWork = true;
@@ -504,7 +483,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 					harvestProvider = logic;
 				}
 			} else if (stage == Stage.CULTIVATE) {
-				farmWorkStatus = cultivateTargets(farmWorkStatus, farmTargets, logic);
+				farmWorkStatus = cultivateTargets(farmWorkStatus, farmTargets, logic, farmSide);
 			}
 
 			if (farmWorkStatus.didWork) {
@@ -622,31 +601,37 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private static class FarmWorkStatus {
 		public boolean didWork = false;
 		public boolean hasFarmland = false;
-		public boolean hasFertilizer = false;
-		public boolean hasLiquid = false;
+		public boolean hasFertilizer = true;
+		public boolean hasLiquid = true;
 	}
 
-	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic) {
-		float hydrationModifier = hydrationManager.getHydrationModifier();
-
-		final int fertilizerConsumption = logic.getFertilizerConsumption();
-		int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-		FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
-
+	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
+		boolean hasFarmland = false;
 		if (farmTargets != null) {
 			for (FarmTarget target : farmTargets) {
-				if (target.getExtent() <= 0) {
-					break;
-				} else {
+				if (target.getExtent() > 0) {
+					hasFarmland = true;
 					farmWorkStatus.hasFarmland = true;
+					break;
 				}
+			}
+		}
 
+		if (hasFarmland && !isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+			final float hydrationModifier = hydrationManager.getHydrationModifier();
+			final int fertilizerConsumption = logic.getFertilizerConsumption();
+			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
+			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
+
+			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
 				if (!fertilizerManager.hasFertilizer(fertilizerConsumption)) {
+					farmWorkStatus.hasFertilizer = false;
 					continue;
 				}
 
 				if (liquid.amount > 0 && !hasLiquid(liquid)) {
+					farmWorkStatus.hasLiquid = false;
 					continue;
 				}
 
@@ -659,9 +644,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				}
 			}
 		}
-
-		farmWorkStatus.hasLiquid = liquid.amount <= 0 || hasLiquid(liquid);
-		farmWorkStatus.hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
 
 		return farmWorkStatus;
 	}
@@ -791,7 +773,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
-		EntityPlayer player = PlayerUtil.getPlayer(world, getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(world, getOwnerHandler().getOwner());
 		return inventory.plantGermling(germling, player, pos);
 	}
 

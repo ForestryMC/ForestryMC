@@ -1,13 +1,16 @@
 package forestry.core.climate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.core.climate.IClimateSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -17,6 +20,20 @@ public class ClimateEventHandler {
 	
 	public ClimateEventHandler() {
 		serverTicks = new HashMap<>();
+	}
+	
+	@SubscribeEvent
+	public void onLoadWorld(WorldEvent.Load event){
+		IClimateManager manager = ForestryAPI.climateManager;
+		Integer dimonsionID = Integer.valueOf(event.getWorld().provider.getDimension());
+		Map<Integer, List<IClimateRegion>> regions = manager.getRegions();
+		Map<Integer, Map<BlockPos, IClimateSource>> sources = manager.getSources();
+		if(regions.get(dimonsionID) == null){
+			regions.put(dimonsionID, new ArrayList<>());
+		}
+		if(sources.get(dimonsionID) == null){
+			sources.put(dimonsionID, new HashMap<>());
+		}
 	}
 	
 	@SubscribeEvent

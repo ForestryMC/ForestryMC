@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -69,9 +68,9 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		return InventoryUtil.getStacks(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 	}
 
-	public boolean removeResources(ItemStack[] stacks, EntityPlayer player) {
+	public boolean removeResources(ItemStack[] stacks) {
 		IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, stacks, player, false, true, false, true);
+		return InventoryUtil.removeSets(inventory, 1, stacks, null, false, true, false, true);
 	}
 
 	public boolean addRemnant(ItemStack remnant, boolean doAdd) {
