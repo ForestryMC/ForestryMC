@@ -12,6 +12,7 @@ package forestry;
 
 import java.io.File;
 
+import forestry.plugins.compat.PluginIC2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -52,7 +53,8 @@ import forestry.plugins.PluginManager;
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.10]",
 		dependencies = "required-after:Forge@[12.18.0.1989,);"
-				+ "after:JEI@[3.7.0,);")
+				+ "after:JEI@[3.7.0,);"
+				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
 	@Mod.Instance(Constants.MOD_ID)

@@ -104,7 +104,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				break;
 			}
 
-			if (!BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
+			if (!BlockUtil.isReplaceableBlock(state, world, position)) {
 				produce.addAll(BlockUtil.getBlockDrops(world, position));
 				world.setBlockToAir(position);
 				return trySetSoil(world, farmHousing, position);
