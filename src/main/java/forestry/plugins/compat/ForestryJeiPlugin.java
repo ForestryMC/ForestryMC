@@ -3,6 +3,8 @@ package forestry.plugins.compat;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import forestry.core.PluginCore;
+import forestry.core.utils.OreDictUtil;
 import net.minecraft.item.ItemStack;
 
 import forestry.plugins.PluginManager;
@@ -12,6 +14,7 @@ import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import net.minecraftforge.oredict.OreDictionary;
 
 @JEIPlugin
 public class ForestryJeiPlugin extends BlankModPlugin {
@@ -23,5 +26,9 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 		for (ItemStack hiddenItem : hiddenItems) {
 			itemBlacklist.addItemToBlacklist(hiddenItem);
 		}
+
+		registry.addDescription(new ItemStack(PluginCore.items.solderingIron), "item.for.solderingIron.description");
+		registry.addDescription(new ItemStack(PluginCore.items.circuitboards, 1, OreDictionary.WILDCARD_VALUE), "item.for.circuitboard.description");
+		registry.addDescription(new ItemStack(PluginCore.items.tubes, 1, OreDictionary.WILDCARD_VALUE), "item.for.thermionicTubes.description");
 	}
 }
