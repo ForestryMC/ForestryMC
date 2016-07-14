@@ -13,8 +13,7 @@ package forestry.energy.circuits;
 public class CircuitElectricChoke extends CircuitElectricChange {
 
 	public CircuitElectricChoke(String uid) {
-		super(uid, false);
+		super(uid);
 		this.configureChange(-2, -10);
-		this.setLimit(1);
 	}
 }

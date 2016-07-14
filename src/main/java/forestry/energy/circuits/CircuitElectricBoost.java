@@ -12,9 +12,8 @@ package forestry.energy.circuits;
 
 public class CircuitElectricBoost extends CircuitElectricChange {
 
-	public CircuitElectricBoost(String uid, int limit, int eu, int rf) {
-		super(uid, false);
-		this.setLimit(limit);
+	public CircuitElectricBoost(String uid, int eu, int rf) {
+		super(uid);
 		this.configureChange(eu, rf);
 	}
 

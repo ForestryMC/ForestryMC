@@ -10,10 +10,6 @@ import java.util.List;
 public interface ICircuit {
 	String getUID();
 
-	boolean requiresDiscovery();
-
-	int getLimit();
-
 	String getUnlocalizedName();
 
 	boolean isCircuitable(Object tile);

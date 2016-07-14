@@ -37,8 +37,8 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
-	private static final short blankSlot = 0;
-	private static final short finishedSlot = 1;
+	private static final short inputCircuitBoardSlot = 0;
+	private static final short finishedCircuitBoardSlot = 1;
 	private static final short ingredientSlot1 = 2;
 	private static final short ingredientSlotCount = 4;
 
@@ -84,11 +84,6 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 				continue;
 			}
 
-			// / Make sure we don't exceed this circuits limit per chipset
-			if (getCount(recipe.getCircuit(), circuits) >= recipe.getCircuit().getLimit()) {
-				continue;
-			}
-
 			if (doConsume) {
 				decrStackSize(ingredientSlot1 + i, recipe.getResource().stackSize);
 			}
@@ -104,39 +99,36 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			return;
 		}
 
-		ItemStack blank = getStackInSlot(blankSlot);
-		// Requires blank slot
-		if (blank == null) {
+		ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
+
+		if (inputCircuitBoard == null || inputCircuitBoard.stackSize > 1) {
 			return;
 		}
-		if (blank.stackSize > 1) {
-			return;
-		}
-		if (getStackInSlot(finishedSlot) != null) {
+		if (getStackInSlot(finishedCircuitBoardSlot) != null) {
 			return;
 		}
 
 		// Need a chipset item
-		if (!ChipsetManager.circuitRegistry.isChipset(blank)) {
+		if (!ChipsetManager.circuitRegistry.isChipset(inputCircuitBoard)) {
 			return;
 		}
 
 		// Illegal type
-		if (blank.getItemDamage() < 0 || blank.getItemDamage() >= EnumCircuitBoardType.values().length) {
+		if (inputCircuitBoard.getItemDamage() < 0 || inputCircuitBoard.getItemDamage() >= EnumCircuitBoardType.values().length) {
 			return;
 		}
 
-		EnumCircuitBoardType type = EnumCircuitBoardType.values()[blank.getItemDamage()];
+		EnumCircuitBoardType type = EnumCircuitBoardType.values()[inputCircuitBoard.getItemDamage()];
 		if (getCircuitCount() != type.getSockets()) {
 			return;
 		}
 
 		ICircuit[] circuits = getCircuits(true);
 
-		ItemStack circuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
+		ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
-		setInventorySlotContents(finishedSlot, circuitBoard);
-		setInventorySlotContents(blankSlot, null);
+		setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
+		setInventorySlotContents(inputCircuitBoardSlot, null);
 	}
 
 	private int getCircuitCount() {
@@ -144,16 +136,6 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		int count = 0;
 		for (ICircuit circuit : circuits) {
 			if (circuit != null) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-	public static int getCount(ICircuit circuit, ICircuit[] circuits) {
-		int count = 0;
-		for (ICircuit other : circuits) {
-			if (other != null && other.getUID().equals(circuit.getUID())) {
 				count++;
 			}
 		}
@@ -168,7 +150,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
 		}
 
-		ItemStack blankCircuitBoard = getStackInSlot(blankSlot);
+		ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
 		if (blankCircuitBoard == null) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
@@ -202,7 +184,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		}
 
 		Item item = itemStack.getItem();
-		if (slotIndex == blankSlot) {
+		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
 			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), itemStack);
