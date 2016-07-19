@@ -74,7 +74,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 		for (int i = 0; i < tokenCount / 2; i++) {
 			IAllele[] randomTemplate = root.getRandomTemplate(rand);
-			String speciesUid = randomTemplate[root.getSpeciesChromosomeType().ordinal()].getUID();
+			String speciesUid = randomTemplate[root.getKaryotypeKey().ordinal()].getUID();
 			gameTokens.add(new EscritoireGameToken(speciesUid));
 			gameTokens.add(new EscritoireGameToken(speciesUid));
 		}
