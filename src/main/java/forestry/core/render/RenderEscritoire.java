@@ -104,6 +104,8 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 				rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 			}
 			GlStateManager.popMatrix();
+
+			dummyEntityItem.worldObj = null; // prevent leaking the world object
 		}
 	}
 }
