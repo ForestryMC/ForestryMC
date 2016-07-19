@@ -51,7 +51,7 @@ public class ModelButterflyItem extends BlankItemModel {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		textures.put("butterfly", butterfly.getGenome().getSecondary().getItemTexture());
 		IModel retexturedModel =  ModelProcessingHelper.retexture(modelButterfly, textures.build());
-		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.0F, -0.03125F, butterfly.getSize() * 1.5F);
+		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.5F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {
