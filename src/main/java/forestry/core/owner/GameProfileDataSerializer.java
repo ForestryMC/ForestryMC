@@ -34,7 +34,7 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 	}
 
 	@Override
-	public Optional<GameProfile> read(PacketBuffer buf) throws IOException {
+	public Optional<GameProfile> read(PacketBuffer buf) {
 		if (buf.readBoolean()) {
 			UUID uuid = buf.readUuid();
 			String name = buf.readStringFromBuffer(1024);

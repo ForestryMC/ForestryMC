@@ -11,6 +11,7 @@
 package forestry.core.circuits;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 
 	@Nonnull
 	private final EnumCircuitBoardType type;
-	@Nonnull
+	@Nullable
 	private final ICircuitLayout layout;
 	@Nonnull
 	private final ICircuit[] circuits;
@@ -80,19 +81,23 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	public void addTooltip(List<String> list) {
 		if (layout != null) {
 			list.add(TextFormatting.GOLD + layout.getUsage() + ":");
-		}
-
-		List<String> extendedTooltip = new ArrayList<>();
-		for (ICircuit circuit : circuits) {
-			if (circuit != null) {
-				circuit.addTooltip(extendedTooltip);
+			List<String> extendedTooltip = new ArrayList<>();
+			for (ICircuit circuit : circuits) {
+				if (circuit != null) {
+					circuit.addTooltip(extendedTooltip);
+				}
 			}
-		}
 
-		if (Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
-			list.addAll(extendedTooltip);
+			if (Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
+				list.addAll(extendedTooltip);
+			} else {
+				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			}
 		} else {
-			list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			int socketCount = type.getSockets();
+			String localizationKey = "item.for.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
+			String tooltip = Translator.translateToLocalFormatted(localizationKey, type.getSockets());
+			list.add(tooltip);
 		}
 	}
 

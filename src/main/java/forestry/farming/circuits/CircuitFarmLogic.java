@@ -21,9 +21,8 @@ public class CircuitFarmLogic extends Circuit {
 	private boolean isManual = false;
 
 	public CircuitFarmLogic(String uid, IFarmLogic logic) {
-		super(uid, false);
+		super(uid);
 		this.logic = logic;
-		setLimit(4);
 	}
 
 	public CircuitFarmLogic setManual() {

@@ -19,33 +19,16 @@ import forestry.core.utils.Translator;
 public abstract class Circuit implements ICircuit {
 
 	private final String uid;
-	private final boolean requiresDiscovery;
-	private int limit = 1;
 
-	protected Circuit(String uid, boolean requiresDiscovery) {
+	protected Circuit(String uid) {
 		this.uid = uid;
-		this.requiresDiscovery = requiresDiscovery;
 
 		ChipsetManager.circuitRegistry.registerCircuit(this);
-	}
-
-	protected void setLimit(int limit) {
-		this.limit = limit;
 	}
 
 	@Override
 	public String getUID() {
 		return "forestry." + this.uid;
-	}
-
-	@Override
-	public int getLimit() {
-		return this.limit;
-	}
-
-	@Override
-	public boolean requiresDiscovery() {
-		return this.requiresDiscovery;
 	}
 
 	@Override

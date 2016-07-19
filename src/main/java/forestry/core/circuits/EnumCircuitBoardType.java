@@ -11,20 +11,22 @@
 package forestry.core.circuits;
 
 public enum EnumCircuitBoardType {
-	BASIC((short) 1, 0x191919, 0x6dcff6), ENHANCED((short) 2, 0x191919, 0xcb7c32), REFINED((short) 3, 0x191919, 0xc9c9c9), INTRICATE((short) 4, 0x191919,
-			0xe2cb6b);
+	BASIC(1, 0x191919, 0x6dcff6),
+	ENHANCED(2, 0x191919, 0xcb7c32),
+	REFINED(3, 0x191919, 0xc9c9c9),
+	INTRICATE(4, 0x191919, 0xe2cb6b);
 
-	private final short sockets;
+	private final int sockets;
 	private final int primaryColor;
 	private final int secondaryColor;
 
-	EnumCircuitBoardType(short sockets, int primaryColor, int secondaryColor) {
+	EnumCircuitBoardType(int sockets, int primaryColor, int secondaryColor) {
 		this.sockets = sockets;
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
 	}
 
-	public short getSockets() {
+	public int getSockets() {
 		return sockets;
 	}
 

@@ -231,7 +231,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 			BlockPos posBelow = pos.down();
 			IBlockState blockStateBelow = worldObj.getBlockState(posBelow);
-			Block blockBelow = blockState.getBlock();
+			Block blockBelow = blockStateBelow.getBlock();
 			if (blockBelow.isLeaves(blockStateBelow, worldObj, posBelow)) {
 				weight += 2.5f;
 			} else if (blockBelow instanceof BlockFence) {

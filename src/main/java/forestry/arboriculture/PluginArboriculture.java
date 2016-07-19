@@ -201,7 +201,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		blocks.treeChest.init();
 
 		if (Config.enableVillagers) {
-			villagerArborist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK);
+			villagerArborist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK, Constants.TEXTURE_SKIN_ZOMBIE_LUMBERJACK);
 			VillagerRegistry.instance().register(villagerArborist);
 
 			VillagerRegistry.VillagerCareer arboristCareer = new VillagerRegistry.VillagerCareer(villagerArborist, "arborist");

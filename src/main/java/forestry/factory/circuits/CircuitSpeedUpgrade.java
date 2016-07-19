@@ -18,9 +18,8 @@ public class CircuitSpeedUpgrade extends Circuit {
 	private final double speedBoost;
 	private final float powerDraw;
 
-	public CircuitSpeedUpgrade(String uid, double speedBoost, float powerDraw, int limit) {
-		super(uid, false);
-		this.setLimit(limit);
+	public CircuitSpeedUpgrade(String uid, double speedBoost, float powerDraw) {
+		super(uid);
 		this.speedBoost = speedBoost;
 		this.powerDraw = powerDraw;
 	}

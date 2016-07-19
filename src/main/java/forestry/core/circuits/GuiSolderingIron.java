@@ -50,7 +50,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {
-				description = Translator.translateToLocal(recipe.getCircuit().getUnlocalizedName()) + " (" + recipe.getCircuit().getLimit() + ")";
+				description = Translator.translateToLocal(recipe.getCircuit().getUnlocalizedName());
 			}
 
 			int row = i * 20;

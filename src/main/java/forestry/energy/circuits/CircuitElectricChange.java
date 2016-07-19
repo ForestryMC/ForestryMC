@@ -18,8 +18,8 @@ public abstract class CircuitElectricChange extends Circuit {
 	private int euChange = 7;
 	private int rfChange = 20;
 
-	protected CircuitElectricChange(String uid, boolean requiresDiscovery) {
-		super(uid, requiresDiscovery);
+	protected CircuitElectricChange(String uid) {
+		super(uid);
 	}
 
 	protected void configureChange(int euChange, int rfChange) {
