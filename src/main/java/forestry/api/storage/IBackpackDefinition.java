@@ -5,43 +5,41 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import java.util.List;
-import java.util.function.Predicate;
+import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 
-public interface IBackpackDefinition extends Predicate<ItemStack> {
-
+/**
+ * To make your own backpack, create a backpack definition and register it with
+ * {@link IBackpackInterface#registerBackpackDefinition(String, IBackpackDefinition)}.
+ */
+public interface IBackpackDefinition {
 	/**
 	 * @return Human-readable name of the backpack.
 	 */
+	@Nonnull
 	String getName(ItemStack backpack);
 
 	/**
-	 * @return Primary colour for the backpack icon.
+	 * @return Primary color for the backpack icon.
 	 */
 	int getPrimaryColour();
 
 	/**
-	 * @return Secondary colour for backpack icon.
+	 * @return Secondary color for backpack icon, normally white.
 	 */
 	int getSecondaryColour();
 
 	/**
-	 * Adds an item as valid for this backpack.
+	 * Filters items that can be put into a backpack.
 	 *
-	 * @param validItem
+	 * For Backpack Implementers: you can create a new filter with
+	 * {@link IBackpackInterface#createBackpackFilter()} or
+	 * {@link IBackpackInterface#createNaturalistBackpackFilter(String)}
+	 * or implement your own.
+	 *
+	 * @return the backpack's item filter.
 	 */
-	void addValidItem(ItemStack validItem);
-
-	void addValidItems(List<ItemStack> validItems);
-
-	void addValidOreDictName(String oreDictName);
-
-	/**
-	 * Returns true if the ItemStack is a valid item for this backpack type.
-	 */
-	@Override
-	boolean test(ItemStack itemstack);
-
+	@Nonnull
+	IBackpackFilter getFilter();
 }

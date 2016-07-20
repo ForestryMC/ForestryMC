@@ -10,43 +10,25 @@
  ******************************************************************************/
 package forestry.storage;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
 import javax.annotation.Nonnull;
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.api.storage.IBackpackFilter;
+import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
@@ -70,6 +52,22 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.items.ItemRegistryStorage;
 import forestry.storage.proxy.ProxyStorage;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends BlankForestryPlugin {
@@ -82,8 +80,10 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	public static ItemRegistryStorage items;
 
-	private final Multimap<String, String> backpackOreDictRegexpDefaults = HashMultimap.create();
-	private final Multimap<String, String> backpackItemDefaults = HashMultimap.create();
+	private final Multimap<String, String> backpackAcceptedOreDictRegexpDefaults = HashMultimap.create();
+	private final Multimap<String, String> backpackRejectedOreDictRegexpDefaults = HashMultimap.create();
+	private final Multimap<String, String> backpackAcceptedItemDefaults = HashMultimap.create();
+	private final Multimap<String, String> backpackRejectedItemDefaults = HashMultimap.create();
 
 	private final List<String> forestryBackpackUids = Arrays.asList(
 			BackpackManager.MINER_UID,
@@ -105,32 +105,34 @@ public class PluginStorage extends BlankForestryPlugin {
 		BackpackDefinition definition;
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			definition = new BackpackDefinition.BackpackDefinitionNaturalist(new Color(0xc4923d), "rootBees");
-			BackpackManager.backpackInterface.registerBackpack("apiarist", definition);
+			IBackpackFilter filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootBees");
+			definition = new BackpackDefinition(new Color(0xc4923d), Color.WHITE, filter);
+			BackpackManager.backpackInterface.registerBackpackDefinition("apiarist", definition);
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			definition = new BackpackDefinition.BackpackDefinitionNaturalist(new Color(0x995b31), "rootButterflies");
-			BackpackManager.backpackInterface.registerBackpack("lepidopterist", definition);
+			IBackpackFilter filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootButterflies");
+			definition = new BackpackDefinition(new Color(0x995b31), Color.WHITE, filter);
+			BackpackManager.backpackInterface.registerBackpackDefinition("lepidopterist", definition);
 		}
 
-		definition = new BackpackDefinition(new Color(0x36187d));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.MINER_UID, definition);
+		definition = new BackpackDefinition(new Color(0x36187d), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.MINER_UID, definition);
 
-		definition = new BackpackDefinition(new Color(0x363cc5));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.DIGGER_UID, definition);
+		definition = new BackpackDefinition(new Color(0x363cc5), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.DIGGER_UID, definition);
 
-		definition = new BackpackDefinition(new Color(0x347427));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.FORESTER_UID, definition);
+		definition = new BackpackDefinition(new Color(0x347427), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.FORESTER_UID, definition);
 
-		definition = new BackpackDefinition(new Color(0x412215));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.HUNTER_UID, definition);
+		definition = new BackpackDefinition(new Color(0x412215), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.HUNTER_UID, definition);
 
-		definition = new BackpackDefinition(new Color(0x7fb8c2));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.ADVENTURER_UID, definition);
+		definition = new BackpackDefinition(new Color(0x7fb8c2), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.ADVENTURER_UID, definition);
 
-		definition = new BackpackDefinition(new Color(0xdd3a3a));
-		BackpackManager.backpackInterface.registerBackpack(BackpackManager.BUILDER_UID, definition);
+		definition = new BackpackDefinition(new Color(0xdd3a3a), Color.WHITE);
+		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.BUILDER_UID, definition);
 		
 		proxy.registerCrateModel();
 	}
@@ -151,7 +153,13 @@ public class PluginStorage extends BlankForestryPlugin {
 		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
 		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "2.0.0");
+		if (!config.getDefinedConfigVersion().equals(config.getLoadedConfigVersion())) {
+			boolean deleted = configFile.delete();
+			if (deleted) {
+				config = new LocalizedConfiguration(configFile, "2.0.0");
+			}
+		}
 
 		setDefaultsForConfig();
 
@@ -163,7 +171,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private void setDefaultsForConfig() {
-		backpackOreDictRegexpDefaults.get(BackpackManager.MINER_UID).addAll(Arrays.asList(
+		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.MINER_UID).addAll(Arrays.asList(
 				"obsidian",
 				"ore[A-Z].*",
 				"dust[A-Z].*",
@@ -175,7 +183,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"denseore[A-Z].*"
 		));
 
-		backpackOreDictRegexpDefaults.get(BackpackManager.DIGGER_UID).addAll(Arrays.asList(
+		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.DIGGER_UID).addAll(Arrays.asList(
 				"cobblestone",
 				"dirt",
 				"gravel",
@@ -185,7 +193,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"sand"
 		));
 
-		backpackOreDictRegexpDefaults.get(BackpackManager.HUNTER_UID).addAll(Arrays.asList(
+		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.HUNTER_UID).addAll(Arrays.asList(
 				"bone",
 				"egg",
 				"enderpearl",
@@ -197,7 +205,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"string"
 		));
 
-		backpackOreDictRegexpDefaults.get(BackpackManager.FORESTER_UID).addAll(Arrays.asList(
+		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.FORESTER_UID).addAll(Arrays.asList(
 				"logWood",
 				"stickWood",
 				"woodStick",
@@ -211,7 +219,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"tree[A-Z].*"
 		));
 
-		backpackOreDictRegexpDefaults.get(BackpackManager.BUILDER_UID).addAll(Arrays.asList(
+		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.BUILDER_UID).addAll(Arrays.asList(
 				"block[A-Z].*",
 				"paneGlass[A-Z].*",
 				"slabWood[A-Z].*",
@@ -234,7 +242,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				"doorWood"
 		));
 
-		backpackItemDefaults.get(BackpackManager.MINER_UID).addAll(getItemStrings(Arrays.asList(
+		backpackAcceptedItemDefaults.get(BackpackManager.MINER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.COAL_ORE),
 				new ItemStack(Items.COAL),
 				PluginCore.items.bronzePickaxe.getItemStack(),
@@ -242,7 +250,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				PluginCore.items.brokenBronzePickaxe.getItemStack()
 		)));
 
-		backpackItemDefaults.get(BackpackManager.DIGGER_UID).addAll(getItemStrings(Arrays.asList(
+		backpackAcceptedItemDefaults.get(BackpackManager.DIGGER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.FLINT),
 				new ItemStack(Blocks.SANDSTONE, 1, 0),
@@ -254,7 +262,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				PluginCore.items.brokenBronzeShovel.getItemStack()
 		)));
 
-		backpackItemDefaults.get(BackpackManager.FORESTER_UID).addAll(getItemStrings(Arrays.asList(
+		backpackAcceptedItemDefaults.get(BackpackManager.FORESTER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.RED_MUSHROOM),
 				new ItemStack(Blocks.BROWN_MUSHROOM),
 				new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE),
@@ -274,7 +282,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Items.APPLE)
 		)));
 
-		backpackItemDefaults.get(BackpackManager.HUNTER_UID).addAll(getItemStrings(Arrays.asList(
+		backpackAcceptedItemDefaults.get(BackpackManager.HUNTER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Items.BLAZE_POWDER),
 				new ItemStack(Items.BLAZE_ROD),
 				new ItemStack(Items.ROTTEN_FLESH),
@@ -315,7 +323,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Items.IRON_HORSE_ARMOR)
 		)));
 
-		backpackItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
+		backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.REDSTONE_TORCH),
 				new ItemStack(Blocks.REDSTONE_LAMP),
 				new ItemStack(Blocks.SEA_LANTERN),
@@ -369,24 +377,15 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
 		if (beeBlocks != null) {
-			backpackItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
+			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 					new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
 			)));
 		}
 
 		// include everything added via the API
-		for (String backpackUid : forestryBackpackUids)  {
-			BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(backpackUid);
-
-			Collection<String> oreDictDefaults = backpackOreDictRegexpDefaults.get(backpackUid);
-			for (int oreId : backpackDefinition.getValidOreIds()) {
-				String oreName = OreDictionary.getOreName(oreId);
-				oreDictDefaults.add(oreName);
-			}
-
-			backpackItemDefaults.get(backpackUid).addAll(backpackDefinition.getValidItemStacks());
-		}
+		BackpackInterface backpackInterface = (BackpackInterface) BackpackManager.backpackInterface;
+		backpackAcceptedItemDefaults.putAll(backpackInterface.getBackpackAcceptedItems());
 	}
 
 	// Should be ore dicted in Forge at some point.
@@ -416,45 +415,91 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private void handleBackpackConfig(LocalizedConfiguration config, String backpackUid) {
-		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(backpackUid);
-		backpackDefinition.clearAllValid();
-
-		{
-			List<String> defaultItemNames = new ArrayList<>(backpackItemDefaults.get(backpackUid));
-			Collections.sort(defaultItemNames);
-			String[] defaultValidItems = defaultItemNames.toArray(new String[defaultItemNames.size()]);
-
-			Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks", defaultValidItems);
-			backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
-
-			String[] backpackItemList = backpackConf.getStringList();
-			List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
-			backpackDefinition.addValidItems(backpackItems);
+		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpackDefinition(backpackUid);
+		if (backpackDefinition == null) {
+			return;
 		}
 
-		{
+		IBackpackFilter filter = backpackDefinition.getFilter();
+		if (filter instanceof IBackpackFilterConfigurable) {
+			IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
+			backpackFilter.clear();
 
-			List<String> defaultOreRegexpList = new ArrayList<>(backpackOreDictRegexpDefaults.get(backpackUid));
-			Collections.sort(defaultOreRegexpList);
-			String[] defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[defaultOreRegexpList.size()]);
+			// accepted items
+			{
+				List<String> defaultAcceptedItemNames = new ArrayList<>(backpackAcceptedItemDefaults.get(backpackUid));
+				Collections.sort(defaultAcceptedItemNames);
+				String[] defaultValidItems = defaultAcceptedItemNames.toArray(new String[defaultAcceptedItemNames.size()]);
 
-			Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict", defaultOreRegexpNames);
-			backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
+				Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks.accepted", defaultValidItems);
+				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
 
-			List<String> oreDictNameList = new ArrayList<>();
-			for (String name : OreDictionary.getOreNames()) {
-				if (name == null) {
-					Log.error("Found a null oreName in the ore dictionary");
-				} else {
-					for (String regex : backpackConf.getStringList()) {
-						if (name.matches(regex)) {
-							oreDictNameList.add(name);
+				String[] backpackItemList = backpackConf.getStringList();
+				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
+				for (ItemStack backpackItem : backpackItems) {
+					backpackFilter.acceptItem(backpackItem);
+				}
+			}
+
+			// rejected items
+			{
+				List<String> defaultRejectedItemNames = new ArrayList<>(backpackRejectedItemDefaults.get(backpackUid));
+				Collections.sort(defaultRejectedItemNames);
+				String[] defaultRejectedItems = defaultRejectedItemNames.toArray(new String[defaultRejectedItemNames.size()]);
+
+				Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks.rejected", defaultRejectedItems);
+				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
+
+				String[] backpackItemList = backpackConf.getStringList();
+				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
+				for (ItemStack backpackItem : backpackItems) {
+					backpackFilter.rejectItem(backpackItem);
+				}
+			}
+
+			// accepted oreDict
+			{
+				List<String> defaultOreRegexpList = new ArrayList<>(backpackAcceptedOreDictRegexpDefaults.get(backpackUid));
+				Collections.sort(defaultOreRegexpList);
+				String[] defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[defaultOreRegexpList.size()]);
+
+				Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.accepted", defaultOreRegexpNames);
+				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
+
+				for (String name : OreDictionary.getOreNames()) {
+					if (name == null) {
+						Log.error("Found a null oreName in the ore dictionary");
+					} else {
+						for (String regex : backpackConf.getStringList()) {
+							if (name.matches(regex)) {
+								backpackFilter.acceptOreDictName(name);
+							}
 						}
 					}
 				}
 			}
 
-			backpackDefinition.addValidOreDictNames(oreDictNameList);
+			// rejected oreDict
+			{
+				List<String> defaultOreRegexpList = new ArrayList<>(backpackRejectedOreDictRegexpDefaults.get(backpackUid));
+				Collections.sort(defaultOreRegexpList);
+				String[] defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[defaultOreRegexpList.size()]);
+
+				Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.rejected", defaultOreRegexpNames);
+				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
+
+				for (String name : OreDictionary.getOreNames()) {
+					if (name == null) {
+						Log.error("Found a null oreName in the ore dictionary");
+					} else {
+						for (String regex : backpackConf.getStringList()) {
+							if (name.matches(regex)) {
+								backpackFilter.rejectOreDictName(name);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -497,14 +542,20 @@ public class PluginStorage extends BlankForestryPlugin {
 				return true;
 			}
 
-			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpack(tokens[0]);
+			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpackDefinition(tokens[0]);
 			if (backpackDefinition == null) {
 				String errorMessage = IMCUtil.getInvalidIMCMessageText(message);
-				Log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
+				Log.warning("{} For non-existent backpack {}.", errorMessage, tokens[0]);
 				return true;
 			}
 			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
-			backpackDefinition.addValidItems(itemStacks);
+			IBackpackFilter filter = backpackDefinition.getFilter();
+			if (filter instanceof IBackpackFilterConfigurable) {
+				IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
+				for (ItemStack itemStack : itemStacks) {
+					backpackFilter.acceptItem(itemStack);
+				}
+			}
 
 			return true;
 		}
