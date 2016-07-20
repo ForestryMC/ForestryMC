@@ -1,5 +1,7 @@
 package forestry.api.storage;
 
+import java.util.function.Predicate;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -7,7 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * A configurable backpack filter. Useful for implementers of {@link IBackpackDefinition}.
  * Get a new instance from {@link IBackpackInterface#createBackpackFilter()}.
  */
-public interface IBackpackFilterConfigurable extends IBackpackFilter {
+public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
 	/**
 	 * Adds an item as valid for this backpack to pick up.
 	 */

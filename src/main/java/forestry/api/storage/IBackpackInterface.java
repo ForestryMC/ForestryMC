@@ -7,6 +7,7 @@ package forestry.api.storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.Item;
@@ -84,5 +85,5 @@ public interface IBackpackInterface {
 	 * @return a new backpack filter for the specified species root
 	 * @see #createNaturalistBackpack(String, ISpeciesRoot)
 	 */
-	IBackpackFilter createNaturalistBackpackFilter(String speciesRootUid);
+	Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid);
 }

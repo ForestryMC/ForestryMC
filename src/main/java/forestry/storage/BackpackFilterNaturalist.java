@@ -1,13 +1,13 @@
 package forestry.storage;
 
 import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.storage.IBackpackFilter;
 import net.minecraft.item.ItemStack;
 
-public class BackpackFilterNaturalist implements IBackpackFilter {
+public class BackpackFilterNaturalist implements Predicate<ItemStack> {
 	@Nonnull
 	private final String speciesRootUid;
 

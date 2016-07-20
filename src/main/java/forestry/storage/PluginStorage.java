@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -27,7 +28,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.api.storage.IBackpackFilter;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.PluginApiculture;
@@ -105,13 +105,13 @@ public class PluginStorage extends BlankForestryPlugin {
 		BackpackDefinition definition;
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			IBackpackFilter filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootBees");
+			Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootBees");
 			definition = new BackpackDefinition(new Color(0xc4923d), Color.WHITE, filter);
 			BackpackManager.backpackInterface.registerBackpackDefinition("apiarist", definition);
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			IBackpackFilter filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootButterflies");
+			Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootButterflies");
 			definition = new BackpackDefinition(new Color(0x995b31), Color.WHITE, filter);
 			BackpackManager.backpackInterface.registerBackpackDefinition("lepidopterist", definition);
 		}
@@ -420,7 +420,7 @@ public class PluginStorage extends BlankForestryPlugin {
 			return;
 		}
 
-		IBackpackFilter filter = backpackDefinition.getFilter();
+		Predicate<ItemStack> filter = backpackDefinition.getFilter();
 		if (filter instanceof IBackpackFilterConfigurable) {
 			IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
 			backpackFilter.clear();
@@ -549,7 +549,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				return true;
 			}
 			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
-			IBackpackFilter filter = backpackDefinition.getFilter();
+			Predicate<ItemStack> filter = backpackDefinition.getFilter();
 			if (filter instanceof IBackpackFilterConfigurable) {
 				IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
 				for (ItemStack itemStack : itemStacks) {

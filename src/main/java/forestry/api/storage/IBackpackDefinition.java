@@ -6,6 +6,7 @@
 package forestry.api.storage;
 
 import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 
@@ -41,5 +42,5 @@ public interface IBackpackDefinition {
 	 * @return the backpack's item filter.
 	 */
 	@Nonnull
-	IBackpackFilter getFilter();
+	Predicate<ItemStack> getFilter();
 }

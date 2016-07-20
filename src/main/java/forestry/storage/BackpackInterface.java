@@ -14,13 +14,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.api.storage.IBackpackFilter;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.api.storage.IBackpackInterface;
 import forestry.core.utils.ItemStackUtil;
@@ -116,7 +116,7 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public IBackpackFilter createNaturalistBackpackFilter(String speciesRootUid) {
+	public Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid) {
 		return new BackpackFilterNaturalist(speciesRootUid);
 	}
 }

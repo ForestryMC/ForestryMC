@@ -12,10 +12,10 @@ package forestry.storage;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.function.Predicate;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.api.storage.IBackpackFilter;
 import forestry.core.utils.Translator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,13 +25,13 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;
 	private final int secondaryColor;
 	@Nonnull
-	private final IBackpackFilter filter;
+	private final Predicate<ItemStack> filter;
 
 	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor) {
 		this(primaryColor, secondaryColor, BackpackManager.backpackInterface.createBackpackFilter());
 	}
 
-	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor, @Nonnull IBackpackFilter filter) {
+	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor, @Nonnull Predicate<ItemStack> filter) {
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();
 		this.filter = filter;
@@ -39,7 +39,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	@Nonnull
-	public IBackpackFilter getFilter() {
+	public Predicate<ItemStack> getFilter() {
 		return filter;
 	}
 
