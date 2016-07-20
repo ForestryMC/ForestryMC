@@ -20,15 +20,20 @@ import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.core.climate.IClimateSource;
+import forestry.core.multiblock.MultiblockRegistry;
+import forestry.core.multiblock.MultiblockWorldRegistry;
 
 public class ClimateManager implements IClimateManager{
 
 	protected Map<Integer, List<IClimateRegion>> regions;
 	protected Map<Integer, Map<BlockPos, IClimateSource>> sources;
 	
+	private final Object regionsMutex;
+	
 	public ClimateManager() {
 		regions = new HashMap<>();
 		sources = new HashMap<>();
+		regionsMutex = new Object();
 	}
 	
 	@Override
@@ -38,13 +43,15 @@ public class ClimateManager implements IClimateManager{
 		}
 		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
 		
-		if(!regions.contains(region)){
-			for(BlockPos pos : region.getPositions().keySet()){
-				if(getRegionForPos(region.getWorld(), pos) != null){
-					return;
+		synchronized (regionsMutex) {
+			if(!regions.contains(region)){
+				for(BlockPos pos : region.getPositions().keySet()){
+					if(getRegionForPos(region.getWorld(), pos) != null){
+						return;
+					}
 				}
+				regions.add(region);
 			}
-			regions.add(region);
 		}
 	}
 	
@@ -53,9 +60,11 @@ public class ClimateManager implements IClimateManager{
 		if(region == null){
 			return;
 		}
-		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
-		if(regions.contains(region)){
-			regions.remove(region);
+		synchronized (regionsMutex) {
+			List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
+			if(regions.contains(region)){
+				regions.remove(region);
+			}
 		}
 	}
 	
