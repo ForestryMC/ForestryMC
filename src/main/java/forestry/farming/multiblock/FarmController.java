@@ -642,7 +642,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				}
 
 				// Check fertilizer and water
-				if (!fertilizerManager.hasFertilizer(fertilizerConsumption)) {
+				if (!fertilizerManager.hasFertilizer(inventory, fertilizerConsumption)) {
 					continue;
 				}
 
@@ -652,7 +652,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 				if (cultivateTarget(worldObj, this, target, logic, farmListeners)) {
 					// Remove fertilizer and water
-					fertilizerManager.removeFertilizer(fertilizerConsumption);
+					fertilizerManager.removeFertilizer(inventory, fertilizerConsumption);
 					removeLiquid(liquid);
 
 					farmWorkStatus.didWork = true;
@@ -661,7 +661,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		farmWorkStatus.hasLiquid = liquid.amount <= 0 || hasLiquid(liquid);
-		farmWorkStatus.hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
+		farmWorkStatus.hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
 
 		return farmWorkStatus;
 	}
@@ -739,7 +739,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// Check fertilizer
-		Boolean hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
+		Boolean hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
 		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
 			return false;
 		}
@@ -760,7 +760,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		// Remove fertilizer and water
-		fertilizerManager.removeFertilizer(fertilizerConsumption);
+		fertilizerManager.removeFertilizer(inventory, fertilizerConsumption);
 		removeLiquid(requiredLiquid);
 
 		// Let event handlers handle the harvest first.

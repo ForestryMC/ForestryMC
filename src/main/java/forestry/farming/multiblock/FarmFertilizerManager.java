@@ -24,23 +24,23 @@ import forestry.core.network.IStreamable;
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;
 
-	private final int fertilizerValue = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value");
+	private static final int guiFertilizerValue = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value");
 	private int storedFertilizer;
 
 	public FarmFertilizerManager() {
 		storedFertilizer = 0;
 	}
 
-	public boolean hasFertilizer(int amount) {
-		if (fertilizerValue < 0) {
+	public boolean hasFertilizer(InventoryFarm inventory, int amount) {
+		if (inventory.getFertilizerValue() < 0) {
 			return true;
 		}
 
 		return storedFertilizer >= amount;
 	}
 
-	public void removeFertilizer(int amount) {
-		if (fertilizerValue < 0) {
+	public void removeFertilizer(InventoryFarm inventory, int amount) {
+		if (inventory.getFertilizerValue() < 0) {
 			return;
 		}
 
@@ -52,6 +52,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 
 	public boolean maintainFertilizer(InventoryFarm inventory) {
 		if (storedFertilizer <= BUFFER_FERTILIZER) {
+			int fertilizerValue = inventory.getFertilizerValue();
 			if (fertilizerValue < 0) {
 				storedFertilizer += 2000;
 			} else if (inventory.useFertilizer()) {
@@ -78,7 +79,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 			return 0;
 		}
 
-		return storedFertilizer * scale / (fertilizerValue + BUFFER_FERTILIZER);
+		return storedFertilizer * scale / (guiFertilizerValue + BUFFER_FERTILIZER);
 	}
 
 	@Override

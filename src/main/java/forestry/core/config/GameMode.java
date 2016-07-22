@@ -31,6 +31,7 @@ public class GameMode implements IGameMode {
 	private static final float FUEL_MODIFIER = 1.0f;
 
 	private static final int FARM_FERTILIZER_VALUE = 2000;
+	private static final int FARM_IC2FERTILIZER_VALUE = FARM_FERTILIZER_VALUE / 2;
 
 	private static final int recipeFertilizerOutputApatite = 8;
 	private static final int recipeFertilizerOutputAsh = 16;
@@ -49,9 +50,11 @@ public class GameMode implements IGameMode {
 
 	private static final int FERMENTATION_DURATION_FERTILIZER = 200;
 	private static final int FERMENTATION_DURATION_COMPOST = 250;
+	private static final int FERMENTATION_DURATION_IC2FERTILIZER = FERMENTATION_DURATION_FERTILIZER / 2;
 
 	private static final int FERMENTED_CYCLE_FERTILIZER = 56;
 	private static final int FERMENTED_CYCLE_COMPOST = 48;
+	private static final int FERMENTED_CYCLE_IC2FERTILIZER = FERMENTED_CYCLE_FERTILIZER;
 
 	private static final int FERMENTED_SAPLING = 250;
 	private static final int FERMENTED_CACTI = 50;
@@ -76,6 +79,7 @@ public class GameMode implements IGameMode {
 		initSettingBoolean(config, "energy", "engine.clockwork", true);
 
 		initSettingInt(config, "farms", "fertilizer.value", FARM_FERTILIZER_VALUE);
+		initSettingInt(config, "farms", "ic2fertilizer.value", FARM_IC2FERTILIZER_VALUE);
 
 		initSettingFloat(config, "fuel.ethanol", "generator", FUEL_MODIFIER);
 		initSettingFloat(config, "fuel.ethanol", "combustion", FUEL_MODIFIER);
@@ -96,9 +100,11 @@ public class GameMode implements IGameMode {
 
 		initSettingInt(config, "fermenter.cycles", "fertilizer", FERMENTATION_DURATION_FERTILIZER);
 		initSettingInt(config, "fermenter.cycles", "compost", FERMENTATION_DURATION_COMPOST);
+		initSettingInt(config, "fermenter.cycles", "ic2fertilizer", FERMENTATION_DURATION_IC2FERTILIZER);
 
 		initSettingInt(config, "fermenter.value", "fertilizer", FERMENTED_CYCLE_FERTILIZER);
 		initSettingInt(config, "fermenter.value", "compost", FERMENTED_CYCLE_COMPOST);
+		initSettingInt(config, "fermenter.value", "ic2fertilizer", FERMENTED_CYCLE_IC2FERTILIZER);
 
 		initSettingInt(config, "fermenter.yield", "sapling", FERMENTED_SAPLING);
 		initSettingInt(config, "fermenter.yield", "cactus", FERMENTED_CACTI);

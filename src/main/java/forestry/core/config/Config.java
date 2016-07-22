@@ -86,6 +86,9 @@ public class Config {
 	private static boolean enableExUtilEnderLily = true;
 	private static boolean enableMagicalCropsSupport = true;
 
+	// IC2 Fertilizer
+	private static boolean enableIC2Fertilizer = true;
+
 	// Mail
 	public static boolean mailAlertEnabled = true;
 	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
@@ -125,6 +128,13 @@ public class Config {
 
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
+	}
+
+	/**
+	 * Allow the usage of ic2 fertilizer in farms and fermenters.
+	 */
+	public static boolean isIC2FertilizerEnabled() {
+		return enableIC2Fertilizer;
 	}
 
 	public static void load() {
@@ -225,6 +235,8 @@ public class Config {
 		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+
+		enableIC2Fertilizer = configCommon.getBooleanLocalized("tweaks.ic2", "ic2fertilizer", enableIC2Fertilizer);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
