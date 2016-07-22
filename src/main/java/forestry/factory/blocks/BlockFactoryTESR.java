@@ -15,5 +15,6 @@ import forestry.core.blocks.BlockBase;
 public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
 	public BlockFactoryTESR(BlockTypeFactoryTesr type) {
 		super(type);
+		setHarvestLevel("pickaxe", 0);
 	}
 }

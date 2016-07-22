@@ -17,7 +17,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -48,6 +50,15 @@ public class ItemForestryTool extends ItemForestry {
 	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
 		this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
 	}
+	
+	@Override
+	public boolean canHarvestBlock(IBlockState block) {
+		if(this == PluginCore.items.bronzePickaxe){
+	        Material material = block.getMaterial();
+	        return material == Material.ROCK ? true : (material == Material.IRON ? true : material == Material.ANVIL);
+		}
+		return super.canHarvestBlock(block);
+	}
 
 	@Override
 	public float getStrVsBlock(ItemStack itemstack, IBlockState state) {
@@ -55,6 +66,10 @@ public class ItemForestryTool extends ItemForestry {
 			if (state.getBlock().isToolEffective(type, state)) {
 				return efficiencyOnProperMaterial;
 			}
+		}
+		if(this == PluginCore.items.bronzePickaxe){
+	        Material material = state.getMaterial();
+	        return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getStrVsBlock(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
 		return super.getStrVsBlock(itemstack, state);
 	}

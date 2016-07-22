@@ -56,6 +56,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	public BlockEngine(BlockTypeEngine blockType) {
 		super(blockType);
+		setHarvestLevel("pickaxe", 0);
 	}
 
 	@Override

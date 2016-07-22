@@ -13,5 +13,6 @@ package forestry.core.blocks;
 public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
 	public BlockCore(BlockTypeCoreTesr blockType) {
 		super(blockType);
+		setHarvestLevel("pickaxe", 0);
 	}
 }
