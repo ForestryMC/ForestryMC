@@ -140,7 +140,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			return SPRINKLER_BOUNDS;
+			return SPRINKLER_BOUNDS.offset(pos);
 		}
 		return super.getSelectedBoundingBox(state, worldIn, pos);
 	}

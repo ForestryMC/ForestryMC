@@ -158,7 +158,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		return BOUNDING_BOX;
+		return BOUNDING_BOX.offset(pos);
 	}
 
 	@Override
