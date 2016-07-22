@@ -36,6 +36,7 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -60,6 +61,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 public class ModelCrate extends BlankItemModel {
 
 	private static final Map<String, IBakedModel> cache = Maps.newHashMap();
+	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
 	private static IModel crateModel;
 	private static ModelBlock MODEL_GENERATED;
@@ -174,6 +176,24 @@ public class ModelCrate extends BlankItemModel {
 		return new CrateOverrideList();
 	}
 	
+	private static IModel getCustomContentModel(ItemCrated crateItem){
+		ItemStack contained =  crateItem.getContained();
+		if(contained != null){
+			try {
+				return ModelLoaderRegistry.getModel(getCustomContentModelLocation(crateItem));
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	private static ResourceLocation getCustomContentModelLocation(ItemCrated crateItem){
+		String containedName = crateItem.getRegistryName().getResourcePath().replace("crated.", "");
+		return new ResourceLocation(CUSTOM_CRATES + containedName);
+		
+	}
+	
 	/**
 	 * Bake the crate model.
 	 */
@@ -181,6 +201,7 @@ public class ModelCrate extends BlankItemModel {
 		List<IBakedModel> models = new ArrayList<>();
 
 		IBakedModel containedModel = getModel(crateItem.getContained());
+		IModel customContentModel = getCustomContentModel(crateItem);
 
 		IdentityHashMap<Item, TIntObjectHashMap<ModelResourceLocation>> modelResourceLocations = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesherForge.class, (ItemModelMesherForge) Minecraft.getMinecraft().getRenderItem().getItemModelMesher(), 0);
 
@@ -188,6 +209,11 @@ public class ModelCrate extends BlankItemModel {
 		ResourceLocation location = getItemLocation(modelResource);
 
 		models.add(crateModel);
+		
+		if(customContentModel != null){
+			containedModel = customContentModel.bake(ModelManager.getInstance().DEFAULT_ITEM, DefaultVertexFormats.ITEM, new DefaultTextureGetter());
+			location = getCustomContentModelLocation(crateItem);
+		}
 		
 		if (hasItemModel(location)) {
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
