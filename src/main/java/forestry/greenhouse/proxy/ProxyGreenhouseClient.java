@@ -34,9 +34,14 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 				ClientRegistry.bindTileEntitySpecialRenderer(TileGreenhouseSprinkler.class, new AnimationTESR<>());
 				continue;
 			}
-			Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType),
-					new ModelResourceLocation("forestry:greenhouse", "inventory"), new ModelGreenhouse(),
-					Block.getBlockFromItem(PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType).getItem())));
+
+			Block greenhouseBlock = PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType);
+			if (greenhouseBlock != null) {
+				ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse." + greenhouseType);
+				ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse", "inventory");
+				BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
+				Proxies.render.registerBlockModel(blockModelIndex);
+			}
 		}
 	}
 }
