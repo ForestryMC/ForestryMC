@@ -10,19 +10,10 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nonnull;
 import java.util.Set;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-
+import com.google.common.collect.ImmutableMap;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -32,7 +23,6 @@ import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.PluginApiculture;
@@ -61,10 +51,15 @@ import forestry.farming.logic.FarmableBasicIC2Crop;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends BlankForestryPlugin {
@@ -153,21 +148,18 @@ public class PluginIC2 extends BlankForestryPlugin {
 			return;
 		}
 
-		IBackpackDefinition forester = BackpackManager.backpackInterface.getBackpack(BackpackManager.FORESTER_UID);
-		if (forester != null) {
-			if (resin != null) {
-				forester.addValidItem(resin);
-			}
-			if (rubber != null) {
-				forester.addValidItem(rubber);
-			}
-			if (rubberSapling != null) {
-				forester.addValidItem(rubberSapling);
-			}
-			ItemStack rubberLeaves = IC2Items.getItem("leaves");
-			if (rubberLeaves != null) {
-				forester.addValidItem(rubberLeaves);
-			}
+		if (resin != null) {
+			BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, resin);
+		}
+		if (rubber != null) {
+			BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubber);
+		}
+		if (rubberSapling != null) {
+			BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubberSapling);
+		}
+		ItemStack rubberLeaves = IC2Items.getItem("leaves");
+		if (rubberLeaves != null) {
+			BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubberLeaves);
 		}
 	}
 

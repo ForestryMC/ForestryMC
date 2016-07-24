@@ -531,7 +531,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 
 	public static IAlleleTreeSpecies getTreeSpecies(ItemStack stack) {
-		if (stack != null) {
+		if (stack != null && stack.hasTagCompound()) {
 			NBTTagCompound tagCompound = stack.getTagCompound();
 
 			// legacy

@@ -36,6 +36,14 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends BlankForestryPlugin {
@@ -231,10 +239,15 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 		for (String blockName : blockNames) {
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(BoP, blockName));
 			if (block != null) {
-				ItemStack blockStack = new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE);
-				BackpackManager.backpackInterface.getBackpack(backpackUid).addValidItem(blockStack);
+				Item item = Item.getItemFromBlock(block);
+				if (item != null) {
+					ItemStack blockStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+					BackpackManager.backpackInterface.addItemToForestryBackpack(backpackUid, blockStack);
+				} else {
+					Log.warning("Could not find an item for block: {}", blockName);
+				}
 			} else {
-				Log.warning("Missing block: ", blockName);
+				Log.warning("Missing block: {}", blockName);
 			}
 		}
 	}

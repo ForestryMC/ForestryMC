@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
@@ -48,7 +50,7 @@ public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IBakedModel getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
+	public Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
 		if(camouflageHandler == null || stack == null || stack.getItem() == null || stack.stackSize <= 0 || Block.getBlockFromItem(stack.getItem()) == null){
 			return null;
 		}
@@ -56,7 +58,7 @@ public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 		Block block = Block.getBlockFromItem(stack.getItem());
 		IBlockState state = block.getStateFromMeta(stack.getItemDamage());
 		
-		return modelShapes.getModelForState(state);
+		return Pair.of(state, modelShapes.getModelForState(state));
 	}
 
 }

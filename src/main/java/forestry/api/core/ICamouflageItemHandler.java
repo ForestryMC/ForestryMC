@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,6 +22,6 @@ public interface ICamouflageItemHandler {
 	float getLightTransmittance(ItemStack stack, ICamouflageHandler camouflageHandler);
 	
 	@SideOnly(Side.CLIENT)
-	IBakedModel getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile);
+	Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile);
 	
 }

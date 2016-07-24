@@ -1,9 +1,9 @@
 package forestry.greenhouse.blocks;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
@@ -24,9 +24,8 @@ public class BlockRegistryGreenhouse extends BlockRegistry {
 		}
 	}
 
-	public ItemStack getGreenhouseBlock(BlockGreenhouseType type) {
-		BlockGreenhouse greenhouseBlock = greenhouseBlockMap.get(type);
-		return new ItemStack(greenhouseBlock);
+	public BlockGreenhouse getGreenhouseBlock(BlockGreenhouseType type) {
+		return greenhouseBlockMap.get(type);
 	}
 	
 }

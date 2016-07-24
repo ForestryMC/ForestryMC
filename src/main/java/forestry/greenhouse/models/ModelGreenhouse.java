@@ -13,7 +13,12 @@ package forestry.greenhouse.models;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -56,10 +61,10 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
 			ICamouflageItemHandler itemHandler = CamouflageAccess.getHandlerFromItem(camouflageStack, camouflageHandler);
 			if(itemHandler != null){
-				IBakedModel model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
+				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
 				
-				baker.addBakedModel(model);
-				baker.setParticleSprite(model.getParticleTexture());
+				baker.addBakedModel(model.getLeft(), model.getRight());
+				baker.setParticleSprite(model.getRight().getParticleTexture());
 			}
 		}
 		

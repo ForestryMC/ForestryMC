@@ -74,8 +74,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	
 	protected final BlockStateContainer blockState;
 
-	public BlockBase(@Nonnull P blockType) {
-		super(Material.IRON);
+	public BlockBase(@Nonnull P blockType, Material material) {
+		super(material);
 
 		this.blockType = blockType;
 		blockType.getMachineProperties().setBlock(this);
@@ -89,6 +89,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.setDefaultState(state);
 		
 		particleCallback = new MachineParticleCallback<>(this, blockType);
+	}
+	
+	public BlockBase(@Nonnull P blockType) {
+		this(blockType, Material.IRON);
 	}
 
 	@Override

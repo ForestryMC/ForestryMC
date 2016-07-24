@@ -10,23 +10,22 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import net.minecraft.item.Item;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
+import forestry.api.storage.IBackpackInterface;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemRegistry;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.item.Item;
 
 public class ItemRegistryStorage extends ItemRegistry {
 	public final ItemCrated crate;
-	public final ItemBackpackNaturalist apiaristBackpack;
-	public final ItemBackpackNaturalist lepidopteristBackpack;
+	public final Item apiaristBackpack;
+	public final Item lepidopteristBackpack;
 	public final Item minerBackpack;
 	public final Item minerBackpackT2;
 	public final Item diggerBackpack;
@@ -45,48 +44,38 @@ public class ItemRegistryStorage extends ItemRegistry {
 		crate = registerItem(new ItemCrated(null, null), "crate");
 		
 		// BACKPACKS
-		IBackpackDefinition definition;
-		
+		IBackpackInterface backpackInterface = BackpackManager.backpackInterface;
+
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			definition = BackpackManager.backpackInterface.getBackpack("apiarist");
-			apiaristBackpack = new ItemBackpackNaturalist(BeeManager.beeRoot, definition, EnumBackpackType.NATURALIST);
+			apiaristBackpack = registerItem(backpackInterface.createNaturalistBackpack("apiarist", BeeManager.beeRoot), "apiaristBag");
 			apiaristBackpack.setCreativeTab(Tabs.tabApiculture);
-			registerItem(apiaristBackpack, "apiaristBag");
 		} else {
 			apiaristBackpack = null;
 		}
 		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			definition = BackpackManager.backpackInterface.getBackpack("lepidopterist");
-			lepidopteristBackpack = new ItemBackpackNaturalist(ButterflyManager.butterflyRoot, definition, EnumBackpackType.NATURALIST);
+			lepidopteristBackpack = registerItem(backpackInterface.createNaturalistBackpack("lepidopterist", ButterflyManager.butterflyRoot), "lepidopteristBag");
 			lepidopteristBackpack.setCreativeTab(Tabs.tabLepidopterology);
-			registerItem(lepidopteristBackpack, "lepidopteristBag");
 		} else {
 			lepidopteristBackpack = null;
 		}
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.MINER_UID);
-		minerBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "minerBag");
-		minerBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "minerBagT2");
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.DIGGER_UID);
-		diggerBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "diggerBag");
-		diggerBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "diggerBagT2");
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.FORESTER_UID);
-		foresterBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "foresterBag");
-		foresterBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "foresterBagT2");
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.HUNTER_UID);
-		hunterBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "hunterBag");
-		hunterBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "hunterBagT2");
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.ADVENTURER_UID);
-		adventurerBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "adventurerBag");
-		adventurerBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "adventurerBagT2");
-		
-		definition = BackpackManager.backpackInterface.getBackpack(BackpackManager.BUILDER_UID);
-		builderBackpack = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.NORMAL), "builderBag");
-		builderBackpackT2 = registerItem(BackpackManager.backpackInterface.createBackpack(definition, EnumBackpackType.WOVEN), "builderBagT2");
+
+		minerBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.MINER_UID, EnumBackpackType.NORMAL), "minerBag");
+		minerBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.MINER_UID, EnumBackpackType.WOVEN), "minerBagT2");
+
+		diggerBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.DIGGER_UID, EnumBackpackType.NORMAL), "diggerBag");
+		diggerBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.DIGGER_UID, EnumBackpackType.WOVEN), "diggerBagT2");
+
+		foresterBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.FORESTER_UID, EnumBackpackType.NORMAL), "foresterBag");
+		foresterBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.FORESTER_UID, EnumBackpackType.WOVEN), "foresterBagT2");
+
+		hunterBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.HUNTER_UID, EnumBackpackType.NORMAL), "hunterBag");
+		hunterBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.HUNTER_UID, EnumBackpackType.WOVEN), "hunterBagT2");
+
+		adventurerBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.ADVENTURER_UID, EnumBackpackType.NORMAL), "adventurerBag");
+		adventurerBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.ADVENTURER_UID, EnumBackpackType.WOVEN), "adventurerBagT2");
+
+		builderBackpack = registerItem(backpackInterface.createBackpack(BackpackManager.BUILDER_UID, EnumBackpackType.NORMAL), "builderBag");
+		builderBackpackT2 = registerItem(backpackInterface.createBackpack(BackpackManager.BUILDER_UID, EnumBackpackType.WOVEN), "builderBagT2");
 	}
 }

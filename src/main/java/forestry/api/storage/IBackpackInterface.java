@@ -7,32 +7,83 @@ package forestry.api.storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
+import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * The Backpack Interface allows you to add items to Forestry backpacks or create your own backpacks.
+ * <p>
+ * To create your own backpack, create an {@link IBackpackDefinition}.
+ * Backpack definitions have a filter, which you can create here with
+ * {@link #createBackpackFilter()}
+ * or {@link #createNaturalistBackpackFilter(String)}
+ * or create your own.
+ * <p>
+ * After you've registered your backpack definition, create the item with
+ * {@link #createBackpack(String, EnumBackpackType)}
+ * or {@link #createNaturalistBackpack(String, ISpeciesRoot)}
+ * and then register the returned item with {@link GameRegistry#register(IForgeRegistryEntry)} like any other item.
+ */
 public interface IBackpackInterface {
 	/**
-	 * Get a backpack with a given uid so you can add items to it or get information about it.
-	 * returns null if there is no backpack for the given uid.
+	 * Add an accepted item to a Forestry backpack.
+	 *
+	 * @param backpackUid The unique ID of the Forestry backpack. See {@link BackpackManager} for valid UIDs.
+	 * @param itemStack   The itemStack that the backpack should accept.
+	 *                    {@link OreDictionary#WILDCARD_VALUE} can be used for meta value.
+	 */
+	void addItemToForestryBackpack(@Nonnull String backpackUid, @Nonnull ItemStack itemStack);
+
+	/**
+	 * Register a backpack definition with a given uid.
+	 */
+	void registerBackpackDefinition(@Nonnull String backpackUid, @Nonnull IBackpackDefinition definition);
+
+	/**
+	 * Get a backpack definition with a given uid.
 	 */
 	@Nullable
-	IBackpackDefinition getBackpack(@Nonnull String uid);
+	IBackpackDefinition getBackpackDefinition(@Nonnull String backpackUid);
 
 	/**
-	 * Register a backpack with a given uid
-	 */
-	void registerBackpack(@Nonnull String uid, @Nonnull IBackpackDefinition definition);
-
-	/**
-	 * Adds a backpack with the given definition and type, returning the item.
+	 * Creates a backpack with the given UID and type, returning the item.
+	 * The backpack's definition must first be registered with {@link #registerBackpackDefinition(String, IBackpackDefinition)}.
 	 *
-	 * @param definition
-	 *            Definition of backpack behaviour.
-	 * @param type
-	 *            Type of backpack.
+	 * @param backpackUid The unique ID of the backpack.
+	 * @param type        Type of backpack.
 	 * @return Created backpack item.
 	 */
 	@Nonnull
-	Item createBackpack(@Nonnull IBackpackDefinition definition, @Nonnull EnumBackpackType type);
+	Item createBackpack(@Nonnull String backpackUid, @Nonnull EnumBackpackType type);
 
+	/**
+	 * Create a backpack that can hold items from a specific {@link ISpeciesRoot}.
+	 * The backpack's definition must first be registered with {@link #registerBackpackDefinition(String, IBackpackDefinition)}.
+	 *
+	 * @param backpackUid The unique ID of the backpack.
+	 * @param speciesRoot The species root.
+	 * @return Created backpack item.
+	 */
+	Item createNaturalistBackpack(@Nonnull String backpackUid, @Nonnull ISpeciesRoot speciesRoot);
+
+	/**
+	 * Makes a new configurable backpack filter. Useful for implementing {@link IBackpackDefinition}.
+	 */
+	IBackpackFilterConfigurable createBackpackFilter();
+
+	/**
+	 * Makes a new naturalist backpack filter. Only accepts items from a specific {@link ISpeciesRoot}.
+	 * Useful for implementing {@link IBackpackDefinition} for naturalist's backpacks.
+	 *
+	 * @param speciesRootUid The species root's unique ID. See {@link ISpeciesRoot#getUID()}.
+	 * @return a new backpack filter for the specified species root
+	 * @see #createNaturalistBackpack(String, ISpeciesRoot)
+	 */
+	Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid);
 }
