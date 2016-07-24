@@ -49,7 +49,7 @@ public class ModelBakerModel implements IModelBakerModel {
 	
 	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
-	private final List<IBakedModel> models;
+	private final List<Pair<IBlockState, IBakedModel>> models;
 	
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
@@ -68,7 +68,7 @@ public class ModelBakerModel implements IModelBakerModel {
 		}
 	}
 
-	private ModelBakerModel(List<IBakedModel> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+	private ModelBakerModel(List<Pair<IBlockState, IBakedModel>> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
 		this.models = models;
 		this.faceQuads = faceQuads;
 		this.generalQuads = generalQuads;
@@ -178,8 +178,10 @@ public class ModelBakerModel implements IModelBakerModel {
 		return modelState;
 	}
 
-	public void addModelQuads(IBakedModel model) {
-		this.models.add(model);
+	public void addModelQuads(Pair<IBlockState, IBakedModel> model) {
+		if(model != null){
+			this.models.add(model);
+		}
 	}
 	
 	@Override
@@ -194,8 +196,11 @@ public class ModelBakerModel implements IModelBakerModel {
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		List<BakedQuad> quads = new ArrayList<>();
-		for (IBakedModel model : this.models) {
-			quads.addAll(model.getQuads(state, side, rand));
+		for (Pair<IBlockState, IBakedModel> model : this.models) {
+			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
+			if(modelQuads != null && !modelQuads.isEmpty()){
+				quads.addAll(modelQuads);
+			}
 		}
 		if(side != null){
 			quads.addAll(faceQuads.get(side));

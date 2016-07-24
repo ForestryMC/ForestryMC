@@ -13,6 +13,7 @@ package forestry.core.models.baker;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ModelBaker implements IModelBaker {
 
 	private static final float quadsUV[] = new float[]{0, 0, 1, 1, 0, 0, 1, 1};
 	private final List<ModelBakerFace> faces = new ArrayList<>();
-	private final List<IBakedModel> bakedModels = new ArrayList<>();
+	private final List<Pair<IBlockState, IBakedModel>> bakedModels = new ArrayList<>();
 	
 	protected AxisAlignedBB renderBounds;
 
@@ -126,8 +127,10 @@ public class ModelBaker implements IModelBaker {
 	}
 	
 	@Override
-	public void addBakedModel(@Nonnull IBakedModel model) {
-		this.bakedModels.add(model);
+	public void addBakedModel(@Nullable IBlockState state, @Nonnull IBakedModel model) {
+		if(model != null){
+			this.bakedModels.add(Pair.of(state, model));
+		}
 	}
 
 	protected static float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
@@ -217,7 +220,7 @@ public class ModelBaker implements IModelBaker {
 		}
 		
 		//Add baked models to the current model.
-		for(IBakedModel bakedModel : bakedModels){
+		for(Pair<IBlockState, IBakedModel> bakedModel : bakedModels){
 			currentModel.addModelQuads(bakedModel);
 		}
 

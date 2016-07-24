@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
@@ -38,7 +39,7 @@ public interface IModelBaker {
 	
 	void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex);
 	
-	void addBakedModel(@Nonnull IBakedModel model);
+	void addBakedModel(@Nullable IBlockState state, @Nonnull IBakedModel model);
 	
 	void addFace(@Nonnull EnumFacing facing, @Nonnull TextureAtlasSprite sprite);
 	

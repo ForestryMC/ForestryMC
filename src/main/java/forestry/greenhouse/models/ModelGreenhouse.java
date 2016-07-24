@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -51,8 +52,9 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 	private static void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack) {
 		if (camouflageStack != null) {
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
+			IBlockState state = Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage());
 			
-			baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())));
+			baker.addBakedModel(state, modelShapes.getModelForState(state));
 			baker.setParticleSprite(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())).getParticleTexture());
 		}
 		

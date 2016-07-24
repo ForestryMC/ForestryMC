@@ -64,14 +64,14 @@ public class CamouflageUtil {
 		}
 		TileEntity tile = world.getTileEntity(pos);
 		
+		if(tile instanceof ICamouflageHandler){
+			return (ICamouflageHandler) tile;
+		}
 		if(tile instanceof IMultiblockComponent){
 			IMultiblockComponent component = (IMultiblockComponent) tile;
 			if(component.getMultiblockLogic().getController() instanceof ICamouflageHandler){
 				return (ICamouflageHandler) component.getMultiblockLogic().getController();
 			}
-		}
-		if(tile instanceof ICamouflageHandler){
-			return (ICamouflageHandler) tile;
 		}
 		return null;
 	}
