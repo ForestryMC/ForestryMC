@@ -21,7 +21,6 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
 

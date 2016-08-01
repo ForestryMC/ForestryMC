@@ -23,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -31,7 +30,6 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.IBlockAccess;
@@ -58,8 +56,8 @@ public class ModelManager implements IModelManager {
 	
 	private static final ModelManager instance = new ModelManager();
 	
-	private final List<BlockModelIndex> customBlockModels = new ArrayList<>();
-	private final List<ModelIndex> customModels = new ArrayList<>();
+	private final List<BlockModelEntry> customBlockModels = new ArrayList<>();
+	private final List<ModelEntry> customModels = new ArrayList<>();
 
 	private final List<IItemModelRegister> itemModelRegisters = new ArrayList<>();
 	private final List<IStateMapperRegister> stateMapperRegisters = new ArrayList<>();
@@ -260,21 +258,21 @@ public class ModelManager implements IModelManager {
 
 	public void registerCustomModels(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
-		for (final BlockModelIndex index : customBlockModels) {
-			registry.putObject(index.blockModelLocation, index.model);
-			registry.putObject(index.itemModelLocation, index.model);
+		for (final BlockModelEntry entry : customBlockModels) {
+			registry.putObject(entry.blockModelLocation, entry.model);
+			registry.putObject(entry.itemModelLocation, entry.model);
 		}
 		
-		for (final ModelIndex index : customModels) {
-			registry.putObject(index.modelLocation, index.model);
+		for (final ModelEntry entry : customModels) {
+			registry.putObject(entry.modelLocation, entry.model);
 		}
 	}
 	
-	public void registerCustomBlockModel(@Nonnull BlockModelIndex index) {
+	public void registerCustomBlockModel(@Nonnull BlockModelEntry index) {
 		customBlockModels.add(index);
 	}
 	
-	public void registerCustomModel(@Nonnull ModelIndex index) {
+	public void registerCustomModel(@Nonnull ModelEntry index) {
 		customModels.add(index);
 	}
 

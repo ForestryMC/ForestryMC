@@ -11,8 +11,8 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 
+import java.util.Collection;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 

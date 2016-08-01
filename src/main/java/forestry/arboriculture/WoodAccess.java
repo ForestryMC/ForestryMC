@@ -11,6 +11,8 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -43,6 +45,7 @@ import forestry.core.utils.Log;
 
 public class WoodAccess implements IWoodAccess {
 	private static final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
+	private static final List<IWoodType> registeredWoodTypes = new ArrayList<>();
 
 	static {
 		for (WoodBlockKind woodBlockKind : WoodBlockKind.values()) {
@@ -195,6 +198,9 @@ public class WoodAccess implements IWoodAccess {
 			int meta = woodTyped.getMetaFromState(blockState);
 			IWoodType woodType = woodTyped.getWoodType(meta);
 			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
+			if(!(woodType instanceof EnumVanillaWoodType)){
+				PluginArboriculture.proxy.registerWoodModel(woodTyped, woodBlockKind, true);
+			}
 			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 		}
 	}
@@ -207,6 +213,9 @@ public class WoodAccess implements IWoodAccess {
 		IBlockState blockState = woodTyped.getDefaultState();
 		IWoodType woodType = woodTyped.getWoodType(0);
 		ItemStack itemStack = new ItemStack(woodTyped);
+		if(!(woodType instanceof EnumVanillaWoodType)){
+			PluginArboriculture.proxy.registerWoodModel(woodTyped, woodBlockKind, false);
+		}
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 	}
 
@@ -218,6 +227,9 @@ public class WoodAccess implements IWoodAccess {
 			throw new NullPointerException("Invalid itemStack: " + itemStack);
 		}
 		WoodMap woodMap = woodMaps.get(woodBlockKind);
+		if(!registeredWoodTypes.contains(woodType)){
+			registeredWoodTypes.add(woodType);
+		}
 		woodMap.getItem(fireproof).put(woodType, itemStack);
 		woodMap.getBlock(fireproof).put(woodType, blockState);
 	}
@@ -248,5 +260,10 @@ public class WoodAccess implements IWoodAccess {
 			return null;
 		}
 		return blockState;
+	}
+	
+	@Override
+	public List<IWoodType> getRegisteredWoodTypes() {
+		return registeredWoodTypes;
 	}
 }

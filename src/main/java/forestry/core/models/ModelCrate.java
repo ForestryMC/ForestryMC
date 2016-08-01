@@ -58,7 +58,7 @@ import forestry.storage.PluginStorage;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 @SideOnly(Side.CLIENT)
-public class ModelCrate extends BlankItemModel {
+public class ModelCrate extends BlankModel {
 
 	private static final Map<String, IBakedModel> cache = Maps.newHashMap();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
@@ -251,7 +251,7 @@ public class ModelCrate extends BlankItemModel {
 		
 	}
 	
-	private class CrateBakedModel extends BlankItemModel{
+	private class CrateBakedModel extends BlankModel{
 
 		public final List<IBakedModel> models;
 		

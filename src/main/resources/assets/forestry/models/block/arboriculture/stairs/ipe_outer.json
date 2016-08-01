@@ -1,8 +1,0 @@
-{
-  "parent": "block/outer_stairs",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.ipe",
-    "top": "forestry:blocks/wood/planks.ipe",
-    "bottom": "forestry:blocks/wood/planks.ipe"
-  }
-}

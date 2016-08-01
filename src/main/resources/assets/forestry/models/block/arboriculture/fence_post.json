@@ -1,0 +1,7 @@
+{
+  "parent": "block/fence_post",
+  "textures": {
+    "particle": "forestry:blocks/wood/planks.acacia",
+    "texture": "forestry:blocks/wood/planks.acacia"
+  }
+}

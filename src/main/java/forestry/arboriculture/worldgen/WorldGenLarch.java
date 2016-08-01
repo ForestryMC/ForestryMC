@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

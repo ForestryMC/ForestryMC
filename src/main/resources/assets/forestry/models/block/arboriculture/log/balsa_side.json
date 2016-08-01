@@ -1,7 +1,0 @@
-{
-  "parent": "block/column_side",
-  "textures": {
-    "side": "forestry:blocks/wood/bark.balsa",
-    "end": "forestry:blocks/wood/heart.balsa"
-  }
-}

@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -14,10 +13,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.ForestryAPI;
+import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
 
@@ -50,6 +51,10 @@ public class WoodHelper {
 
 		return displayName;
 	}
+	
+	public static ResourceLocation getDefaultResourceLocations(IWoodTyped typed) {
+		return new ResourceLocation(Constants.MOD_ID, typed.getBlockKind().toString());
+	}
 
 	public static ResourceLocation[] getResourceLocations(IWoodTyped typed) {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
@@ -65,7 +70,7 @@ public class WoodHelper {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static class WoodMeshDefinition implements ItemMeshDefinition {
+	public static class WoodMeshDefinition implements IWoodItemMeshDefinition {
 		@Nonnull
 		public IWoodTyped wood;
 
@@ -75,6 +80,9 @@ public class WoodHelper {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			if(!WoodModelLoader.INSTANCE.isRegistered){
+				return new ModelResourceLocation(getDefaultModelLocation(stack), "inventory");
+			}
 			int meta = stack.getMetadata();
 			IWoodType woodType = wood.getWoodType(meta);
 			WoodBlockKind blockKind = wood.getBlockKind();
@@ -85,6 +93,12 @@ public class WoodHelper {
 			} else {
 				throw new IllegalArgumentException("Unknown wood type: " + woodType);
 			}
+		}
+		
+		@Override
+		public ResourceLocation getDefaultModelLocation(ItemStack stack) {
+			WoodBlockKind blockKind = wood.getBlockKind();
+			return new ResourceLocation("forestry:item/" + blockKind.toString());
 		}
 
 	}

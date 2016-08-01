@@ -25,8 +25,6 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-import forestry.core.owner.IOwnerHandler;
-
 public abstract class PlayerUtil {
 
 	//TODO: use null everywhere instead of an emptyUUID

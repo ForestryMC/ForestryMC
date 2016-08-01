@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import forestry.core.PluginCore;
-import forestry.core.utils.OreDictUtil;
 import net.minecraft.item.ItemStack;
 
 import forestry.plugins.PluginManager;

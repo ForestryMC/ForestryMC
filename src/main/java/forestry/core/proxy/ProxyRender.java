@@ -31,8 +31,8 @@ import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.core.fluids.Fluids;
-import forestry.core.models.BlockModelIndex;
-import forestry.core.models.ModelIndex;
+import forestry.core.models.BlockModelEntry;
+import forestry.core.models.ModelEntry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
@@ -83,10 +83,10 @@ public class ProxyRender {
 		return null;
 	}
 	
-	public void registerBlockModel(BlockModelIndex index) {
+	public void registerBlockModel(BlockModelEntry index) {
 	}
 	
-	public void registerModel(ModelIndex index) {
+	public void registerModel(ModelEntry index) {
 	}
 
 	public void registerStateMapper(Block block, IStateMapper mapper) {

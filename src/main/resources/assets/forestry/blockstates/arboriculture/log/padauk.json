@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/log/padauk" },
-    "axis=z":   { "model": "forestry:arboriculture/log/padauk_side" },
-    "axis=x":   { "model": "forestry:arboriculture/log/padauk_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/log/padauk_bark" }
-  }
-}

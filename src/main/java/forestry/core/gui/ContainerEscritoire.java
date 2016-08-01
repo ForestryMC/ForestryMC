@@ -18,7 +18,6 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.network.packets.PacketGuiUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 

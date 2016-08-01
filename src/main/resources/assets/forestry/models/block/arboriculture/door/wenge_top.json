@@ -1,7 +1,0 @@
-{
-  "parent": "block/door_top",
-  "textures": {
-    "bottom": "forestry:blocks/doors/wenge_lower",
-    "top": "forestry:blocks/doors/wenge_upper"
-  }
-}

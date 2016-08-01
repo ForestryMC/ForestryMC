@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-import forestry.core.models.BlockModelIndex;
+import forestry.core.models.BlockModelEntry;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -39,7 +39,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 			if (greenhouseBlock != null) {
 				ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse." + greenhouseType);
 				ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse", "inventory");
-				BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
+				BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
 				Proxies.render.registerBlockModel(blockModelIndex);
 			}
 		}

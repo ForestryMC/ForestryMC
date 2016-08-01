@@ -1,8 +1,0 @@
-{
-  "parent": "forestry:block/arboriculture/planks/plum",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.plum",
-    "top": "forestry:blocks/wood/planks.plum",
-    "bottom": "forestry:blocks/wood/planks.plum"
-  }
-}

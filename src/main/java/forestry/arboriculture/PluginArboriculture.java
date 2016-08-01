@@ -55,6 +55,7 @@ import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TilePile;
@@ -67,6 +68,7 @@ import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
@@ -87,7 +89,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
@@ -551,6 +555,24 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}
+		List<ResourceLocation> textures = new ArrayList<>();
+		for(IWoodType type : TreeManager.woodAccess.getRegisteredWoodTypes()){
+			textures.add(new ResourceLocation(type.getHeartTexture()));
+			textures.add(new ResourceLocation(type.getBarkTexture()));
+			textures.add(new ResourceLocation(type.getDoorLowerTexture()));
+			textures.add(new ResourceLocation(type.getDoorUpperTexture()));
+			textures.add(new ResourceLocation(type.getPlankTexture()));
+		}
+		for(ResourceLocation loc : textures){
+			TextureManager.getInstance();
+			TextureManager.registerSprite(loc);
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onModelBake(ModelBakeEvent event) {
+		((ProxyArboricultureClient)proxy).onModelBake(event);
 	}
 
 	@SubscribeEvent

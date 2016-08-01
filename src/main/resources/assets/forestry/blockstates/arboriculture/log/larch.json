@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/log/larch" },
-    "axis=z":   { "model": "forestry:arboriculture/log/larch_side" },
-    "axis=x":   { "model": "forestry:arboriculture/log/larch_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/log/larch_bark" }
-  }
-}
