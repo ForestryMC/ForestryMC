@@ -15,21 +15,13 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -48,6 +40,13 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 
@@ -355,8 +354,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public EnumTemperature getTemperature() {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(this);
-		if (beeModifier.isHellish() && tempChange >= 0) {
-			return EnumTemperature.HELLISH;
+		Biome biome = getBiome();
+		if (beeModifier.isHellish() || BiomeHelper.isBiomeHellish(biome)) {
+			if (tempChange >= 0) {
+				return EnumTemperature.HELLISH;
+			}
 		}
 
 		return EnumTemperature.getFromValue(getExactTemperature());
