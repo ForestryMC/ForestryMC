@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import forestry.api.core.BiomeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -359,8 +360,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public EnumTemperature getTemperature() {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(this);
-		if (beeModifier.isHellish() && tempChange >= 0) {
-			return EnumTemperature.HELLISH;
+		BiomeGenBase biome = getBiome();
+		if (beeModifier.isHellish() || BiomeHelper.isBiomeHellish(biome)) {
+			if (tempChange >= 0) {
+				return EnumTemperature.HELLISH;
+			}
 		}
 
 		return EnumTemperature.getFromValue(getExactTemperature());
