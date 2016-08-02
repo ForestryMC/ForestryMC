@@ -7,6 +7,7 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -18,7 +19,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.genetics.IHousing;
 
-public interface IBeeHousing extends IHousing, IErrorLogicSource {
+public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvider {
 
 	/**
 	 * Used by BeeManager.beeRoot.createBeeHousingModifier(IBeeHousing housing)
@@ -39,18 +40,12 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource {
 
 	IBeekeepingLogic getBeekeepingLogic();
 
-	EnumTemperature getTemperature();
-
-	EnumHumidity getHumidity();
-
 	int getBlockLightValue();
 
 	boolean canBlockSeeTheSky();
 
 	/** Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12 */
 	World getWorldObj();
-
-	Biome getBiome();
 
 	GameProfile getOwner();
 
