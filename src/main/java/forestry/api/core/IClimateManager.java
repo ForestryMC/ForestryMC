@@ -13,5 +13,7 @@ public interface IClimateManager {
 	float getTemperature(World world, BlockPos pos);
 	
 	float getHumidity(World world, BlockPos pos);
-	
+
+	IClimateProvider getDefaultClimate(World world, BlockPos pos);
+
 }

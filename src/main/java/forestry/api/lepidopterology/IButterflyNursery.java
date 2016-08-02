@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IHousing;
 import forestry.api.genetics.IIndividual;
 
-public interface IButterflyNursery extends IHousing {
+public interface IButterflyNursery extends IHousing, IClimateProvider {
 	
 	IButterfly getCaterpillar();
 	

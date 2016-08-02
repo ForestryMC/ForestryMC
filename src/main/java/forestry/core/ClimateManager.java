@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
+import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -42,4 +43,8 @@ public class ClimateManager implements IClimateManager{
 		return biome.getRainfall();
 	}
 
+	@Override
+	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {
+		return new DefaultClimateProvider(world, pos);
+	}
 }
