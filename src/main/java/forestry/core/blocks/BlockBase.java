@@ -61,7 +61,7 @@ import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister {
 	/** use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order. */
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.DOWN, EnumFacing.UP);
 
 	private final boolean hasTESR;
 	private final boolean hasCustom;
