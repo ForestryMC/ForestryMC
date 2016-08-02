@@ -31,6 +31,6 @@ public class ProxyArboriculture {
 		return 6396257;
 	}
 	
-	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, WoodBlockKind woodKind, boolean withVariants){
+	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants){
 	}
 }

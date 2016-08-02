@@ -35,6 +35,7 @@ public enum WoodBlockKind {
 			textures.put("side", textureLocation);
 			textures.put("top", textureLocation);
 			textures.put("bottom", textureLocation);
+			textures.put("all", textureLocation);
 			break;
 		case PLANKS:
 			textures.put("particle", type.getPlankTexture());

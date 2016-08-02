@@ -20,12 +20,10 @@ import net.minecraft.block.Block;
 public class WoodModelEntry<T extends Block & IWoodTyped> {
 	
 	public final T woodTyped;
-	public final WoodBlockKind woodKind;
 	public final boolean withVariants;
 
-	public WoodModelEntry(T woodTyped, WoodBlockKind woodKind, boolean withVariants) {
+	public WoodModelEntry(T woodTyped, boolean withVariants) {
 		this.woodTyped = woodTyped;
-		this.woodKind = woodKind;
 		this.withVariants = withVariants;
 	}
 

@@ -11,6 +11,7 @@
 package forestry.arboriculture.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -43,7 +44,9 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.WoodAccess;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.blocks.slab.BlockArbSlab;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.ModelWoodPile;
@@ -84,6 +87,12 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePile.class, new CharcoalPileRenderer());
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
+		for(BlockArbSlab slab : PluginArboriculture.blocks.slabsDouble){
+			registerWoodModel(slab, true);
+		}
+		for(BlockArbSlab slab : PluginArboriculture.blocks.slabsDoubleFireproof){
+			registerWoodModel(slab, true);
+		}
 	}
 	
 	@SubscribeEvent
@@ -100,7 +109,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			
 			for(WoodModelEntry<T> entry : woodModelEntrys){
 				T woodTyped = entry.woodTyped;
-				WoodBlockKind woodKind = entry.woodKind;
+				WoodBlockKind woodKind = woodTyped.getBlockKind();
 				
 				IStateMapper mapper = blockStateMap.get(woodTyped);
 				if(mapper instanceof IWoodStateMapper){
@@ -145,8 +154,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 	
 	@Override
-	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, WoodBlockKind woodKind, boolean withVariants){
-		woodModelEntrys.add(new WoodModelEntry(woodTyped, woodKind, withVariants));
+	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants){
+		woodModelEntrys.add(new WoodModelEntry(woodTyped, withVariants));
 	}
 
 	@Override
