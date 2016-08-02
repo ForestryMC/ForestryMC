@@ -23,6 +23,8 @@ public class Constants implements IForestryConstants {
 	public static final String VERSION = "@VERSION@";
 	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
 
+	public static final String TESLA_MOD_ID = "tesla";
+
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;
 
