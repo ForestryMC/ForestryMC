@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
+import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +28,7 @@ public class MutationConditionDaytime implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		if (world.isDaytime() == daytime) {
 			return 1;
 		}

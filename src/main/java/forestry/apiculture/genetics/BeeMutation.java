@@ -45,7 +45,7 @@ public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationB
 		World world = housing.getWorldObj();
 		BlockPos housingPos = housing.getCoordinates();
 
-		float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1);
+		float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1, housing);
 		if (processedChance <= 0) {
 			return 0;
 		}
