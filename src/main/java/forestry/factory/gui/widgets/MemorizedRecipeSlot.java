@@ -56,6 +56,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		if (getItemStack() != null) {
 			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
+			Proxies.common.playButtonClick();
 		}
 	}
 }

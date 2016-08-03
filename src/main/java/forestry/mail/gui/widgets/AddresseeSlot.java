@@ -55,6 +55,7 @@ public class AddresseeSlot extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		if (!containerLetter.getLetter().isProcessed()) {
 			containerLetter.advanceCarrierType();
+			Proxies.common.playButtonClick();
 		}
 	}
 }
