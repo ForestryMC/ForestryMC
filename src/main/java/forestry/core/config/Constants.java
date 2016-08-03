@@ -91,10 +91,10 @@ public class Constants implements IForestryConstants {
 	public static final int ENGINE_BRONZE_HEAT_LOSS_OVERHEATING = 5;
 	public static final int ENGINE_BRONZE_HEAT_GENERATION_ENERGY = 1;
 
-	public static final int ENGINE_COPPER_CYCLE_DURATION_PEAT = 5000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 10;
-	public static final int ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT = 6000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 20;
+	public static final int ENGINE_COPPER_CYCLE_DURATION_PEAT = 2500;
+	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 20;
+	public static final int ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT = 3000;
+	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 40;
 	public static final int ENGINE_COPPER_HEAT_MAX = 10000;
 	public static final int ENGINE_COPPER_ASH_FOR_ITEM = 7500;
 
