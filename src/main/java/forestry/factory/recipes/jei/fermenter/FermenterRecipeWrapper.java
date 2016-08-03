@@ -30,7 +30,7 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 	public List getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
-			inputs.add(fuel.item);
+			inputs.add(fuel.getItem());
 		}
 		inputs.add(fermentable);
 		return inputs;

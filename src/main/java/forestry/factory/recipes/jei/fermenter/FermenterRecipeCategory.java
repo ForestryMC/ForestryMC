@@ -21,7 +21,6 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
 
@@ -75,7 +74,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 		guiItemStacks.set(resourceSlot, recipeWrapper.getFermentable());
 		List<ItemStack> fuels = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
-			fuels.add(fuel.item);
+			fuels.add(fuel.getItem());
 		}
 		guiItemStacks.set(fuelSlot, fuels);
 		

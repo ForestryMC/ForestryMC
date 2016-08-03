@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import forestry.energy.EnergyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -163,7 +162,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			FluidStack fuelFluidStack = fuelTank.getFluid();
 			EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
 			if (fuel != null) {
-				loss = loss * fuel.dissipationMultiplier;
+				loss = loss * fuel.getDissipationMultiplier();
 			}
 		}
 
@@ -197,7 +196,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	 */
 	private static int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
+			return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
 		} else {
 			return 0;
 		}
@@ -208,7 +207,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	 */
 	private static int determineBurnTime(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).burnDuration;
+			return FuelManager.bronzeEngineFuel.get(fluid).getBurnDuration();
 		} else {
 			return 0;
 		}

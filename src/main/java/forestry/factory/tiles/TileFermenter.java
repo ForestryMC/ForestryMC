@@ -180,8 +180,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		fuelBurnTime = fuelTotalTime = fermenterFuel.burnDuration;
-		fuelCurrentFerment = fermenterFuel.fermentPerCycle;
+		fuelBurnTime = fuelTotalTime = fermenterFuel.getBurnDuration();
+		fuelCurrentFerment = fermenterFuel.getFermentPerCycle();
 
 		decrStackSize(InventoryFermenter.SLOT_FUEL, 1);
 	}

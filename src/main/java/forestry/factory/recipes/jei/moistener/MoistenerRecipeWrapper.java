@@ -25,8 +25,8 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 	public List<ItemStack> getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
 		inputs.add(getRecipe().getResource());
-		if (fuel.item != null) {
-			inputs.add(fuel.item);
+		if (fuel.getItem() != null) {
+			inputs.add(fuel.getItem());
 		}
 		return inputs;
 	}
@@ -36,8 +36,8 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 	public List<ItemStack> getOutputs() {
 		List<ItemStack> outputs = new ArrayList<>();
 		outputs.add(getRecipe().getProduct());
-		if (fuel.product != null) {
-			outputs.add(fuel.product);
+		if (fuel.getProduct() != null) {
+			outputs.add(fuel.getProduct());
 		}
 		return outputs;
 	}

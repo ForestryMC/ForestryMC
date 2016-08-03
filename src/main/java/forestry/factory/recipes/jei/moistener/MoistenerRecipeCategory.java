@@ -74,10 +74,10 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 		
 		MoistenerRecipeWrapper wrapper = (MoistenerRecipeWrapper) recipeWrapper;
 		guiItemStacks.set(resourceSlot, wrapper.getRecipe().getResource());
-		guiItemStacks.set(fuelItemSlot, wrapper.getFuel().item);
+		guiItemStacks.set(fuelItemSlot, wrapper.getFuel().getItem());
 		
 		guiItemStacks.set(productSlot, wrapper.getRecipe().getProduct());
-		guiItemStacks.set(fuelProductSlot, wrapper.getFuel().product);
+		guiItemStacks.set(fuelProductSlot, wrapper.getFuel().getProduct());
 		
 		guiFluidStacks.set(inputTank, FluidRegistry.getFluidStack("water", 10000));
 		

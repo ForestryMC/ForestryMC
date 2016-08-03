@@ -8,27 +8,43 @@ package forestry.api.fuels;
 import net.minecraft.item.ItemStack;
 
 public class MoistenerFuel {
-	/**
-	 * The item to use
-	 */
-	public final ItemStack item;
-	/**
-	 * The item that leaves the moistener's working slot (i.e. mouldy wheat, decayed wheat, mulch)
-	 */
-	public final ItemStack product;
-	/**
-	 * How much this item contributes to the final product of the moistener (i.e. mycelium)
-	 */
-	public final int moistenerValue;
-	/**
-	 * What stage this product represents. Resources with lower stage value will be consumed first.
-	 */
-	public final int stage;
+	private final ItemStack item;
+	private final ItemStack product;
+	private final int moistenerValue;
+	private final int stage;
 
 	public MoistenerFuel(ItemStack item, ItemStack product, int stage, int moistenerValue) {
 		this.item = item;
 		this.product = product;
 		this.stage = stage;
 		this.moistenerValue = moistenerValue;
+	}
+
+	/**
+	 * The item to use
+	 */
+	public ItemStack getItem() {
+		return item;
+	}
+
+	/**
+	 * The item that leaves the moistener's working slot (i.e. mouldy wheat, decayed wheat, mulch)
+	 */
+	public ItemStack getProduct() {
+		return product;
+	}
+
+	/**
+	 * How much this item contributes to the final product of the moistener (i.e. mycelium)
+	 */
+	public int getMoistenerValue() {
+		return moistenerValue;
+	}
+
+	/**
+	 * What stage this product represents. Resources with lower stage value will be consumed first.
+	 */
+	public int getStage() {
+		return stage;
 	}
 }
