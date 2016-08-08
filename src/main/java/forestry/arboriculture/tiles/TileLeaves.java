@@ -27,6 +27,9 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
@@ -55,6 +58,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.EnumPlantType;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
@@ -494,5 +498,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public boolean canNurse(IButterfly butterfly) {
 		ITree tree = getTree();
 		return !isDestroyed(tree, damage) && caterpillar == null;
+	}
+
+	@Override
+	public Biome getBiome() {
+		return worldObj.getBiome(pos);
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(worldObj.getBiome(pos), worldObj, pos);
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(worldObj, pos));
 	}
 }

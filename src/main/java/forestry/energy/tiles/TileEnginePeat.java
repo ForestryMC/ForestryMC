@@ -122,9 +122,10 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 			if (fuelSlot >= 0 && wasteSlot >= 0) {
 				IInventoryAdapter inventory = getInternalInventory();
-				burnTime = totalBurnTime = determineBurnDuration(inventory.getStackInSlot(fuelSlot));
-				if (burnTime > 0) {
-					fuelItem = inventory.getStackInSlot(fuelSlot).getItem();
+				ItemStack fuelStack = inventory.getStackInSlot(fuelSlot);
+				burnTime = totalBurnTime = determineBurnDuration(fuelStack);
+				if (burnTime > 0 && fuelStack != null) {
+					fuelItem = fuelStack.getItem();
 					decrStackSize(fuelSlot, 1);
 				}
 			}
@@ -179,10 +180,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		int wasteSlot = getFreeWasteSlot();
 		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
-			if (inventory.getStackInSlot(wasteSlot) == null) {
+			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
+			if (wasteStack == null) {
 				inventory.setInventorySlotContents(wasteSlot, PluginCore.items.ash.getItemStack());
 			} else {
-				inventory.getStackInSlot(wasteSlot).stackSize++;
+				wasteStack.stackSize++;
 			}
 		}
 		// Reset
@@ -196,7 +198,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	 */
 	private static int determineFuelValue(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle;
+			return FuelManager.copperEngineFuel.get(fuel).getPowerPerCycle();
 		} else {
 			return 0;
 		}
@@ -207,7 +209,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	 */
 	private static int determineBurnDuration(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-			return FuelManager.copperEngineFuel.get(fuel).burnDuration;
+			return FuelManager.copperEngineFuel.get(fuel).getBurnDuration();
 		} else {
 			return 0;
 		}

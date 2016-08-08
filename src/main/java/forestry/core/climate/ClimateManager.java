@@ -16,10 +16,13 @@ import net.minecraft.world.biome.Biome;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import forestry.api.core.IClimateProvider;
 import forestry.api.core.climate.IClimateManager;
 import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.core.climate.IClimateSource;
+import forestry.core.DefaultClimateProvider;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.multiblock.MultiblockWorldRegistry;
 
@@ -137,6 +140,11 @@ public class ClimateManager implements IClimateManager{
 	@Override
 	public Map<Integer, Map<BlockPos, IClimateSource>> getSources() {
 		return sources;
+	}
+	
+	@Override
+	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {
+		return new DefaultClimateProvider(world, pos);
 	}
 
 }

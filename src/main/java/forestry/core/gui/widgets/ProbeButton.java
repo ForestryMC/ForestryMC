@@ -48,6 +48,7 @@ public class ProbeButton extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		pressed = true;
 		Proxies.net.sendToServer(new PacketGuiSelectRequest(-1, 0));
+		Proxies.common.playButtonClick();
 	}
 
 	@Override

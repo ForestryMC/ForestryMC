@@ -74,7 +74,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 		guiItemStacks.set(resourceSlot, recipeWrapper.getFermentable());
 		List<ItemStack> fuels = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
-			fuels.add(fuel.item);
+			fuels.add(fuel.getItem());
 		}
 		guiItemStacks.set(fuelSlot, fuels);
 		

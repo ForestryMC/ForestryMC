@@ -113,7 +113,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 		SoilType type = SoilType.fromMaturity(maturity);
 
 		if (type == SoilType.PEAT) {
-			ret.add(PluginCore.items.peat.getItemStack());
+			ret.add(PluginCore.items.peat.getItemStack(2));
 			ret.add(new ItemStack(Blocks.DIRT));
 		} else {
 			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));

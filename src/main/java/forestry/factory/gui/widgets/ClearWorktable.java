@@ -12,6 +12,7 @@ package forestry.factory.gui.widgets;
 
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.proxy.Proxies;
 import forestry.factory.gui.ContainerWorktable;
 
 public class ClearWorktable extends Widget {
@@ -29,5 +30,6 @@ public class ClearWorktable extends Widget {
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		ContainerWorktable.clearRecipe();
+		Proxies.common.playButtonClick();
 	}
 }

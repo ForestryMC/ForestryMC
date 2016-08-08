@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IGenome;
@@ -125,10 +126,10 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		return this;
 	}
 
-	protected float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	protected float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
-			mutationChance *= mutationCondition.getChance(world, pos, allele0, allele1, genome0, genome1);
+			mutationChance *= mutationCondition.getChance(world, pos, allele0, allele1, genome0, genome1, climate);
 			if (mutationChance == 0) {
 				return 0;
 			}

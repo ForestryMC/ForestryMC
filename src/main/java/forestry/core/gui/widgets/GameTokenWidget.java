@@ -93,5 +93,6 @@ public class GameTokenWidget extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		game.choose(index);
 		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, 0));
+		Proxies.common.playButtonClick();
 	}
 }

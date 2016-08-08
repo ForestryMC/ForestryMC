@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,6 +20,8 @@ public interface IClimateManager {
 	float getTemperature(World world, BlockPos pos);
 	
 	float getHumidity(World world, BlockPos pos);
+	
+	IClimateProvider getDefaultClimate(World world, BlockPos pos);
 	
 	void addRegion(IClimateRegion region);
 	

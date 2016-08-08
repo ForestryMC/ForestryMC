@@ -83,4 +83,8 @@ public class ProxyCommon {
 		return null;
 	}
 
+	public void playButtonClick() {
+
+	}
+
 }

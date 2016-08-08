@@ -46,7 +46,7 @@ public class MoistenerRecipeHandler implements IRecipeHandler<MoistenerRecipeWra
 		if (recipe.getProduct() == null) {
 			return false;
 		}
-		return wrapper.getFuel() != null || wrapper.getFuel().item != null || wrapper.getFuel().product != null;
+		return wrapper.getFuel() != null || wrapper.getFuel().getItem() != null || wrapper.getFuel().getProduct() != null;
 	}
 
 }

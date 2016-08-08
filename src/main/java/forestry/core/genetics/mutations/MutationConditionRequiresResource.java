@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
@@ -54,7 +55,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		TileEntity tile;
 		do {
 			pos = pos.down();

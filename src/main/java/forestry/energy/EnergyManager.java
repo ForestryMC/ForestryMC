@@ -2,6 +2,7 @@ package forestry.energy;
 
 import java.io.IOException;
 
+import forestry.core.config.Constants;
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
 import net.darkhax.tesla.api.ITeslaProducer;
@@ -14,6 +15,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.tiles.TileEngine;
+
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,9 +23,9 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.InterfaceList({
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = "Tesla"),
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaProducer", modid = "Tesla"),
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = "Tesla")
+		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = Constants.TESLA_MOD_ID),
+		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaProducer", modid = Constants.TESLA_MOD_ID),
+		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = Constants.TESLA_MOD_ID)
 })
 public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaProducer, ITeslaHolder, IEnergyProvider, IStreamable {
 	@CapabilityInject(ITeslaConsumer.class)
@@ -257,13 +259,13 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 		return null;
 	}
 
-	@Optional.Method(modid = "Tesla")
+	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	public static int sendEnergyTesla(TileEntity tile, EnumFacing side, int amount, boolean simulate) {
 		ITeslaConsumer consumer = tile.getCapability(TESLA_CONSUMER, side);
 		return (int) consumer.givePower(amount, simulate);
 	}
 
-	@Optional.Method(modid = "Tesla")
+	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	@Override
 	public long givePower(long power, boolean simulated) {
 		if (!canReceive()) {
@@ -272,7 +274,7 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 		return energyStorage.receiveEnergy(power, simulated);
 	}
 
-	@Optional.Method(modid = "Tesla")
+	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	@Override
 	public long takePower(long power, boolean simulated) {
 		if (!canExtract()) {
@@ -281,13 +283,13 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 		return energyStorage.extractEnergy(power, simulated);
 	}
 
-	@Optional.Method(modid = "Tesla")
+	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	@Override
 	public long getStoredPower() {
 		return energyStorage.getEnergyStored();
 	}
 
-	@Optional.Method(modid = "Tesla")
+	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	@Override
 	public long getCapacity() {
 		return energyStorage.getMaxEnergyStored();

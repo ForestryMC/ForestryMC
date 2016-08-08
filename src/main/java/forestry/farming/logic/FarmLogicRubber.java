@@ -10,20 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -31,6 +21,11 @@ import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.plugins.compat.PluginIC2;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class FarmLogicRubber extends FarmLogic {
 
@@ -114,63 +109,24 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
-		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
-		// Determine what type we want to harvest.
-		IBlockState blockState = world.getBlockState(position);
-		Block block = blockState.getBlock();
-		if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
-			return crops;
-		}
-
-		int meta = block.getMetaFromState(blockState);
-		if (meta >= 7 && meta <= 10) {
-			crops.push(new CropDestroy(world, blockState, position, null));
-		}
-
-		List<BlockPos> candidates = processHarvestBlock(world, crops, seen, position);
-		List<BlockPos> temp = new ArrayList<>();
-		while (!candidates.isEmpty() && crops.size() < 100) {
-			for (BlockPos candidate : candidates) {
-				temp.addAll(processHarvestBlock(world, crops, seen, candidate));
-			}
-			candidates.clear();
-			candidates.addAll(temp);
-			temp.clear();
-		}
-
-		return crops;
-	}
-
-	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
-		List<BlockPos> candidates = new ArrayList<>();
-
-		// Get additional candidates to return
-		for (int j = 0; j < 2; j++) {
+		for (int j = 0; j < 10; j++) {
 			BlockPos candidate = position.add(0, j, 0);
-			if (candidate.equals(position)) {
-				continue;
-			}
-
-			// See whether the given position has already been processed
-			if (seen.contains(candidate)) {
-				continue;
-			}
 
 			IBlockState blockState = world.getBlockState(candidate);
 			Block block = blockState.getBlock();
-			if (ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
-				int meta = block.getMetaFromState(blockState);
-				if (meta >= 7 && meta <= 10) {
-					crops.push(new CropRubber(world, blockState, candidate));
-				}
-				candidates.add(candidate);
-				seen.add(candidate);
+			if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
+				break;
+			}
+			
+			if (CropRubber.hasRubberToHarvest(blockState)) {
+				crops.push(new CropRubber(world, blockState, candidate));
+				break;
 			}
 		}
 
-		return candidates;
+		return crops;
 	}
 
 }

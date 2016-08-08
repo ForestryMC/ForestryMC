@@ -35,7 +35,7 @@ public class ButterflyMutation extends Mutation implements IButterflyMutation, I
 	
 	@Override
 	public float getChance(World world, IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		float processedChance = super.getChance(world, housing.getCoordinates(), allele0, allele1, genome0, genome1);
+		float processedChance = super.getChance(world, housing.getCoordinates(), allele0, allele1, genome0, genome1, housing);
 		if (processedChance <= 0) {
 			return 0;
 		}
