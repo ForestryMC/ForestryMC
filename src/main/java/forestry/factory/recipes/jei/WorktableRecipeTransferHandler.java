@@ -15,12 +15,11 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 
-class WorktableRecipeTransferHandler implements IRecipeTransferHandler {
+class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable> {
 	@Override
-	public Class<? extends Container> getContainerClass() {
+	public Class<ContainerWorktable> getContainerClass() {
 		return ContainerWorktable.class;
 	}
 
@@ -31,11 +30,10 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler {
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(@Nonnull Container container, @Nonnull IRecipeLayout recipeLayout, @Nonnull EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(@Nonnull ContainerWorktable container, @Nonnull IRecipeLayout recipeLayout, @Nonnull EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
 		Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 
-		ContainerWorktable containerWorktable = (ContainerWorktable) container;
-		InventoryCraftingForestry inventory = new InventoryCraftingForestry(containerWorktable);
+		InventoryCraftingForestry inventory = new InventoryCraftingForestry(container);
 
 		List<ItemStack> recipeOutputs = Collections.emptyList();
 		for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : guiIngredients.entrySet()) {
@@ -53,7 +51,7 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler {
 
 		if (!recipeOutputs.isEmpty() && doTransfer) {
 			MemorizedRecipe recipe = new MemorizedRecipe(inventory, recipeOutputs);
-			containerWorktable.sendWorktableRecipeRequest(recipe);
+			container.sendWorktableRecipeRequest(recipe);
 		}
 
 		return null;
