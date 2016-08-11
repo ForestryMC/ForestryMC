@@ -639,4 +639,10 @@ public class PluginStorage extends BlankForestryPlugin {
 	public void onBakeModel(ModelBakeEvent event) {
 		ModelCrate.initModel(event);
 	}
+
+	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+		super.addLootPoolNames(lootPoolNames);
+		lootPoolNames.add("forestry_storage_items");
+	}
 }
