@@ -14,7 +14,7 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.models.BlankItemModel;
+import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.tiles.TileUtil;
 import net.minecraft.block.state.IBlockState;
@@ -38,7 +38,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelWoodPile extends BlankItemModel{
+public class ModelWoodPile extends BlankModel{
 
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)

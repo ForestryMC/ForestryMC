@@ -1,0 +1,9 @@
+{
+  "parent": "block/upper_slab",
+  "textures": {
+	"particle": "forestry:blocks/wood/planks.acacia",
+    "side": "forestry:blocks/wood/planks.acacia",
+    "top": "forestry:blocks/wood/planks.acacia",
+    "bottom": "forestry:blocks/wood/planks.acacia"
+  }
+}

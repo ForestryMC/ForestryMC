@@ -1,6 +1,0 @@
-{
-	"variants": {
-        "half=bottom": { "model": "forestry:arboriculture/slab/sequoia_half" },
-        "half=top": { "model": "forestry:arboriculture/slab/sequoia_upper" }
-    }
-}

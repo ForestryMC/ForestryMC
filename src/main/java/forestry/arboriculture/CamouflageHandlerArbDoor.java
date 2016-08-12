@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 
@@ -51,7 +52,7 @@ public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IBakedModel getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
+	public Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
 		if(camouflageHandler == null || stack == null || stack.getItem() == null || stack.stackSize <= 0 || !(stack.getItem() instanceof ItemBlockWoodDoor)){
 			return null;
 		}
@@ -71,7 +72,7 @@ public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 		
 		BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 		
-		return modelShapes.getModelForState(doorState);
+		return Pair.of(doorState, modelShapes.getModelForState(doorState));
 	}
 
 }

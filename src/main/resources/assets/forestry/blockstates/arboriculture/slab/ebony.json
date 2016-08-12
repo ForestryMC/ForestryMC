@@ -1,6 +1,0 @@
-{
-	"variants": {
-        "half=bottom": { "model": "forestry:arboriculture/slab/ebony_half" },
-        "half=top": { "model": "forestry:arboriculture/slab/ebony_upper" }
-    }
-}

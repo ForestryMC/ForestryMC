@@ -1,0 +1,39 @@
+{
+  "parent": "forestry:block/arboriculture/fence_gate_closed",
+  "display": {
+    "firstperson": {
+      "rotation": [
+        0.0,
+        90.0,
+        0.0
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "thirdperson": {
+      "rotation": [
+        0.0,
+        -90.0,
+        170.0
+      ],
+      "translation": [
+        0.0,
+        1.5,
+        -2.75
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    }
+  }
+}

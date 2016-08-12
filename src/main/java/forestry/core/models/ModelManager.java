@@ -56,8 +56,8 @@ public class ModelManager implements IModelManager {
 	
 	private static final ModelManager instance = new ModelManager();
 	
-	private final List<BlockModelIndex> customBlockModels = new ArrayList<>();
-	private final List<ModelIndex> customModels = new ArrayList<>();
+	private final List<BlockModelEntry> customBlockModels = new ArrayList<>();
+	private final List<ModelEntry> customModels = new ArrayList<>();
 
 	private final List<IItemModelRegister> itemModelRegisters = new ArrayList<>();
 	private final List<IStateMapperRegister> stateMapperRegisters = new ArrayList<>();
@@ -258,23 +258,23 @@ public class ModelManager implements IModelManager {
 
 	public void registerCustomModels(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
-		for (final BlockModelIndex index : customBlockModels) {
-			registry.putObject(index.blockModelLocation, index.model);
-			if(index.itemModelLocation != null){
-				registry.putObject(index.itemModelLocation, index.model);
+		for (final BlockModelEntry entry : customBlockModels) {
+			registry.putObject(entry.blockModelLocation, entry.model);
+			if (entry.itemModelLocation != null) {
+				registry.putObject(entry.itemModelLocation, entry.model);
 			}
 		}
 		
-		for (final ModelIndex index : customModels) {
-			registry.putObject(index.modelLocation, index.model);
+		for (final ModelEntry entry : customModels) {
+			registry.putObject(entry.modelLocation, entry.model);
 		}
 	}
 	
-	public void registerCustomBlockModel(@Nonnull BlockModelIndex index) {
+	public void registerCustomBlockModel(@Nonnull BlockModelEntry index) {
 		customBlockModels.add(index);
 	}
 	
-	public void registerCustomModel(@Nonnull ModelIndex index) {
+	public void registerCustomModel(@Nonnull ModelEntry index) {
 		customModels.add(index);
 	}
 

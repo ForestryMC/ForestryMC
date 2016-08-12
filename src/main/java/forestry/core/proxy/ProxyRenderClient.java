@@ -58,8 +58,8 @@ import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
 import forestry.core.fluids.Fluids;
-import forestry.core.models.BlockModelIndex;
-import forestry.core.models.ModelIndex;
+import forestry.core.models.BlockModelEntry;
+import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
@@ -134,7 +134,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerBlockModel(@Nonnull final BlockModelIndex index) {
+	public void registerBlockModel(@Nonnull final BlockModelEntry index) {
 		ModelManager.getInstance().registerCustomBlockModel(index);
 		if(index.addStateMapper){
 			StateMapperBase ignoreState = new BlockModeStateMapper(index);
@@ -143,7 +143,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerModel(@Nonnull ModelIndex index) {
+	public void registerModel(@Nonnull ModelEntry index) {
 		ModelManager.getInstance().registerCustomModel(index);
 	}
 
@@ -318,9 +318,9 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	private static class BlockModeStateMapper extends StateMapperBase {
-		private final BlockModelIndex index;
+		private final BlockModelEntry index;
 
-		public BlockModeStateMapper(BlockModelIndex index) {
+		public BlockModeStateMapper(BlockModelEntry index) {
 			this.index = index;
 		}
 

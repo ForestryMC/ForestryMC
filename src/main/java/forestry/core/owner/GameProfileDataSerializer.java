@@ -1,6 +1,5 @@
 package forestry.core.owner;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import com.google.common.base.Optional;
