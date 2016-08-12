@@ -73,6 +73,7 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 	}
 	
 	protected void onCreateModel(IModelBakerModel model){
+		model.setAmbientOcclusion(true);
 	}
 
 	@Override

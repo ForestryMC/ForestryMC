@@ -43,11 +43,6 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 	public ModelGreenhouse() {
 		super(BlockGreenhouse.class);
 	}
-	
-	@Override
-	protected void onCreateModel(IModelBakerModel model) {
-		model.setAmbientOcclusion(true);
-	}
 
 	@Override
 	protected void bakeInventoryBlock(@Nonnull BlockGreenhouse block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
