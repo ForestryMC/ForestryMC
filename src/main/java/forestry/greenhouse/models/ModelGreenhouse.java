@@ -31,6 +31,7 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
+import forestry.api.core.IModelBakerModel;
 import forestry.core.CamouflageAccess;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
@@ -41,6 +42,11 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 
 	public ModelGreenhouse() {
 		super(BlockGreenhouse.class);
+	}
+	
+	@Override
+	protected void onCreateModel(IModelBakerModel model) {
+		model.setAmbientOcclusion(true);
 	}
 
 	@Override

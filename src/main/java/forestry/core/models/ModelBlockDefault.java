@@ -66,9 +66,13 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 			bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
 	
 			blockModel = baker.bakeModel(false);
+			onCreateModel(blockModel);
 			return blockModel.getQuads(state, side, rand);
 		}
 		return Collections.emptyList();
+	}
+	
+	protected void onCreateModel(IModelBakerModel model){
 	}
 
 	@Override
