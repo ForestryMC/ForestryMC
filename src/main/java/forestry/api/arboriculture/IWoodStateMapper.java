@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IWoodStateMapper extends IStateMapper {
 	
-	ModelResourceLocation getModelResourceLocation(IBlockState state);
+	ModelResourceLocation getModelLocation(IBlockState state);
 	
 	ModelResourceLocation getDefaultModelResourceLocation(IBlockState state);
 

@@ -10,12 +10,8 @@ import javax.annotation.Nonnull;
 import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.genetics.IHousing;
 

@@ -17,8 +17,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -31,7 +29,6 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
-import forestry.api.core.IModelBakerModel;
 import forestry.core.CamouflageAccess;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;

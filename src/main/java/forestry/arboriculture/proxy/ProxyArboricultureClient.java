@@ -11,7 +11,6 @@
 package forestry.arboriculture.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -44,7 +43,6 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.WoodAccess;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.slab.BlockArbSlab;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
@@ -137,7 +135,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 								}
 							}
 							IModel basicModel = ModelLoaderRegistry.getModel(woodMapper.getDefaultModelResourceLocation(state));
-							ModelResourceLocation basicLocation = woodMapper.getModelResourceLocation(state);
+							ModelResourceLocation basicLocation = woodMapper.getModelLocation(state);
 							if(loadingExceptions.containsKey(basicLocation)){
 								loadingExceptions.remove(basicLocation);
 							}

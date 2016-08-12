@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
 

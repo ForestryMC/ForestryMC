@@ -23,8 +23,6 @@ import forestry.api.core.climate.IClimatePosition;
 import forestry.api.core.climate.IClimateRegion;
 import forestry.api.core.climate.IClimateSource;
 import forestry.core.DefaultClimateProvider;
-import forestry.core.multiblock.MultiblockRegistry;
-import forestry.core.multiblock.MultiblockWorldRegistry;
 
 public class ClimateManager implements IClimateManager{
 

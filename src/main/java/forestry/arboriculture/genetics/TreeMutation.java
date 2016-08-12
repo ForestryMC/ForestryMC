@@ -11,7 +11,6 @@
 package forestry.arboriculture.genetics;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.DefaultClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

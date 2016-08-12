@@ -54,9 +54,14 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		this.propertiesToRemove.add(property);
 		return this;
 	}
+	
+	@Override
+	public ModelResourceLocation getModelLocation(IBlockState state) {
+		return getModelResourceLocation(state);
+	}
 
 	@Override
-	public ModelResourceLocation getModelResourceLocation(IBlockState state) {
+	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
 		final Map<IProperty<?>, Comparable<?>> properties;
 		if (propertyWoodType != null) {
 			properties = Maps.newLinkedHashMap(state.getProperties());
