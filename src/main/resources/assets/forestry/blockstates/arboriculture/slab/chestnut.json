@@ -1,6 +1,0 @@
-{
-	"variants": {
-        "half=bottom": { "model": "forestry:arboriculture/slab/chestnut_half" },
-        "half=top": { "model": "forestry:arboriculture/slab/chestnut_upper" }
-    }
-}

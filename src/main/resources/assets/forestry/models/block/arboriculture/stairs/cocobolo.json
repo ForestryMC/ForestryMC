@@ -1,8 +1,0 @@
-{
-  "parent": "block/stairs",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.cocobolo",
-    "top": "forestry:blocks/wood/planks.cocobolo",
-    "bottom": "forestry:blocks/wood/planks.cocobolo"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "block/column_side",
-  "textures": {
-    "side": "forestry:blocks/wood/bark.walnut",
-    "end": "forestry:blocks/wood/heart.walnut"
-  }
-}

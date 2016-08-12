@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.greenhouse.proxy;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-
-import net.minecraftforge.client.model.animation.AnimationTESR;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import forestry.api.core.ForestryAPI;
-import forestry.core.models.BlockModelIndex;
+import forestry.core.models.BlockModelEntry;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.models.ModelGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.client.model.animation.AnimationTESR;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
@@ -30,7 +29,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 	public void initializeModels() {
 		for (BlockGreenhouseType greenhouseType : BlockGreenhouseType.VALUES) {
 			if (greenhouseType == BlockGreenhouseType.DOOR) {
-				Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
+				Proxies.render.registerBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
 						null, new ModelGreenhouse(),
 						PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType), false));
 				continue;
@@ -47,7 +46,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 			if (greenhouseBlock != null) {
 				ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse." + greenhouseType);
 				ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse", "inventory");
-				BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
+				BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
 				Proxies.render.registerBlockModel(blockModelIndex);
 			}
 		}

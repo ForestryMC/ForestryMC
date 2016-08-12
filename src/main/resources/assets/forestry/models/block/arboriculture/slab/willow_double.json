@@ -1,8 +1,0 @@
-{
-  "parent": "forestry:block/arboriculture/planks/willow",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.willow",
-    "top": "forestry:blocks/wood/planks.willow",
-    "bottom": "forestry:blocks/wood/planks.willow"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "block/inner_stairs",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.papaya",
-    "top": "forestry:blocks/wood/planks.papaya",
-    "bottom": "forestry:blocks/wood/planks.papaya"
-  }
-}

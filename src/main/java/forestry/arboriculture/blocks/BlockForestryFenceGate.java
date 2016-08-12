@@ -119,7 +119,7 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
+		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 }

@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "axis=y":  { "model": "forestry:arboriculture/log/zebrawood" },
-    "axis=z":   { "model": "forestry:arboriculture/log/zebrawood_side" },
-    "axis=x":   { "model": "forestry:arboriculture/log/zebrawood_side", "y": 90 },
-    "axis=none": { "model": "forestry:arboriculture/log/zebrawood_bark" }
-  }
-}

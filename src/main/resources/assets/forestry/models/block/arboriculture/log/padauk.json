@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "side": "forestry:blocks/wood/bark.padauk",
-    "end": "forestry:blocks/wood/heart.padauk"
-  }
-}

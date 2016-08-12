@@ -181,7 +181,7 @@ public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends Bl
 	@SideOnly(Side.CLIENT)
 	@Override
 	public final void registerModel(Item item, IModelManager manager) {
-		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
+		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
 		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 

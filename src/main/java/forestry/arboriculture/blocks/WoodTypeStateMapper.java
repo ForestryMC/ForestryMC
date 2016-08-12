@@ -15,19 +15,19 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
+import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
-public class WoodTypeStateMapper extends StateMapperBase {
+public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMapper {
 
 	@Nonnull
 	private final IWoodTyped woodTyped;
@@ -56,7 +56,7 @@ public class WoodTypeStateMapper extends StateMapperBase {
 	}
 
 	@Override
-	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+	public ModelResourceLocation getModelResourceLocation(IBlockState state) {
 		final Map<IProperty<?>, Comparable<?>> properties;
 		if (propertyWoodType != null) {
 			properties = Maps.newLinkedHashMap(state.getProperties());
@@ -73,10 +73,33 @@ public class WoodTypeStateMapper extends StateMapperBase {
 		int meta = block.getMetaFromState(state);
 		IWoodType woodType = woodTyped.getWoodType(meta);
 		if (woodType instanceof EnumForestryWoodType) {
-			return getForestryModelResourceLocation(woodType, properties);
+			if(WoodModelLoader.INSTANCE.isRegistered){
+				return getForestryModelResourceLocation(woodType, properties);
+			}else{
+				return getDefaultModelResourceLocation(state);
+			}
 		} else {
 			return getVanillaModelResourceLocation(block, woodType, properties);
 		}
+	}
+	
+	@Override
+	public ModelResourceLocation getDefaultModelResourceLocation(IBlockState state) {
+		final Map<IProperty<?>, Comparable<?>> properties;
+		if (propertyWoodType != null) {
+			properties = Maps.newLinkedHashMap(state.getProperties());
+			properties.remove(propertyWoodType);
+		} else {
+			properties = Maps.newLinkedHashMap(state.getProperties());
+		}
+
+		for (IProperty property : propertiesToRemove) {
+			properties.remove(property);
+		}
+
+		String resourceLocation = "arboriculture/" + blockPath;
+		String propertyString = this.getPropertyString(properties);
+		return new ModelResourceLocation(Constants.MOD_ID + ':' + resourceLocation, propertyString);
 	}
 
 	private ModelResourceLocation getForestryModelResourceLocation(IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties) {

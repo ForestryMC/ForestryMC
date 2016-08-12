@@ -1,8 +1,0 @@
-{
-  "parent": "block/outer_stairs",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.acacia",
-    "top": "forestry:blocks/wood/planks.acacia",
-    "bottom": "forestry:blocks/wood/planks.acacia"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "block/half_slab",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.baobab",
-    "top": "forestry:blocks/wood/planks.baobab",
-    "bottom": "forestry:blocks/wood/planks.baobab"
-  }
-}

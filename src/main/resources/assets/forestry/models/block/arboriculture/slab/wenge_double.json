@@ -1,8 +1,0 @@
-{
-  "parent": "forestry:block/arboriculture/planks/wenge",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.wenge",
-    "top": "forestry:blocks/wood/planks.wenge",
-    "bottom": "forestry:blocks/wood/planks.wenge"
-  }
-}

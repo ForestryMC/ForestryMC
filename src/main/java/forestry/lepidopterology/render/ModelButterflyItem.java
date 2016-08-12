@@ -32,12 +32,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.models.BlankItemModel;
+import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
 
 @SideOnly(Side.CLIENT)
-public class ModelButterflyItem extends BlankItemModel {
+public class ModelButterflyItem extends BlankModel {
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)
 	private IModel modelButterfly;

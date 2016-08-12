@@ -1,8 +1,0 @@
-{
-  "parent": "forestry:block/arboriculture/planks/baobab",
-  "textures": {
-    "side": "forestry:blocks/wood/planks.baobab",
-    "top": "forestry:blocks/wood/planks.baobab",
-    "bottom": "forestry:blocks/wood/planks.baobab"
-  }
-}

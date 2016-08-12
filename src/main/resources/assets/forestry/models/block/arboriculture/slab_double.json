@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+  	"particle": "forestry:blocks/wood/planks.acacia",
+    "all": "forestry:blocks/wood/planks.acacia"
+  }
+}
