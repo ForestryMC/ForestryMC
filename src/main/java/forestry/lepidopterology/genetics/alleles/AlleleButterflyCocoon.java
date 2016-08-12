@@ -18,6 +18,7 @@ import java.util.Map;
 
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
@@ -49,8 +50,12 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	}
 	
 	public static void createLoot(){
-		cocoonSilk.getCocoonLoot().put(PluginCore.items.craftingMaterial.getSilkWisp(), 0.75F);
-		cocoonSilk.getCocoonLoot().put(PluginCore.items.craftingMaterial.getSilkWisp(), 0.25F);
+		cocoonDefault.getCocoonLoot().put(new ItemStack(Items.STRING, 2), 1F);
+		cocoonDefault.getCocoonLoot().put(new ItemStack(Items.STRING), 0.75F);
+		cocoonDefault.getCocoonLoot().put(new ItemStack(Items.STRING, 3), 0.25F);
+		
+		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.items.craftingMaterial, 3, 2), 0.75F);
+		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.items.craftingMaterial, 2, 2), 0.25F);
 	}
 	
 	private final Map<ItemStack, Float> loot = new HashMap<>();
