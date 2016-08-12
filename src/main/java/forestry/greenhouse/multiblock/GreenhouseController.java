@@ -123,31 +123,34 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	@Override
 	public float getExactTemperature() {
-		int dimensionID = worldObj.provider.getDimension();
-		
+		int dimensionID = worldObj.provider.getDimension();	
 		float temperature = 0.0F;
+		int positions = 0;
 		
 		for(IInternalBlock internalBlock : internalBlocks){
 			IClimatePosition position = region.getPositions().get(internalBlock.getPos());
 			if(position != null){
+				positions++;
 				temperature+=position.getTemperature();
 			}
 		}
-		return temperature / internalBlocks.size();
+		return temperature / positions;
 	}
 
 	@Override
 	public float getExactHumidity() {
 		int dimensionID = worldObj.provider.getDimension();
 		float humidity = 0.0F;
+		int positions = 0;
 		
 		for(IInternalBlock internalBlock : internalBlocks){
 			IClimatePosition position = region.getPositions().get(internalBlock.getPos());
 			if(position != null){
+				positions++;
 				humidity+=position.getHumidity();
 			}
 		}
-		return humidity / internalBlocks.size();
+		return humidity / positions;
 	}
 
 	@Override

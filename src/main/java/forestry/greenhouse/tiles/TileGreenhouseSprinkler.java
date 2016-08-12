@@ -116,19 +116,8 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 			return false;
 		}
 
-		modifyWaterStored(-fluidPerCycle, tank);
+		tank.drain(fluidPerCycle, true);
 		return true;
-	}
-	
-	public void modifyWaterStored(int fluid, StandardTank tank) {
-
-		tank.getFluid().amount += fluid;
-
-		if (tank.getFluid().amount > tank.getCapacity()) {
-			tank.getFluid().amount = tank.getCapacity();
-		} else if (tank.getFluid().amount < 0) {
-			tank.getFluid().amount = 0;
-		}
 	}
 	
     @Override
