@@ -17,7 +17,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -57,9 +57,8 @@ import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.log.BlockArbLog;
 import forestry.core.PluginCore;
-import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.plugins.ForestryPluginUids;
@@ -140,9 +139,9 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		fillWithBlocks(world, structBoundingBox, 8, 1, 6, 8, 1, 10, fence, fence, false);
 		fillWithBlocks(world, structBoundingBox, 2, 1, 10, 7, 1, 10, fence, fence, false);
 
-		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.EAST), 8, 1, 8, structBoundingBox);
-		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.EAST), 1, 1, 8, structBoundingBox);
-		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.NORTH), 4, 1, 10, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockHorizontal.FACING, EnumFacing.EAST), 8, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockHorizontal.FACING, EnumFacing.EAST), 1, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 4, 1, 10, structBoundingBox);
 
 		// Flowers
 		plantFlowerGarden(world, structBoundingBox, 2, 1, 5, 7, 1, 9);
@@ -171,7 +170,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		IBlockState slabCeiling = slabs.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 		fillWithBlocks(world, structBoundingBox, 1, 4, 1, 7, 4, 4, slabCeiling, slabCeiling, false);
 
-		IBlockState logBracing = logs.withProperty(BlockArbLog.LOG_AXIS, BlockLog.EnumAxis.X);
+		IBlockState logBracing = logs.withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
 		fillWithBlocks(world, structBoundingBox, 0, 4, 1, 8, 4, 1, logBracing, logBracing, false);
 		fillWithBlocks(world, structBoundingBox, 0, 4, 4, 8, 4, 4, logBracing, logBracing, false);
 
@@ -219,7 +218,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockState escritoireBlock = PluginCore.blocks.escritoire.getDefaultState().withProperty(BlockCore.FACING, EnumFacing.EAST);
+			IBlockState escritoireBlock = PluginCore.blocks.escritoire.getDefaultState().withProperty(BlockBase.FACING, EnumFacing.EAST);
 			setBlockState(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
 

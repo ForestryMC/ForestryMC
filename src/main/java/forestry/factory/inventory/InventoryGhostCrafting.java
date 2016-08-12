@@ -12,7 +12,6 @@ package forestry.factory.inventory;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.owner.IOwnedTile;
 import forestry.core.inventory.InventoryAdapterTile;
 
 public class InventoryGhostCrafting<T extends TileEntity> extends InventoryAdapterTile<T> {

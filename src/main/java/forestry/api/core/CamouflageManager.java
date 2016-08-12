@@ -5,15 +5,14 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-public interface IClimateManager {
-
-	float getTemperature(World world, BlockPos pos);
+public class CamouflageManager {
 	
-	float getHumidity(World world, BlockPos pos);
-
-	IClimateProvider getDefaultClimate(World world, BlockPos pos);
+	public static ICamouflageAccess camouflageAccess;
+	
+	public static final String DEFAULT = "default";
+	
+	public static final String GLASS = "glass";
+	
+	public static final String DOOR = "door";
 
 }

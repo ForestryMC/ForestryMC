@@ -19,25 +19,25 @@ public class TileGreenhouseHeater extends TileGreenhouseClimatiser {
 	}
 
 	private static class HeaterDefinition implements IClimitiserDefinition {
-
-		@Override
-		public float getChangePerTransfer() {
-			return 0.01f;
-		}
-
-		@Override
-		public float getBoundaryUp() {
-			return 2.5f;
-		}
-
-		@Override
-		public float getBoundaryDown() {
-			return 0.0f;
-		}
 		
 		@Override
 		public ClimitiserType getType() {
 			return ClimitiserType.TEMPERATURE;
+		}
+
+		@Override
+		public float getChange() {
+			return 0.015F;
+		}
+
+		@Override
+		public int getClimitiseRange() {
+			return 7;
+		}
+
+		@Override
+		public boolean isPositiv() {
+			return true;
 		}
 	}
 

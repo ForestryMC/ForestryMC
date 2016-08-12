@@ -17,19 +17,18 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-
-import forestry.api.core.EnumCamouflageType;
+import net.minecraft.world.World;
+import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
-import forestry.greenhouse.FakeGreenhouseState;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -55,18 +54,23 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getCamouflageBlock(String type) {
 		return null;
 	}
 	
 	@Override
-	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
 	}
 
 	@Override
-	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
 		
+	}
+	
+	@Override
+	public boolean canHandleType(String type) {
+		return false;
 	}
 
 	@Override
@@ -82,20 +86,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public void onChange(EnumGreenhouseEventType type, Object event) {
 	}
-
-	@Override
-	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-	}
-
-	@Override
-	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-	}
-
-	@Nonnull
-	@Override
-	public IGreenhouseState createState() {
-		return FakeGreenhouseState.instance;
-	}
 	
 	@Override
 	public Set<IInternalBlock> getInternalBlocks() {
@@ -105,5 +95,24 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public String getUnlocalizedType() {
 		return "for.multiblock.greenhouse.type";
+	}
+	
+	@Override
+	public IClimateRegion getRegion() {
+		return null;
+	}
+
+	@Override
+	public void clearRegion() {
+	}
+
+	@Override
+	public Set<Listener> getListenerComponents() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public World getWorld() {
+		return null;
 	}
 }

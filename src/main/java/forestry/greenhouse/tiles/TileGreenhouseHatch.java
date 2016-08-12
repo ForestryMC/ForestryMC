@@ -12,6 +12,8 @@ package forestry.greenhouse.tiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.io.IOException;
 import java.util.List;
 
 import forestry.core.owner.IOwnerHandler;
@@ -25,15 +27,10 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-
-import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
@@ -45,6 +42,9 @@ import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -59,7 +59,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile, IFluidHandler, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
@@ -140,28 +140,44 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 
 	/* CONSTRUCTION MATERIAL */
 	@Override
-	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			this.camouflageBlock = camouflageBlock;
 			
 			if (worldObj != null) {
 				if (worldObj.isRemote) {
-					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 				}
 			}
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
+			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
 		}
 	}
 	
 	@Override
-	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getCamouflageBlock(String type) {
 		return camouflageBlock;
 	}
 	
 	@Override
-	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
+	}
+	
+	@Override
+	public boolean canHandleType(String type) {
+		return type.equals(getCamouflageType());
+	}
+	
+	/* IStreamableGui */
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().writeGuiData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	/* TILEFORESTRY */
@@ -201,11 +217,11 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 	
 	@Override
-	public EnumCamouflageType getCamouflageType() {
+	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			return EnumCamouflageType.GLASS;
+			return CamouflageManager.GLASS;
 		}
-		return EnumCamouflageType.DEFAULT;
+		return CamouflageManager.DEFAULT;
 	}
 	
 	private IItemHandler getOutwardsInventory() {
@@ -220,14 +236,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			return null;
 		}
 		return worldObj.getTileEntity(getPos().offset(outwards));
-	}
-	
-	private IFluidHandler getOutwardFluidHandler() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IFluidHandler)) {
-			return null;
-		}
-		return (IFluidHandler) tile;
 	}
 	
 	private IEnergyConnection getOutwardEnergyConnection() {
@@ -360,60 +368,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			return 0;
 		}
 		return provider.extractEnergy(from, maxExtract, simulate);
-	}
-
-	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return 0;
-		}
-		return handler.fill(from, resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return false;
-		}
-		return handler.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return false;
-		}
-		return handler.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		IFluidHandler handler = getOutwardFluidHandler();
-		if (handler == null) {
-			return null;
-		}
-		return handler.getTankInfo(from);
 	}
 	
 	

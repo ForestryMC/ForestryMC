@@ -10,15 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.logics;
 
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.greenhouse.tiles.TileGreenhouseDoor;
 
 public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
 
@@ -30,7 +26,7 @@ public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implem
 	
 	@Override
 	public void work() {
-		if (controller == null || !controller.isAssembled()) {
+		/*if (controller == null || !controller.isAssembled()) {
 			return;
 		}
 		if (workTimer++ > 20) {
@@ -46,7 +42,7 @@ public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implem
 			controller.addTemperatureChange(-0.0001F * openDoors, 0.05F, 2.5F);
 			controller.addHumidityChange(-0.0001F * openDoors, 0.05F, 2.5F);
 			workTimer = 0;
-		}
+		}*/
 	}
 	
 	@Override

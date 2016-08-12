@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 
 public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenhouseButterflyHatch> {
@@ -28,13 +27,6 @@ public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenho
 		addSlotToContainer(new SlotOutput(tile, 1, 80, 27));
 		addSlotToContainer(new SlotOutput(tile, 2, 101, 40));
 		addSlotToContainer(new SlotOutput(tile, 3, 80, 53));
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
 	}
 	
 	public IFluidTank getTank(int slot) {

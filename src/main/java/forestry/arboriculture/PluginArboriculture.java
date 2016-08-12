@@ -27,6 +27,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ILeafTranslator;
@@ -173,6 +174,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
+		
+		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerArbDoor());
 	}
 
 	@Override

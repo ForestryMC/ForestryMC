@@ -17,13 +17,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,14 +37,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.tiles.TileGreenhouseDoor;
+import forestry.greenhouse.models.GreenhouseDoorStateMapper;
+import forestry.greenhouse.tiles.TileGreenhouse;
 
 public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapperRegister {
 
@@ -54,6 +60,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	private static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = BlockDoor.HINGE;
 	private static final PropertyBool POWERED = BlockDoor.POWERED;
 	private static final PropertyEnum<BlockDoor.EnumDoorHalf> HALF = BlockDoor.HALF;
+	public static final PropertyBool CAMOUFLAGED = PropertyBool.create("camouflaged");
 
 	protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1875D);
 	protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.8125D, 1.0D, 1.0D, 1.0D);
@@ -62,7 +69,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 
 	public BlockGreenhouseDoor() {
 		setSoundType(SoundType.GLASS);
-		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, false).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, false).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, false).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, false).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(CAMOUFLAGED, false));
 	}
 
 	@Override
@@ -109,8 +116,16 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof TileGreenhouseDoor)) {
+		if (!(tile instanceof TileGreenhouse)) {
 			return false;
+		}
+		
+		TileGreenhouse door = (TileGreenhouse) tile;
+		if(playerIn.isSneaking() && playerIn.getHeldItem(hand) == null){
+			if (!worldIn.isRemote) {
+				door.openGui(playerIn);
+			}
+			return true;
 		}
 
 		BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
@@ -232,6 +247,13 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				state = state.withProperty(FACING, iblockstate1.getValue(FACING)).withProperty(OPEN, iblockstate1.getValue(OPEN));
 			}
 		}
+		TileGreenhouse tile = TileUtil.getTile(worldIn, pos, TileGreenhouse.class);
+		boolean isCamouflaged = false;
+		if(tile != null){
+			ItemStack camouflage = CamouflageUtil.getCamouflageBlock(worldIn, pos);
+			isCamouflaged = camouflage != null;
+		}
+		state = state.withProperty(CAMOUFLAGED, isCamouflaged);
 
 		return state;
 	}
@@ -281,7 +303,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMap.Builder().ignore(BlockDoor.POWERED).build());
+		Proxies.render.registerStateMapper(this, new GreenhouseDoorStateMapper());
 	}
 
 	protected static int removeHalfBit(int meta) {
@@ -314,12 +336,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, HALF, FACING, OPEN, HINGE, POWERED);
-	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return state;
+		return new ExtendedBlockState(this, new IProperty[]{HALF, FACING, OPEN, HINGE, POWERED, CAMOUFLAGED}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	@Nonnull

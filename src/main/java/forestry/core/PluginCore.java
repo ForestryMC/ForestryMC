@@ -37,6 +37,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
@@ -48,6 +49,7 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
+import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
@@ -108,6 +110,8 @@ public class PluginCore extends BlankForestryPlugin {
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = new ClimateManager();
+		
+		CamouflageManager.camouflageAccess = new CamouflageAccess();
 	}
 
 	@Override
@@ -125,6 +129,10 @@ public class PluginCore extends BlankForestryPlugin {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		rootCommand.addChildCommand(new CommandPlugins());
+		
+		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDefault());
+		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
+		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
 	}
 
 	@Override

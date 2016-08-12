@@ -13,10 +13,13 @@ package forestry.greenhouse.models;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -24,8 +27,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
-
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflageItemHandler;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
+import forestry.core.CamouflageAccess;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
@@ -51,11 +57,15 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 	
 	private static void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack) {
 		if (camouflageStack != null) {
-			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
-			IBlockState state = Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage());
-			
-			baker.addBakedModel(state, modelShapes.getModelForState(state));
-			baker.setParticleSprite(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())).getParticleTexture());
+			ICamouflageHandler camouflageHandler = CamouflageUtil.getCamouflageHandler(world, pos);
+			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
+			ICamouflageItemHandler itemHandler = CamouflageAccess.getHandlerFromItem(camouflageStack, camouflageHandler);
+			if(itemHandler != null){
+				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
+				
+				baker.addBakedModel(model.getLeft(), model.getRight());
+				baker.setParticleSprite(model.getRight().getParticleTexture());
+			}
 		}
 		
 		//Bake the default blocks

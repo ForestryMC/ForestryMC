@@ -26,7 +26,7 @@ public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 		
 		addSlotToContainer(new SlotLiquidIn(tile, 0, 125, 37));
 	}
-
+	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();

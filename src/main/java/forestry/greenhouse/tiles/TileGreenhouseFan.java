@@ -22,23 +22,23 @@ public class TileGreenhouseFan extends TileGreenhouseClimatiser {
 	private static class FanDefinition implements IClimitiserDefinition {
 
 		@Override
-		public float getChangePerTransfer() {
-			return -0.01f;
+		public float getChange() {
+			return 0.015F;
 		}
 
 		@Override
-		public float getBoundaryUp() {
-			return 2.5f;
-		}
-
-		@Override
-		public float getBoundaryDown() {
-			return 0.05f;
+		public int getClimitiseRange() {
+			return 5;
 		}
 		
 		@Override
 		public ClimitiserType getType() {
 			return ClimitiserType.TEMPERATURE;
+		}
+
+		@Override
+		public boolean isPositiv() {
+			return false;
 		}
 	}
 	

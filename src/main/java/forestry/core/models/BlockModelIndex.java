@@ -19,13 +19,19 @@ public class BlockModelIndex {
 	public final ModelResourceLocation blockModelLocation;
 	public final ModelResourceLocation itemModelLocation;
 	public final IBakedModel model;
+	public final boolean addStateMapper;
 	public final Block block;
 
 	public BlockModelIndex(ModelResourceLocation blockModelLocation, ModelResourceLocation itemModelLocation, IBakedModel model, Block block) {
+		this(blockModelLocation, itemModelLocation, model, block, true);
+	}
+	
+	public BlockModelIndex(ModelResourceLocation blockModelLocation, ModelResourceLocation itemModelLocation, IBakedModel model, Block block, boolean addStateMapper) {
 		this.blockModelLocation = blockModelLocation;
 		this.itemModelLocation = itemModelLocation;
 		this.model = model;
 		this.block = block;
+		this.addStateMapper = addStateMapper;
 	}
 
 }

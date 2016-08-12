@@ -10,53 +10,28 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemStack;
+import forestry.core.utils.ItemStackUtil;
 
-public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent.Door, IErrorLogicSource, IOwnedTile {
+public class TileGreenhouseDoor extends TileGreenhouse {
 
 	public TileGreenhouseDoor() {
-		super(new MultiblockLogicGreenhouse());
 	}
 	
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
-		markDirty();
-	}
-
-	@Override
-	public void onMachineBroken() {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
-		markDirty();
-	}
-	
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return getMultiblockLogic().getController().getErrorLogic();
-	}
-
-	@Override
-	public IOwnerHandler getOwnerHandler() {
-		return getMultiblockLogic().getController().getOwnerHandler();
-	}
-
-	@Override
-	public Object getGui(EntityPlayer player, int data) {
-		return null;
-	}
-
-	@Override
-	public Object getContainer(EntityPlayer player, int data) {
-		return null;
+	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
+			super.setCamouflageBlock(type, camouflageBlock);
+			TileGreenhouseDoor otherDoorTile = null;
+			if(worldObj.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.up());
+			}else if(worldObj.getTileEntity(pos.down()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.down());
+			}
+			if(otherDoorTile != null){
+				otherDoorTile.setCamouflageBlock(type, camouflageBlock);
+			}
+		}
 	}
 
 }

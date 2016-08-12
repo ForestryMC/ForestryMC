@@ -15,8 +15,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -37,7 +35,6 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
-import forestry.core.owner.OwnerHandler;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
