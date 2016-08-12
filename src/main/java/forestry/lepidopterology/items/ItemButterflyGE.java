@@ -253,6 +253,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 						if (!playerIn.capabilities.isCreativeMode) {
 							stack.stackSize--;
 						}
+						nursery.setCaterpillar(null);
 						return EnumActionResult.SUCCESS;
 					}else{
 						nursery.setCaterpillar(null);

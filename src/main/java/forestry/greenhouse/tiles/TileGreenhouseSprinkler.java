@@ -77,7 +77,7 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 						double distance = pos.distanceSq(pos);
 						int maxDistance = definition.getClimitiseRange();
 						if(distance <= maxDistance){
-							position.setHumidity(position.getHumidity() + (float) (definition.getChange() / distance));
+							position.setHumidity((float) (position.getHumidity() + ((distance == 0) ? definition.getChange() : (definition.getChange() / distance))));
 						}
 					}
 				}
