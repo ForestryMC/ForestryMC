@@ -36,6 +36,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
+
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
@@ -49,6 +51,7 @@ import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.ModelWoodPile;
 import forestry.arboriculture.models.WoodModelLoader;
+import forestry.arboriculture.models.WoodTextures;
 import forestry.arboriculture.render.CharcoalPileRenderer;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.models.BlockModelEntry;
@@ -124,14 +127,15 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 								woodType = woodTyped.getWoodType(0);
 								itemStack = new ItemStack(woodTyped);
 							}
+							ImmutableMap<String, String> customTextures = WoodTextures.getLocations(woodType, woodKind);
 							if(woodKind.retextureItem){
 								ItemMeshDefinition definition = definitions.get(itemStack.getItem());
 								if(definition instanceof IWoodItemMeshDefinition){
 									IWoodItemMeshDefinition woodDefinition = (IWoodItemMeshDefinition) definition;
 									IModel basicItemModel = ModelLoaderRegistry.getModel(woodDefinition.getDefaultModelLocation(itemStack));
 									ModelResourceLocation basicItemLocation = definition.getModelLocation(itemStack);
-									
-									registry.putObject(basicItemLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType)));
+											
+									registry.putObject(basicItemLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType, customTextures)));
 								}
 							}
 							IModel basicModel = ModelLoaderRegistry.getModel(woodMapper.getDefaultModelResourceLocation(state));
@@ -139,7 +143,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 							if(loadingExceptions.containsKey(basicLocation)){
 								loadingExceptions.remove(basicLocation);
 							}
-							registry.putObject(basicLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType)));
+							registry.putObject(basicLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType, customTextures)));
 						}
 					}catch(Exception e){
 						e.printStackTrace();

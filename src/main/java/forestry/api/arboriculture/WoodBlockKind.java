@@ -1,7 +1,8 @@
 package forestry.api.arboriculture;
 
+import java.util.HashMap;
 import java.util.Locale;
-
+import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraftforge.client.model.IModel;
@@ -25,8 +26,8 @@ public enum WoodBlockKind {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 	
-	public IModel retextureModel(IModel model, IWoodType type){
-		ImmutableMap.Builder<String, String> textures = new ImmutableMap.Builder();
+	public IModel retextureModel(IModel model, IWoodType type, ImmutableMap<String, String> customTextures){
+		Map<String, String> textures = new HashMap<>();
 		switch (this) {
 		case SLAB:
 		case STAIRS:
@@ -61,6 +62,7 @@ public enum WoodBlockKind {
 		default:
 			break;
 		}
-		return ModelProcessingHelper.retexture(model, textures.build());
+		textures.putAll(customTextures);
+		return ModelProcessingHelper.retexture(model, new ImmutableMap.Builder<String, String>().putAll(textures).build());
 	}
 }

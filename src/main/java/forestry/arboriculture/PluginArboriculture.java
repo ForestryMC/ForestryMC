@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -54,6 +55,7 @@ import forestry.arboriculture.items.ItemCharcoal;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
+import forestry.arboriculture.models.WoodTextures;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
@@ -555,6 +557,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
+		WoodTextures.deserializeFile();
 		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}
@@ -565,6 +568,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			textures.add(new ResourceLocation(type.getDoorLowerTexture()));
 			textures.add(new ResourceLocation(type.getDoorUpperTexture()));
 			textures.add(new ResourceLocation(type.getPlankTexture()));
+			for(WoodBlockKind kind : WoodBlockKind.values()){
+				for(Entry<String, String> loc : WoodTextures.getLocations(type, kind).entrySet()){
+					textures.add(new ResourceLocation(loc.getValue()));
+				}
+			}
 		}
 		for(ResourceLocation loc : textures){
 			TextureManager.getInstance();
