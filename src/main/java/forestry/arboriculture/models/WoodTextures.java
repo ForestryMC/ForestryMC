@@ -28,7 +28,6 @@ public class WoodTextures {
 	
 	public static final Gson GSON = new GsonBuilder().create();
 	protected static final Map<String, Texture> textures = new HashMap<>();
-	protected static KindTexture kindTextures;
 	
 	public static void deserializeFile(){
 		try {
@@ -84,14 +83,11 @@ public class WoodTextures {
 	public static ImmutableMap<String, String> getLocations(IWoodType woodType, WoodBlockKind blockKind){
 		if(woodType != null && blockKind != null && woodType.getName() != null){
 			String kindName = blockKind.toString();
-			SimpleTexture kindTex = null;
+			Texture kindTex = textures.get(blockKind);
 			Texture tex = textures.get(woodType.getName().toLowerCase(Locale.ENGLISH));
-			if(kindTextures != null){
-				kindTex = kindTextures.kindLocations.get(kindName);
-			}
 			Map<String, String> locations = new HashMap<>();
-			if(kindTex != null){
-				locations.putAll(kindTex.locations);
+			if(kindTex != null && kindTex instanceof SimpleTexture){
+				locations.putAll(((SimpleTexture)kindTex).locations);
 			}
 			if(tex != null){
 				if(tex instanceof SimpleTexture){
