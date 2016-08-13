@@ -20,6 +20,9 @@ import com.google.gson.stream.JsonReader;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.core.render.FontColour;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,9 +32,9 @@ public class WoodTextures {
 	public static final Gson GSON = new GsonBuilder().create();
 	protected static final Map<String, Texture> textures = new HashMap<>();
 	
-	public static void deserializeFile(){
+	public static void deserializeFile(IResourceManager resourceManager){
 		try {
-			InputStream stream = FontColour.class.getResourceAsStream("/assets/forestry/textures/woodTextures.json");
+			InputStream stream = resourceManager.getResource(new ResourceLocation("forestry:textures/woodTextures.json")).getInputStream();
 			if(stream != null){
 				JsonReader reader = null;
 				try {

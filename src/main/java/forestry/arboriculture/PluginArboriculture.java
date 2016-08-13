@@ -70,6 +70,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.IMCUtil;
@@ -557,7 +558,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
-		WoodTextures.deserializeFile();
+		WoodTextures.deserializeFile(Proxies.render.getSelectedTexturePack());
 		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}
