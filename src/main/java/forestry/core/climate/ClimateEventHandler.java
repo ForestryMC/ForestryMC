@@ -23,20 +23,6 @@ public class ClimateEventHandler {
 	}
 	
 	@SubscribeEvent
-	public void onLoadWorld(WorldEvent.Load event){
-		IClimateManager manager = ForestryAPI.climateManager;
-		Integer dimonsionID = Integer.valueOf(event.getWorld().provider.getDimension());
-		Map<Integer, List<IClimateRegion>> regions = manager.getRegions();
-		Map<Integer, Map<BlockPos, IClimateSource>> sources = manager.getSources();
-		if(regions.get(dimonsionID) == null){
-			regions.put(dimonsionID, new ArrayList<>());
-		}
-		if(sources.get(dimonsionID) == null){
-			sources.put(dimonsionID, new HashMap<>());
-		}
-	}
-	
-	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		Integer dim = Integer.valueOf(event.world.provider.getDimension());
 		if (event.phase == TickEvent.Phase.END) {

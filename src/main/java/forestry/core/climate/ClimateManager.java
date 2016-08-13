@@ -13,6 +13,8 @@ package forestry.core.climate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,21 +73,23 @@ public class ClimateManager implements IClimateManager{
 	
 	@Override
 	public void removeSource(IClimateSource source) {
-		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())) == null){
-			sources.put(Integer.valueOf(source.getWorld().provider.getDimension()), new HashMap<>());
+		Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
+		if(!sources.containsKey(dimensionID)){
+			sources.put(dimensionID, new HashMap<>());
 		}
-		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).keySet().contains(source.getPos())){
-			sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).remove(source.getPos(), source);
+		if(sources.get(dimensionID).keySet().contains(source.getPos())){
+			sources.get(dimensionID).remove(source.getPos(), source);
 		}
 	}
 	
 	@Override
 	public void addSource(IClimateSource source) {
-		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())) == null){
-			sources.put(Integer.valueOf(source.getWorld().provider.getDimension()), new HashMap<>());
+		Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
+		if(!sources.containsKey(dimensionID)){
+			sources.put(dimensionID, new HashMap<>());
 		}
-		if(sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).get(source.getPos()) == null){
-			sources.get(Integer.valueOf(source.getWorld().provider.getDimension())).put(source.getPos(), source);
+		if(sources.get(dimensionID).get(source.getPos()) == null){
+			sources.get(dimensionID).put(source.getPos(), source);
 		}
 	}
 	
@@ -124,7 +128,11 @@ public class ClimateManager implements IClimateManager{
 	
 	@Override
 	public IClimateRegion getRegionForPos(World world, BlockPos pos){
-		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(world.provider.getDimension()));
+		Integer dimensionID = Integer.valueOf(world.provider.getDimension());
+		if(!regions.containsKey(dimensionID)){
+			this.regions.put(dimensionID, new ArrayList<>());
+		}
+		List<IClimateRegion> regions = this.regions.get(dimensionID);
 		for(IClimateRegion region : regions){
 			if(region.getPositions().keySet().contains(pos)){
 				return region;
