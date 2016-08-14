@@ -44,9 +44,12 @@ public class ClimateManager implements IClimateManager{
 		if(region == null){
 			return;
 		}
-		List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
-		
 		synchronized (regionsMutex) {
+			Integer dimensionID = Integer.valueOf(region.getWorld().provider.getDimension());
+			if(!regions.containsKey(dimensionID)){
+				this.regions.put(dimensionID, new ArrayList<>());
+			}
+			List<IClimateRegion> regions = this.regions.get(dimensionID);
 			if(!regions.contains(region)){
 				for(BlockPos pos : region.getPositions().keySet()){
 					if(getRegionForPos(region.getWorld(), pos) != null){
@@ -64,7 +67,11 @@ public class ClimateManager implements IClimateManager{
 			return;
 		}
 		synchronized (regionsMutex) {
-			List<IClimateRegion> regions = this.regions.get(Integer.valueOf(region.getWorld().provider.getDimension()));
+			Integer dimensionID = Integer.valueOf(region.getWorld().provider.getDimension());
+			if(!regions.containsKey(dimensionID)){
+				this.regions.put(dimensionID, new ArrayList<>());
+			}
+			List<IClimateRegion> regions = this.regions.get(dimensionID);
 			if(regions.contains(region)){
 				regions.remove(region);
 			}

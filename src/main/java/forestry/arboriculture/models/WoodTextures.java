@@ -1,6 +1,7 @@
 package forestry.arboriculture.models;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,7 +69,9 @@ public class WoodTextures {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			if(!(e instanceof FileNotFoundException)){
+				e.printStackTrace();
+			}
 		} 
 	}
 	

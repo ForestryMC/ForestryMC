@@ -26,10 +26,7 @@ public class SimpleRetexturedModel extends BlankModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		if(bakedModel == null){
-			bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, new DefaultTextureGetter());
-		}
-		return bakedModel.getQuads(state, side, rand);
+		return getModel().getQuads(state, side, rand);
 	}
 	
 	@Override
@@ -39,7 +36,14 @@ public class SimpleRetexturedModel extends BlankModel {
 	
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return bakedModel.getParticleTexture();
+		return getModel().getParticleTexture();
+	}
+	
+	private IBakedModel getModel(){
+		if(bakedModel == null){
+			return bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, new DefaultTextureGetter());
+		}
+		return bakedModel;
 	}
 	
 	private static class RetexturedOverrideList extends ItemOverrideList{
