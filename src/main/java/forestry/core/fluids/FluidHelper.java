@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
-import forestry.core.utils.InventoryUtil;
 
 public final class FluidHelper {
 
@@ -32,6 +33,18 @@ public final class FluidHelper {
 		} else {
 			return fluidStack1.isFluidStackIdentical(fluidStack2);
 		}
+	}
+
+	public static boolean canAcceptFluid(World world, BlockPos pos, EnumFacing facing, FluidStack fluid) {
+		IFluidHandler capability = FluidUtil.getFluidHandler(world, pos, facing);
+		if (capability != null) {
+			for (IFluidTankProperties tankProperties : capability.getTankProperties()) {
+				if (tankProperties.canFillFluidType(fluid)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public enum FillStatus {

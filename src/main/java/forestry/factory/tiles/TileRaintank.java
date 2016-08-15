@@ -18,6 +18,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.ContainerFiller;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
@@ -34,18 +35,29 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
-	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
+	private static final FluidStack WATER_PER_UPDATE = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
+	@Nonnull
 	private final FilteredTank resourceTank;
+	@Nonnull
 	private final TankManager tankManager;
+	@Nonnull
 	private final ContainerFiller containerFiller;
+
+	private Boolean canDumpBelow = null;
+	private boolean dumpingFluid = false;
 
 	// client
 	private int fillingProgress;
@@ -89,27 +101,47 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	@Override
 	public void updateServerSide() {
+		if (updateOnInterval(20)) {
+			IErrorLogic errorLogic = getErrorLogic();
 
-		if (!updateOnInterval(20)) {
-			return;
+			BlockPos pos = getPos();
+			Biome biome = worldObj.getBiome(pos);
+			errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
+
+			BlockPos posAbove = pos.up();
+			boolean hasSky = worldObj.canBlockSeeSky(posAbove);
+			errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
+
+			errorLogic.setCondition(!worldObj.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
+
+			if (!errorLogic.hasErrors()) {
+				resourceTank.fillInternal(WATER_PER_UPDATE, true);
+			}
+
+			containerFiller.updateServerSide();
 		}
 
-		IErrorLogic errorLogic = getErrorLogic();
-
-		Biome biome = worldObj.getBiome(getPos());
-		errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
-
-		BlockPos posAbove = getPos().up();
-		boolean hasSky = worldObj.canBlockSeeSky(posAbove);
-		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
-
-		errorLogic.setCondition(!worldObj.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
-
-		if (!errorLogic.hasErrors()) {
-			resourceTank.fillInternal(STACK_WATER, true);
+		if (canDumpBelow == null) {
+			canDumpBelow = FluidHelper.canAcceptFluid(worldObj, getPos().down(), EnumFacing.UP, STACK_WATER);
 		}
 
-		containerFiller.updateServerSide();
+		if (canDumpBelow) {
+			if (dumpingFluid || updateOnInterval(20)) {
+				dumpingFluid = dumpFluidBelow();
+			}
+		}
+	}
+
+	private boolean dumpFluidBelow() {
+		if (!resourceTank.isEmpty()) {
+			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldObj, pos.down(), EnumFacing.UP);
+			if (fluidDestination != null) {
+				if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean isFilling() {
@@ -137,6 +169,15 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
+	}
+
+	@Override
+	public void onNeighborTileChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborTileChange(world, pos, neighbor);
+
+		if (neighbor.equals(pos.down())) {
+			canDumpBelow = FluidHelper.canAcceptFluid(worldObj, neighbor, EnumFacing.UP, STACK_WATER);
+		}
 	}
 
 	@Override

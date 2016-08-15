@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.IItemModelRegister;
+import forestry.core.CreativeTabForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
+import forestry.core.tiles.TileForestry;
+import forestry.core.utils.Log;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -21,14 +26,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.core.CreativeTabForestry;
-import forestry.core.tiles.TileForestry;
-import forestry.core.utils.Log;
 
 public abstract class BlockForestry extends Block implements IItemModelRegister, ITileEntityProvider {
 
@@ -57,16 +56,17 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborChange(world, pos, neighbor);
+
 		try {
-			TileEntity tile = worldIn.getTileEntity(pos);
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileForestry) {
-				((TileForestry) tile).onNeighborBlockChange(state.getBlock());
+				((TileForestry) tile).onNeighborTileChange(world, pos, neighbor);
 			}
 		} catch (StackOverflowError error) {
-			Log.error("Stack Overflow Error in BlockMachine.onNeighborBlockChange()", error);
+			Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
 			throw error;
 		}
 	}
-
 }
