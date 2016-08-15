@@ -30,7 +30,7 @@ public class GuiRaintank extends GuiForestryTitled<ContainerRaintank, TileRainta
 
 		if (inventory.isFilling()) {
 			int progress = inventory.getFillProgressScaled(24);
-			drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, 24 - progress, 16);
+			drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, progress, 16);
 		}
 	}
 }

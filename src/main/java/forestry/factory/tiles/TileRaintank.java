@@ -14,43 +14,41 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.ContainerFiller;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileBase;
-import forestry.core.utils.ItemStackUtil;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private int fillingTime;
-	private ItemStack usedEmpty;
+	private final ContainerFiller containerFiller;
+
+	// client
+	private int fillingProgress;
 
 	public TileRaintank() {
 		super("raintank");
@@ -59,6 +57,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 
 		tankManager = new TankManager(this, resourceTank);
+
+		containerFiller = new ContainerFiller(resourceTank, Constants.RAINTANK_FILLING_TIME, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT);
 	}
 
 	@Nonnull
@@ -108,51 +108,29 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (!errorLogic.hasErrors()) {
 			resourceTank.fillInternal(STACK_WATER, true);
 		}
-		
-		if (!ItemStackUtil.isIdenticalItem(usedEmpty, getStackInSlot(InventoryRaintank.SLOT_RESOURCE))) {
-			fillingTime = 0;
-			usedEmpty = null;
-		}
 
-		if (usedEmpty == null) {
-			usedEmpty = getStackInSlot(InventoryRaintank.SLOT_RESOURCE);
-		}
-
-		if (!isFilling()) {
-			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, FluidRegistry.WATER, false);
-			if (canFill == FluidHelper.FillStatus.SUCCESS) {
-				fillingTime = Constants.RAINTANK_FILLING_TIME;
-			}
-		} else {
-			fillingTime--;
-			if (fillingTime <= 0) {
-				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, FluidRegistry.WATER, true);
-				if (filled == FluidHelper.FillStatus.SUCCESS) {
-					fillingTime = 0;
-				}
-			}
-		}
+		containerFiller.updateServerSide();
 	}
 
 	public boolean isFilling() {
-		return fillingTime > 0;
+		return fillingProgress > 0;
 	}
 
 	public int getFillProgressScaled(int i) {
-		return fillingTime * i / Constants.RAINTANK_FILLING_TIME;
+		return fillingProgress * i / Constants.RAINTANK_FILLING_TIME;
 	}
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
 			case 0:
-				fillingTime = j;
+				fillingProgress = j;
 				break;
 		}
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, fillingTime);
+		iCrafting.sendProgressBarUpdate(container, 0, containerFiller.getFillingProgress());
 	}
 
 	@Nonnull
