@@ -12,6 +12,9 @@ package forestry.core.items;
 
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.core.IToolPipette;
+import forestry.core.fluids.PipetteContents;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,16 +23,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.core.IToolPipette;
-import forestry.core.fluids.PipetteContents;
 
 public class ItemPipette extends ItemForestry implements IToolPipette, IFluidContainerItem {
 
@@ -90,6 +88,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
+
 		PipetteContents contained = PipetteContents.create(itemstack);
 		if (contained != null) {
 			contained.addTooltip(list);

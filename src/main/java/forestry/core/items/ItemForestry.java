@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
+import java.util.List;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemForestry extends Item implements IItemModelRegister {
 	public ItemForestry() {
@@ -47,5 +49,11 @@ public class ItemForestry extends Item implements IItemModelRegister {
 
 	public ItemStack getWildcard() {
 		return new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		super.addInformation(stack, playerIn, tooltip, advanced);
+		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}
 }

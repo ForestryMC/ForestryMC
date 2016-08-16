@@ -275,6 +275,7 @@ public class ItemResearchNote extends ItemForestry {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
 		note.addTooltip(list);
 	}

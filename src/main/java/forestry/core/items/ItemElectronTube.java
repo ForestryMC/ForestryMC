@@ -10,18 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -30,6 +23,11 @@ import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 
 public class ItemElectronTube extends ItemOverlay {
 
@@ -39,6 +37,7 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
 			if (Proxies.common.isShiftDown()) {

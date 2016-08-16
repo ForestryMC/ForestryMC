@@ -12,6 +12,15 @@ package forestry.mail.items;
 
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.mail.ILetter;
+import forestry.core.items.ItemWithGui;
+import forestry.core.utils.Translator;
+import forestry.mail.Letter;
+import forestry.mail.LetterProperties;
+import forestry.mail.gui.ContainerLetter;
+import forestry.mail.gui.GuiLetter;
+import forestry.mail.inventory.ItemInventoryLetter;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,19 +31,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.mail.ILetter;
-import forestry.core.items.ItemWithGui;
-import forestry.core.utils.Translator;
-import forestry.mail.Letter;
-import forestry.mail.LetterProperties;
-import forestry.mail.gui.ContainerLetter;
-import forestry.mail.gui.GuiLetter;
-import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
 	public ItemLetter() {
@@ -65,6 +63,8 @@ public class ItemLetter extends ItemWithGui {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
+
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
 			list.add('<' + Translator.translateToLocal("for.gui.blank") + '>');

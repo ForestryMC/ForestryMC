@@ -12,17 +12,6 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -36,6 +25,15 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -69,6 +67,8 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
+
 		Biome currentBiome = player.worldObj.getBiome(player.getPosition());
 
 		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.worldObj, player.getPosition());

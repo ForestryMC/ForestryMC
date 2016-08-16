@@ -186,6 +186,12 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
+
+		if (type == EnumBackpackType.WOVEN) {
+			list.add(Translator.translateToLocalFormatted("item.for.bag.woven.tooltip"));
+		}
+
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 
 		BackpackMode mode = getMode(itemstack);

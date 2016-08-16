@@ -13,15 +13,6 @@ package forestry.core.circuits;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
@@ -30,6 +21,13 @@ import forestry.api.core.IModelManager;
 import forestry.core.PluginCore;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
@@ -80,6 +78,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+		super.addInformation(itemstack, player, list, flag);
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
 		if (circuitboard != null) {
 			circuitboard.addTooltip(list);

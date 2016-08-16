@@ -1,7 +1,10 @@
 package forestry.apiculture.items;
 
-import java.util.List;
-
+import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.apiculture.IHiveTile;
+import forestry.api.core.Tabs;
+import forestry.core.items.ItemForestry;
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,19 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.apiculture.IHiveTile;
-import forestry.api.core.Tabs;
-import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Translator;
 
 public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 	public ItemSmoker() {
@@ -104,12 +100,6 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 32;
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
-		tooltip.add(Translator.translateToLocal("item.for.smoker.description"));
 	}
 
 	@Override

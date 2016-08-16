@@ -11,16 +11,13 @@
 package forestry.core.items;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.core.Tabs;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
@@ -40,11 +37,5 @@ public class ItemAlyzer extends ItemWithGui {
 	@Override
 	public Object getContainer(@Nonnull EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
-		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}
 }

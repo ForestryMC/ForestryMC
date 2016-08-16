@@ -23,11 +23,11 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
-		if (!itemstack.hasTagCompound()) {
-			return;
-		}
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean advanced) {
+		super.addInformation(itemstack, player, info, advanced);
 
-		info.add("There are still some scribbles on this.");
+		if (itemstack.hasTagCompound()) {
+			info.add("There are still some scribbles on this.");
+		}
 	}
 }

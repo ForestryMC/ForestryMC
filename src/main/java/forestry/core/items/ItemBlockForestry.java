@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.List;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,11 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IBlockWithMeta;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
 
 public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
@@ -52,6 +54,12 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 			return block.getUnlocalizedName() + "." + blockMeta.getNameFromMeta(meta);
 		}
 		return block.getUnlocalizedName();
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		super.addInformation(stack, playerIn, tooltip, advanced);
+		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}
 
 	@Override

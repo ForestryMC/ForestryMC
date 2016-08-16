@@ -11,7 +11,7 @@
 package forestry.energy.blocks;
 
 import forestry.core.blocks.BlockRegistry;
-import forestry.energy.items.ItemEngine;
+import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryEnergy extends BlockRegistry {
 	public final BlockEngine peatEngine;
@@ -20,12 +20,12 @@ public class BlockRegistryEnergy extends BlockRegistry {
 
 	public BlockRegistryEnergy() {
 		peatEngine = new BlockEngine(BlockTypeEngine.PEAT);
-		registerBlock(peatEngine, new ItemEngine(peatEngine), "engine_peat");
+		registerBlock(peatEngine, new ItemBlockForestry<>(peatEngine), "engine_peat");
 
 		biogasEngine = new BlockEngine(BlockTypeEngine.BIOGAS);
-		registerBlock(biogasEngine, new ItemEngine(biogasEngine), "engine_biogas");
+		registerBlock(biogasEngine, new ItemBlockForestry<>(biogasEngine), "engine_biogas");
 
 		clockworkEngine = new BlockEngine(BlockTypeEngine.CLOCKWORK);
-		registerBlock(clockworkEngine, new ItemEngine(clockworkEngine), "engine_clockwork");
+		registerBlock(clockworkEngine, new ItemBlockForestry<>(clockworkEngine), "engine_clockwork");
 	}
 }

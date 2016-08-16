@@ -10,25 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
-import forestry.core.utils.Translator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
-
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
-		tooltip.add(Translator.translateToLocal("item.for.solderingIron.tooltip"));
-	}
-
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
