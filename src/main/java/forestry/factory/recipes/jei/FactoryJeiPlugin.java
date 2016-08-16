@@ -2,14 +2,14 @@ package forestry.factory.recipes.jei;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.utils.JeiUtil;
 import forestry.factory.PluginFactory;
+import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.gui.GuiCentrifuge;
@@ -47,7 +47,6 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeWrapper;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeHandler;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
-
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
@@ -55,6 +54,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class FactoryJeiPlugin extends BlankModPlugin {
@@ -108,20 +108,27 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
 		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.still), ForestryRecipeCategoryUid.STILL);
+		BlockRegistryFactory blocks = PluginFactory.blocks;
+
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
 		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler());
 
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
+
+		JeiUtil.addDescription(registry,
+				blocks.raintank,
+				blocks.worktable
+		);
 	}
 
 	private static class ForestryAdvancedGuiHandler implements IAdvancedGuiHandler<GuiForestry> {

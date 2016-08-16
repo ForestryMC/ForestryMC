@@ -4,16 +4,16 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import forestry.core.PluginCore;
-import net.minecraft.item.ItemStack;
-
+import forestry.core.blocks.BlockRegistryCore;
+import forestry.core.items.ItemRegistryCore;
+import forestry.core.utils.JeiUtil;
 import forestry.plugins.PluginManager;
-
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class ForestryJeiPlugin extends BlankModPlugin {
@@ -26,8 +26,24 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 			itemBlacklist.addItemToBlacklist(hiddenItem);
 		}
 
-		registry.addDescription(new ItemStack(PluginCore.items.solderingIron), "item.for.solderingIron.description");
-		registry.addDescription(new ItemStack(PluginCore.items.circuitboards, 1, OreDictionary.WILDCARD_VALUE), "item.for.circuitboard.description");
-		registry.addDescription(new ItemStack(PluginCore.items.tubes, 1, OreDictionary.WILDCARD_VALUE), "item.for.thermionicTubes.description");
+		ItemRegistryCore items = PluginCore.items;
+
+		JeiUtil.addDescription(registry,
+				items.solderingIron,
+				items.circuitboards,
+				items.tubes,
+				items.pipette,
+				items.kitPickaxe,
+				items.kitShovel,
+				items.fertilizerCompound
+		);
+
+		BlockRegistryCore blocks = PluginCore.blocks;
+		JeiUtil.addDescription(registry,
+				blocks.analyzer,
+				blocks.bogEarth,
+				blocks.escritoire,
+				blocks.humus
+		);
 	}
 }
