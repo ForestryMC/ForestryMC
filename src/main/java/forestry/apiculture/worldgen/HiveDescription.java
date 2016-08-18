@@ -62,7 +62,7 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	},
 	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(IHiveRegistry.HiveType.END, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
+	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
