@@ -47,6 +47,8 @@ import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,6 +57,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -65,20 +68,6 @@ import net.minecraft.world.biome.Biome;
 
 public class TileHive extends TileEntity implements ITickable, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
-	private static final Predicate<EntityLivingBase> BEE_TARGET_PREDICATE = new Predicate<EntityLivingBase>() {
-		@Override
-		public boolean apply(@Nullable EntityLivingBase input) {
-			if (input != null && input.isEntityAlive() && !input.isInvisible()) {
-				if (input instanceof EntityPlayer) {
-					EntityPlayer player = (EntityPlayer) input;
-					return !player.isSpectator() && !player.isCreative();
-				} else if (input instanceof IMob) {
-					return true;
-				}
-			}
-			return false;
-		}
-	};
 
 	@Nonnull
 	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
@@ -88,6 +77,9 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	private final BeekeepingLogic beeLogic;
 	@Nonnull
 	private final IErrorLogic errorLogic;
+	@Nonnull
+	private final Predicate<EntityLivingBase> beeTargetPredicate;
+
 	private IBee containedBee = null;
 	private boolean active = false;
 	private boolean angry = false;
@@ -103,6 +95,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		inventory = new HiveBeeHousingInventory(this);
 		beeLogic = new BeekeepingLogic(this);
 		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
+		beeTargetPredicate = new BeeTargetPredicate(this);
 	}
 
 	@Override
@@ -127,7 +120,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 				if (calmTime == 0) {
 					if (canWork) {
 						AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-						List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, BEE_TARGET_PREDICATE);
+						List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, beeTargetPredicate);
 						if (!entities.isEmpty()) {
 							Collections.shuffle(entities);
 							EntityLivingBase entity = entities.get(0);
@@ -369,6 +362,30 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Override
 	public BlockPos getCoordinates() {
 		return getPos();
+	}
+
+	private static class BeeTargetPredicate implements Predicate<EntityLivingBase> {
+		@Nonnull
+		private final IHiveTile hive;
+
+		public BeeTargetPredicate(@Nonnull IHiveTile hive) {
+			this.hive = hive;
+		}
+
+		@Override
+		public boolean apply(@Nullable EntityLivingBase input) {
+			if (input != null && input.isEntityAlive() && !input.isInvisible()) {
+				if (input instanceof EntityPlayer) {
+					return EntitySelectors.CAN_AI_TARGET.apply(input);
+				} else if (hive.isAngry()) {
+					return true;
+				} else if (input instanceof IMob) {
+					// don't attack semi-passive vanilla mobs
+					return !(input instanceof EntityEnderman) && !(input instanceof EntityPigZombie);
+				}
+			}
+			return false;
+		}
 	}
 
 }
