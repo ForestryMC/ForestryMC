@@ -18,6 +18,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.ContainerFiller;
+import forestry.core.fluids.DrainOnlyFluidHandlerWrapper;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -189,7 +190,13 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			final IFluidHandler fluidHandler;
+			if (facing == EnumFacing.DOWN) {
+				fluidHandler = new DrainOnlyFluidHandlerWrapper(tankManager);
+			} else {
+				fluidHandler = tankManager;
+			}
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidHandler);
 		}
 		return super.getCapability(capability, facing);
 	}
