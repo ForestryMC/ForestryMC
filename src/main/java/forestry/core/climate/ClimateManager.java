@@ -19,23 +19,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import forestry.api.core.IClimateProvider;
-import forestry.api.core.climate.IClimateManager;
-import forestry.api.core.climate.IClimatePosition;
-import forestry.api.core.climate.IClimateRegion;
-import forestry.api.core.climate.IClimateSource;
+import forestry.api.climate.IClimateManager;
+import forestry.api.climate.IClimatePosition;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.climate.IClimateRegion;
+import forestry.api.climate.IClimateSourceProvider;
 import forestry.core.DefaultClimateProvider;
 
 public class ClimateManager implements IClimateManager{
 
 	protected Map<Integer, List<IClimateRegion>> regions;
-	protected Map<Integer, Map<BlockPos, IClimateSource>> sources;
 	
 	private final Object regionsMutex;
 	
 	public ClimateManager() {
 		regions = new HashMap<>();
-		sources = new HashMap<>();
 		regionsMutex = new Object();
 	}
 	
@@ -79,24 +77,40 @@ public class ClimateManager implements IClimateManager{
 	}
 	
 	@Override
-	public void removeSource(IClimateSource source) {
-		Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
-		if(!sources.containsKey(dimensionID)){
-			sources.put(dimensionID, new HashMap<>());
+	public void removeSource(IClimateSourceProvider source) {
+		if(source == null){
+			return;
 		}
-		if(sources.get(dimensionID).keySet().contains(source.getPos())){
-			sources.get(dimensionID).remove(source.getPos(), source);
+		synchronized (regionsMutex) {
+			Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
+			if(!regions.containsKey(dimensionID)){
+				regions.put(dimensionID, new ArrayList<>());
+			}
+			IClimateRegion region = getRegionForPos(source.getWorld(), source.getCoordinates());
+			if(region != null){
+				if(!region.getSources().contains(source.getClimateSource())){
+					region.removeSource(source.getClimateSource());
+				}
+			}
 		}
 	}
 	
 	@Override
-	public void addSource(IClimateSource source) {
-		Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
-		if(!sources.containsKey(dimensionID)){
-			sources.put(dimensionID, new HashMap<>());
+	public void addSource(IClimateSourceProvider source) {
+		if(source == null){
+			return;
 		}
-		if(sources.get(dimensionID).get(source.getPos()) == null){
-			sources.get(dimensionID).put(source.getPos(), source);
+		synchronized (regionsMutex) {
+			Integer dimensionID = Integer.valueOf(source.getWorld().provider.getDimension());
+			if(!regions.containsKey(dimensionID)){
+				regions.put(dimensionID, new ArrayList<>());
+			}
+			IClimateRegion region = getRegionForPos(source.getWorld(), source.getCoordinates());
+			if(region != null){
+				if(!region.getSources().contains(source.getClimateSource())){
+					region.addSource(source.getClimateSource());
+				}
+			}
 		}
 	}
 	
@@ -148,11 +162,6 @@ public class ClimateManager implements IClimateManager{
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public Map<Integer, Map<BlockPos, IClimateSource>> getSources() {
-		return sources;
 	}
 	
 	@Override

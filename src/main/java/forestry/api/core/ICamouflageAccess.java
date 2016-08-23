@@ -30,4 +30,6 @@ public interface ICamouflageAccess {
 	
 	boolean isItemBlackListed(@Nonnull String type, @Nonnull ItemStack camouflageBlock);
 	
+	ICamouflageItemHandler getHandlerFromItem(ItemStack stack);
+	
 }

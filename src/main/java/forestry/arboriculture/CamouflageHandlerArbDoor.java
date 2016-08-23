@@ -30,8 +30,8 @@ import org.apache.commons.lang3.tuple.Pair;
 public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 
 	@Override
-	public boolean canHandle(ItemStack stack, ICamouflageHandler camouflageHandler) {
-		if(camouflageHandler == null || stack == null || stack.getItem() == null || stack.stackSize <= 0){
+	public boolean canHandle(ItemStack stack) {
+		if(stack == null || stack.getItem() == null || stack.stackSize <= 0){
 			return false;
 		}
 		if(stack.getItem() instanceof ItemBlockWoodDoor){

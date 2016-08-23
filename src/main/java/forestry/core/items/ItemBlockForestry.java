@@ -12,7 +12,7 @@ package forestry.core.items;
 
 import java.util.List;
 
-import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockRotatable;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -77,8 +77,8 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 				}
 			}
 
-			if (block instanceof BlockBase) {
-				((BlockBase) block).rotateAfterPlacement(player, world, pos, side);
+			if (block instanceof IBlockRotatable) {
+				((IBlockRotatable) block).rotateAfterPlacement(player, world, pos, side);
 			}
 		}
 

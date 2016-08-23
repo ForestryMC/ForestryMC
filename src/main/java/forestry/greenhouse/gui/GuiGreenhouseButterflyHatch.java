@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
-import forestry.greenhouse.gui.widgets.WidgetCamouflageSlot;
+import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 

@@ -46,7 +46,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.models.GreenhouseDoorStateMapper;
@@ -247,13 +246,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				state = state.withProperty(FACING, iblockstate1.getValue(FACING)).withProperty(OPEN, iblockstate1.getValue(OPEN));
 			}
 		}
-		TileGreenhouse tile = TileUtil.getTile(worldIn, pos, TileGreenhouse.class);
-		boolean isCamouflaged = false;
-		if(tile != null){
-			ItemStack camouflage = CamouflageUtil.getCamouflageBlock(worldIn, pos);
-			isCamouflaged = camouflage != null;
-		}
-		state = state.withProperty(CAMOUFLAGED, isCamouflaged);
+		state = state.withProperty(CAMOUFLAGED, CamouflageUtil.getCamouflageBlock(worldIn, pos) != null);
 
 		return state;
 	}

@@ -14,32 +14,32 @@ import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-import forestry.api.core.climate.IClimatePosition;
-import forestry.api.core.climate.IClimateRegion;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IMultiblockController;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import forestry.api.climate.EnumClimatiserModes;
+import forestry.api.climate.EnumClimatiserTypes;
+import forestry.api.climate.IClimatiserDefinition;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.climate.ClimatiserDefinition;
 import forestry.core.config.Constants;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
 public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 	
 	private final IAnimationStateMachine asm;
-	private final TimeValues.VariableValue cycleLength = new TimeValues.VariableValue(4);
+	private final TimeValues.VariableValue cycleLength = new TimeValues.VariableValue(20);
 	private final TimeValues.VariableValue clickTime = new TimeValues.VariableValue(Float.NEGATIVE_INFINITY);
 	
 	protected static final int WATER_PER_OPERATION = 25;
-	private static final SprinklerDefinition definition = new SprinklerDefinition();
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.005F, EnumClimatiserModes.POSITIVE, 9, EnumClimatiserTypes.HUMIDITY);
 
 	public TileGreenhouseSprinkler() {
-		super(definition);
+		super(DEFINITION, 20 + WATER_PER_OPERATION / 10);
 		asm = Proxies.render.loadAnimationState(new ResourceLocation(Constants.MOD_ID, "asms/block/sprinkler.json"), ImmutableMap.of(
 				"cycle_length", cycleLength,
 				"click_time", clickTime
@@ -52,47 +52,12 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 	}
 	
 	@Override
-	public void changeClimate(int tick, IClimateRegion region) {
-		IMultiblockController controller = getMultiblockLogic().getController();
-		if(getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && minPos != null && maxPos != null && region != null){
-			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
-			boolean canWork = true;
-			for (IGreenhouseComponent.Listener listenerComponent : greenhouseInternal.getListenerComponents()) {
-				if(canWork){
-					canWork = listenerComponent.getGreenhouseListener().canWork(greenhouseInternal, canWork);
-				}
-			}
-			if (canWork && workingTime == 0 && consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, (StandardTank) greenhouseInternal.getTankManager().getTank(0))) {
-				
-				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
-					IClimatePosition position = region.getPositions().get(pos);
-					if(position != null){
-						if(position.getHumidity() >= 2.0F){
-							if(position.getHumidity() > 2.0F){
-								position.setHumidity(2.0F);
-							}
-							continue;
-						}
-						
-						double distance = pos.distanceSq(pos);
-						int maxDistance = definition.getClimitiseRange();
-						if(distance <= maxDistance){
-							position.setHumidity((float) (position.getHumidity() + ((distance == 0) ? definition.getChange() : (definition.getChange() / distance))));
-						}
-					}
-				}
-				
-				workingTime += WATER_PER_OPERATION / 10;
-			}
-	
-			if (workingTime > 0) {
-				workingTime--;
-			}
-	
-			setActive(workingTime > 0);
-		}else if(isActive()){
-			setActive(false);
+	public boolean canWork() {
+		IMultiblockLogic logic = getMultiblockLogic();
+		if(logic == null || !logic.isConnected() || getMultiblockLogic().getController().getTankManager() == null || getMultiblockLogic().getController().getTankManager().getTank(0) == null){
+			return false;
 		}
+		return consumeWaterToDoWork(WORK_CYCLES, WATER_PER_OPERATION, getMultiblockLogic().getController().getTankManager().getTank(0));
 	}
 	
 	@Override
@@ -110,14 +75,14 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
 		}
 	}
 	
-	public boolean consumeWaterToDoWork(int ticksPerWorkCycle, int fluidPerWorkCycle, StandardTank tank) {
+	public boolean consumeWaterToDoWork(int ticksPerWorkCycle, int fluidPerWorkCycle, IFluidTank tank) {
 		int fluidPerCycle = (int) Math.ceil(fluidPerWorkCycle / (float) ticksPerWorkCycle);
 		if (tank.getFluid() == null || tank.getFluid().amount < fluidPerCycle) {
 			return false;
 		}
-
-		tank.drain(fluidPerCycle, true);
-		return true;
+		FluidStack drained = tank.drain(fluidPerCycle, true);
+		
+		return drained != null && drained.amount > 0;
 	}
 	
     @Override
@@ -137,28 +102,5 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {
         }
         return super.getCapability(capability, side);
     }
-
-	private static class SprinklerDefinition implements IClimitiserDefinition {
-		
-		@Override
-		public ClimitiserType getType() {
-			return ClimitiserType.HUMIDITY;
-		}
-
-		@Override
-		public float getChange() {
-			return 0.005F;
-		}
-
-		@Override
-		public int getClimitiseRange() {
-			return 9;
-		}
-
-		@Override
-		public boolean isPositiv() {
-			return true;
-		}
-	}
 
 }

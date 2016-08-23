@@ -20,9 +20,7 @@ import com.google.gson.stream.JsonReader;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.core.render.FontColour;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

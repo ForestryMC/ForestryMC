@@ -7,11 +7,11 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nonnull;
 
-import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.climate.IClimateProvider;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.genetics.IHousing;
 

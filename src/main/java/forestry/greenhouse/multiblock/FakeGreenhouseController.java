@@ -18,10 +18,12 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import forestry.api.core.climate.IClimateRegion;
+import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
@@ -113,6 +115,21 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public World getWorld() {
+		return null;
+	}
+
+	@Override
+	public boolean canWork() {
+		return false;
+	}
+
+	@Override
+	public IClimateControl getClimateControl() {
+		return DefaultClimateControl.instance;
+	}
+
+	@Override
+	public ButterflyHatch getButterflyHatch() {
 		return null;
 	}
 }

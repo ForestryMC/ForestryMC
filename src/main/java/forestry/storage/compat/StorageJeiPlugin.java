@@ -3,9 +3,6 @@ package forestry.storage.compat;
 import javax.annotation.Nonnull;
 
 import forestry.core.utils.JeiUtil;
-import forestry.mail.PluginMail;
-import forestry.mail.blocks.BlockRegistryMail;
-import forestry.mail.items.ItemRegistryMail;
 import forestry.storage.PluginStorage;
 import forestry.storage.items.ItemRegistryStorage;
 import mezz.jei.api.BlankModPlugin;

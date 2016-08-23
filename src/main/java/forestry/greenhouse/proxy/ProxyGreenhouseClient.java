@@ -40,6 +40,8 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 				if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)){
 					continue;
 				}
+			}else if(greenhouseType == BlockGreenhouseType.WINDOW || greenhouseType == BlockGreenhouseType.WINDOW_UP){
+				continue;
 			}
 
 			Block greenhouseBlock = PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType);

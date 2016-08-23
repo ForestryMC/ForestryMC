@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import forestry.api.core.ICamouflageAccess;
-import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.core.utils.Log;
 
@@ -48,6 +47,13 @@ public class CamouflageAccess implements ICamouflageAccess {
 	
 	@Override
 	public List<ICamouflageItemHandler> getCamouflageItemHandler(String type) {
+		if(type == null){
+			List<ICamouflageItemHandler> handlers = new ArrayList<>();
+			for(List<ICamouflageItemHandler> handler : camouflageItemHandlers.values()){
+				handlers.addAll(handler);
+			}
+			return handlers;
+		}
 		if(!camouflageItemHandlers.containsKey(type)){
 			return null;
 		}
@@ -76,21 +82,31 @@ public class CamouflageAccess implements ICamouflageAccess {
 	
 	@Override
 	public boolean isItemBlackListed(String type, ItemStack camouflageBlock) {
-		if (camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null || !camouflageItemBlacklist.containsKey(type)) {
+		if (camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null || type != null && !camouflageItemBlacklist.containsKey(type)) {
 			return false;
 		}
-		for (ItemStack camouflageBlacklisted : camouflageItemBlacklist.get(type)) {
+		List<ItemStack> camouflageItemBlacklisted;
+		if(type == null){
+			camouflageItemBlacklisted = new ArrayList<>();
+			for(List<ItemStack> stacks : camouflageItemBlacklist.values()){
+				camouflageItemBlacklisted.addAll(stacks);
+			}
+		}else{
+			camouflageItemBlacklisted = camouflageItemBlacklist.get(type);
+		}
+		for (ItemStack camouflageBlacklisted : camouflageItemBlacklisted) {
 			if (camouflageBlacklisted.getItem() == camouflageBlock.getItem() && camouflageBlacklisted.getItemDamage() == camouflageBlock.getItemDamage() && ItemStack.areItemStackTagsEqual(camouflageBlock, camouflageBlacklisted)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public static ICamouflageItemHandler getHandlerFromItem(@Nonnull ItemStack camouflageItem, ICamouflageHandler camouflageHandler){
+
+	@Override
+	public ICamouflageItemHandler getHandlerFromItem(ItemStack stack) {
 		for(List<ICamouflageItemHandler> handlers : camouflageItemHandlers.values()){
 			for(ICamouflageItemHandler handler : handlers){
-				if(handler.canHandle(camouflageItem, camouflageHandler)){
+				if(handler.canHandle(stack)){
 					return handler;
 				}
 			}

@@ -55,5 +55,9 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	 */
 	void clearRegion();
 	
+	boolean canWork();
+	
 	Set<IGreenhouseComponent.Listener> getListenerComponents();
+	
+	IGreenhouseComponent.ButterflyHatch getButterflyHatch();
 }

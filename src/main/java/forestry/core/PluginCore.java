@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import forestry.core.owner.GameProfileDataSerializer;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -60,6 +61,8 @@ import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.functions.SetSpeciesNBT;
+import forestry.core.models.ModelCamouflageSprayCan;
+import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -449,6 +452,9 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
+		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflageSprayCan", "inventory");
+		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
+		Proxies.render.registerModel(blockModelIndex);
 		ModelManager.getInstance().registerCustomModels(event);
 	}
 	

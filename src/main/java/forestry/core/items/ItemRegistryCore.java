@@ -89,6 +89,9 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry refractoryWax;
 	public final ItemFruit fruits;
 	
+	/* Camouflage */
+	public final ItemCamouflageSprayCan camouflageSprayCan;
+	
 	public ItemRegistryCore() {
 		fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizerCompound");
@@ -186,6 +189,9 @@ public class ItemRegistryCore extends ItemRegistry {
 			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
 			OreDictionary.registerOre(def.getOreDict(), fruit);
 		}
+		
+		// CAMOUFLAGE
+		camouflageSprayCan = registerItem(new ItemCamouflageSprayCan(), "camouflageSprayCan");
 	}
 
 }

@@ -45,6 +45,8 @@ import forestry.core.gui.IHintSource;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.packets.CamouflageSelectionType;
+import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -52,8 +54,6 @@ import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
-
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
@@ -144,11 +144,8 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			this.camouflageBlock = camouflageBlock;
 			
-			if (worldObj != null) {
-				if (worldObj.isRemote) {
-					Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
-					worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
-				}
+			if (worldObj != null && worldObj.isRemote) {
+				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
 		}

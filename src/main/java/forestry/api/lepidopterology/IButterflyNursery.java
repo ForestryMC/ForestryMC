@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import forestry.api.core.IClimateProvider;
+import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IHousing;
 import forestry.api.genetics.IIndividual;
 

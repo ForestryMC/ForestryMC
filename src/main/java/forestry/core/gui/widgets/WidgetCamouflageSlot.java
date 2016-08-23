@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.greenhouse.gui.widgets;
+package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -25,8 +25,6 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
@@ -65,8 +63,8 @@ public class WidgetCamouflageSlot extends Widget {
 			if (stack != null) {
 				if (!CamouflageManager.camouflageAccess.isItemBlackListed(type, stack)) {
 					for(ICamouflageItemHandler handler : CamouflageManager.camouflageAccess.getCamouflageItemHandler(type)){
-						if(handler != null && handler.canHandle(stack, camouflageHandler)){
-							camouflageHandler.setCamouflageBlock(type, stack.copy());
+						if(handler != null && handler.canHandle(stack)){
+							camouflageHandler.setCamouflageBlock(handler.getType(), stack.copy());
 						}
 					}
 				}
