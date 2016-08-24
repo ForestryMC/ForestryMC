@@ -135,7 +135,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
     }
     
     private float parseField(GuiTextField field){
-    	String text = temperatureField.getText();
+    	String text = field.getText();
     	if(text.isEmpty()){
     		return 2.0F;
     	}

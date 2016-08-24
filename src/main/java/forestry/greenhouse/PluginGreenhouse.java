@@ -215,16 +215,6 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 					'B', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 					'S', PluginCore.items.craftingMaterial.getSilkWisp());
 		}
-		
-
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(4),
-					" A ", "###", "RPR",
-					'#', OreDictUtil.PLANK_WOOD,
-					'A', OreDictUtil.DUST_ASH,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'P', OreDictUtil.PULP_WOOD);
-		}
 	}
 	
 	@Override
