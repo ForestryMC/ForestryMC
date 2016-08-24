@@ -71,7 +71,9 @@ import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.CamouflageUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.greenhouse.tiles.TileGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -447,12 +449,23 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		Block block = iblockstate.getBlock();
 
 		if (getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			if (blockAccess.getBlockState(pos.offset(side)) != iblockstate) {
+			BlockPos posSide = pos.offset(side);
+			if (blockAccess.getBlockState(posSide) != iblockstate) {
 				return true;
 			}
-
-			if (block == this) {
-				return false;
+			TileEntity tile = blockAccess.getTileEntity(pos);
+			TileEntity tileSide = blockAccess.getTileEntity(posSide);
+			if(tile instanceof TileGreenhousePlain && tileSide instanceof TileGreenhousePlain){
+				if(((TileGreenhousePlain)tile).getCamouflageType().equals(((TileGreenhousePlain)tileSide).getCamouflageType())){
+					ItemStack camouflage = CamouflageUtil.getCamouflageBlock(blockAccess, pos);
+					ItemStack camouflageSide = CamouflageUtil.getCamouflageBlock(blockAccess, posSide);
+					if(camouflage != null && camouflageSide != null){
+						if(ItemStackUtil.isIdenticalItem(camouflage, camouflageSide)){
+							return false;
+						}
+						return true;
+					}
+				}
 			}
 			return block != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 		} else if (getGreenhouseType() == BlockGreenhouseType.DOOR) {
