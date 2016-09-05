@@ -5,22 +5,22 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import forestry.core.tiles.ILocatable;
 
-public interface ICamouflageHandler{
+import net.minecraft.item.ItemStack;
+
+public interface ICamouflageHandler extends ILocatable {
 
 	/**
 	 * @return The item of the block that is the camouflage of this handler for the type.
 	 */
     ItemStack getCamouflageBlock(String type);
-    
+
     /**
      * @return The default camouflage block item for the type.
      */
     ItemStack getDefaultCamouflageBlock(String type);
-    
+
     /**
      * @return True if the handler can handle this type of camouflage.
      */
@@ -30,11 +30,4 @@ public interface ICamouflageHandler{
      * Set the camouflage block item for the type.
      */
     void setCamouflageBlock(String type, ItemStack camouflageBlock);
-    
-    /**
-     * @return The coordinates of the handler as a BlockPos.
-     */
-	BlockPos getCoordinates();
-	
-	World getWorld();
 }
