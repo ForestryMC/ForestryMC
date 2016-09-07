@@ -12,6 +12,8 @@ package forestry.core.tiles;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.core.ILocatable;
+
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.Fluid;

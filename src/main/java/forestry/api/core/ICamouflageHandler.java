@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import forestry.core.tiles.ILocatable;
-
 import net.minecraft.item.ItemStack;
 
 public interface ICamouflageHandler extends ILocatable {

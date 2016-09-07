@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core.climate;
 
-import forestry.core.tiles.ILocatable;
+import forestry.api.core.ILocatable;
 
 /**
  * A climate source is used to change the climate in a region.
