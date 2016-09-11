@@ -556,7 +556,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeydew.getItemStack()}, honeyDropFluid);
 
 			ItemStack phosphor = PluginCore.items.phosphor.getItemStack(2);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND)}, new FluidStack(FluidRegistry.WATER, 2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND)}, new FluidStack(FluidRegistry.LAVA, 2000));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND, 1, 1)}, new FluidStack(FluidRegistry.LAVA, 2000));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.DIRT)}, new FluidStack(FluidRegistry.LAVA, 1600));
 
