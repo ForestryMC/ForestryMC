@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import forestry.api.core.IClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
+import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;

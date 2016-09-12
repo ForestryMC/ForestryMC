@@ -7,7 +7,7 @@ package forestry.api.multiblock;
 
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.core.climate.IClimateControlled;
+import forestry.api.climate.IClimateControlled;
 
 /**
  * Needs to be implemented by TileEntities that want to be part of an alveary.

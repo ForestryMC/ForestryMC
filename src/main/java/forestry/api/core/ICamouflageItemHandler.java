@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ICamouflageItemHandler {
 
-	boolean canHandle(ItemStack stack, ICamouflageHandler camouflageHandler);
+	boolean canHandle(ItemStack stack);
 	
 	String getType();
 	

@@ -10,52 +10,47 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import forestry.api.core.climate.IClimatePosition;
-import forestry.api.core.climate.IClimateRegion;
+import forestry.api.climate.IClimateSource;
+import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.api.multiblock.IMultiblockLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.climate.ClimateSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
+import forestry.greenhouse.GreenhouseClimateSource;
 
 public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivatable, IGreenhouseComponent.Climatiser {
 	
 	protected static final int WORK_CYCLES = 1;
 	protected static final int ENERGY_PER_OPERATION = 150;
 	
-	protected enum ClimitiserType {
-		TEMPERATURE, HUMIDITY
-	}
-	
-	protected interface IClimitiserDefinition {
-		float getChange();
-		
-		boolean isPositiv();
-		
-		int getClimitiseRange();
-		
-		ClimitiserType getType();
-	}
-	
-	private final IClimitiserDefinition definition;
+	private final IClimatiserDefinition definition;
+	private final ClimateSource source;
 	
 	protected EnumFacing inwards;
 	protected EnumFacing leftwards;
 	protected BlockPos maxPos;
 	protected BlockPos minPos;
 	
-	protected int workingTime = 0;
-	
 	private boolean active;
 	
-	protected TileGreenhouseClimatiser(IClimitiserDefinition definition) {
+	protected TileGreenhouseClimatiser(IClimatiserDefinition definition, int ticksForChange) {
+		this(definition, new GreenhouseClimateSource(ticksForChange));
+	}
+	
+	protected TileGreenhouseClimatiser(IClimatiserDefinition definition, ClimateSource source) {
 		this.definition = definition;
+		this.source = source;
+		this.source.setProvider(this);
+	}
+	
+	protected TileGreenhouseClimatiser(IClimatiserDefinition definition) {
+		this(definition, 20 + ENERGY_PER_OPERATION / 25);
 	}
 	
 	@Override
@@ -70,114 +65,24 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		recalculateDirections(minCoord, maxCoord);
+		int range = Math.round((float)definition.getRange() / 2);
 		
 		if(leftwards != null){
-			maxPos = getPos().offset(inwards, definition.getClimitiseRange() / 2).offset(leftwards, definition.getClimitiseRange() / 2).offset(EnumFacing.UP, definition.getClimitiseRange() / 2);
-			minPos = getPos().offset(inwards).offset(leftwards.getOpposite(), definition.getClimitiseRange() / 2).offset(EnumFacing.DOWN, definition.getClimitiseRange() / 2);
+			maxPos = getCoordinates().offset(inwards, range).offset(leftwards, range).offset(EnumFacing.UP, range);
+			minPos = getCoordinates().offset(inwards).offset(leftwards.getOpposite(), range).offset(EnumFacing.DOWN, range);
 			
 		}else{
-			maxPos = getPos().offset(inwards, definition.getClimitiseRange() / 2).offset(EnumFacing.EAST, definition.getClimitiseRange() / 2).offset(EnumFacing.NORTH, definition.getClimitiseRange() / 2);
-			minPos = getPos().offset(inwards).offset(EnumFacing.WEST, definition.getClimitiseRange() / 2).offset(EnumFacing.SOUTH, definition.getClimitiseRange() / 2);
+			maxPos = getCoordinates().offset(inwards, range).offset(EnumFacing.EAST, range).offset(EnumFacing.NORTH, range);
+			minPos = getCoordinates().offset(inwards).offset(EnumFacing.WEST, range).offset(EnumFacing.SOUTH, range);
 		}
 	}
 	
-	@Override
-	public int getTicksForChange(IClimateRegion region) {
-		return 20;
+	public BlockPos getMinPos()	{
+		return minPos;
 	}
 	
-	@Override
-	public void changeClimate(int tick, IClimateRegion region) {
-		IMultiblockController controller = getMultiblockLogic().getController();
-		if(getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && minPos != null && maxPos != null && region != null){
-			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
-			boolean canWork = true;
-			for (IGreenhouseComponent.Listener listenerComponent : greenhouseInternal.getListenerComponents()) {
-				if(canWork){
-					canWork = listenerComponent.getGreenhouseListener().canWork(greenhouseInternal, canWork);
-				}
-			}
-			if (canWork && workingTime == 0 && greenhouseInternal.getEnergyManager().consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
-				int dimensionID = worldObj.provider.getDimension();
-				
-				for(BlockPos pos : BlockPos.getAllInBox(maxPos, minPos)){
-					IClimatePosition position = region.getPositions().get(pos);
-					if(position != null){
-						if (definition.getType() == ClimitiserType.TEMPERATURE) {
-							if(definition.isPositiv()){
-								if(position.getTemperature() >= 2.0F){
-									if(position.getTemperature() > 2.0F){
-										position.setTemperature(2.0F);
-									}
-									continue;
-								}
-							}else{
-								if(position.getTemperature() <= 0.0F){
-									if(position.getTemperature() < 0.0F){
-										position.setTemperature(0.0F);
-									}
-									continue;
-								}
-							}
-						}else{
-							if(definition.isPositiv()){
-								if(position.getHumidity() >= 2.0F){
-									if(position.getHumidity() > 2.0F){
-										position.setHumidity(2.0F);
-									}
-									continue;
-								}
-							}else{ 
-								if(position.getHumidity() <= 0.0F){
-									if(position.getHumidity() < 0.0F){
-										position.setHumidity(0.0F);
-									}
-									continue;
-								}
-							}
-						}
-						
-						double distance = pos.distanceSq(this.pos);
-						int maxDistance = definition.getClimitiseRange();
-						if(distance <= maxDistance){
-							if (definition.getType() == ClimitiserType.TEMPERATURE) {
-								position.addTemperature((definition.isPositiv() ? +1 : -1) * ((distance == 0) ? definition.getChange() : (float) (definition.getChange() / distance)));
-							}else{
-								position.addHumidity((definition.isPositiv() ? +1 : -1) * ((distance == 0) ? definition.getChange() : (float) (definition.getChange() / distance)));
-							}
-						}
-					}
-				}
-				
-				// TODO: Add config entry for a time modifier and a energy modifier.
-				// one tick of work for every 10 RF
-				workingTime += ENERGY_PER_OPERATION / 25;
-			}
-	
-			if (workingTime > 0) {
-				workingTime--;
-			}
-	
-			setActive(workingTime > 0);
-		}else if(isActive()){
-			setActive(false);
-		}
-	}
-	
-	/* LOADING & SAVING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		workingTime = nbttagcompound.getInteger("Heating");
-		setActive(workingTime > 0);
-	}
-
-	@Nonnull
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		nbttagcompound.setInteger("Heating", workingTime);
-		return nbttagcompound;
+	public BlockPos getMaxPos()	{
+		return maxPos;
 	}
 	
 	/* Network */
@@ -204,29 +109,29 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 		leftwards = null;
 
 		int facesMatching = 0;
-		if (maxCoord.getX() == getPos().getX() || minCoord.getX() == getPos().getX()) {
+		if (maxCoord.getX() == getCoordinates().getX() || minCoord.getX() == getCoordinates().getX()) {
 			facesMatching++;
 		}
-		if (maxCoord.getY() == getPos().getY() || minCoord.getY() == getPos().getY()) {
+		if (maxCoord.getY() == getCoordinates().getY() || minCoord.getY() == getCoordinates().getY()) {
 			facesMatching++;
 		}
-		if (maxCoord.getZ() == getPos().getZ() || minCoord.getZ() == getPos().getZ()) {
+		if (maxCoord.getZ() == getCoordinates().getZ() || minCoord.getZ() == getCoordinates().getZ()) {
 			facesMatching++;
 		}
 		if (facesMatching == 1) {
-			if (maxCoord.getX() == getPos().getX()) {
+			if (maxCoord.getX() == getCoordinates().getX()) {
 				inwards = EnumFacing.WEST;
 				leftwards = EnumFacing.SOUTH;
-			} else if (minCoord.getX() == getPos().getX()) {
+			} else if (minCoord.getX() == getCoordinates().getX()) {
 				inwards = EnumFacing.EAST;
 				leftwards = EnumFacing.NORTH;
-			} else if (maxCoord.getZ() == getPos().getZ()) {
+			} else if (maxCoord.getZ() == getCoordinates().getZ()) {
 				inwards = EnumFacing.NORTH;
 				leftwards = EnumFacing.WEST;
-			} else if (minCoord.getZ() == getPos().getZ()) {
+			} else if (minCoord.getZ() == getCoordinates().getZ()) {
 				inwards = EnumFacing.SOUTH;
 				leftwards = EnumFacing.EAST;
-			} else if (maxCoord.getY() == getPos().getY()) {
+			} else if (maxCoord.getY() == getCoordinates().getY()) {
 				inwards = EnumFacing.DOWN;
 			} else {
 				inwards = EnumFacing.UP;
@@ -236,8 +141,29 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 		}
 	}
 	
-	public IClimitiserDefinition getDefinition() {
+	@Override
+	public IClimatiserDefinition getDefinition() {
 		return definition;
+	}
+	
+	@Override
+	public IClimateSource getClimateSource() {
+		return source;
+	}
+	
+	public boolean canWork(){
+		IMultiblockLogic logic = getMultiblockLogic();
+		if(logic == null || !logic.isConnected() || getMultiblockLogic().getController().getEnergyManager() == null){
+			return false;
+		}
+		return getMultiblockLogic().getController().getEnergyManager().consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION);
+	}
+	
+	public Iterable<BlockPos> getPositionsInRange(){
+		if(maxPos == null || minPos == null){
+			return null;
+		}
+		return BlockPos.getAllInBox(maxPos, minPos);
 	}
 
 	@Override
@@ -250,7 +176,7 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+				worldObj.markBlockRangeForRenderUpdate(getCoordinates(), getCoordinates());
 			} else {
 				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 			}

@@ -10,36 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import forestry.api.climate.EnumClimatiserModes;
+import forestry.api.climate.EnumClimatiserTypes;
+import forestry.api.climate.IClimatiserDefinition;
+import forestry.core.climate.ClimatiserDefinition;
 
 public class TileGreenhouseFan extends TileGreenhouseClimatiser {
 
-	private static final FanDefinition definition = new FanDefinition();
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.NEGATIVE, 5D, EnumClimatiserTypes.TEMPERATURE);
 
 	public TileGreenhouseFan() {
-		super(definition);
-	}
-
-	private static class FanDefinition implements IClimitiserDefinition {
-
-		@Override
-		public float getChange() {
-			return 0.015F;
-		}
-
-		@Override
-		public int getClimitiseRange() {
-			return 5;
-		}
-		
-		@Override
-		public ClimitiserType getType() {
-			return ClimitiserType.TEMPERATURE;
-		}
-
-		@Override
-		public boolean isPositiv() {
-			return false;
-		}
+		super(DEFINITION);
 	}
 	
 }

@@ -25,11 +25,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
-import forestry.core.CamouflageAccess;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
@@ -57,7 +57,7 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 		if (camouflageStack != null) {
 			ICamouflageHandler camouflageHandler = CamouflageUtil.getCamouflageHandler(world, pos);
 			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
-			ICamouflageItemHandler itemHandler = CamouflageAccess.getHandlerFromItem(camouflageStack, camouflageHandler);
+			ICamouflageItemHandler itemHandler = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflageStack);
 			if(itemHandler != null){
 				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
 				

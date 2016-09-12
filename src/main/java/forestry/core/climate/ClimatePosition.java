@@ -12,8 +12,8 @@ package forestry.core.climate;
 
 import javax.annotation.Nonnull;
 
-import forestry.api.core.climate.IClimateRegion;
-import forestry.api.core.climate.IClimatePosition;
+import forestry.api.climate.IClimatePosition;
+import forestry.api.climate.IClimateRegion;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -26,6 +26,12 @@ public class ClimatePosition implements IClimatePosition {
 	protected final BlockPos pos;
 	protected float temperature;
 	protected float humidity;
+	
+	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos, NBTTagCompound nbtTag) {
+		this.climateRegion = climateRegion;
+		this.pos = pos;
+		readFromNBT(nbtTag);
+	}
 	
 	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos) {
 		Biome biome = climateRegion.getWorld().getBiome(pos);

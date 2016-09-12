@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import forestry.core.network.packets.PacketCamouflageSelectClient;
+import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
@@ -26,6 +28,7 @@ import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
+import forestry.core.network.packets.PacketUpdateClimateControl;
 
 public class PacketRegistryCore extends PacketRegistry {
 	@Override
@@ -42,10 +45,13 @@ public class PacketRegistryCore extends PacketRegistry {
 		registerClientPacket(new PacketFXSignal());
 		registerClientPacket(new PacketTankLevelUpdate());
 		registerClientPacket(new PacketGenomeTrackerSync());
+		registerClientPacket(new PacketCamouflageSelectClient());
 
 		registerServerPacket(new PacketGuiSelectRequest());
 		registerServerPacket(new PacketPipetteClick());
 		registerServerPacket(new PacketChipsetClick());
 		registerServerPacket(new PacketSolderingIronClick());
+		registerServerPacket(new PacketCamouflageSelectServer());
+		registerServerPacket(new PacketUpdateClimateControl());
 	}
 }

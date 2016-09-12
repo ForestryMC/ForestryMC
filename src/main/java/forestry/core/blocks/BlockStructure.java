@@ -45,7 +45,7 @@ public abstract class BlockStructure extends BlockForestry {
 		return false;
 	}
 
-	private long previousMessageTick = 0;
+	protected long previousMessageTick = 0;
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {

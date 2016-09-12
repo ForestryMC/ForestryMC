@@ -28,12 +28,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IAllele;
+import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.api.multiblock.IGreenhouseController;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -42,7 +46,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NBTUtilForestry;
-import forestry.greenhouse.multiblock.GreenhouseController;
+import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 
@@ -190,7 +194,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 				age++;
 				maturationTime = 0;
 			} else if (caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())) {
-				IGreenhouseComponent.ButterflyHatch hatch = GreenhouseController.getGreenhouseButterflyHatch(worldObj, pos);
+				IGreenhouseComponent.ButterflyHatch hatch = getButterflyHatch(worldObj, pos);
 				ItemStack[] cocoonDrops;
 				if (hatch != null) {
 					cocoonDrops = hatch.addCocoonLoot(this);
@@ -204,6 +208,22 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 				attemptButterflySpawn(worldObj, caterpillar, getPos());
 			}
 		}
+	}
+	
+	public ButterflyHatch getButterflyHatch(World world, BlockPos pos) {
+		if (GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
+			return null;
+		}
+		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
+		if(controller instanceof IGreenhouseControllerInternal){
+			return ((IGreenhouseControllerInternal) controller).getButterflyHatch();
+		}
+		for (IMultiblockComponent greenhouse : controller.getComponents()) {
+			if (greenhouse instanceof ButterflyHatch) {
+				return (ButterflyHatch) greenhouse;
+			}
+		}
+		return null;
 	}
 	
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {

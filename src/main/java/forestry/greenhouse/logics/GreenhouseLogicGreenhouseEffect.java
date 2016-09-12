@@ -21,7 +21,6 @@ import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.CamouflageAccess;
 import forestry.core.utils.CamouflageUtil;
 
 public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
@@ -76,7 +75,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 					if (block.getCamouflageType() == CamouflageManager.GLASS) {
 						if (world.canBlockSeeSky(component.getCoordinates())) {
 							ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, component.getCoordinates());
-							ICamouflageItemHandler handler = CamouflageAccess.getHandlerFromItem(camouflageStack, controller);
+							ICamouflageItemHandler handler = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflageStack);
 							float camouflageLightTransmittance = handler.getLightTransmittance(camouflageStack, controller);
 							
 							if (camouflageLightTransmittance < 1 && camouflageLightTransmittance > 0) {

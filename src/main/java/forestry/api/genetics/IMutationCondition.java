@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.core.IClimateProvider;
+import forestry.api.climate.IClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

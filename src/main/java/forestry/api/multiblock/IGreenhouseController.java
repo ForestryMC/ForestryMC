@@ -7,15 +7,18 @@ package forestry.api.multiblock;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateControlProvider;
+import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseLogic;
 
-public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler {
+public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateControlProvider {
 	
 	/**
 	 * Handle change events.
@@ -29,5 +32,9 @@ public interface IGreenhouseController extends IMultiblockController, IGreenhous
 	
 	@Nullable
 	IClimateRegion getRegion();
+	
+	@Override
+	@Nonnull
+	IClimateControl getClimateControl();
 
 }

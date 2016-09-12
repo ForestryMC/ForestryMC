@@ -58,5 +58,9 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 		}
 		return result;
 	}
+	
+	public I getItemInventory() {
+		return inventory;
+	}
 
 }

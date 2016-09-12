@@ -10,35 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import forestry.api.climate.EnumClimatiserModes;
+import forestry.api.climate.EnumClimatiserTypes;
+import forestry.api.climate.IClimatiserDefinition;
+import forestry.core.climate.ClimatiserDefinition;
+
 public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
 	
-	private static final DryerDefinition definition = new DryerDefinition();
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.NEGATIVE, 5D, EnumClimatiserTypes.HUMIDITY);
 
 	public TileGreenhouseDryer() {
-		super(definition);
-	}
-
-	private static class DryerDefinition implements IClimitiserDefinition {
-
-		@Override
-		public float getChange() {
-			return 0.015F;
-		}
-		
-		@Override
-		public boolean isPositiv() {
-			return false;
-		}
-
-		@Override
-		public int getClimitiseRange() {
-			return 5;
-		}
-		
-		@Override
-		public ClimitiserType getType() {
-			return ClimitiserType.HUMIDITY;
-		}
+		super(DEFINITION);
 	}
 
 }

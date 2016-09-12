@@ -1,0 +1,33 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+        }
+     },
+    "variants": {
+		"state": {
+		    "on": {
+				"model": "forestry:greenhouse.window_up_open"
+            },
+            "off": {
+				 "model": "forestry:greenhouse.window_up_closed"
+            }
+		},
+		"facing":{
+			"east": {
+				"y": -90
+            },
+			"south": {
+            },
+			"west": {
+				"y": 90
+            },
+			"north": {
+				"y": 180
+            },
+			"up": {
+				"x": 90
+            }
+		}
+    }
+}

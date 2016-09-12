@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import forestry.core.owner.GameProfileDataSerializer;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -54,12 +55,15 @@ import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.functions.SetSpeciesNBT;
+import forestry.core.models.ModelCamouflageSprayCan;
+import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -275,14 +279,28 @@ public class PluginCore extends BlankForestryPlugin {
 		// / WRENCH
 		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
 		
+		// / CAMOUFLAGE SPRAY CAN
+		RecipeUtil.addRecipe(items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
+		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CARPENTER
+			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), null, PluginCore.items.portableAlyzer.getItemStack(),
 					"X#X", "X#X", "RDR",
 					'#', OreDictUtil.PANE_GLASS,
 					'X', OreDictUtil.INGOT_TIN,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
+			// Camouflaged Paneling
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(4),
+					"YAR", "B#B", "RPY",
+					'#', OreDictUtil.PLANK_WOOD,
+					'A', OreDictUtil.DUST_ASH,
+					'R', OreDictUtil.DUST_REDSTONE,
+					'P', OreDictUtil.PULP_WOOD,
+					'R', OreDictUtil.DYE_RED,
+					'B', OreDictUtil.DYE_BLUE,
+					'Y', OreDictUtil.DYE_YELLOW);
 		}else{
 			// Portable ANALYZER
 			RecipeUtil.addRecipe(PluginCore.items.portableAlyzer.getItemStack(),
@@ -293,6 +311,16 @@ public class PluginCore extends BlankForestryPlugin {
 					'X', OreDictUtil.INGOT_TIN,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
+			// Camouflaged Paneling
+			RecipeUtil.addRecipe(PluginCore.items.craftingMaterial.getCamouflagedPaneling(4), 
+					"WWW", 
+					"YBR", 
+					"WWW", 
+					'W', OreDictUtil.PLANK_WOOD, 
+					'D', OreDictUtil.DUST_REDSTONE, 
+					'Y', OreDictUtil.DYE_YELLOW,
+					'B', OreDictUtil.DYE_BLUE,
+					'R', OreDictUtil.DYE_RED);
 		}
 		
 		// ANALYZER
@@ -449,6 +477,9 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
+		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflageSprayCan", "inventory");
+		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
+		Proxies.render.registerModel(blockModelIndex);
 		ModelManager.getInstance().registerCustomModels(event);
 	}
 	

@@ -31,7 +31,6 @@ public class TileGreenhouseButterflyHatch extends TileGreenhouse implements IGre
 	public TileGreenhouseButterflyHatch() {
 		this.inventory = new InventoryGreenhouseButterflyHatch(this);
 	}
-	
 
 	@Override
 	public IInventoryAdapter getInternalInventory() {

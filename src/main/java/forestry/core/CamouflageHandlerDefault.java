@@ -29,14 +29,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 
 	@Override
-	public boolean canHandle(ItemStack stack, ICamouflageHandler camouflageHandler) {
-		if(camouflageHandler == null || stack == null || stack.getItem() == null || stack.stackSize <= 0 || Block.getBlockFromItem(stack.getItem()) == null){
+	public boolean canHandle(ItemStack stack) {
+		if(stack == null || stack.getItem() == null || stack.stackSize <= 0 || Block.getBlockFromItem(stack.getItem()) == null){
 			return false;
 		}
 		Block block = Block.getBlockFromItem(stack.getItem());
 		IBlockState stateFromMeta = block.getStateFromMeta(stack.getItemDamage());
-
-		return stateFromMeta.isOpaqueCube() && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta, camouflageHandler.getWorldObj(), camouflageHandler.getCoordinates());
+		
+		return stateFromMeta.isOpaqueCube() && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta) && block.isFullCube(stateFromMeta) && block.isBlockNormalCube(stateFromMeta);
 	}
 
 	@Override

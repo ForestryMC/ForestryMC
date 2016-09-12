@@ -35,6 +35,9 @@ public enum BlockGreenhouseType {
 	CONTROL(true),
 	SPRINKLER(false, true),
 	DOOR,
+	CLIMATE_CONTROL(true),
+	WINDOW(true),
+	WINDOW_UP(true),
 	BUTTERFLY_HATCH(true);
 	
 	public static final BlockGreenhouseType[] VALUES = values();
@@ -61,7 +64,7 @@ public enum BlockGreenhouseType {
 	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites;
 	
 	private enum BlockGreenhouseSprites {
-		PLAIN, GLASS, GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), BUTTERFLY_HATCH("butterfly_hatch");
+		GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), CLIMATE_CONTROL("climate_control"), BUTTERFLY_HATCH("butterfly_hatch");
 		
 		public static final BlockGreenhouseSprites[] VALUES = values();
 		
@@ -69,10 +72,6 @@ public enum BlockGreenhouseType {
 		
 		BlockGreenhouseSprites(String spriteName) {
 			this.spriteName = spriteName;
-		}
-		
-		BlockGreenhouseSprites() {
-			this.spriteName = null;
 		}
 	}
 	
@@ -82,11 +81,9 @@ public enum BlockGreenhouseType {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 
 		for (BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES) {
-			if (sprite != BlockGreenhouseSprites.PLAIN && sprite != BlockGreenhouseSprites.GLASS) {
-				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "blocks/greenhouse/" + sprite.spriteName);
-				TextureAtlasSprite textureAtlasSprite = map.registerSprite(location);
-				sprites.put(sprite, textureAtlasSprite);
-			}
+			ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "blocks/greenhouse/" + sprite.spriteName);
+			TextureAtlasSprite textureAtlasSprite = map.registerSprite(location);
+			sprites.put(sprite, textureAtlasSprite);
 		}
 	}
 	
@@ -140,6 +137,11 @@ public enum BlockGreenhouseType {
 					return sprites.get(BlockGreenhouseSprites.HATCH_INPUT);
 				}
 				return null;
+			case CLIMATE_CONTROL:
+				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
+					return null;
+				}
+				return sprites.get(BlockGreenhouseSprites.CLIMATE_CONTROL);
 			case BUTTERFLY_HATCH:
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
 					return null;

@@ -25,6 +25,7 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.items.ItemAlyzer;
+import forestry.core.items.ItemCamouflageSprayCan;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
@@ -105,7 +106,8 @@ public class GuiIdRegistry {
 				ItemImprinter.class,
 				ItemInfuser.class,
 				ItemLetter.class,
-				ItemSolderingIron.class
+				ItemSolderingIron.class,
+				ItemCamouflageSprayCan.class
 		));
 
 		registerGuiHandlers(GuiType.Entity, Arrays.asList(

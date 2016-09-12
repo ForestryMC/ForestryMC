@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.IClimateProvider;
+import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
