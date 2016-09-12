@@ -16,17 +16,18 @@ import java.util.Map;
 
 import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ForestryAPI;
+
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClimateEventHandler {
 
 	Map<Integer, Integer> serverTicks;
-	
+
 	public ClimateEventHandler() {
 		serverTicks = new HashMap<>();
 	}
-	
+
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		Integer dim = Integer.valueOf(event.world.provider.getDimension());
@@ -44,5 +45,5 @@ public class ClimateEventHandler {
 			serverTicks.put(dim, ticks+1);
 		}
 	}
-	
+
 }

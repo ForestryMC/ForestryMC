@@ -1,7 +1,5 @@
 package forestry.core.utils;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 public class OreDictUtil {
 	public static final String ORE_COPPER = "oreCopper";
 	public static final String ORE_TIN = "oreTin";

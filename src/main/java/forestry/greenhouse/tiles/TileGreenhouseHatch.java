@@ -10,26 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.IOException;
 import java.util.List;
 
-import forestry.core.owner.IOwnerHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
@@ -39,7 +26,6 @@ import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.MultiblockTileEntityBase;
-import forestry.core.owner.IOwnedTile;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.network.DataInputStreamForestry;
@@ -47,6 +33,8 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -54,34 +42,48 @@ import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
+
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+
 public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
-	
+
 	@Nullable
 	private GameProfile owner;
-	
+
 	public TileGreenhouseHatch() {
 		super(new MultiblockLogicGreenhouse());
 		outwards = null;
 		camouflageBlock = null;
 	}
-	
+
 	public EnumFacing getOutwardsDir() {
 		return outwards;
 	}
-	
+
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
 		markDirty();
-		
+
 		recalculateOutwardsDirection(minCoord, maxCoord);
 	}
 
@@ -96,11 +98,11 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		
+
 		if (data.hasKey("CamouflageBlock")) {
 			camouflageBlock = ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock"));
 		}
-		
+
 		if (data.hasKey("owner")) {
 			NBTTagCompound ownerNbt = data.getCompoundTag("owner");
 			this.owner = PlayerUtil.readGameProfileFromNBT(ownerNbt);
@@ -117,7 +119,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("CamouflageBlock", nbtTag);
 		}
-		
+
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			PlayerUtil.writeGameProfile(nbt, owner);
@@ -126,7 +128,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 
 		return data;
 	}
-	
+
 	/* IMultiblockComponent */
 	@Nullable
 	@Override
@@ -150,22 +152,22 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
 		}
 	}
-	
+
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
 		return camouflageBlock;
 	}
-	
+
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
 		return null;
 	}
-	
+
 	@Override
 	public boolean canHandleType(String type) {
 		return type.equals(getCamouflageType());
 	}
-	
+
 	/* IStreamableGui */
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
@@ -212,7 +214,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	public IOwnerHandler getOwnerHandler() {
 		return getMultiblockLogic().getController().getOwnerHandler();
 	}
-	
+
 	@Override
 	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
@@ -220,21 +222,21 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return CamouflageManager.DEFAULT;
 	}
-	
+
 	private IItemHandler getOutwardsInventory() {
 		if (getOutwardsTile() == null) {
 			return null;
 		}
 		return TileUtil.getInventoryFromTile(getOutwardsTile(), outwards.getOpposite());
 	}
-	
+
 	private TileEntity getOutwardsTile() {
 		if (outwards == null || worldObj == null || pos == null) {
 			return null;
 		}
 		return worldObj.getTileEntity(getPos().offset(outwards));
 	}
-	
+
 	private IEnergyConnection getOutwardEnergyConnection() {
 		TileEntity tile = getOutwardsTile();
 		if (!(tile instanceof IEnergyConnection)) {
@@ -242,7 +244,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return (IEnergyConnection) tile;
 	}
-	
+
 	private IEnergyHandler getOutwardEnergyHandler() {
 		TileEntity tile = getOutwardsTile();
 		if (!(tile instanceof IEnergyHandler)) {
@@ -250,7 +252,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return (IEnergyHandler) tile;
 	}
-	
+
 	private IEnergyReceiver getOutwardEnergyReceiver() {
 		TileEntity tile = getOutwardsTile();
 		if (!(tile instanceof IEnergyReceiver)) {
@@ -258,7 +260,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return (IEnergyReceiver) tile;
 	}
-	
+
 	private IEnergyProvider getOutwardEnergyProvider() {
 		TileEntity tile = getOutwardsTile();
 		if (!(tile instanceof IEnergyProvider)) {
@@ -266,7 +268,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return (IEnergyProvider) tile;
 	}
-	
+
 	public void recalculateOutwardsDirection(BlockPos minCoord, BlockPos maxCoord) {
 		outwards = null;
 
@@ -295,12 +297,12 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 				outwards = EnumFacing.DOWN;
 			}
 		}
-		
+
 		if (((BlockGreenhouse) getBlockType()).getGreenhouseType() != BlockGreenhouseType.HATCH_OUTPUT && outwards != null) {
 			outwards = outwards.getOpposite();
 		}
 	}
-	
+
 	@Nonnull
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
@@ -311,7 +313,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return super.getCapability(capability, facing);
 	}
-	
+
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
 		if(getOutwardsTile() != null){
@@ -366,6 +368,11 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		}
 		return provider.extractEnergy(from, maxExtract, simulate);
 	}
-	
-	
+
+	@Override
+	public World getWorldObj() {
+		return worldObj;
+	}
+
+
 }

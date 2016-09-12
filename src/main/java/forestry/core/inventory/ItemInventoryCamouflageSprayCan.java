@@ -49,8 +49,7 @@ public class ItemInventoryCamouflageSprayCan extends ItemInventory implements IC
 	}
 
 	@Override
-	public World getWorld() {
+	public World getWorldObj() {
 		return null;
 	}
-
 }

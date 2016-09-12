@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.core;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,7 +58,7 @@ public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 		BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 		Block block = Block.getBlockFromItem(stack.getItem());
 		IBlockState state = block.getStateFromMeta(stack.getItemDamage());
-		
+
 		return Pair.of(state, modelShapes.getModelForState(state));
 	}
 

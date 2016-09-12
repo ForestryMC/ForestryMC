@@ -12,6 +12,8 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.api.core.ILocatable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -21,7 +23,6 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.ILocatable;
 
 public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacketClient {
 

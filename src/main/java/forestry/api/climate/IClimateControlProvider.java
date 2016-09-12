@@ -5,15 +5,10 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import forestry.api.core.ILocatable;
 
-public interface IClimateControlProvider {
+public interface IClimateControlProvider extends ILocatable {
 
 	IClimateControl getClimateControl();
-	
-	World getWorld();
-	
-	BlockPos getCoordinates();
 	
 }

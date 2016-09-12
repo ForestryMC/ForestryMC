@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import forestry.api.core.ILocatable;
 
-import forestry.core.tiles.ILocatable;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IGuiHandlerTile extends IGuiHandlerForestry, ILocatable {
 	Object getGui(EntityPlayer player, int data);

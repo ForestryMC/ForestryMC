@@ -73,7 +73,6 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.greenhouse.tiles.TileGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
