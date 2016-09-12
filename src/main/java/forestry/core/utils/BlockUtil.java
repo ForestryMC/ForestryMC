@@ -38,6 +38,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockUtil {
@@ -53,6 +55,11 @@ public abstract class BlockUtil {
 	
 	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
 		if (tile != null) {
+			if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
+				IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+				return energyStorage.canReceive();
+			}
+
 			if (EnergyManager.TESLA_CONSUMER != null) {
 				if (tile.hasCapability(EnergyManager.TESLA_CONSUMER, side)) {
 					return true;

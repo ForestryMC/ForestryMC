@@ -19,6 +19,8 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.InterfaceList({
@@ -26,7 +28,7 @@ import net.minecraftforge.fml.common.Optional;
 		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaProducer", modid = Constants.TESLA_MOD_ID),
 		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = Constants.TESLA_MOD_ID)
 })
-public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaProducer, ITeslaHolder, IEnergyProvider, IStreamable {
+public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaProducer, ITeslaHolder, IEnergyProvider, IEnergyStorage, IStreamable {
 	@CapabilityInject(ITeslaConsumer.class)
 	public static Capability<ITeslaConsumer> TESLA_CONSUMER = null;
 	@CapabilityInject(ITeslaProducer.class)
@@ -57,24 +59,26 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 		mode = EnergyTransferMode.RECEIVE;
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	private boolean canExtract() {
+	@Override
+	public boolean canExtract() {
 		switch (mode) {
 			case EXTRACT:
 			case BOTH:
 				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	private boolean canReceive() {
+	@Override
+	public boolean canReceive() {
 		switch (mode) {
 			case RECEIVE:
 			case BOTH:
 				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
 	/* NBT */
@@ -121,18 +125,12 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 	/* IEnergyHandler */
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if (!canReceive()) {
-			return 0;
-		}
-		return energyStorage.receiveEnergy(maxReceive, simulate);
+		return receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		if (!canExtract()) {
-			return 0;
-		}
-		return energyStorage.extractEnergy(maxExtract, simulate);
+		return extractEnergy(maxExtract, simulate);
 	}
 
 	@Override
@@ -147,6 +145,27 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 	@Override
 	public int getMaxEnergyStored(EnumFacing from) {
 		return energyStorage.getMaxEnergyStored();
+	}
+
+	@Override
+	public int receiveEnergy(int maxReceive, boolean simulate) {
+		if (!canReceive()) {
+			return 0;
+		}
+		return energyStorage.receiveEnergy(maxReceive, simulate);
+	}
+
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate) {
+		if (!canExtract()) {
+			return 0;
+		}
+		return energyStorage.extractEnergy(maxExtract, simulate);
+	}
+
+	@Override
+	public int getEnergyStored() {
+		return energyStorage.getEnergyStored();
 	}
 
 	public int getMaxEnergyStored() {
@@ -206,7 +225,10 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 			int extractable = energyStorage.extractEnergy(amount, true);
 			if (extractable > 0) {
 				EnumFacing side = orientation.getOpposite();
-				if (TESLA_CONSUMER != null && tile.hasCapability(TESLA_CONSUMER, side)) {
+				if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
+					IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+					sent = energyStorage.receiveEnergy(extractable, simulate);
+				} else if (TESLA_CONSUMER != null && tile.hasCapability(TESLA_CONSUMER, side)) {
 					sent = sendEnergyTesla(tile, side, extractable, simulate);
 				} else if (tile instanceof IEnergyReceiver) {
 					IEnergyReceiver receptor = (IEnergyReceiver) tile;
@@ -237,7 +259,9 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 	}
 
 	public boolean hasCapability(Capability<?> capability) {
-		if (capability == TESLA_PRODUCER && canExtract()) {
+		if (capability == CapabilityEnergy.ENERGY) {
+			return true;
+		} else if (capability == TESLA_PRODUCER && canExtract()) {
 			return true;
 		} else if (capability == TESLA_CONSUMER && canReceive()) {
 			return true;
@@ -248,7 +272,9 @@ public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaPro
 	}
 
 	public <T> T getCapability(Capability<T> capability) {
-		if (capability == TESLA_PRODUCER && canExtract()) {
+		if (capability == CapabilityEnergy.ENERGY) {
+			return CapabilityEnergy.ENERGY.cast(this);
+		} else if (capability == TESLA_PRODUCER && canExtract()) {
 			return TESLA_PRODUCER.cast(this);
 		} else if (capability == TESLA_CONSUMER && canReceive()) {
 			return TESLA_CONSUMER.cast(this);
