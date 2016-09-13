@@ -45,7 +45,7 @@ public class PowerLedger extends Ledger {
 		drawHeader(Translator.translateToLocal("for.gui.energy"), xHeader, y + 8);
 
 		drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', xBody, y + 20);
-		drawText(energyManager.getTotalEnergyStored() + " RF", xBody, y + 32);
+		drawText(energyManager.getEnergyStored() + " RF", xBody, y + 32);
 
 		drawSubheader(Translator.translateToLocal("for.gui.maxenergy") + ':', xBody, y + 44);
 		drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
@@ -56,7 +56,7 @@ public class PowerLedger extends Ledger {
 
 	@Override
 	public String getTooltip() {
-		return tile.getEnergyManager().getTotalEnergyStored() + " RF";
+		return tile.getEnergyManager().getEnergyStored() + " RF";
 	}
 
 }

@@ -14,19 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
@@ -43,6 +30,17 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank fuelTank;
@@ -274,7 +272,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 				currentOutput = data;
 				break;
 			case 1:
-				energyManager.fromGuiInt(data);
+				energyManager.setEnergyStored(data);
 				break;
 			case 2:
 				heat = data;
@@ -288,7 +286,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	@Override
 	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.getEnergyStored());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
 		iCrafting.sendProgressBarUpdate(containerEngine, 3, burnTank.getCapacity());
 	}

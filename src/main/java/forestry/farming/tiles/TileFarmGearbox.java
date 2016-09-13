@@ -13,18 +13,16 @@ package forestry.farming.tiles;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
+import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
+import forestry.energy.compat.rf.IEnergyReceiverDelegated;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnergyHandler, IFarmComponent.Active {
+public class TileFarmGearbox extends TileFarm implements IEnergyReceiverDelegated, IFarmComponent.Active {
 
 	private static final int WORK_CYCLES = 4;
 	private static final int ENERGY_PER_OPERATION = WORK_CYCLES * 50;
@@ -62,7 +60,7 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 
 	@Override
 	public void updateServer(int tickCount) {
-		if (energyManager.getTotalEnergyStored() <= 0) {
+		if (energyManager.getEnergyStored() <= 0) {
 			return;
 		}
 
@@ -72,7 +70,7 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 		}
 
 		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
+		if (workCounter < WORK_CYCLES && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
 			workCounter++;
 		}
 
@@ -94,29 +92,9 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 
 	}
 
-	/* IEnergyReceiver */
 	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
 	public EnergyManager getEnergyManager() {
 		return energyManager;
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return energyManager.getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return energyManager.getMaxEnergyStored(from);
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return energyManager.canConnectEnergy(from);
 	}
 
 	@Override

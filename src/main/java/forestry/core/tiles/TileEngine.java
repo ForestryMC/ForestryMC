@@ -14,13 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.blocks.BlockBase;
@@ -30,13 +23,19 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
+import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-
-import cofh.api.energy.IEnergyConnection;
+import forestry.energy.EnergyTransferMode;
+import forestry.energy.compat.rf.IEnergyConnectionDelegated;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class TileEngine extends TileBase implements IEnergyConnection, IActivatable {
+public abstract class TileEngine extends TileBase implements IEnergyConnectionDelegated, IActivatable {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 
 	private boolean active = false; // Used for smp.
@@ -63,13 +62,10 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
 
-		// allow engines to chain, but not have energy sucked out of them
-		energyManager.setReceiveOnly();
+		energyManager.setExternalMode(EnergyTransferMode.NONE);
 
 		hints.addAll(Config.hints.get("engine"));
 	}
-
-
 
 	protected void addHeat(int i) {
 		heat += i;
@@ -133,7 +129,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 			progress += pistonSpeedServer;
 
-			energyManager.sendEnergy(facing, tile);
+			EnergyHelper.sendEnergy(energyManager, facing, tile);
 
 			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
@@ -141,8 +137,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 				progress = 0;
 				stagePiston = 0;
 			}
-		} else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(facing.getOpposite(), tile)) {
-			if (energyManager.canSendEnergy(facing, tile)) {
+		} else if (enabledRedstone && EnergyHelper.isEnergyReceiverOrEngine(facing.getOpposite(), tile)) {
+			if (EnergyHelper.canSendEnergy(energyManager, facing, tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 				cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
@@ -287,11 +283,6 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 	@Deprecated //use packets
 	public abstract void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting);
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return energyManager.canConnectEnergy(from);
-	}
 
 	public EnergyManager getEnergyManager() {
 		return energyManager;

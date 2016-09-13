@@ -10,15 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.gui;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import java.io.IOException;
-
 import javax.annotation.Nullable;
+import java.io.IOException;
 
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
-
 import forestry.api.climate.IClimateControl;
 import forestry.api.climate.IClimateControlProvider;
 import forestry.api.core.CamouflageManager;
@@ -36,6 +32,8 @@ import forestry.core.utils.Translator;
 import forestry.greenhouse.multiblock.DefaultClimateControl;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouse;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGreenhouse> {
 
@@ -200,12 +198,12 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
 			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 20);
-			drawText(inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored(null) + " RF", x + 22, y + 32);
+			drawText(inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF", x + 22, y + 32);
 		}
 
 		@Override
 		public String getTooltip() {
-			return Translator.translateToLocal("for.gui.energy") + ": " + inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored(null) + " RF/t";
+			return Translator.translateToLocal("for.gui.energy") + ": " + inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF/t";
 		}
 	}
 }

@@ -1,322 +1,136 @@
 package forestry.energy;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.darkhax.tesla.api.ITeslaConsumer;
-import net.darkhax.tesla.api.ITeslaHolder;
-import net.darkhax.tesla.api.ITeslaProducer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Constants;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.tiles.TileEngine;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import forestry.energy.compat.EnergyStorageWrapper;
+import forestry.energy.compat.tesla.TeslaConsumerWrapper;
+import forestry.energy.compat.tesla.TeslaHelper;
+import forestry.energy.compat.tesla.TeslaHolderWrapper;
+import forestry.energy.compat.tesla.TeslaProducerWrapper;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.common.Optional;
 
-@Optional.InterfaceList({
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = Constants.TESLA_MOD_ID),
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaProducer", modid = Constants.TESLA_MOD_ID),
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = Constants.TESLA_MOD_ID)
-})
-public class EnergyManager implements IEnergyReceiver, ITeslaConsumer, ITeslaProducer, ITeslaHolder, IEnergyProvider, IEnergyStorage, IStreamable {
-	@CapabilityInject(ITeslaConsumer.class)
-	public static Capability<ITeslaConsumer> TESLA_CONSUMER = null;
-	@CapabilityInject(ITeslaProducer.class)
-	public static Capability<ITeslaProducer> TESLA_PRODUCER = null;
-	@CapabilityInject(ITeslaHolder.class)
-	public static Capability<ITeslaHolder> TESLA_HOLDER = null;
-
-	private enum EnergyTransferMode {
-		EXTRACT, RECEIVE, BOTH
-	}
-
-	private final EnergyStorage energyStorage;
-	private EnergyTransferMode mode = EnergyTransferMode.BOTH;
+public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
+	@Nonnull
+	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
 
 	public EnergyManager(int maxTransfer, int capacity) {
-		this.energyStorage = new EnergyStorage(scaleForDifficulty(capacity), scaleForDifficulty(maxTransfer), scaleForDifficulty(maxTransfer));
+		super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
 	}
 
-	public static int scaleForDifficulty(int energyPerUse) {
-		return Math.round(energyPerUse * ForestryAPI.activeMode.getFloatSetting("energy.demand.modifier"));
+	public void setExternalMode(@Nonnull EnergyTransferMode externalMode) {
+		this.externalMode = externalMode;
 	}
 
-	public void setExtractOnly() {
-		mode = EnergyTransferMode.EXTRACT;
-	}
-
-	public void setReceiveOnly() {
-		mode = EnergyTransferMode.RECEIVE;
+	@Nonnull
+	public EnergyTransferMode getExternalMode() {
+		return externalMode;
 	}
 
 	@Override
-	public boolean canExtract() {
-		switch (mode) {
-			case EXTRACT:
-			case BOTH:
-				return true;
-			default:
-				return false;
+	public void readFromNBT(NBTTagCompound nbt) {
+		final int energy;
+		if (nbt.hasKey("EnergyManager")) { // legacy
+			NBTTagCompound energyManagerNBT = nbt.getCompoundTag("EnergyManager");
+			NBTTagCompound energyStorageNBT = energyManagerNBT.getCompoundTag("EnergyStorage");
+			energy = energyStorageNBT.getInteger("Energy");
+		} else {
+			energy = nbt.getInteger("Energy");
 		}
+
+		setEnergyStored(energy);
 	}
 
 	@Override
-	public boolean canReceive() {
-		switch (mode) {
-			case RECEIVE:
-			case BOTH:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	/* NBT */
-	public EnergyManager readFromNBT(NBTTagCompound nbt) {
-		NBTTagCompound energyManagerNBT = nbt.getCompoundTag("EnergyManager");
-		NBTTagCompound energyStorageNBT = energyManagerNBT.getCompoundTag("EnergyStorage");
-		energyStorage.readFromNBT(energyStorageNBT);
-
-		return this;
-	}
-
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		NBTTagCompound energyStorageNBT = new NBTTagCompound();
-		energyStorage.writeToNBT(energyStorageNBT);
-
-		NBTTagCompound energyManagerNBT = new NBTTagCompound();
-		energyManagerNBT.setTag("EnergyStorage", energyStorageNBT);
-		nbt.setTag("EnergyManager", energyManagerNBT);
-
+		nbt.setInteger("Energy", energy);
 		return nbt;
 	}
 
-	/* Packets */
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		int energyStored = energyStorage.getEnergyStored();
-		data.writeInt(energyStored);
+		data.writeVarInt(this.energy);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		int energyStored = data.readInt();
-		energyStorage.setEnergyStored(energyStored);
-	}
-
-	public int toGuiInt() {
-		return energyStorage.getEnergyStored();
-	}
-
-	public void fromGuiInt(int packetInt) {
-		energyStorage.setEnergyStored(packetInt);
-	}
-
-	/* IEnergyHandler */
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return receiveEnergy(maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return extractEnergy(maxExtract, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return energyStorage.getEnergyStored();
-	}
-
-	public int getTotalEnergyStored() {
-		return energyStorage.getEnergyStored();
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxEnergyStored();
-	}
-
-	@Override
-	public int receiveEnergy(int maxReceive, boolean simulate) {
-		if (!canReceive()) {
-			return 0;
-		}
-		return energyStorage.receiveEnergy(maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(int maxExtract, boolean simulate) {
-		if (!canExtract()) {
-			return 0;
-		}
-		return energyStorage.extractEnergy(maxExtract, simulate);
-	}
-
-	@Override
-	public int getEnergyStored() {
-		return energyStorage.getEnergyStored();
-	}
-
-	public int getMaxEnergyStored() {
-		return energyStorage.getMaxEnergyStored();
+		int energyStored = data.readVarInt();
+		setEnergyStored(energyStored);
 	}
 
 	public int getMaxEnergyReceived() {
-		return energyStorage.getMaxReceive();
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return true;
-	}
-
-	/**
-	 * Consumes one work cycle's worth of energy.
-	 *
-	 * @return true if the energy to do work was consumed
-	 */
-	public boolean consumeEnergyToDoWork(int ticksPerWorkCycle, int energyPerWorkCycle) {
-		int energyPerCycle = (int) Math.ceil(energyPerWorkCycle / (float) ticksPerWorkCycle);
-		if (energyStorage.getEnergyStored() < energyPerCycle) {
-			return false;
-		}
-
-		energyStorage.modifyEnergyStored(-energyPerCycle);
-		return true;
-	}
-
-	/**
-	 * @return whether this can send energy to the target tile
-	 */
-	public boolean canSendEnergy(EnumFacing orientation, TileEntity tile) {
-		return sendEnergy(orientation, tile, Integer.MAX_VALUE, true) > 0;
-	}
-
-	/**
-	 * Sends as much energy as it can to the tile at orientation.
-	 * For power sources. Ignores canExtract()
-	 *
-	 * @return amount sent
-	 */
-	public int sendEnergy(EnumFacing orientation, TileEntity tile) {
-		return sendEnergy(orientation, tile, Integer.MAX_VALUE, false);
-	}
-
-	/**
-	 * Sends amount of energy to the tile at orientation.
-	 * For power sources. Ignores canExtract()
-	 *
-	 * @return amount sent
-	 */
-	public int sendEnergy(EnumFacing orientation, TileEntity tile, int amount, boolean simulate) {
-		int sent = 0;
-		if (tile != null) {
-			int extractable = energyStorage.extractEnergy(amount, true);
-			if (extractable > 0) {
-				EnumFacing side = orientation.getOpposite();
-				if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-					IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-					sent = energyStorage.receiveEnergy(extractable, simulate);
-				} else if (TESLA_CONSUMER != null && tile.hasCapability(TESLA_CONSUMER, side)) {
-					sent = sendEnergyTesla(tile, side, extractable, simulate);
-				} else if (tile instanceof IEnergyReceiver) {
-					IEnergyReceiver receptor = (IEnergyReceiver) tile;
-					sent = receptor.receiveEnergy(side, extractable, simulate);
-				} else if (tile instanceof TileEngine) { // engine chaining
-					TileEngine receptor = (TileEngine) tile;
-					sent = receptor.getEnergyManager().receiveEnergy(side, extractable, simulate);
-				}
-
-				energyStorage.extractEnergy(sent, simulate);
-			}
-		}
-		return sent;
+		return this.maxReceive;
 	}
 
 	/**
 	 * Drains an amount of energy, due to decay from lack of work or other factors
 	 */
 	public void drainEnergy(int amount) {
-		energyStorage.modifyEnergyStored(-amount);
+		setEnergyStored(energy - amount);
 	}
 
 	/**
 	 * Creates an amount of energy, generated by engines
 	 */
 	public void generateEnergy(int amount) {
-		energyStorage.modifyEnergyStored(amount);
+		setEnergyStored(energy + amount);
+	}
+
+	public void setEnergyStored(int energyStored) {
+		this.energy = energyStored;
+		if (this.energy > capacity) {
+			this.energy = capacity;
+		} else if (this.energy < 0) {
+			this.energy = 0;
+		}
 	}
 
 	public boolean hasCapability(Capability<?> capability) {
+		if (capability == null) {
+			return false;
+		}
+
 		if (capability == CapabilityEnergy.ENERGY) {
 			return true;
-		} else if (capability == TESLA_PRODUCER && canExtract()) {
+		} else if (capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract()) {
 			return true;
-		} else if (capability == TESLA_CONSUMER && canReceive()) {
+		} else if (capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive()) {
 			return true;
-		} else if (capability == TESLA_HOLDER) {
+		} else if (capability == TeslaHelper.TESLA_HOLDER) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
+	@Nullable
 	public <T> T getCapability(Capability<T> capability) {
+		if (capability == null) {
+			return null;
+		}
+
 		if (capability == CapabilityEnergy.ENERGY) {
-			return CapabilityEnergy.ENERGY.cast(this);
-		} else if (capability == TESLA_PRODUCER && canExtract()) {
-			return TESLA_PRODUCER.cast(this);
-		} else if (capability == TESLA_CONSUMER && canReceive()) {
-			return TESLA_CONSUMER.cast(this);
-		} else if (capability == TESLA_HOLDER) {
-			return TESLA_HOLDER.cast(this);
+			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
+			return CapabilityEnergy.ENERGY.cast(energyStorage);
+		} else if (capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract()) {
+			return TeslaHelper.TESLA_PRODUCER.cast(new TeslaProducerWrapper(this));
+		} else if (capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive()) {
+			return TeslaHelper.TESLA_CONSUMER.cast(new TeslaConsumerWrapper(this));
+		} else if (capability == TeslaHelper.TESLA_HOLDER) {
+			return TeslaHelper.TESLA_HOLDER.cast(new TeslaHolderWrapper(this));
+		} else {
+			return null;
 		}
-		return null;
 	}
 
-	@Optional.Method(modid = Constants.TESLA_MOD_ID)
-	public static int sendEnergyTesla(TileEntity tile, EnumFacing side, int amount, boolean simulate) {
-		ITeslaConsumer consumer = tile.getCapability(TESLA_CONSUMER, side);
-		return (int) consumer.givePower(amount, simulate);
-	}
-
-	@Optional.Method(modid = Constants.TESLA_MOD_ID)
-	@Override
-	public long givePower(long power, boolean simulated) {
-		if (!canReceive()) {
-			return 0;
-		}
-		return energyStorage.receiveEnergy(power, simulated);
-	}
-
-	@Optional.Method(modid = Constants.TESLA_MOD_ID)
-	@Override
-	public long takePower(long power, boolean simulated) {
-		if (!canExtract()) {
-			return 0;
-		}
-		return energyStorage.extractEnergy(power, simulated);
-	}
-
-	@Optional.Method(modid = Constants.TESLA_MOD_ID)
-	@Override
-	public long getStoredPower() {
-		return energyStorage.getEnergyStored();
-	}
-
-	@Optional.Method(modid = Constants.TESLA_MOD_ID)
-	@Override
-	public long getCapacity() {
-		return energyStorage.getMaxEnergyStored();
-	}
 }

@@ -14,12 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileEngine;
-import forestry.energy.EnergyManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
@@ -30,7 +26,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,8 +33,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockUtil {
@@ -51,27 +44,6 @@ public abstract class BlockUtil {
 
 		return blockState.getBlock().getDrops(world, posBlock, blockState, 0);
 
-	}
-	
-	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
-		if (tile != null) {
-			if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-				IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-				return energyStorage.canReceive();
-			}
-
-			if (EnergyManager.TESLA_CONSUMER != null) {
-				if (tile.hasCapability(EnergyManager.TESLA_CONSUMER, side)) {
-					return true;
-				}
-			}
-
-			if (tile instanceof IEnergyReceiver || (tile instanceof TileEngine)) {
-				IEnergyConnection receptor = (IEnergyConnection) tile;
-				return receptor.canConnectEnergy(side);
-			}
-		}
-		return false;
 	}
 
 	public static boolean tryPlantCocoaPod(World world, BlockPos pos) {

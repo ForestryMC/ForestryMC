@@ -108,13 +108,7 @@ allprojects {
 }
 
 jar {
-	// Copy redstone api into the jar, should shade this as a maven dep...
-	from (sourceSets.api.allSource) {
-		include 'cofh/**/*.txt'
-	}
-	from (sourceSets.api.output.classesDir) {
-		include 'cofh/**/*.*'
-	}
+
 }
 
 task sourcesJar(type: Jar) {

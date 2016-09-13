@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import com.google.common.base.Objects;
-
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,17 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.base.Objects;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -81,6 +69,15 @@ import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FarmController extends RectangularMultiblockControllerBase implements IFarmControllerInternal, ILiquidTankTile {
 
@@ -262,7 +259,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		for (Map.Entry<IFarmComponent.Active, Integer> entry : farmActiveComponents.entrySet()) {
 			IFarmComponent.Active farmComponent = entry.getKey();
 			if (farmComponent instanceof TileFarmGearbox) {
-				hasPower |= ((TileFarmGearbox) farmComponent).getEnergyManager().getTotalEnergyStored() > 0;
+				hasPower |= ((TileFarmGearbox) farmComponent).getEnergyManager().getEnergyStored() > 0;
 			}
 
 			int tickOffset = entry.getValue();

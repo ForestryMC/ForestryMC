@@ -13,19 +13,20 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-
-import cofh.api.energy.IEnergyReceiver;
+import forestry.energy.EnergyTransferMode;
+import forestry.energy.compat.rf.IEnergyReceiverDelegated;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiver, IActivatable, IAlvearyComponent.Climatiser {
+public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiverDelegated, IActivatable, IAlvearyComponent.Climatiser {
 
 	private static final int WORK_CYCLES = 1;
 	private static final int ENERGY_PER_OPERATION = 50;
@@ -50,13 +51,13 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 2000);
-		this.energyManager.setReceiveOnly();
+		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 	}
 
 	/* UPDATING */
 	@Override
 	public void changeClimate(int tick, IClimateControlled climateControlled) {
-		if (workingTime < 20 && energyManager.consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
+		if (workingTime < 20 && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
 			// one tick of work for every 10 RF
 			workingTime += ENERGY_PER_OPERATION / 10;
 		}
@@ -123,25 +124,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		}
 	}
 
-	/* IEnergyHandler */
 	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return energyManager.getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return energyManager.getMaxEnergyStored(from);
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return energyManager.canConnectEnergy(from);
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 
 	@Override

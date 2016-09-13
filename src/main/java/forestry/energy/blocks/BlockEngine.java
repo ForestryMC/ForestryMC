@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.EnumMap;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import forestry.core.blocks.BlockBase;
+import forestry.energy.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,9 +27,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.utils.BlockUtil;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
@@ -116,7 +114,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {
 		TileEntity tile = world.getTileEntity(pos.offset(orientation));
-		return BlockUtil.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
+		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 
 	private static boolean rotate(World world, BlockPos pos) {

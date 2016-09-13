@@ -14,9 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Config;
@@ -25,13 +22,17 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
+import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-
-import cofh.api.energy.IEnergyReceiver;
+import forestry.energy.EnergyTransferMode;
+import forestry.energy.compat.rf.IEnergyHandlerDelegated;
+import forestry.energy.compat.rf.IEnergyReceiverDelegated;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
 //@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiver, IPowerHandler, ISpeedUpgradable, IStreamableGui {
+public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiverDelegated, IEnergyHandlerDelegated, ISpeedUpgradable, IStreamableGui {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -49,7 +50,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	protected TilePowered(String hintKey, int maxTransfer, int capacity) {
 		super(hintKey);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
-		this.energyManager.setReceiveOnly();
+		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
 		this.ticksPerWorkCycle = 4;
 
@@ -73,7 +74,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	public void setEnergyPerWorkCycle(int energyPerWorkCycle) {
-		this.energyPerWorkCycle = EnergyManager.scaleForDifficulty(energyPerWorkCycle);
+		this.energyPerWorkCycle = EnergyHelper.scaleForDifficulty(energyPerWorkCycle);
 	}
 
 	public int getEnergyPerWorkCycle() {
@@ -117,7 +118,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
 		if (workCounter < ticksPerWorkCycle) {
 			int energyPerWorkCycle = getEnergyPerWorkCycle();
-			boolean consumedEnergy = energyManager.consumeEnergyToDoWork(ticksPerWorkCycle, energyPerWorkCycle);
+			boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(energyManager, ticksPerWorkCycle, energyPerWorkCycle);
 			if (consumedEnergy) {
 				errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
 				workCounter++;
@@ -199,26 +200,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	@Override
 	public EnergyManager getEnergyManager() {
 		return energyManager;
-	}
-
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return energyManager.getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return energyManager.getMaxEnergyStored(from);
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return energyManager.canConnectEnergy(from);
 	}
 
 	@Override

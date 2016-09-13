@@ -15,17 +15,6 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
 
-import forestry.core.owner.IOwnedTile;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
@@ -35,11 +24,22 @@ import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.FontColour;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
+import forestry.core.tiles.TileEngine;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
 	protected final I inventory;
@@ -94,8 +94,13 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
 		}
 
-		if (Config.enableEnergyStat && inventory instanceof IPowerHandler && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0) {
-			ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
+		if (Config.enableEnergyStat) {
+			if (inventory instanceof IPowerHandler && !(inventory instanceof TileEngine)) {
+				IPowerHandler powerHandler = (IPowerHandler) this.inventory;
+				if (powerHandler.getEnergyManager().getMaxEnergyStored() > 0) {
+					ledgerManager.add(new PowerLedger(ledgerManager, powerHandler));
+				}
+			}
 		}
 
 		if (Config.enableHints && inventory instanceof IHintSource) {

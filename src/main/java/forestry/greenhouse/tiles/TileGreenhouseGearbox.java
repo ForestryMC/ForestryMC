@@ -13,50 +13,19 @@ package forestry.greenhouse.tiles;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.util.EnumFacing;
-
 import forestry.energy.EnergyManager;
-
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
+import forestry.energy.compat.rf.IEnergyHandlerDelegated;
+import forestry.energy.compat.rf.IEnergyReceiverDelegated;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyReceiver, IEnergyHandler {
+public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyReceiverDelegated, IEnergyHandlerDelegated {
 
 	public TileGreenhouseGearbox() {
 	}
 
-	/* IEnergyReceiver */
 	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if (getEnergyManager() == null) {
-			return 0;
-		}
-		return getEnergyManager().receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		if (getEnergyManager() == null) {
-			return 0;
-		}
-		return getEnergyManager().getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		if (getEnergyManager() == null) {
-			return 0;
-		}
-		return getEnergyManager().getMaxEnergyStored(from);
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return getEnergyManager() != null && getEnergyManager().canConnectEnergy(from);
-	}
-	
-	private EnergyManager getEnergyManager() {
+	public EnergyManager getEnergyManager() {
 		if (!getMultiblockLogic().isConnected()) {
 			return null;
 		}

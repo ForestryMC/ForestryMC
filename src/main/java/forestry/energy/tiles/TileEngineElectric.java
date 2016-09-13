@@ -13,13 +13,6 @@ package forestry.energy.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -38,8 +31,13 @@ import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.plugins.compat.PluginIC2;
-
 import ic2.api.energy.prefab.BasicSink;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory, IStreamableGui {
 	protected static class EuConfig {
@@ -147,7 +145,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		int gain = 0;
 		if (isRedstoneActivated() && isBurning()) {
 			gain++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
+			if (((double) energyManager.getEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
 				gain++;
 			}
 		}

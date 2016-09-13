@@ -69,7 +69,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 
 		if (tile instanceof IPowerHandler) {
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			int energyManagerData = energyManager.toGuiInt();
+			int energyManagerData = energyManager.getEnergyStored();
 			if (energyManagerData != previousEnergyManagerData) {
 				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
 				sendPacketToListeners(packet);
@@ -105,7 +105,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	public void onGuiEnergy(int energyStored) {
 		if (tile instanceof IPowerHandler) {
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			energyManager.fromGuiInt(energyStored);
+			energyManager.setEnergyStored(energyStored);
 		}
 	}
 }

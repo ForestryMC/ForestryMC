@@ -10,19 +10,21 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.api.multiblock.IMultiblockLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.climate.ClimateSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
 import forestry.greenhouse.GreenhouseClimateSource;
+import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivatable, IGreenhouseComponent.Climatiser {
 	
@@ -152,11 +154,17 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	}
 	
 	public boolean canWork(){
-		IMultiblockLogic logic = getMultiblockLogic();
-		if(logic == null || !logic.isConnected() || getMultiblockLogic().getController().getEnergyManager() == null){
+		MultiblockLogicGreenhouse logic = getMultiblockLogic();
+		if (logic == null || !logic.isConnected()) {
 			return false;
 		}
-		return getMultiblockLogic().getController().getEnergyManager().consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION);
+
+		EnergyManager energyManager = logic.getController().getEnergyManager();
+		if (energyManager == null) {
+			return false;
+		}
+
+		return EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION);
 	}
 	
 	public Iterable<BlockPos> getPositionsInRange(){

@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.List;
 
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.CamouflageManager;
@@ -42,26 +41,19 @@ import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;
@@ -237,38 +229,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		return worldObj.getTileEntity(getPos().offset(outwards));
 	}
 
-	private IEnergyConnection getOutwardEnergyConnection() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IEnergyConnection)) {
-			return null;
-		}
-		return (IEnergyConnection) tile;
-	}
-
-	private IEnergyHandler getOutwardEnergyHandler() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IEnergyHandler)) {
-			return null;
-		}
-		return (IEnergyHandler) tile;
-	}
-
-	private IEnergyReceiver getOutwardEnergyReceiver() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IEnergyReceiver)) {
-			return null;
-		}
-		return (IEnergyReceiver) tile;
-	}
-
-	private IEnergyProvider getOutwardEnergyProvider() {
-		TileEntity tile = getOutwardsTile();
-		if (!(tile instanceof IEnergyProvider)) {
-			return null;
-		}
-		return (IEnergyProvider) tile;
-	}
-
 	public void recalculateOutwardsDirection(BlockPos minCoord, BlockPos maxCoord) {
 		outwards = null;
 
@@ -322,51 +282,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			}
 		}
 		return super.hasCapability(capability, facing);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		IEnergyHandler handler = getOutwardEnergyHandler();
-		if (handler == null) {
-			return 0;
-		}
-		return handler.getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		IEnergyHandler handler = getOutwardEnergyHandler();
-		if (handler == null) {
-			return 0;
-		}
-		return handler.getMaxEnergyStored(from);
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		IEnergyConnection connection = getOutwardEnergyConnection();
-		if (connection == null) {
-			return false;
-		}
-		return connection.canConnectEnergy(from);
-	}
-
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		IEnergyReceiver receiver = getOutwardEnergyReceiver();
-		if (receiver == null) {
-			return 0;
-		}
-		return receiver.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		IEnergyProvider provider = getOutwardEnergyProvider();
-		if (provider == null) {
-			return 0;
-		}
-		return provider.extractEnergy(from, maxExtract, simulate);
 	}
 
 	@Override

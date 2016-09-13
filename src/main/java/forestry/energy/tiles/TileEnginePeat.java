@@ -12,18 +12,6 @@ package forestry.energy.tiles;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-
 import forestry.api.fuels.FuelManager;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -38,6 +26,16 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private Item fuelItem;
@@ -160,7 +158,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 		if (isBurning()) {
 			heatToAdd++;
-			if ((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored() > 0.5) {
+			if ((double) energyManager.getEnergyStored() / (double) energyManager.getMaxEnergyStored() > 0.5) {
 				heatToAdd++;
 			}
 		}
@@ -314,7 +312,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 				currentOutput = j;
 				break;
 			case 3:
-				energyManager.fromGuiInt(j);
+				energyManager.setEnergyStored(j);
 				break;
 			case 4:
 				heat = j;
@@ -327,7 +325,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toGuiInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.getEnergyStored());
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
 	}
 

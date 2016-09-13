@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.core.IForestryConstants;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
 public class Constants implements IForestryConstants {
@@ -23,6 +22,7 @@ public class Constants implements IForestryConstants {
 	public static final String VERSION = "@VERSION@";
 	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
 
+	public static final String RF_MOD_ID = "CoFHAPI|energy";
 	public static final String TESLA_MOD_ID = "tesla";
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
