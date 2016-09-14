@@ -11,15 +11,11 @@
 package forestry.farming;
 
 import com.google.common.collect.ImmutableSet;
-
+import forestry.api.farming.FarmDirection;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.multiblock.IFarmComponent;
 
 public class FarmHelper {
 
@@ -37,21 +33,29 @@ public class FarmHelper {
 		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
 	}
 
-	public static BlockPos getFarmMultiblockCorner(World world, BlockPos start, FarmDirection farmSide, FarmDirection layoutDirection) {
-		BlockPos edge = getFarmMultiblockEdge(world, start, farmSide);
-		return getFarmMultiblockEdge(world, edge, getOpposite(layoutDirection));
+	/**
+	 * @return the corner of the farm for the given side and layout. Returns null if the corner is not in a loaded chunk.
+	 */
+	public static BlockPos getFarmMultiblockCorner(BlockPos start, FarmDirection farmSide, FarmDirection layoutDirection, BlockPos minFarmCoord, BlockPos maxFarmCoord) {
+		BlockPos edge = getFarmMultiblockEdge(start, farmSide, maxFarmCoord, minFarmCoord);
+		return getFarmMultiblockEdge(edge, getOpposite(layoutDirection), maxFarmCoord, minFarmCoord);
 	}
 
-	private static BlockPos getFarmMultiblockEdge(World world, BlockPos start, FarmDirection direction) {
-		BlockPos.MutableBlockPos edge = new BlockPos.MutableBlockPos(start);
-
-		while (world.getTileEntity(edge) instanceof IFarmComponent) {
-			edge.move(direction.getFacing());
+	/**
+	 * @return the edge of the farm for the given starting point and direction.
+	 */
+	private static BlockPos getFarmMultiblockEdge(BlockPos start, FarmDirection direction, BlockPos maxFarmCoord, BlockPos minFarmCoord) {
+		switch (direction) {
+			case NORTH: // -z
+				return new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
+			case EAST: // +x
+				return new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
+			case SOUTH: // +z
+				return new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
+			case WEST: // -x
+				return new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
+			default:
+				throw new IllegalArgumentException("Invalid farm direction: " + direction);
 		}
-
-		FarmDirection oppositeDirection = getOpposite(direction);
-		edge.move(oppositeDirection.getFacing());
-		return edge.toImmutable();
 	}
-
 }
