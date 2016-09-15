@@ -62,7 +62,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
 
-		energyManager.setExternalMode(EnergyTransferMode.NONE);
+		energyManager.setExternalMode(EnergyTransferMode.EXTRACT);
 
 		hints.addAll(Config.hints.get("engine"));
 	}

@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyConnection;
 import forestry.core.config.Constants;
 import forestry.core.tiles.IPowerHandler;
 import forestry.energy.EnergyManager;
+import forestry.energy.EnergyTransferMode;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
@@ -19,6 +20,7 @@ public interface IEnergyConnectionDelegated extends IEnergyConnection, IPowerHan
 		if (energyManager == null) {
 			return false;
 		}
-		return energyManager.getExternalMode().canReceive();
+		EnergyTransferMode externalMode = energyManager.getExternalMode();
+		return externalMode.canReceive() || externalMode.canExtract();
 	}
 }
