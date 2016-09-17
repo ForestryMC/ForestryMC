@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
-
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -36,8 +36,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import forestry.Forestry;
+import forestry.api.apiculture.BeeManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.AlleleSpeciesRegisterEvent;
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
@@ -130,6 +132,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
 		AlleleButterflyCocoon.createLoot();
+		
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(ButterflyManager.butterflyRoot));
 
 		blocks.butterflyChest.init();
 

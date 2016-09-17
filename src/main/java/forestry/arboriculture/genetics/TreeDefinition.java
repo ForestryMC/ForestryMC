@@ -35,6 +35,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleSpeciesRegisterEvent;
 import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.PluginArboriculture;
@@ -91,6 +92,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.MinecraftForge;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
@@ -1066,6 +1068,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	}
 
 	public static void preInit() {
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(TreeManager.treeRoot));
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.BiomeDictionary;
-
+import net.minecraftforge.common.MinecraftForge;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -30,8 +30,10 @@ import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeMutationBuilder;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleSpeciesRegisterEvent;
 import forestry.api.genetics.IAllele;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
@@ -1019,6 +1021,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		for (BeeDefinition bee : values()) {
 			bee.registerMutations();
 		}
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot));
 	}
 	
 	public static void preInit() {
