@@ -113,10 +113,10 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	@Override
 	public boolean workCycle() {
-
+		
 		// If we add pending products, we skip to the next work cycle.
 		if (tryAddPending()) {
-			return false;
+			return true;
 		}
 
 		if (!pendingProducts.isEmpty()) {
@@ -180,6 +180,9 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	@Override
 	public boolean hasWork() {
+		if(!pendingProducts.isEmpty()){
+			return true;
+		}
 		checkRecipe();
 
 		boolean hasResource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) != null;
