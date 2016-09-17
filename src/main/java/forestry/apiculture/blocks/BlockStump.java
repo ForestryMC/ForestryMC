@@ -60,10 +60,11 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 		if (heldItem != null && BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			IBlockState blockState = worldIn.getBlockState(pos);
 			Block block = blockState.getBlock();
-			IBlockState activatedState = PluginApiculture.blocks.candle.getStateFromMeta(block.getMetaFromState(blockState) | 0x08);
+			IBlockState activatedState = PluginApiculture.blocks.candle.getStateFromMeta(block.getMetaFromState(blockState));
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
-			tc.setColour(0); // default to white
+			tc.setColour(16777215); // default to white
+			tc.setLit(true);
 			worldIn.setTileEntity(pos, tc);
 			return true;
 		}
