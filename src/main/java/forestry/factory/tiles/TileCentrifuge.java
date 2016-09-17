@@ -113,8 +113,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	@Override
 	public boolean workCycle() {
-		
-		// If we add pending products, we skip to the next work cycle.
 		if (tryAddPending()) {
 			return true;
 		}
