@@ -165,5 +165,10 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
+	}
     
 }

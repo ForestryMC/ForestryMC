@@ -211,7 +211,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 	
 	public ButterflyHatch getButterflyHatch(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
+		if (GreenhouseManager.greenhouseHelper == null || GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
 			return null;
 		}
 		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
