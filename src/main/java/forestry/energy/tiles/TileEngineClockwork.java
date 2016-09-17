@@ -155,14 +155,6 @@ public class TileEngineClockwork extends TileEngine {
 
 		return fromClockwork;
 	}
-	
-	@Override
-	public void getGUINetworkData(int i, int j) {
-	}
-
-	@Override
-	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
-	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {
