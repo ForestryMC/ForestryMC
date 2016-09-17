@@ -15,6 +15,7 @@ import net.minecraft.inventory.IContainerListener;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
+import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
 
@@ -27,18 +28,9 @@ public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas
 	}
 
 	@Override
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
-
-		tile.getGUINetworkData(messageId, data);
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		for (IContainerListener crafter : listeners) {
-			tile.sendGUINetworkData(this, crafter);
-		}
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
 	}
 }

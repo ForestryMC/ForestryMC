@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import java.io.IOException;
+
 import javax.annotation.Nonnull;
 
 import forestry.api.fuels.FuelManager;
@@ -19,6 +21,8 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
@@ -296,37 +300,19 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		nbttagcompound.setInteger("AshProduction", ashProduction);
 		return nbttagcompound;
 	}
-
-	// / SMP GUI
+	
 	@Override
-	public void getGUINetworkData(int i, int j) {
-
-		switch (i) {
-			case 0:
-				burnTime = j;
-				break;
-			case 1:
-				totalBurnTime = j;
-				break;
-			case 2:
-				currentOutput = j;
-				break;
-			case 3:
-				energyManager.setEnergyStored(j);
-				break;
-			case 4:
-				heat = j;
-				break;
-		}
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		super.writeGuiData(data);
+		data.writeInt(burnTime);
+		data.writeInt(totalBurnTime);
 	}
-
+	
 	@Override
-	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.getEnergyStored());
-		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		super.readGuiData(data);
+		burnTime = data.readInt();
+		totalBurnTime = data.readInt();
 	}
 
 	/* ITriggerProvider */

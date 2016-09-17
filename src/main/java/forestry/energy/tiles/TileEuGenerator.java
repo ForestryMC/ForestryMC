@@ -35,6 +35,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
@@ -46,7 +47,7 @@ import forestry.plugins.compat.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSource;
 
-public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
+public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile, IStreamableGui {
 	private static final int maxEnergy = 30000;
 
 	private final TankManager tankManager;
@@ -183,19 +184,18 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	public TankRenderInfo getProductTankInfo() {
 		return TankRenderInfo.EMPTY;
 	}
-
-	/* SMP GUI */
-	public void getGUINetworkData(int i, int j) {
-		if (i == 0) {
-			if (ic2EnergySource != null) {
-				ic2EnergySource.setEnergyStored(j);
-			}
+	
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		if (ic2EnergySource != null) {
+			data.writeDouble(ic2EnergySource.getEnergyStored());
 		}
 	}
-
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+	
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		if (ic2EnergySource != null) {
-			iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
+			ic2EnergySource.setEnergyStored(data.readDouble());
 		}
 	}
 

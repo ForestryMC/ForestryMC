@@ -27,20 +27,10 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 	}
 
 	@Override
-	public void updateProgressBar(int i, int j) {
-		if (tile != null) {
-			tile.getGUINetworkData(i, j);
-		}
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		if (tile != null) {
-			PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-			sendPacketToListeners(packet);
-		}
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
 	}
 
 }

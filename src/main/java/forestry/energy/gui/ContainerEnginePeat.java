@@ -16,6 +16,7 @@ import net.minecraft.inventory.IContainerListener;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
@@ -32,18 +33,9 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 	}
 
 	@Override
-	public void updateProgressBar(int i, int j) {
-		if (tile != null) {
-			tile.getGUINetworkData(i, j);
-		}
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		for (IContainerListener crafter : listeners) {
-			tile.sendGUINetworkData(this, crafter);
-		}
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
 	}
 }

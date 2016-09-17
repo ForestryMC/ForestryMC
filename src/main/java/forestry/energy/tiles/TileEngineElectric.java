@@ -226,10 +226,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	// / SMP GUI
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		data.writeVarInt(currentOutput);
-		data.writeVarInt(heat);
+		super.writeGuiData(data);
 		sockets.writeData(data);
-		energyManager.writeData(data);
 		final boolean hasIc2EnergySink = (ic2EnergySink != null);
 		data.writeBoolean(hasIc2EnergySink);
 		if (hasIc2EnergySink) {
@@ -239,25 +237,13 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		currentOutput = data.readVarInt();
-		heat = data.readVarInt();
+		super.readGuiData(data);
 		sockets.readData(data);
-		energyManager.readData(data);
 		final boolean hasIc2EnergySink = data.readBoolean();
 		if (hasIc2EnergySink) {
 			final int energyStored = data.readVarInt();
 			ic2EnergySink.setEnergyStored(energyStored);
 		}
-	}
-
-	@Override
-	public void getGUINetworkData(int i, int j) {
-		// handled by IStreamableGui
-	}
-
-	@Override
-	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
-		// handled by IStreamableGui
 	}
 
 	// / ENERGY CONFIG CHANGE

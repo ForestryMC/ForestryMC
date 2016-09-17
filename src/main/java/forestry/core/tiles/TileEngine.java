@@ -22,6 +22,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
@@ -35,7 +36,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class TileEngine extends TileBase implements IEnergyConnectionDelegated, IActivatable {
+public abstract class TileEngine extends TileBase implements IEnergyConnectionDelegated, IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 
 	private boolean active = false; // Used for smp.
@@ -276,14 +277,22 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 		pistonSpeedServer = data.readFloat();
 		energyManager.readData(data);
 	}
+	
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		data.writeInt(currentOutput);
+		data.writeInt(heat);
+		energyManager.writeData(data);
+	}
+	
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		currentOutput = data.readInt();
+		heat = data.readInt();
+		energyManager.readData(data);
+	}
 
-	/* SMP GUI */
-	@Deprecated //use packets
-	public abstract void getGUINetworkData(int i, int j);
-
-	@Deprecated //use packets
-	public abstract void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting);
-
+	@Override
 	public EnergyManager getEnergyManager() {
 		return energyManager;
 	}

@@ -255,6 +255,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		super.writeData(data);
 		data.writeBoolean(shutdown);
 		tankManager.writeData(data);
+		burnTank.writeData(data);
 	}
 
 	@Override
@@ -262,33 +263,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		super.readData(data);
 		shutdown = data.readBoolean();
 		tankManager.readData(data);
-	}
-
-	/* GUI */
-	@Override
-	public void getGUINetworkData(int id, int data) {
-		switch (id) {
-			case 0:
-				currentOutput = data;
-				break;
-			case 1:
-				energyManager.setEnergyStored(data);
-				break;
-			case 2:
-				heat = data;
-				break;
-			case 3:
-				burnTank.setCapacity(data);
-				break;
-		}
-	}
-
-	@Override
-	public void sendGUINetworkData(Container containerEngine, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.getEnergyStored());
-		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, burnTank.getCapacity());
+		burnTank.readData(data);
 	}
 
 	@Override
