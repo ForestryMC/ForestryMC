@@ -1,6 +1,5 @@
 package forestry.api.genetics;
 
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**

@@ -29,8 +29,6 @@ import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
 import forestry.energy.compat.rf.IEnergyConnectionDelegated;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.gui.GuiAlyzer;
-
 public interface IAlyzerPlugin {
 
 	@SideOnly(Side.CLIENT)
