@@ -101,7 +101,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 
 		registry.addRecipeClickArea(GuiBottler.class, 80, 37, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
 		registry.addRecipeClickArea(GuiCarpenter.class, 98, 48, 21, 26, ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeClickArea(GuiCentrifuge.class, 52, 22, 16, 48, ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 22, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 54, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
 		registry.addRecipeClickArea(GuiFabricator.class, 121, 53, 18, 18, ForestryRecipeCategoryUid.FABRICATOR);
 		registry.addRecipeClickArea(GuiFermenter.class, 72, 40, 32, 18, ForestryRecipeCategoryUid.FERMENTER);
 		registry.addRecipeClickArea(GuiMoistener.class, 123, 35, 19, 21, ForestryRecipeCategoryUid.MOISTENER);

@@ -16,11 +16,12 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -34,6 +35,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.gui.ContainerCentrifuge;
@@ -41,12 +43,13 @@ import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 
-public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory {
+public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 3200;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
+	private final InventoryCraftResult craftPreviewInventory;
 
 	private ICentrifugeRecipe currentRecipe;
 
@@ -55,6 +58,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	public TileCentrifuge() {
 		super("centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
+		craftPreviewInventory = new InventoryCraftResult();
 	}
 
 	/* LOADING & SAVING */
@@ -114,10 +118,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean workCycle() {
 		if (tryAddPending()) {
+			setCurrentPreviewItem();
 			return true;
 		}
 
 		if (!pendingProducts.isEmpty()) {
+			setCurrentPreviewItem();
 			return false;
 		}
 
@@ -130,8 +136,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		pendingProducts.addAll(products);
 
 		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
-
-		tryAddPending();
+		
+		setCurrentPreviewItem();
 		return true;
 	}
 
@@ -254,5 +260,22 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerCentrifuge(player.inventory, this);
+	}
+	
+	public IInventory getCraftPreviewInventory() {
+		return craftPreviewInventory;
+	}
+	
+	private void setCurrentPreviewItem(){
+		if(!pendingProducts.isEmpty()){
+			craftPreviewInventory.setInventorySlotContents(0, pendingProducts.peek());
+		}else{
+			craftPreviewInventory.setInventorySlotContents(0, null);
+		}
+	}
+
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		craftPreviewInventory.setInventorySlotContents(0, itemStack);
 	}
 }

@@ -21,7 +21,7 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, TileCe
 
 	public GuiCentrifuge(InventoryPlayer inventory, TileCentrifuge tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket.png", new ContainerCentrifuge(inventory, tile), tile);
-		widgetManager.add(new SocketWidget(this.widgetManager, 71, 37, tile, 0));
+		widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
 	}
 
 	@Override
@@ -29,6 +29,7 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, TileCe
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		int progress = inventory.getProgressScaled(16);
-		drawTexturedModalRect(guiLeft + 58, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+		drawTexturedModalRect(guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+		drawTexturedModalRect(guiLeft + 67, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
 	}
 }
