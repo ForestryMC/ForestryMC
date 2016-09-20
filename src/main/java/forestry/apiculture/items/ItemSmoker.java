@@ -1,6 +1,9 @@
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.IArmorApiarist;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IHiveTile;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
@@ -9,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -18,8 +22,10 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public class ItemSmoker extends ItemForestry implements IArmorApiarist {
+public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
 		super(Tabs.tabApiculture);
 		setMaxStackSize(1);
@@ -102,8 +108,22 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 		return 32;
 	}
 
+	@Nonnull
 	@Override
-	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
-		return true;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new ICapabilityProvider() {
+			@Override
+			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				return capability == ApicultureCapabilities.ARMOR_APIARIST;
+			}
+
+			@Override
+			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
+					return capability.getDefaultInstance();
+				}
+				return null;
+			}
+		};
 	}
 }

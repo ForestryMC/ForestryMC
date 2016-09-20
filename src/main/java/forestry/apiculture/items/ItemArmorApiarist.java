@@ -10,26 +10,30 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Constants;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IItemModelRegister {
+public class ItemArmorApiarist extends ItemArmor implements IArmorNaturalist, IItemModelRegister {
 
 	public ItemArmorApiarist(EntityEquipmentSlot equipmentSlotIn) {
 		super(ArmorMaterial.LEATHER, 0, equipmentSlotIn);
@@ -58,13 +62,26 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	}
 
 	@Override
-	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
-		return true;
-	}
-
-	@Override
 	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
 		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
+	@Nonnull
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new ICapabilityProvider() {
+			@Override
+			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				return capability == ApicultureCapabilities.ARMOR_APIARIST;
+			}
+
+			@Override
+			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
+					return capability.getDefaultInstance();
+				}
+				return null;
+			}
+		};
+	}
 }

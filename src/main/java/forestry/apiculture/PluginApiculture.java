@@ -22,6 +22,7 @@ import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
@@ -36,6 +37,7 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -72,6 +74,7 @@ import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PluginCore;
 import forestry.core.PluginFluids;
+import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -106,6 +109,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -161,6 +165,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
+
+		// Capabilities
+		CapabilityManager.INSTANCE.register(IArmorApiarist.class, new NullStorage<>(), () -> ArmorApiarist.INSTANCE);
 	}
 
 	@Override
