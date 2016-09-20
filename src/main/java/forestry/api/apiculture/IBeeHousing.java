@@ -5,33 +5,29 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.ILocatable;
 import forestry.api.genetics.IHousing;
+import net.minecraft.util.math.Vec3d;
 
-public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvider {
+public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvider, ILocatable {
 
 	/**
-	 * Used by BeeManager.beeRoot.createBeeHousingModifier(IBeeHousing housing)
+	 * Used by {@link IBeeRoot#createBeeHousingModifier(IBeeHousing)}
 	 * to combine bee modifiers from several sources that can change over time.
 	 * @return IBeeModifiers from the housing, frames, etc.
 	 */
 	Iterable<IBeeModifier> getBeeModifiers();
 
 	/**
-	 * Used by BeeManager.beeRoot.createBeeHousingListener(IBeeHousing housing)
+	 * Used by {@link IBeeRoot#createBeeHousingListener(IBeeHousing)}
 	 * to combine bee listeners from several sources that can change over time.
 	 * @return IBeeListeners from the housing, multiblock parts, etc.
 	 */
 	Iterable<IBeeListener> getBeeListeners();
 
-	@Nonnull
 	IBeeHousingInventory getBeeInventory();
 
 	IBeekeepingLogic getBeekeepingLogic();
@@ -40,14 +36,11 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvid
 
 	boolean canBlockSeeTheSky();
 
-	/** Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12 */
-	World getWorldObj();
-
 	GameProfile getOwner();
 
 	/**
 	 * @since Forestry 4.2
-	 * @return exact coordinates where bee FX should spawn from
+	 * @return exact coordinates where bee particle FX should spawn from
 	 */
 	Vec3d getBeeFXCoordinates();
 }
