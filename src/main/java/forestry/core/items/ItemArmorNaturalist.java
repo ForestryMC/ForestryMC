@@ -10,23 +10,27 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IArmorNaturalist;
+import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
+import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, IItemModelRegister {
+public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister {
 
 	public ItemArmorNaturalist() {
 		super(ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.HEAD);
@@ -34,6 +38,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, 
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
+	@Nonnull
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
@@ -50,9 +55,25 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, 
 		return false;
 	}
 
+	@Nonnull
 	@Override
-	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
-		return armorType == EntityEquipmentSlot.HEAD;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new ICapabilityProvider() {
+			@Override
+			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				return capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
+						armorType == EntityEquipmentSlot.HEAD;
+			}
+
+			@Override
+			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
+						armorType == EntityEquipmentSlot.HEAD) {
+					return capability.getDefaultInstance();
+				}
+				return null;
+			}
+		};
 	}
 
 }

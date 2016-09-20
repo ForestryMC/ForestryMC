@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -30,6 +30,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ILeafTranslator;
 import forestry.api.genetics.ISaplingTranslator;
@@ -41,6 +42,7 @@ import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.log.BlockArbLog;
 import forestry.arboriculture.blocks.slab.BlockArbSlab;
+import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -64,6 +66,7 @@ import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.PluginCore;
+import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -98,6 +101,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -140,6 +144,9 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
+
+		// Capabilities
+		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
 	}
 
 	@Override

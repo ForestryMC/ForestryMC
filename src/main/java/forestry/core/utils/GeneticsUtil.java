@@ -14,17 +14,8 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
@@ -43,6 +34,14 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class GeneticsUtil {
 
@@ -56,12 +55,16 @@ public class GeneticsUtil {
 			return false;
 		}
 
-		Item armorItem = armorItemStack.getItem();
-		if (!(armorItem instanceof IArmorNaturalist)) {
+		final Item armorItem = armorItemStack.getItem();
+		final IArmorNaturalist armorNaturalist;
+		if (armorItem instanceof IArmorNaturalist) { // legacy
+			armorNaturalist = (IArmorNaturalist) armorItem;
+		} else if (armorItemStack.hasCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null)) {
+			armorNaturalist = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null);
+		} else {
 			return false;
 		}
 
-		IArmorNaturalist armorNaturalist = (IArmorNaturalist) armorItem;
 		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 

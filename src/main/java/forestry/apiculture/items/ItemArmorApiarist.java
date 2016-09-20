@@ -14,14 +14,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.core.IArmorNaturalist;
+import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Constants;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -33,7 +32,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorNaturalist, IItemModelRegister {
+public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
 	public ItemArmorApiarist(EntityEquipmentSlot equipmentSlotIn) {
 		super(ArmorMaterial.LEATHER, 0, equipmentSlotIn);
@@ -61,23 +60,24 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorNaturalist, II
 		return false;
 	}
 
-	@Override
-	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
-		return armorType == EntityEquipmentSlot.HEAD;
-	}
-
 	@Nonnull
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST) {
+					return armorType == EntityEquipmentSlot.HEAD;
+				}
 				return capability == ApicultureCapabilities.ARMOR_APIARIST;
 			}
 
 			@Override
 			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
+					return capability.getDefaultInstance();
+				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
+						armorType == EntityEquipmentSlot.HEAD) {
 					return capability.getDefaultInstance();
 				}
 				return null;
