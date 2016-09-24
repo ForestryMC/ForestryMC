@@ -286,6 +286,11 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		boolean isLit = isLit(stack);
 		tileCandle.setColour(colour);
 		tileCandle.setLit(isLit);
+		if (tileCandle.isLit()) {
+			world.theProfiler.startSection("checkLight");
+			world.checkLight(pos);
+			world.theProfiler.endSection();
+		}
 	}
 
 	@Override
@@ -322,19 +327,11 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public ItemStack getUnlitCandle(int amount) {
-		ItemStack itemStack = new ItemStack(this, amount, 0);
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
-		itemStack.setTagCompound(tag);
-		return itemStack;
+		return new ItemStack(this, amount, 0);
 	}
 
 	public ItemStack getLitCandle(int amount) {
-		ItemStack itemStack = new ItemStack(this, amount, 1);
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
-		itemStack.setTagCompound(tag);
-		return itemStack;
+		return new ItemStack(this, amount, 1);
 	}
 
 	@Override
