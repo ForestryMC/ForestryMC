@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
 import forestry.api.recipes.ISqueezerRecipe;
+import net.minecraft.item.ItemStack;
 
 public interface ISqueezerContainerRecipe {
 	ItemStack getEmptyContainer();
 
 	int getProcessingTime();
 
+	@Nullable
 	ItemStack getRemnants();
 
 	float getRemnantsChance();

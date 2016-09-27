@@ -1,21 +1,17 @@
 package forestry.factory.recipes.jei.rainmaker;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.client.Minecraft;
 
-public class RainmakerRecipeCategory extends ForestryRecipeCategory {
+public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRecipeWrapper> {
 	private static final int SLOT_INPUT_INDEX = 0;
 	private final IDrawable slot;
 
@@ -37,13 +33,9 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull RainmakerRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(SLOT_INPUT_INDEX, true, 0, 0);
-		if (recipeWrapper instanceof RainmakerRecipeWrapper) {
-			RainmakerRecipeWrapper rainmakerRecipeWrapper = (RainmakerRecipeWrapper) recipeWrapper;
-			List<ItemStack> input = rainmakerRecipeWrapper.getInputs().get(SLOT_INPUT_INDEX);
-			guiItemStacks.set(SLOT_INPUT_INDEX, input);
-		}
+		guiItemStacks.set(ingredients);
 	}
 }

@@ -3,15 +3,13 @@ package forestry.factory.recipes.jei.rainmaker;
 import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.utils.Translator;
-
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 
 public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
 	@Nonnull
@@ -21,10 +19,9 @@ public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
 		this.substrate = substrate;
 	}
 
-	@Nonnull
 	@Override
-	public List<List<ItemStack>> getInputs() {
-		return Collections.singletonList(Collections.singletonList(substrate.getItem()));
+	public void getIngredients(@Nonnull IIngredients ingredients) {
+		ingredients.setInputs(ItemStack.class, Collections.singletonList(substrate.getItem()));
 	}
 
 	@Override

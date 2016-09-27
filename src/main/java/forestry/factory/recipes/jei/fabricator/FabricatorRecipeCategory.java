@@ -2,30 +2,28 @@ package forestry.factory.recipes.jei.fabricator;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.Fluid;
-
+import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
-public class FabricatorRecipeCategory extends ForestryRecipeCategory {
+public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorRecipeWrapper> {
 
 	private static final int planSlot = 0;
 	private static final int smeltingInputSlot = 1;
@@ -51,7 +49,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FabricatorRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
@@ -69,25 +67,33 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 		}
 		
 		guiFluidStacks.init(inputTank, true, 6, 32, 16, 16, 2000, false, null);
-		
-		FabricatorRecipeWrapper wrapper = (FabricatorRecipeWrapper) recipeWrapper;
-		guiItemStacks.set(planSlot, wrapper.getRecipe().getPlan());
-		
+
+		IFabricatorRecipe recipe = recipeWrapper.getRecipe();
+
+		ItemStack plan = recipe.getPlan();
+		if (plan != null) {
+			guiItemStacks.set(planSlot, plan);
+		}
+
 		List<ItemStack> smeltingInput = new ArrayList<>();
-		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(wrapper.getRecipe().getLiquid().getFluid())) {
+		Fluid recipeFluid = recipe.getLiquid().getFluid();
+		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {
 			smeltingInput.add(s.getResource());
 		}
 		if (!smeltingInput.isEmpty()) {
 			guiItemStacks.set(smeltingInputSlot, smeltingInput);
 		}
-		
-		craftingGridHelper.setOutput(guiItemStacks, wrapper.getOutputs());
-		List<Object> inputs = new ArrayList<>();
-		Collections.addAll(inputs, wrapper.getRecipe().getIngredients());
-		craftingGridHelper.setInput(guiItemStacks, inputs, wrapper.getRecipe().getWidth(), wrapper.getRecipe().getHeight());
-		
-		guiFluidStacks.set(inputTank, wrapper.getFluidInputs());
-		
+
+		List<ItemStack> itemOutputs = ingredients.getOutputs(ItemStack.class);
+		craftingGridHelper.setOutput(guiItemStacks, itemOutputs);
+
+		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(ItemStack.class);
+		craftingGridHelper.setInputStacks(guiItemStacks, itemStackInputs, recipe.getWidth(), recipe.getHeight());
+
+		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
+		if (!fluidInputs.isEmpty()) {
+			guiFluidStacks.set(inputTank, fluidInputs.get(0));
+		}
 	}
 	
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {

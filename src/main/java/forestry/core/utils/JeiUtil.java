@@ -1,5 +1,8 @@
 package forestry.core.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mezz.jei.api.IModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -8,9 +11,12 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class JeiUtil {
 	public static void addDescription(IModRegistry registry, String itemKey, Item... items) {
+		List<ItemStack> itemStacks = new ArrayList<>();
 		for (Item item : items) {
-			addDescription(registry, item, itemKey);
+			itemStacks.add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
 		}
+
+		registry.addDescription(itemStacks, "for.jei.description." + itemKey);
 	}
 
 	public static void addDescription(IModRegistry registry, Block... blocks) {

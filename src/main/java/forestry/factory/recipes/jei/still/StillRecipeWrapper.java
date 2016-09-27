@@ -2,12 +2,11 @@ package forestry.factory.recipes.jei.still;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.List;
-
-import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 	
@@ -15,16 +14,9 @@ public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 		super(recipe);
 	}
 
-	@Nonnull
 	@Override
-	public List<FluidStack> getFluidInputs() {
-		return Collections.singletonList(getRecipe().getInput());
+	public void getIngredients(@Nonnull IIngredients ingredients) {
+		ingredients.setInputs(FluidStack.class, Collections.singletonList(getRecipe().getInput()));
+		ingredients.setOutput(FluidStack.class, getRecipe().getOutput());
 	}
-
-	@Nonnull
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return Collections.singletonList(getRecipe().getOutput());
-	}
-
 }

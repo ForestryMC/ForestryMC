@@ -2,15 +2,9 @@ package forestry.factory.recipes.jei.moistener;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidRegistry;
-
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -18,9 +12,11 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
-public class MoistenerRecipeCategory extends ForestryRecipeCategory {
+public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRecipeWrapper> {
 
 	private static final int resourceSlot = 0;
 	private static final int productSlot = 1;
@@ -60,7 +56,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull MoistenerRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
@@ -71,16 +67,9 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 		guiItemStacks.init(fuelProductSlot, false, 89, 21);
 		
 		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
-		
-		MoistenerRecipeWrapper wrapper = (MoistenerRecipeWrapper) recipeWrapper;
-		guiItemStacks.set(resourceSlot, wrapper.getRecipe().getResource());
-		guiItemStacks.set(fuelItemSlot, wrapper.getFuel().getItem());
-		
-		guiItemStacks.set(productSlot, wrapper.getRecipe().getProduct());
-		guiItemStacks.set(fuelProductSlot, wrapper.getFuel().getProduct());
-		
-		guiFluidStacks.set(inputTank, FluidRegistry.getFluidStack("water", 10000));
-		
+
+		guiItemStacks.set(ingredients);
+		guiFluidStacks.set(ingredients);
 	}
 
 }

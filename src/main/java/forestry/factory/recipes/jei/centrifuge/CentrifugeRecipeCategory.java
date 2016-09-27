@@ -2,29 +2,28 @@ package forestry.factory.recipes.jei.centrifuge;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
 import forestry.core.render.ForestryResource;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
+public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeRecipeWrapper> {
 
 	private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
 	
@@ -62,14 +61,16 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull CentrifugeRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
 		guiItemStacks.init(inputSlot, true, 4, 18);
-		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
-		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
+		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
+		guiItemStacks.set(inputSlot, inputs.get(0));
+
 		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-		setResults(tooltip, centrifugeWrapper.getRecipe().getAllProducts(), guiItemStacks);
+		Map<ItemStack, Float> products = recipeWrapper.getRecipe().getAllProducts();
+		setResults(tooltip, products, guiItemStacks);
 		guiItemStacks.addTooltipCallback(tooltip);
 	}
 	

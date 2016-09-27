@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
 /**
@@ -30,4 +33,7 @@ public interface IDescriptiveRecipe extends IRecipe {
 	 */
 	Object[] getIngredients();
 
+	@Nonnull
+	@Override
+	ItemStack getRecipeOutput();
 }

@@ -2,14 +2,12 @@ package forestry.factory.recipes.jei.bottler;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import forestry.factory.recipes.BottlerRecipe;
+import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class BottlerRecipeWrapper extends ForestryRecipeWrapper<BottlerRecipe> {
 
@@ -17,22 +15,13 @@ public class BottlerRecipeWrapper extends ForestryRecipeWrapper<BottlerRecipe> {
 		super(recipe);
 	}
 
-	@Nonnull
 	@Override
-	public List<FluidStack> getFluidInputs() {
-		return Collections.singletonList(getRecipe().input);
-	}
+	public void getIngredients(@Nonnull IIngredients ingredients) {
+		BottlerRecipe recipe = getRecipe();
 
-	@Nonnull
-	@Override
-	public List<ItemStack> getInputs() {
-		return Collections.singletonList(getRecipe().empty);
-	}
+		ingredients.setInputs(ItemStack.class, Collections.singletonList(recipe.empty));
+		ingredients.setInputs(FluidStack.class, Collections.singletonList(recipe.input));
 
-	@Nonnull
-	@Override
-	public List getOutputs() {
-		return Collections.singletonList(getRecipe().filled);
+		ingredients.setOutput(ItemStack.class, recipe.filled);
 	}
-
 }

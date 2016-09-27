@@ -2,7 +2,7 @@ package forestry.factory.recipes.jei;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.List;
 
 import forestry.core.gui.GuiForestry;
@@ -58,9 +58,11 @@ import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class FactoryJeiPlugin extends BlankModPlugin {
+	public static IJeiHelpers jeiHelpers;
+
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
-		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
+		jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
 		registry.addRecipeCategories(
