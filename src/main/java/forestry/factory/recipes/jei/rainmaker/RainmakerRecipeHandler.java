@@ -34,6 +34,6 @@ public class RainmakerRecipeHandler implements IRecipeHandler<RainmakerRecipeWra
 
 	@Override
 	public boolean isRecipeValid(@Nonnull RainmakerRecipeWrapper wrapper) {
-		return !wrapper.getInputs().isEmpty();
+		return true;
 	}
 }

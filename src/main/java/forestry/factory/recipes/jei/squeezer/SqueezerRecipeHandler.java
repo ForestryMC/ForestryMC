@@ -7,7 +7,7 @@ import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements IRecipeHandler<R> {
+public class SqueezerRecipeHandler<R extends AbstractSqueezerRecipeWrapper> implements IRecipeHandler<R> {
 	
 	@Nonnull
 	private final Class<R> recipeClass;
@@ -42,12 +42,6 @@ public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements I
 
 	@Override
 	public boolean isRecipeValid(@Nonnull R wrapper) {
-		if (wrapper.getFluidOutputs() == null || wrapper.getFluidOutputs().isEmpty()) {
-			return false;
-		}
-		if (wrapper.getInputs() == null || wrapper.getInputs().isEmpty()) {
-			return false;
-		}
 		return true;
 	}
 
