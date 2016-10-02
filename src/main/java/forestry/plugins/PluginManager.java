@@ -46,8 +46,10 @@ import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PluginCore;
+import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 import forestry.core.utils.Translator;
 
 public class PluginManager {
@@ -221,6 +223,13 @@ public class PluginManager {
 			plugin.registerItemsAndBlocks();
 			Log.debug("Register Items and Blocks Complete: {}", plugin);
 		}
+		if (ModUtil.isModLoaded(Constants.MM_MOD_ID)) {
+			for (IForestryPlugin plugin : loadedPlugins) {
+				Log.debug("Register Modules Start: {}", plugin);
+				plugin.registerModules();
+				Log.debug("Register Modules Complete: {}", plugin);
+			}
+		}
 	}
 
 	public static void runPreInit() {
@@ -247,6 +256,13 @@ public class PluginManager {
 			plugin.doInit();
 			plugin.registerRecipes();
 			Log.debug("Init Complete: {}", plugin);
+		}
+		if (ModUtil.isModLoaded(Constants.MM_MOD_ID)) {
+			for (IForestryPlugin plugin : loadedPlugins) {
+				Log.debug("Register Module Containers Start: {}", plugin);
+				plugin.registerModuleContainers();
+				Log.debug("Register Module Containers Complete: {}", plugin);
+			}
 		}
 	}
 

@@ -13,7 +13,7 @@ public class RFHelper {
 	public static boolean isLoaded() {
 		return loaded;
 	}
-
+	
 	public static boolean isEnergyReceiver(TileEntity tile, EnumFacing side) {
 		if (isLoaded()) {
 			return _isEnergyReceiver(tile, side);

@@ -39,6 +39,10 @@ public interface IForestryPlugin {
 	void registerItemsAndBlocks();
 
 	void preInit();
+	
+	void registerModules();
+	
+	void registerModuleContainers();
 
 	void registerTriggers();
 

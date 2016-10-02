@@ -55,6 +55,7 @@ import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.apiculture.modules.ModuleRegistryApiculture;
 import forestry.apiculture.multiblock.TileAlvearyFan;
 import forestry.apiculture.multiblock.TileAlvearyHeater;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
@@ -312,7 +313,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		super.postInit();
 		registerDungeonLoot();
 	}
-
+	
 	private void initFlowerRegistry() {
 		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 
@@ -773,6 +774,16 @@ public class PluginApiculture extends BlankForestryPlugin {
 		hiveRegistry.registerHive(HiveType.END.getHiveUid(), HiveDescription.END);
 		hiveRegistry.registerHive(HiveType.SNOW.getHiveUid(), HiveDescription.SNOW);
 		hiveRegistry.registerHive(HiveType.SWAMP.getHiveUid(), HiveDescription.SWAMP);
+	}
+	
+	@Override
+	public void registerModules() {
+		ModuleRegistryApiculture.registerModules();
+	}
+	
+	@Override
+	public void registerModuleContainers() {
+		ModuleRegistryApiculture.registerModuleContainers();
 	}
 
 	private static void createAlleles() {

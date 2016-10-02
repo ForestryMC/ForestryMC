@@ -1,0 +1,21 @@
+{
+"textures": {
+	"front": "forestry:blocks/beehouse.2",
+	"bottom": "forestry:blocks/beehouse.0",
+	"side": "forestry:blocks/beehouse.4",
+	"top": "forestry:blocks/beehouse.1"
+},
+"elements": [ 
+{
+    "from": [ 2, 1, 0 ],
+    "to": [ 14, 14, 2 ],
+    "faces": {
+        "down":  { "uv": [ 0, 14, 16, 16 ], "texture": "#bottom" },
+        "up":    { "uv": [ 0, 0, 16, 2 ], "texture": "#top" },
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front" },
+        "west":  { "uv": [ 0, 0, 2, 16 ], "texture": "#side" },
+        "east":  { "uv": [ 14, 0, 16, 16 ], "texture": "#side" }
+    }
+}
+]
+}
