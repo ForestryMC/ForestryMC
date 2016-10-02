@@ -60,15 +60,15 @@ public enum EnumTemperature {
 		}
 	}
 
-	public static EnumTemperature getFromBiome(Biome Biome) {
-		if (BiomeHelper.isBiomeHellish(Biome)) {
+	public static EnumTemperature getFromBiome(Biome biome) {
+		if (BiomeHelper.isBiomeHellish(biome)) {
 			return HELLISH;
 		}
-		return getFromValue(Biome.getTemperature());
+		return getFromValue(biome.getTemperature());
 	}
 
-	public static EnumTemperature getFromBiome(Biome Biome, World world, BlockPos pos) {
-		if (BiomeHelper.isBiomeHellish(Biome)) {
+	public static EnumTemperature getFromBiome(Biome biome, World world, BlockPos pos) {
+		if (BiomeHelper.isBiomeHellish(biome)) {
 			return HELLISH;
 		}
 		float temperature = ForestryAPI.climateManager.getTemperature(world, pos);
