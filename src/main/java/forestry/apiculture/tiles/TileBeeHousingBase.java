@@ -35,7 +35,6 @@ import forestry.core.tiles.TileBase;
 
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
 	private final IBeekeepingLogic beeLogic;
-	private BiomeGenBase cachedBiome;
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
@@ -142,10 +141,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public BiomeGenBase getBiome() {
-		if (cachedBiome == null) {
-			cachedBiome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
-		}
-		return cachedBiome;
+		return worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 	}
 
 	@Override

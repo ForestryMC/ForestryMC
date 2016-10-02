@@ -54,7 +54,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
-	private BiomeGenBase cachedBiome;
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
 
@@ -387,11 +386,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public BiomeGenBase getBiome() {
-		if (cachedBiome == null) {
-			ChunkCoordinates coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
-		}
-		return cachedBiome;
+		ChunkCoordinates coords = getReferenceCoord();
+		return worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
 	}
 
 	@Override
