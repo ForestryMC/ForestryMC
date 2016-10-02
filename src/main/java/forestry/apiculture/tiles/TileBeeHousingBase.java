@@ -38,7 +38,6 @@ import net.minecraft.world.biome.Biome;
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private final IBeekeepingLogic beeLogic;
-	private Biome cachedBiome;
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
@@ -164,10 +163,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public Biome getBiome() {
-		if (cachedBiome == null) {
-			cachedBiome = worldObj.getBiome(getPos());
-		}
-		return cachedBiome;
+		return worldObj.getBiome(getPos());
 	}
 
 	@Override

@@ -248,7 +248,6 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public Set<IErrorState> getCanWork(IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		Biome biome = housing.getBiome();
 		BlockPos housingCoords = housing.getCoordinates();
 
 		Set<IErrorState> errorStates = new HashSet<>();
@@ -282,7 +281,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / Check for the sky, except if in hell
-		if (biome != null && !BiomeHelper.isBiomeHellish(biome)) {
+		if (!world.provider.getHasNoSky()) {
 			if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
 				errorStates.add(EnumErrorCode.NO_SKY);
 			}
