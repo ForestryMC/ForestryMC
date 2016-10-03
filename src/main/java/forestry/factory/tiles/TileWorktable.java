@@ -31,6 +31,7 @@ import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -118,39 +119,47 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	private boolean canCraftCurrentRecipe() {
-		if (currentRecipe == null) {
-			return false;
-		}
-
-		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
-		ItemStack[] inventory = InventoryUtil.getStacks(this);
-		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
-		return crafting != null;
+		return craftRecipe(true);
 	}
 
 	@Override
 	public boolean onCraftingStart(EntityPlayer player) {
+		return craftRecipe(false);
+	}
+
+	private boolean craftRecipe(boolean simulate) {
 		if (currentRecipe == null) {
 			return false;
 		}
 
 		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
-		ItemStack[] inventory = InventoryUtil.getStacks(this);
-		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+		ItemStack[] inventoryStacks = InventoryUtil.getStacks(this);
+		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventoryStacks, worldObj, currentRecipe.getRecipeOutput());
 		if (crafting == null) {
 			return false;
 		}
 
 		recipeItems = InventoryUtil.getStacks(crafting);
 
+		IInventory inventory;
+		if (simulate) {
+			inventory = new InventoryBasic("copy", false, this.getSizeInventory());
+			InventoryUtil.deepCopyInventoryContents(this, inventory);
+		} else {
+			inventory = this;
+		}
+
 		// craft recipe should exactly match ingredients here, so no oreDict or tool matching
-		ItemStack[] removed = InventoryUtil.removeSets(this, 1, recipeItems, player, false, false, false);
+		ItemStack[] removed = InventoryUtil.removeSets(inventory, 1, recipeItems, null, false, false, false);
 		if (removed == null) {
 			return false;
 		}
 
-		// update crafting display to match the ingredients that were actually used
-		setCraftingDisplay(crafting);
+		if (!simulate) {
+			// update crafting display to match the ingredients that were actually used
+			setCraftingDisplay(crafting);
+		}
+
 		return true;
 	}
 
