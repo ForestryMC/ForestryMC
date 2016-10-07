@@ -41,7 +41,6 @@ import forestry.core.proxy.Proxies;
 
 public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock, IShearable {
 	private static final int VARIANTS_PER_BLOCK = 16;
-	private static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
 	public static List<BlockDecorativeLeaves> create() {
 		List<BlockDecorativeLeaves> blocks = new ArrayList<>();
@@ -148,7 +147,8 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Nonnull
 	public TreeDefinition getTreeType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + blockNumber * VARIANTS_PER_BLOCK;
+		int variantCount = getVariant().getAllowedValues().size();
+		int variantMeta = (meta % variantCount) + blockNumber * VARIANTS_PER_BLOCK;
 		return TreeDefinition.byMetadata(variantMeta);
 	}
 

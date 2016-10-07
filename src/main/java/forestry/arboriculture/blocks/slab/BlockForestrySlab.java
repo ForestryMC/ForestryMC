@@ -38,7 +38,6 @@ import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends BlockSlab implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	protected static final int VARIANTS_PER_BLOCK = 8;
-	protected static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
 	private final boolean fireproof;
 	private final int blockNumber;

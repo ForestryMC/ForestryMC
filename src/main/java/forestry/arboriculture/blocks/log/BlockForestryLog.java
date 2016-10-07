@@ -35,7 +35,6 @@ import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends BlockLog implements IWoodTyped, IStateMapperRegister, IItemModelRegister {
 	protected static final int VARIANTS_PER_BLOCK = 4;
-	protected static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
 	private final boolean fireproof;
 	private final int blockNumber;

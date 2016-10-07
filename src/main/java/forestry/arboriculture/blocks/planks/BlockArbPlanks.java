@@ -42,7 +42,8 @@ public abstract class BlockArbPlanks extends BlockForestryPlanks<EnumForestryWoo
 	@Nonnull
 	@Override
 	public EnumForestryWoodType getWoodType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + getBlockNumber() * VARIANTS_PER_BLOCK;
+		int variantCount = getVariant().getAllowedValues().size();
+		int variantMeta = (meta % variantCount) + getBlockNumber() * VARIANTS_PER_BLOCK;
 		return EnumForestryWoodType.byMetadata(variantMeta);
 	}
 }

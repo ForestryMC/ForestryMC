@@ -42,7 +42,8 @@ public abstract class BlockFireproofVanillaLog extends BlockForestryLog<EnumVani
 	@Nonnull
 	@Override
 	public EnumVanillaWoodType getWoodType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + getBlockNumber() * VARIANTS_PER_BLOCK;
+		int variantCount = getVariant().getAllowedValues().size();
+		int variantMeta = (meta % variantCount) + getBlockNumber() * VARIANTS_PER_BLOCK;
 		return EnumVanillaWoodType.byMetadata(variantMeta);
 	}
 }
