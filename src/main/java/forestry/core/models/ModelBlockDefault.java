@@ -36,7 +36,7 @@ import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.baker.ModelBaker;
 
-public abstract class ModelBlockDefault<B extends Block> implements IBakedModel {
+public abstract class ModelBlockDefault<B extends Block, K extends Object> implements IBakedModel {
 	private ItemOverrideList overrideList;
 	@Nonnull
 	protected final Class<B> blockClass;
@@ -48,12 +48,15 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 		this.blockClass = blockClass;
 	}
 
-	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		if(state instanceof IExtendedBlockState){
+	protected IBakedModel bakeModel(IBlockState state, K key) {
+		if (key == null) {
+			return null;
+		}
+
+		if(state instanceof IExtendedBlockState) {
 			IModelBaker baker = new ModelBaker();
 			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-	
+
 			IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
 			Block block = state.getBlock();
@@ -61,15 +64,64 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 				return null;
 			}
 			B bBlock = blockClass.cast(block);
-	
-			baker.setRenderBounds(block.getBoundingBox(state, world, pos));
-			bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
-	
+
+			baker.setRenderBounds(state.getBoundingBox(world, pos));
+			bakeBlock(bBlock, key, baker, false);
+
 			blockModel = baker.bakeModel(false);
 			onCreateModel(blockModel);
-			return blockModel.getQuads(state, side, rand);
+			return blockModel;
+		} else {
+			return null;
 		}
-		return Collections.emptyList();
+	}
+
+	protected IBakedModel getModel(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return bakeModel(state, getWorldKey(state, world, pos));
+	}
+
+	protected IBakedModel bakeModel(ItemStack stack, World world, K key) {
+		if (key == null) {
+			return null;
+		}
+
+		IModelBaker baker = new ModelBaker();
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		B bBlock = blockClass.cast(block);
+
+		// FIXME: This way of getting the IBlockState will probably backfire.
+		IBlockState state = block.getStateFromMeta(stack.getItemDamage());
+		baker.setRenderBounds(state.getBoundingBox(world, null));
+		bakeBlock(bBlock, key, baker, true);
+
+		return itemModel = baker.bakeModel(true);
+	}
+
+	protected IBakedModel getModel(ItemStack stack, World world) {
+		return bakeModel(stack, world, getInventoryKey(stack));
+	}
+
+	@Override
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		IBakedModel model;
+
+		if (state instanceof IExtendedBlockState) {
+			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+			IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+			model = getModel(state, world, pos);
+		} else {
+			model = getModel(state, null, null);
+		}
+
+		if (model != null) {
+			return model.getQuads(state, side, rand);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 	
 	protected void onCreateModel(IModelBakerModel model){
@@ -128,9 +180,9 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 		return overrideList;
 	}
 
-	protected abstract void bakeInventoryBlock(@Nonnull B block, @Nonnull ItemStack item, @Nonnull IModelBaker baker);
-
-	protected abstract void bakeWorldBlock(@Nonnull B block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker);
+	protected abstract K getInventoryKey(@Nonnull ItemStack stack);
+	protected abstract K getWorldKey(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos);
+	protected abstract void bakeBlock(@Nonnull B block, @Nonnull K key, @Nonnull IModelBaker baker, boolean inventory);
 
 	private class DefaultItemOverrideList extends ItemOverrideList {
 		public DefaultItemOverrideList() {
@@ -139,17 +191,7 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 		
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-			IModelBaker baker = new ModelBaker();
-			Block block = Block.getBlockFromItem(stack.getItem());
-			if (!blockClass.isInstance(block)) {
-				return null;
-			}
-			B bBlock = blockClass.cast(block);
-
-			baker.setRenderBounds(block.getBoundingBox(block.getStateFromMeta(stack.getItemDamage()), world, null));
-			bakeInventoryBlock(bBlock, stack, baker);
-
-			return itemModel = baker.bakeModel(true);
+			return getModel(stack, world);
 		}
 	}
 }

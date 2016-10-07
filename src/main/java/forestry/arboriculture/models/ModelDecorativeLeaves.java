@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.arboriculture.genetics.Tree;
+import forestry.core.models.ModelBlockCached;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -41,76 +43,33 @@ import forestry.core.models.ModelBlockDefault;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
-public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeaves> {
-
+public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, TreeDefinition> {
 	public ModelDecorativeLeaves() {
 		super(BlockDecorativeLeaves.class);
 	}
-	
-	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		IModelBaker baker = new ModelBaker();
 
-		Block block = state.getBlock();
-		if (!blockClass.isInstance(block)) {
+	@Override
+	protected TreeDefinition getInventoryKey(@Nonnull ItemStack stack) {
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if (!(block instanceof BlockDecorativeLeaves)) {
 			return null;
 		}
-		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-		TreeDefinition tree = state.getValue(bBlock.getVariant());
-
-		baker.setRenderBounds(Block.FULL_BLOCK_AABB);
-		bakeBlock(bBlock, tree, baker);
-
-		blockModel = baker.bakeModel(false);
-		return blockModel.getQuads(state, side, rand);
-	}
-	
-	@Override
-	protected ItemOverrideList createOverrides() {
-		return new LeaveOverideList(this);
-	}
-	
-	private static class LeaveOverideList extends ItemOverrideList{
-
-		private final ModelDecorativeLeaves modelDecorativeLeaves;
-
-		public LeaveOverideList(ModelDecorativeLeaves modelDecorativeLeaves) {
-			super(Collections.emptyList());
-			this.modelDecorativeLeaves = modelDecorativeLeaves;
-		}
-		
-		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-			IModelBaker baker = new ModelBaker();
-			Block block = Block.getBlockFromItem(stack.getItem());
-			if (!modelDecorativeLeaves.blockClass.isInstance(block)) {
-				return null;
-			}
-			BlockDecorativeLeaves bBlock = modelDecorativeLeaves.blockClass.cast(block);
-			TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
-
-			baker.setRenderBounds(Block.FULL_BLOCK_AABB);
-			bakeBlock(bBlock, tree, baker);
-
-			return modelDecorativeLeaves.itemModel = baker.bakeModel(true);
-		}
-		
+		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
+		return bBlock.getTreeType(stack.getMetadata());
 	}
 
 	@Override
-	protected void bakeInventoryBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
-
+	protected TreeDefinition getWorldKey(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
+		Block block = state.getBlock();
+		if (!(block instanceof BlockDecorativeLeaves)) {
+			return null;
+		}
+		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
+		return state.getValue(bBlock.getVariant());
 	}
 
 	@Override
-	protected void bakeWorldBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
-	}
-
-	public static void bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker) {
-		if (treeDefinition == null) {
-			return;
-		}
-
+	protected void bakeBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull TreeDefinition treeDefinition, @Nonnull IModelBaker baker, boolean inventory) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 
 		ITreeGenome genome = treeDefinition.getGenome();
@@ -119,7 +78,7 @@ public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeav
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
-		
+
 		// Render the plain leaf block.
 		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leafSprite, 0);
 
@@ -129,7 +88,7 @@ public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeav
 			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
 			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitSprite, 1);
 		}
-		
+
 		// Set the particle sprite
 		baker.setParticleSprite(leafSprite);
 	}

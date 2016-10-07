@@ -12,6 +12,7 @@ package forestry.core;
 
 import java.util.Collection;
 
+import forestry.core.models.ModelBlockCached;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootPool;
@@ -94,6 +95,7 @@ public class EventHandlerCore {
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		ErrorStateRegistry.initSprites();
 		TextureManager.initDefaultSprites();
+		ModelBlockCached.clear();
 	}
 
 	@SubscribeEvent
