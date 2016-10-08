@@ -11,16 +11,19 @@
 package forestry.core.models;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +39,7 @@ import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.baker.ModelBaker;
 
-public abstract class ModelBlockDefault<B extends Block, K extends Object> implements IBakedModel {
+public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
 	private ItemOverrideList overrideList;
 	@Nonnull
 	protected final Class<B> blockClass;
@@ -104,6 +107,7 @@ public abstract class ModelBlockDefault<B extends Block, K extends Object> imple
 		return bakeModel(stack, world, getInventoryKey(stack));
 	}
 
+	@Nonnull
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		IBakedModel model;
@@ -152,18 +156,20 @@ public abstract class ModelBlockDefault<B extends Block, K extends Object> imple
 		return blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer();
 	}
 	
+	@Nonnull
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		if(blockModel != null) {
 			return blockModel.getParticleTexture();
 		}
-		return null;
+		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 
+	@Nonnull
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		if(itemModel == null) {
-			return null;
+		if (itemModel == null) {
+			return ItemCameraTransforms.DEFAULT;
 		}
 		return itemModel.getItemCameraTransforms();
 	}
@@ -172,6 +178,7 @@ public abstract class ModelBlockDefault<B extends Block, K extends Object> imple
 		return new DefaultItemOverrideList();
 	}
 
+	@Nonnull
 	@Override
 	public ItemOverrideList getOverrides() {
 		if (overrideList == null) {

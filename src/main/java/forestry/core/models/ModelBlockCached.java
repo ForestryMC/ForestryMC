@@ -15,10 +15,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ModelBlockCached<B extends Block, K extends Object> extends ModelBlockDefault<B, K> {
-    private static final boolean DISABLE_CACHE = false;
+public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDefault<B, K> {
     private static final Set<ModelBlockCached> CACHE_PROVIDERS = new HashSet<>();
-    private final Cache<K, IBakedModel> inventoryCache, worldCache;
+
+    private final Cache<K, IBakedModel> inventoryCache;
+    private final Cache<K, IBakedModel> worldCache;
 
     public static void clear() {
         for (ModelBlockCached modelBlockCached : CACHE_PROVIDERS) {
@@ -35,14 +36,10 @@ public abstract class ModelBlockCached<B extends Block, K extends Object> extend
     }
 
     @Override
-    protected IBakedModel getModel(IBlockState state, IBlockAccess world, BlockPos pos) {
+    protected IBakedModel getModel(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
         K key = getWorldKey(state, world, pos);
         if (key == null) {
             return null;
-        }
-
-        if (DISABLE_CACHE) {
-            return bakeModel(state, key);
         }
 
         IBakedModel model = worldCache.getIfPresent(key);
@@ -58,10 +55,6 @@ public abstract class ModelBlockCached<B extends Block, K extends Object> extend
         K key = getInventoryKey(stack);
         if (key == null) {
             return null;
-        }
-
-        if (DISABLE_CACHE) {
-            return bakeModel(stack, world, key);
         }
 
         IBakedModel model = inventoryCache.getIfPresent(key);
