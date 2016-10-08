@@ -33,6 +33,8 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
 
         worldCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
         inventoryCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+
+        CACHE_PROVIDERS.add(this);
     }
 
     @Override
