@@ -356,14 +356,21 @@ public class PluginFactory extends BlankForestryPlugin {
 				'Y', PluginCore.items.sturdyCasing);
 
 		// / CHIPSETS
-		ItemCircuitBoard circuitBoard = PluginCore.items.circuitboards;
-		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}),
+		ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{});
+		ItemStack enhancedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{});
+		ItemStack refinedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{});
+		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
+
+		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, 1000), null, basicCircuitboard,
 				"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}),
+
+		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(FluidRegistry.WATER, 1000), null, enhancedCircuitboard,
 				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}),
+
+		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, refinedCircuitboard,
 				"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}),
+
+		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(FluidRegistry.WATER, 1000), null, intricateCircuitboard,
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
 		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(FluidRegistry.WATER, 1000), null, PluginCore.items.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");

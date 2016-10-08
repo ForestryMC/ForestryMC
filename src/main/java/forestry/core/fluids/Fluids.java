@@ -221,7 +221,7 @@ public enum Fluids {
 	}
 
 	@Nullable
-	public static Fluids getFluidDefinition(FluidStack fluidStack) {
+	public static Fluids getFluidDefinition(@Nullable FluidStack fluidStack) {
 		if (fluidStack != null) {
 			Fluid fluid = fluidStack.getFluid();
 			if (fluid != null) {

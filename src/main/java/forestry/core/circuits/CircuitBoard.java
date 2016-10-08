@@ -35,7 +35,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	@Nonnull
 	private final ICircuit[] circuits;
 
-	public CircuitBoard(@Nonnull EnumCircuitBoardType type, @Nonnull ICircuitLayout layout, @Nonnull ICircuit[] circuits) {
+	public CircuitBoard(@Nonnull EnumCircuitBoardType type, @Nullable ICircuitLayout layout, @Nonnull ICircuit[] circuits) {
 		this.type = type;
 		this.layout = layout;
 		this.circuits = circuits;
