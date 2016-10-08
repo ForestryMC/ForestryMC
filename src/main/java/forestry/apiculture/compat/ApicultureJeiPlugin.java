@@ -1,7 +1,6 @@
 package forestry.apiculture.compat;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -13,10 +12,23 @@ import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
-import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class ApicultureJeiPlugin extends BlankModPlugin {
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+		ItemRegistryApiculture items = PluginApiculture.items;
+
+		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
+			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
+			return species == null ? null : species.getUID();
+		};
+
+		subtypeRegistry.registerNbtInterpreter(items.beeDroneGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerNbtInterpreter(items.beePrincessGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerNbtInterpreter(items.beeQueenGE, beeSubtypeInterpreter);
+	}
+
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
 		ItemRegistryApiculture items = PluginApiculture.items;
@@ -39,21 +51,5 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 				items.scoop,
 				items.imprinter
 		);
-
-		ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
-		subtypeRegistry.registerNbtInterpreter(items.beeDroneGE, BeeSubtypeInterpreter.INSTANCE);
-		subtypeRegistry.registerNbtInterpreter(items.beePrincessGE, BeeSubtypeInterpreter.INSTANCE);
-		subtypeRegistry.registerNbtInterpreter(items.beeQueenGE, BeeSubtypeInterpreter.INSTANCE);
-	}
-
-	private static class BeeSubtypeInterpreter implements ISubtypeRegistry.ISubtypeInterpreter {
-		public static BeeSubtypeInterpreter INSTANCE = new BeeSubtypeInterpreter();
-
-		@Nullable
-		@Override
-		public String getSubtypeInfo(@Nonnull ItemStack itemStack) {
-			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
-			return species == null ? null : species.getUID();
-		}
 	}
 }
