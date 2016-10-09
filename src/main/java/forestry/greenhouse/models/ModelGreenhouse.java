@@ -11,29 +11,28 @@
 package forestry.greenhouse.models;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
-
-import net.minecraftforge.common.property.IExtendedBlockState;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import org.apache.commons.lang3.tuple.Pair;
 
 // DO NOT CACHE THIS. PLEASE. I BEG YOU. NOT IN THE CURRENT STATE.
 public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGreenhouse.Key> {
@@ -59,8 +58,11 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
-		return new Key(state instanceof IExtendedBlockState ? ((IExtendedBlockState) state) : null, world, pos);
+	protected Key getWorldKey(@Nonnull IBlockState state) {
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+		return new Key(stateExtended, world, pos);
 	}
 
 	@Override

@@ -1,26 +1,23 @@
 package forestry.farming.models;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
-import forestry.arboriculture.models.ModelLeaves;
+import forestry.api.core.IModelBaker;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
+import forestry.core.tiles.TileUtil;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.tiles.TileFarm;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
 import net.minecraftforge.common.property.IExtendedBlockState;
-
-import forestry.api.core.IModelBaker;
-import forestry.core.models.ModelBlockDefault;
-import forestry.core.tiles.TileUtil;
-import forestry.farming.blocks.BlockFarm;
-import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.tiles.TileFarm;
-
-import java.util.Objects;
 
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
 	public static class Key {
@@ -63,7 +60,11 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
+	protected Key getWorldKey(@Nonnull IBlockState state) {
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+
 		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
 		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;

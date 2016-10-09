@@ -1,19 +1,17 @@
 package forestry.core.models;
 
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDefault<B, K> {
     private static final Set<ModelBlockCached> CACHE_PROVIDERS = new HashSet<>();
@@ -38,8 +36,8 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
     }
 
     @Override
-    protected IBakedModel getModel(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
-        K key = getWorldKey(state, world, pos);
+    protected IBakedModel getModel(@Nonnull IBlockState state) {
+        K key = getWorldKey(state);
         if (key == null) {
             return null;
         }
@@ -47,7 +45,9 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
         IBakedModel model = worldCache.getIfPresent(key);
         if (model == null) {
             model = bakeModel(state, key);
-            worldCache.put(key, model);
+            if (model != null) {
+                worldCache.put(key, model);
+            }
         }
         return model;
     }

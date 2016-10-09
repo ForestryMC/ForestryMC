@@ -11,27 +11,7 @@
 package forestry.arboriculture.models;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
-
-import forestry.arboriculture.genetics.Tree;
-import forestry.core.models.ModelBlockCached;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.property.IExtendedBlockState;
+import javax.annotation.Nullable;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ILeafSpriteProvider;
@@ -39,9 +19,16 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.models.ModelBlockDefault;
+import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, TreeDefinition> {
 	public ModelDecorativeLeaves() {
@@ -59,7 +46,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected TreeDefinition getWorldKey(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
+	protected TreeDefinition getWorldKey(@Nonnull IBlockState state) {
 		Block block = state.getBlock();
 		if (!(block instanceof BlockDecorativeLeaves)) {
 			return null;
@@ -91,5 +78,28 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 
 		// Set the particle sprite
 		baker.setParticleSprite(leafSprite);
+	}
+
+	@Nullable
+	@Override
+	protected IBakedModel bakeModel(@Nonnull IBlockState state, @Nonnull TreeDefinition key) {
+		if (key == null) {
+			return null;
+		}
+
+		IModelBaker baker = new ModelBaker();
+
+		Block block = state.getBlock();
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		BlockDecorativeLeaves bBlock = blockClass.cast(block);
+
+		baker.setRenderBounds(Block.FULL_BLOCK_AABB);
+		bakeBlock(bBlock, key, baker, false);
+
+		blockModel = baker.bakeModel(false);
+		onCreateModel(blockModel);
+		return blockModel;
 	}
 }

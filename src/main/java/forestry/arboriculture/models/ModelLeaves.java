@@ -11,8 +11,19 @@
 package forestry.arboriculture.models;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.core.IModelBaker;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.TreeRoot;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.blocks.propertys.UnlistedBlockAccess;
+import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,21 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
 import net.minecraftforge.common.property.IExtendedBlockState;
-
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.core.IModelBaker;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.TreeRoot;
-import forestry.arboriculture.items.ItemBlockLeaves;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.models.ModelBlockDefault;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-
-import java.util.Objects;
 
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
 	public static class Key {
@@ -87,7 +84,11 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
+	protected Key getWorldKey(@Nonnull IBlockState state) {
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
 
