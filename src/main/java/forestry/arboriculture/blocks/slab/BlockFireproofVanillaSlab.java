@@ -50,6 +50,7 @@ public abstract class BlockFireproofVanillaSlab extends BlockForestrySlab<EnumVa
 	@Nonnull
 	@Override
 	public EnumVanillaWoodType getWoodType(int meta) {
+		meta &= ~8; // unset the top/bottom slab bit
 		int variantCount = getVariant().getAllowedValues().size();
 		int variantMeta = (meta % variantCount) + getBlockNumber() * VARIANTS_PER_BLOCK;
 		return EnumVanillaWoodType.byMetadata(variantMeta);

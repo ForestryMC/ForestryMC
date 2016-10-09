@@ -76,11 +76,13 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 		return blockNumber;
 	}
 
+	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return this.isDouble() ? new BlockStateContainer(this, getVariant()) : new BlockStateContainer(this, HALF, getVariant());
 	}
 
+	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		T woodType = getWoodType(meta);
@@ -99,8 +101,7 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		T woodType = state.getValue(getVariant());
-		int meta = woodType.getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
+		int meta = damageDropped(state);
 
 		if (!this.isDouble() && state.getValue(HALF) == BlockSlab.EnumBlockHalf.TOP) {
 			meta |= 8;
@@ -111,7 +112,8 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return state.getValue(getVariant()).getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
+		T woodType = state.getValue(getVariant());
+		return woodType.getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 	}
 
 	@Override
