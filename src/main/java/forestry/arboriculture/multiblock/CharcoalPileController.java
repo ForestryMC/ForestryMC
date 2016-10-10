@@ -156,8 +156,12 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 
 	@Override
 	protected void isMachineWhole() throws MultiblockValidationException {
+		int minX = getSizeLimits().getMinimumXSize();
+		int minY = getSizeLimits().getMinimumYSize();
+		int minZ = getSizeLimits().getMinimumZSize();
+		
 		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
-			throw new MultiblockValidationException(Translator.translateToLocal("multiblock.error.small"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
 		BlockPos maximumCoord = getMaximumCoord();
 		BlockPos minimumCoord = getMinimumCoord();
@@ -168,26 +172,23 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		int maxX = getSizeLimits().getMaximumXSize();
 		int maxY = getSizeLimits().getMaximumYSize();
 		int maxZ = getSizeLimits().getMaximumZSize();
-		int minX = getSizeLimits().getMinimumXSize();
-		int minY = getSizeLimits().getMinimumYSize();
-		int minZ = getSizeLimits().getMinimumZSize();
 		if (maxX > 0 && deltaX > maxX) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.large.x", maxX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.x", maxX));
 		}
 		if (maxY > 0 && deltaY > maxY) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.large.y", maxY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.y", maxY));
 		}
 		if (maxZ > 0 && deltaZ > maxZ) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.large.z", maxZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.z", maxZ));
 		}
 		if (deltaX < minX) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.small.x", minX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.x", minX));
 		}
 		if (deltaY < minY) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.small.y", minY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.y", minY));
 		}
 		if (deltaZ < minZ) {
-			throw new MultiblockValidationException(Translator.translateToLocalFormatted("multiblock.error.small.z", minZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
 		}
 		
 		TileEntity te;
