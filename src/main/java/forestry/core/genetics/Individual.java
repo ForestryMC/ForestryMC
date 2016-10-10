@@ -26,7 +26,11 @@ public abstract class Individual implements IIndividual {
 	}
 
 	protected Individual(@Nonnull NBTTagCompound nbt) {
-		isAnalyzed = nbt.getBoolean("IsAnalyzed");
+		if(nbt.hasKey("IsAnalyzed")){
+			isAnalyzed = nbt.getBoolean("IsAnalyzed");
+		}else{
+			isAnalyzed = false;
+		}
 	}
 
 	@Override

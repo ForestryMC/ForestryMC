@@ -32,8 +32,12 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 
 	protected IndividualLiving(@Nonnull NBTTagCompound nbt) {
 		super(nbt);
-		health = nbt.getInteger("Health");
-		maxHealth = nbt.getInteger("MaxH");
+		if(nbt.hasKey("Health")){
+			health = nbt.getInteger("Health");
+		}
+		if(nbt.hasKey("MaxH")){
+			maxHealth = nbt.getInteger("MaxH");
+		}
 	}
 
 	@Override
