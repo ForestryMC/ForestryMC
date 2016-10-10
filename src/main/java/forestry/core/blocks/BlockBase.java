@@ -39,6 +39,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -156,7 +157,9 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 				if (!playerIn.isSneaking()) {
 					if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 						IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-						if (FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn)) {
+						FluidActionResult fluidActionResult = FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn);
+						if (fluidActionResult.isSuccess()) {
+							playerIn.setHeldItem(hand, fluidActionResult.getResult());
 							return true;
 						}
 					}

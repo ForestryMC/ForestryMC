@@ -23,13 +23,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemPipette extends ItemForestry implements IToolPipette, IFluidContainerItem {
+public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	public ItemPipette() {
 		setMaxStackSize(1);
@@ -40,50 +41,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = PipetteContents.create(itemstack);
 		return contained == null || !contained.isFull();
-	}
-
-	@Override
-	public int fill(ItemStack itemstack, FluidStack liquid, boolean doFill) {
-		PipetteContents contained = PipetteContents.create(itemstack);
-
-		int limit = getCapacity(itemstack);
-		int filled;
-
-		if (contained == null) {
-			if (liquid.amount > limit) {
-				filled = limit;
-			} else {
-				filled = liquid.amount;
-			}
-
-			contained = new PipetteContents(new FluidStack(liquid, filled));
-		} else {
-			if (contained.getContents().amount >= limit) {
-				return 0;
-			}
-			if (!contained.getContents().isFluidEqual(liquid)) {
-				return 0;
-			}
-
-			int space = limit - contained.getContents().amount;
-
-			if (liquid.amount > space) {
-				filled = space;
-			} else {
-				filled = liquid.amount;
-			}
-
-			contained.getContents().amount += filled;
-		}
-
-		if (doFill) {
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			contained.writeToNBT(nbttagcompound);
-			itemstack.setTagCompound(nbttagcompound);
-			itemstack.setItemDamage(1);
-		}
-
-		return filled;
 	}
 
 	@Override
@@ -115,7 +72,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if (stack.getItemDamage() <= 0) {
+			if (FluidUtil.getFluidContained(stack) == null) {
 				return models[0];
 			} else {
 				return models[1];
@@ -125,44 +82,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette, IFluidCon
 	}
 
 	@Override
-	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
-		PipetteContents contained = PipetteContents.create(pipette);
-		if (contained == null) {
-			return null;
-		}
-
-		int drained = maxDrain;
-		if (contained.getContents().amount < drained) {
-			drained = contained.getContents().amount;
-		}
-
-		if (doDrain) {
-			contained.getContents().amount -= drained;
-
-			if (contained.getContents().amount <= 0) {
-				pipette.setTagCompound(new NBTTagCompound());
-				pipette.setItemDamage(0);
-			} else {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				contained.writeToNBT(nbttagcompound);
-				pipette.setTagCompound(nbttagcompound);
-			}
-		}
-
-		return new FluidStack(contained.getContents(), drained);
-	}
-
-	@Override
-	public FluidStack getFluid(ItemStack container) {
-		PipetteContents contained = PipetteContents.create(container);
-		if (contained == null) {
-			return null;
-		}
-		return contained.getContents();
-	}
-
-	@Override
-	public int getCapacity(ItemStack pipette) {
-		return Fluid.BUCKET_VOLUME;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new FluidHandlerItemStackSimple(stack, Fluid.BUCKET_VOLUME);
 	}
 }

@@ -17,9 +17,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public final class FluidHelper {
@@ -65,7 +67,7 @@ public final class FluidHelper {
 		ItemStack filled = input.copy();
 		filled.stackSize = 1;
 
-		IFluidHandler fluidFilledHandler = FluidUtil.getFluidHandler(filled);
+		IFluidHandlerItem fluidFilledHandler = FluidUtil.getFluidHandler(filled);
 		if (fluidFilledHandler == null) {
 			return FillStatus.INVALID_INPUT;
 		}
@@ -88,6 +90,8 @@ public final class FluidHelper {
 		if (fluidInContainer == null) {
 			return FillStatus.INVALID_INPUT;
 		}
+
+		filled = fluidFilledHandler.getContainer();
 
 		boolean moveToOutput = fluidInContainer.amount >= containerCapacity;
 		if (moveToOutput) {
@@ -123,15 +127,17 @@ public final class FluidHelper {
 			return false;
 		}
 
-		ItemStack drainedItemSimulated = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, false);
-		if (drainedItemSimulated == null) {
+		FluidActionResult fluidActionSimulated = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, false);
+		if (!fluidActionSimulated.isSuccess()) {
 			return false;
 		}
 
-		if (input.stackSize == 1 || drainedItemSimulated.stackSize == 0) {
-			ItemStack drainedItem = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
-			if (drainedItem != null) {
-				if (drainedItem.stackSize > 0) {
+		ItemStack drainedItemSimulated = fluidActionSimulated.getResult();
+		if (input.stackSize == 1 || drainedItemSimulated == null) {
+			FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+			if (fluidActionResult.isSuccess()) {
+				ItemStack drainedItem = fluidActionResult.getResult();
+				if (drainedItem != null) {
 					inv.setInventorySlotContents(inputSlot, drainedItem);
 				} else {
 					inv.decrStackSize(inputSlot, 1);

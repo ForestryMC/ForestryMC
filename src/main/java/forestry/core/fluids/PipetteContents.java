@@ -21,18 +21,15 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.INbtWritable;
+import net.minecraftforge.fluids.FluidUtil;
 
-public class PipetteContents implements INbtWritable {
+public class PipetteContents {
 	@Nonnull
 	private final FluidStack contents;
 
 	@Nullable
 	public static PipetteContents create(@Nullable ItemStack itemStack) {
-		if (itemStack == null) {
-			return null;
-		}
-		NBTTagCompound nbt = itemStack.getTagCompound();
-		FluidStack contents = FluidStack.loadFluidStackFromNBT(nbt);
+		FluidStack contents = FluidUtil.getFluidContained(itemStack);
 		if (contents == null) {
 			return null;
 		}
@@ -57,11 +54,5 @@ public class PipetteContents implements INbtWritable {
 		descr += " (" + contents.amount + " mb)";
 
 		list.add(descr);
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		contents.writeToNBT(nbttagcompound);
-		return nbttagcompound;
 	}
 }

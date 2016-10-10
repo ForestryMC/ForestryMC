@@ -37,6 +37,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -72,9 +73,10 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		// filled
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			ItemStack itemStack = new ItemStack(itemIn);
-			IFluidHandler fluidHandler = new FluidHandlerItemForestry(itemStack, type);
+			IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 			if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
-				subItems.add(itemStack);
+				ItemStack filled = fluidHandler.getContainer();
+				subItems.add(filled);
 			}
 		}
 	}
