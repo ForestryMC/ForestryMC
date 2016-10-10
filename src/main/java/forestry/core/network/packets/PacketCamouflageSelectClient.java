@@ -94,9 +94,5 @@ public class PacketCamouflageSelectClient extends PacketCoordinates implements I
 				player.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 			}
 		}
-		
-		if (handler != null) {
-			handler.setCamouflageBlock(camouflageType, camouflageStack);
-		}
 	}
 }
