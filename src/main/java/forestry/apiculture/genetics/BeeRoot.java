@@ -180,7 +180,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getMember(ItemStack stack) {
-		if (!isMember(stack)) {
+		if (!isMember(stack) || !stack.hasTagCompound()) {
 			return null;
 		}
 
