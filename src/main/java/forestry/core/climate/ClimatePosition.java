@@ -34,7 +34,7 @@ public class ClimatePosition implements IClimatePosition {
 	}
 	
 	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos) {
-		Biome biome = climateRegion.getWorld().getBiome(pos);
+		Biome biome = climateRegion.getWorld().getBiomeGenForCoords(pos);
 		this.climateRegion = climateRegion;
 		this.pos = pos;
 		this.temperature = biome.getTemperature();

@@ -135,7 +135,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return false;
 		}
 
-		Biome biome = world.getBiome(new BlockPos(x, 0, z));
+		Biome biome = world.getBiomeGenForCoords(new BlockPos(x, 0, z));
 		if (!getGenome().getPrimary().getSpawnBiomes().isEmpty()) {
 			boolean noneMatched = true;
 
@@ -182,7 +182,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
-		Biome biome = world.getBiome(new BlockPos(x, y, z));
+		Biome biome = world.getBiomeGenForCoords(new BlockPos(x, y, z));
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, new BlockPos(x, y, z));
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, new BlockPos(x, y, z)));
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,

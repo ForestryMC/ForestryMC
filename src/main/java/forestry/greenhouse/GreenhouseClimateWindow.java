@@ -97,7 +97,7 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 		if(biome == null){
 			BlockPos pos = provider.getCoordinates();
 			World world = provider.getWorld();
-			biome = world.getBiome(pos);
+			biome = world.getBiomeGenForCoords(pos);
 		}
 		return BiomeClimateControl.getControl(biome);
 	}

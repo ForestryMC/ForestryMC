@@ -144,7 +144,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public Biome getBiome() {
-		return worldObj.getBiome(getPosition());
+		return worldObj.getBiomeGenForCoords(getPosition());
 	}
 
 	@Override

@@ -191,7 +191,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 	protected IClimateControl getControl(BlockPos pos){
 		if(world.isBlockLoaded(pos)){
 			if(!controller.isAssembled()){
-				return BiomeClimateControl.getControl(world.getBiome(pos));
+				return BiomeClimateControl.getControl(world.getBiomeGenForCoords(pos));
 			}
 		}
 		return controller.getClimateControl();

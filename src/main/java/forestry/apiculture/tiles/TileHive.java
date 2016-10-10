@@ -339,7 +339,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	@Override
 	public Biome getBiome() {
-		return getWorld().getBiome(getPos());
+		return getWorld().getBiomeGenForCoords(getPos());
 	}
 
 	@Override

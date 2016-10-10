@@ -502,12 +502,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public Biome getBiome() {
-		return worldObj.getBiome(pos);
+		return worldObj.getBiomeGenForCoords(pos);
 	}
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(worldObj.getBiome(pos), worldObj, pos);
+		return EnumTemperature.getFromBiome(worldObj.getBiomeGenForCoords(pos), worldObj, pos);
 	}
 
 	@Override

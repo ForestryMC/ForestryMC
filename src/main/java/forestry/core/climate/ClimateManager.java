@@ -115,7 +115,7 @@ public class ClimateManager implements IClimateManager{
 
 	@Override
 	public float getTemperature(World world, BlockPos pos) {
-		Biome biome = world.getBiome(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		IClimateRegion region = getRegionForPos(world, pos);
 		if(region!= null){
 			IClimatePosition position = region.getPositions().get(pos);
@@ -129,7 +129,7 @@ public class ClimateManager implements IClimateManager{
 
 	@Override
 	public float getHumidity(World world, BlockPos pos) {
-		Biome biome = world.getBiome(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		IClimateRegion region = getRegionForPos(world, pos);
 		if(region!= null){
 			IClimatePosition position = region.getPositions().get(pos);

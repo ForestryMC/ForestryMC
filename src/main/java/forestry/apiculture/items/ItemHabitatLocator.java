@@ -69,7 +69,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
-		Biome currentBiome = player.worldObj.getBiome(player.getPosition());
+		Biome currentBiome = player.worldObj.getBiomeGenForCoords(player.getPosition());
 
 		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.worldObj, player.getPosition());
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);

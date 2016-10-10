@@ -106,7 +106,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			IErrorLogic errorLogic = getErrorLogic();
 
 			BlockPos pos = getPos();
-			Biome biome = worldObj.getBiome(pos);
+			Biome biome = worldObj.getBiomeGenForCoords(pos);
 			errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
 
 			BlockPos posAbove = pos.up();

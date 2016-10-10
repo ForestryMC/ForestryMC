@@ -66,7 +66,7 @@ public abstract class HiveDecorator {
 				Log.error("tried to generate a hive in an unloaded area.");
 				return;
 			}
-			Biome biome = world.getBiome(pos);
+			Biome biome = world.getBiomeGenForCoords(pos);
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 			for (Hive hive : hives) {
@@ -84,7 +84,7 @@ public abstract class HiveDecorator {
 	private static void decorateHivesDebug(World world, Random rand, int chunkX, int chunkZ, List<Hive> hives) {
 		int worldX = (chunkX << 4) + 8;
 		int worldZ = (chunkZ << 4) + 8;
-		Biome biome = world.getBiome(new BlockPos(chunkX, 0, chunkZ));
+		Biome biome = world.getBiomeGenForCoords(new BlockPos(chunkX, 0, chunkZ));
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		for (int x = 0; x < 16; x++) {
@@ -113,7 +113,7 @@ public abstract class HiveDecorator {
 			return false;
 		}
 
-		Biome biome = world.getBiome(hivePos);
+		Biome biome = world.getBiomeGenForCoords(hivePos);
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;

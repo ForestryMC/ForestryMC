@@ -856,7 +856,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
 		public boolean isAcceptableFlower(IBlockState blockState, World world, BlockPos pos, String flowerType) {
-			Biome biomeGenForCoords = world.getBiome(pos);
+			Biome biomeGenForCoords = world.getBiomeGenForCoords(pos);
 			return BiomeDictionary.isBiomeOfType(biomeGenForCoords, BiomeDictionary.Type.END);
 		}
 	}

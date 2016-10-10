@@ -29,12 +29,12 @@ public class DefaultClimateProvider implements IClimateProvider {
 
     @Override
     public Biome getBiome() {
-        return world.getBiome(pos);
+        return world.getBiomeGenForCoords(pos);
     }
 
     @Override
     public EnumTemperature getTemperature() {
-        return EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
+        return EnumTemperature.getFromBiome(world.getBiomeGenForCoords(pos), world, pos);
     }
 
     @Override

@@ -67,7 +67,7 @@ public abstract class CocoonDecorator {
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 
-		Biome biome = world.getBiome(new BlockPos(worldX, 0, worldZ));
+		Biome biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
 		
 		Type[] types = BiomeDictionary.getTypesForBiome(biome);
 		EnumSet<Type> speciesTypes = butterfly.getGenome().getPrimary().getSpawnBiomes();

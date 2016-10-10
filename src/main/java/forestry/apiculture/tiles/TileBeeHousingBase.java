@@ -163,7 +163,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public Biome getBiome() {
-		return worldObj.getBiome(getPos());
+		return worldObj.getBiomeGenForCoords(getPos());
 	}
 
 	@Override

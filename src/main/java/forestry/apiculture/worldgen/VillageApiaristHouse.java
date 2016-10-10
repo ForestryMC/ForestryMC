@@ -360,7 +360,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private static IBee getRandomVillageBee(World world, BlockPos pos) {
 
 		// Get current biome
-		Biome biome = world.getBiome(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 
 		List<IBeeGenome> candidates;
 		if (BeeManager.uncommonVillageBees != null && !BeeManager.uncommonVillageBees.isEmpty() && world.rand.nextDouble() < 0.2) {
