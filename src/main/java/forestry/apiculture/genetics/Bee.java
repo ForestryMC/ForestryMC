@@ -44,7 +44,6 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.arboriculture.ITree;
-import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;

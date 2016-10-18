@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;

@@ -65,6 +65,7 @@ public class WoodProvider implements IWoodProvider {
 		return woodType.getCarbonization();
 	}
 	
+	@Override
 	public float getCharcoalChance(int numberOfCharcoal){
 		return woodType.getCharcoalChance(numberOfCharcoal);
 	}

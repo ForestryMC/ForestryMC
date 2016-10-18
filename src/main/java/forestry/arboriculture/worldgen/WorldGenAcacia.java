@@ -27,7 +27,7 @@ public class WorldGenAcacia extends WorldGenTree {
 	public WorldGenAcacia(ITreeGenData tree) {
 		super(tree, 5, 2);
 	}
-
+	
 	@Nonnull
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
@@ -41,20 +41,21 @@ public class WorldGenAcacia extends WorldGenTree {
 			treeTops.addAll(treeTops2);
 		}
 
-		Set<BlockPos> branchEnds = new HashSet<>(treeTops);
+		Set<BlockPos> branchEnds = new HashSet<>();
 
 		for (BlockPos treeTop : treeTops) {
 			int xOffset = treeTop.getX();
-			int yOffset = treeTop.getY() + 1;
+			int yOffset = treeTop.getY() - startPos.getY() + 1;
 			int zOffset = treeTop.getZ();
 			float canopyMultiplier = (1.5f * height - yOffset + 2) / 4.0f;
 			int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
-
+			
+			branchEnds.add(new BlockPos(xOffset, startPos.getY() + yOffset--, zOffset));
 			yOffset--;
 
 			float canopyWidth = rand.nextBoolean() ? 3.0f : 2.5f;
 			int radius = Math.round(canopyMultiplier * canopyWidth - 4);
-			BlockPos pos = startPos.add(xOffset, yOffset - canopyThickness, zOffset);
+			BlockPos pos = new BlockPos(xOffset, startPos.getY() + yOffset - canopyThickness, zOffset);
 			branchEnds.addAll(WorldGenHelper.generateBranches(world, rand, wood, pos, girth, 0.0f, 0.1f, radius, 2, 1.0f));
 		}
 
@@ -64,11 +65,11 @@ public class WorldGenAcacia extends WorldGenTree {
 	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		for (BlockPos branchEnd : branchEnds) {
-			int leafSpawn = branchEnd.getY();
+			int leafSpawn =  branchEnd.getY() - startPos.getY();
 			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
 			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
-			float canopyWidth = rand.nextBoolean() ? 2.0f : 4.5f;
-			BlockPos center = new BlockPos(branchEnd.getX(), leafSpawn - canopyThickness + 1, branchEnd.getZ());
+			float canopyWidth = rand.nextBoolean() ? 1.0f : 1.5f;
+			BlockPos center = new BlockPos(branchEnd.getX(), leafSpawn - canopyThickness + 1 + startPos.getY(), branchEnd.getZ());
 			float radius = Math.max(1, canopyMultiplier * canopyWidth + girth);
 			WorldGenHelper.generateCylinderFromPos(world, leaf, center, radius, canopyThickness, WorldGenHelper.EnumReplaceMode.AIR);
 		}

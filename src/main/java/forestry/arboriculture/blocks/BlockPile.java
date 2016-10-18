@@ -37,7 +37,6 @@ import forestry.core.multiblock.MultiblockLogic;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.tiles.TileSqueezer;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;

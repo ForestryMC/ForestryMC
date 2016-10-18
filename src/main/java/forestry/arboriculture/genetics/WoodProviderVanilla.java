@@ -80,6 +80,7 @@ public class WoodProviderVanilla implements IWoodProvider {
 		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 	}
 	
+	@Override
 	public float getCharcoalChance(int numberOfCharcoal){
 		return woodType.getCharcoalChance(numberOfCharcoal);
 	}
