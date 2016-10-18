@@ -20,17 +20,28 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	private final TileEntitySpecialRenderer<? super T> renderer;
 	@Nonnull
 	private final String particleTextureLocation;
+	private final boolean isFullCube;
 
 	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull String particleTextureLocation) {
-		super(teClass, name);
-		this.renderer = renderer;
-		this.particleTextureLocation = particleTextureLocation;
+		this(teClass, name, renderer, particleTextureLocation, true);
 	}
 
 	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, @Nonnull String particleTextureLocation) {
+		this(teClass, name, renderer, boundingBox, particleTextureLocation, true);
+	}
+	
+	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull String particleTextureLocation, boolean isFullCube) {
+		super(teClass, name);
+		this.renderer = renderer;
+		this.particleTextureLocation = particleTextureLocation;
+		this.isFullCube = isFullCube;
+	}
+
+	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, @Nonnull String particleTextureLocation, boolean isFullCube) {
 		super(teClass, name, boundingBox);
 		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
+		this.isFullCube = isFullCube;
 	}
 
 	@Nullable
@@ -59,6 +70,6 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		return false;
+		return isFullCube;
 	}
 }

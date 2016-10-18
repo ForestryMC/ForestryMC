@@ -47,7 +47,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;

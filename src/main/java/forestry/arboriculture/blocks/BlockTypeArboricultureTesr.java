@@ -37,7 +37,7 @@ public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
 		if (boundingBox != null) {
 			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
 		} else {
-			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0");
+			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0", false);
 		}
 	}
 

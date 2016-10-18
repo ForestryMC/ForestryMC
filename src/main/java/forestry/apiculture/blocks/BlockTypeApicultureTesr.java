@@ -34,7 +34,7 @@ public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileForestry> BlockTypeApicultureTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, AxisAlignedBB boundingBox) {
-		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
+		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
 	}
 
 	@Nonnull
