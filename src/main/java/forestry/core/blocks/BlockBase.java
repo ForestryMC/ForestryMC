@@ -139,6 +139,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return definition.collisionRayTrace(worldIn, pos, start, end);
 	}
 
+
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
@@ -230,6 +231,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(blockType));
 	}
+	
+	@Override
+    public boolean isFullCube(IBlockState state){
+		IMachineProperties definition = getDefinition();
+        return definition.isFullCube(state);
+    }
 
 	@Override
 	protected BlockStateContainer createBlockState() {

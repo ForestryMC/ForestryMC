@@ -46,6 +46,8 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	void setBlock(@Nonnull Block block);
 
 	Block getBlock();
+	
+	boolean isFullCube(IBlockState state);
 
 	@Nonnull
 	AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state);

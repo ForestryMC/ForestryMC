@@ -3,6 +3,7 @@ package forestry.core.blocks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -54,5 +55,10 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@Override
 	public String getParticleTextureLocation() {
 		return particleTextureLocation;
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
 	}
 }

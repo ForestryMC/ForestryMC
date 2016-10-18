@@ -108,4 +108,9 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return true;
+	}
 }
