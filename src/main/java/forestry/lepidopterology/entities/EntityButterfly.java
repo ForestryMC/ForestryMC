@@ -119,6 +119,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		tasks.addTask(11, new AIButterflyRest(this));
 		tasks.addTask(12, new AIButterflyRise(this));
 		tasks.addTask(12, new AIButterflyWander(this));
+		tasks.addTask(13, new AIButterflyGoHome(this));
 	}
 
 	@Override
