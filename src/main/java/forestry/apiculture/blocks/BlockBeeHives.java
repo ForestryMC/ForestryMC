@@ -162,7 +162,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 
 	private static List<IHiveDrop> getDropsForHive(int meta) {
 		String hiveName = getHiveNameForMeta(meta);
-		if (hiveName == null) {
+		if (hiveName == null || hiveName.equals(HiveType.SWARM.getHiveUid())) {
 			return Collections.emptyList();
 		}
 		return PluginApiculture.hiveRegistry.getDrops(hiveName);
