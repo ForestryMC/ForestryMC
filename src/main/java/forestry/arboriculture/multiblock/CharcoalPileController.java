@@ -111,18 +111,26 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		if (!isActive()) {
 			return false;
 		}
-		if(woodBurnTime == 0){
-			int comps = 0;
+		if(woodBurnTime == 0 && tickCount % 20 == 0){
+			int validComps = 0;
 			int newBurnTime = 0;
 			for (IMultiblockComponent part : connectedParts) {
 				ICharcoalPileComponent comp = (ICharcoalPileComponent) part;
 				if (comp.getTreeSpecies() != null) {
-					comps++;
+					validComps++;
 					IWoodProvider woodProvider = comp.getTreeSpecies().getWoodProvider();
-					newBurnTime += woodProvider.getCombustibility() * 1000;
+					int charcoalAmount = woodProvider.getCarbonization();
+					while(worldObj.rand.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)){
+						charcoalAmount++;
+					}
+					newBurnTime += charcoalAmount * 500;
 				}
 			}
-			woodBurnTime = newBurnTime / comps;
+			if(validComps <= 0){
+				woodBurnTime = newBurnTime / validComps;
+			}else{
+				woodBurnTime = 0;
+			}
 		}
 		if (burnTime >= woodBurnTime) {
 			for(IMultiblockComponent part : connectedParts) {
