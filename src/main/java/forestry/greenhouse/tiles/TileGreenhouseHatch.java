@@ -188,7 +188,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
 		if (packetData.hasKey("CamouflageBlock")) {
-			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")));
+			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")), true);
 		}
 	}
 
