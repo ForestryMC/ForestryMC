@@ -144,7 +144,7 @@ public abstract class CocoonDecorator {
 		}
 
 		do {
-			pos.down();
+			pos = pos.down();
 			blockState = world.getBlockState(pos);
 		} while (blockState.getBlock().isLeaves(blockState, world, pos));
 
