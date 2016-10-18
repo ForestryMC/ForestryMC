@@ -26,7 +26,7 @@ import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.FontColour;
+import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
@@ -49,7 +49,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected final WidgetManager widgetManager;
 	protected LedgerManager ledgerManager;
 	protected TextLayoutHelper textLayout;
-	protected FontColour fontColor;
 
 	protected GuiForestry(String texture, C container, I inventory) {
 		this(new ForestryResource(texture), container, inventory);
@@ -65,8 +64,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		this.inventory = inventory;
 		this.container = container;
 
-		this.fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
-		this.textLayout = new TextLayoutHelper(this, this.fontColor);
+		this.textLayout = new TextLayoutHelper(this, ColourProperties.INSTANCE);
 	}
 
 	/* LEDGERS */
@@ -122,8 +120,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		ledgerManager.onGuiClosed();
 	}
 
-	public FontColour getFontColor() {
-		return fontColor;
+	public ColourProperties getFontColor() {
+		return ColourProperties.INSTANCE;
 	}
 
 	public FontRenderer getFontRenderer() {

@@ -24,6 +24,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemInventorySolderingIron> {
@@ -41,7 +42,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 
 		ICircuitLayout layout = ((ContainerSolderingIron) inventorySlots).getLayout();
 		String title = layout.getName();
-		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;
@@ -54,7 +55,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 			}
 
 			int row = i * 20;
-			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, fontColor.get("gui.screen"));
+			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
 			if (tube == null) {
 				ICircuitSocketType socketType = layout.getSocketType();
@@ -62,7 +63,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 					FarmDirection farmDirection = FarmDirection.values()[i];
 					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
 					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, fontColor.get("gui.screen"));
+					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 				}
 			}
 		}

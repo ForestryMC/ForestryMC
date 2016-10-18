@@ -14,40 +14,43 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
-
+import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import forestry.core.utils.Log;
 
-public class FontColour {
+public class ColourProperties implements IResourceManagerReloadListener {
 
-	//private static final ResourceLocation colourDefinitions = new ForestryResource("/config/forestry/colour.properties");
-
+	public static final ColourProperties INSTANCE;
+	
+	static{
+		INSTANCE = new ColourProperties();
+	}
+	
 	private final Properties defaultMappings = new Properties();
 	private final Properties mappings = new Properties();
 
-	public FontColour(IResourceManager texturepack) {
-		load(texturepack);
+	private ColourProperties() {
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
 	}
 
 	public synchronized int get(String key) {
 		return Integer.parseInt(mappings.getProperty(key, defaultMappings.getProperty(key, "d67fff")), 16);
 	}
 
-	public void load(IResourceManager texturepack) {
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
 		try {
-			//InputStream fontStream = texturepack.func_110536_a(colourDefinitions).func_110527_b();
-			InputStream defaultFontStream = FontColour.class.getResourceAsStream("/config/forestry/colour.properties");
-			//mappings.load((fontStream == null) ? defaultFontStream : fontStream);
+			InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
 			mappings.load(defaultFontStream);
 			defaultMappings.load(defaultFontStream);
 
-			//if (fontStream != null)
-			//	fontStream.close();
 			defaultFontStream.close();
 		} catch (IOException e) {
-			Log.error("Failed to load font colors.", e);
+			Log.error("Failed to load colors.properties.", e);
 		}
-
 	}
 
 }

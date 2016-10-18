@@ -12,7 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.client.renderer.GlStateManager;
 
-import forestry.core.render.FontColour;
+import forestry.core.render.ColourProperties;
 
 public class TextLayoutHelper {
 	private static final int LINE_HEIGHT = 12;
@@ -25,7 +25,7 @@ public class TextLayoutHelper {
 	public int column2;
 	public int line;
 
-	public TextLayoutHelper(GuiForestry guiForestry, FontColour fontColour) {
+	public TextLayoutHelper(GuiForestry guiForestry, ColourProperties fontColour) {
 		this.guiForestry = guiForestry;
 		this.defaultFontColor = fontColour.get("gui.screen");
 	}

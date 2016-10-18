@@ -15,6 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.api.food.BeverageManager;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+import forestry.core.render.ColourProperties;
 import forestry.food.inventory.ItemInventoryInfuser;
 
 public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfuser> {
@@ -40,7 +41,7 @@ public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfus
 			}
 
 			int row = (l - 2) * 20;
-			fontRendererObj.drawString(description, startX + 32, startY + 16 + row, fontColor.get("gui.screen"));
+			fontRendererObj.drawString(description, startX + 32, startY + 16 + row, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 	}
 

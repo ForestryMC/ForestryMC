@@ -27,6 +27,7 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.core.network.packets.PacketUpdateClimateControl;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.multiblock.DefaultClimateControl;
@@ -154,12 +155,12 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
     	
     	if(temperatureField.getVisible()){
 			textLayout.line = 20;
-			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.temperature"), 0, fontColor.get("gui.greenhouse.temperature.text"));
+			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.temperature"), 0, ColourProperties.INSTANCE.get("gui.greenhouse.temperature.text"));
 	        temperatureField.drawTextBox();
     	}
     	if(humidityField.getVisible()){
 			textLayout.line = 50;
-			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.humidity"), 0, fontColor.get("gui.greenhouse.humidity.text"));
+			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.humidity"), 0, ColourProperties.INSTANCE.get("gui.greenhouse.humidity.text"));
 	    	
 	        humidityField.drawTextBox();
     	}

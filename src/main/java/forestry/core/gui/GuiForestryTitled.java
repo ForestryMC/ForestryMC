@@ -12,7 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-
+import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
 
@@ -28,7 +28,7 @@ public abstract class GuiForestryTitled<C extends Container, I extends ITitled &
 
 		String name = Translator.translateToLocal(inventory.getUnlocalizedTitle());
 		textLayout.line = 6;
-		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
+		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);
 	}
 }

@@ -43,6 +43,7 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
@@ -60,9 +61,9 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	public final int getColorCoding(boolean dominant) {
 		if (dominant) {
-			return fontColor.get("gui.beealyzer.dominant");
+			return ColourProperties.INSTANCE.get("gui.beealyzer.dominant");
 		} else {
-			return fontColor.get("gui.beealyzer.recessive");
+			return ColourProperties.INSTANCE.get("gui.beealyzer.recessive");
 		}
 	}
 
@@ -83,7 +84,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	}
 
 	public final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
-		textLayout.drawRow(text0, text1, text2, fontColor.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
+		textLayout.drawRow(text0, text1, text2, ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
 				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
@@ -91,7 +92,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
 		textLayout.drawRow(chromosomeName, active.getName(), inactive.getName(),
-				fontColor.get("gui.screen"), getColorCoding(active.isDominant()),
+				ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
 				getColorCoding(inactive.isDominant()));
 	}
 
@@ -195,10 +196,10 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		textLayout.newLine();
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
-		textLayout.drawCenteredLine(title, 8, 208, fontColor.get("gui.screen"));
+		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 
-		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, fontColor.get("gui.screen"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
@@ -265,7 +266,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
 			fontRendererObj.drawStringWithShadow(extinct, guiLeft + 200 - fontRendererObj.getStringWidth(extinct),
-					guiTop + textLayout.getLineY(), fontColor.get("gui.beealyzer.dominant"));
+					guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}
 
 		textLayout.newLine();
