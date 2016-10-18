@@ -37,6 +37,7 @@ import forestry.core.multiblock.MultiblockLogic;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileUtil;
+import forestry.factory.tiles.TileSqueezer;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -52,6 +53,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -414,9 +416,13 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			if (getPileType() == EnumPileType.ASH) {
 				if (pile.getTreeSpecies() != null) {
 					IWoodProvider woodProvider = pile.getTreeSpecies().getWoodProvider();
-					ItemStack charcoal = new ItemStack(PluginArboriculture.items.charcoal, woodProvider.getCarbonization(), woodProvider.getCombustibility());
+					int charcoalAmount = woodProvider.getCarbonization();
+					ItemStack charcoal = new ItemStack(Items.COAL, charcoalAmount, 1);
+					while(RANDOM.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)){
+						charcoal.stackSize++;
+					}
 					list.add(charcoal);
-					list.add(new ItemStack(PluginCore.items.ash, 3));
+					list.add(new ItemStack(PluginCore.items.ash, (int)(charcoalAmount / 1.5)));
 				} else {
 					list.add(new ItemStack(Blocks.DIRT, 2));
 					list.add(new ItemStack(PluginCore.items.ash, 2));

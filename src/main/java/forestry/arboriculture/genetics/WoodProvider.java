@@ -61,13 +61,12 @@ public class WoodProvider implements IWoodProvider {
 	}
 
 	@Override
-	public int getCombustibility() {
-		return woodType.getCombustability();
-	}
-
-	@Override
 	public int getCarbonization() {
 		return woodType.getCarbonization();
+	}
+	
+	public float getCharcoalChance(int numberOfCharcoal){
+		return woodType.getCharcoalChance(numberOfCharcoal);
 	}
 
 }

@@ -138,14 +138,6 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			IAlleleTreeSpecies activeSpecies = (IAlleleTreeSpecies) tree.getGenome().getActiveAllele(EnumTreeChromosome.SPECIES);
 			IAlleleTreeSpecies inActiveSpecies = (IAlleleTreeSpecies) tree.getGenome().getInactiveAllele(EnumTreeChromosome.SPECIES);
 	
-			int activeCombustibility = activeSpecies.getWoodProvider().getCombustibility();
-			int inactiveCombustibility = inActiveSpecies.getWoodProvider().getCombustibility();
-			textLayout.drawLine(Translator.translateToLocal("for.gui.combustibility"), GuiAlyzer.COLUMN_0);
-			guiAlyzer.drawLine(Integer.toString(activeCombustibility), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.SPECIES, false);
-			guiAlyzer.drawLine(Integer.toString(inactiveCombustibility), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.SPECIES, true);
-	
-			textLayout.newLineCompressed();
-	
 			int activeCarbonization = activeSpecies.getWoodProvider().getCarbonization();
 			int inactiveCarbonization = inActiveSpecies.getWoodProvider().getCarbonization();
 			textLayout.drawLine(Translator.translateToLocal("for.gui.carbonization"), GuiAlyzer.COLUMN_0);

@@ -12,8 +12,8 @@ public interface IWoodType extends IStringSerializable {
 	float getHardness();
 
 	int getCarbonization();
-
-	int getCombustability();
+	
+	float getCharcoalChance(int numberOfCharcoal);
 	
 	String getPlankTexture();
 	

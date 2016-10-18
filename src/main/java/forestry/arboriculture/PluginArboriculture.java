@@ -53,7 +53,6 @@ import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
-import forestry.arboriculture.items.ItemCharcoal;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
@@ -538,10 +537,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			if (items.sapling == item) {
 				return 100;
-			}
-			
-			if(items.charcoal == item){
-				return ItemCharcoal.getBurnTime(fuel);
 			}
 			
 			Block block = Block.getBlockFromItem(item);

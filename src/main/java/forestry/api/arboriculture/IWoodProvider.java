@@ -32,12 +32,12 @@ public interface IWoodProvider {
 	ItemStack getWoodStack();
 
 	/**
-	 * @return how long this wood's charcoal burns / 1000
-	 */
-	int getCombustibility();
-
-	/**
 	 * The amount of charcoal dropped from a charcoal pile of this wood.
 	 */
 	int getCarbonization();
+	
+	/**
+	 * The chance that a pile has to drop a extra charcoal
+	 */
+	float getCharcoalChance(int numberOfCharcoal);
 }
