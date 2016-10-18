@@ -62,7 +62,7 @@ public enum Fluids {
 			return new BlockForestryFluid(this, 0, true);
 		}
 	},
-	FOR_HONEY(new Color(255, 196, 35), 1420, 73600) {
+	FOR_HONEY(new Color(255, 196, 35), 1420, 75600) {
 		@Override
 		public Block makeBlock() {
 			return new BlockForestryFluid(this);
@@ -73,7 +73,7 @@ public enum Fluids {
 			return new DrinkProperties(2, 0.2f, 64);
 		}
 	},
-	ICE(new Color(175, 242, 255), 920, 1000) {
+	ICE(new Color(175, 242, 255), 520, 1000) {
 		@Override
 		public int getTemperature() {
 			return 265;
@@ -118,7 +118,7 @@ public enum Fluids {
 	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this);
+			return new BlockForestryFluid(this, 4, true);
 		}
 	};
 	
