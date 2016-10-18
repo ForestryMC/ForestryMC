@@ -421,7 +421,11 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 						charcoal.stackSize++;
 					}
 					list.add(charcoal);
-					list.add(new ItemStack(PluginCore.items.ash, (int)(charcoalAmount / 1.5)));
+					int ashAmount = (int)(charcoalAmount / 1.5);
+					if(ashAmount <= 0){
+						ashAmount = 1;
+					}
+					list.add(new ItemStack(PluginCore.items.ash, ashAmount));
 				} else {
 					list.add(new ItemStack(Blocks.DIRT, 2));
 					list.add(new ItemStack(PluginCore.items.ash, 2));
