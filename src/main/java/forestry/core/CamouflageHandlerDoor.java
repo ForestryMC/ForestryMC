@@ -14,6 +14,8 @@ import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
+import jline.internal.Log;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
@@ -68,6 +70,10 @@ public class CamouflageHandlerDoor implements ICamouflageItemHandler {
 		ItemDoor itemDoor = (ItemDoor) stack.getItem();
 		Block doorBlock = ObfuscationReflectionHelper.getPrivateValue(ItemDoor.class, itemDoor, 0);
 
+		if(doorBlock == null){
+			Log.error("Can't render Door : block is null for" + stack);
+			return null;
+		}
 		IBlockState doorState = doorBlock.getDefaultState()
 				.withProperty(BlockDoor.FACING, currentState.getValue(BlockDoor.FACING))
 				.withProperty(BlockDoor.HINGE, currentState.getValue(BlockDoor.HINGE))

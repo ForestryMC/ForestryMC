@@ -78,8 +78,10 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 			if(itemHandler != null){
 				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
 
-				baker.addBakedModel(model.getLeft(), model.getRight());
-				baker.setParticleSprite(model.getRight().getParticleTexture());
+				if(model != null){
+					baker.addBakedModel(model.getLeft(), model.getRight());
+					baker.setParticleSprite(model.getRight().getParticleTexture());
+				}
 			}
 		}
 
