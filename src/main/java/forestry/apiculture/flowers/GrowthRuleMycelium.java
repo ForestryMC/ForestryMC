@@ -22,7 +22,7 @@ public class GrowthRuleMycelium implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
-		if (!world.isAirBlock(pos)) {
+		if (!world.isBlockLoaded(pos) || !world.isAirBlock(pos)) {
 			return false;
 		}
 

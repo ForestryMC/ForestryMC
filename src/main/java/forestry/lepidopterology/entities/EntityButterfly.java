@@ -204,6 +204,10 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	@Override
 	public float getBlockPathWeight(BlockPos pos) {
+		if (!worldObj.isBlockLoaded(pos)) {
+			return -100f;
+		}
+
 		float weight = 0.0f;
 
 		if (!getButterfly().isAcceptedEnvironment(worldObj, pos.getX(), pos.getY(), pos.getZ())) {

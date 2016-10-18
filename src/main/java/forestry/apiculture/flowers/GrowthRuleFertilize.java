@@ -35,6 +35,10 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 	}
 
 	private boolean growFlower(World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
+
 		IBlockState state = world.getBlockState(pos);
 		Block ground = state.getBlock();
 		int groundMeta;

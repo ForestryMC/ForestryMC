@@ -61,12 +61,14 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area).subtract(halfArea).add(housingCoordinates);
-			IBlockState blockState = world.getBlockState(pos);
+			if (world.isBlockLoaded(pos)) {
+				IBlockState blockState = world.getBlockState(pos);
 
-			if (convertToMycelium(world, blockState, pos)) {
-				return;
-			} else if (growGiantMushroom(world, blockState, pos)) {
-				return;
+				if (convertToMycelium(world, blockState, pos)) {
+					return;
+				} else if (growGiantMushroom(world, blockState, pos)) {
+					return;
+				}
 			}
 		}
 	}

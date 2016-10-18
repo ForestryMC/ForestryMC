@@ -84,6 +84,9 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	private boolean canLand(BlockPos pos) {
+		if (!entity.worldObj.isBlockLoaded(pos)) {
+			return false;
+		}
 		IBlockState blockState = entity.worldObj.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (!block.isPassable(entity.worldObj, pos)) {

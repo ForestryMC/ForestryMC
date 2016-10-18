@@ -57,12 +57,16 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (dest.yCoord < 1) {
 			return false;
 		}
-		IBlockState blockState = entity.worldObj.getBlockState(new BlockPos(dest));
+		BlockPos pos = new BlockPos(dest);
+		if (!entity.worldObj.isBlockLoaded(pos)) {
+			return false;
+		}
+		IBlockState blockState = entity.worldObj.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (!allowFluids && block.getMaterial(blockState).isLiquid()) {
 			return false;
 		}
-		if (!block.isPassable(entity.worldObj, new BlockPos(dest))) {
+		if (!block.isPassable(entity.worldObj, pos)) {
 			return false;
 		}
 		return entity.getButterfly().isAcceptedEnvironment(entity.worldObj, dest.xCoord, dest.yCoord, dest.zCoord);

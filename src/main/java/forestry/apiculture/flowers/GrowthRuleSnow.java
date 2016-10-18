@@ -22,7 +22,7 @@ public class GrowthRuleSnow implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock() != Blocks.SNOW) {
+		if (!world.isBlockLoaded(pos) || world.getBlockState(pos).getBlock() != Blocks.SNOW) {
 			return false;
 		}
 

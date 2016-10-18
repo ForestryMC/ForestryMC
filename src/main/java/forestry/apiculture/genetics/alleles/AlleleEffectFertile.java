@@ -45,11 +45,13 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
-				break;
+			if (world.getChunkProvider().getLoadedChunk(blockX >> 4, blockZ >> 4) != null) {
+				if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
+					break;
+				}
+				blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+				blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 			}
-			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
 		
 		return storedData;

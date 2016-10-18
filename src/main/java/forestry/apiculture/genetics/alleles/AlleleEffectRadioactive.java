@@ -84,7 +84,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (world.isAirBlock(posBlock)) {
+			if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
 				continue;
 			}
 

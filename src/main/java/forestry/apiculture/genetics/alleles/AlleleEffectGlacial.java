@@ -52,16 +52,14 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			BlockPos posBlock = VectUtil.add(randomPos, housingCoords, offset);
 
 			// Freeze water
-			Block block = world.getBlockState(posBlock).getBlock();
-			if (block != Blocks.WATER) {
-				continue;
+			if (world.isBlockLoaded(posBlock)) {
+				Block block = world.getBlockState(posBlock).getBlock();
+				if (block == Blocks.WATER) {
+					if (world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
+						world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
+					}
+				}
 			}
-
-			if (!world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
-				continue;
-			}
-
-			world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
 		}
 
 		return storedData;

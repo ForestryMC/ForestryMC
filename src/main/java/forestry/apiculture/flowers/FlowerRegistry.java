@@ -167,6 +167,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 		List<BlockPos> flowerCoords = new ArrayList<>();
 		for (BlockPos.MutableBlockPos posBlock : VectUtil.getAllInBoxFromCenterMutable(world, minPos, beeHousing.getCoordinates(), maxPos)) {
+			if (!world.isBlockLoaded(posBlock)) {
+				continue;
+			}
 			IBlockState blockState = world.getBlockState(posBlock);
 			if (blockState.getBlock().isAir(blockState, world, posBlock)) {
 				continue;
@@ -194,6 +197,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 	@Override
 	public boolean isAcceptedFlower(String flowerType, World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return true; // Avoid actually checking until the flower's position is loaded.
+		}
 		IBlockState blockState = world.getBlockState(pos);
 		Set<IFlowerAcceptableRule> acceptedCustom = this.registeredRules.get(flowerType);
 		for (IFlowerAcceptableRule acceptableFlower : acceptedCustom) {

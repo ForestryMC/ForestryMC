@@ -55,6 +55,9 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			BlockPos posBlock = randomPos.add(housing.getCoordinates());
 			posBlock = posBlock.add(offset);
+			if (!world.isBlockLoaded(posBlock)) {
+				continue;
+			}
 
 			// Put snow on the ground
 			if (!world.isSideSolid(new BlockPos(posBlock.getX(), posBlock.getY() - 1, posBlock.getZ()), EnumFacing.UP, false)) {
