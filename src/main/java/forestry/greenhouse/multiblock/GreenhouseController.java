@@ -266,7 +266,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	/* CAMOUFLAGE */
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		ItemStack oldCamouflageBlock;
 		switch (type) {
 		case CamouflageManager.DEFAULT:
@@ -279,7 +279,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			oldCamouflageBlock = camouflageDoorBlock;
 			break;
 		default:
-			return;
+			return false;
 		}
 
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)){
@@ -294,14 +294,15 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					camouflageDoorBlock = camouflageBlock;
 					break;
 				default:
-					return;
+					return false;
 			}
-			
-			if (worldObj != null && worldObj.isRemote) {
+			if (sendClientUpdate && worldObj != null && worldObj.isRemote) {
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, null, this, type));
+			return true;
 		}
+		return false;
 	}
 
 	@Override

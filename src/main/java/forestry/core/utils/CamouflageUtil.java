@@ -37,7 +37,7 @@ public class CamouflageUtil {
 	
 	public static void readCamouflageBlockFromNBT(NBTTagCompound data, ICamouflageHandler handler, String type){
 		if(data.hasKey("Camouflage" + type)){
-			handler.setCamouflageBlock(type, ItemStack.loadItemStackFromNBT(data.getCompoundTag("Camouflage" + type)));
+			handler.setCamouflageBlock(type, ItemStack.loadItemStackFromNBT(data.getCompoundTag("Camouflage" + type)), false);
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class CamouflageUtil {
 	
 	public static void readCamouflageBlockFromData(DataInputStreamForestry data, ICamouflageHandler handler) throws IOException{
 		if(data.readShort() == 1){
-			handler.setCamouflageBlock(data.readUTF(), data.readItemStack());
+			handler.setCamouflageBlock(data.readUTF(), data.readItemStack(), false);
 		}
 	}
 	

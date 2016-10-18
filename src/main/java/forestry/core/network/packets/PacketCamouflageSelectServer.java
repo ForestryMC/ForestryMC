@@ -96,8 +96,7 @@ public class PacketCamouflageSelectServer extends PacketCoordinates implements I
 		}
 		
 		if (handler != null) {
-			handler.setCamouflageBlock(camouflageType, camouflageStack);
-			if(selectionType != CamouflageSelectionType.ITEM){
+			if(handler.setCamouflageBlock(camouflageType, camouflageStack, true) && selectionType != CamouflageSelectionType.ITEM){
 				Proxies.net.sendNetworkPacket(new PacketCamouflageSelectClient(handler, camouflageType, selectionType), player.worldObj);
 			}
 		}

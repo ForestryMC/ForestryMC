@@ -76,12 +76,13 @@ public class PacketCamouflageSelectClient extends PacketCoordinates implements I
 				
 				if (controller instanceof ICamouflageHandler) {
 					handler = (ICamouflageHandler) controller;
-					handler.setCamouflageBlock(camouflageType, camouflageStack);
-					for (IMultiblockComponent comp : controller.getComponents()) {
-						if (comp instanceof ICamouflagedTile) {
-							ICamouflagedTile camBlock = (ICamouflagedTile) comp;
-							if (camouflageType != null && camBlock.getCamouflageType() != null && camBlock.getCamouflageType().equals(camouflageType)) {
-								player.worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+					if(handler.setCamouflageBlock(camouflageType, camouflageStack, false)){
+						for (IMultiblockComponent comp : controller.getComponents()) {
+							if (comp instanceof ICamouflagedTile) {
+								ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+								if (camouflageType != null && camBlock.getCamouflageType() != null && camBlock.getCamouflageType().equals(camouflageType)) {
+									player.worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+								}
 							}
 						}
 					}
@@ -90,8 +91,9 @@ public class PacketCamouflageSelectClient extends PacketCoordinates implements I
 		}else if(selectionType == CamouflageSelectionType.TILE){
 			if (tile instanceof ICamouflageHandler) {
 				handler = (ICamouflageHandler) tile;
-				handler.setCamouflageBlock(camouflageType, camouflageStack);
-				player.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+				if(handler.setCamouflageBlock(camouflageType, camouflageStack, false)){
+					player.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+				}
 			}
 		}
 	}

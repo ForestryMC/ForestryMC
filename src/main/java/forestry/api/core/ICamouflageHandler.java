@@ -26,6 +26,7 @@ public interface ICamouflageHandler extends ILocatable {
 
     /**
      * Set the camouflage block item for the type.
+     * @return True if the block has chanced.
      */
-    void setCamouflageBlock(String type, ItemStack camouflageBlock);
+    boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate);
 }

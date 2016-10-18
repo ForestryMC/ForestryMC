@@ -48,7 +48,7 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 				String type = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflage).getType();
 				if(type != null && handler.canHandleType(type)){
 					if(world.isRemote){
-						handler.setCamouflageBlock(type, camouflage);
+						handler.setCamouflageBlock(type, camouflage, false);
 					}
 					return EnumActionResult.SUCCESS;
 				}

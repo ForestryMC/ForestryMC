@@ -56,7 +56,7 @@ public class WidgetCamouflageSlot extends Widget {
 			return;
 		}
 		if (GuiScreen.isShiftKeyDown()) {
-			camouflageHandler.setCamouflageBlock(type, camouflageHandler.getDefaultCamouflageBlock(type));
+			camouflageHandler.setCamouflageBlock(type, camouflageHandler.getDefaultCamouflageBlock(type), false);
 		} else {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ItemStack stack = player.inventory.getItemStack();
@@ -64,7 +64,7 @@ public class WidgetCamouflageSlot extends Widget {
 				if (!CamouflageManager.camouflageAccess.isItemBlackListed(type, stack)) {
 					for(ICamouflageItemHandler handler : CamouflageManager.camouflageAccess.getCamouflageItemHandler(type)){
 						if(handler != null && handler.canHandle(stack)){
-							camouflageHandler.setCamouflageBlock(handler.getType(), stack.copy());
+							camouflageHandler.setCamouflageBlock(handler.getType(), stack.copy(), false);
 						}
 					}
 				}

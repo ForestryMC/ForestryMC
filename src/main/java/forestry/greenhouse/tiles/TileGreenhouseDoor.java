@@ -19,9 +19,9 @@ public class TileGreenhouseDoor extends TileGreenhouse {
 	}
 	
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
-			super.setCamouflageBlock(type, camouflageBlock);
+			super.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);
 			TileGreenhouseDoor otherDoorTile = null;
 			if(worldObj.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
 				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.up());
@@ -29,9 +29,10 @@ public class TileGreenhouseDoor extends TileGreenhouse {
 				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.down());
 			}
 			if(otherDoorTile != null){
-				otherDoorTile.setCamouflageBlock(type, camouflageBlock);
+				return otherDoorTile.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);
 			}
 		}
+		return false;
 	}
 
 }

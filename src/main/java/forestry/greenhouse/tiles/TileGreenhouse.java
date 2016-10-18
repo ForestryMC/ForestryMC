@@ -103,15 +103,17 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			this.camouflageBlock = camouflageBlock;
 			
-			if (worldObj != null && worldObj.isRemote) {
+			if (sendClientUpdate && worldObj != null && worldObj.isRemote) {
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
