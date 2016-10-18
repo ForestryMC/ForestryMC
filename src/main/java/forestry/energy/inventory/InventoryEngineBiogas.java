@@ -11,7 +11,7 @@
 package forestry.energy.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -25,6 +25,11 @@ public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas
 		super(engineBronze, 1, "Items");
 	}
 
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+		return true;
+	}
+	
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN) {
