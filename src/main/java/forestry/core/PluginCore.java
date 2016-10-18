@@ -71,7 +71,6 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.render.ColourProperties;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -130,8 +129,6 @@ public class PluginCore extends BlankForestryPlugin {
 		super.preInit();
 		
 		GameProfileDataSerializer.register();
-		//load colour properties
-		ColourProperties.INSTANCE.getClass();
 
 		MinecraftForge.EVENT_BUS.register(this);
 

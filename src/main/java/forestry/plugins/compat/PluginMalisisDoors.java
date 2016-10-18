@@ -6,7 +6,6 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.item.ItemStack;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.MALISIS_DOORES, name = "malisisdoors", author = "nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.malisisDoors.description")
 public class PluginMalisisDoors extends BlankForestryPlugin {
