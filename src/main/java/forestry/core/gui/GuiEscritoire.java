@@ -20,6 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
 import forestry.core.gui.widgets.ProbeButton;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.render.ColourProperties;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
@@ -94,10 +95,10 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			String format = TextFormatting.UNDERLINE + TextFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
 			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
-			textLayout.drawLine(format + attemptNoString, 170, fontColor.get("gui.mail.lettertext"));
+			textLayout.drawLine(format + attemptNoString, 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			textLayout.newLine();
 			String escritoireText = textSource.getText(inventory.getGame());
-			textLayout.drawSplitLine(escritoireText, 170, 90, fontColor.get("gui.mail.lettertext"));
+			textLayout.drawSplitLine(escritoireText, 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		}
 		textLayout.endPage();
 	}

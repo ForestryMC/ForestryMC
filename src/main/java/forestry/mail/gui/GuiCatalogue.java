@@ -28,6 +28,7 @@ import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
@@ -72,7 +73,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
 
 		clearTradeInfoWidgets();
 
@@ -90,18 +91,18 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	}
 
 	private void drawNoTrade(int x, int y) {
-		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
 	}
 
 	private void drawTradePreview(ITradeStationInfo tradeInfo, int x, int y) {
 
-		fontRendererObj.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
 
-		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
 
-		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
 
 		for (int i = 0; i < tradeInfo.getRequired().length; i++) {
 			ItemStack itemStack = tradeInfo.getRequired()[i];
@@ -109,9 +110,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		}
 
 		if (tradeInfo.getState().isOk()) {
-			fontRendererObj.drawSplitString(TextFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		} else {
-			fontRendererObj.drawSplitString(TextFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		}
 	}
 

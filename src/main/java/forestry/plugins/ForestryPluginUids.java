@@ -21,6 +21,7 @@ public class ForestryPluginUids {
 	public static final String BUILDCRAFT_TRANSPORT = "forestry.buildcraft.transport";
 	public static final String CHISEL = "forestry.chisel";
 	public static final String ENDER_IO = "forestry.ender.io";
+	public static final String MALISIS_DOORES = "forestry.malisis.doors";
 	public static final String EXTRA_UTILITIES = "forestry.extra.utilities";
 	public static final String NATURA = "forestry.natura";
 	public static final String INDUSTRIALCRAFT2 = "forestry.industrialcraft2";

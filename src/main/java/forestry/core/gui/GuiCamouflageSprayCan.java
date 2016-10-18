@@ -3,6 +3,7 @@ package forestry.core.gui;
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -20,7 +21,7 @@ public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayC
 
 		String name = Translator.translateToLocal("for.gui.camouflage.spray.can");
 		textLayout.line = 6;
-		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
+		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);
 	}
 

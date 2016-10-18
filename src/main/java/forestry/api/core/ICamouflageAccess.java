@@ -28,6 +28,8 @@ public interface ICamouflageAccess {
 	
 	void addItemToBlackList(@Nonnull String type, @Nonnull ItemStack camouflageBlock);
 	
+	void addModIdToBlackList(@Nonnull String type, @Nonnull String modID);
+	
 	boolean isItemBlackListed(@Nonnull String type, @Nonnull ItemStack camouflageBlock);
 	
 	ICamouflageItemHandler getHandlerFromItem(ItemStack stack);

@@ -27,6 +27,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 
 	private static final Map<String, List<ICamouflageItemHandler>> camouflageItemHandlers = new HashMap<>();
 	private static final Map<String, List<ItemStack>> camouflageItemBlacklist = new HashMap<>();
+	private static final Map<String, List<String>> blacklistedMods = new HashMap<>();
 	
 	@Override
 	public void registerCamouflageItemHandler(@Nonnull ICamouflageItemHandler itemHandler) {
@@ -61,6 +62,16 @@ public class CamouflageAccess implements ICamouflageAccess {
 	}
 	
 	@Override
+	public void addModIdToBlackList(String type, String modID) {
+		if(!blacklistedMods.containsKey(type)){
+			blacklistedMods.put(type, new ArrayList<>());
+		}
+		if(!blacklistedMods.get(type).contains(modID)){
+			blacklistedMods.get(type).add(modID);
+		}
+	}
+	
+	@Override
 	public void addItemToBlackList(String type, ItemStack camouflageBlock) {
 		if (camouflageBlock == null || camouflageBlock.getItem() == null) {
 			Log.error("Fail to add camouflage block item to the black list, because it is null");
@@ -77,6 +88,9 @@ public class CamouflageAccess implements ICamouflageAccess {
 				return;
 			}
 		}
+		if(!camouflageItemBlacklist.containsKey(type)){
+			camouflageItemBlacklist.put(type, new ArrayList<>());
+		}
 		camouflageItemBlacklist.get(type).add(camouflageBlock);
 	}
 	
@@ -84,6 +98,10 @@ public class CamouflageAccess implements ICamouflageAccess {
 	public boolean isItemBlackListed(String type, ItemStack camouflageBlock) {
 		if (camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null || type != null && !camouflageItemBlacklist.containsKey(type)) {
 			return false;
+		}
+		String modId = camouflageBlock.getItem().getRegistryName().getResourceDomain();
+		if(blacklistedMods.get(type) != null && blacklistedMods.get(type).contains(modId)){
+			return true;
 		}
 		List<ItemStack> camouflageItemBlacklisted;
 		if(type == null){
@@ -99,6 +117,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 

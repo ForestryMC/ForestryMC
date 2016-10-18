@@ -34,6 +34,7 @@ import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
@@ -65,7 +66,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		super.drawGuiContainerBackgroundLayer(f, i, j);
 		String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
-		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, fontColor.get("gui.title"));
+		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));
 
 		IIndividual individual = getIndividualAtPosition(i, j);
 		if (individual == null) {
