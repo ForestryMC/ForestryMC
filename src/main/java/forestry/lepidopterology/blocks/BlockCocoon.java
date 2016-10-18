@@ -39,7 +39,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.blocks.IMachineProperties;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.lepidopterology.blocks.property.PropertyCocoon;

@@ -118,12 +118,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean workCycle() {
 		if (tryAddPending()) {
-			setCurrentPreviewItem();
 			return true;
 		}
 
 		if (!pendingProducts.isEmpty()) {
-			setCurrentPreviewItem();
+			craftPreviewInventory.setInventorySlotContents(0, null);
 			return false;
 		}
 
@@ -134,10 +133,13 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		// We are done, add products to queue
 		Collection<ItemStack> products = currentRecipe.getProducts(worldObj.rand);
 		pendingProducts.addAll(products);
-
-		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
 		
-		setCurrentPreviewItem();
+		//Add Item to preview slot.
+		ItemStack previewStack = getInternalInventory().getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).copy();
+		previewStack.stackSize=1;
+		craftPreviewInventory.setInventorySlotContents(0, previewStack);
+		
+		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
 		return true;
 	}
 
@@ -166,6 +168,9 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		if (added) {
 			pendingProducts.pop();
+			if(pendingProducts.isEmpty()){
+				craftPreviewInventory.setInventorySlotContents(0, null);
+			}
 		}
 
 		getErrorLogic().setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
@@ -264,14 +269,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	
 	public IInventory getCraftPreviewInventory() {
 		return craftPreviewInventory;
-	}
-	
-	private void setCurrentPreviewItem(){
-		if(!pendingProducts.isEmpty()){
-			craftPreviewInventory.setInventorySlotContents(0, pendingProducts.peek());
-		}else{
-			craftPreviewInventory.setInventorySlotContents(0, null);
-		}
 	}
 
 	@Override
