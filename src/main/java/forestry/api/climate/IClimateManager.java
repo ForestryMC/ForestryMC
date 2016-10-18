@@ -20,6 +20,7 @@ public interface IClimateManager {
 	
 	float getHumidity(World world, BlockPos pos);
 	
+	@Nonnull
 	IClimateProvider getDefaultClimate(World world, BlockPos pos);
 	
 	void addRegion(IClimateRegion region);
@@ -29,6 +30,9 @@ public interface IClimateManager {
 	void addSource(IClimateSourceProvider source);
 	
 	void removeSource(IClimateSourceProvider source);
+	
+	@Nullable
+	IClimatePosition getPosition(World world, BlockPos pos);
 	
 	@Nullable
 	IClimateRegion getRegionForPos(World world, BlockPos pos);

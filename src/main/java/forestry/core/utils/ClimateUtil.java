@@ -10,13 +10,19 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
+import forestry.core.climate.ClimateRoom;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import net.minecraft.util.math.BlockPos;
 
 public class ClimateUtil implements IClimateHelper {
 
@@ -202,5 +208,26 @@ public class ClimateUtil implements IClimateHelper {
 	@Override
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	}
+	
+	public static void writeRoomPositionData(IClimatePosition position, DataOutputStreamForestry data) throws IOException {
+		data.writeInt(position.getPos().getX());
+		data.writeInt(position.getPos().getY());
+		data.writeInt(position.getPos().getZ());
+		writePositionData(position, data);
+	}
+	
+	public static void writePositionData(IClimatePosition position, DataOutputStreamForestry data) throws IOException {
+		data.writeFloat(position.getTemperature());
+		data.writeFloat(position.getHumidity());
+	}
+	
+	public static void readRoomPositionData(ClimateRoom room, DataInputStreamForestry data) throws IOException {
+		room.addPosition(new BlockPos(data.readInt(), data.readInt(), data.readInt()), data.readFloat(), data.readFloat());
+	}
+	
+	public static void readPositionData(IClimatePosition position, DataInputStreamForestry data) throws IOException {
+		position.setHumidity(data.readFloat());
+		position.setTemperature(data.readFloat());
 	}
 }

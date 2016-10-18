@@ -20,11 +20,11 @@ import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimateSourceProvider;
+import forestry.api.core.ForestryAPI;
 import forestry.core.DefaultClimateProvider;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 public class ClimateManager implements IClimateManager{
 
@@ -115,35 +115,42 @@ public class ClimateManager implements IClimateManager{
 
 	@Override
 	public float getTemperature(World world, BlockPos pos) {
-		Biome biome = world.getBiome(pos);
-		IClimateRegion region = getRegionForPos(world, pos);
-		if(region!= null){
-			IClimatePosition position = region.getPositions().get(pos);
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, pos);
 
-			if(position != null){
-				return position.getTemperature();
-			}
+		if(position != null){
+			return position.getTemperature();
 		}
-		return biome.getTemperature();
+		return world.getBiome(pos).getTemperature();
 	}
 
 	@Override
 	public float getHumidity(World world, BlockPos pos) {
-		Biome biome = world.getBiome(pos);
-		IClimateRegion region = getRegionForPos(world, pos);
-		if(region!= null){
-			IClimatePosition position = region.getPositions().get(pos);
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, pos);
 
-			if(position != null){
-				return position.getHumidity();
-			}
+		if(position != null){
+			return position.getHumidity();
 		}
-		return biome.getRainfall();
+		return world.getBiome(pos).getRainfall();
 	}
 
 	@Override
 	public Map<Integer, List<IClimateRegion>> getRegions() {
 		return regions;
+	}
+	
+	@Override
+	public IClimatePosition getPosition(World world, BlockPos pos){
+		Integer dimensionID = Integer.valueOf(world.provider.getDimension());
+		if(!regions.containsKey(dimensionID)){
+			regions.put(dimensionID, new ArrayList<>());
+			return null;
+		}
+		for(IClimateRegion region : regions.get(dimensionID)){
+			if(region.getPositions().keySet().contains(pos)){
+				return region.getPositions().get(pos);
+			}
+		}
+		return null;
 	}
 
 	@Override

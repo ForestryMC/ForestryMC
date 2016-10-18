@@ -25,6 +25,7 @@ import forestry.api.climate.IClimateSource;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.utils.ClimateUtil;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -245,7 +246,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 		return positions;
 	}
 	
-	protected void addPosition(BlockPos pos, float temperature, float humidity){
+	public void addPosition(BlockPos pos, float temperature, float humidity){
 		IClimatePosition otherPosition = positions.get(pos);
 		if(otherPosition != null){
 			otherPosition.setHumidity(humidity);
@@ -284,11 +285,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 		if(!positions.isEmpty()){
 			data.writeInt(positions.size());
 			for(IClimatePosition pos : positions.values()){
-				data.writeInt(pos.getPos().getX());
-				data.writeInt(pos.getPos().getY());
-				data.writeInt(pos.getPos().getZ());
-				data.writeFloat(pos.getTemperature());
-				data.writeFloat(pos.getHumidity());
+				ClimateUtil.writeRoomPositionData(pos, data);
 			}
 			data.writeFloat(temperature);
 			data.writeFloat(humidity);
@@ -303,7 +300,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 		if(size != 0){
 			positions.clear();;
 			for(int index = 0;index < size;index++){
-				addPosition(new BlockPos(data.readInt(), data.readInt(), data.readInt()), data.readFloat(), data.readFloat());
+				ClimateUtil.readRoomPositionData(this, data);
 			}
 			temperature = data.readFloat();
 			humidity = data.readFloat();

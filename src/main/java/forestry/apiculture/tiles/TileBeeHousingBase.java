@@ -17,6 +17,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -30,6 +31,7 @@ import forestry.core.owner.OwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
+import forestry.core.utils.ClimateUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -153,11 +155,19 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		data.writeVarInt(beeLogic.getBeeProgressPercent());
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(worldObj, getPos());
+		if(position != null){
+			ClimateUtil.writePositionData(position, data);
+		}
 	}
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		breedingProgressPercent = data.readVarInt();
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(worldObj, getPos());
+		if(position != null){
+			ClimateUtil.readPositionData(position, data);
+		}
 	}
 
 	// / IBEEHOUSING
