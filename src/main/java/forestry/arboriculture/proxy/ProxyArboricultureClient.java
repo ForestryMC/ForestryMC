@@ -153,6 +153,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 		
 		loadingExceptions.putAll(WoodModelLoader.loadingExceptions);
+		ModelWoodPile.onModelBake(event);
 	}
 	
 	@Override

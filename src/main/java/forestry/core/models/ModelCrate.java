@@ -11,8 +11,8 @@
 package forestry.core.models;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
-
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -60,7 +60,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankModel {
 
-	private static final Map<String, IBakedModel> cache = Maps.newHashMap();
+	private static final Cache<String, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
 	private static IModel crateModel;
@@ -70,7 +70,7 @@ public class ModelCrate extends BlankModel {
 	/**
 	 * Init the model with datas from the ModelBakeEvent.
 	 */
-	public static void initModel(ModelBakeEvent event){
+	public static void onModelBake(ModelBakeEvent event){
 		try {
 			crateModel = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/crate-filled"));
 			MODEL_GENERATED = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.getModelLoader(), 17);
@@ -78,7 +78,7 @@ public class ModelCrate extends BlankModel {
 		} catch (Exception e) {
 			Log.error("Failed to init the crate model.", e);
 		}
-		ModelCrate.cache.clear();
+		ModelCrate.cache.invalidateAll();
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class ModelCrate extends BlankModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
 			String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
-			if (cache.get(crateUID) == null) {
+			if (cache.getIfPresent(crateUID) == null) {
 				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 				//Set the crate color index to 100
 				for (BakedQuad quad : baseBaked.getQuads(null, null, 0)) {
@@ -246,7 +246,7 @@ public class ModelCrate extends BlankModel {
 				
 				cache.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeModel(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
 			}
-			return cache.get(crateUID);
+			return cache.getIfPresent(crateUID);
 		}
 		
 	}

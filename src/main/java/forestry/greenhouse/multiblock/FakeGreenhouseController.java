@@ -67,8 +67,8 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
-
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
+		return false;
 	}
 
 	@Override

@@ -637,7 +637,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		ModelCrate.initModel(event);
+		ModelCrate.onModelBake(event);
 	}
 
 	@Override

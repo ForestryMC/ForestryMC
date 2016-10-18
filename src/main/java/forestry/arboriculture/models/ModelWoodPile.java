@@ -1,11 +1,12 @@
 package forestry.arboriculture.models;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
@@ -31,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelProcessingHelper;
@@ -38,14 +40,22 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelWoodPile extends BlankModel{
 
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
-	@SideOnly(Side.CLIENT)
-	private IModel modelWoodPileItem;
-	private IModel modelWoodPileBlock;
-	private static final Map<String, IBakedModel> blockCache = new HashMap<>();
-	private static final Map<String, IBakedModel> itemCache = new HashMap<>();
+	private static IModel modelWoodPileItem;
+	private static IModel modelWoodPileBlock;
+	private static final Cache<String, IBakedModel> blockCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	private static final Cache<String, IBakedModel> itemCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	
+	/**
+	 * Init the model with datas from the ModelBakeEvent.
+	 */
+	public static void onModelBake(ModelBakeEvent event){
+		blockCache.invalidateAll();
+		itemCache.invalidateAll();
+	}
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
@@ -103,16 +113,19 @@ public class ModelWoodPile extends BlankModel{
 	}
 
 	private IBakedModel bakeModel(IAlleleTreeSpecies treeSpecies, boolean isItem) {
+		if(treeSpecies == null || treeSpecies.getWoodProvider() == null || treeSpecies.getWoodProvider().getSprite(false) == null){
+			return null;
+		}
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		String treeUID = treeSpecies.getUID();
-		Map<String, IBakedModel> map = isItem ? itemCache : blockCache;
-		if(!map.containsKey(treeUID)){
+		Cache<String, IBakedModel> map = isItem ? itemCache : blockCache;
+		if(map.getIfPresent(treeUID) == null){
 			textures.put("woodBark", treeSpecies.getWoodProvider().getSprite(false).getIconName());
 			textures.put("woodTop", treeSpecies.getWoodProvider().getSprite(true).getIconName());
 			IModel retextureWoodPile = ModelProcessingHelper.retexture(isItem ? modelWoodPileItem : modelWoodPileBlock, textures.build());
 			map.put(treeUID, retextureWoodPile.bake(ModelRotation.X0_Y0, isItem ? DefaultVertexFormats.ITEM : DefaultVertexFormats.BLOCK, textureGetter));
 		}
-		return map.get(treeUID);
+		return map.getIfPresent(treeUID);
 	}
 	
 	private class PileItemOverrideList extends ItemOverrideList {

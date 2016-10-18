@@ -28,10 +28,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -43,6 +47,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -65,6 +70,7 @@ import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
+import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.tiles.TileCocoon;
 import forestry.lepidopterology.worldgen.CocoonDecorator;
 import forestry.plugins.BlankForestryPlugin;
@@ -108,6 +114,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
 		
@@ -302,5 +309,11 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	
 	public static float getSecondSerumChance() {
 		return secondSerumChance;
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onModelBake(ModelBakeEvent event) {
+		ModelButterflyItem.onModelBake(event);
 	}
 }

@@ -11,9 +11,12 @@
 package forestry.lepidopterology.render;
 
 import com.google.common.base.Function;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -24,6 +27,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelProcessingHelper;
@@ -40,8 +44,15 @@ import forestry.core.models.TRSRBakedModel;
 public class ModelButterflyItem extends BlankModel {
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)
-	private IModel modelButterfly;
+	private static IModel modelButterfly;
+	
+	private static final Cache<IButterfly, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 
+	public static void onModelBake(ModelBakeEvent event){
+		modelButterfly = null;
+		cache.invalidateAll();
+	}
+	
 	@Override
 	protected ItemOverrideList createOverrides() {
 		return new ButterflyItemOverrideList();
@@ -50,6 +61,17 @@ public class ModelButterflyItem extends BlankModel {
 	private IBakedModel bakeModel(IButterfly butterfly) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		textures.put("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
+		
+		if (modelButterfly == null) {
+			try {
+				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterflyGE"));
+			} catch (Exception e) {
+				return null;
+			}
+			if (modelButterfly == null) {
+				return null;
+			}
+		}
 		IModel retexturedModel =  ModelProcessingHelper.retexture(modelButterfly, textures.build());
 		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.5F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
@@ -61,21 +83,14 @@ public class ModelButterflyItem extends BlankModel {
 
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-			if (modelButterfly == null) {
-				try {
-					modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterflyGE"));
-				} catch (Exception e) {
-					return null;
-				}
-				if (modelButterfly == null) {
-					return null;
-				}
-			}
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(stack);
 			if (butterfly == null) {
 				butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 			}
-			return bakeModel(butterfly);
+			if(cache.getIfPresent(butterfly) == null){
+				cache.put(butterfly, bakeModel(butterfly));
+			}
+			return cache.getIfPresent(butterfly);
 		}
 	}
 }
