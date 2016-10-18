@@ -73,4 +73,8 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}
+	
+	public TileFabricator getFabricator(){
+		return tile;
+	}
 }

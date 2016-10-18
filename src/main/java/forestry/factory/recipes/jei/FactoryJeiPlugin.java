@@ -24,12 +24,14 @@ import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeCategory;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeHandler;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeMaker;
+import forestry.factory.recipes.jei.carpenter.CarpenterRecipeTransferHandler;
 import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeCategory;
 import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeHandler;
 import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeMaker;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeCategory;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeHandler;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeMaker;
+import forestry.factory.recipes.jei.fabricator.FabricatorRecipeTransferHandler;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeCategory;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeHandler;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeMaker;
@@ -127,6 +129,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
 		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler());
+		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler());
+		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler());
 
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 

@@ -28,6 +28,7 @@ public enum PacketIdServer implements IPacketId {
 
 	// JEI
 	WORKTABLE_RECIPE_REQUEST,
+	RECIPE_TRANSFER_REQUEST,
 
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,

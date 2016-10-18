@@ -56,7 +56,10 @@ public enum PacketIdClient implements IPacketId {
 	// Mail
 	TRADING_ADDRESS_RESPONSE,
 	LETTER_INFO_RESPONSE,
-	POBOX_INFO_RESPONSE;
+	POBOX_INFO_RESPONSE,
+	
+	// JEI
+	RECIPE_TRANSFER_UPDATE;
 
 	public static final PacketIdClient[] VALUES = values();
 

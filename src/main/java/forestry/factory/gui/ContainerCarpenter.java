@@ -78,4 +78,8 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 		}
 	}
 
+	public TileCarpenter getCarpenter() {
+		return tile;
+	}
+
 }

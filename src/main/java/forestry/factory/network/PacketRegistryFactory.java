@@ -11,6 +11,8 @@
 package forestry.factory.network;
 
 import forestry.core.network.PacketRegistry;
+import forestry.factory.network.packets.PacketRecipeTransferRequest;
+import forestry.factory.network.packets.PacketRecipeTransferUpdate;
 import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
 import forestry.factory.network.packets.PacketWorktableRecipeRequest;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
@@ -21,7 +23,9 @@ public class PacketRegistryFactory extends PacketRegistry {
 
 		registerClientPacket(new PacketWorktableMemoryUpdate());
 		registerClientPacket(new PacketWorktableRecipeUpdate());
+		registerClientPacket(new PacketRecipeTransferUpdate());
 
 		registerServerPacket(new PacketWorktableRecipeRequest());
+		registerServerPacket(new PacketRecipeTransferRequest());
 	}
 }
