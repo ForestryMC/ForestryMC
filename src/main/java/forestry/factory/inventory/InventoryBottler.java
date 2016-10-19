@@ -22,19 +22,22 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileBottler;
 
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
-	public static final short SLOT_INPUT_EMPTY_CAN = 0;
-	public static final short SLOT_OUTPUT = 1;
-	public static final short SLOT_INPUT_FULL_CAN = 2;
+	public static final short SLOT_INPUT_FULL_CONTAINER = 0;
+	public static final short SLOT_INPUT_EMPTY_CONTAINER = 1;
+	public static final short SLOT_LEFT_PROCESSING = 2;
+	public static final short SLOT_RIGHT_PROCESSING = 3;
+	public static final short SLOT_OUTPUT_EMPTY_CONTAINER = 4;
+	public static final short SLOT_OUTPUT_FULL_CONTAINER = 5;
 
 	public InventoryBottler(TileBottler tileBottler) {
-		super(tileBottler, 3, "Items");
+		super(tileBottler, 6, "Items");
 	}
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_INPUT_EMPTY_CAN) {
+		if (slotIndex == SLOT_INPUT_EMPTY_CONTAINER) {
 			return FluidHelper.isFillableContainerWithRoom(itemStack);
-		} else if (slotIndex == SLOT_INPUT_FULL_CAN) {
+		} else if (slotIndex == SLOT_INPUT_FULL_CONTAINER) {
 			FluidStack fluidStack = FluidUtil.getFluidContained(itemStack);
 			return fluidStack != null && FluidRegistry.isFluidRegistered(fluidStack.getFluid());
 		}
@@ -43,6 +46,6 @@ public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
-		return slotIndex == SLOT_OUTPUT;
+		return slotIndex == SLOT_OUTPUT_EMPTY_CONTAINER || slotIndex == SLOT_OUTPUT_FULL_CONTAINER;
 	}
 }

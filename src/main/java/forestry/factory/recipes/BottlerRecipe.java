@@ -18,7 +18,28 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class BottlerRecipe {
-	public static BottlerRecipe create(Fluid res, ItemStack empty) {
+	
+	public static BottlerRecipe createFilled(ItemStack filled) {
+		if (filled == null) {
+			return null;
+		}
+
+		ItemStack empty = filled.copy();
+		empty.stackSize = 1;
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(empty);
+		if (fluidHandler == null) {
+			return null;
+		}
+
+		FluidStack fill = fluidHandler.drain(Integer.MAX_VALUE, true);
+		if (fill != null && fill.amount > 0) {
+			return new BottlerRecipe(empty, fill, filled, false);
+		}
+
+		return null;
+	}
+	
+	public static BottlerRecipe createEmpty(Fluid res, ItemStack empty) {
 		if (res == null || empty == null) {
 			return null;
 		}
@@ -33,7 +54,7 @@ public class BottlerRecipe {
 
 		int fillAmount = fluidHandler.fill(new FluidStack(res, Integer.MAX_VALUE), true);
 		if (fillAmount > 0) {
-			return new BottlerRecipe(empty, new FluidStack(res, fillAmount), filled);
+			return new BottlerRecipe(empty, new FluidStack(res, fillAmount), filled, true);
 		}
 
 		return null;
@@ -42,14 +63,20 @@ public class BottlerRecipe {
 	public final FluidStack input;
 	public final ItemStack empty;
 	public final ItemStack filled;
+	public final boolean fillRecipe;
 
-	private BottlerRecipe(ItemStack empty, FluidStack input, ItemStack filled) {
+	private BottlerRecipe(ItemStack empty, FluidStack input, ItemStack filled, boolean fillRecipe) {
 		this.input = input;
 		this.empty = empty;
 		this.filled = filled;
+		this.fillRecipe = fillRecipe;
 	}
 
-	public boolean matches(ItemStack emptyCan, FluidStack resource) {
-		return emptyCan != null && resource != null && emptyCan.isItemEqual(empty) && resource.containsFluid(input);
+	public boolean matcheEmpty(ItemStack emptyCan, FluidStack resource) {
+		return emptyCan != null && resource != null && emptyCan.isItemEqual(empty) && resource.containsFluid(input) && fillRecipe;
+	}
+	
+	public boolean matcheFilled(ItemStack filledCan) {
+		return filled != null && !fillRecipe && filled.isItemEqual(filledCan);
 	}
 }

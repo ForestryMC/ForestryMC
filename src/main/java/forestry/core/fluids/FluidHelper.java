@@ -11,6 +11,7 @@
 package forestry.core.fluids;
 
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -48,9 +49,9 @@ public final class FluidHelper {
 	}
 
 	public enum FillStatus {
-		SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE
+		SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE, NO_SPACE_FLUID
 	}
-
+	
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
 		if (fluidToFill == null) {
 			return FillStatus.INVALID_INPUT;
@@ -109,14 +110,14 @@ public final class FluidHelper {
 					output.stackSize++;
 				}
 				inv.decrStackSize(inputSlot, 1);
-			} else {
+			}else{
 				inv.setInventorySlotContents(inputSlot, filled);
 			}
 		}
 
 		return FillStatus.SUCCESS;
 	}
-
+	
 	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot) {
 		ItemStack input = inv.getStackInSlot(inputSlot);
 		if (input == null) {
@@ -130,13 +131,70 @@ public final class FluidHelper {
 
 		if (input.stackSize == 1 || drainedItemSimulated.stackSize == 0) {
 			ItemStack drainedItem = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+			
 			if (drainedItem != null) {
-				if (drainedItem.stackSize > 0) {
+				if(drainedItem.stackSize > 0){
 					inv.setInventorySlotContents(inputSlot, drainedItem);
-				} else {
+				}else {
 					inv.decrStackSize(inputSlot, 1);
 				}
 				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static FillStatus drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot) {
+		ItemStack input = inv.getStackInSlot(inputSlot);
+		if (input == null) {
+			return FillStatus.INVALID_INPUT;
+		}
+		ItemStack outputStack = inv.getStackInSlot(outputSlot);
+		
+		ItemStack drainedItemSimulated = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, false);
+		if (drainedItemSimulated == null) {
+			return FillStatus.INVALID_INPUT;
+		}
+
+		if (outputStack == null || drainedItemSimulated.stackSize == 0 || ItemStackUtil.isIdenticalItem(outputStack, drainedItemSimulated) && outputStack.stackSize + drainedItemSimulated.stackSize < outputStack.getMaxStackSize()) {
+			ItemStack drainedItem = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+			
+			if (drainedItem != null) {
+				if(drainedItem.stackSize > 0){
+					ItemStack newStack = drainedItem.copy();
+					if(outputStack != null){
+						newStack.stackSize+=outputStack.stackSize;
+					}
+					if (isFillableContainerAndEmpty(newStack)) {
+						inv.setInventorySlotContents(outputSlot, newStack);
+						inv.decrStackSize(inputSlot, 1);
+					}
+				}else {
+					inv.decrStackSize(inputSlot, 1);
+				}
+				return FillStatus.SUCCESS;
+			}
+		}
+
+		return FillStatus.NO_SPACE;
+	}
+	
+	public static boolean isFillableContainerAndEmpty(ItemStack container) {
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		if (fluidHandler == null) {
+			return false;
+		}
+
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (properties.canFill() && properties.getCapacity() > 0) {
+				FluidStack contents = properties.getContents();
+				if (contents == null) {
+					return true;
+				} else if (contents.amount > 0) {
+					return false;
+				}
 			}
 		}
 

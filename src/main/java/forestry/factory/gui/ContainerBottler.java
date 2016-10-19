@@ -23,9 +23,12 @@ public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
 	public ContainerBottler(InventoryPlayer player, TileBottler tile) {
 		super(tile, player, 8, 84);
-
-		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(tile, InventoryBottler.SLOT_INPUT_EMPTY_CAN, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_OUTPUT, 116, 55));
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryBottler.SLOT_INPUT_FULL_CAN, 26, 38));
+		
+		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 18, 7));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_LEFT_PROCESSING, 18, 35).setPickupWatcher(tile));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, 18, 63));
+		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(tile, InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER, 142, 7));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_RIGHT_PROCESSING, 142, 35).setPickupWatcher(tile));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, 142, 63));
 	}
 }

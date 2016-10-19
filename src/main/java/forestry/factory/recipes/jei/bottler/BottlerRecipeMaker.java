@@ -19,7 +19,7 @@ public class BottlerRecipeMaker {
 		for (FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
 			FluidStack fluid = container.fluid;
 			if (fluid != null) {
-				BottlerRecipe recipe = BottlerRecipe.create(fluid.getFluid(), container.emptyContainer);
+				BottlerRecipe recipe = BottlerRecipe.createEmpty(fluid.getFluid(), container.emptyContainer);
 				if (recipe != null) {
 					recipes.add(new BottlerRecipeWrapper(recipe));
 				}
