@@ -227,7 +227,7 @@ public class ClimateUtil implements IClimateHelper {
 	}
 	
 	public static void readPositionData(IClimatePosition position, DataInputStreamForestry data) throws IOException {
-		position.setHumidity(data.readFloat());
 		position.setTemperature(data.readFloat());
+		position.setHumidity(data.readFloat());
 	}
 }
