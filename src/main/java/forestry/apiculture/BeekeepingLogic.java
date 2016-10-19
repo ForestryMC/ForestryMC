@@ -195,7 +195,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			queenStack = null;
 		}
 
-		if (!ItemStack.areItemStacksEqual(this.queenStack, queenStack)) {
+		if (this.queenStack != queenStack) {
 			this.queen = BeeManager.beeRoot.getMember(queenStack);
 			this.queenStack = queenStack;
 			hasFlowersCache.clear();
