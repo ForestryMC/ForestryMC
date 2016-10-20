@@ -246,7 +246,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 		return positions;
 	}
 	
-	public void addPosition(BlockPos pos, float temperature, float humidity){
+	public synchronized void addPosition(BlockPos pos, float temperature, float humidity){
 		IClimatePosition otherPosition = positions.get(pos);
 		if(otherPosition != null){
 			otherPosition.setHumidity(humidity);
@@ -257,14 +257,14 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 	}
 	
 	@Override
-	public void addSource(IClimateSource source) {
+	public synchronized void addSource(IClimateSource source) {
 		if(!sources.contains(source)){
 			sources.add(source);
 		}
 	}
 	
 	@Override
-	public void removeSource(IClimateSource source) {
+	public synchronized void removeSource(IClimateSource source) {
 		if(sources.contains(source)){
 			sources.remove(source);
 		}
