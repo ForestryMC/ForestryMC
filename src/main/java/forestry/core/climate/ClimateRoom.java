@@ -143,6 +143,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 								climatedInfo.addHumidity(-Math.min(0.01F, climatedInfo.getHumidity() - climateControl.getControlHumidity()));
 							}else{
 								climatedInfo.addHumidity(Math.min(0.01F, climateControl.getControlHumidity() - climatedInfo.getHumidity()));
+
 							}
 						}
 					}
@@ -156,29 +157,20 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 		IClimateControl climateControl = getControl(pos);
 		boolean hasChange = false;
 		if(climateControl.getControlTemperature() != temperature || climateControl.getControlHumidity() != humidity) {
-			boolean updateTemp = climatedInfo.getTemperature() >= climateControl.getControlTemperature();
-			boolean updateHum = climatedInfo.getHumidity() >= climateControl.getControlHumidity();
-			if(updateTemp || updateHum){
-				for(EnumFacing facing : EnumFacing.VALUES){
-					IClimatePosition climatedInfoFace = positions.get(pos.offset(facing));
-					if(climatedInfoFace != null){
-						if(climatedInfo.getTemperature() > climatedInfoFace.getTemperature() + 0.01F){
-							float change = Math.min(0.01F, climatedInfo.getTemperature() - climatedInfoFace.getTemperature());
-							climatedInfo.addTemperature(-change);
-							climatedInfoFace.addTemperature(change);
-							updateTemp = climatedInfo.getTemperature() >= climateControl.getControlTemperature();
-							hasChange = true;
-						}
-						if(climatedInfo.getHumidity() > climatedInfoFace.getHumidity() + 0.01F){
-							float change = Math.min(0.01F, climatedInfo.getHumidity() - climatedInfoFace.getHumidity());
-							climatedInfo.addHumidity(-change);
-							climatedInfoFace.addHumidity(change);
-							updateHum = climatedInfo.getTemperature() >= climateControl.getControlTemperature();
-							hasChange = true;
-						}
-						if(!updateTemp && !updateHum){
-							break;
-						}
+			for(EnumFacing facing : EnumFacing.VALUES){
+				IClimatePosition climatedInfoFace = positions.get(pos.offset(facing));
+				if(climatedInfoFace != null){
+					if(climatedInfo.getTemperature() > climatedInfoFace.getTemperature() + 0.01F){
+						float change = Math.min(0.01F, climatedInfo.getTemperature() - climatedInfoFace.getTemperature());
+						climatedInfo.addTemperature(-change);
+						climatedInfoFace.addTemperature(change);
+						hasChange = true;
+					}
+					if(climatedInfo.getHumidity() > climatedInfoFace.getHumidity() + 0.01F){
+						float change = Math.min(0.01F, climatedInfo.getHumidity() - climatedInfoFace.getHumidity());
+						climatedInfo.addHumidity(-change);
+						climatedInfoFace.addHumidity(change);
+						hasChange = true;
 					}
 				}
 			}
