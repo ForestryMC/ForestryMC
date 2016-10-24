@@ -43,7 +43,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.arboriculture.ITree;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
@@ -666,7 +665,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	/* FLOWERS */
 	@Override
-	public ITree retrievePollen(IBeeHousing housing) {
+	public IIndividual retrievePollen(IBeeHousing housing) {
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
@@ -684,7 +683,7 @@ public class Bee extends IndividualLiving implements IBee {
 		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		BlockPos housingPos = housing.getCoordinates();
 
-		ITree pollen = null;
+		IIndividual pollen = null;
 
 		for (int i = 0; i < 20; i++) {
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
@@ -709,7 +708,7 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public boolean pollinateRandom(IBeeHousing housing, ITree pollen) {
+	public boolean pollinateRandom(IBeeHousing housing, IIndividual pollen) {
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 

@@ -38,10 +38,10 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
@@ -528,7 +528,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private static class PollenHandler {
 		private static final int MAX_POLLINATION_ATTEMPTS = 20;
 
-		private ITree pollen;
+		private IIndividual pollen;
 		private int attemptedPollinations = 0;
 
 		public void doPollination(IBee queen, IBeeHousing beeHousing, IBeeListener beeListener) {

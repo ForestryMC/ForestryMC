@@ -43,7 +43,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.genetics.AlleleManager;
@@ -80,7 +79,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	private Vec3d flightTarget;
 	private int exhaustion;
 	private IButterfly contained;
-	private ITree pollen;
+	private IIndividual pollen;
 
 	public int cooldownPollination = 0;
 	public int cooldownEgg = 0;
@@ -270,12 +269,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	/* POLLEN */
 	@Override
-	public ITree getPollen() {
+	public IIndividual getPollen() {
 		return pollen;
 	}
 
 	@Override
-	public void setPollen(ITree pollen) {
+	public void setPollen(IIndividual pollen) {
 		this.pollen = pollen;
 	}
 

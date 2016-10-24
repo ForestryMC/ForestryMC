@@ -13,13 +13,13 @@ import java.util.List;
 import com.mojang.authlib.GameProfile;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesRootPollinatable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface ITreeRoot extends ISpeciesRoot {
+public interface ITreeRoot extends ISpeciesRootPollinatable {
 
 	@Override
 	boolean isMember(ItemStack itemstack);

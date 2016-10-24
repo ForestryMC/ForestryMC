@@ -29,10 +29,10 @@ import forestry.api.genetics.ILeafTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISaplingTranslator;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
-import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -90,9 +90,12 @@ public class GeneticsUtil {
 			return (IPollinatable) tile;
 		}
 
-		ITree pollen = getPollen(world, pos);
+		IIndividual pollen = getPollen(world, pos);
 		if (pollen != null) {
-			return new CheckPollinatableTree(pollen);
+			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+			if(root instanceof ISpeciesRootPollinatable){
+				return ((ISpeciesRootPollinatable)root).createPollinatable(pollen);
+			}
 		}
 
 		return null;
@@ -108,11 +111,11 @@ public class GeneticsUtil {
 			return (IPollinatable) tile;
 		}
 
-		if (Config.pollinateVanillaTrees) {
-			ITree pollen = getPollen(world, pos);
-			if (pollen != null) {
-				pollen.setLeaves(world, owner, pos);
-				return (IPollinatable) world.getTileEntity(pos);
+		final IIndividual pollen = getPollen(world, pos);
+		if(pollen != null){
+			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+			if(root instanceof ISpeciesRootPollinatable){
+				return ((ISpeciesRootPollinatable) root).tryConvertToPollinatable(owner, world, pos, pollen);
 			}
 		}
 
@@ -123,7 +126,7 @@ public class GeneticsUtil {
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
 	@Nullable
-	public static ITree getPollen(World world, final BlockPos pos) {
+	public static IIndividual getPollen(World world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof ICheckPollinatable) {

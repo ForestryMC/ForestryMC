@@ -13,9 +13,9 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 
-import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
 
 /**
@@ -85,8 +85,8 @@ public interface IBee extends IIndividualLiving {
 
 	void plantFlowerRandom(IBeeHousing housing);
 
-	ITree retrievePollen(IBeeHousing housing);
+	IIndividual retrievePollen(IBeeHousing housing);
 
-	boolean pollinateRandom(IBeeHousing housing, ITree pollen);
+	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
 
 }

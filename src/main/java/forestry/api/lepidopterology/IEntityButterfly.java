@@ -8,7 +8,7 @@ package forestry.api.lepidopterology;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.passive.IAnimals;
 
-import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.IIndividual;
 
 public interface IEntityButterfly extends IAnimals {
 
@@ -23,9 +23,9 @@ public interface IEntityButterfly extends IAnimals {
 	 */
 	EntityCreature getEntity();
 
-	ITree getPollen();
+	IIndividual getPollen();
 
-	void setPollen(ITree pollen);
+	void setPollen(IIndividual pollen);
 	
 	boolean canMateWith(IEntityButterfly butterfly);
 	

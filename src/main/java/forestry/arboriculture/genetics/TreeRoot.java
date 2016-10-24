@@ -34,15 +34,19 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockSapling;
+import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.config.Config;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
@@ -426,6 +430,25 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return TreeAlyzerPlugin.INSTANCE;
+	}
+
+	@Override
+	public ICheckPollinatable createPollinatable(IIndividual individual) {
+		if(individual instanceof ITree){
+			return new CheckPollinatableTree((ITree)individual);
+		}
+		return null;
+	}
+
+	@Override
+	public IPollinatable tryConvertToPollinatable(GameProfile owner, World world, BlockPos pos, IIndividual pollen) {
+		if(pollen instanceof ITree){
+			if (Config.pollinateVanillaTrees) {
+				((ITree)pollen).setLeaves(world, owner, pos);
+				return (IPollinatable) world.getTileEntity(pos);
+			}
+		}
+		return null;
 	}
 
 }
