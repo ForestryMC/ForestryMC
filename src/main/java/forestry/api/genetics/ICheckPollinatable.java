@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.arboriculture.ITree;
 import net.minecraftforge.common.EnumPlantType;
 
 /**
@@ -28,7 +27,7 @@ public interface ICheckPollinatable {
 	/**
 	 * @return IIndividual containing the genetic information of this IPollinatable
 	 */
-	ITree getPollen();
+	IIndividual getPollen();
 
 	/**
 	 * Checks whether this can mate with the given pollen.
@@ -38,7 +37,7 @@ public interface ICheckPollinatable {
 	 * @param pollen IIndividual representing the pollen.
 	 * @return true if mating is possible, false otherwise.
 	 */
-	boolean canMateWith(ITree pollen);
+	boolean canMateWith(IIndividual pollen);
 
 	/**
 	 * @return true if this has already been pollinated.

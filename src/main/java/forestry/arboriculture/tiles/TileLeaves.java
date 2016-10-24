@@ -269,28 +269,33 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public boolean canMateWith(ITree individual) {
-		ITree tree = getTree();
-		if (tree == null) {
-			return false;
+	public boolean canMateWith(IIndividual individual) {
+		if(individual instanceof ITree){
+			ITree tree = getTree();
+			if (tree == null) {
+				return false;
+			}
+			if (tree.getMate() != null) {
+				return false;
+			}
+	
+			return !tree.isGeneticEqual(individual);
 		}
-		if (tree.getMate() != null) {
-			return false;
-		}
-
-		return !tree.isGeneticEqual(individual);
+		return false;
 	}
 
 	@Override
-	public void mateWith(ITree individual) {
-		ITree tree = getTree();
-		if (tree == null || worldObj == null) {
-			return;
-		}
-
-		tree.mate(individual);
-		if (!worldObj.isRemote) {
-			sendNetworkUpdate();
+	public void mateWith(IIndividual individual) {
+		if(individual instanceof ITree){
+			ITree tree = getTree();
+			if (tree == null || worldObj == null) {
+				return;
+			}
+	
+			tree.mate((ITree) individual);
+			if (!worldObj.isRemote) {
+				sendNetworkUpdate();
+			}
 		}
 	}
 
