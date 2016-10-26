@@ -120,7 +120,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if (((TileCandle) world.getTileEntity(pos)).isLit()) {
+		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+		if (tileCandle != null && tileCandle.isLit()) {
 			state = state.withProperty(STATE, State.ON);
 		}
 		return super.getActualState(state, world, pos);
