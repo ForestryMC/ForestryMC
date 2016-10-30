@@ -53,6 +53,10 @@ public final class FluidHelper {
 	}
 	
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
+		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, getEmptyContainer(inv.getStackInSlot(inputSlot)), doFill);
+	}
+	
+	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, ItemStack emptyStack, boolean doFill) {
 		if (fluidToFill == null) {
 			return FillStatus.INVALID_INPUT;
 		}
@@ -66,13 +70,19 @@ public final class FluidHelper {
 		ItemStack filled = input.copy();
 		filled.stackSize = 1;
 
+		if(emptyStack == null){
+			emptyStack = filled;
+		}
+		
 		IFluidHandler fluidFilledHandler = FluidUtil.getFluidHandler(filled);
-		if (fluidFilledHandler == null) {
+		IFluidHandler fluidEmptyHandler = FluidUtil.getFluidHandler(emptyStack);
+		if (fluidFilledHandler == null || emptyStack != null && fluidEmptyHandler == null) {
 			return FillStatus.INVALID_INPUT;
 		}
 
+		int containerEmptyCapacity = fluidEmptyHandler.fill(new FluidStack(fluidToFill, Integer.MAX_VALUE), false);
 		int containerCapacity = fluidFilledHandler.fill(new FluidStack(fluidToFill, Integer.MAX_VALUE), false);
-		if (containerCapacity <= 0) {
+		if (containerCapacity <= 0 && containerEmptyCapacity <= 0) {
 			return FillStatus.INVALID_INPUT;
 		}
 
@@ -90,7 +100,7 @@ public final class FluidHelper {
 			return FillStatus.INVALID_INPUT;
 		}
 
-		boolean moveToOutput = fluidInContainer.amount >= containerCapacity;
+		boolean moveToOutput = fluidInContainer.amount >= containerEmptyCapacity;
 		if (moveToOutput) {
 			if (output != null && (output.stackSize >= output.getMaxStackSize() || !InventoryUtil.isItemEqual(filled, output))) {
 				return FillStatus.NO_SPACE;
@@ -145,7 +155,7 @@ public final class FluidHelper {
 		return false;
 	}
 
-	public static FillStatus drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot) {
+	public static FillStatus drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, boolean doDrain) {
 		ItemStack input = inv.getStackInSlot(inputSlot);
 		if (input == null) {
 			return FillStatus.INVALID_INPUT;
@@ -158,23 +168,26 @@ public final class FluidHelper {
 		}
 
 		if (outputStack == null || drainedItemSimulated.stackSize == 0 || ItemStackUtil.isIdenticalItem(outputStack, drainedItemSimulated) && outputStack.stackSize + drainedItemSimulated.stackSize < outputStack.getMaxStackSize()) {
-			ItemStack drainedItem = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
-			
-			if (drainedItem != null) {
-				if(drainedItem.stackSize > 0){
-					ItemStack newStack = drainedItem.copy();
-					if(outputStack != null){
-						newStack.stackSize+=outputStack.stackSize;
-					}
-					if (isFillableContainerAndEmpty(newStack)) {
-						inv.setInventorySlotContents(outputSlot, newStack);
+			if(doDrain){
+				ItemStack drainedItem = FluidUtil.tryEmptyContainer(input, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+				
+				if (drainedItem != null) {
+					if(drainedItem.stackSize > 0){
+						ItemStack newStack = drainedItem.copy();
+						if(outputStack != null){
+							newStack.stackSize+=outputStack.stackSize;
+						}
+						if (isFillableContainerAndEmpty(newStack)) {
+							inv.setInventorySlotContents(outputSlot, newStack);
+							inv.decrStackSize(inputSlot, 1);
+						}
+					}else {
 						inv.decrStackSize(inputSlot, 1);
 					}
-				}else {
-					inv.decrStackSize(inputSlot, 1);
+					return FillStatus.SUCCESS;
 				}
-				return FillStatus.SUCCESS;
 			}
+			return FillStatus.SUCCESS;
 		}
 
 		return FillStatus.NO_SPACE;
@@ -200,7 +213,23 @@ public final class FluidHelper {
 
 		return false;
 	}
-
+	
+	public static ItemStack getEmptyContainer(ItemStack container){
+		if(container == null){
+			return null;
+		}
+		ItemStack empty = container.copy();
+		empty.stackSize = 1;
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(empty);
+		if (fluidHandler == null) {
+			return null;
+		}
+		if(fluidHandler.drain(Integer.MAX_VALUE, true) != null){
+			return empty;
+		}
+		return null;
+	}
+	
 	public static boolean isFillableContainerWithRoom(ItemStack container) {
 		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
 		if (fluidHandler == null) {

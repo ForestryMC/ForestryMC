@@ -178,7 +178,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if(currentRecipe.fillRecipe){
 			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
 		}else{
-			status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER);
+			status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, true);
 		}
 		if(status == FluidHelper.FillStatus.SUCCESS){
 			currentRecipe = null;
@@ -246,9 +246,15 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
 		if(slotIndex == InventoryBottler.SLOT_LEFT_PROCESSING){
-			setTicksPerWorkCycle(0);
+			if(currentRecipe != null && !currentRecipe.fillRecipe){
+				currentRecipe = null;
+				setTicksPerWorkCycle(0);
+			}
 		}else if(slotIndex == InventoryBottler.SLOT_RIGHT_PROCESSING){
-			setTicksPerWorkCycle(0);
+			if(currentRecipe != null && currentRecipe.fillRecipe){
+				currentRecipe = null;
+				setTicksPerWorkCycle(0);
+			}
 		}
 	}
 	
@@ -290,11 +296,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (currentRecipe != null) {
 			IFluidTankProperties properties = tankManager.getTankProperties()[0];
 			if(properties != null){
-				if(properties.getContents() != null && properties.getContents().amount >= properties.getCapacity()){
-					emptyStatus = FillStatus.NO_SPACE_FLUID;
-				}else{
-					emptyStatus = FillStatus.SUCCESS;
-				}
+				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			}else{
 				emptyStatus = FillStatus.SUCCESS;
 			}
@@ -304,7 +306,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if(emptyStatus == null || emptyStatus != FillStatus.SUCCESS){
 			checkFillRecipe();
 			if (currentRecipe == null) {
-				fillStatus = FluidHelper.FillStatus.NO_FLUID;
+				return false;
 			}else{
 				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
 			}
@@ -320,6 +322,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		errorLogic.setCondition(fillStatus == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NO_SPACE_INVENTORY);
 		errorLogic.setCondition(emptyStatus == FluidHelper.FillStatus.NO_SPACE_FLUID, EnumErrorCode.NO_SPACE_TANK);
 		if(emptyStatus == FillStatus.INVALID_INPUT || fillStatus == FillStatus.INVALID_INPUT || errorLogic.hasErrors()){
+			currentRecipe = null;
 			return false;
 		}
 		return true;

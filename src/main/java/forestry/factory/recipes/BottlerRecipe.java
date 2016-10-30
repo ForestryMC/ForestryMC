@@ -32,9 +32,9 @@ public class BottlerRecipe {
 			return null;
 		}
 
-		FluidStack fill = fluidHandler.drain(Integer.MAX_VALUE, true);
-		if (fill != null && fill.amount > 0) {
-			return new BottlerRecipe(empty, fill, filled, false);
+		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, true);
+		if (drained != null && drained.amount > 0) {
+			return new BottlerRecipe(empty, drained, filled, false);
 		}
 
 		return null;
@@ -75,7 +75,7 @@ public class BottlerRecipe {
 	}
 
 	public boolean matchEmpty(ItemStack emptyCan, FluidStack resource) {
-		return emptyCan != null && resource != null && emptyCan.isItemEqual(inputStack) && resource.containsFluid(fluid) && fillRecipe;
+		return emptyCan != null && resource != null && emptyCan.isItemEqual(inputStack) && resource.isFluidEqual(fluid) && fillRecipe;
 	}
 
 	public boolean matchFilled(ItemStack filledCan) {
