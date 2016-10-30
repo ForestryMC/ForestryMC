@@ -93,7 +93,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new StillRecipeHandler()
 		);
 
-		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes());
+		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()));
 		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes());
 		registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe());
 		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes());
@@ -104,7 +104,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes());
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());
 
-		registry.addRecipeClickArea(GuiBottler.class, 80, 37, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipeClickArea(GuiBottler.class, 107, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipeClickArea(GuiBottler.class, 45, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
 		registry.addRecipeClickArea(GuiCarpenter.class, 98, 48, 21, 26, ForestryRecipeCategoryUid.CARPENTER);
 		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 22, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
 		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 54, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -60,23 +61,24 @@ public class BottlerRecipe {
 		return null;
 	}
 
-	public final FluidStack input;
-	public final ItemStack empty;
-	public final ItemStack filled;
+	public final FluidStack fluid;
+	public final ItemStack inputStack;
+	@Nullable
+	public final ItemStack outputStack;
 	public final boolean fillRecipe;
 
-	private BottlerRecipe(ItemStack empty, FluidStack input, ItemStack filled, boolean fillRecipe) {
-		this.input = input;
-		this.empty = empty;
-		this.filled = filled;
+	public BottlerRecipe(ItemStack inputStack, FluidStack fluid, @Nullable ItemStack outputStack, boolean fillRecipe) {
+		this.fluid = fluid;
+		this.inputStack = inputStack;
+		this.outputStack = outputStack;
 		this.fillRecipe = fillRecipe;
 	}
 
-	public boolean matcheEmpty(ItemStack emptyCan, FluidStack resource) {
-		return emptyCan != null && resource != null && emptyCan.isItemEqual(empty) && resource.containsFluid(input) && fillRecipe;
+	public boolean matchEmpty(ItemStack emptyCan, FluidStack resource) {
+		return emptyCan != null && resource != null && emptyCan.isItemEqual(inputStack) && resource.containsFluid(fluid) && fillRecipe;
 	}
-	
-	public boolean matcheFilled(ItemStack filledCan) {
-		return filled != null && !fillRecipe && filled.isItemEqual(filledCan);
+
+	public boolean matchFilled(ItemStack filledCan) {
+		return outputStack != null && !fillRecipe && outputStack.isItemEqual(filledCan);
 	}
 }

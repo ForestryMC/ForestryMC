@@ -19,8 +19,8 @@ import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
 import forestry.core.fluids.FluidHelper.FillStatus;
+import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
@@ -176,7 +176,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public boolean workCycle() {
 		FluidHelper.FillStatus status;
 		if(currentRecipe.fillRecipe){
-			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.input.getFluid(), true);
+			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
 		}else{
 			status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER);
 		}
@@ -204,13 +204,13 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				return;
 			}
 			//Fill Container
-			if (currentRecipe == null || !currentRecipe.matcheEmpty(emptyCan, resource) ) {
+			if (currentRecipe == null || !currentRecipe.matchEmpty(emptyCan, resource)) {
 				currentRecipe = BottlerRecipe.createEmpty(resource.getFluid(), emptyCan);
 				if (currentRecipe != null) {
 					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
+					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
 					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
@@ -225,14 +225,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_LEFT_PROCESSING);
 		if(filledCan != null){
 			//Empty Container
-			if (currentRecipe == null || !currentRecipe.matcheFilled(filledCan) && !currentRecipe.fillRecipe) {
+			if (currentRecipe == null || !currentRecipe.matchFilled(filledCan) && !currentRecipe.fillRecipe) {
 				currentRecipe = BottlerRecipe.createFilled(filledCan);
 				if (currentRecipe != null) {
-					FluidStack resource = currentRecipe.input;
+					FluidStack resource = currentRecipe.fluid;
 					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
+					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
 					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
@@ -306,7 +306,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			if (currentRecipe == null) {
 				fillStatus = FluidHelper.FillStatus.NO_FLUID;
 			}else{
-				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.input.getFluid(), false);
+				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
 			}
 		}else{
 			return true;
