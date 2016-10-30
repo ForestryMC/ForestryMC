@@ -20,6 +20,7 @@ import forestry.api.core.IModelBakerModel;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.baker.ModelBaker;
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -101,6 +102,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	}
 
 	protected IBakedModel getModel(ItemStack stack, World world) {
+		if(stack == null){
+			return null;
+		}
 		return bakeModel(stack, world, getInventoryKey(stack));
 	}
 
@@ -187,6 +191,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+			if(world == null){
+				world = Proxies.common.getRenderWorld();
+			}
 			return getModel(stack, world);
 		}
 	}

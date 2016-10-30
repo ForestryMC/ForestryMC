@@ -37,6 +37,9 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
 
     @Override
     protected IBakedModel getModel(@Nonnull IBlockState state) {
+    	if(state == null){
+    		return null;
+    	}
         K key = getWorldKey(state);
         if (key == null) {
             return null;
