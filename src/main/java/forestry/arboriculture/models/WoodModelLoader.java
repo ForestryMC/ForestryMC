@@ -224,9 +224,6 @@ public enum WoodModelLoader implements ICustomModelLoader{
 
         @Override
 		public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter){
-            if(!Attributes.moreSpecific(format, Attributes.DEFAULT_BAKED_FORMAT)){
-                throw new IllegalArgumentException("can't bake vanilla weighted models to the format that doesn't fit into the default one: " + format);
-            }
             if(variants.size() == 1){
                 IModel model = models.get(0);
                 return model.bake(MultiModelState.getPartState(state, model, 0), format, bakedTextureGetter);
