@@ -1,5 +1,6 @@
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -25,7 +26,7 @@ public class FarmableAgingCrop implements IFarmable {
 	@Nullable
 	protected final Integer replantAge;
 
-	public FarmableAgingCrop(ItemStack germling, Block cropBlock, IProperty<Integer> ageProperty, int minHarvestAge) {
+	public FarmableAgingCrop(@Nonnull ItemStack germling, @Nonnull Block cropBlock, @Nonnull IProperty<Integer> ageProperty, int minHarvestAge) {
 		this(germling, cropBlock, ageProperty, minHarvestAge, null);
 	}
 
