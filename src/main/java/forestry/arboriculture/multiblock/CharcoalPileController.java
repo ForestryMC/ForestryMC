@@ -11,7 +11,10 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.ICharcoalPileComponent;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.BlockPile;
 import forestry.core.multiblock.IMultiblockControllerInternal;
+import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
@@ -19,6 +22,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -129,7 +133,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 				woodBurnTime = 0;
 			}
 		}
-		/*if (burnTime >= woodBurnTime) {
+		if (burnTime >= woodBurnTime) {
 			for(IMultiblockComponent part : connectedParts) {
 				BlockPos pos = part.getCoordinates();
 				IBlockState state = worldObj.getBlockState(pos);
@@ -140,7 +144,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 			MultiblockRegistry.addDirtyController(worldObj, this);
 		} else {
 			burnTime++;
-		}*/
+		}
 		return true;
 	}
 	
