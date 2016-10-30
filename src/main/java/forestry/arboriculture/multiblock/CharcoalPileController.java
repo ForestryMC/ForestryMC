@@ -95,6 +95,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 	protected void onMachineDisassembled() {
 		setActive(false);
 		burnTime = 0;
+		woodBurnTime = 0;
 	}
 
 	@Override
@@ -111,7 +112,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		if (!isActive()) {
 			return false;
 		}
-		if(woodBurnTime == 0 && tickCount % 20 == 0){
+		if(woodBurnTime == 0){
 			int validComps = 0;
 			int newBurnTime = 0;
 			for (IMultiblockComponent part : connectedParts) {
@@ -126,13 +127,13 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 					newBurnTime += charcoalAmount * 500;
 				}
 			}
-			if(validComps <= 0){
-				woodBurnTime = newBurnTime / validComps;
+			if(validComps > 0){
+				woodBurnTime = newBurnTime;
 			}else{
 				woodBurnTime = 0;
 			}
 		}
-		if (burnTime >= woodBurnTime) {
+		/*if (burnTime >= woodBurnTime) {
 			for(IMultiblockComponent part : connectedParts) {
 				BlockPos pos = part.getCoordinates();
 				IBlockState state = worldObj.getBlockState(pos);
@@ -143,7 +144,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 			MultiblockRegistry.addDirtyController(worldObj, this);
 		} else {
 			burnTime++;
-		}
+		}*/
 		return true;
 	}
 	

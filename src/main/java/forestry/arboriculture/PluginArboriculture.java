@@ -425,7 +425,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		}
 		
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.DIRT)), PluginCore.items.fertilizerBio, Items.CLAY_BALL, PluginCore.items.fertilizerBio, OreDictUtil.DIRT, OreDictUtil.DIRT, OreDictUtil.DIRT, PluginCore.items.fertilizerBio, Items.CLAY_BALL, PluginCore.items.fertilizerBio);
+		RecipeUtil.addShapelessRecipe(new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.DIRT), 4), Items.CLAY_BALL, PluginCore.items.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, PluginCore.items.fertilizerBio, Items.CLAY_BALL);
 		
 	}
 
