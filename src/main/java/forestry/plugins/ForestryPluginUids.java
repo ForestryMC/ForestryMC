@@ -25,4 +25,5 @@ public class ForestryPluginUids {
 	public static final String EXTRA_UTILITIES = "forestry.extra.utilities";
 	public static final String NATURA = "forestry.natura";
 	public static final String INDUSTRIALCRAFT2 = "forestry.industrialcraft2";
+	public static final String ACT_ADD = "forestry.actuallyadditions";
 }
