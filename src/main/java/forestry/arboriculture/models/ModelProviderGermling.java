@@ -56,4 +56,9 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 			return germlingModel;
 		}
 	}
+
+	@Override
+	public int getSpriteColor(int renderPass) {
+		return 0xFFFFFF;
+	}
 }
