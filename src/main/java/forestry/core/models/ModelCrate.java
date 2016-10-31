@@ -48,18 +48,10 @@ public class ModelCrate extends BlankModel {
 	private static Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
-//	private static IModel crateModel;
-
 	/**
 	 * Init the model with datas from the ModelBakeEvent.
 	 */
 	public static void onModelBake(ModelBakeEvent event){
-//		try {
-//			crateModel = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/crate-filled"));
-//		} catch (Exception e) {
-//			Log.error("Failed to init the crate model.", e);
-//		}
-//		ModelCrate.cache.invalidateAll();
 		cache.clear();
 	}
 
