@@ -26,4 +26,12 @@ public interface IGermlingModelProvider {
 
 	@Nonnull
 	ModelResourceLocation getModel(EnumGermlingType type);
+
+	/**
+	 * Provides color for sapling. See {@link ILeafSpriteProvider} for pollen color.
+	 * @param type the germling type to render
+	 * @param renderPass renderPass of rendering
+	 * @return sapling color for renderPass
+	 */
+	int getSpriteColor(EnumGermlingType type, int renderPass);
 }

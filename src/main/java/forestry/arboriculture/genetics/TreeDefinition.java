@@ -967,7 +967,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		this.branch = branch;
 
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
-		IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid);
+		IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid, leafIconProvider);
 		IWoodProvider woodProvider = WoodProviderFactory.create(woodType);
 
 		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, leafIconProvider, germlingIconProvider, woodProvider, this);

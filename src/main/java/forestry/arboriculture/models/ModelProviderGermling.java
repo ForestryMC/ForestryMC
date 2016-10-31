@@ -12,6 +12,7 @@ package forestry.arboriculture.models;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -27,12 +28,14 @@ import forestry.api.core.IModelManager;
 public class ModelProviderGermling implements IGermlingModelProvider {
 
 	private final String name;
+	private final ILeafSpriteProvider leafSpriteProvider;
 
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
 
-	public ModelProviderGermling(String modelUid) {
+	public ModelProviderGermling(String modelUid, ILeafSpriteProvider leafSpriteProvider) {
 		this.name = modelUid.substring("forestry.".length());
+		this.leafSpriteProvider = leafSpriteProvider;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -54,6 +57,15 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 			return pollenModel;
 		}else{
 			return germlingModel;
+		}
+	}
+
+	@Override
+	public int getSpriteColor(EnumGermlingType type, int renderPass) {
+		if (type == EnumGermlingType.POLLEN) {
+			return leafSpriteProvider.getColor(false);
+		} else {
+			return 0xFFFFFF;
 		}
 	}
 }
