@@ -44,7 +44,6 @@ import forestry.storage.PluginStorage;
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankModel {
 
-	//Cache not needed because each baked quad is only 116 bytes big (minium size) and you do not have more then 1000 CrateTypes would only eat up 8 MB of ram.
 	private static Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
