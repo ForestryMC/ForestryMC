@@ -141,7 +141,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SideOnly(Side.CLIENT)
 	public int getGermlingColour(EnumGermlingType type, int renderPass) {
 		if (type != EnumGermlingType.POLLEN) {
-			return 0xFFFFFF;
+			return germlingModelProvider.getSpriteColor(renderPass);
 		}
 		return getSpriteColour(renderPass);
 	}
