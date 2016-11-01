@@ -65,7 +65,7 @@ public class ModelCrate extends BlankModel {
 	 */
 	public static void onModelBake(ModelBakeEvent event){
 		cache.clear();
-		itemTransforms = getMap(new ResourceLocation("minecraft:models/item/handheld"));
+		itemTransforms = getMap(new ResourceLocation("minecraft:models/item/generated"));
 	}
 	
 	public static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> getMap(ResourceLocation par1)
