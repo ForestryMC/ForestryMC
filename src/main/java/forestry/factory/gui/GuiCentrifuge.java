@@ -20,7 +20,7 @@ import forestry.factory.tiles.TileCentrifuge;
 public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, TileCentrifuge> {
 
 	public GuiCentrifuge(InventoryPlayer inventory, TileCentrifuge tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket.png", new ContainerCentrifuge(inventory, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", new ContainerCentrifuge(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
 	}
 

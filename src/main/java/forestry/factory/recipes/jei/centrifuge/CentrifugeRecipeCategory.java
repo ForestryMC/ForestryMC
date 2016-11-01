@@ -37,7 +37,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
 	private static final int inputSlot = 0;
 	private static final int outputSlot = 1;
 	
-	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket2.png");
 	@Nonnull
 	private final IDrawableAnimated arrow;
 
