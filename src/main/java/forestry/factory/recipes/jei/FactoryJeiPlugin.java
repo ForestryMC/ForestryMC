@@ -54,7 +54,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.gui.IAdvancedGuiHandler;
+import mezz.jei.api.gui.BlankAdvancedGuiHandler;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
@@ -141,7 +141,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		);
 	}
 
-	private static class ForestryAdvancedGuiHandler implements IAdvancedGuiHandler<GuiForestry> {
+	private static class ForestryAdvancedGuiHandler extends BlankAdvancedGuiHandler<GuiForestry> {
 		@Nonnull
 		@Override
 		public Class<GuiForestry> getGuiContainerClass() {
@@ -153,6 +153,12 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
 			GuiForestry<?, ?> guiForestry = guiContainer;
 			return guiForestry.getExtraGuiAreas();
+		}
+
+		@Nullable
+		@Override
+		public Object getIngredientUnderMouse(GuiForestry guiContainer, int mouseX, int mouseY) {
+			return guiContainer.getFluidStackAtPosition(mouseX, mouseY);
 		}
 	}
 }

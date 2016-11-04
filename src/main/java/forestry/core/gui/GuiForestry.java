@@ -11,6 +11,7 @@
 package forestry.core.gui;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,8 @@ import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.ledgers.PowerLedger;
+import forestry.core.gui.widgets.TankWidget;
+import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.proxy.Proxies;
@@ -40,6 +43,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
 	protected final I inventory;
@@ -152,11 +157,25 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
 	}
 
-	protected Slot getSlotAtPosition(int par1, int par2) {
+	@Nullable
+	public FluidStack getFluidStackAtPosition(int mouseX, int mouseY) {
+		for (Widget widget : widgetManager.getWidgets()) {
+			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - guiLeft, mouseY - guiTop)) {
+				TankWidget tankWidget = (TankWidget) widget;
+				IFluidTank tank = tankWidget.getTank();
+				if (tank != null) {
+					return tank.getFluid();
+				}
+			}
+		}
+		return null;
+	}
+
+	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
 			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
-			if (isMouseOverSlot(slot, par1, par2)) {
+			if (isMouseOverSlot(slot, mouseX, mouseY)) {
 				return slot;
 			}
 		}
@@ -164,8 +183,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return null;
 	}
 
-	private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-		return isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+	private boolean isMouseOverSlot(Slot par1Slot, int mouseX, int mouseY) {
+		return isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, mouseX, mouseY);
 	}
 
 	@Override

@@ -10,6 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import javax.annotation.Nullable;
+
+import forestry.api.core.IToolPipette;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.gui.IContainerLiquidTanks;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.proxy.Proxies;
+import forestry.farming.gui.ContainerFarm;
+import forestry.greenhouse.gui.ContainerGreenhouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,18 +31,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-
-import forestry.api.core.IToolPipette;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
-import forestry.farming.gui.ContainerFarm;
-import forestry.greenhouse.gui.ContainerGreenhouse;
 
 /**
  * Slot for liquid tanks
@@ -57,6 +57,7 @@ public class TankWidget extends Widget {
 		return this;
 	}
 
+	@Nullable
 	public IFluidTank getTank() {
 		Container container = manager.gui.inventorySlots;
 		if (container instanceof IContainerLiquidTanks) {
