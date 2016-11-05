@@ -39,7 +39,6 @@ import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.lepidopterology.render.TextureAtlasButterfly;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
