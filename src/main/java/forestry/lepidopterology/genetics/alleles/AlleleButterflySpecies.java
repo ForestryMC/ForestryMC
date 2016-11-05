@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -199,7 +200,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public void registerSprites() {
 		String spriteName = getItemTexture();
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		textureMap.setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
+		textureMap.registerSprite(new ResourceLocation(spriteName));
 	}
 	
 	@Override

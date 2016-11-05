@@ -33,8 +33,8 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
@@ -46,7 +46,7 @@ public class ModelButterflyItem extends BlankModel {
 	@SideOnly(Side.CLIENT)
 	private static IModel modelButterfly;
 	
-	private static final Cache<IButterfly, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	private static final Cache<IAlleleButterflySpecies, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 
 	public static void onModelBake(ModelBakeEvent event){
 		modelButterfly = null;
@@ -73,7 +73,7 @@ public class ModelButterflyItem extends BlankModel {
 			}
 		}
 		IModel retexturedModel =  ModelProcessingHelper.retexture(modelButterfly, textures.build());
-		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.5F, -0.03125F, butterfly.getSize() * 1.5F);
+		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {
@@ -87,10 +87,13 @@ public class ModelButterflyItem extends BlankModel {
 			if (butterfly == null) {
 				butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 			}
-			if(cache.getIfPresent(butterfly) == null){
-				cache.put(butterfly, bakeModel(butterfly));
+			IAlleleButterflySpecies primary = butterfly.getGenome().getPrimary();
+			IBakedModel bakedModel = cache.getIfPresent(primary);
+			if(bakedModel == null){
+				bakedModel = bakeModel(butterfly);
+				cache.put(primary, bakedModel);
 			}
-			return cache.getIfPresent(butterfly);
+			return bakedModel;
 		}
 	}
 }
