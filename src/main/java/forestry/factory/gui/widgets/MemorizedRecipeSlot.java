@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.RecipeMemory;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
 
 public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	private static final TextureAtlasSprite lockIcon = TextureManager.getInstance().getDefault("slots/locked");
@@ -45,7 +43,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 		GlStateManager.disableDepth();
 
 		if (recipeMemory.isLocked(slotNumber)) {
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
 		}
 

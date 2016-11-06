@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.mail.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.Translator;
 import forestry.mail.gui.ContainerLetter;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class AddresseeSlot extends Widget {
 
@@ -38,8 +37,8 @@ public class AddresseeSlot extends Widget {
 		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
 		if (carrier != null) {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);
+			Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
+			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, carrier.getSprite(), 26, 26);
 		}
 	}
 

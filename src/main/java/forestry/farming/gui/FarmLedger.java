@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
@@ -45,8 +45,7 @@ public class FarmLedger extends Ledger {
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
 		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite("minecraft:items/bucket_water");
-
-		drawSprite(textureAtlasSprite, xIcon, y);
+		drawSprite(TextureMap.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
 		y += 4;
 
 		if (!isFullyOpened()) {

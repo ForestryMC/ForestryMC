@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.mail;
 
+import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,6 +31,10 @@ public interface IPostalCarrier {
 	 */
 	String getName();
 
+	/**
+	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}.
+	 * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 26x26 square to be accepted by the texture map.
+	 */
 	@SideOnly(Side.CLIENT)
 	TextureAtlasSprite getSprite();
 

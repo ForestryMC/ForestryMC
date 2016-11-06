@@ -5,16 +5,14 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -112,7 +110,8 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprite() {
-		texture = TextureManager.registerSprite(new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName));
+		ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName);
+		texture = TextureManager.getInstance().registerGuiSprite(location);
 	}
 
 	@SideOnly(Side.CLIENT)

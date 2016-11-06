@@ -6,13 +6,29 @@
 package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Get the instance from {@link ForestryAPI#textureManager}.
+ */
 @SideOnly(Side.CLIENT)
 public interface ITextureManager {
 
+	/**
+	 * Location of the Forestry Gui Texture Map.
+	 * Used for binding with {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture(ResourceLocation)}
+	 */
+	ResourceLocation getGuiTextureMap();
+
+	/**
+	 * Get a texture atlas sprite that has been registered by Forestry, for Forestry's Gui Texture Map.
+	 */
 	TextureAtlasSprite getDefault(String ident);
 
+	/**
+	 * Register a sprite with Forestry's Gui Texture Map.
+	 */
+	TextureAtlasSprite registerGuiSprite(ResourceLocation location);
 }

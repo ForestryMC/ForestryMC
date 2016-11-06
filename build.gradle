@@ -98,6 +98,9 @@ processResources {
 		exclude 'mcmod.info'
 		exclude '**/*.md'
 	}
+
+	// Move access transformers to META-INF
+	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // prevent java 8's strict doclint for javadocs from failing builds
@@ -108,7 +111,9 @@ allprojects {
 }
 
 jar {
-
+	manifest {
+		attributes 'FMLAT': 'forestry_at.cfg'
+	}
 }
 
 task sourcesJar(type: Jar) {

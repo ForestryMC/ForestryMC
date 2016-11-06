@@ -11,31 +11,27 @@
 package forestry.core.render;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TextureManager implements ITextureManager {
-
+	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation("textures/atlas/forestry.png");
 	private static final TextureManager INSTANCE = new TextureManager();
-	private static final Map<String, TextureAtlasSprite> defaultIcons = new HashMap<>();
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
+	private final TextureMapForestry textureMap;
 
 	static {
 		ForestryAPI.textureManager = INSTANCE;
@@ -46,6 +42,11 @@ public class TextureManager implements ITextureManager {
 	}
 
 	private TextureManager() {
+		this.textureMap = new TextureMapForestry("textures");
+	}
+
+	public TextureMapForestry getTextureMap() {
+		return textureMap;
 	}
 
 	public static void initDefaultSprites() {
@@ -59,10 +60,13 @@ public class TextureManager implements ITextureManager {
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String identifier : defaultIconNames) {
-			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "gui/" + identifier);
-			TextureAtlasSprite icon = registerSprite(resourceLocation);
-			defaultIcons.put(identifier, icon);
+			ResourceLocation resourceLocation = getForestryGuiLocation(identifier);
+			INSTANCE.registerGuiSprite(resourceLocation);
 		}
+	}
+
+	private static ResourceLocation getForestryGuiLocation(String identifier) {
+		return new ResourceLocation(Constants.MOD_ID, "gui/" + identifier);
 	}
 
 	public static TextureAtlasSprite registerSprite(ResourceLocation location) {
@@ -71,10 +75,21 @@ public class TextureManager implements ITextureManager {
 	}
 
 	@Override
-	public TextureAtlasSprite getDefault(String ident) {
-		return defaultIcons.get(ident);
+	public TextureAtlasSprite getDefault(String identifier) {
+		ResourceLocation resourceLocation = getForestryGuiLocation(identifier);
+		return getTextureMap().getAtlasSprite(resourceLocation.toString());
 	}
-	
+
+	@Override
+	public ResourceLocation getGuiTextureMap() {
+		return LOCATION_FORESTRY_TEXTURE;
+	}
+
+	@Override
+	public TextureAtlasSprite registerGuiSprite(ResourceLocation location) {
+		return getTextureMap().registerSprite(location);
+	}
+
 	public void registerBlock(Block block) {
 		if (block instanceof ISpriteRegister) {
 			spriteRegisters.add((ISpriteRegister) block);

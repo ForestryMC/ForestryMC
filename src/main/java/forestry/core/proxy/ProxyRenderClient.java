@@ -10,39 +10,10 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nonnull;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.animation.ITimeValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-
+import com.google.common.collect.ImmutableMap;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IHiveTile;
@@ -66,12 +37,40 @@ import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
+import forestry.core.render.TextureManager;
+import forestry.core.render.TextureMapForestry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.utils.VectUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 public class ProxyRenderClient extends ProxyRender {
 
@@ -83,6 +82,15 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public boolean hasRendering() {
 		return true;
+	}
+
+	@Override
+	public void initRendering() {
+		TextureManager textureManager = TextureManager.getInstance();
+		TextureMapForestry textureMap = textureManager.getTextureMap();
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		minecraft.renderEngine.loadTickableTexture(TextureManager.getInstance().getGuiTextureMap(), textureMap);
 	}
 
 	@Override

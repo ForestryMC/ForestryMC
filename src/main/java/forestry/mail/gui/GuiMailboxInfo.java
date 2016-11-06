@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
+import forestry.mail.POBoxInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,12 +25,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
-import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
 
@@ -43,6 +42,7 @@ public class GuiMailboxInfo extends Gui {
 
 	private final FontRenderer fontRendererObj;
 	private POBoxInfo poInfo;
+	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {

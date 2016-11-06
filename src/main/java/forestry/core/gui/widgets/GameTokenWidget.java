@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -23,6 +17,10 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class GameTokenWidget extends Widget {
 	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
@@ -70,8 +68,9 @@ public class GameTokenWidget extends Widget {
 
 		GlStateManager.disableDepth();
 		for (String ident : getToken().getOverlayIcons()) {
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			TextureAtlasSprite icon = TextureManager.getInstance().getDefault(ident);
+			TextureManager textureManager = TextureManager.getInstance();
+			Proxies.render.bindTexture(textureManager.getGuiTextureMap());
+			TextureAtlasSprite icon = textureManager.getDefault(ident);
 			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
 		}
 		GlStateManager.enableDepth();

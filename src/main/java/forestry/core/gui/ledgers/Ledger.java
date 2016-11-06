@@ -13,18 +13,17 @@ package forestry.core.gui.ledgers;
 import java.awt.Rectangle;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
+import forestry.core.render.TextureManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Side ledger for guis
@@ -214,9 +213,13 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
+		drawSprite(TextureManager.getInstance().getGuiTextureMap(), sprite, x, y);
+	}
+
+	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
 		if (sprite != null) {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Proxies.render.bindTexture(textureMap);
 			manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 		}
 	}
