@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TextureManager implements ITextureManager {
-	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation("textures/atlas/forestry.png");
+	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/atlas/gui");
 	private static final TextureManager INSTANCE = new TextureManager();
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 	private final TextureMapForestry textureMap;

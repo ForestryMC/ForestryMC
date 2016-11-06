@@ -17,6 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
@@ -31,7 +33,9 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 		if (inventory == null) {
 			throw new IllegalArgumentException("Inventory must not be null");
 		}
-		setBackgroundLocation(TextureManager.getInstance().getGuiTextureMap());
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			setBackgroundLocation(TextureManager.getInstance().getGuiTextureMap());
+		}
 		this.stackLimit = -1;
 	}
 
