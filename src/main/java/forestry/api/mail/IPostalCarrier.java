@@ -33,7 +33,7 @@ public interface IPostalCarrier {
 
 	/**
 	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}.
-	 * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 26x26 square to be accepted by the texture map.
+	 * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 32x32 square.
 	 */
 	@SideOnly(Side.CLIENT)
 	TextureAtlasSprite getSprite();
