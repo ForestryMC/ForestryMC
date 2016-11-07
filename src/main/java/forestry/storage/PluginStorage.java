@@ -15,6 +15,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -542,19 +543,19 @@ public class PluginStorage extends BlankForestryPlugin {
 				return true;
 			}
 
-			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpackDefinition(tokens[0]);
+			String backpackUid = tokens[0];
+			String itemStackStrings = tokens[1];
+
+			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpackDefinition(backpackUid);
 			if (backpackDefinition == null) {
 				String errorMessage = IMCUtil.getInvalidIMCMessageText(message);
-				Log.warning("{} For non-existent backpack {}.", errorMessage, tokens[0]);
+				Log.error("{} For non-existent backpack {}.", errorMessage, backpackUid);
 				return true;
 			}
-			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
-			Predicate<ItemStack> filter = backpackDefinition.getFilter();
-			if (filter instanceof IBackpackFilterConfigurable) {
-				IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
-				for (ItemStack itemStack : itemStacks) {
-					backpackFilter.acceptItem(itemStack);
-				}
+
+			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(itemStackStrings, 0);
+			for (ItemStack itemStack : itemStacks) {
+				BackpackManager.backpackInterface.addItemToForestryBackpack(backpackUid, itemStack);
 			}
 
 			return true;
