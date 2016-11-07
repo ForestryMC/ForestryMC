@@ -11,23 +11,12 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
@@ -41,7 +30,15 @@ import forestry.arboriculture.blocks.log.BlockForestryLog;
 import forestry.arboriculture.blocks.planks.BlockForestryPlanks;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.arboriculture.blocks.slab.BlockForestrySlab;
-import forestry.core.utils.Log;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockWoodSlab;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class WoodAccess implements IWoodAccess {
 	private static final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
@@ -242,8 +239,8 @@ public class WoodAccess implements IWoodAccess {
 		WoodMap woodMap = woodMaps.get(woodBlockKind);
 		ItemStack itemStack = woodMap.getItem(fireproof).get(woodType);
 		if (itemStack == null) {
-			Log.error("No stack found for {} {} {}", woodType, woodMap.getName(), fireproof ? "fireproof" : "");
-			return null;
+			String errMessage = String.format("No stack found for %s %s %s", woodType, woodMap.getName(), fireproof ? "fireproof" : "non-fireproof");
+			throw new IllegalStateException(errMessage);
 		}
 		return itemStack.copy();
 	}
@@ -256,8 +253,8 @@ public class WoodAccess implements IWoodAccess {
 		WoodMap woodMap = woodMaps.get(woodBlockKind);
 		IBlockState blockState = woodMap.getBlock(fireproof).get(woodType);
 		if (blockState == null) {
-			Log.error("No block found for {} {} {}", woodType, woodMap.getName(), fireproof ? "fireproof" : "non-fireproof");
-			return null;
+			String errMessage = String.format("No block found for %s %s %s", woodType, woodMap.getName(), fireproof ? "fireproof" : "non-fireproof");
+			throw new IllegalStateException(errMessage);
 		}
 		return blockState;
 	}

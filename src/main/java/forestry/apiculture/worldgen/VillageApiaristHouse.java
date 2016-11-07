@@ -15,27 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -62,6 +41,25 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
@@ -88,13 +86,15 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	private void createBuildingBlocks(Random random) {
-		boolean fireproof = random.nextInt(4) == 0;
 		IWoodType woodType;
+		boolean fireproof;
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			woodType = EnumForestryWoodType.getRandom(random);
+			fireproof = random.nextInt(4) == 0;
 		} else {
 			woodType = EnumVanillaWoodType.getRandom(random);
+			fireproof = false;
 		}
 
 		IWoodAccess woodAccess = TreeManager.woodAccess;

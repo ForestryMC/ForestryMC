@@ -149,6 +149,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	@Override
+	public void disabledSetupAPI() {
+		TreeManager.woodAccess = new WoodAccess();
+
+		// Capabilities
+		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
+	}
+
+	@Override
 	public void registerItemsAndBlocks() {
 		items = new ItemRegistryArboriculture();
 		blocks = new BlockRegistryArboriculture();
