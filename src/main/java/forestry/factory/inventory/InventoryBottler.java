@@ -24,8 +24,8 @@ import forestry.factory.tiles.TileBottler;
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 	public static final short SLOT_INPUT_FULL_CONTAINER = 0;
 	public static final short SLOT_INPUT_EMPTY_CONTAINER = 1;
-	public static final short SLOT_LEFT_PROCESSING = 2;
-	public static final short SLOT_RIGHT_PROCESSING = 3;
+	public static final short SLOT_EMPTYING_PROCESSING = 2;
+	public static final short SLOT_FILLING_PROCESSING = 3;
 	public static final short SLOT_OUTPUT_EMPTY_CONTAINER = 4;
 	public static final short SLOT_OUTPUT_FULL_CONTAINER = 5;
 

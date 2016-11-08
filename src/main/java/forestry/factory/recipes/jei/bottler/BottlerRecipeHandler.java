@@ -1,7 +1,6 @@
 package forestry.factory.recipes.jei.bottler;
 
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.factory.recipes.BottlerRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -29,14 +28,7 @@ public class BottlerRecipeHandler implements IRecipeHandler<BottlerRecipeWrapper
 
 	@Override
 	public boolean isRecipeValid(BottlerRecipeWrapper wrapper) {
-		BottlerRecipe recipe = wrapper.getRecipe();
-		if (recipe.fluid == null || recipe.fluid.amount <= 0) {
-			return false;
-		}
-		if (recipe.inputStack == null) {
-			return false;
-		}
-		return recipe.fluid != null;
+		return wrapper.fluid.amount > 0;
 	}
 
 }

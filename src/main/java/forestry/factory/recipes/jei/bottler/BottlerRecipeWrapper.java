@@ -1,29 +1,37 @@
 package forestry.factory.recipes.jei.bottler;
 
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.BottlerRecipe;
+import javax.annotation.Nullable;
+
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BottlerRecipeWrapper extends ForestryRecipeWrapper<BottlerRecipe> {
-	public BottlerRecipeWrapper(BottlerRecipe recipe) {
-		super(recipe);
+public class BottlerRecipeWrapper extends BlankRecipeWrapper {
+	public final ItemStack inputStack;
+	public final FluidStack fluid;
+	@Nullable
+	public final ItemStack outputStack;
+	public final boolean fillRecipe;
+
+	public BottlerRecipeWrapper(ItemStack inputStack, FluidStack fluid, @Nullable ItemStack outputStack, boolean fillRecipe) {
+		this.inputStack = inputStack;
+		this.fluid = fluid;
+		this.outputStack = outputStack;
+		this.fillRecipe = fillRecipe;
 	}
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		BottlerRecipe recipe = getRecipe();
-
-		ingredients.setInput(ItemStack.class, recipe.inputStack);
-		if (recipe.outputStack != null) {
-			ingredients.setOutput(ItemStack.class, recipe.outputStack);
+		ingredients.setInput(ItemStack.class, inputStack);
+		if (outputStack != null) {
+			ingredients.setOutput(ItemStack.class, outputStack);
 		}
 
-		if (recipe.fillRecipe) {
-			ingredients.setInput(FluidStack.class, recipe.fluid);
+		if (fillRecipe) {
+			ingredients.setInput(FluidStack.class, fluid);
 		} else {
-			ingredients.setOutput(FluidStack.class, recipe.fluid);
+			ingredients.setOutput(FluidStack.class, fluid);
 		}
 	}
 }

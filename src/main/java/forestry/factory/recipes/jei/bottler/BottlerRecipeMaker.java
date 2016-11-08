@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import forestry.core.config.Constants;
-import forestry.factory.recipes.BottlerRecipe;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -35,8 +34,7 @@ public class BottlerRecipeMaker {
 					if (emptyStack.stackSize == 0) {
 						emptyStack = null;
 					}
-					BottlerRecipe recipe = new BottlerRecipe(ingredient, drain, emptyStack, false);
-					recipes.add(new BottlerRecipeWrapper(recipe));
+					recipes.add(new BottlerRecipeWrapper(ingredient, drain, emptyStack, false));
 					addFillRecipe(ingredient, drain.getFluid(), recipes);
 				} else {
 					for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
@@ -54,8 +52,7 @@ public class BottlerRecipeMaker {
 		int fill = fillCapability.fill(new FluidStack(fluid, Constants.PROCESSOR_TANK_CAPACITY), true);
 		if (fill > 0) {
 			FluidStack filledFluid = new FluidStack(fluid, fill);
-			BottlerRecipe recipe = new BottlerRecipe(ingredient, filledFluid, fillStack, true);
-			recipes.add(new BottlerRecipeWrapper(recipe));
+			recipes.add(new BottlerRecipeWrapper(ingredient, filledFluid, fillStack, true));
 		}
 	}
 }

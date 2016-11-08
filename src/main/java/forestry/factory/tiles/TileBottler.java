@@ -110,14 +110,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		if (updateOnInterval(20)) {
 			boolean movedStack = false;
-			ItemStack leftProcessingStack = getStackInSlot(InventoryBottler.SLOT_LEFT_PROCESSING);
-			ItemStack rightProcessingStack = getStackInSlot(InventoryBottler.SLOT_RIGHT_PROCESSING);
+			ItemStack leftProcessingStack = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
+			ItemStack rightProcessingStack = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 			if(leftProcessingStack == null){
 				ItemStack inputStack = getStackInSlot(InventoryBottler.SLOT_INPUT_FULL_CONTAINER);
 				if(inputStack != null){
 					leftProcessingStack = inputStack.copy();
 					leftProcessingStack.stackSize = 1;
-					setInventorySlotContents(InventoryBottler.SLOT_LEFT_PROCESSING, leftProcessingStack);
+					setInventorySlotContents(InventoryBottler.SLOT_EMPTYING_PROCESSING, leftProcessingStack);
 					decrStackSize(InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 1);
 					movedStack = true;
 				}
@@ -127,7 +127,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				if(inputStack != null){
 					rightProcessingStack = inputStack.copy();
 					rightProcessingStack.stackSize = 1;
-					setInventorySlotContents(InventoryBottler.SLOT_RIGHT_PROCESSING, rightProcessingStack);
+					setInventorySlotContents(InventoryBottler.SLOT_FILLING_PROCESSING, rightProcessingStack);
 					decrStackSize(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER, 1);
 					movedStack = true;
 				}
@@ -176,9 +176,9 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public boolean workCycle() {
 		FluidHelper.FillStatus status;
 		if(currentRecipe.fillRecipe){
-			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
+			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
 		}else{
-			status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, true);
+			status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, true);
 		}
 		if(status == FluidHelper.FillStatus.SUCCESS){
 			currentRecipe = null;
@@ -197,7 +197,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 	
 	private void checkFillRecipe(){
-		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_RIGHT_PROCESSING);
+		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if(emptyCan != null){
 			FluidStack resource = resourceTank.getFluid();
 			if (resource == null) {
@@ -222,7 +222,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 	
 	private void checkEmptyRecipe(){
-		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_LEFT_PROCESSING);
+		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
 		if(filledCan != null){
 			//Empty Container
 			if (currentRecipe == null || !currentRecipe.matchFilled(filledCan) && !currentRecipe.fillRecipe) {
@@ -245,12 +245,12 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	
 	@Override
 	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
-		if(slotIndex == InventoryBottler.SLOT_LEFT_PROCESSING){
+		if(slotIndex == InventoryBottler.SLOT_EMPTYING_PROCESSING){
 			if(currentRecipe != null && !currentRecipe.fillRecipe){
 				currentRecipe = null;
 				setTicksPerWorkCycle(0);
 			}
-		}else if(slotIndex == InventoryBottler.SLOT_RIGHT_PROCESSING){
+		}else if(slotIndex == InventoryBottler.SLOT_FILLING_PROCESSING){
 			if(currentRecipe != null && currentRecipe.fillRecipe){
 				currentRecipe = null;
 				setTicksPerWorkCycle(0);
@@ -277,7 +277,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		ItemStack emptyCan = inventory.getStackInSlot(InventoryBottler.SLOT_RIGHT_PROCESSING);
+		ItemStack emptyCan = inventory.getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if (emptyCan == null) {
 			return false;
 		}
@@ -296,7 +296,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (currentRecipe != null) {
 			IFluidTankProperties properties = tankManager.getTankProperties()[0];
 			if(properties != null){
-				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_LEFT_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
+				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			}else{
 				emptyStatus = FillStatus.SUCCESS;
 			}
@@ -308,7 +308,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			if (currentRecipe == null) {
 				return false;
 			}else{
-				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_RIGHT_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
+				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
 			}
 		}else{
 			return true;

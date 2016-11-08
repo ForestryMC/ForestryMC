@@ -59,7 +59,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
-		if (recipeWrapper.getRecipe().fillRecipe) {
+		if (recipeWrapper.fillRecipe) {
 			guiItemStacks.init(inputEmpty, true, 44, 0);
 			guiItemStacks.init(outputFull, false, 44, 42);
 			guiFluidStacks.init(tankIndex, true, 23, 1, 16, 58, 10000, false, tankOverlay);
