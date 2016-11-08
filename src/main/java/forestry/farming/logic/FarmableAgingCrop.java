@@ -41,7 +41,7 @@ public class FarmableAgingCrop implements IFarmable {
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
-		return blockState.getBlock() == cropBlock && blockState.getValue(ageProperty) < minHarvestAge;
+		return blockState.getBlock() == cropBlock && blockState.getValue(ageProperty) <= minHarvestAge;
 	}
 
 	@Override

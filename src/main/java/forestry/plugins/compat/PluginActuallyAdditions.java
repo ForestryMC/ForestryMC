@@ -87,7 +87,8 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 			if (plantBlock != null) {
 				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7);
 				Farmables.farmables.get("farmWheat").add(crop);
-				Farmables.farmables.get("farmOrchard").add(crop);
+				FarmableAgingCrop cropOrchard = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
+				Farmables.farmables.get("farmOrchard").add(cropOrchard);
 			}
 		}
 	}

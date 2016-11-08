@@ -98,10 +98,10 @@ public class PluginFarming extends BlankForestryPlugin {
 		}
 
 		Farmables.farmables.putAll("farmOrchard", Arrays.asList(
-				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7),
-				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7),
-				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7),
-				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3)
+				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3, 0)
 		));
 
 		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
