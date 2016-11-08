@@ -109,27 +109,20 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			boolean movedStack = false;
 			ItemStack leftProcessingStack = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
 			ItemStack rightProcessingStack = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
-			if(leftProcessingStack == null){
+			if (leftProcessingStack == null) {
 				ItemStack inputStack = getStackInSlot(InventoryBottler.SLOT_INPUT_FULL_CONTAINER);
-				if(inputStack != null){
-					leftProcessingStack = inputStack.copy();
-					leftProcessingStack.stackSize = 1;
+				if (inputStack != null) {
+					leftProcessingStack = decrStackSize(InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 1);
 					setInventorySlotContents(InventoryBottler.SLOT_EMPTYING_PROCESSING, leftProcessingStack);
-					decrStackSize(InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 1);
-					movedStack = true;
 				}
 			}
-			if(rightProcessingStack == null){
+			if (rightProcessingStack == null) {
 				ItemStack inputStack = getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER);
-				if(inputStack != null){
-					rightProcessingStack = inputStack.copy();
-					rightProcessingStack.stackSize = 1;
+				if (inputStack != null) {
+					rightProcessingStack = decrStackSize(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER, 1);
 					setInventorySlotContents(InventoryBottler.SLOT_FILLING_PROCESSING, rightProcessingStack);
-					decrStackSize(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER, 1);
-					movedStack = true;
 				}
 			}
 		}
