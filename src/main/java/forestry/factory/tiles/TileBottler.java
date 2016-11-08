@@ -72,7 +72,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		resourceTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(this, resourceTank);
 		
-		canDump = new EnumMap(EnumFacing.class);
+		canDump = new EnumMap<>(EnumFacing.class);
 	}
 
 	/* SAVING & LOADING */
@@ -134,12 +134,6 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			}
 		}
 
-		if (canDump.isEmpty()) {
-			for(EnumFacing facing : EnumFacing.VALUES){
-				canDump.put(facing, FluidHelper.canAcceptFluid(worldObj, pos.offset(facing), facing.getOpposite(), tankManager.getFluid(0)));
-			}
-		}
-
 		if (canDump()) {
 			if (dumpingFluid || updateOnInterval(20)) {
 				dumpingFluid = dumpFluid();
@@ -148,6 +142,12 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 	
 	private boolean canDump() {
+		if (canDump.isEmpty()) {
+			for(EnumFacing facing : EnumFacing.VALUES){
+				canDump.put(facing, FluidHelper.canAcceptFluid(worldObj, pos.offset(facing), facing.getOpposite(), tankManager.getFluid(0)));
+			}
+		}
+
 		for(EnumFacing facing : EnumFacing.VALUES){
 			if(canDump.get(facing)){
 				return true;
@@ -191,9 +191,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public void onNeighborTileChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborTileChange(world, pos, neighbor);
 
-		for(EnumFacing facing : EnumFacing.VALUES){
-			canDump.put(facing, FluidHelper.canAcceptFluid(worldObj, pos.offset(facing), facing.getOpposite(), tankManager.getFluid(0)));
-		}
+		canDump.clear();
 	}
 	
 	private void checkFillRecipe(){
