@@ -184,7 +184,8 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (block.isWood(world, candidate) || isBlockTraversable(blockState, world, candidate, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (isFruitBearer(world, candidate)) {
+					}
+					if (isFruitBearer(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 
