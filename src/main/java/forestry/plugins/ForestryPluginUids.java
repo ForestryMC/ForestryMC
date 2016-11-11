@@ -27,4 +27,5 @@ public class ForestryPluginUids {
 	public static final String INDUSTRIALCRAFT2 = "forestry.industrialcraft2";
 	public static final String ACT_ADD = "forestry.actuallyadditions";
 	public static final String HARVESTCRAFT = "forestry.harvestcraft";
+	public static final String IMMERSIVE_ENGINEERING = "forestry.immersiveengineering";
 }
