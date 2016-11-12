@@ -1,6 +1,8 @@
 package forestry.lepidopterology.entities;
 
 import forestry.lepidopterology.PluginLepidopterology;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class AIButterflyGoHome extends AIButterflyMovement {
@@ -12,12 +14,12 @@ public class AIButterflyGoHome extends AIButterflyMovement {
 
 	@Override
 	public boolean shouldExecute() {
-		if (PluginLepidopterology.maxDistance > entity.getDistanceSqToCenter(entity.getHomePosition())) {
+		if (entity.isWithinHomeDistanceCurrentPosition()) {
 			return false;
 		}
 
 		flightTarget = new Vec3d(entity.getHomePosition());
-		if (flightTarget == null) {
+		if (flightTarget == null || flightTarget.equals(BlockPos.ORIGIN)) {
 			if (entity.getState().doesMovement) {
 				entity.setState(EnumButterflyState.HOVER);
 			}

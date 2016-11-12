@@ -58,6 +58,7 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.genetics.Butterfly;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
@@ -96,10 +97,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setDefaults();
 	}
 
-	public EntityButterfly(World world, IButterfly butterfly) {
+	public EntityButterfly(World world, IButterfly butterfly, BlockPos homePos) {
 		super(world);
 		setDefaults();
 		setIndividual(butterfly);
+		setHomePosAndDistance(homePos, PluginLepidopterology.maxDistance);
 	}
 
 	@Override
@@ -145,6 +147,10 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		nbttagcompound.setByte("STATE", (byte) getState().ordinal());
 		nbttagcompound.setInteger("EXH", exhaustion);
+		
+		nbttagcompound.setInteger("homeX", getHomePosition().getX());
+		nbttagcompound.setInteger("homeY", getHomePosition().getY());
+		nbttagcompound.setInteger("homeZ", getHomePosition().getZ());
 	}
 
 	@Override
@@ -164,6 +170,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		EnumButterflyState state = EnumButterflyState.VALUES[nbttagcompound.getByte("STATE")];
 		setState(state);
 		exhaustion = nbttagcompound.getInteger("EXH");
+		BlockPos home = new BlockPos(nbttagcompound.getInteger("homeX"), nbttagcompound.getInteger("homeY"), nbttagcompound.getInteger("homeZ"));
+		setHomePosAndDistance(home, PluginLepidopterology.maxDistance);
 	}
 
 	public float getWingFlap(float partialTicktime) {

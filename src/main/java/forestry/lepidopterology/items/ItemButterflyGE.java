@@ -143,7 +143,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
-		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
+		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly, entityItem.getPosition()), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
 			if (entityItem.getEntityItem().stackSize > 1) {
 				entityItem.getEntityItem().stackSize--;
 			} else {
