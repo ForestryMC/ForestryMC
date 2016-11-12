@@ -1,6 +1,7 @@
 package forestry.energy.compat.tesla;
 
 import forestry.core.config.Constants;
+import forestry.core.utils.Log;
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
 import net.darkhax.tesla.api.ITeslaProducer;
@@ -46,6 +47,12 @@ public class TeslaHelper {
 	@Optional.Method(modid = Constants.TESLA_MOD_ID)
 	private static int _sendEnergy(TileEntity tile, EnumFacing side, int amount, boolean simulate) {
 		ITeslaConsumer consumer = tile.getCapability(TESLA_CONSUMER, side);
+		if (consumer == null) {
+			if (tile.hasCapability(TESLA_CONSUMER, side)) {
+				Log.error("Tile claims to support Tesla but does not have the capability. {} {}", tile.getPos(), tile);
+			}
+			return 0;
+		}
 		return (int) consumer.givePower(amount, simulate);
 	}
 }
