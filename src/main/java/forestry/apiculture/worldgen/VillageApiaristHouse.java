@@ -107,9 +107,9 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		this.fenceGate = woodAccess.getBlock(woodType, WoodBlockKind.FENCE_GATE, fireproof);
 	}
 
-	public static VillageApiaristHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> par1List, Random random, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
+	public static VillageApiaristHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> pieces, Random random, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
 		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(structureMinX, structureMinY, structureMinZ, -4, 0, 0, 12, 9, 12, facing);
-		if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(par1List, bbox) != null) {
+		if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(pieces, bbox) != null) {
 			return null;
 		}
 
@@ -276,7 +276,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private void buildGarden(World world, StructureBoundingBox box) {
 
 		Block ground = Blocks.DIRT;
-		if (field_189928_h == 1) { // desert
+		if (structureType == 1) { // desert
 			ground = Blocks.SAND;
 		}
 
@@ -289,7 +289,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 	private void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
-		if (field_189928_h == 1) { // desert
+		if (structureType == 1) { // desert
 			setBlockState(world, Blocks.CACTUS.getDefaultState(), 4, 1, 7, box);
 			return;
 		}
