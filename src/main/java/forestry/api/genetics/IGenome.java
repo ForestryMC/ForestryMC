@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.core.INbtWritable;
 
 /**
@@ -14,17 +16,23 @@ import forestry.api.core.INbtWritable;
  */
 public interface IGenome extends INbtWritable {
 
+	@Nonnull
 	IAlleleSpecies getPrimary();
 
+	@Nonnull
 	IAlleleSpecies getSecondary();
 
+	@Nonnull
 	IChromosome[] getChromosomes();
 
+	@Nonnull
 	IAllele getActiveAllele(IChromosomeType chromosomeType);
 
+	@Nonnull
 	IAllele getInactiveAllele(IChromosomeType chromosomeType);
 
 	boolean isGeneticEqual(IGenome other);
-	
+
+	@Nonnull
 	ISpeciesRoot getSpeciesRoot();
 }

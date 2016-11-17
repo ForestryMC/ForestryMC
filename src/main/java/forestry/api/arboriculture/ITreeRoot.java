@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,7 +79,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	@Override
 	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, BlockPos pos);
+	boolean setFruitBlock(@Nonnull World world, @Nonnull IAlleleFruit allele, float sappiness, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();

@@ -53,7 +53,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		Log.debug("Made a fruit pod");
 	}
 
-	public void setProperties(IAlleleFruit allele, float sappiness) {
+	public void setProperties(@Nonnull IAlleleFruit allele, float sappiness) {
 		this.allele = allele;
 		this.sappiness = sappiness;
 	}
@@ -74,6 +74,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		sappiness = nbttagcompound.getFloat("SP");
 	}
 
+	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);

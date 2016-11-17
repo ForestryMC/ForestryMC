@@ -120,12 +120,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT == null) {
+		if (genomeNBT.hasNoTags()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT == null) {
+		if (chromosomesNBT.hasNoTags()) {
 			return null;
 		}
 
@@ -147,7 +147,7 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
-		if (genome == null) {
+		if (genome.hasNoTags()) {
 			return null;
 		}
 
@@ -212,16 +212,19 @@ public abstract class Genome implements IGenome {
 
 	// / INFORMATION RETRIEVAL
 	@Override
+	@Nonnull
 	public IChromosome[] getChromosomes() {
 		return Arrays.copyOf(chromosomes, chromosomes.length);
 	}
 
 	@Override
+	@Nonnull
 	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
 	}
 
 	@Override
+	@Nonnull
 	public IAllele getInactiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getInactiveAllele();
 	}

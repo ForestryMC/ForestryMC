@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
@@ -12,9 +14,11 @@ import forestry.api.genetics.IGenome;
 public interface IButterflyGenome extends IGenome {
 	
 	@Override
+	@Nonnull
 	IAlleleButterflySpecies getPrimary();
 
 	@Override
+	@Nonnull
 	IAlleleButterflySpecies getSecondary();
 
 	float getSize();

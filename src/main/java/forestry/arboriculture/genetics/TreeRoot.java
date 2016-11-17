@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -239,7 +240,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, BlockPos pos) {
+	public boolean setFruitBlock(@Nonnull World world, @Nonnull IAlleleFruit allele, float sappiness, BlockPos pos) {
 
 		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
 		if (facing == null) {

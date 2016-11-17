@@ -98,11 +98,13 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// / INFORMATION RETRIEVAL
 	@Override
+	@Nonnull
 	public IAlleleBeeSpecies getPrimary() {
 		return (IAlleleBeeSpecies) getActiveAllele(EnumBeeChromosome.SPECIES);
 	}
 
 	@Override
+	@Nonnull
 	public IAlleleBeeSpecies getSecondary() {
 		return (IAlleleBeeSpecies) getInactiveAllele(EnumBeeChromosome.SPECIES);
 	}
@@ -168,6 +170,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	}
 
 	@Override
+	@Nonnull
 	public ISpeciesRoot getSpeciesRoot() {
 		return BeeManager.beeRoot;
 	}

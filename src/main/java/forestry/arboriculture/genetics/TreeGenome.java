@@ -53,11 +53,13 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
+	@Nonnull
 	public IAlleleTreeSpecies getPrimary() {
 		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
 	@Override
+	@Nonnull
 	public IAlleleTreeSpecies getSecondary() {
 		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
 	}
@@ -104,6 +106,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
+	@Nonnull
 	public ISpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
 	}
