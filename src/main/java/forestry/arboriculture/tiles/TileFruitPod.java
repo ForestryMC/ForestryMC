@@ -22,6 +22,7 @@ import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -43,8 +44,10 @@ import forestry.core.utils.NBTUtilForestry;
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 
 	private static final short MAX_MATURITY = 2;
+	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele(Constants.MOD_ID + ".fruitCocoa");
 
-	private IAlleleFruit allele;
+	@Nonnull
+	private IAlleleFruit allele = defaultAllele;
 
 	private short maturity;
 	private float sappiness;
@@ -56,6 +59,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	public void setProperties(@Nonnull IAlleleFruit allele, float sappiness) {
 		this.allele = allele;
 		this.sappiness = sappiness;
+		markDirty();
 	}
 
 	/* SAVING & LOADING */
@@ -67,7 +71,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		if (stored instanceof IAlleleFruit) {
 			allele = (IAlleleFruit) stored;
 		} else {
-			allele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele(Constants.MOD_ID + ".fruitCocoa");
+			allele = defaultAllele;
 		}
 
 		maturity = nbttagcompound.getShort("MT");
@@ -78,11 +82,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
-
-		if (allele != null) {
-			nbttagcompound.setString("UID", allele.getUID());
-		}
-
+		nbttagcompound.setString("UID", allele.getUID());
 		nbttagcompound.setShort("MT", maturity);
 		nbttagcompound.setFloat("SP", sappiness);
 		return nbttagcompound;
@@ -116,8 +116,12 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			}
 		}
 
-		pickBlock.stackSize = 1;
-		return pickBlock;
+		if (pickBlock == null) {
+			return null;
+		} else {
+			pickBlock.stackSize = 1;
+			return pickBlock;
+		}
 	}
 
 	public List<ItemStack> getDrops() {
@@ -142,6 +146,13 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		NBTTagCompound nbt = pkt.getNbtCompound();
+		handleUpdateTag(nbt);
 	}
 
 	/* IFRUITBEARER */
@@ -195,7 +206,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		if (allele != null) {
+		if (allele != defaultAllele) {
 			data.writeUTF(allele.getUID());
 		} else {
 			data.writeUTF("");
@@ -208,7 +219,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		if (stored instanceof IAlleleFruit) {
 			allele = (IAlleleFruit) stored;
 		} else {
-			allele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele(Constants.MOD_ID + ".fruitCocoa");
+			allele = defaultAllele;
 		}
 		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
