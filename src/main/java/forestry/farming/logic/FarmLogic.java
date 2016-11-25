@@ -14,6 +14,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -25,15 +30,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.entities.EntitySelector;
-import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
@@ -90,7 +88,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected List<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
-		List<EntityItem> entityItems = world.getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
+		List<EntityItem> entityItems = world.getEntitiesWithinAABB(EntityItem.class, harvestBox, entitySelectorFarm);
 		List<ItemStack> stacks = new ArrayList<>();
 		for (EntityItem entity : entityItems) {
 			ItemStack contained = entity.getEntityItem();
@@ -100,17 +98,20 @@ public abstract class FarmLogic implements IFarmLogic {
 		return stacks;
 	}
 
-	private static class EntitySelectorFarm extends EntitySelector<EntityItem> {
+	private static class EntitySelectorFarm implements Predicate<EntityItem> {
 		private final FarmLogic farmLogic;
 
 		public EntitySelectorFarm(FarmLogic farmLogic) {
-			super(EntityItem.class);
 			this.farmLogic = farmLogic;
 		}
 
 		@Override
-		protected boolean isEntityApplicableTyped(EntityItem entity) {
+		public boolean apply(EntityItem entity) {
 			if (entity.isDead) {
+				return false;
+			}
+
+			if (entity.getEntityData().getBoolean("PreventRemoteMovement")) {
 				return false;
 			}
 
