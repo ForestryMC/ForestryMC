@@ -45,7 +45,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
 
-		if (event.isCanceled()) {
+		if (event.isCanceled() || event.getResult() == Result.ALLOW) {
 			return;
 		}
 
