@@ -100,8 +100,6 @@ public abstract class ContainerForestry extends Container {
 		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayer) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
-			} else {
-				Log.error("Unknown listener type: {}", listener);
 			}
 		}
 	}
