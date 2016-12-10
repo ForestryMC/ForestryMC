@@ -28,7 +28,8 @@ public abstract class ClimateSource<P extends IClimateSourceProvider> implements
 	}
 
 	@Override
-	public void changeClimate(int tickCount, IClimateRegion region) {
+	public boolean changeClimate(int tickCount, IClimateRegion region) {
+		return false;
 	}
 
 	@Override

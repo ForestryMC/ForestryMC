@@ -132,10 +132,10 @@ public class ClimateEventHandler {
 								red  = 0.75F;
 								offset = 6;
 							}
-							event.getContext().func_189697_a(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX - 1 * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
-							event.getContext().func_189696_b(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX - 1 * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
-							event.getContext().func_189697_a(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX + offset * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
-							event.getContext().func_189696_b(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX + offset * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
+							event.getContext().drawSelectionBoundingBox(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX - 1 * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
+							event.getContext().renderFilledBox(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX - 1 * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
+							event.getContext().drawSelectionBoundingBox(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX + offset * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
+							event.getContext().renderFilledBox(Block.FULL_BLOCK_AABB.offset(pos.getX()  -d0, pos.getY()  -d1, pos.getZ()  -d2).offset(new BlockPos(deltaX + offset * deltaX, 0, deltaZ)), red, green, blue, 0.35F);
 						}
 					}
 				}

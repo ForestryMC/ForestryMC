@@ -114,10 +114,11 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 	
 	@Override
 	public void updateClimate(int ticks) {
+		boolean hasChange = false;;
 		for(IClimateSource source : sources){
 			if(source != null){
 				if(ticks % source.getTicksForChange(this) == 0){
-					source.changeClimate(ticks, this);
+					hasChange |= source.changeClimate(ticks, this);
 				}
 			}
 		}
@@ -125,7 +126,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 			for(Entry<BlockPos, IClimatePosition> position : positions.entrySet()){
 				BlockPos pos = position.getKey();
 				if(world.isBlockLoaded(pos)){
-					updateSides(pos);
+					hasChange |= updateSides(pos);
 					
 					if(!controller.isAssembled()){
 						IClimateControl climateControl = getControl(pos);
@@ -134,25 +135,32 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 						if(climatedInfo.getTemperature() != climateControl.getControlTemperature()){
 							if(climatedInfo.getTemperature() > climateControl.getControlTemperature()){
 								climatedInfo.addTemperature(-Math.min(0.01F, climatedInfo.getTemperature() - climateControl.getControlTemperature()));
+								hasChange = true;
 							}else{
 								climatedInfo.addTemperature(Math.min(0.01F, climateControl.getControlTemperature() - climatedInfo.getTemperature()));
+								hasChange = true;
 							}
 						}
 						if(climatedInfo.getHumidity() != climateControl.getControlHumidity()){
 							if(climatedInfo.getHumidity() > climateControl.getControlHumidity()){
 								climatedInfo.addHumidity(-Math.min(0.01F, climatedInfo.getHumidity() - climateControl.getControlHumidity()));
+								hasChange = true;
 							}else{
 								climatedInfo.addHumidity(Math.min(0.01F, climateControl.getControlHumidity() - climatedInfo.getHumidity()));
-
+								hasChange = true;
 							}
 						}
 					}
 				}
 			}
 		}
+		if(hasChange){
+			temperature = getExactTemperature();
+			humidity = getExactHumidity();
+		}
 	}
 	
-	protected void updateSides(BlockPos pos){
+	protected boolean updateSides(BlockPos pos){
 		IClimatePosition climatedInfo = positions.get(pos);
 		IClimateControl climateControl = getControl(pos);
 		boolean hasChange = false;
@@ -175,10 +183,7 @@ public class ClimateRoom implements IClimateRegion, IStreamable {
 				}
 			}
 		}
-		if(hasChange){
-			temperature = getExactTemperature();
-			humidity = getExactHumidity();
-		}
+		return hasChange;
 	}
 	
 	protected IClimateControl getControl(BlockPos pos){

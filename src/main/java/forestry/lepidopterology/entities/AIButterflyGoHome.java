@@ -1,7 +1,5 @@
 package forestry.lepidopterology.entities;
 
-import forestry.lepidopterology.PluginLepidopterology;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 

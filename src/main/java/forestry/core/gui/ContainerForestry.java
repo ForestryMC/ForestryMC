@@ -29,7 +29,6 @@ import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
 import forestry.core.utils.SlotUtil;
 
 import invtweaks.api.container.ContainerSection;

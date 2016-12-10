@@ -87,7 +87,7 @@ public class ClimateManager implements IClimateManager{
 			}
 			IClimateRegion region = getRegionForPos(source.getWorldObj(), source.getCoordinates());
 			if(region != null){
-				if(!region.getSources().contains(source.getClimateSource())){
+				if(region.getSources().contains(source.getClimateSource())){
 					region.removeSource(source.getClimateSource());
 				}
 			}

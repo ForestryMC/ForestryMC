@@ -25,13 +25,14 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 	}
 	
 	@Override
-	public void changeClimate(int tickCount, IClimateRegion region) {
+	public boolean changeClimate(int tickCount, IClimateRegion region) {
 		World world = region.getWorld();
 		IClimatiserDefinition definition = provider.getDefinition();
 		IMultiblockLogic logic = provider.getMultiblockLogic();
 		IMultiblockController controller = logic.getController();
 		Iterable<BlockPos> positionsInRange = provider.getPositionsInRange();
 		
+		boolean hasChange = false;
 		WindowMode windowMode = provider.getMode();
 		if(logic.isConnected() && controller.isAssembled() && controller instanceof IGreenhouseControllerInternal && positionsInRange != null && positionsInRange.iterator().hasNext() && region != null){
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
@@ -67,10 +68,12 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 								if(position.getTemperature() < controlTemp) {
 									if(canChange(mode, EnumClimatiserModes.POSITIVE)){
 										position.addTemperature(Math.min(change, controlTemp - position.getTemperature()));
+										hasChange = true;
 									}
 								}else if(position.getTemperature() > controlTemp){
 									if(canChange(mode, EnumClimatiserModes.NEGATIVE)){
 										position.addTemperature(-Math.min(position.getTemperature() - controlTemp, change));
+										hasChange = true;
 									}
 								}
 							}
@@ -78,10 +81,12 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 								if(position.getHumidity() < controlHum) {
 									if(canChange(mode, EnumClimatiserModes.POSITIVE)){
 										position.addHumidity(Math.min(change, controlHum - position.getHumidity()));
+										hasChange = true;
 									}
 								}else if(position.getHumidity() > controlHum){
 									if(canChange(mode, EnumClimatiserModes.NEGATIVE)){
 										position.addHumidity(-Math.min(position.getHumidity() - controlHum, change));
+										hasChange = true;
 									}
 								}
 							}
@@ -90,6 +95,7 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 				}
 			}
 		}
+		return hasChange;
 	}
 	
 	@Override
