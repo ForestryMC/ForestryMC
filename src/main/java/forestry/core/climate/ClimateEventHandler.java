@@ -154,23 +154,25 @@ public class ClimateEventHandler {
 		if (event.phase == TickEvent.Phase.END) {
 			MinecraftServer server = world.getMinecraftServer();
 			if(server != null){
-				server.addScheduledTask(new Runnable() {
-					@Override
-					public void run() {
-						Integer dim = Integer.valueOf(event.world.provider.getDimension());
-						if(!serverTicks.containsKey(dim)){
-							serverTicks.put(dim, 1);
-						}
-						int ticks = serverTicks.get(dim);
-						Map<Integer,  List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
-						if(regions != null && regions.containsKey(dim)){
-							for(IClimateRegion region : regions.get(dim)){
-								region.updateClimate(ticks);
+				if (!server.isCallingFromMinecraftThread()) {
+					server.addScheduledTask(new Runnable() {
+						@Override
+						public void run() {
+							Integer dim = Integer.valueOf(event.world.provider.getDimension());
+							if(!serverTicks.containsKey(dim)){
+								serverTicks.put(dim, 1);
 							}
+							int ticks = serverTicks.get(dim);
+							Map<Integer,  List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
+							if(regions != null && regions.containsKey(dim)){
+								for(IClimateRegion region : regions.get(dim)){
+									region.updateClimate(ticks);
+								}
+							}
+							serverTicks.put(dim, ticks+1);
 						}
-						serverTicks.put(dim, ticks+1);
-					}
-				});
+					});
+				}
 			}
 		}
 	}
