@@ -14,6 +14,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,6 +40,9 @@ public final class FluidHelper {
 	public static boolean canAcceptFluid(World world, BlockPos pos, EnumFacing facing, FluidStack fluid) {
 		IFluidHandler capability = FluidUtil.getFluidHandler(world, pos, facing);
 		if (capability != null) {
+			if(capability.getTankProperties() == null){
+				throw new NullPointerException("The fluid handler " + capability.toString() + " returns null in the method getTankProperties, this is not allowed, please report that to the author of the mod from that the handler is.");
+			}
 			for (IFluidTankProperties tankProperties : capability.getTankProperties()) {
 				if (tankProperties.canFillFluidType(fluid)) {
 					return true;
