@@ -47,6 +47,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
@@ -336,8 +337,14 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
-			SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(inventory, facing);
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+			if(facing != null){
+				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(inventory, facing);
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+			}else{
+				InvWrapper invWrapper = new InvWrapper(inventory);
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+			}
+			
 		}
 		return super.getCapability(capability, facing);
 	}
