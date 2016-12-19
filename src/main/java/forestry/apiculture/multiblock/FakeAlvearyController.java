@@ -66,6 +66,11 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	public boolean canBlockSeeTheSky() {
 		return false;
 	}
+	
+	@Override
+	public boolean isRaining() {
+		return false;
+	}
 
 	@Override
 	public GameProfile getOwner() {

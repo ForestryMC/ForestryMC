@@ -35,6 +35,8 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvid
 	int getBlockLightValue();
 
 	boolean canBlockSeeTheSky();
+	
+	boolean isRaining();
 
 	GameProfile getOwner();
 

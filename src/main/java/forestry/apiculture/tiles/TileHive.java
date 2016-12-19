@@ -331,6 +331,11 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	public boolean canBlockSeeTheSky() {
 		return true; // hives may have the sky obstructed but should still be active
 	}
+	
+	@Override
+	public boolean isRaining() {
+		return worldObj.isRainingAt(getPos().up());
+	}
 
 	@Override
 	public World getWorldObj() {

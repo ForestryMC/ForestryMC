@@ -253,7 +253,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		// / Rain needs tolerant flyers
-		if (world.isRainingAt(housingCoords.up()) && !canFlyInRain(beeModifier)) {
+		if (housing.isRaining() && !canFlyInRain(beeModifier)) {
 			errorStates.add(EnumErrorCode.IS_RAINING);
 		}
 

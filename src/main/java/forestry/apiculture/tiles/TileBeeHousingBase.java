@@ -185,6 +185,11 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public boolean canBlockSeeTheSky() {
 		return worldObj.canBlockSeeSky(getPos().up());
 	}
+	
+	@Override
+	public boolean isRaining() {
+		return worldObj.isRainingAt(getPos().up());
+	}
 
 	@Override
 	public GameProfile getOwner() {

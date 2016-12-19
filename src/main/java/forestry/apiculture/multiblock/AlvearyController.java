@@ -397,6 +397,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		BlockPos topCenter = getTopCenterCoord();
 		return worldObj.canBlockSeeSky(topCenter.add(0, 2, 0));
 	}
+	
+	@Override
+	public boolean isRaining() {
+		BlockPos topCenter = getTopCenterCoord();
+		return worldObj.isRainingAt(topCenter.add(0, 2, 0));
+	}
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {

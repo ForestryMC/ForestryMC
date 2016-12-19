@@ -1,7 +1,6 @@
 package forestry.core.render;
 
 import javax.annotation.Nonnull;
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Map;
 

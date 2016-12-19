@@ -91,7 +91,7 @@ public class ParticleHelper {
 		if (block != state.getBlock()) {
 			return true;
 		}
-
+		
 		byte iterations = 4;
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {
