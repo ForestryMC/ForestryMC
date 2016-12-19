@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -260,16 +261,19 @@ public enum Fluids {
 	}
 	
 	public boolean flowTextureExists() {
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			return true;
 		}
 		try {
 			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
-			IResourceManager resourceManager = Proxies.common.getClientInstance().getResourceManager();
-			return resourceManager.getResource(resourceLocation) != null;
+			Minecraft minecraft = Proxies.common.getClientInstance();
+			if(minecraft != null){
+				IResourceManager resourceManager = minecraft.getResourceManager();
+				return resourceManager.getResource(resourceLocation) != null;
+			}
 		} catch (IOException e) {
-			return false;
 		}
+		return false;
 	}
 
 	public ResourceLocation[] getResources() {
