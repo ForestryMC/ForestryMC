@@ -298,6 +298,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		return tanks.get(tankIndex).getInfo();
 	}
 
+	@Nullable
 	public FluidStack getFluid(int tankIndex) {
 		return tanks.get(tankIndex).getFluid();
 	}

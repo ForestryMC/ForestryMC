@@ -135,15 +135,18 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 	
 	private boolean canDump() {
-		if (canDump.isEmpty()) {
-			for(EnumFacing facing : EnumFacing.VALUES){
-				canDump.put(facing, FluidHelper.canAcceptFluid(worldObj, pos.offset(facing), facing.getOpposite(), tankManager.getFluid(0)));
+		FluidStack fluid = tankManager.getFluid(0);
+		if (fluid != null) {
+			if (canDump.isEmpty()) {
+				for (EnumFacing facing : EnumFacing.VALUES) {
+					canDump.put(facing, FluidHelper.canAcceptFluid(worldObj, pos.offset(facing), facing.getOpposite(), fluid));
+				}
 			}
-		}
 
-		for(EnumFacing facing : EnumFacing.VALUES){
-			if(canDump.get(facing)){
-				return true;
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if (canDump.get(facing)) {
+					return true;
+				}
 			}
 		}
 		return false;

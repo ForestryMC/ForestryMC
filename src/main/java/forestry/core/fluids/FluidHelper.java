@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nonnull;
+
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
@@ -36,7 +38,7 @@ public final class FluidHelper {
 		}
 	}
 
-	public static boolean canAcceptFluid(World world, BlockPos pos, EnumFacing facing, FluidStack fluid) {
+	public static boolean canAcceptFluid(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, @Nonnull FluidStack fluid) {
 		IFluidHandler capability = FluidUtil.getFluidHandler(world, pos, facing);
 		if (capability != null) {
 			if(capability.getTankProperties() == null){
