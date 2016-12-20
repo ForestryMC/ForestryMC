@@ -129,12 +129,17 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getLightFromNeighbors(getPosition().add(0, +1, 0));
+		return worldObj.getLightFromNeighbors(getPosition().up());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeSky(getPosition().add(0, +1, 0));
+		return worldObj.canBlockSeeSky(getPosition().up());
+	}
+	
+	@Override
+	public boolean isRaining() {
+		return worldObj.canBlockSeeSky(getPosition().up());
 	}
 
 	@Override
