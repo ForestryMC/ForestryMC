@@ -33,7 +33,7 @@ public class ItemBlockFarm extends ItemBlock {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			return;
 		}
 

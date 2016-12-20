@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.List;
@@ -61,10 +60,11 @@ import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class FactoryJeiPlugin extends BlankModPlugin {
+	@Nullable
 	public static IJeiHelpers jeiHelpers;
 
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
+	public void register(IModRegistry registry) {
 		jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
@@ -79,7 +79,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new SqueezerRecipeCategory(guiHelper),
 				new StillRecipeCategory(guiHelper)
 		);
-		
+
 		registry.addRecipeHandlers(
 				new BottlerRecipeHandler(),
 				new CarpenterRecipeHandler(),
@@ -101,7 +101,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes());
 		registry.addRecipes(RainmakerRecipeMaker.getRecipes());
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes());
-		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes());
+		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientRegistry()));
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());
 
 		registry.addRecipeClickArea(GuiBottler.class, 107, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
@@ -129,9 +129,9 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.worktable), VanillaRecipeCategoryUid.CRAFTING);
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
-		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler());
-		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler());
-		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler());
+		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
+		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler(), ForestryRecipeCategoryUid.CARPENTER);
+		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), ForestryRecipeCategoryUid.FABRICATOR);
 
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 
@@ -142,7 +142,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 	}
 
 	private static class ForestryAdvancedGuiHandler extends BlankAdvancedGuiHandler<GuiForestry> {
-		@Nonnull
+
 		@Override
 		public Class<GuiForestry> getGuiContainerClass() {
 			return GuiForestry.class;
@@ -151,8 +151,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
-			GuiForestry<?, ?> guiForestry = guiContainer;
-			return guiForestry.getExtraGuiAreas();
+			return ((GuiForestry<?, ?>) guiContainer).getExtraGuiAreas();
 		}
 
 		@Nullable

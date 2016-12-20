@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -21,7 +19,6 @@ public class TileCandle extends TileEntity {
 	private int colour;
 	private boolean lit;
 
-	@Nonnull
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
@@ -34,7 +31,6 @@ public class TileCandle extends TileEntity {
 		handleUpdateTag(nbt);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
@@ -42,7 +38,7 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	public void handleUpdateTag( NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		readFromNBT(tag);
 	}
@@ -59,7 +55,6 @@ public class TileCandle extends TileEntity {
 		lit = tagRoot.getBoolean("lit");
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagRoot) {
 		tagRoot = super.writeToNBT(tagRoot);

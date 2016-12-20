@@ -44,6 +44,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player), null);
 		this.xSize = 192;
 		this.ySize = 192;
+
+		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"));
+		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"));
 	}
 
 	@Override
@@ -104,8 +107,8 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
 		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
 
-		for (int i = 0; i < tradeInfo.getRequired().length; i++) {
-			ItemStack itemStack = tradeInfo.getRequired()[i];
+		for (int i = 0; i < tradeInfo.getRequired().size(); i++) {
+			ItemStack itemStack = tradeInfo.getRequired().get(i);
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft + i * 18, y - guiTop + 56, itemStack));
 		}
 
@@ -132,7 +135,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
 			case 0:
-				mc.thePlayer.closeScreen();
+				mc.player.closeScreen();
 				break;
 			case 2:
 				container.nextPage();
@@ -149,7 +152,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
-				mc.thePlayer.closeScreen();
+				mc.player.closeScreen();
 				break;
 		}
 	}

@@ -10,20 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
-
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.core.IModelManager;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IGermlingModelProvider;
-import forestry.api.core.IModelManager;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
 
@@ -41,21 +37,20 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		if(type == EnumGermlingType.SAPLING){
+		if (type == EnumGermlingType.SAPLING) {
 			germlingModel = manager.getModelLocation("germlings/sapling." + name);
 			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
-		}else if(type == EnumGermlingType.POLLEN){
+		} else if (type == EnumGermlingType.POLLEN) {
 			pollenModel = manager.getModelLocation("pollen");
 			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
 		}
 	}
 
-	@Nonnull
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if(type == EnumGermlingType.POLLEN){
+		if (type == EnumGermlingType.POLLEN) {
 			return pollenModel;
-		}else{
+		} else {
 			return germlingModel;
 		}
 	}

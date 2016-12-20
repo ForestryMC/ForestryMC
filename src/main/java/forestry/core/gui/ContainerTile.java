@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableSet;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -26,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 	protected final T tile;
+	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 	private int previousEnergyManagerData = 0;
 	private int previousWorkCounter = 0;
@@ -43,7 +46,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 
 	@Override
 	protected final boolean canAccess(EntityPlayer player) {
-		return player != null;
+		return true;
 	}
 
 	@Override

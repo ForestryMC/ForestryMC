@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.arboriculture.ITreeRoot;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,11 +51,15 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		ITree tree = TreeManager.treeRoot.getMember(germling);
-		if (tree == null) {
+		ITreeRoot treeRoot = TreeManager.treeRoot;
+
+		germling = GeneticsUtil.convertToGeneticEquivalent(germling);
+		if (treeRoot.isMember(germling)) {
+			ITree tree = treeRoot.getMember(germling);
+			return treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
+		} else {
 			return false;
 		}
-		return TreeManager.treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 
 	@Override

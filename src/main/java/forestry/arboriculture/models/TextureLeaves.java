@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 
 public class TextureLeaves {
 	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);
@@ -62,7 +60,6 @@ public class TextureLeaves {
 		textureMapBlocks.registerSprite(pollinatedFancy);
 	}
 
-	@Nonnull
 	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
 		if (pollinated) {
 			if (fancy) {

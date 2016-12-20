@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,17 +14,17 @@ import net.minecraft.item.ItemStack;
  * and creates crating and uncrating recipes for the Carpenter.
  * The icon is rendered automatically from the contained item.
  * If an oreDictName is specified, it will make recipes using that.
- *
+ * <p>
  * Can only be called during the Init stage.
  */
 public interface ICrateRegistry {
 
-	void registerCrate(@Nonnull Item item);
+	void registerCrate(Item item);
 
-	void registerCrate(@Nonnull Block block);
+	void registerCrate(Block block);
 
-	void registerCrate(@Nonnull ItemStack stack);
+	void registerCrate(ItemStack stack);
 
-	void registerCrate(@Nonnull String oreDictName);
+	void registerCrate(String oreDictName);
 
 }

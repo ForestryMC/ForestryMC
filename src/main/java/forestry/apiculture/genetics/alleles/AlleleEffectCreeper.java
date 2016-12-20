@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;

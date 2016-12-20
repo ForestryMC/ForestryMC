@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -31,11 +31,11 @@ public interface IMultiblockController {
 	 * @return A string representing the last error encountered when trying to assemble this
 	 * multiblock, or null if there is no error.
 	 */
+	@Nullable
 	String getLastValidationError();
 
 	/**
 	 * @return all the multiblock components attached to this controller
 	 */
-	@Nonnull
 	Collection<IMultiblockComponent> getComponents();
 }

@@ -10,18 +10,9 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import java.util.Stack;
 import java.util.Map.Entry;
+import java.util.Stack;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.oredict.OreDictionary;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -35,6 +26,15 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;
@@ -50,7 +50,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	public static final int SLOT_CAN_COUNT = 1;
 
 	public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
-	
+
 	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 
 	private final FarmController farmController;
@@ -80,7 +80,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return farmController.getTankManager().canFillFluidType(fluid);
+			return fluid != null && farmController.getTankManager().canFillFluidType(fluid);
 		}
 		return false;
 	}
@@ -91,19 +91,19 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	@Override
-	public boolean hasResources(ItemStack[] resources) {
+	public boolean hasResources(NonNullList<ItemStack> resources) {
 		return InventoryUtil.contains(resourcesInventory, resources);
 	}
 
 	@Override
-	public void removeResources(ItemStack[] resources) {
+	public void removeResources(NonNullList<ItemStack> resources) {
 		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorldObj(), farmController.getOwnerHandler().getOwner());
 		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true, false, true);
 	}
 
 	@Override
 	public boolean acceptsAsGermling(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
@@ -119,7 +119,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean acceptsAsResource(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
@@ -135,17 +135,17 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean acceptsAsFertilizer(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
-		
- 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
- 			ItemStack fertilizerItem = fertilizer.getKey();
- 			if(itemstack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == itemstack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
- 				return true;
- 			}
- 		}
- 		return false;
+
+		for (Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()) {
+			ItemStack fertilizerItem = fertilizer.getKey();
+			if (itemstack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == itemstack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -175,11 +175,11 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	public boolean plantGermling(IFarmable germling, EntityPlayer player, BlockPos pos) {
 		for (int i = 0; i < germlingsInventory.getSizeInventory(); i++) {
 			ItemStack germlingStack = germlingsInventory.getStackInSlot(i);
-			if (germlingStack == null || !germling.isGermling(germlingStack)) {
+			if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {
 				continue;
 			}
 
-			if (germling.plantSaplingAt(player, germlingStack, player.worldObj, pos)) {
+			if (germling.plantSaplingAt(player, germlingStack, player.world, pos)) {
 				germlingsInventory.decrStackSize(i, 1);
 				return true;
 			}
@@ -188,13 +188,15 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public void addProduce(ItemStack produce) {
-		produce.stackSize -= InventoryUtil.addStack(productInventory, produce, true);
+		int added = InventoryUtil.addStack(productInventory, produce, true);
+		produce.shrink(added);
 	}
 
 	public void stowHarvest(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
 		for (ItemStack harvest : harvested) {
-			harvest.stackSize -= InventoryUtil.addStack(productInventory, harvest, true);
-			if (harvest.stackSize > 0) {
+			int added = InventoryUtil.addStack(productInventory, harvest, true);
+			harvest.shrink(added);
+			if (!harvest.isEmpty()) {
 				pendingProduce.push(harvest);
 			}
 		}
@@ -212,33 +214,28 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 		return added;
 	}
-	
+
 	public int getFertilizerValue() {
 		ItemStack fertilizerStack = getStackInSlot(SLOT_FERTILIZER);
- 		if (fertilizerStack == null || fertilizerStack.stackSize <= 0) {
- 			return 0;
- 		}
- 		
- 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
- 			ItemStack fertilizerItem = fertilizer.getKey();
- 			if(fertilizerStack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == fertilizerStack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
- 				return fertilizer.getValue() * FERTILIZER_MODIFIER;
- 			}
- 		}
- 		return 0;
-	 }
+		if (fertilizerStack.isEmpty()) {
+			return 0;
+		}
+
+		for (Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()) {
+			ItemStack fertilizerItem = fertilizer.getKey();
+			if (fertilizerStack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == fertilizerStack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
+				return fertilizer.getValue() * FERTILIZER_MODIFIER;
+			}
+		}
+		return 0;
+	}
 
 	public boolean useFertilizer() {
 		ItemStack fertilizer = getStackInSlot(SLOT_FERTILIZER);
-		if (fertilizer == null || fertilizer.stackSize <= 0) {
-			return false;
+		if (acceptsAsFertilizer(fertilizer)) {
+			decrStackSize(SLOT_FERTILIZER, 1);
+			return true;
 		}
-
-		if (!acceptsAsFertilizer(fertilizer)) {
-			return false;
-		}
-
-		decrStackSize(SLOT_FERTILIZER, 1);
-		return true;
+		return false;
 	}
 }

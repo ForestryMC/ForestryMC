@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,8 +32,9 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 		addRecipe(recipe);
 	}
 
+	@Nullable
 	public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return null;
 		}
 

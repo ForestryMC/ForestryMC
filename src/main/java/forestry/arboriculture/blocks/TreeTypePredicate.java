@@ -17,6 +17,6 @@ public class TreeTypePredicate implements Predicate<TreeDefinition> {
 
 	@Override
 	public boolean apply(@Nullable TreeDefinition treeDefinition) {
-		return treeDefinition.getMetadata() >= minMeta && treeDefinition.getMetadata() <= maxMeta;
+		return treeDefinition != null && treeDefinition.getMetadata() >= minMeta && treeDefinition.getMetadata() <= maxMeta;
 	}
 }

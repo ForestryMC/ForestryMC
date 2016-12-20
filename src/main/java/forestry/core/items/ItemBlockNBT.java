@@ -26,7 +26,7 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean advanced) {
 		super.addInformation(itemstack, player, info, advanced);
 
-		if (itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() != null) {
 			info.add("There are still some scribbles on this.");
 		}
 	}

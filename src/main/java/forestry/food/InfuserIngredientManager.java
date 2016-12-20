@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.food;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +27,9 @@ public class InfuserIngredientManager implements IIngredientManager {
 	}
 
 	@Override
+	@Nullable
 	public String getDescription(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return null;
 		}
 

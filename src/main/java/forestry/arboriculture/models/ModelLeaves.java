@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -19,8 +19,8 @@ import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
@@ -36,11 +36,13 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
 	public static class Key {
-		public final TextureAtlasSprite leafSprite, fruitSprite;
+		public final TextureAtlasSprite leafSprite;
+		@Nullable
+		public final TextureAtlasSprite fruitSprite;
 		public final boolean fancy;
 		private final int hashCode;
 
-		public Key(TextureAtlasSprite leafSprite, TextureAtlasSprite fruitSprite, boolean fancy) {
+		public Key(TextureAtlasSprite leafSprite, @Nullable TextureAtlasSprite fruitSprite, boolean fancy) {
 			this.leafSprite = leafSprite;
 			this.fruitSprite = fruitSprite;
 			this.fancy = fancy;
@@ -64,11 +66,11 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected Key getInventoryKey(@Nonnull ItemStack itemStack) {
+	protected Key getInventoryKey(ItemStack itemStack) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 
 		TileLeaves leaves = new TileLeaves();
-		if (itemStack.hasTagCompound()) {
+		if (itemStack.getTagCompound() != null) {
 			leaves.readFromNBT(itemStack.getTagCompound());
 		} else {
 			leaves.setTree(TreeRoot.treeTemplates.get(0));
@@ -84,7 +86,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state) {
+	protected Key getWorldKey(IBlockState state) {
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
@@ -110,7 +112,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected void bakeBlock(@Nonnull BlockForestryLeaves block, @Nonnull Key key, @Nonnull IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockForestryLeaves block, Key key, IModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
 		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, key.leafSprite, 0);
 

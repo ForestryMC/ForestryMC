@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Constants;
@@ -28,6 +29,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		Preconditions.checkState(inventory != null);
 		String name = Translator.translateToLocal(inventory.getUnlocalizedTitle());
 		this.fontRendererObj.drawString(name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
 

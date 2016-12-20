@@ -39,7 +39,7 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 		}
 	}
 	
-	private ItemStack oldCraftPreview;
+	private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
 	@Override
 	public void detectAndSendChanges() {

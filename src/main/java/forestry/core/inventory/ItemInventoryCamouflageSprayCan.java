@@ -23,7 +23,7 @@ public class ItemInventoryCamouflageSprayCan extends ItemInventory implements IC
 
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ItemInventoryCamouflageSprayCan extends ItemInventory implements IC
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, getStackInSlot(0))){
 			setInventorySlotContents(0, camouflageBlock);
 			
-			World world = player.worldObj;
+			World world = player.world;
 			if (sendClientUpdate && world != null && world.isRemote) {
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.ITEM));
 			}

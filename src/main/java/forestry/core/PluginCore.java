@@ -10,33 +10,13 @@
  ******************************************************************************/
 package forestry.core;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import forestry.core.owner.GameProfileDataSerializer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
@@ -61,13 +41,14 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.loot.functions.SetSpeciesNBT;
+import forestry.core.loot.SetSpeciesNBT;
 import forestry.core.models.ModelCamouflageSprayCan;
 import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
+import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -78,11 +59,30 @@ import forestry.core.utils.OreDictUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends BlankForestryPlugin {
 	public static final RootCommand rootCommand = new RootCommand();
+	@Nullable
 	public static ItemRegistryCore items;
+	@Nullable
 	public static BlockRegistryCore blocks;
 
 	@Override
@@ -90,7 +90,6 @@ public class PluginCore extends BlankForestryPlugin {
 		return false;
 	}
 
-	@Nonnull
 	@Override
 	public Set<String> getDependencyUids() {
 		return Collections.emptySet();
@@ -108,13 +107,11 @@ public class PluginCore extends BlankForestryPlugin {
 		AlleleManager.alleleFactory = new AlleleFactory();
 		alleleRegistry.initialize();
 
-		AlleleHelper.instance = new AlleleHelper();
-
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = new ClimateManager();
-		
+
 		CamouflageManager.camouflageAccess = new CamouflageAccess();
 	}
 
@@ -127,13 +124,13 @@ public class PluginCore extends BlankForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-		
+
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
 
 		rootCommand.addChildCommand(new CommandPlugins());
-		
+
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDefault());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
@@ -143,12 +140,16 @@ public class PluginCore extends BlankForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
+		AlleleHelper alleleHelper = AlleleHelper.getInstance();
+		Preconditions.checkState(blocks != null);
+		Preconditions.checkState(alleleHelper != null);
+
 		blocks.analyzer.init();
 		blocks.escritoire.init();
 
 		ForestryModEnvWarningCallable.register();
 
-		AlleleHelper.instance.init();
+		alleleHelper.init();
 
 		Proxies.render.initRendering();
 
@@ -163,6 +164,8 @@ public class PluginCore extends BlankForestryPlugin {
 	@Override
 	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		Preconditions.checkState(items != null);
+		Preconditions.checkState(blocks != null);
 
 		// forestry items
 		crateRegistry.registerCrate(items.peat);
@@ -233,6 +236,8 @@ public class PluginCore extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
+		Preconditions.checkState(blocks != null);
+		Preconditions.checkState(items != null);
 
 		/* SMELTING RECIPES */
 		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
@@ -243,7 +248,7 @@ public class PluginCore extends BlankForestryPlugin {
 		/* BRONZE INGOTS */
 		if (Config.isCraftingBronzeEnabled()) {
 			ItemStack ingotBronze = items.ingotBronze.copy();
-			ingotBronze.stackSize = 4;
+			ingotBronze.setCount(4);
 			RecipeUtil.addShapelessRecipe(ingotBronze, OreDictUtil.INGOT_TIN, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER);
 		}
 
@@ -278,21 +283,21 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / WRENCH
 		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-		
+
 		// / CAMOUFLAGE SPRAY CAN
 		RecipeUtil.addRecipe(items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
-		
+
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
-			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), null, PluginCore.items.portableAlyzer.getItemStack(),
+			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
 					"X#X", "X#X", "RDR",
 					'#', OreDictUtil.PANE_GLASS,
 					'X', OreDictUtil.INGOT_TIN,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(4),
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), ItemStack.EMPTY, items.craftingMaterial.getCamouflagedPaneling(4),
 					"YAR", "B#B", "RPY",
 					'#', OreDictUtil.PLANK_WOOD,
 					'A', OreDictUtil.DUST_ASH,
@@ -301,9 +306,9 @@ public class PluginCore extends BlankForestryPlugin {
 					'R', OreDictUtil.DYE_RED,
 					'B', OreDictUtil.DYE_BLUE,
 					'Y', OreDictUtil.DYE_YELLOW);
-		}else{
+		} else {
 			// Portable ANALYZER
-			RecipeUtil.addRecipe(PluginCore.items.portableAlyzer.getItemStack(),
+			RecipeUtil.addRecipe(items.portableAlyzer.getItemStack(),
 					"X#X",
 					"X#X",
 					"RDR",
@@ -312,24 +317,24 @@ public class PluginCore extends BlankForestryPlugin {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeUtil.addRecipe(PluginCore.items.craftingMaterial.getCamouflagedPaneling(4), 
-					"WWW", 
-					"YBR", 
-					"WWW", 
-					'W', OreDictUtil.PLANK_WOOD, 
-					'D', OreDictUtil.DUST_REDSTONE, 
+			RecipeUtil.addRecipe(items.craftingMaterial.getCamouflagedPaneling(4),
+					"WWW",
+					"YBR",
+					"WWW",
+					'W', OreDictUtil.PLANK_WOOD,
+					'D', OreDictUtil.DUST_REDSTONE,
 					'Y', OreDictUtil.DYE_YELLOW,
 					'B', OreDictUtil.DYE_BLUE,
 					'R', OreDictUtil.DYE_RED);
 		}
-		
+
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.analyzer,
+		RecipeUtil.addRecipe(blocks.analyzer,
 				"XTX",
 				" Y ",
 				"X X",
-				'Y', PluginCore.items.sturdyCasing,
-				'T', PluginCore.items.portableAlyzer,
+				'Y', items.sturdyCasing,
+				'T', items.portableAlyzer,
 				'X', OreDictUtil.INGOT_BRONZE);
 
 		// Manure and Fertilizer
@@ -405,7 +410,7 @@ public class PluginCore extends BlankForestryPlugin {
 			RecipeUtil.addRecipe(blocks.resourceStorageCopper, "###", "###", "###", '#', OreDictUtil.INGOT_COPPER);
 
 			ItemStack ingotCopper = items.ingotCopper.copy();
-			ingotCopper.stackSize = 9;
+			ingotCopper.setCount(9);
 			RecipeUtil.addShapelessRecipe(ingotCopper, OreDictUtil.BLOCK_COPPER);
 		}
 
@@ -413,7 +418,7 @@ public class PluginCore extends BlankForestryPlugin {
 			RecipeUtil.addRecipe(blocks.resourceStorageTin, "###", "###", "###", '#', OreDictUtil.INGOT_TIN);
 
 			ItemStack ingotTin = items.ingotTin.copy();
-			ingotTin.stackSize = 9;
+			ingotTin.setCount(9);
 			RecipeUtil.addShapelessRecipe(ingotTin, OreDictUtil.BLOCK_TIN);
 		}
 
@@ -421,7 +426,7 @@ public class PluginCore extends BlankForestryPlugin {
 			RecipeUtil.addRecipe(blocks.resourceStorageBronze, "###", "###", "###", '#', OreDictUtil.INGOT_BRONZE);
 
 			ItemStack ingotBronze = items.ingotBronze.copy();
-			ingotBronze.stackSize = 9;
+			ingotBronze.setCount(9);
 			RecipeUtil.addShapelessRecipe(ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
@@ -450,16 +455,23 @@ public class PluginCore extends BlankForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		return new FuelHandler();
+		Preconditions.checkState(items != null);
+		return new FuelHandler(items);
 	}
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		Preconditions.checkState(items != null);
 		// research note items are not useful without actually having completed research
-		hiddenItems.add(new ItemStack(PluginCore.items.researchNote));
+		hiddenItems.add(new ItemStack(items.researchNote));
 	}
 
 	private static class FuelHandler implements IFuelHandler {
+		private final ItemRegistryCore items;
+
+		public FuelHandler(ItemRegistryCore items) {
+			this.items = items;
+		}
 
 		@Override
 		public int getBurnTime(ItemStack fuel) {
@@ -473,7 +485,7 @@ public class PluginCore extends BlankForestryPlugin {
 			return 0;
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
@@ -482,7 +494,7 @@ public class PluginCore extends BlankForestryPlugin {
 		Proxies.render.registerModel(blockModelIndex);
 		ModelManager.getInstance().registerCustomModels(event);
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {

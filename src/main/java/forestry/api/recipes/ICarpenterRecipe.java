@@ -23,10 +23,9 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	IDescriptiveRecipe getCraftingGridRecipe();
 
 	/**
-	 * @return the box required for this recipe. return null if there is no required box.
+	 * @return the box required for this recipe. return empty stack if there is no required box.
 	 * Examples of boxes are the Forestry cartons and crates.
 	 */
-	@Nullable
 	ItemStack getBox();
 
 	/**

@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +18,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
@@ -43,21 +33,14 @@ import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.Log;
 import forestry.core.utils.VectUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
-
-	private final Set<String> defaultFlowerTypes = ImmutableSet.of(
-			FlowerManager.FlowerTypeVanilla,
-			FlowerManager.FlowerTypeNether,
-			FlowerManager.FlowerTypeCacti,
-			FlowerManager.FlowerTypeMushrooms,
-			FlowerManager.FlowerTypeEnd,
-			FlowerManager.FlowerTypeJungle,
-			FlowerManager.FlowerTypeSnow,
-			FlowerManager.FlowerTypeWheat,
-			FlowerManager.FlowerTypeGourd
-	);
-
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
 	private final HashMultimap<String, Block> acceptableBlocks;
 	private final HashMultimap<String, IBlockState> acceptableBlockStates;
@@ -152,7 +135,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	@Nonnull
+
 	public List<BlockPos> getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType, int maxFlowers) {
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
 		Set<IBlockState> acceptedBlockStates = this.acceptableBlockStates.get(flowerType);

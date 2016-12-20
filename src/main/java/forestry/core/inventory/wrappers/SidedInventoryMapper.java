@@ -36,6 +36,17 @@ public class SidedInventoryMapper extends InvWrapperBase implements ISidedInvent
 	}
 
 	@Override
+	public boolean isEmpty() {
+		int[] slotsForFace = inv.getSlotsForFace(side);
+		for (int slot : slotsForFace) {
+			if (!inv.getStackInSlot(slot).isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return inv.getSlotsForFace(side);
 	}

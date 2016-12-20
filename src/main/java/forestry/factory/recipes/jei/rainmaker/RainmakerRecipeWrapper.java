@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.rainmaker;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Collections;
 
@@ -12,20 +11,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
 public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
-	@Nonnull
 	private final RainSubstrate substrate;
 
-	public RainmakerRecipeWrapper(@Nonnull RainSubstrate substrate) {
+	public RainmakerRecipeWrapper(RainSubstrate substrate) {
 		this.substrate = substrate;
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, Collections.singletonList(substrate.getItem()));
 	}
 
 	@Override
-	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
 
 		minecraft.fontRendererObj.drawString(getEffectString(), 24, 0, Color.darkGray.getRGB());

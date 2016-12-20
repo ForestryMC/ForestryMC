@@ -22,7 +22,7 @@ public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal
 
 	@Override
 	public IFarmControllerInternal getController() {
-		if (super.isConnected()) {
+		if (controller != null) {
 			return controller;
 		} else {
 			return FakeFarmController.instance;

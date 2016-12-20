@@ -1,34 +1,36 @@
 package forestry.apiculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import forestry.api.apiculture.EnumBeeType;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.items.ItemHoneyComb;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeDefinition;
-
 public class VillagerApiaristTrades {
 
 	public static class GiveRandomCombsForItems implements EntityVillager.ITradeList {
-		public ItemStack itemToBuy;
+		public final ItemHoneyComb honeyComb;
+		public final ItemStack itemToBuy;
 		@Nullable
-		public EntityVillager.PriceInfo buyInfo;
+		public final EntityVillager.PriceInfo buyInfo;
 		@Nullable
-		public EntityVillager.PriceInfo priceInfo;
+		public final EntityVillager.PriceInfo priceInfo;
 
-		public GiveRandomCombsForItems(ItemStack stack, @Nullable EntityVillager.PriceInfo buyInfo, @Nullable EntityVillager.PriceInfo priceInfo) {
+		public GiveRandomCombsForItems(ItemHoneyComb honeyComb, ItemStack stack, @Nullable EntityVillager.PriceInfo buyInfo, @Nullable EntityVillager.PriceInfo priceInfo) {
+			this.honeyComb = honeyComb;
 			this.itemToBuy = stack;
 			this.buyInfo = buyInfo;
 			this.priceInfo = priceInfo;
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(@Nonnull MerchantRecipeList recipeList, @Nonnull Random random) {
+		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, Random random) {
 			int sellAmount = 1;
 			if (this.priceInfo != null) {
 				sellAmount = this.priceInfo.getPrice(random);
@@ -40,25 +42,26 @@ public class VillagerApiaristTrades {
 			}
 
 			ItemStack itemToBuy = this.itemToBuy.copy();
-			itemToBuy.stackSize = buyAmount;
-			ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(sellAmount, random, false);
-			recipeList.add(new MerchantRecipe(itemToBuy, randomComb));
+			itemToBuy.setCount(buyAmount);
+			ItemStack randomComb = honeyComb.getRandomComb(sellAmount, random, false);
+			if (!randomComb.isEmpty()) {
+				recipeList.add(new MerchantRecipe(itemToBuy, randomComb));
+			}
 		}
 	}
+
 	public static class GiveRandomHiveDroneForItems implements EntityVillager.ITradeList {
-		@Nonnull
-		public ItemStack buyingItemStack;
+		public final ItemStack buyingItemStack;
 		@Nullable
-		public EntityVillager.PriceInfo buyingPriceInfo;
-		@Nonnull
-		public ItemStack buyingItemStackTwo;
+		public final EntityVillager.PriceInfo buyingPriceInfo;
+		public final ItemStack buyingItemStackTwo;
 		@Nullable
-		public EntityVillager.PriceInfo buyingPriceItemTwoInfo;
+		public final EntityVillager.PriceInfo buyingPriceItemTwoInfo;
 
 		public GiveRandomHiveDroneForItems(
-				@Nonnull ItemStack buyingItemStack,
+				ItemStack buyingItemStack,
 				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
-				@Nonnull ItemStack buyingItemStackTwo,
+				ItemStack buyingItemStackTwo,
 				@Nullable EntityVillager.PriceInfo buyingPriceItemTwoInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
@@ -67,8 +70,7 @@ public class VillagerApiaristTrades {
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(@Nonnull MerchantRecipeList recipeList, @Nonnull Random random) {
-
+		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, Random random) {
 			int buyAmount = 1;
 			if (this.buyingPriceInfo != null) {
 				buyAmount = this.buyingPriceInfo.getPrice(random);
@@ -78,12 +80,12 @@ public class VillagerApiaristTrades {
 			if (this.buyingPriceItemTwoInfo != null) {
 				buyTwoAmount = this.buyingPriceItemTwoInfo.getPrice(random);
 			}
-			BeeDefinition [] forestryMundane = new BeeDefinition[] { BeeDefinition.FOREST, BeeDefinition.MEADOWS, BeeDefinition.MODEST, BeeDefinition.WINTRY, BeeDefinition.TROPICAL, BeeDefinition.MARSHY };
+			BeeDefinition[] forestryMundane = new BeeDefinition[]{BeeDefinition.FOREST, BeeDefinition.MEADOWS, BeeDefinition.MODEST, BeeDefinition.WINTRY, BeeDefinition.TROPICAL, BeeDefinition.MARSHY};
 			ItemStack randomHiveDrone = forestryMundane[random.nextInt(forestryMundane.length)].getMemberStack(EnumBeeType.DRONE);
 			ItemStack buyItemStack = this.buyingItemStack.copy();
-			buyItemStack.stackSize = buyAmount;
+			buyItemStack.setCount(buyAmount);
 			ItemStack buyItemStackTwo = this.buyingItemStackTwo.copy();
-			buyItemStackTwo.stackSize = buyTwoAmount;
+			buyItemStackTwo.setCount(buyTwoAmount);
 			recipeList.add(new MerchantRecipe(buyItemStack, buyItemStackTwo, randomHiveDrone));
 		}
 	}

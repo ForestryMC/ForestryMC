@@ -61,13 +61,13 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 
-		if (packet.getSecondaryIndex() == 0) {
-			if (packet.getPrimaryIndex() == 0) {
+		if (secondary == 0) {
+			if (primary == 0) {
 				inventory.advanceLayout();
 			}
-		} else if (packet.getPrimaryIndex() == 0) {
+		} else if (primary == 0) {
 			inventory.regressLayout();
 		}
 

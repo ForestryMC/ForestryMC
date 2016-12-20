@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -92,8 +95,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return null;
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		return NonNullList.create();
 	}
 
 	@Override
@@ -138,7 +141,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, position) && !isBlockTraversable(blockState, world, position, traversalBlocks) && !isFruitBearer(world, position)) {
+		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position)) {
 			return crops;
 		}
 
@@ -181,7 +184,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 					IBlockState blockState = world.getBlockState(candidate);
 					Block block = blockState.getBlock();
-					if (block.isWood(world, candidate) || isBlockTraversable(blockState, world, candidate, traversalBlocks)) {
+					if (block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}
@@ -217,7 +220,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private static boolean isBlockTraversable(IBlockState blockState, World world, BlockPos position, ImmutableList<Block> traversalBlocks) {
+	private static boolean isBlockTraversable(IBlockState blockState, ImmutableList<Block> traversalBlocks) {
 		Block candidate = blockState.getBlock();
 		for (Block block : traversalBlocks) {
 			if (block == candidate) {
@@ -227,6 +230,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
+	@Nullable
 	private ICrop getCrop(World world, BlockPos position) {
 
 		TileEntity tile = world.getTileEntity(position);

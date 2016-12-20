@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileMill extends TileBase {
 
@@ -22,7 +22,7 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill(String hintKey) {
+	protected TileMill(@Nullable String hintKey) {
 		super(hintKey);
 		speed = 0.01F;
 	}
@@ -38,7 +38,7 @@ public abstract class TileMill extends TileBase {
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeInt(charge);
 		data.writeFloat(speed);
@@ -46,7 +46,7 @@ public abstract class TileMill extends TileBase {
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		charge = data.readInt();
 		speed = data.readFloat();

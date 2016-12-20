@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nullable;
+
 import forestry.api.climate.EnumClimatiserModes;
 import forestry.api.climate.EnumClimatiserTypes;
 import forestry.core.climate.ClimatiserDefinition;
@@ -23,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class TileGreenhouseWindow extends TileGreenhouseClimatiser{
-
+	@Nullable
 	private WindowMode mode;
 	
 	public TileGreenhouseWindow() {
@@ -38,21 +40,22 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser{
 	}
 	
 	public WindowMode isBlocked(){
-		if(worldObj == null){
+		if(world == null){
 			return WindowMode.BLOCK;
 		}
-		IBlockState state = worldObj.getBlockState(pos);
-		if(state == null){
+		if (!world.isBlockLoaded(pos)) {
 			return WindowMode.BLOCK;
 		}
+		IBlockState state = world.getBlockState(pos);
 		BlockPos blockedPos;
 		if(state.getBlock() == PluginGreenhouse.blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)){
 			blockedPos = getCoordinates().offset(EnumFacing.UP);
 		}else{
 			blockedPos = getCoordinates().offset(state.getValue(BlockGreenhouse.FACING));
 		}
-		return worldObj.isAirBlock(blockedPos) ? WindowMode.OPEN : WindowMode.BLOCK;
+		return world.isAirBlock(blockedPos) ? WindowMode.OPEN : WindowMode.BLOCK;
 	}
+	
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -95,7 +98,8 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser{
 		this.mode = mode;
 		setActive(mode == WindowMode.OPEN);
 	}
-	
+
+	@Nullable
 	public WindowMode getMode(){
 		return mode;
 	}

@@ -1,6 +1,6 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -31,8 +31,8 @@ import forestry.arboriculture.render.PileStateMapper;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.multiblock.MultiblockLogic;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ParticleHelper;
@@ -61,12 +61,12 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -77,103 +77,103 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockPile extends BlockStructure implements ITileEntityProvider, IStateMapperRegister, ISpriteRegister {
 
-    /**
-     * B: .. T: x.
-     * B: .. T: x.
-     */
-    protected static final AxisAlignedBB AABB_QTR_TOP_WEST = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 1.0D);
-    /**
-     * B: .. T: .x
-     * B: .. T: .x
-     */
-    protected static final AxisAlignedBB AABB_QTR_TOP_EAST = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
-    /**
-     * B: .. T: xx
-     * B: .. T: ..
-     */
-    protected static final AxisAlignedBB AABB_QTR_TOP_NORTH = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
-    /**
-     * B: .. T: ..
-     * B: .. T: xx
-     */
-    protected static final AxisAlignedBB AABB_QTR_TOP_SOUTH = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
-    /**
-     * B: .. T: x.
-     * B: .. T: ..
-     */
-    protected static final AxisAlignedBB AABB_OCT_TOP_NW = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 0.5D);
-    /**
-     * B: .. T: .x
-     * B: .. T: ..
-     */
-    protected static final AxisAlignedBB AABB_OCT_TOP_NE = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
-    /**
-     * B: .. T: ..
-     * B: .. T: x.
-     */
-    protected static final AxisAlignedBB AABB_OCT_TOP_SW = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 0.5D, 1.0D, 1.0D);
-    /**
-     * B: .. T: ..
-     * B: .. T: .x
-     */
-    protected static final AxisAlignedBB AABB_OCT_TOP_SE = new AxisAlignedBB(0.5D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
-    /**
-     * B: xx T: ..
-     * B: xx T: ..
-     */
-    protected static final AxisAlignedBB AABB_SLAB_BOTTOM = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    
+	/**
+	 * B: .. T: x.
+	 * B: .. T: x.
+	 */
+	protected static final AxisAlignedBB AABB_QTR_TOP_WEST = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 1.0D);
+	/**
+	 * B: .. T: .x
+	 * B: .. T: .x
+	 */
+	protected static final AxisAlignedBB AABB_QTR_TOP_EAST = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
+	/**
+	 * B: .. T: xx
+	 * B: .. T: ..
+	 */
+	protected static final AxisAlignedBB AABB_QTR_TOP_NORTH = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
+	/**
+	 * B: .. T: ..
+	 * B: .. T: xx
+	 */
+	protected static final AxisAlignedBB AABB_QTR_TOP_SOUTH = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
+	/**
+	 * B: .. T: x.
+	 * B: .. T: ..
+	 */
+	protected static final AxisAlignedBB AABB_OCT_TOP_NW = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 0.5D);
+	/**
+	 * B: .. T: .x
+	 * B: .. T: ..
+	 */
+	protected static final AxisAlignedBB AABB_OCT_TOP_NE = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
+	/**
+	 * B: .. T: ..
+	 * B: .. T: x.
+	 */
+	protected static final AxisAlignedBB AABB_OCT_TOP_SW = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 0.5D, 1.0D, 1.0D);
+	/**
+	 * B: .. T: ..
+	 * B: .. T: .x
+	 */
+	protected static final AxisAlignedBB AABB_OCT_TOP_SE = new AxisAlignedBB(0.5D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
+	/**
+	 * B: xx T: ..
+	 * B: xx T: ..
+	 */
+	protected static final AxisAlignedBB AABB_SLAB_BOTTOM = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
+
 	public static final PropertyEnum<EnumPilePosition> PILE_POSITION = PropertyEnum.create("position", EnumPilePosition.class);
 	public final ParticleHelper.Callback particleCallback;
-	
+
 	public static Map<EnumPileType, BlockPile> create() {
 		Map<EnumPileType, BlockPile> blockMap = new EnumMap<>(EnumPileType.class);
 		for (final EnumPileType type : EnumPileType.VALUES) {
 			BlockPile pile = new BlockPile() {
-				
+
 				@Override
 				public String getHarvestTool(IBlockState state) {
-					if(type == EnumPileType.WOOD){
+					if (type == EnumPileType.WOOD) {
 						return "axe";
-					}else{
+					} else {
 						return "shovel";
 					}
 				}
-				
+
 				@Override
 				public int getHarvestLevel(IBlockState state) {
 					return 0;
 				}
-				
+
 				@Override
 				public EnumPileType getPileType() {
 					return type;
 				}
-				
+
 				@Override
-				public SoundType getSoundType() {
-					if(type == EnumPileType.DIRT){
-						return Blocks.DIRT.getSoundType();
-					}else if(type == EnumPileType.ASH){
-						return Blocks.SAND.getSoundType();
-					}else if(type == EnumPileType.WOOD){
-						return Blocks.LOG.getSoundType();
+				public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+					if (type == EnumPileType.DIRT) {
+						return Blocks.DIRT.getSoundType(state, world, pos, entity);
+					} else if (type == EnumPileType.ASH) {
+						return Blocks.SAND.getSoundType(state, world, pos, entity);
+					} else if (type == EnumPileType.WOOD) {
+						return Blocks.LOG.getSoundType(state, world, pos, entity);
 					}
-					return super.getSoundType();
+					return super.getSoundType(state, world, pos, entity);
 				}
 			};
 			blockMap.put(type, pile);
 		}
 		return blockMap;
 	}
-	
+
 	public BlockPile() {
 		super(Material.GROUND);
 		setHardness(1.0F);
 		setUnlocalizedName("charcoal.pile");
 		setCreativeTab(Tabs.tabArboriculture);
 		setDefaultState(blockState.getBaseState().withProperty(PILE_POSITION, EnumPilePosition.INTERIOR));
-		
+
 		particleCallback = new PileParticleCallback(this);
 	}
 
@@ -181,64 +181,60 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[]{PILE_POSITION}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
-	
+
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
 				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
-	
-    @Override
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end){
-        List<RayTraceResult> list = Lists.newArrayList();
 
-        for (AxisAlignedBB axisalignedbb : getCollisionBoxList(this.getActualState(blockState, worldIn, pos)))
-        {
-            list.add(this.rayTrace(pos, start, end, axisalignedbb));
-        }
+	@Override
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+		List<RayTraceResult> list = Lists.newArrayList();
 
-        RayTraceResult raytraceresult1 = null;
-        double d1 = 0.0D;
+		for (AxisAlignedBB axisalignedbb : getCollisionBoxList(this.getActualState(blockState, worldIn, pos))) {
+			list.add(this.rayTrace(pos, start, end, axisalignedbb));
+		}
 
-        for (RayTraceResult raytraceresult : list)
-        {
-            if (raytraceresult != null)
-            {
-                double d0 = raytraceresult.hitVec.squareDistanceTo(end);
+		RayTraceResult raytraceresult1 = null;
+		double d1 = 0.0D;
 
-                if (d0 > d1)
-                {
-                    raytraceresult1 = raytraceresult;
-                    d1 = d0;
-                }
-            }
-        }
+		for (RayTraceResult raytraceresult : list) {
+			if (raytraceresult != null) {
+				double d0 = raytraceresult.hitVec.squareDistanceTo(end);
 
-        return raytraceresult1;
-    }
-	
-    @Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn){
-        state = this.getActualState(state, worldIn, pos);
+				if (d0 > d1) {
+					raytraceresult1 = raytraceresult;
+					d1 = d0;
+				}
+			}
+		}
 
-        for (AxisAlignedBB axisalignedbb : getCollisionBoxList(state)){
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, axisalignedbb);
-        }
-    }
+		return raytraceresult1;
+	}
 
-    private static List<AxisAlignedBB> getCollisionBoxList(IBlockState state){
-        List<AxisAlignedBB> list = Lists.newArrayList();
-        EnumPilePosition position = state.getValue(PILE_POSITION);
-        
-        if(position != EnumPilePosition.INTERIOR){
-	        list.add(AABB_SLAB_BOTTOM);
-	
-	        switch (position) {
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+		state = this.getActualState(state, worldIn, pos);
+
+		for (AxisAlignedBB axisalignedbb : getCollisionBoxList(state)) {
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, axisalignedbb);
+		}
+	}
+
+	private static List<AxisAlignedBB> getCollisionBoxList(IBlockState state) {
+		List<AxisAlignedBB> list = Lists.newArrayList();
+		EnumPilePosition position = state.getValue(PILE_POSITION);
+
+		if (position != EnumPilePosition.INTERIOR) {
+			list.add(AABB_SLAB_BOTTOM);
+
+			switch (position) {
 				case BACK:
 					list.add(AABB_QTR_TOP_SOUTH);
 					break;
 				case FRONT:
-					 list.add(AABB_QTR_TOP_NORTH);
+					list.add(AABB_QTR_TOP_NORTH);
 					break;
 				case SIDE_LEFT:
 					list.add(AABB_QTR_TOP_EAST);
@@ -261,28 +257,28 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 				default:
 					break;
 			}
-        }else{
-        	list.add(Block.FULL_BLOCK_AABB);
-        }
+		} else {
+			list.add(Block.FULL_BLOCK_AABB);
+		}
 
-        return list;
-    }
-	
+		return list;
+	}
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(PILE_POSITION).ordinal();
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(PILE_POSITION, EnumPilePosition.values()[meta]);
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TilePile();
 	}
-	
+
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
@@ -294,16 +290,16 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		}
 		return super.getLightValue(state, world, pos);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		TilePile pile = TileUtil.getTile(world, pos, TilePile.class);
-		if(pile == null){
+		if (pile == null) {
 			return;
 		}
 		MultiblockLogic<ICharcoalPileControllerInternal> logic = pile.getMultiblockLogic();
-		
+
 		if (logic.isConnected() && logic.getController().isAssembled() && logic.getController().isActive() && state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR) {
 			float f = pos.getX() + 0.5F;
 			float f1 = pos.getY() + 0.0F + rand.nextFloat() * 6.0F / 16.0F;
@@ -316,7 +312,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		if (getPileType() == EnumPileType.WOOD) {
 			List<ItemStack> woodPiles = new ArrayList<>();
 			for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
@@ -329,60 +325,56 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			super.getSubBlocks(item, tab, subItems);
 		}
 	}
-	
+
 	private long previousMessageTick = 0;
-	
+
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if(world.isRemote){
-			return false;
-		}
-		
-		if (player.isSneaking()) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (worldIn.isRemote) {
 			return false;
 		}
 
-		TilePile pile = TileUtil.getTile(world, pos, TilePile.class);
-
-		if(pile == null) {
+		if (playerIn.isSneaking()) {
 			return false;
 		}
-		
+
+		TilePile pile = TileUtil.getTile(worldIn, pos, TilePile.class);
+
+		if (pile == null) {
+			return false;
+		}
+
 		ICharcoalPileControllerInternal controller = pile.getMultiblockLogic().getController();
 
+		ItemStack heldItem = playerIn.getHeldItem(hand);
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
-		if (heldItem == null) {
-			if (controller != null) {
-				if (!controller.isAssembled()) {
-					String validationError = controller.getLastValidationError();
-					if (validationError != null) {
-						long tick = world.getTotalWorldTime();
-						if (tick > previousMessageTick + 20) {
-							player.addChatMessage(new TextComponentString(validationError));
-							previousMessageTick = tick;
-						}
-						return true;
+		if (heldItem.isEmpty()) {
+			if (!controller.isAssembled()) {
+				String validationError = controller.getLastValidationError();
+				if (validationError != null) {
+					long tick = worldIn.getTotalWorldTime();
+					if (tick > previousMessageTick + 20) {
+						playerIn.sendMessage(new TextComponentString(validationError));
+						previousMessageTick = tick;
 					}
+					return true;
 				}
-			} else {
-				player.addChatMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
-				return true;
 			}
-		}else if(BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			if (pile.getMultiblockLogic().isConnected() && controller != null && controller.isAssembled() && !controller.isActive()) {
+		} else if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
+			if (pile.getMultiblockLogic().isConnected() && controller.isAssembled() && !controller.isActive()) {
 				controller.setActive(true);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/* DROP HANDLING */
 	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
 	private final ThreadLocal<List<ItemStack>> drop = new ThreadLocal<>();
-	
+
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (!world.isRemote) {
@@ -390,8 +382,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			drop.set(getPileDrop(world, pos, state, fortune));
 		}
 	}
-	
-	@Nonnull
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = drop.get();
@@ -405,7 +396,6 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		return drops;
 	}
 
-	@Nonnull
 	private List<ItemStack> getPileDrop(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> list = new ArrayList<>();
 		TileEntity tile = world.getTileEntity(pos);
@@ -413,23 +403,18 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 			ICharcoalPileComponent pile = (ICharcoalPileComponent) tile;
 
 			if (getPileType() == EnumPileType.ASH) {
-				if (pile.getTreeSpecies() != null) {
-					IWoodProvider woodProvider = pile.getTreeSpecies().getWoodProvider();
-					int charcoalAmount = woodProvider.getCarbonization();
-					ItemStack charcoal = new ItemStack(Items.COAL, charcoalAmount, 1);
-					while(RANDOM.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)){
-						charcoal.stackSize++;
-					}
-					list.add(charcoal);
-					int ashAmount = (int)(charcoalAmount / 1.5);
-					if(ashAmount <= 0){
-						ashAmount = 1;
-					}
-					list.add(new ItemStack(PluginCore.items.ash, ashAmount));
-				} else {
-					list.add(new ItemStack(Blocks.DIRT, 2));
-					list.add(new ItemStack(PluginCore.items.ash, 2));
+				IWoodProvider woodProvider = pile.getTreeSpecies().getWoodProvider();
+				int charcoalAmount = woodProvider.getCarbonization();
+				ItemStack charcoal = new ItemStack(Items.COAL, charcoalAmount, 1);
+				while (RANDOM.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)) {
+					charcoal.grow(1);
 				}
+				list.add(charcoal);
+				int ashAmount = (int) (charcoalAmount / 1.5);
+				if (ashAmount <= 0) {
+					ashAmount = 1;
+				}
+				list.add(new ItemStack(PluginCore.items.ash, ashAmount));
 			} else if (getPileType() == EnumPileType.DIRT) {
 				list.add(new ItemStack(this));
 			} else {
@@ -438,52 +423,43 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		}
 		return list;
 	}
-	
+
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		//use to override world.removeTileEntity
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		if(state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR){
-			return false;
-		}
-		return true;
+		return state.getValue(PILE_POSITION) == EnumPilePosition.INTERIOR;
 	}
-	
+
 	@Override
 	public int getLightOpacity(IBlockState state) {
-		if(state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR){
+		if (state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR) {
 			return 0;
 		}
 		return super.getLightOpacity(state);
 	}
-	
+
 	@Override
 	public boolean isFullBlock(IBlockState state) {
-		if(state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR){
-			return false;
-		}
-		return true;
+		return state.getValue(PILE_POSITION) == EnumPilePosition.INTERIOR;
 	}
-	
+
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		if(state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR){
-			return false;
-		}
-		return true;
+		return state.getValue(PILE_POSITION) == EnumPilePosition.INTERIOR;
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		if(state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR){
+		if (state.getValue(PILE_POSITION) != EnumPilePosition.INTERIOR) {
 			return EnumBlockRenderType.INVISIBLE;
 		}
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
@@ -492,44 +468,44 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
 				return createWoodPile(((ICharcoalPileComponent) tile).getTreeSpecies());
 			}
-		}else if(getPileType() == EnumPileType.DIRT){
+		} else if (getPileType() == EnumPileType.DIRT) {
 			return super.getPickBlock(state, target, world, pos, player);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			manager.registerItemModel(item, 0, "woodPile");
-		}else if(getPileType() == EnumPileType.DIRT){
+		} else if (getPileType() == EnumPileType.DIRT) {
 			manager.registerItemModel(item, 0, "dirtPile");
-		}else if(getPileType() == EnumPileType.ASH){
+		} else if (getPileType() == EnumPileType.ASH) {
 			manager.registerItemModel(item, 0, "ashPile");
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprites(ITextureManager manager) {
-		for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()){
-			if(allele instanceof IAlleleTreeSpecies){
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) allele;
 				treeSpecies.getWoodProvider().registerSprites(Item.getItemFromBlock(this), manager);
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
-		return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
+	public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager effectRenderer) {
+		return ParticleHelper.addBlockHitEffects(world, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -539,8 +515,9 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
 	}
 
+	@Nullable
 	public static IAlleleTreeSpecies getTreeSpecies(ItemStack stack) {
-		if (stack != null && stack.hasTagCompound()) {
+		if (!stack.isEmpty() && stack.getTagCompound() != null) {
 			NBTTagCompound tagCompound = stack.getTagCompound();
 
 			// legacy
@@ -554,20 +531,16 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 		}
 		return null;
 	}
-	
+
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
 				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
-				if (tree != null) {
-					ItemStack wood = tree.getWoodProvider().getWoodStack();
-					if(wood != null){
-						Block block = Block.getBlockFromItem(wood.getItem());
-						return block.getFlammability(world, pos, face);
-					}
-				}
+				ItemStack wood = tree.getWoodProvider().getWoodStack();
+				Block block = Block.getBlockFromItem(wood.getItem());
+				return block.getFlammability(world, pos, face);
 			}
 		}
 		return super.getFlammability(world, pos, face);
@@ -575,52 +548,41 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
 				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
-				if(tree != null){
-					ItemStack wood = tree.getWoodProvider().getWoodStack();
-					if(wood != null){
-						Block block = Block.getBlockFromItem(wood.getItem());
-						return block.getFireSpreadSpeed(world, pos, face);
-					}
-				}
+				ItemStack wood = tree.getWoodProvider().getWoodStack();
+				Block block = Block.getBlockFromItem(wood.getItem());
+				return block.getFireSpreadSpeed(world, pos, face);
 			}
 		}
 		return super.getFireSpreadSpeed(world, pos, face);
-		
+
 	}
-	
+
 	@Override
 	public float getBlockHardness(IBlockState blockState, World world, BlockPos pos) {
-		if(getPileType() == EnumPileType.WOOD){
+		if (getPileType() == EnumPileType.WOOD) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ICharcoalPileComponent) {
 
 				IAlleleTreeSpecies tree = ((ICharcoalPileComponent) tile).getTreeSpecies();
-				if(tree != null){
-					ItemStack wood = tree.getWoodProvider().getWoodStack();
-					if (wood != null) {
-						Block block = Block.getBlockFromItem(wood.getItem());
-						return block.getStateFromMeta(wood.getMetadata()).getBlockHardness(world, pos);
-					}
-				}
+				ItemStack wood = tree.getWoodProvider().getWoodStack();
+				Block block = Block.getBlockFromItem(wood.getItem());
+				return block.getStateFromMeta(wood.getMetadata()).getBlockHardness(world, pos);
 			}
 		}
 		return super.getBlockHardness(blockState, world, pos);
 	}
 
 	public static ItemStack createWoodPile(IAlleleTreeSpecies treeSpecies) {
-		if (treeSpecies != null) {
-			ItemStack stack = new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
-			NBTTagCompound nbtItem = new NBTTagCompound();
-			nbtItem.setString("TreeSpecies", treeSpecies.getUID());
-			stack.setTagCompound(nbtItem);
-			return stack;
-		}
-		return null;
+		ItemStack stack = new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
+		NBTTagCompound nbtItem = new NBTTagCompound();
+		nbtItem.setString("TreeSpecies", treeSpecies.getUID());
+		stack.setTagCompound(nbtItem);
+		return stack;
 	}
-	
+
 	public abstract EnumPileType getPileType();
 }

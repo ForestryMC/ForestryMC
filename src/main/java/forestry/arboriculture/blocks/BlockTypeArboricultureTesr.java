@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.math.AxisAlignedBB;
 
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.core.blocks.IBlockTypeTesr;
@@ -24,16 +20,17 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
 	ARB_CHEST(TileArboristChest.class, "arb_chest", Proxies.render.getRenderChest("arbchest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeArboricultureTesr[] VALUES = values();
 
-	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeArboricultureTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
+	<T extends TileForestry> BlockTypeArboricultureTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
 		if (boundingBox != null) {
 			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
 		} else {
@@ -41,7 +38,6 @@ public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
 		}
 	}
 
-	@Nonnull
 	@Override
 	public IMachinePropertiesTesr<?> getMachineProperties() {
 		return machineProperties;

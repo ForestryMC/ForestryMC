@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -36,15 +29,20 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
-	@Nonnull
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(@Nonnull ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
+	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
 		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;
@@ -59,7 +57,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, speciesRoot.getIconType()));
 		}
 
-		breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 	}
 
 	@Override
@@ -109,6 +107,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 	}
 
+	@Nullable
 	private IIndividual getIndividualAtPosition(int x, int y) {
 		Slot slot = getSlotAtPosition(x, y);
 		if (slot == null) {

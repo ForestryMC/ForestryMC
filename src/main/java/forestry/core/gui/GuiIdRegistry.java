@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +32,7 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.energy.tiles.TileEngineBiogas;
-import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
-import forestry.energy.tiles.TileEuGenerator;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileCentrifuge;
@@ -84,13 +83,13 @@ public class GuiIdRegistry {
 				TileStill.class,
 
 				TileFarm.class,
-				
+
 				TileGreenhouse.class,
 
 				TileEngineBiogas.class,
-				TileEngineElectric.class,
+//				TileEngineElectric.class,
 				TileEnginePeat.class,
-				TileEuGenerator.class,
+//				TileEuGenerator.class,
 
 				TileMailbox.class,
 				TileStampCollector.class,
@@ -141,6 +140,7 @@ public class GuiIdRegistry {
 		return guiId;
 	}
 
+	@Nullable
 	public static GuiId getGuiId(int id) {
 		return idMap.get(id);
 	}

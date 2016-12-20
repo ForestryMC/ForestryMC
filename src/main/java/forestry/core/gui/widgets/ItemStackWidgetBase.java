@@ -31,7 +31,7 @@ public abstract class ItemStackWidgetBase extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		ItemStack itemStack = getItemStack();
-		if (itemStack != null) {
+		if (!itemStack.isEmpty()) {
 			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
 		}
 	}
@@ -40,10 +40,10 @@ public abstract class ItemStackWidgetBase extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		EntityPlayer player = minecraft.thePlayer;
+		EntityPlayer player = minecraft.player;
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
-		if (itemStack != null) {
+		if (!itemStack.isEmpty()) {
 			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
 		}
 		return tip;

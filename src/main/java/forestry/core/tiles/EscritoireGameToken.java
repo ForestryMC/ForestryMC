@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -20,9 +19,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.item.ItemStack;
@@ -45,9 +43,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	@Nullable
 	private IIndividual tokenIndividual;
-	@Nullable
-	private ItemStack tokenStack;
-	@Nonnull
+	private ItemStack tokenStack = ItemStack.EMPTY;
+
 	private State state = State.UNREVEALED;
 
 	@SuppressWarnings("unused")
@@ -55,21 +52,14 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		// required for IStreamable serialization
 	}
 
-	public EscritoireGameToken(@Nullable String speciesUid) {
+	public EscritoireGameToken(String speciesUid) {
 		setTokenSpecies(speciesUid);
 	}
 
-	public EscritoireGameToken(@Nonnull NBTTagCompound nbttagcompound) {
+	public EscritoireGameToken(NBTTagCompound nbttagcompound) {
 		if (nbttagcompound.hasKey("state")) {
 			int stateOrdinal = nbttagcompound.getInteger("state");
 			state = State.values()[stateOrdinal];
-		}
-
-		// legacy
-		if (nbttagcompound.hasKey("tokenStack")) {
-			tokenStack = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("tokenStack"));
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(tokenStack);
-			tokenIndividual = speciesRoot.getMember(tokenStack);
 		}
 
 		if (nbttagcompound.hasKey("tokenSpecies")) {
@@ -91,7 +81,6 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		}
 	}
 
-	@Nullable
 	public ItemStack getTokenStack() {
 		return tokenStack;
 	}
@@ -146,9 +135,9 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		}
 	}
 
-	@Nonnull
+
 	public String getTooltip() {
-		return tokenStack != null ? tokenStack.getDisplayName() : Translator.translateToLocal("for.gui.unknown");
+		return !tokenStack.isEmpty() ? tokenStack.getDisplayName() : Translator.translateToLocal("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {
@@ -178,21 +167,21 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	/* IStreamable */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeEnum(state, State.VALUES);
 		if (tokenIndividual != null) {
 			data.writeBoolean(true);
-			data.writeUTF(tokenIndividual.getGenome().getPrimary().getUID());
+			data.writeString(tokenIndividual.getGenome().getPrimary().getUID());
 		} else {
 			data.writeBoolean(false);
 		}
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		state = data.readEnum(State.VALUES);
 		if (data.readBoolean()) {
-			String speciesUid = data.readUTF();
+			String speciesUid = data.readString();
 			setTokenSpecies(speciesUid);
 		}
 	}

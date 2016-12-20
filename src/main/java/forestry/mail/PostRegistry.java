@@ -10,19 +10,13 @@
  ******************************************************************************/
 package forestry.mail;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -32,14 +26,21 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class PostRegistry implements IPostRegistry {
-
+	@Nullable
 	public static PostOffice cachedPostOffice;
 	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<>();
 	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
+
+	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<>(EnumAddressee.class);
 
 	/**
 	 * @param world   the Minecraft world the PO box will be in
@@ -51,13 +52,14 @@ public class PostRegistry implements IPostRegistry {
 		return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
+	@Nullable
 	public static POBox getPOBox(World world, IMailAddress address) {
 
 		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
 		}
 
-		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + address);
+		POBox pobox = (POBox) world.loadData(POBox.class, POBox.SAVE_NAME + address);
 		if (pobox != null) {
 			cachedPOBoxes.put(address, pobox);
 		}
@@ -69,13 +71,13 @@ public class PostRegistry implements IPostRegistry {
 
 		if (pobox == null) {
 			pobox = new POBox(address);
-			world.setItemData(POBox.SAVE_NAME + address, pobox);
+			world.setData(POBox.SAVE_NAME + address, pobox);
 			pobox.markDirty();
 			cachedPOBoxes.put(address, pobox);
 
 			EntityPlayer player = PlayerUtil.getPlayer(world, address.getPlayerProfile());
 			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 
@@ -89,7 +91,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, IMailAddress address) {
-		return address != null && address.getType() == EnumAddressee.TRADER && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address.getType() == EnumAddressee.TRADER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
@@ -99,20 +101,16 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isAvailableTradeAddress(World world, IMailAddress address) {
-		return address != null && getTradeStation(world, address) == null;
+		return getTradeStation(world, address) == null;
 	}
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
-		if (address == null || address.getName() == null) {
-			return null;
-		}
-
 		if (cachedTradeStations.containsKey(address)) {
 			return (TradeStation) cachedTradeStations.get(address);
 		}
 
-		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + address);
+		TradeStation trade = (TradeStation) world.loadData(TradeStation.class, TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
 		if (trade != null && trade.isValid()) {
@@ -130,7 +128,7 @@ public class PostRegistry implements IPostRegistry {
 
 		if (trade == null) {
 			trade = new TradeStation(owner, address);
-			world.setItemData(TradeStation.SAVE_NAME + address, trade);
+			world.setData(TradeStation.SAVE_NAME + address, trade);
 			trade.markDirty();
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
@@ -151,7 +149,10 @@ public class PostRegistry implements IPostRegistry {
 		cachedTradeStations.remove(address);
 		getPostOffice(world).deregisterTradeStation(trade);
 		File file = world.getSaveHandler().getMapFileFromName(trade.mapName);
-		file.delete();
+		boolean delete = file.delete();
+		if (!delete) {
+			Log.error("Failed to delete trade station file. {}", file);
+		}
 	}
 
 	@Override
@@ -160,12 +161,12 @@ public class PostRegistry implements IPostRegistry {
 			return cachedPostOffice;
 		}
 
-		PostOffice office = (PostOffice) world.loadItemData(PostOffice.class, PostOffice.SAVE_NAME);
+		PostOffice office = (PostOffice) world.loadData(PostOffice.class, PostOffice.SAVE_NAME);
 
 		// Create office if there is none yet
 		if (office == null) {
 			office = new PostOffice();
-			world.setItemData(PostOffice.SAVE_NAME, office);
+			world.setData(PostOffice.SAVE_NAME, office);
 		}
 
 		office.setWorld(world);
@@ -174,20 +175,18 @@ public class PostRegistry implements IPostRegistry {
 		return office;
 	}
 
-	@Nonnull
+
 	@Override
-	public IMailAddress getMailAddress(@Nonnull GameProfile gameProfile) {
+	public IMailAddress getMailAddress(GameProfile gameProfile) {
 		return new MailAddress(gameProfile);
 	}
 
 	@Override
-	public IMailAddress getMailAddress(@Nonnull String traderName) {
+	public IMailAddress getMailAddress(String traderName) {
 		return new MailAddress(traderName);
 	}
 
 	/* CARRIER */
-	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<>(EnumAddressee.class);
-
 	@Override
 	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {
 		return carriers;
@@ -221,8 +220,9 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ILetter getLetter(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return null;
 		}
 
@@ -239,6 +239,6 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public boolean isLetter(ItemStack itemstack) {
-		return itemstack != null && itemstack.getItem() == PluginMail.items.letters;
+		return itemstack.getItem() == PluginMail.items.letters;
 	}
 }

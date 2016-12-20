@@ -76,8 +76,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance) {
-		if (product == null || product.getItem() == null) {
-			throw new IllegalArgumentException("Tried to add null product");
+		if (product.isEmpty()) {
+			throw new IllegalArgumentException("Tried to add empty product");
 		}
 		if (chance <= 0.0f || chance > 1.0f) {
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");
@@ -88,8 +88,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance) {
-		if (specialty == null || specialty.getItem() == null) {
-			throw new IllegalArgumentException("Tried to add null specialty");
+		if (specialty.isEmpty()) {
+			throw new IllegalArgumentException("Tried to add empty specialty");
 		}
 		if (chance <= 0.0f || chance > 1.0f) {
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");

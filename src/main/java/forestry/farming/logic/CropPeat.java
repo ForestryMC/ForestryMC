@@ -10,22 +10,18 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class CropPeat extends Crop {
 
@@ -46,14 +42,14 @@ public class CropPeat extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
-		List<ItemStack> drops = new ArrayList<>();
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+		NonNullList<ItemStack> drops = NonNullList.create();
 		drops.add(PluginCore.items.peat.getItemStack());
 
 		IBlockState blockState = world.getBlockState(pos);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		return drops;

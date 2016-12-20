@@ -10,16 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
-
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.core.IModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
@@ -28,7 +25,6 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
-	private ModelResourceLocation charcoalModel;
 
 	public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType, ILeafSpriteProvider leafSpriteProvider) {
 		this.woodType = woodType;
@@ -37,7 +33,7 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
 	@Override
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		if(type == EnumGermlingType.SAPLING){
+		if (type == EnumGermlingType.SAPLING) {
 			switch (woodType) {
 				case OAK:
 					germlingModel = manager.getModelLocation("minecraft", "oak_sapling");
@@ -58,17 +54,16 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 					germlingModel = manager.getModelLocation("minecraft", "dark_oak_sapling");
 					break;
 			}
-		}else if(type == EnumGermlingType.POLLEN){
+		} else if (type == EnumGermlingType.POLLEN) {
 			pollenModel = manager.getModelLocation("pollen");
 		}
 	}
 
-	@Nonnull
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if(type == EnumGermlingType.POLLEN){
+		if (type == EnumGermlingType.POLLEN) {
 			return pollenModel;
-		}else{
+		} else {
 			return germlingModel;
 		}
 	}

@@ -12,68 +12,67 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
-import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 
-public class PacketRecipeTransferRequest extends PacketCoordinates implements IForestryPacketServer {
-	private ItemStack[] craftingInventory;
+public class PacketRecipeTransferRequest extends ForestryPacket implements IForestryPacketServer {
+	private final BlockPos pos;
+	private final NonNullList<ItemStack> craftingInventory;
 
-	public PacketRecipeTransferRequest() {
-	}
-
-	public PacketRecipeTransferRequest(TileBase base, ItemStack[] craftingInventory) {
-		super(base);
+	public PacketRecipeTransferRequest(TileBase base, NonNullList<ItemStack> craftingInventory) {
+		this.pos = base.getPos();
 		this.craftingInventory = craftingInventory;
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeItemStacks(craftingInventory);
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		craftingInventory = data.readItemStacks();
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
-		if (tile instanceof TileCarpenter) {
-			TileCarpenter carpenter = (TileCarpenter) tile;
-			int index = 0;
-			for(ItemStack stack : craftingInventory){
-				carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
-				index++;
-			}
-
-			Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), player.worldObj);
-		}else if(tile instanceof TileFabricator){
-			TileFabricator fabricator = (TileFabricator) tile;
-			int index = 0;
-			for(ItemStack stack : craftingInventory){
-				fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
-				index++;
-			}
-
-			Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), player.worldObj);
-		}
 	}
 
 	@Override
 	public PacketIdServer getPacketId() {
 		return PacketIdServer.RECIPE_TRANSFER_REQUEST;
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
+
+			TileEntity tile = player.world.getTileEntity(pos);
+			if (tile instanceof TileCarpenter) {
+				TileCarpenter carpenter = (TileCarpenter) tile;
+				int index = 0;
+				for (ItemStack stack : craftingInventory) {
+					carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
+					index++;
+				}
+
+				Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
+			} else if (tile instanceof TileFabricator) {
+				TileFabricator fabricator = (TileFabricator) tile;
+				int index = 0;
+				for (ItemStack stack : craftingInventory) {
+					fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
+					index++;
+				}
+
+				Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
+			}
+		}
 	}
 }

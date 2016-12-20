@@ -13,7 +13,7 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import forestry.api.core.IToolPipette;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
@@ -64,7 +64,7 @@ public class TankWidget extends Widget {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
-		}else if (container instanceof ContainerGreenhouse) {
+		} else if (container instanceof ContainerGreenhouse) {
 			return ((ContainerGreenhouse) container).getTank(slot);
 		}
 		return null;
@@ -147,7 +147,7 @@ public class TankWidget extends Widget {
 		}
 		return ((StandardTank) tank).getToolTip();
 	}
-	
+
 	private static void setGLColorFromInt(int color) {
 		float red = (color >> 16 & 0xFF) / 255.0F;
 		float green = (color >> 8 & 0xFF) / 255.0F;
@@ -156,7 +156,7 @@ public class TankWidget extends Widget {
 		GlStateManager.color(red, green, blue, 1.0F);
 	}
 
-	
+
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
 		double uMin = textureSprite.getMinU();
 		double uMax = textureSprite.getMaxU();
@@ -168,18 +168,18 @@ public class TankWidget extends Widget {
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer vertexBuffer = tessellator.getBuffer();
 		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		vertexBuffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin,  vMax).endVertex();
+		vertexBuffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
 		vertexBuffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
 		vertexBuffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-		vertexBuffer.pos(xCoord, yCoord + maskTop,  zLevel).tex(uMin, vMin).endVertex();
+		vertexBuffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
 		tessellator.draw();
 	}
 
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		EntityPlayer player = manager.minecraft.thePlayer;
+		EntityPlayer player = manager.minecraft.player;
 		ItemStack itemstack = player.inventory.getItemStack();
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return;
 		}
 

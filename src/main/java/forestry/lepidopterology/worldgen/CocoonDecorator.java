@@ -11,23 +11,9 @@
 package forestry.lepidopterology.worldgen;
 
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
-
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
+import java.util.Set;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
@@ -35,6 +21,18 @@ import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class CocoonDecorator {
 
@@ -68,13 +66,13 @@ public abstract class CocoonDecorator {
 		int worldZ = chunkZ * 16;
 
 		Biome biome = world.getBiome(new BlockPos(worldX, 0, worldZ));
-		
-		Type[] types = BiomeDictionary.getTypesForBiome(biome);
-		EnumSet<Type> speciesTypes = butterfly.getGenome().getPrimary().getSpawnBiomes();
+
+		Set<Type> types = BiomeDictionary.getTypes(biome);
+		Set<Type> speciesTypes = butterfly.getGenome().getPrimary().getSpawnBiomes();
 
 		boolean biomeTypesGood = false;
 		for (Type type : types) {
-			if (speciesTypes == null || speciesTypes.size() <= 0 || speciesTypes.contains(type)) {
+			if (speciesTypes.isEmpty() || speciesTypes.contains(type)) {
 				biomeTypesGood = true;
 			}
 		}
@@ -120,7 +118,7 @@ public abstract class CocoonDecorator {
 		if (!Block.isEqualTo(cocoonBlock, state.getBlock())) {
 			return false;
 		}
-		
+
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileCocoon) {
 			TileCocoon cocoon = (TileCocoon) tile;
@@ -134,7 +132,7 @@ public abstract class CocoonDecorator {
 
 		return true;
 	}
-	
+
 	private static int getYForCocoon(World world, int x, int z) {
 		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
 		BlockPos pos = new BlockPos(x, y, z);
@@ -150,7 +148,7 @@ public abstract class CocoonDecorator {
 
 		return y;
 	}
-	
+
 	public static boolean isValidLocation(World world, BlockPos pos) {
 		BlockPos posAbove = pos.up();
 		IBlockState blockStateAbove = world.getBlockState(posAbove);

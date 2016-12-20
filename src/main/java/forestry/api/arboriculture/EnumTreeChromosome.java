@@ -8,11 +8,9 @@ package forestry.api.arboriculture;
 import java.util.Locale;
 
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAllelePlantType;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRoot;
@@ -25,12 +23,6 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 * will actually yield fruit with this species. - Native {@link EnumPlantType} for this tree. Combines with the PLANT chromosome.
 	 */
 	SPECIES(IAlleleTreeSpecies.class),
-	/**
-	 * {@link IGrowthProvider}, determines conditions required by the tree to grow.
-	 * @deprecated unused
-	 */
-	@Deprecated
-	GROWTH(IAlleleGrowth.class),
 	/**
 	 * A float modifying the height of the tree. Taken into account at worldgen.
 	 */
@@ -48,21 +40,9 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 */
 	YIELD(IAlleleFloat.class),
 	/**
-	 * May add additional tolerances for {@link EnumPlantType}.
-	 * @deprecated this is tied to species directly
-	 */
-	@Deprecated
-	PLANT(IAllelePlantType.class),
-	/**
 	 * Determines the speed at which fruit will ripen on this tree.
 	 */
 	SAPPINESS(IAlleleFloat.class),
-	/**
-	 * Territory for leaf effects.
-	 * @deprecated unused
-	 */
-	@Deprecated
-	TERRITORY(IAlleleArea.class),
 	/**
 	 * Leaf effect. Unused.
 	 */
@@ -74,23 +54,11 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	
 	GIRTH(IAlleleInteger.class),
 	/**
-	 * The combustibility of the wood, when it burn to charcoal and the combustibility of the charcoal.
-	 * @deprecated this is tied to species directly
-	 */
-	@Deprecated
-	COMBUSTIBILITY(IAlleleInteger.class),
-	/**
-	 * The amount of charcoal that a wood pile ash drop;
-	 * @deprecated this is tied to species directly
-	 */
-	@Deprecated
-	CARBONIZATION(IAlleleInteger.class),
-	/**
 	 * Determines if the tree can burn.
 	 */
 	FIREPROOF(IAlleleBoolean.class),;
 	
-	Class<? extends IAllele> alleleClass;
+	private final Class<? extends IAllele> alleleClass;
 	
 	EnumTreeChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;

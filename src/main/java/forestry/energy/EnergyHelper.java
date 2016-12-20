@@ -2,7 +2,6 @@ package forestry.energy;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.tiles.TileEngine;
-import forestry.energy.compat.rf.RFHelper;
 import forestry.energy.compat.tesla.TeslaHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -51,29 +50,33 @@ public class EnergyHelper {
 	 * @return amount sent
 	 */
 	public static int sendEnergy(EnergyManager energyManager, EnumFacing orientation, TileEntity tile, int amount, boolean simulate) {
-		if (tile != null) {
-			int extractable = energyManager.extractEnergy(amount, true);
-			if (extractable > 0) {
-				final int sent;
-				EnumFacing side = orientation.getOpposite();
-				if (tile instanceof TileEngine) { // engine chaining
-					TileEngine receptor = (TileEngine) tile;
-					sent = receptor.getEnergyManager().receiveEnergy(extractable, simulate);
-				} else if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-					IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-					sent = energyStorage.receiveEnergy(extractable, simulate);
-				} else if (TeslaHelper.isEnergyReceiver(tile, side)) {
-					sent = TeslaHelper.sendEnergy(tile, side, extractable, simulate);
-				} else if (RFHelper.isEnergyReceiver(tile, side)) {
-					sent = RFHelper.sendEnergy(tile, side, extractable, simulate);
-				} else {
-					sent = 0;
-				}
+		int extractable = energyManager.extractEnergy(amount, true);
+		if (extractable > 0) {
+			EnumFacing side = orientation.getOpposite();
+			final int  sent = sendEnergyToTile(tile, side, extractable, simulate);
+			energyManager.extractEnergy(sent, simulate);
+			return sent;
+		}
+		return 0;
+	}
 
-				energyManager.extractEnergy(sent, simulate);
-				return sent;
+	private static int sendEnergyToTile(TileEntity tile, EnumFacing side, int extractable, boolean simulate) {
+		if (tile instanceof TileEngine) { // engine chaining
+			TileEngine receptor = (TileEngine) tile;
+			return receptor.getEnergyManager().receiveEnergy(extractable, simulate);
+		}
+
+		if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
+			IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+			if (energyStorage != null) {
+				return energyStorage.receiveEnergy(extractable, simulate);
 			}
 		}
+
+		if (TeslaHelper.isEnergyReceiver(tile, side)) {
+			return TeslaHelper.sendEnergy(tile, side, extractable, simulate);
+		}
+
 		return 0;
 	}
 
@@ -85,24 +88,15 @@ public class EnergyHelper {
 	}
 
 	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
-		if (tile != null) {
-			if (tile instanceof TileEngine) { // engine chaining
-				return true;
-			}
-
-			if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-				IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-				return energyStorage.canReceive();
-			}
-
-			if (TeslaHelper.isEnergyReceiver(tile, side)) {
-				return true;
-			}
-
-			if (RFHelper.isEnergyReceiver(tile, side)) {
-				return true;
-			}
+		if (tile instanceof TileEngine) { // engine chaining
+			return true;
 		}
-		return false;
+
+		if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
+			IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+			return energyStorage != null && energyStorage.canReceive();
+		}
+
+		return TeslaHelper.isEnergyReceiver(tile, side);
 	}
 }

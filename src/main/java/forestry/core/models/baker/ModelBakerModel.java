@@ -10,18 +10,15 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
+import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.vecmath.Matrix4f;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.ImmutableMap;
-
+import forestry.api.core.IModelBakerModel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -34,22 +31,24 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelBakerModel;
+import org.apache.commons.lang3.tuple.Pair;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
-	
+
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
+	@Nullable
 	private TextureAtlasSprite particleSprite;
+	@Nullable
 	private IModelState modelState;
-    private ImmutableMap<TransformType, TRSRTransformation> transforms;
-	
+	@Nullable
+	private ImmutableMap<TransformType, TRSRTransformation> transforms;
+
 	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
 	private final List<Pair<IBlockState, IBakedModel>> models;
-	
+
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
@@ -61,8 +60,8 @@ public class ModelBakerModel implements IModelBakerModel {
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
-		
-		for(EnumFacing face : EnumFacing.VALUES){
+
+		for (EnumFacing face : EnumFacing.VALUES) {
 			faceQuads.put(face, new ArrayList<>());
 		}
 	}
@@ -79,7 +78,7 @@ public class ModelBakerModel implements IModelBakerModel {
 		this.particleSprite = particleSprite;
 		setModelState(modelState);
 	}
-	
+
 	@Override
 	public void setGui3d(boolean gui3d) {
 		this.isGui3d = gui3d;
@@ -94,12 +93,12 @@ public class ModelBakerModel implements IModelBakerModel {
 	public void setAmbientOcclusion(boolean ambientOcclusion) {
 		this.isAmbientOcclusion = ambientOcclusion;
 	}
-	
+
 	@Override
 	public boolean isAmbientOcclusion() {
 		return isAmbientOcclusion;
 	}
-	
+
 	@Override
 	public void setParticleSprite(TextureAtlasSprite particleSprite) {
 		this.particleSprite = particleSprite;
@@ -109,7 +108,7 @@ public class ModelBakerModel implements IModelBakerModel {
 	public TextureAtlasSprite getParticleTexture() {
 		return particleSprite;
 	}
-	
+
 	@Override
 	public boolean isBuiltInRenderer() {
 		return false;
@@ -126,32 +125,32 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 
 	public static float[] getDefaultRotation() {
-		return new float[] { -80, -45, 170 };
+		return new float[]{-80, -45, 170};
 	}
 
 	public static float[] getDefaultTranslation() {
-		return new float[] { 0, 1.5F, -2.75F };
+		return new float[]{0, 1.5F, -2.75F};
 	}
 
 	public static float[] getDefaultScale() {
-		return new float[] { 0.375F, 0.375F, 0.375F };
+		return new float[]{0.375F, 0.375F, 0.375F};
 	}
-	
+
 	@Override
 	public void setRotation(float[] rotation) {
 		this.rotation = rotation;
 	}
-	
+
 	@Override
 	public void setTranslation(float[] translation) {
 		this.translation = translation;
 	}
-	
+
 	@Override
 	public void setScale(float[] scale) {
 		this.scale = scale;
 	}
-	
+
 	@Override
 	public float[] getRotation() {
 		return rotation;
@@ -166,42 +165,35 @@ public class ModelBakerModel implements IModelBakerModel {
 	public float[] getScale() {
 		return scale;
 	}
-	
-	public void setModelState(IModelState modelState) {
+
+	public void setModelState(@Nullable IModelState modelState) {
 		this.modelState = modelState;
 		this.transforms = MapWrapper.getTransforms(modelState);
 	}
-	
-	@Override
-	public IModelState getModelState() {
-		return modelState;
-	}
 
 	public void addModelQuads(Pair<IBlockState, IBakedModel> model) {
-		if(model != null){
-			this.models.add(model);
-		}
+		this.models.add(model);
 	}
-	
+
 	@Override
-	public void addQuad(EnumFacing facing, @Nonnull BakedQuad quad) {
-		if(facing != null){
+	public void addQuad(@Nullable EnumFacing facing, BakedQuad quad) {
+		if (facing != null) {
 			faceQuads.get(facing).add(quad);
-		}else{
+		} else {
 			generalQuads.add(quad);
 		}
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		List<BakedQuad> quads = new ArrayList<>();
 		for (Pair<IBlockState, IBakedModel> model : this.models) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
-			if(modelQuads != null && !modelQuads.isEmpty()){
+			if (modelQuads != null && !modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);
 			}
 		}
-		if(side != null){
+		if (side != null) {
 			quads.addAll(faceQuads.get(side));
 		}
 		quads.addAll(generalQuads);
@@ -212,9 +204,8 @@ public class ModelBakerModel implements IModelBakerModel {
 		return new ModelBakerModel(models, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, modelState, rotation, translation, scale, particleSprite);
 	}
 
-    @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
-    {
-        return MapWrapper.handlePerspective(this, transforms, cameraTransformType);
-    }
+	@Override
+	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
+		return MapWrapper.handlePerspective(this, transforms, cameraTransformType);
+	}
 }

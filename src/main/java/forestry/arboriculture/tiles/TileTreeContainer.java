@@ -15,13 +15,13 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.OwnerHandler;
@@ -73,27 +73,25 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		String speciesUID = "";
 		ITree tree = getTree();
 		if (tree != null) {
 			speciesUID = tree.getIdent();
 		}
-		data.writeUTF(speciesUID);
+		data.writeString(speciesUID);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		String speciesUID = data.readUTF();
+	public void readData(PacketBufferForestry data) throws IOException {
+		String speciesUID = data.readString();
 		ITree tree = getTree(speciesUID);
 		setTree(tree);
 	}
 
 	private static ITree getTree(String speciesUID) {
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-		if (treeTemplate == null) {
-			return null;
-		}
+		Preconditions.checkArgument(treeTemplate != null, "There is no tree template for speciesUID %s", speciesUID);
 		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 	}
 
@@ -102,8 +100,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (worldObj != null && worldObj.isRemote) {
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world != null && world.isRemote) {
+			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 

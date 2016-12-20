@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class EventHandlerMailAlert {
 	@SubscribeEvent
@@ -29,7 +29,7 @@ public class EventHandlerMailAlert {
 			return;
 		}
 
-		if (Minecraft.getMinecraft().theWorld != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
+		if (Minecraft.getMinecraft().world != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render();
 		}
 	}
@@ -39,10 +39,8 @@ public class EventHandlerMailAlert {
 		EntityPlayer player = event.player;
 		if (player != null) {
 			MailAddress address = new MailAddress(player.getGameProfile());
-			POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
-			if (pobox != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
-			}
+			POBox pobox = PostRegistry.getOrCreatePOBox(player.world, address);
+			Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 		}
 	}
 }

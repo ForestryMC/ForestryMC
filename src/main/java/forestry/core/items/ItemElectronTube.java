@@ -27,6 +27,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 
 public class ItemElectronTube extends ItemOverlay {
@@ -57,12 +58,12 @@ public class ItemElectronTube extends ItemOverlay {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < overlays.length; i++) {
 			if (Config.isDebug || !overlays[i].isSecret()) {
 				ItemStack itemStack = new ItemStack(this, 1, i);
 				if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
-					itemList.add(itemStack);
+					subItems.add(itemStack);
 				}
 			}
 		}

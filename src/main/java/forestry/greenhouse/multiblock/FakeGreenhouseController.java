@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 import forestry.api.climate.IClimateControl;
 import forestry.api.climate.IClimateRegion;
@@ -29,7 +28,6 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
@@ -39,13 +37,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	private FakeGreenhouseController() {
 	}
 
-	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return FakeInventoryAdapter.instance();
 	}
 
-	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
@@ -58,12 +54,12 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -78,7 +74,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public BlockPos getCoordinates() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
@@ -125,6 +121,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
+	@Nullable
 	public ButterflyHatch getButterflyHatch() {
 		return null;
 	}

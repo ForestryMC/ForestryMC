@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 import forestry.core.tiles.TileEngine;
 
 public class ProxyEnergy {
+	@Nullable
 	public TileEntitySpecialRenderer<TileEngine> getRenderDefaultEngine(String gfxBase) {
 		return null;
 	}

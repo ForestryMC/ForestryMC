@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,21 +37,23 @@ import forestry.plugins.ForestryPluginUids;
 public class AlleleHelper implements IAlleleHelper {
 
 	private static final String modId = Constants.MOD_ID;
-	public static AlleleHelper instance;
+	@Nullable
+	private static AlleleHelper instance;
 
 	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
+
+	public static AlleleHelper getInstance() {
+		if (instance == null) {
+			instance = new AlleleHelper();
+		}
+		return instance;
+	}
 
 	public void init() {
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Flowering.class, EnumBeeChromosome.FLOWERING);
-		}
-
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-			createAlleles(EnumAllele.Territory.class,
-					EnumBeeChromosome.TERRITORY,
-					EnumTreeChromosome.TERRITORY
-			);
+			createAlleles(EnumAllele.Territory.class, EnumBeeChromosome.TERRITORY);
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
@@ -91,17 +95,8 @@ public class AlleleHelper implements IAlleleHelper {
 			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
 					EnumTreeChromosome.GIRTH,
-					EnumTreeChromosome.CARBONIZATION,
-					EnumTreeChromosome.COMBUSTIBILITY,
 					EnumButterflyChromosome.METABOLISM,
 					EnumButterflyChromosome.FERTILITY
-			);
-			integers.put(i, alleleInteger);
-		}
-		for (int i = 11; i <= 25; i++) {
-			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
-			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
-					EnumTreeChromosome.COMBUSTIBILITY
 			);
 			integers.put(i, alleleInteger);
 		}
@@ -139,18 +134,14 @@ public class AlleleHelper implements IAlleleHelper {
 
 	@Override
 	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele) {
-		if (allele == null) {
-			throw new NullPointerException("Allele must not be null");
-		}
 		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
 			throw new IllegalArgumentException("Allele is the wrong type. Expected: " + chromosomeType + " Got: " + allele);
 		}
 
-		// uncomment this once all addon mods are using the allele registration with IChromosomeType
-		//		Collection<IChromosomeType> validTypes = AlleleManager.alleleRegistry.getChromosomeTypes(allele);
-		//		if (validTypes.size() > 0 && !validTypes.contains(chromosomeType)) {
-		//			throw new IllegalArgumentException("Allele can't applied to this Chromosome type. Expected: " + validTypes + " Got: " + chromosomeType);
-		//		}
+		Collection<IChromosomeType> validTypes = AlleleManager.alleleRegistry.getChromosomeTypes(allele);
+		if (validTypes.size() > 0 && !validTypes.contains(chromosomeType)) {
+			throw new IllegalArgumentException("Allele can't applied to this Chromosome type. Expected: " + validTypes + " Got: " + chromosomeType);
+		}
 
 		alleles[chromosomeType.ordinal()] = allele;
 	}

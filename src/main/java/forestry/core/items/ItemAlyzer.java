@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.core.Tabs;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
@@ -23,19 +21,19 @@ public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
 		setCreativeTab(Tabs.tabApiculture);
 	}
-	
+
 	@Override
 	public void openGui(EntityPlayer entityplayer) {
 		super.openGui(entityplayer);
 	}
 
 	@Override
-	public Object getGui(@Nonnull EntityPlayer player, ItemStack heldItem, int data) {
+	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(@Nonnull EntityPlayer player, ItemStack heldItem, int data) {
+	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
 	}
 }

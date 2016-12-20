@@ -5,71 +5,64 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IGreenhouseController;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class GreenhouseEvents extends Event {
-	
+
 	@Nullable
 	public final IGreenhouseController controller;
-	
+
 	public GreenhouseEvents(@Nullable IGreenhouseController state) {
 		this.controller = state;
 	}
-	
-	public static class CamouflageChangeEvent extends GreenhouseEvents{
+
+	public static class CamouflageChangeEvent extends GreenhouseEvents {
 
 		@Nullable
-		public ICamouflagedTile camouflagedBlock;
-		@Nonnull
-		public ICamouflageHandler camouflageHandler;
-		@Nonnull
+		public final ICamouflagedTile camouflagedBlock;
+
+		public final ICamouflageHandler camouflageHandler;
+
 		public final String camouflageType;
-		
-		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull String camouflageType) {
+
+		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, ICamouflageHandler camouflageHandler, String camouflageType) {
 			super(controller);
-			
+
 			this.camouflagedBlock = camouflagedBlock;
 			this.camouflageHandler = camouflageHandler;
 			this.camouflageType = camouflageType;
 		}
 	}
-	
-	public static class InternalBlockEvent extends GreenhouseEvents{
 
-		@Nonnull
-		public IInternalBlock internalBlock;
-		
-		public InternalBlockEvent(IGreenhouseController controller, @Nonnull IInternalBlock internalBlock) {
+	public static class InternalBlockEvent extends GreenhouseEvents {
+		public final IInternalBlock internalBlock;
+
+		public InternalBlockEvent(IGreenhouseController controller, IInternalBlock internalBlock) {
 			super(controller);
-			
-			this.internalBlock = internalBlock;
-		}	
-	}
-	
-	public static class CreateInternalBlockEvent extends InternalBlockEvent{
 
+			this.internalBlock = internalBlock;
+		}
+	}
+
+	public static class CreateInternalBlockEvent extends InternalBlockEvent {
 		public CreateInternalBlockEvent(IGreenhouseController controller, IInternalBlock internalBlock) {
 			super(controller, internalBlock);
 		}
 	}
-	
-	public static class CheckInternalBlockFaceEvent extends InternalBlockEvent{
 
-		@Nonnull
+	public static class CheckInternalBlockFaceEvent extends InternalBlockEvent {
 		public final IInternalBlockFace face;
-		
-		public CheckInternalBlockFaceEvent(IGreenhouseController controller, IInternalBlock internalBlock, @Nonnull IInternalBlockFace face) {
+
+		public CheckInternalBlockFaceEvent(IGreenhouseController controller, IInternalBlock internalBlock, IInternalBlockFace face) {
 			super(controller, internalBlock);
-			
+
 			this.face = face;
 		}
 	}
-	
+
 }

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.PluginCore;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,12 +26,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import forestry.core.PluginCore;
-import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
 	private final ItemStack remnants;
@@ -40,7 +39,7 @@ public class ItemForestryTool extends ItemForestry {
 		efficiencyOnProperMaterial = 6F;
 		setMaxDamage(200);
 		this.remnants = remnants;
-		if (remnants != null) {
+		if (!remnants.isEmpty()) {
 			MinecraftForge.EVENT_BUS.register(this);
 		}
 	}
@@ -48,12 +47,12 @@ public class ItemForestryTool extends ItemForestry {
 	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
 		this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
 	}
-	
+
 	@Override
 	public boolean canHarvestBlock(IBlockState block) {
-		if(this == PluginCore.items.bronzePickaxe){
-	        Material material = block.getMaterial();
-	        return material == Material.ROCK ? true : (material == Material.IRON ? true : material == Material.ANVIL);
+		if (this == PluginCore.items.bronzePickaxe) {
+			Material material = block.getMaterial();
+			return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
 		}
 		return super.canHarvestBlock(block);
 	}
@@ -65,50 +64,51 @@ public class ItemForestryTool extends ItemForestry {
 				return efficiencyOnProperMaterial;
 			}
 		}
-		if(this == PluginCore.items.bronzePickaxe){
-	        Material material = state.getMaterial();
-	        return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getStrVsBlock(itemstack, state) : this.efficiencyOnProperMaterial;
+		if (this == PluginCore.items.bronzePickaxe) {
+			Material material = state.getMaterial();
+			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getStrVsBlock(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
 		return super.getStrVsBlock(itemstack, state);
 	}
-	
+
 	@Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-    	if(this == PluginCore.items.bronzeShovel){
-	        if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack)){
-	            return EnumActionResult.FAIL;
-	        }else{
-	            IBlockState iblockstate = worldIn.getBlockState(pos);
-	            Block block = iblockstate.getBlock();
-	
-	            if (facing != EnumFacing.DOWN && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS){
-	                IBlockState iblockstate1 = Blocks.GRASS_PATH.getDefaultState();
-	                worldIn.playSound(playerIn, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-	
-	                if (!worldIn.isRemote){
-	                    worldIn.setBlockState(pos, iblockstate1, 11);
-	                    stack.damageItem(1, playerIn);
-	                }
-	
-	                return EnumActionResult.SUCCESS;
-	            }else{
-	                return EnumActionResult.PASS;
-	            }
-	        }
-    	}
-    	return EnumActionResult.PASS;
-    }
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (this == PluginCore.items.bronzeShovel) {
+			ItemStack heldItem = player.getHeldItem(hand);
+			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
+				return EnumActionResult.FAIL;
+			} else {
+				IBlockState iblockstate = worldIn.getBlockState(pos);
+				Block block = iblockstate.getBlock();
+
+				if (facing != EnumFacing.DOWN && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
+					IBlockState iblockstate1 = Blocks.GRASS_PATH.getDefaultState();
+					worldIn.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+					if (!worldIn.isRemote) {
+						worldIn.setBlockState(pos, iblockstate1, 11);
+						heldItem.damageItem(1, player);
+					}
+
+					return EnumActionResult.SUCCESS;
+				} else {
+					return EnumActionResult.PASS;
+				}
+			}
+		}
+		return EnumActionResult.PASS;
+	}
 
 	@SubscribeEvent
 	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
-		if (event.getOriginal() == null || event.getOriginal().getItem() != this) {
+		if (event.getOriginal().isEmpty() || event.getOriginal().getItem() != this) {
 			return;
 		}
 
 		EntityPlayer player = event.getEntityPlayer();
-		World world = player.worldObj;
+		World world = player.world;
 
-		if (!world.isRemote && remnants != null) {
+		if (!world.isRemote && !remnants.isEmpty()) {
 			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.posX, player.posY, player.posZ);
 		}
 	}

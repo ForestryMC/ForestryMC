@@ -13,12 +13,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class PileParticleCallback extends ParticleHelper.DefaultCallback<BlockPile>{
+public class PileParticleCallback extends ParticleHelper.DefaultCallback<BlockPile> {
 
 	public PileParticleCallback(BlockPile block) {
 		super(block);
 	}
-	
+
 	@Override
 	protected void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
 		EnumPileType type = block.getPileType();
@@ -32,7 +32,7 @@ public class PileParticleCallback extends ParticleHelper.DefaultCallback<BlockPi
 				return;
 			}
 			texture = pile.getTreeSpecies().getWoodProvider().getSprite(false);
-		}else{
+		} else {
 			texture = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/ash"));
 		}
 		fx.setParticleTexture(texture);

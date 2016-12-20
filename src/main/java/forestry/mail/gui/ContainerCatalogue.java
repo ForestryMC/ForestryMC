@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -40,6 +41,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	private final EntityPlayer player;
 	private final List<ITradeStation> stations = new ArrayList<>();
 
+	@Nullable
 	private ITradeStationInfo currentTrade = null;
 
 	private int stationIndex = 0;
@@ -67,7 +69,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	public ContainerCatalogue(EntityPlayer player) {
 		this.player = player;
 
-		if (!player.worldObj.isRemote) {
+		if (!player.world.isRemote) {
 			rebuildStationsList();
 		}
 	}
@@ -87,14 +89,14 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	private void rebuildStationsList() {
 		stations.clear();
 
-		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.worldObj);
-		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.worldObj);
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.world);
+		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.world);
 
 		for (ITradeStation station : tradeStations.values()) {
 			ITradeStationInfo info = station.getTradeInfo();
 
 			// Filter out any trade stations which do not actually offer anything.
-			if (info.getTradegood() != null && FILTERS.get(currentFilter).contains(info.getState())) {
+			if (FILTERS.get(currentFilter).contains(info.getState())) {
 				stations.add(station);
 			}
 		}
@@ -104,7 +106,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public void nextPage() {
-		if (player.worldObj.isRemote) {
+		if (player.world.isRemote) {
 			sendSelection(true);
 			return;
 		}
@@ -117,7 +119,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public void previousPage() {
-		if (player.worldObj.isRemote) {
+		if (player.world.isRemote) {
 			sendSelection(false);
 			return;
 		}
@@ -130,7 +132,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public void cycleFilter() {
-		if (player.worldObj.isRemote) {
+		if (player.world.isRemote) {
 			Proxies.net.sendToServer(new PacketGuiSelectRequest(2, 0));
 			return;
 		}
@@ -148,7 +150,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	/* Managing Trade info */
 	private void updateTradeInfo() {
 		// Updating is done by the server.
-		if (player.worldObj.isRemote) {
+		if (player.world.isRemote) {
 			return;
 		}
 
@@ -162,15 +164,16 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
-		setTradeInfo(packet.tradeInfo);
+	public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
+		setTradeInfo(tradeInfo);
 	}
 
+	@Nullable
 	public ITradeStationInfo getTradeInfo() {
 		return currentTrade;
 	}
 
-	private void setTradeInfo(ITradeStationInfo info) {
+	private void setTradeInfo(@Nullable ITradeStationInfo info) {
 		currentTrade = info;
 	}
 
@@ -211,9 +214,9 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 
-		switch (packet.getPrimaryIndex()) {
+		switch (primary) {
 			case 0:
 				nextPage();
 				break;

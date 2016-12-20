@@ -12,19 +12,7 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -38,6 +26,16 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 
@@ -63,7 +61,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-
 		if (itemstack.getTagCompound() == null) {
 			return super.getItemStackDisplayName(itemstack);
 		}
@@ -81,7 +78,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			return;
 		}
 
@@ -98,11 +95,11 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		addCreativeItems(itemList, true);
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		addCreativeItems(subItems, true);
 	}
 
-	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
+	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
 		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
@@ -110,15 +107,15 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			}
 
 			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type);
-			if (beeStack != null) {
-				itemList.add(beeStack);
+			if (!beeStack.isEmpty()) {
+				subItems.add(beeStack);
 			}
 		}
 	}
 
 	@Override
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			if (tintIndex == 1) {
 				return 0xffdc16;
 			} else {
@@ -127,26 +124,10 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		IAlleleBeeSpecies species = BeeGenome.getSpecies(itemstack);
-		if (species instanceof IAlleleBeeSpecies) {
-			return species.getSpriteColour(tintIndex);
-		} else {
-			return 0xffffff;
-		}
+		return species.getSpriteColour(tintIndex);
 	}
 
 	/* MODELS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
-
-		if (species instanceof IAlleleBeeSpecies) {
-			return species.getSpriteColour(renderPass);
-		} else {
-			return 0xffffff;
-		}
-
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
@@ -159,16 +140,11 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	private class BeeMeshDefinition implements ItemMeshDefinition {
-
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
-			if (species == null) {
-				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
-			}
 			return species.getModel(type);
 		}
-
 	}
 
 	public final EnumBeeType getType() {

@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface IGuiHandlerItem extends IGuiHandlerForestry {
+	@Nullable
 	Object getGui(EntityPlayer player, ItemStack heldItem, int data);
 
+	@Nullable
 	Object getContainer(EntityPlayer player, ItemStack heldItem, int data);
 }

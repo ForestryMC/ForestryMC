@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -40,9 +39,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		if (!TreeManager.treeRoot.isMember(itemStack)) {
-			return null;
-		}
+		Preconditions.checkArgument(TreeManager.treeRoot.isMember(itemStack), "ItemStack must be a tree");
 
 		IAlleleSpecies species = getSpeciesDirectly(TreeManager.treeRoot, itemStack);
 		if (species instanceof IAlleleTreeSpecies) {
@@ -53,18 +50,16 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
-	@Nonnull
 	public IAlleleTreeSpecies getPrimary() {
 		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
 	@Override
-	@Nonnull
 	public IAlleleTreeSpecies getSecondary() {
 		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
-	@Nonnull
+
 	@Override
 	public IFruitProvider getFruitProvider() {
 		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS)).getProvider();
@@ -99,16 +94,14 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	public int getGirth() {
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
 	}
-	
+
 	@Override
 	public IAlleleLeafEffect getEffect() {
 		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
 	}
 
 	@Override
-	@Nonnull
 	public ISpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
 	}
-
 }

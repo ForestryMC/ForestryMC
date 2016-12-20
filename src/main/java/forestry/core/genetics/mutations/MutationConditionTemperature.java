@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -20,6 +17,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.Translator;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class MutationConditionTemperature implements IMutationCondition {
 
@@ -33,7 +32,6 @@ public class MutationConditionTemperature implements IMutationCondition {
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		Biome biome = world.getBiomeProvider().getBiome(pos);
 		EnumTemperature biomeTemperature = climate.getTemperature();
 
 		if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {

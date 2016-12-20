@@ -30,7 +30,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -88,7 +88,7 @@ public class PostalCarrier implements IPostalCarrier {
 		} else {
 			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 

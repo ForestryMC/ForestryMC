@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -21,15 +23,16 @@ import net.minecraft.util.math.Vec3d;
 public class AIAvoidPlayers extends EntityAIBase {
 
 	private final EntityCreature mob;
+	private final PathNavigate pathNavigator;
 
 	private final float farSpeed;
 	private final float nearSpeed;
 	private final float minDistance;
 
+	@Nullable
 	private Path path;
 
-	private final PathNavigate pathNavigator;
-
+	@Nullable
 	private EntityPlayer player;
 
 	public AIAvoidPlayers(EntityCreature mob, float minDistance, float farSpeed, float nearSpeed) {
@@ -44,7 +47,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 
-		player = mob.worldObj.getClosestPlayerToEntity(mob, minDistance);
+		player = mob.world.getClosestPlayerToEntity(mob, minDistance);
 
 		if (player == null) {
 			return false;
@@ -86,7 +89,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if (mob.getDistanceSqToEntity(player) < 49.0D) {
+		if (player != null && mob.getDistanceSqToEntity(player) < 49.0D) {
 			mob.getNavigator().setSpeed(nearSpeed);
 		} else {
 			mob.getNavigator().setSpeed(farSpeed);

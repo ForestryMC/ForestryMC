@@ -27,6 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -74,8 +75,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return null;
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		return NonNullList.create();
 	}
 
 	private final Map<BlockPos, Integer> lastExtentsCultivation = new HashMap<>();
@@ -146,10 +147,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	private static boolean isJungleTreeTrunk(IBlockState blockState) {
 		Block block = blockState.getBlock();
-		if (block == Blocks.LOG && blockState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
-			return true;
-		}
-		return false;
+		return block == Blocks.LOG && blockState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {

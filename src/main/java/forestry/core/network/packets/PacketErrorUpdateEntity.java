@@ -12,46 +12,45 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
-
-public class PacketErrorUpdateEntity extends PacketEntityUpdate implements IForestryPacketClient {
-	private IErrorLogic errorLogic;
-
-	public PacketErrorUpdateEntity() {
-	}
+public class PacketErrorUpdateEntity extends ForestryPacket implements IForestryPacketClient {
+	private final Entity entity;
+	private final IErrorLogic errorLogic;
 
 	public PacketErrorUpdateEntity(Entity entity, IErrorLogicSource errorLogicSource) {
-		super(entity);
+		this.entity = entity;
 		this.errorLogic = errorLogicSource.getErrorLogic();
-	}
-
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		errorLogic.writeData(data);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Entity entity = getTarget(Proxies.common.getRenderWorld());
-		if (entity instanceof IErrorLogicSource) {
-			IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
-			errorLogic = errorSourceTile.getErrorLogic();
-			errorLogic.readData(data);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.ERROR_UPDATE_ENTITY;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeEntityById(entity);
+		errorLogic.writeData(data);
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			Entity entity = data.readEntityById(player.world);
+			if (entity instanceof IErrorLogicSource) {
+				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
+				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
+				errorLogic.readData(data);
+			}
+		}
 	}
 }

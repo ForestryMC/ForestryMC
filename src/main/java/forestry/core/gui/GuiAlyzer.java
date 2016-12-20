@@ -10,18 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
-
-import forestry.api.genetics.IGenome;
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -33,6 +25,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
@@ -45,9 +38,15 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.StringUtils;
 
 public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
-	
+
 	public static final int COLUMN_0 = 12;
 	public static final int COLUMN_1 = 90;
 	public static final int COLUMN_2 = 155;
@@ -96,7 +95,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 				getColorCoding(inactive.isDominant()));
 	}
 
-	public final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, String customPrimaryName, String customSecondaryName) {
+	public final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, @Nullable String customPrimaryName, @Nullable String customSecondaryName) {
 		IAlleleSpecies primary = individual.getGenome().getPrimary();
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 
@@ -117,6 +116,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		textLayout.newLine();
 	}
 
+	@Nullable
 	public static String checkCustomName(String key) {
 		if (Translator.canTranslateToLocal(key)) {
 			return Translator.translateToLocal(key);
@@ -124,7 +124,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
@@ -138,6 +138,9 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		ItemStack stackInSlot = inventory.getStackInSlot(specimenSlot);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stackInSlot);
+		if (speciesRoot == null) {
+			return;
+		}
 
 		switch (specimenSlot) {
 			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
@@ -171,7 +174,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	private int getSpecimenSlot() {
 		for (int k = ItemInventoryAlyzer.SLOT_SPECIMEN; k <= ItemInventoryAlyzer.SLOT_ANALYZE_5; k++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(k);
-			if (stackInSlot == null) {
+			if (stackInSlot.isEmpty()) {
 				continue;
 			}
 
@@ -181,7 +184,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			}
 
 			IIndividual individual = speciesRoot.getMember(stackInSlot);
-			if (individual == null || !individual.isAnalyzed()) {
+			if (!individual.isAnalyzed()) {
 				continue;
 			}
 
@@ -229,7 +232,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		IClassification classification = individual.getGenome().getPrimary().getBranch();
 		while (classification != null) {
 
-			if (classification.getScientific() != null && !classification.getScientific().isEmpty()) {
+			if (!classification.getScientific().isEmpty()) {
 				hierarchy.push(classification);
 			}
 			classification = classification.getParent();
@@ -301,7 +304,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		int x = 0;
 
 		EntityPlayer player = Proxies.common.getPlayer();
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		for (IMutation mutation : speciesRoot.getCombinations(species)) {
 			if (breedingTracker.isDiscovered(mutation)) {
@@ -328,7 +331,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	public void drawMutationInfo(IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
 
 		Map<String, ItemStack> iconStacks = combination.getRoot().getAlyzerPlugin().getIconStacks();
-		
+
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 

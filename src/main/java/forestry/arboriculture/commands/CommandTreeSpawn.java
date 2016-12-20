@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -58,13 +60,13 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (args.length == 1) {
 			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
 			tabCompletion.add("help");
 			return tabCompletion;
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	private static String[] getSpecies() {

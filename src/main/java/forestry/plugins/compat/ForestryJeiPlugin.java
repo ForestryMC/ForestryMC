@@ -1,8 +1,8 @@
 package forestry.plugins.compat;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.items.ItemRegistryCore;
@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 @JEIPlugin
 public class ForestryJeiPlugin extends BlankModPlugin {
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
+	public void register(IModRegistry registry) {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IItemBlacklist itemBlacklist = jeiHelpers.getItemBlacklist();
 		List<ItemStack> hiddenItems = PluginManager.getHiddenItems();
@@ -27,6 +27,7 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 		}
 
 		ItemRegistryCore items = PluginCore.items;
+		Preconditions.checkState(items != null);
 
 		JeiUtil.addDescription(registry,
 				items.solderingIron,
@@ -39,6 +40,8 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 		);
 
 		BlockRegistryCore blocks = PluginCore.blocks;
+		Preconditions.checkState(blocks != null);
+
 		JeiUtil.addDescription(registry,
 				blocks.analyzer,
 				blocks.bogEarth,

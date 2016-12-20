@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
+import forestry.core.items.ItemRegistryCore;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +40,7 @@ import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
-
+	@Nullable
 	public static ItemRegistryFluids items;
 
 	private static void createFluid(Fluids fluidDefinition) {
@@ -56,6 +60,7 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	private static void createBlock(Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
+		Preconditions.checkState(fluid != null);
 		Block fluidBlock = fluid.getBlock();
 
 		if (Config.isBlockEnabled(forestryFluid.getTag())) {
@@ -101,10 +106,14 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
+		Preconditions.checkState(items != null);
+
 		if (RecipeManagers.squeezerManager != null) {
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), PluginCore.items.ingotTin.copy(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), PluginCore.items.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), PluginCore.items.refractoryWax.getItemStack(), 0.10f);
+			ItemRegistryCore itemRegistryCore = PluginCore.items;
+			Preconditions.checkState(itemRegistryCore != null);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);

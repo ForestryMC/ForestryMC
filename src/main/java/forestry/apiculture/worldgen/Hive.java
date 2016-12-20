@@ -31,9 +31,6 @@ public final class Hive {
 	private final List<IHiveDrop> drops = new ArrayList<>();
 
 	public Hive(IHiveDescription hiveDescription) {
-		if (hiveDescription == null) {
-			throw new IllegalArgumentException("Tried to create hive with null hive description");
-		}
 		this.hiveDescription = hiveDescription;
 	}
 

@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public class DefaultClimateProvider implements IClimateProvider {
-    private World world;
-    private BlockPos pos;
+    private final World world;
+    private final BlockPos pos;
 
     public DefaultClimateProvider(World world, BlockPos pos) {
         this.world = world;

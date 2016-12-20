@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.models;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
@@ -107,7 +109,7 @@ public enum EnumFarmBlockTexture {
 		return base;
 	}
 
-	public static EnumFarmBlockTexture getFromCompound(NBTTagCompound compound) {
+	public static EnumFarmBlockTexture getFromCompound(@Nullable NBTTagCompound compound) {
 		if (compound != null) {
 			int farmBlockOrdinal = compound.getInteger("FarmBlock");
 			if (farmBlockOrdinal < EnumFarmBlockTexture.values().length) {

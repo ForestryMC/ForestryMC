@@ -61,9 +61,6 @@ public class ModelAnalyzer extends ModelBase {
 		GlStateManager.translate(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
 
-		if (orientation == null) {
-			orientation = EnumFacing.WEST;
-		}
 		switch (orientation) {
 			case EAST:
 				angle[1] = (float) Math.PI / 2;

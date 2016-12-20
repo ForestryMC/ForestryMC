@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,15 +45,16 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	private boolean isCounted = true;
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
+	@Nullable
 	private Integer complexityOverride = null;
 
-	protected AlleleSpecies(@Nonnull String uid,
-			@Nonnull String unlocalizedName,
-			@Nonnull String authority,
-			@Nonnull String unlocalizedDescription,
-			boolean isDominant,
-			@Nonnull IClassification branch,
-			@Nonnull String binomial) {
+	protected AlleleSpecies(String uid,
+							String unlocalizedName,
+							String authority,
+							String unlocalizedDescription,
+							boolean isDominant,
+							IClassification branch,
+							String binomial) {
 		super(uid, unlocalizedName, isDominant);
 
 		this.branch = branch;
@@ -69,7 +70,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return 0f;
 		}
 

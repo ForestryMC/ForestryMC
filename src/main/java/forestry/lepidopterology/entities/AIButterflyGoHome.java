@@ -1,6 +1,5 @@
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class AIButterflyGoHome extends AIButterflyMovement {
@@ -17,7 +16,7 @@ public class AIButterflyGoHome extends AIButterflyMovement {
 		}
 
 		flightTarget = new Vec3d(entity.getHomePosition());
-		if (flightTarget == null || flightTarget.equals(BlockPos.ORIGIN)) {
+		if (flightTarget.equals(Vec3d.ZERO)) {
 			if (entity.getState().doesMovement) {
 				entity.setState(EnumButterflyState.HOVER);
 			}
@@ -28,5 +27,5 @@ public class AIButterflyGoHome extends AIButterflyMovement {
 		entity.setState(EnumButterflyState.FLYING);
 		return true;
 	}
-	
+
 }

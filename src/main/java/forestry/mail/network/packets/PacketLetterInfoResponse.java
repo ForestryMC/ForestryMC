@@ -10,43 +10,46 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.mail.TradeStationInfo;
 import forestry.mail.gui.ILetterInfoReceiver;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
+// TODO: split this into two different packets
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
+	public final EnumAddressee type;
+	public final ITradeStationInfo tradeInfo;
+	@Nullable
+	public final IMailAddress address;
 
-	public EnumAddressee type;
-	public ITradeStationInfo tradeInfo;
-	public IMailAddress address;
-
-	public PacketLetterInfoResponse() {
-	}
-
-	public PacketLetterInfoResponse(EnumAddressee type, ITradeStationInfo info, IMailAddress address) {
+	public PacketLetterInfoResponse(EnumAddressee type, ITradeStationInfo info, @Nullable IMailAddress address) {
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
+			this.address = null;
 		} else if (type == EnumAddressee.PLAYER) {
+			this.tradeInfo = info;
 			this.address = address;
+		} else {
+			throw new IllegalArgumentException("Unknown addressee type: " + type);
 		}
 	}
 
@@ -56,91 +59,55 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-
-		if (type == null) {
-			data.writeShort(-1);
-			return;
-		}
-		data.writeShort(0);
-
-		data.writeUTF(type.toString());
+	public void writeData(PacketBufferForestry data) {
+		data.writeEnum(type, EnumAddressee.values());
 
 		if (type == EnumAddressee.PLAYER) {
-
-			if (address == null) {
-				data.writeShort(-1);
-				return;
-			}
-			data.writeShort(0);
-
+			Preconditions.checkNotNull(address);
 			GameProfile profile = address.getPlayerProfile();
 
 			data.writeLong(profile.getId().getMostSignificantBits());
 			data.writeLong(profile.getId().getLeastSignificantBits());
-			data.writeUTF(profile.getName());
+			data.writeString(profile.getName());
 
 		} else if (type == EnumAddressee.TRADER) {
-
-			if (tradeInfo == null) {
-				data.writeShort(-1);
-				return;
-			}
-
-			data.writeShort(0);
-
-			data.writeUTF(tradeInfo.getAddress().getName());
+			data.writeString(tradeInfo.getAddress().getName());
 
 			data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
 			data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
-			data.writeUTF(tradeInfo.getOwner().getName());
+			data.writeString(tradeInfo.getOwner().getName());
 
 			data.writeItemStack(tradeInfo.getTradegood());
 			data.writeItemStacks(tradeInfo.getRequired());
 
-			data.writeShort(tradeInfo.getState().ordinal());
+			data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
 		}
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			Container container = player.openContainer;
+			if (container instanceof ILetterInfoReceiver) {
+				EnumAddressee type = data.readEnum(EnumAddressee.values());
+				ITradeStationInfo tradeInfo = null;
+				IMailAddress address = null;
 
-		if (data.readShort() < 0) {
-			return;
-		}
+				if (type == EnumAddressee.PLAYER) {
+					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+					address = PostManager.postRegistry.getMailAddress(profile);
+				} else if (type == EnumAddressee.TRADER) {
+					address = PostManager.postRegistry.getMailAddress(data.readString());
+					GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 
-		type = EnumAddressee.fromString(data.readUTF());
-		tradeInfo = null;
-		address = null;
+					ItemStack tradegood = data.readItemStack();
+					NonNullList<ItemStack> required = data.readItemStacks();
 
-		if (type == EnumAddressee.PLAYER) {
-			if (data.readShort() < 0) {
-				return;
+					EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());
+					tradeInfo = new TradeStationInfo(address, owner, tradegood, required, state);
+				}
+				((ILetterInfoReceiver) container).handleLetterInfoUpdate(type, address, tradeInfo);
 			}
-			GameProfile player = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
-			this.address = PostManager.postRegistry.getMailAddress(player);
-
-		} else if (type == EnumAddressee.TRADER) {
-			if (data.readShort() < 0) {
-				return;
-			}
-			IMailAddress address = PostManager.postRegistry.getMailAddress(data.readUTF());
-			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
-			ItemStack tradegood;
-			ItemStack[] required;
-
-			tradegood = data.readItemStack();
-			required = data.readItemStacks();
-
-			this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumTradeStationState.values()[data.readShort()]);
-		}
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Container container = player.openContainer;
-		if (container instanceof ILetterInfoReceiver) {
-			((ILetterInfoReceiver) container).handleLetterInfoUpdate(this);
 		}
 	}
 }

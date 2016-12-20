@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,6 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -43,8 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
@@ -90,15 +93,14 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;
 			}
 
 			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(item, 1, i);
+				ItemStack stack = new ItemStack(itemIn, 1, i);
 				NBTTagCompound compound = new NBTTagCompound();
 				block.saveToCompound(compound);
 				stack.setTagCompound(compound);
@@ -120,12 +122,14 @@ public class BlockFarm extends BlockStructure {
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
 		
-		if (!stack.hasTagCompound()) {
+		if (stack.getTagCompound() == null) {
 			return;
 		}
 
-		TileFarm tile = (TileFarm) world.getTileEntity(pos);
-		tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
+		TileFarm tile = TileUtil.getTile(world, pos, TileFarm.class);
+		if (tile != null) {
+			tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
+		}
 	}
 
 	@Override
@@ -191,7 +195,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
 		return state.getValue(META) == EnumFarmBlockType.CONTROL;
 	}
 

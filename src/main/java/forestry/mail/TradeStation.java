@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.ArrayList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -143,7 +142,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	@Override
 	public TradeStationInfo getTradeInfo() {
-		ItemStack[] condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
+		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 		// Set current state
 		EnumTradeStationState state = EnumTradeStationState.OK;
@@ -172,7 +171,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		
 		boolean sendOwnerNotice = doLodge && owner != null;
-		
+
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 
 		if (!isVirtual() && !hasPaper(sendOwnerNotice ? 2 : 1)) {
@@ -303,7 +302,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* TRADE LOGIC */
 	private int countFillableOrders(int max, ItemStack tradegood) {
 
-		if (tradegood == null) {
+		if (tradegood.isEmpty()) {
 			return 0;
 		}
 
@@ -312,7 +311,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood)) {
-				orderCount += stack.stackSize / (float) tradegood.stackSize;
+				orderCount += stack.getCount() / (float) tradegood.getCount();
 				if (orderCount >= max) {
 					return max;
 				}
@@ -324,12 +323,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	public boolean canReceivePayment() {
 		InventoryAdapter test = inventory.copy();
-		ItemStack[] payment = InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
+		NonNullList<ItemStack> payment = InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
 
 		return InventoryUtil.tryAddStacksCopy(test, payment, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, true);
 	}
 
-	private int countStorablePayment(int max, ItemStack[] exchange) {
+	private int countStorablePayment(int max, NonNullList<ItemStack> exchange) {
 		
 		InventoryAdapter test = inventory.copy();
 		int count = 0;
@@ -348,26 +347,20 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	private void removeTradegood(int filled) {
 
 		for (int j = 0; j < filled; j++) {
-			int toRemove = inventory.getStackInSlot(SLOT_TRADEGOOD).stackSize;
+			int toRemove = inventory.getStackInSlot(SLOT_TRADEGOOD).getCount();
 			for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++) {
 				ItemStack buffer = inventory.getStackInSlot(i);
-				if (buffer == null) {
-					continue;
-				}
 
-				if (!buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD))) {
-					continue;
-				}
+				if (!buffer.isEmpty() &&
+						buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
+						ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
 
-				if (!ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
-					continue;
-				}
+					ItemStack decrease = inventory.decrStackSize(i, toRemove);
+					toRemove -= decrease.getCount();
 
-				ItemStack decrease = inventory.decrStackSize(i, toRemove);
-				toRemove -= decrease.stackSize;
-
-				if (toRemove <= 0) {
-					break;
+					if (toRemove <= 0) {
+						break;
+					}
 				}
 			}
 		}
@@ -380,7 +373,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
 			if (stack != null) {
-				amountFound += stack.stackSize;
+				amountFound += stack.getCount();
 			}
 
 			if (amountFound >= amountRequired) {
@@ -395,7 +388,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	private void removePaper() {
 		for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack != null && stack.getItem() == Items.PAPER && stack.stackSize > 0) {
+			if (stack.getItem() == Items.PAPER) {
 				inventory.decrStackSize(i, 1);
 				break;
 			}
@@ -414,7 +407,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				continue;
 			}
 
-			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.stackSize;
+			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.getCount();
 
 			if (posted >= postage) {
 				return true;
@@ -480,7 +473,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			}
 
 			if (((IStamps) stamp.getItem()).getPostage(stamp) == postage) {
-				count += stamp.stackSize;
+				count += stamp.getCount();
 			}
 
 		}
@@ -501,7 +494,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				}
 
 				ItemStack stamp = inventory.getStackInSlot(j);
-				if (stamp == null) {
+				if (stamp.isEmpty()) {
 					continue;
 				}
 
@@ -511,43 +504,44 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 				if (((IStamps) stamp.getItem()).getPostage(stamp) == EnumPostage.values()[i]) {
 					ItemStack decrease = inventory.decrStackSize(j, stampCount[i]);
-					stampCount[i] -= decrease.stackSize;
+					stampCount[i] -= decrease.getCount();
 				}
 			}
 		}
 	}
 
-	private ItemStack[] getSurplusAttachments(int filled, ItemStack[] attachments) {
-		ArrayList<ItemStack> surplus = new ArrayList<>();
+	private NonNullList<ItemStack> getSurplusAttachments(int filled, NonNullList<ItemStack> attachments) {
+		NonNullList<ItemStack> surplus = NonNullList.create();
 
 		// Get a copy of the attachments to play with
-		ItemStack[] pool = new ItemStack[attachments.length];
-		for (int i = 0; i < attachments.length; i++) {
-			if (attachments[i] != null) {
-				pool[i] = attachments[i].copy();
+		NonNullList<ItemStack> pool = NonNullList.withSize(attachments.size(), ItemStack.EMPTY);
+		for (int i = 0; i < attachments.size(); i++) {
+			ItemStack attachment = attachments.get(i);
+			if (!attachment.isEmpty()) {
+				pool.set(i, attachment.copy());
 			}
 		}
 
 		// Remove stuff until we are only left with the remnants
 		for (int i = 0; i < filled; i++) {
-			ItemStack[] required = InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
-			ItemStack[] condensedRequired = ItemStackUtil.condenseStacks(required);
+			NonNullList<ItemStack> required = InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
+			NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(required);
 			for (ItemStack req : condensedRequired) {
-				for (int j = 0; j < pool.length; j++) {
-					ItemStack pol = pool[j];
-					if (pol == null) {
+				for (int j = 0; j < pool.size(); j++) {
+					ItemStack pol = pool.get(j);
+					if (pol.isEmpty()) {
 						continue;
 					}
 					if (!pol.isItemEqual(req)) {
 						continue;
 					}
 
-					if (req.stackSize >= pol.stackSize) {
-						req.stackSize -= pol.stackSize;
-						pool[j] = null;
+					if (req.getCount() >= pol.getCount()) {
+						req.shrink(pol.getCount());
+						pool.set(j, ItemStack.EMPTY);
 					} else {
-						pol.stackSize -= req.stackSize;
-						req.stackSize = 0;
+						pol.shrink(req.getCount());
+						req.setCount(0);
 					}
 				}
 			}
@@ -559,10 +553,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			}
 		}
 
-		return surplus.toArray(new ItemStack[surplus.size()]);
+		return surplus;
 	}
 
 	/* IINVENTORY */
+
+	@Override
+	public boolean isEmpty() {
+		return inventory.isEmpty();
+	}
+
 	@Override
 	public void markDirty() {
 		super.markDirty();
@@ -606,7 +606,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 

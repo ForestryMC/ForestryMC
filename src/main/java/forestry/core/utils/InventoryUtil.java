@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,8 +31,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.circuits.ISocketable;
-import forestry.core.inventory.filters.StandardStackFilters;
-import forestry.core.inventory.manipulators.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.StandardStackFilters;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.plugins.ForestryPluginUids;
 
@@ -54,7 +55,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean isItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
-		if (a == null || b == null) {
+		if (a.isEmpty() || b.isEmpty()) {
 			return false;
 		}
 		if (a.getItem() != b.getItem()) {
@@ -198,40 +199,41 @@ public abstract class InventoryUtil {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
-	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
-		ItemStack[] stock = getStacks(inventory);
+	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
+		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (doRemove) {
-			ItemStack[] removed = removeSets(inventory, count, set, player, stowContainer, oreDictionary, craftingTools);
-			return removed != null && removed.length >= count;
+			NonNullList<ItemStack> removed = removeSets(inventory, count, set, player, stowContainer, oreDictionary, craftingTools);
+			return removed != null && removed.size() >= count;
 		} else {
 			return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
 		}
 	}
 
-	public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
-		ItemStack[] removed = new ItemStack[set.length];
-		ItemStack[] stock = getStacks(inventory);
+	@Nullable
+	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
+		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) < count) {
 			return null;
 		}
 
-		for (int i = 0; i < set.length; i++) {
-			if (set[i] == null) {
-				continue;
-			}
-			ItemStack stackToRemove = set[i].copy();
-			stackToRemove.stackSize *= count;
+		for (int i = 0; i < set.size(); i++) {
+			ItemStack itemStack = set.get(i);
+			if (!itemStack.isEmpty()) {
+				ItemStack stackToRemove = itemStack.copy();
+				stackToRemove.setCount(stackToRemove.getCount() * count);
 
-			// try to remove the exact stack first
-			ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
-			if (removedStack == null) {
-				// remove crafting equivalents next
-				removedStack = removeStack(inventory, stackToRemove, player, stowContainer, oreDictionary, craftingTools);
-			}
+				// try to remove the exact stack first
+				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
+				if (removedStack.isEmpty()) {
+					// remove crafting equivalents next
+					removedStack = removeStack(inventory, stackToRemove, player, stowContainer, oreDictionary, craftingTools);
+				}
 
-			removed[i] = removedStack;
+				removed.set(i, removedStack);
+			}
 		}
 		return removed;
 	}
@@ -242,36 +244,32 @@ public abstract class InventoryUtil {
 	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
-			if (stackInSlot == null) {
-				continue;
-			}
+			if (!stackInSlot.isEmpty()) {
+				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools)) {
+					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
+					stackToRemove.shrink(removed.getCount());
 
-			if (!ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools)) {
-				continue;
-			}
+					if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
+						stowContainerItem(removed, inventory, j, player);
+					}
 
-			ItemStack removed = inventory.decrStackSize(j, stackToRemove.stackSize);
-			stackToRemove.stackSize -= removed.stackSize;
-
-			if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
-				stowContainerItem(removed, inventory, j, player);
-			}
-
-			if (stackToRemove.stackSize == 0) {
-				return removed;
+					if (stackToRemove.isEmpty()) {
+						return removed;
+					}
+				}
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/* CONTAINS */
 
-	public static boolean contains(IInventory inventory, ItemStack[] query) {
+	public static boolean contains(IInventory inventory, NonNullList<ItemStack> query) {
 		return contains(inventory, query, 0, inventory.getSizeInventory());
 	}
 
-	public static boolean contains(IInventory inventory, ItemStack[] query, int startSlot, int slots) {
-		ItemStack[] stock = getStacks(inventory, startSlot, slots);
+	public static boolean contains(IInventory inventory, NonNullList<ItemStack> query, int startSlot, int slots) {
+		NonNullList<ItemStack> stock = getStacks(inventory, startSlot, slots);
 		return ItemStackUtil.containsSets(query, stock) > 0;
 	}
 
@@ -288,7 +286,7 @@ public abstract class InventoryUtil {
 				continue;
 			}
 
-			amount += itemStack.stackSize;
+			amount += itemStack.getCount();
 			stackMax += itemStack.getMaxStackSize();
 		}
 		if (stackMax == 0) {
@@ -299,30 +297,30 @@ public abstract class InventoryUtil {
 
 	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
 		for (int i = slotStart; i < slotStart + slotCount; i++) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public static ItemStack[] getStacks(IInventory inventory) {
-		ItemStack[] stacks = new ItemStack[inventory.getSizeInventory()];
+	public static NonNullList<ItemStack> getStacks(IInventory inventory) {
+		NonNullList<ItemStack> stacks = NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			stacks[i] = inventory.getStackInSlot(i);
+			stacks.set(i, inventory.getStackInSlot(i));
 		}
 		return stacks;
 	}
 
-	public static ItemStack[] getStacks(IInventory inventory, int slot1, int length) {
-		ItemStack[] result = new ItemStack[length];
+	public static NonNullList<ItemStack> getStacks(IInventory inventory, int slot1, int length) {
+		NonNullList<ItemStack> result = NonNullList.withSize(length, ItemStack.EMPTY);
 		for (int i = slot1; i < slot1 + length; i++) {
-			result[i - slot1] = inventory.getStackInSlot(i);
+			result.set(i - slot1, inventory.getStackInSlot(i));
 		}
 		return result;
 	}
 
-	public static boolean tryAddStacksCopy(IInventory inventory, ItemStack[] stacks, int startSlot, int slots, boolean all) {
+	public static boolean tryAddStacksCopy(IInventory inventory, NonNullList<ItemStack> stacks, int startSlot, int slots, boolean all) {
 
 		for (ItemStack stack : stacks) {
 			if (stack == null) {
@@ -354,7 +352,7 @@ public abstract class InventoryUtil {
 
 	public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
 		int added = addStack(inventory, stack, startSlot, slots, false);
-		boolean success = all ? added == stack.stackSize : added > 0;
+		boolean success = all ? added == stack.getCount() : added > 0;
 
 		if (success && doAdd) {
 			addStack(inventory, stack, startSlot, slots, true);
@@ -368,6 +366,9 @@ public abstract class InventoryUtil {
 	}
 
 	public static int addStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean doAdd) {
+		if (stack.isEmpty()) {
+			return 0;
+		}
 
 		int added = 0;
 		// Add to existing stacks first
@@ -375,7 +376,7 @@ public abstract class InventoryUtil {
 
 			ItemStack inventoryStack = inventory.getStackInSlot(i);
 			// Empty slot. Add
-			if (inventoryStack == null || inventoryStack.getItem() == null) {
+			if (inventoryStack.isEmpty()) {
 				continue;
 			}
 
@@ -390,8 +391,8 @@ public abstract class InventoryUtil {
 				continue;
 			}
 
-			int remain = stack.stackSize - added;
-			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
+			int remain = stack.getCount() - added;
+			int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
 			// No space left, skip this slot.
 			if (space <= 0) {
 				continue;
@@ -399,34 +400,31 @@ public abstract class InventoryUtil {
 			// Enough space
 			if (space >= remain) {
 				if (doAdd) {
-					inventoryStack.stackSize += remain;
+					inventoryStack.grow(remain);
 				}
-				return stack.stackSize;
+				return stack.getCount();
 			}
 
 			// Not enough space
 			if (doAdd) {
-				inventoryStack.stackSize = inventoryStack.getMaxStackSize();
+				inventoryStack.setCount(inventoryStack.getMaxStackSize());
 			}
 
 			added += space;
 		}
 
-		if (added >= stack.stackSize) {
+		if (added >= stack.getCount()) {
 			return added;
 		}
 
 		for (int i = startSlot; i < startSlot + slots; i++) {
-			if (inventory.getStackInSlot(i) != null) {
-				continue;
+			if (inventory.getStackInSlot(i).isEmpty()) {
+				if (doAdd) {
+					inventory.setInventorySlotContents(i, stack.copy());
+					inventory.getStackInSlot(i).setCount(stack.getCount() - added);
+				}
+				return stack.getCount();
 			}
-
-			if (doAdd) {
-				inventory.setInventorySlotContents(i, stack.copy());
-				inventory.getStackInSlot(i).stackSize = stack.stackSize - added;
-			}
-			return stack.stackSize;
-
 		}
 
 		return added;
@@ -444,16 +442,16 @@ public abstract class InventoryUtil {
 			ItemStack inventoryStack = inventory.getStackInSlot(i);
 
 			// Grab those free slots
-			if (inventoryStack == null) {
+			if (inventoryStack.isEmpty()) {
 				if (doAdd) {
 					inventory.setInventorySlotContents(i, itemstack.copy());
-					itemstack.stackSize = 0;
+					itemstack.setCount(0);
 				}
 				return true;
 			}
 
 			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
+			if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
 				continue;
 			}
 
@@ -465,20 +463,20 @@ public abstract class InventoryUtil {
 				continue;
 			}
 
-			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
+			int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
 
 			// Enough space to add all
-			if (space > itemstack.stackSize) {
+			if (space > itemstack.getCount()) {
 				if (doAdd) {
-					inventoryStack.stackSize += itemstack.stackSize;
-					itemstack.stackSize = 0;
+					inventoryStack.grow(itemstack.getCount());
+					itemstack.setCount(0);
 				}
 				return true;
 				// Only part can be added
 			} else {
 				if (doAdd) {
-					inventoryStack.stackSize = inventoryStack.getMaxStackSize();
-					itemstack.stackSize -= space;
+					inventoryStack.setCount(inventoryStack.getMaxStackSize());
+					itemstack.shrink(space);
 				}
 				added = true;
 			}
@@ -494,7 +492,7 @@ public abstract class InventoryUtil {
 		}
 
 		ItemStack container = ForgeHooks.getContainerItem(itemstack);
-		if (container != null) {
+		if (!container.isEmpty()) {
 			if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
 				if (!tryAddStack(stowing, container, true) && player != null) {
 					player.dropItem(container, true);
@@ -504,16 +502,13 @@ public abstract class InventoryUtil {
 	}
 
 	public static void deepCopyInventoryContents(IInventory source, IInventory destination) {
-		if (source == null || destination == null) {
-			throw new IllegalArgumentException("Inventory can't be null. Source: " + source + ", Destination: " + destination);
-		}
 		if (source.getSizeInventory() != destination.getSizeInventory()) {
 			throw new IllegalArgumentException("Inventory sizes do not match. Source: " + source + ", Destination: " + destination);
 		}
 
 		for (int i = 0; i < source.getSizeInventory(); i++) {
 			ItemStack stack = source.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				stack = stack.copy();
 			}
 			destination.setInventorySlotContents(i, stack);
@@ -521,15 +516,11 @@ public abstract class InventoryUtil {
 	}
 
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
-		if (inventory == null) {
-			return;
-		}
-
 		// Release inventory
 		for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
 			ItemStack itemstack = inventory.getStackInSlot(slot);
 			dropItemStackFromInventory(itemstack, world, x, y, z);
-			inventory.setInventorySlotContents(slot, null);
+			inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
 		}
 	}
 	
@@ -541,7 +532,7 @@ public abstract class InventoryUtil {
 		for (int slot = 0; slot < socketable.getSocketCount(); slot++) {
 			ItemStack itemstack = socketable.getSocket(slot);
 			dropItemStackFromInventory(itemstack, world, x, y, z);
-			socketable.setSocket(slot, null);
+			socketable.setSocket(slot, ItemStack.EMPTY);
 		}
 	}
 	
@@ -550,7 +541,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static void dropItemStackFromInventory(ItemStack itemStack, World world, double x, double y, double z) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return;
 		}
 
@@ -558,10 +549,10 @@ public abstract class InventoryUtil {
 		float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
 		float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
 
-		while (itemStack.stackSize > 0) {
+		while (!itemStack.isEmpty()) {
 			int stackPartial = world.rand.nextInt(21) + 10;
-			if (stackPartial > itemStack.stackSize) {
-				stackPartial = itemStack.stackSize;
+			if (stackPartial > itemStack.getCount()) {
+				stackPartial = itemStack.getCount();
 			}
 			ItemStack drop = itemStack.splitStack(stackPartial);
 			EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
@@ -569,7 +560,7 @@ public abstract class InventoryUtil {
 			entityitem.motionX = (float) world.rand.nextGaussian() * accel;
 			entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
 			entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-			world.spawnEntityInWorld(entityitem);
+			world.spawnEntity(entityitem);
 		}
 	}
 
@@ -584,14 +575,14 @@ public abstract class InventoryUtil {
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
 			int index = nbttagcompound2.getByte("Slot");
-			inventory.setInventorySlotContents(index, ItemStack.loadItemStackFromNBT(nbttagcompound2));
+			inventory.setInventorySlotContents(index, new ItemStack(nbttagcompound2));
 		}
 	}
 	
 	public static void writeToNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 				nbttagcompound2.setByte("Slot", (byte) i);
 				inventory.getStackInSlot(i).writeToNBT(nbttagcompound2);

@@ -1,13 +1,10 @@
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 
 public class FakeBeeHousingInventory implements IBeeHousingInventory {
-	@Nonnull
 	public static final FakeBeeHousingInventory instance = new FakeBeeHousingInventory();
 
 	private FakeBeeHousingInventory() {
@@ -16,12 +13,12 @@ public class FakeBeeHousingInventory implements IBeeHousingInventory {
 
 	@Override
 	public ItemStack getQueen() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack getDrone() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

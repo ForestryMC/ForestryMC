@@ -67,16 +67,16 @@ public class ParticleIgnition extends Particle {
 		float f = (float) this.particleAge / (float) this.particleMaxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+			this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 
 		this.motionY -= 0.03D;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.999D;
 		this.motionY *= 0.999D;
 		this.motionZ *= 0.999D;
 
-		if (this.isCollided) {
+		if (this.onGround) {
 			this.motionX *= 0.7;
 			this.motionZ *= 0.7;
 		}

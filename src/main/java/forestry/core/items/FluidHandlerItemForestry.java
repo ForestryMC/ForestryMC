@@ -15,10 +15,6 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	}
 
 	private boolean contentsAllowed(FluidStack fluidStack) {
-		if (fluidStack == null) {
-			return false;
-		}
-
 		Fluid fluid = fluidStack.getFluid();
 		if (fluid == null) {
 			return false;

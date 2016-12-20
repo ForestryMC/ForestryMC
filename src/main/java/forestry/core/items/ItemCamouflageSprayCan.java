@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemCamouflageSprayCan extends ItemWithGui {
-	
+
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiCamouflageSprayCan(player, new ItemInventoryCamouflageSprayCan(player, heldItem));
@@ -30,24 +30,25 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerCamouflageSprayCan(new ItemInventoryCamouflageSprayCan(player, heldItem), player.inventory);
 	}
-	
+
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		super.registerModel(item, manager);
 		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:camouflageSprayCanFilled"));
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		ItemInventoryCamouflageSprayCan inventory = new ItemInventoryCamouflageSprayCan(player, stack);
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		ItemInventoryCamouflageSprayCan inventory = new ItemInventoryCamouflageSprayCan(player, heldItem);
 		ItemStack camouflage = inventory.getStackInSlot(0);
-		if(camouflage != null){
+		if (!camouflage.isEmpty()) {
 			TileEntity tile = world.getTileEntity(pos);
-			if(tile instanceof ICamouflageHandler){
+			if (tile instanceof ICamouflageHandler) {
 				ICamouflageHandler handler = (ICamouflageHandler) tile;
 				String type = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflage).getType();
-				if(type != null && handler.canHandleType(type)){
-					if(world.isRemote){
+				if (handler.canHandleType(type)) {
+					if (world.isRemote) {
 						handler.setCamouflageBlock(type, camouflage, false);
 					}
 					return EnumActionResult.SUCCESS;
@@ -56,14 +57,15 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 		}
 		return EnumActionResult.PASS;
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (!worldIn.isRemote && playerIn.isSneaking()) {
 			openGui(playerIn);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
 	}
 
 }

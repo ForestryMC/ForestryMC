@@ -24,17 +24,15 @@ public class PickupHandlerCore implements IPickupHandler {
 	@Override
 	public boolean onItemPickup(EntityPlayer entityPlayer, EntityItem entityitem) {
 		ItemStack itemstack = entityitem.getEntityItem();
-		if (itemstack == null || itemstack.stackSize <= 0) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemstack);
 		if (root != null) {
 			IIndividual individual = root.getMember(itemstack);
-			if (individual != null) {
-				IBreedingTracker tracker = root.getBreedingTracker(entityitem.worldObj, entityPlayer.getGameProfile());
-				tracker.registerPickup(individual);
-			}
+			IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, entityPlayer.getGameProfile());
+			tracker.registerPickup(individual);
 		}
 
 		return false;

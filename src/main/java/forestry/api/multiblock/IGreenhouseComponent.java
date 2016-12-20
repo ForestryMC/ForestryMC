@@ -12,6 +12,7 @@ import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> extends IMultiblockComponent {
 	@Override
@@ -35,7 +36,7 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 	}
 	
 	interface ButterflyHatch extends IGreenhouseComponent {
-		ItemStack[] addCocoonLoot(IButterflyCocoon cocoon);
+		NonNullList<ItemStack> addCocoonLoot(IButterflyCocoon cocoon);
 	}
 
 	interface Active extends IGreenhouseComponent {

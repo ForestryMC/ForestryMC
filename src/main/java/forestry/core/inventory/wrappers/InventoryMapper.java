@@ -55,6 +55,11 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return inv.isEmpty();
+	}
+
+	@Override
 	public int getSizeInventory() {
 		return size;
 	}

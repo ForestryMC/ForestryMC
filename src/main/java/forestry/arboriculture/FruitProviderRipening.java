@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -28,12 +26,8 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
-
-	@Nonnull
 	private final Map<ItemStack, Float> products = new HashMap<>();
-
 	private int colourCallow = 0xffffff;
-
 	private int diffR;
 	private int diffG;
 	private int diffB;
@@ -67,28 +61,24 @@ public class FruitProviderRipening extends FruitProviderNone {
 		return (float) ripeningTime / ripeningPeriod;
 	}
 
-	@Nonnull
 	@Override
-	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
-		ArrayList<ItemStack> product = new ArrayList<>();
+	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+		NonNullList<ItemStack> product = NonNullList.create();
 
 		float stage = getRipeningStage(ripeningTime);
-		if (stage < 0.5f) {
-			return Collections.emptyList();
-		}
+		if (stage >= 0.5f) {
+			float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
-		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
-
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {
-				product.add(entry.getKey().copy());
+			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+				if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {
+					product.add(entry.getKey().copy());
+				}
 			}
 		}
 
 		return product;
 	}
-
-	@Nonnull
+	
 	@Override
 	public Map<ItemStack, Float> getProducts() {
 		return Collections.unmodifiableMap(products);

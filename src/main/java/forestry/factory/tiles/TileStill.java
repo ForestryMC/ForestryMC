@@ -10,28 +10,18 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
+import com.google.common.base.Preconditions;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -39,6 +29,13 @@ import forestry.factory.gui.ContainerStill;
 import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.recipes.StillRecipeManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
@@ -47,7 +44,9 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
+	@Nullable
 	private IStillRecipe currentRecipe;
+	@Nullable
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
@@ -62,7 +61,6 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -88,13 +86,13 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -115,7 +113,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	@Override
 	public boolean workCycle() {
-
+		Preconditions.checkState(currentRecipe != null);
 		int cycles = currentRecipe.getCyclesPerUnit();
 		FluidStack output = currentRecipe.getOutput();
 
@@ -181,20 +179,20 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		return new TankRenderInfo(productTank);
 	}
 
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
+
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

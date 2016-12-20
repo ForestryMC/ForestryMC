@@ -1,6 +1,5 @@
 package forestry.apiculture.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.apiculture.ApicultureCapabilities;
@@ -42,8 +41,8 @@ public class ItemSmoker extends ItemForestry {
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		super.onUsingTick(stack, player, count);
-		World worldObj = player.worldObj;
-		addSmoke(stack, worldObj, player, (count % 5) + 1);
+		World world = player.world;
+		addSmoke(stack, world, player, (count % 5) + 1);
 	}
 
 	private static EnumHandSide getHandSide(ItemStack stack, Entity entity) {
@@ -60,7 +59,7 @@ public class ItemSmoker extends ItemForestry {
 		return EnumHandSide.RIGHT;
 	}
 
-	private static void addSmoke(ItemStack stack, World worldObj, Entity entity, int distance) {
+	private static void addSmoke(ItemStack stack, World world, Entity entity, int distance) {
 		if (distance <= 0) {
 			return;
 		}
@@ -78,9 +77,9 @@ public class ItemSmoker extends ItemForestry {
 		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
 		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
 
-		Proxies.render.addEntitySmokeFX(worldObj, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
+		Proxies.render.addEntitySmokeFX(world, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
-		TileEntity tileEntity = worldObj.getTileEntity(blockPos);
+		TileEntity tileEntity = world.getTileEntity(blockPos);
 		if (tileEntity instanceof IHiveTile) {
 			IHiveTile hive = (IHiveTile) tileEntity;
 			hive.calmBees();
@@ -88,19 +87,20 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		playerIn.setActiveHand(hand);
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		playerIn.setActiveHand(handIn);
+		ItemStack itemStack = playerIn.getHeldItem(handIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof IHiveTile) {
 			IHiveTile hive = (IHiveTile) tileEntity;
 			hive.calmBees();
 		}
-		return super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand);
+		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
 	}
 
 	@Override
@@ -108,9 +108,8 @@ public class ItemSmoker extends ItemForestry {
 		return 32;
 	}
 
-	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import forestry.api.genetics.AlleleManager;
@@ -20,8 +21,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 
 public enum ButterflyBranchDefinition implements IBranchDefinition {
 	Anthocharis,
@@ -50,6 +50,7 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	Siproeta,
 	Speyeria;
 
+	@Nullable
 	private static IAllele[] defaultTemplate;
 
 	private final IClassification branch;
@@ -62,20 +63,20 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	public IAllele[] getTemplate() {
 		if (defaultTemplate == null) {
 			defaultTemplate = new IAllele[EnumButterflyChromosome.values().length];
-
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.METABOLISM, 3);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FERTILITY, 3);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.NOCTURNAL, false);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.COCOON, AlleleButterflyCocoon.cocoonDefault);
+			AlleleHelper alleleHelper = AlleleHelper.getInstance();
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.METABOLISM, 3);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FERTILITY, 3);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.NOCTURNAL, false);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.EFFECT, ButterflyAlleles.butterflyNone);
+			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.COCOON, ButterflyAlleles.cocoonDefault);
 		}
 		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}

@@ -1,8 +1,11 @@
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import forestry.api.core.IModelManager;
+import forestry.core.tiles.TileForestry;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -12,35 +15,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import forestry.api.core.IModelManager;
-import forestry.core.tiles.TileForestry;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
-
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
-	@Nonnull
 	private final String name;
-	@Nonnull
 	private final String teIdent;
-	@Nonnull
 	private final Class<T> teClass;
-	@Nonnull
 	private final AxisAlignedBB boundingBox;
 	@Nullable
 	private Block block;
 
-	public MachineProperties(@Nonnull Class<T> teClass, @Nonnull String name) {
+	public MachineProperties(Class<T> teClass, String name) {
 		this("forestry." + name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
 	}
 
-	public MachineProperties(@Nonnull Class<T> teClass, @Nonnull String name, @Nonnull AxisAlignedBB boundingBox) {
+	public MachineProperties(Class<T> teClass, String name, AxisAlignedBB boundingBox) {
 		this("forestry." + name, teClass, name, boundingBox);
 	}
 
-	private MachineProperties(@Nonnull String teIdent, @Nonnull Class<T> teClass, @Nonnull String name, @Nonnull AxisAlignedBB boundingBox) {
+	private MachineProperties(String teIdent, Class<T> teClass, String name, AxisAlignedBB boundingBox) {
 		this.teIdent = teIdent;
 		this.teClass = teClass;
 		this.name = name;
@@ -48,7 +41,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public void setBlock(@Nonnull Block block) {
+	public void setBlock(Block block) {
 		this.block = block;
 	}
 
@@ -58,15 +51,13 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 		return block;
 	}
 
-	@Nonnull
 	@Override
-	public AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state) {
+	public AxisAlignedBB getBoundingBox(BlockPos pos, IBlockState state) {
 		return boundingBox;
 	}
 
-	@Nonnull
 	@Override
-	public RayTraceResult collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec) {
+	public RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec) {
 		return BlockUtil.collisionRayTrace(pos, startVec, endVec, boundingBox);
 	}
 
@@ -76,12 +67,11 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public void registerModel(@Nonnull Item item, @Nonnull IModelManager manager) {
+	public void registerModel(Item item, IModelManager manager) {
 		String identifier = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
 		manager.registerItemModel(item, 0, identifier);
 	}
 
-	@Nonnull
 	@Override
 	public TileEntity createTileEntity() {
 		try {
@@ -91,19 +81,16 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 		}
 	}
 
-	@Nonnull
 	@Override
 	public String getTeIdent() {
 		return teIdent;
 	}
 
-	@Nonnull
 	@Override
 	public Class<T> getTeClass() {
 		return teClass;
 	}
 
-	@Nonnull
 	@Override
 	public String getName() {
 		return name;

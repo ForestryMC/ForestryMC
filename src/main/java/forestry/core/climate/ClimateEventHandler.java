@@ -13,6 +13,7 @@ package forestry.core.climate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ForestryAPI;
 import net.minecraft.server.MinecraftServer;
@@ -22,12 +23,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClimateEventHandler {
 
-	Map<Integer, Integer> serverTicks;
+	private final Map<Integer, Integer> serverTicks;
 
 	public ClimateEventHandler() {
 		serverTicks = new HashMap<>();
 	}
-	
+
 	//Climate test mode
 	/*public static Pair<BlockPos, BlockPos> recalculateMinMaxCoords(Collection<BlockPos> positions) {
 		BlockPos minimumCoord = new BlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -70,7 +71,7 @@ public class ClimateEventHandler {
 	        Tessellator tessellator = Tessellator.getInstance();
 	        VertexBuffer buffer = tessellator.getBuffer();
 	        float partialTicks = event.getPartialTicks();
-	        EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
+	        EntityPlayer entityplayer = Minecraft.getMinecraft().player;
 	        double d0 = entityplayer.lastTickPosX + (entityplayer.posX - entityplayer.lastTickPosX) * partialTicks;
 	        double d1 = entityplayer.lastTickPosY + (entityplayer.posY - entityplayer.lastTickPosY) * partialTicks;
 	        double d2 = entityplayer.lastTickPosZ + (entityplayer.posZ - entityplayer.lastTickPosZ) * partialTicks;
@@ -79,7 +80,7 @@ public class ClimateEventHandler {
 	        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	        GlStateManager.disableTexture2D();
 	        GlStateManager.glLineWidth(5.0F);
-			World world = Minecraft.getMinecraft().theWorld;
+			World world = Minecraft.getMinecraft().world;
 			List<IClimateRegion> regions = ForestryAPI.climateManager.getRegions().get(Integer.valueOf(world.provider.getDimension()));
 			for(IClimateRegion region : regions){
 				if(region != null){
@@ -153,23 +154,20 @@ public class ClimateEventHandler {
 		World world = event.world;
 		if (event.phase == TickEvent.Phase.END) {
 			MinecraftServer server = world.getMinecraftServer();
-			if(server != null){
-				server.addScheduledTask(new Runnable() {
-					@Override
-					public void run() {
-						Integer dim = Integer.valueOf(event.world.provider.getDimension());
-						if(!serverTicks.containsKey(dim)){
-							serverTicks.put(dim, 1);
-						}
-						int ticks = serverTicks.get(dim);
-						Map<Integer,  List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
-						if(regions != null && regions.containsKey(dim)){
-							for(IClimateRegion region : regions.get(dim)){
-								region.updateClimate(ticks);
-							}
-						}
-						serverTicks.put(dim, ticks+1);
+			if (server != null) {
+				server.addScheduledTask(() -> {
+					Integer dim = event.world.provider.getDimension();
+					if (!serverTicks.containsKey(dim)) {
+						serverTicks.put(dim, 1);
 					}
+					int ticks = serverTicks.get(dim);
+					Map<Integer, List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
+					if (regions.containsKey(dim)) {
+						for (IClimateRegion region : regions.get(dim)) {
+							region.updateClimate(ticks);
+						}
+					}
+					serverTicks.put(dim, ticks + 1);
 				});
 			}
 		}

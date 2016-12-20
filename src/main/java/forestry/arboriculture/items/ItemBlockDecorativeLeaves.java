@@ -1,16 +1,13 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(Block block) {
@@ -22,9 +19,6 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getTreeType(meta);
-		if (treeDefinition == null) {
-			return Translator.translateToLocal("trees.grammar.leaves.type");
-		}
 
 		String unlocalizedSpeciesName = treeDefinition.getGenome().getPrimary().getUnlocalizedName();
 		return ItemBlockLeaves.getDisplayName(unlocalizedSpeciesName);
@@ -35,9 +29,6 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getTreeType(meta);
-		if (treeDefinition == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
-		}
 
 		ITreeGenome genome = treeDefinition.getGenome();
 

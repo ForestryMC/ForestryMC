@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,7 @@ public interface ICircuitRegistry {
 
 	ICircuitLayout getDefaultLayout();
 
+	@Nullable
 	ICircuitBoard getCircuitBoard(ItemStack itemstack);
 
 	boolean isChipset(ItemStack itemstack);

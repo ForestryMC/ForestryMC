@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -20,21 +19,19 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.proxy.Proxies;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import forestry.energy.compat.rf.IEnergyConnectionDelegated;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class TileEngine extends TileBase implements IEnergyConnectionDelegated, IActivatable, IStreamableGui {
+public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 
 	private boolean active = false; // Used for smp.
@@ -56,7 +53,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 	public float progress;
 	protected final EnergyManager energyManager;
 
-	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
+	protected TileEngine(@Nullable String hintKey, int maxHeat, int maxEnergy) {
 		super(hintKey);
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
@@ -114,9 +111,9 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
-		IBlockState blockState = worldObj.getBlockState(getPos());
+		IBlockState blockState = world.getBlockState(getPos());
 		EnumFacing facing = blockState.getValue(BlockBase.FACING);
-		TileEntity tile = worldObj.getTileEntity(getPos().offset(facing));
+		TileEntity tile = world.getTileEntity(getPos().offset(facing));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -175,8 +172,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 		}
 		this.active = active;
 
-		if (!worldObj.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
+		if (!world.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
 	}
 
@@ -245,7 +242,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 		forceCooldown = nbt.getBoolean("ForceCooldown");
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
@@ -259,7 +256,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeBoolean(active);
 		data.writeInt(heat);
@@ -268,41 +265,40 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();
 		heat = data.readInt();
 		pistonSpeedServer = data.readFloat();
 		energyManager.readData(data);
 	}
-	
+
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		data.writeInt(currentOutput);
 		data.writeInt(heat);
 		energyManager.writeData(data);
 	}
-	
+
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		currentOutput = data.readInt();
 		heat = data.readInt();
 		energyManager.readData(data);
 	}
 
-	@Override
 	public EnergyManager getEnergyManager() {
 		return energyManager;
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

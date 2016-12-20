@@ -37,6 +37,7 @@ import forestry.core.genetics.ItemGE;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -46,12 +47,8 @@ import net.minecraft.world.World;
 public class GeneticsUtil {
 
 	public static boolean hasNaturalistEye(EntityPlayer player) {
-		if (player == null) {
-			return false;
-		}
-
-		ItemStack armorItemStack = player.inventory.armorInventory[3];
-		if (armorItemStack == null) {
+		ItemStack armorItemStack = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		if (armorItemStack.isEmpty()) {
 			return false;
 		}
 
@@ -65,7 +62,7 @@ public class GeneticsUtil {
 			return false;
 		}
 
-		return armorNaturalist.canSeePollination(player, armorItemStack, true);
+		return armorNaturalist != null && armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
@@ -83,6 +80,7 @@ public class GeneticsUtil {
 	 * Returns an ICheckPollinatable that can be checked but not mated.
 	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
 	 */
+	@Nullable
 	public static ICheckPollinatable getCheckPollinatable(World world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 
@@ -93,8 +91,8 @@ public class GeneticsUtil {
 		IIndividual pollen = getPollen(world, pos);
 		if (pollen != null) {
 			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
-			if(root instanceof ISpeciesRootPollinatable){
-				return ((ISpeciesRootPollinatable)root).createPollinatable(pollen);
+			if (root instanceof ISpeciesRootPollinatable) {
+				return ((ISpeciesRootPollinatable) root).createPollinatable(pollen);
 			}
 		}
 
@@ -104,7 +102,8 @@ public class GeneticsUtil {
 	/**
 	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
 	 */
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final BlockPos pos) {
+	@Nullable
+	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IPollinatable) {
@@ -112,9 +111,9 @@ public class GeneticsUtil {
 		}
 
 		final IIndividual pollen = getPollen(world, pos);
-		if(pollen != null){
+		if (pollen != null) {
 			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
-			if(root instanceof ISpeciesRootPollinatable){
+			if (root instanceof ISpeciesRootPollinatable) {
 				return ((ISpeciesRootPollinatable) root).tryConvertToPollinatable(owner, world, pos, pollen);
 			}
 		}
@@ -127,6 +126,10 @@ public class GeneticsUtil {
 	 */
 	@Nullable
 	public static IIndividual getPollen(World world, final BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return null;
+		}
+
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof ICheckPollinatable) {
@@ -134,9 +137,6 @@ public class GeneticsUtil {
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState == null) {
-			return null;
-		}
 		Block block = blockState.getBlock();
 
 		ILeafTranslator leafTranslator = AlleleManager.leafTranslators.get(block);
@@ -147,11 +147,8 @@ public class GeneticsUtil {
 		return leafTranslator.getTreeFromLeaf(blockState);
 	}
 
+	@Nullable
 	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
-		if (itemStack == null) {
-			return null;
-		}
-
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
@@ -165,22 +162,15 @@ public class GeneticsUtil {
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
-		if (foreign == null) {
-			return null;
+		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
+			IIndividual individual = getGeneticEquivalent(foreign);
+			if (individual instanceof ITree) {
+				ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+				equivalent.setCount(foreign.getCount());
+				return equivalent;
+			}
 		}
-
-		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) != null) {
-			return foreign;
-		}
-
-		IIndividual individual = getGeneticEquivalent(foreign);
-		if (individual instanceof ITree) {
-			ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
-			equivalent.stackSize = foreign.stackSize;
-			return equivalent;
-		}
-
-		return null;
+		return foreign;
 	}
 
 	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {

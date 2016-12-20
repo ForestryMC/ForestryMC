@@ -5,20 +5,16 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 
 public interface IButterflyGenome extends IGenome {
-	
+
 	@Override
-	@Nonnull
 	IAlleleButterflySpecies getPrimary();
 
 	@Override
-	@Nonnull
 	IAlleleButterflySpecies getSecondary();
 
 	float getSize();
@@ -26,7 +22,7 @@ public interface IButterflyGenome extends IGenome {
 	int getLifespan();
 
 	int getMetabolism();
-	
+
 	int getFertility();
 
 	float getSpeed();
@@ -44,7 +40,7 @@ public interface IButterflyGenome extends IGenome {
 	IFlowerProvider getFlowerProvider();
 
 	IAlleleButterflyEffect getEffect();
-	
+
 	IAlleleButterflyCocoon getCocoon();
 
 }

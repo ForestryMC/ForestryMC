@@ -13,7 +13,7 @@ package forestry.core.network;
 import java.io.IOException;
 
 public interface IStreamableGui {
-	void writeGuiData(DataOutputStreamForestry data) throws IOException;
+	void writeGuiData(PacketBufferForestry data);
 
-	void readGuiData(DataInputStreamForestry data) throws IOException;
+	void readGuiData(PacketBufferForestry data) throws IOException;
 }

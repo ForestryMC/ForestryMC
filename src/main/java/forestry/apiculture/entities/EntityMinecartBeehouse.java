@@ -10,14 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -30,6 +24,10 @@ import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -51,7 +49,7 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	public List<String> getHints() {
 		return Config.hints.get("bee.house");
 	}
-	
+
 	@Override
 	public IBlockState getDisplayTile() {
 		return PluginApiculture.blocks.beeHouse.getDefaultState();
@@ -73,7 +71,6 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 		return Collections.singleton(beeListener);
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return beeInventory;

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.HashMultimap;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 
@@ -42,6 +45,19 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	private static final int ALLELE_ARRAY_SIZE = 2048;
 
+	/* ALLELES */
+	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
+	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
+	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
+	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
+	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
+	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
+
+	/*
+	 * Internal Set of all alleleHandlers, which trigger when an allele or branch is registered
+	 */
+	private final Set<IAlleleHandler> alleleHandlers = new HashSet<>();
+
 	/* SPECIES ROOT */
 	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<>(16);
 
@@ -56,13 +72,15 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ISpeciesRoot getSpeciesRoot(String uid) {
 		return rootMap.get(uid);
 	}
 
 	@Override
+	@Nullable
 	public ISpeciesRoot getSpeciesRoot(ItemStack stack) {
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return null;
 		}
 
@@ -75,6 +93,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz) {
 		for (ISpeciesRoot root : rootMap.values()) {
 			if (root.getMemberClass().isAssignableFrom(clz)) {
@@ -84,16 +103,19 @@ public class AlleleRegistry implements IAlleleRegistry {
 		return null;
 	}
 
+	@Override
+	public ISpeciesRoot getSpeciesRoot(IIndividual individual) {
+		return individual.getGenome().getSpeciesRoot();
+	}
+
 	/* INDIVIDUALS */
 	@Override
 	public boolean isIndividual(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
 		return getSpeciesRoot(stack) != null;
 	}
 
 	@Override
+	@Nullable
 	public IIndividual getIndividual(ItemStack stack) {
 		ISpeciesRoot root = getSpeciesRoot(stack);
 		if (root == null) {
@@ -102,19 +124,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 		return root.getMember(stack);
 	}
-
-	/* ALLELES */
-	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
-	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
-	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
-	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
-	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
-	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
-
-	/*
-	 * Internal HashSet of all alleleHandlers, which trigger when an allele or branch is registered
-	 */
-	private final HashSet<IAlleleHandler> alleleHandlers = new HashSet<>();
 
 	public void initialize() {
 

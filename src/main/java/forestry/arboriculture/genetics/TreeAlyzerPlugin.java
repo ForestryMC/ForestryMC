@@ -27,7 +27,7 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
@@ -37,6 +37,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,13 +48,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private TreeAlyzerPlugin() {
-		List<ItemStack> treeList = new ArrayList<>();
+		NonNullList<ItemStack> treeList = NonNullList.create();
 		PluginArboriculture.items.sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
-			if (species != null) {
-				iconStacks.put(species.getUID(), treeStack);
-			}
+			iconStacks.put(species.getUID(), treeStack);
 		}
 	}
 
@@ -67,6 +66,9 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				return;
 			}
 			EnumGermlingType type = TreeManager.treeRoot.getType(itemStack);
+			if (type == null) {
+				return;
+			}
 	
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 	
@@ -181,14 +183,14 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.drawLine(Translator.translateToLocal("for.gui.fruits"), GuiAlyzer.COLUMN_0);
 			String strike = "";
 			IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
-			if (!tree.canBearFruit() && fruit0 != AlleleFruit.fruitNone) {
+			if (!tree.canBearFruit() && fruit0 != AlleleFruits.fruitNone) {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
 			textLayout.drawLine(strike + tree.getGenome().getFruitProvider().getDescription(), GuiAlyzer.COLUMN_1, fruitDominance0);
 	
 			strike = "";
 			IAlleleFruit fruit1 = (IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
-			if (!tree.getGenome().getSecondary().getSuitableFruit().contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruit.fruitNone) {
+			if (!tree.getGenome().getSecondary().getSuitableFruit().contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruits.fruitNone) {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
 			textLayout.drawLine(strike + fruit1.getProvider().getDescription(), GuiAlyzer.COLUMN_2, fruitDominance1);

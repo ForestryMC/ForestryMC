@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.food;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
@@ -25,7 +28,7 @@ import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends BlankForestryPlugin {
-
+	@Nullable
 	public static ItemRegistryFood items;
 
 	@Override
@@ -60,6 +63,8 @@ public class PluginFood extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
+		Preconditions.checkState(items != null);
+
 		// INFUSER
 		RecipeUtil.addRecipe(items.infuser.getItemStack(),
 				"X", "#", "X",

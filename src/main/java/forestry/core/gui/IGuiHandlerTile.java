@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
 import forestry.api.core.ILocatable;
 
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IGuiHandlerTile extends IGuiHandlerForestry, ILocatable {
+	@Nullable
 	Object getGui(EntityPlayer player, int data);
 
+	@Nullable
 	Object getContainer(EntityPlayer player, int data);
 }

@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
-
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
@@ -45,14 +43,14 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		tile.flipPage(player, (short) packet.getPrimaryIndex());
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+		tile.flipPage(player, (short) primary);
 	}
-	
+
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		
+
 		tile.increaseNumPlayersUsing();
 	}
 

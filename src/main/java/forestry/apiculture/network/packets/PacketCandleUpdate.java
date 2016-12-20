@@ -12,28 +12,23 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
-import forestry.core.proxy.Proxies;
-
-public class PacketCandleUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private int colour;
-	private boolean lit;
-
-	public PacketCandleUpdate() {
-	}
+public class PacketCandleUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final int colour;
+	private final boolean lit;
 
 	public PacketCandleUpdate(TileCandle tileCandle) {
-		super(tileCandle);
-
+		pos = tileCandle.getPos();
 		colour = tileCandle.getColour();
 		lit = tileCandle.isLit();
 	}
@@ -44,24 +39,23 @@ public class PacketCandleUpdate extends PacketCoordinates implements IForestryPa
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeInt(colour);
 		data.writeBoolean(lit);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		colour = data.readInt();
-		lit = data.readBoolean();
-	}
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			int colour = data.readInt();
+			boolean lit = data.readBoolean();
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tileEntity = getTarget(Proxies.common.getRenderWorld());
-		if (tileEntity instanceof TileCandle) {
-			((TileCandle) tileEntity).onPacketUpdate(colour, lit);
+			TileEntity tileEntity = player.world.getTileEntity(pos);
+			if (tileEntity instanceof TileCandle) {
+				((TileCandle) tileEntity).onPacketUpdate(colour, lit);
+			}
 		}
 	}
 }

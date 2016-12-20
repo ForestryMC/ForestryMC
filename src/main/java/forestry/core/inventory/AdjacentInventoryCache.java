@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.items.IItemHandler;
-
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.IItemHandler;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -38,18 +36,20 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 	private boolean changed = true;
 	private final List<IItemHandler> invs = new LinkedList<>();
 	private final IItemHandler[] sides = new IItemHandler[6];
+	@Nullable
 	private final Comparator<IItemHandler> sorter;
+	@Nullable
 	private final ITileFilter filter;
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
 		this(tile, cache, null, null);
 	}
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter) {
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter) {
 		this(tile, cache, filter, null);
 	}
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IItemHandler> sorter) {
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter, @Nullable Comparator<IItemHandler> sorter) {
 		this.cache = cache;
 		this.filter = filter;
 		this.sorter = sorter;
@@ -93,7 +93,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 				}
 			}
 			if (sorter != null) {
-				Collections.sort(invs, sorter);
+				invs.sort(sorter);
 			}
 		}
 	}

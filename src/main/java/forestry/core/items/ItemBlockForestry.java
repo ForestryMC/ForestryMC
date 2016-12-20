@@ -68,7 +68,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
 		if (placed) {
 			if (block.hasTileEntity(newState)) {
-				if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
+				if (stack.getItem() instanceof ItemBlockNBT && stack.getTagCompound() != null) {
 					TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 					if (tile != null) {
 						tile.readFromNBT(stack.getTagCompound());

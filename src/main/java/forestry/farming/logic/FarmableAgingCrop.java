@@ -1,8 +1,11 @@
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -10,10 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
 
 /**
  * For blocks that are harvestable once they are a certain age.
@@ -26,11 +25,15 @@ public class FarmableAgingCrop implements IFarmable {
 	@Nullable
 	protected final Integer replantAge;
 
-	public FarmableAgingCrop(@Nonnull ItemStack germling, @Nonnull Block cropBlock, @Nonnull IProperty<Integer> ageProperty, int minHarvestAge) {
+	public FarmableAgingCrop(ItemStack germling, Block cropBlock, IProperty<Integer> ageProperty, int minHarvestAge) {
 		this(germling, cropBlock, ageProperty, minHarvestAge, null);
 	}
 
 	public FarmableAgingCrop(ItemStack germling, Block cropBlock, IProperty<Integer> ageProperty, int minHarvestAge, @Nullable Integer replantAge) {
+		Preconditions.checkNotNull(germling);
+		Preconditions.checkNotNull(cropBlock);
+		Preconditions.checkNotNull(ageProperty);
+
 		this.germling = germling;
 		this.cropBlock = cropBlock;
 		this.ageProperty = ageProperty;
@@ -45,6 +48,7 @@ public class FarmableAgingCrop implements IFarmable {
 	}
 
 	@Override
+	@Nullable
 	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
 		if (blockState.getBlock() != cropBlock) {
 			return null;
@@ -54,15 +58,15 @@ public class FarmableAgingCrop implements IFarmable {
 			return null;
 		}
 
-		if (replantAge != null) {
-			IBlockState replantState = getReplantState(world, pos, blockState);
-			return new CropDestroy(world, blockState, pos, replantState);
-		} else {
-			return new CropDestroy(world, blockState, pos, null);
-		}
+		IBlockState replantState = getReplantState(blockState);
+		return new CropDestroy(world, blockState, pos, replantState);
 	}
 
-	protected IBlockState getReplantState(World world, BlockPos pos, IBlockState blockState) {
+	@Nullable
+	protected IBlockState getReplantState(IBlockState blockState) {
+		if (replantAge == null) {
+			return null;
+		}
 		return blockState.withProperty(ageProperty, replantAge);
 	}
 

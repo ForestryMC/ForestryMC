@@ -11,19 +11,16 @@ import com.google.common.collect.Multimap;
 import net.minecraft.item.ItemStack;
 
 import java.util.LinkedHashMap;
-
-import javax.annotation.Nonnull;
+import java.util.Map;
 
 public class Farmables {
 	/**
 	 * Can be used to add IFarmables to some of the vanilla farm logics.
-	 *
+	 * <p>
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
 	 */
-	@Nonnull
 	public static final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	
-	@Nonnull
-	public static final LinkedHashMap<ItemStack, Integer> fertilizers = new LinkedHashMap();
+	public static final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
 
 }

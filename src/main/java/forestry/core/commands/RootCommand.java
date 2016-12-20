@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -41,13 +42,13 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	/* CommandBase */
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return ROOT_COMMAND_NAME;
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/" + this.getCommandName() + " help";
+	public String getUsage(ICommandSender sender) {
+		return "/" + this.getName() + " help";
 	}
 
 	@Override
@@ -67,22 +68,22 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		List<String> aliases = new ArrayList<>();
 		aliases.add(ROOT_COMMAND_ALIAS);
 		return aliases;
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, pos);
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, targetPos);
 	}
 
 	/* IForestryCommand */
 
 	@Override
 	public String getFullCommandString() {
-		return getCommandName();
+		return getName();
 	}
 
 	@Override

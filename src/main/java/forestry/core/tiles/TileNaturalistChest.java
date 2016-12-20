@@ -12,20 +12,18 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
@@ -59,7 +57,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	protected void updateClientSide() {
 		updates();
 	}
-	
+
 	@Override
 	protected void updateServerSide() {
 		updates();
@@ -90,7 +88,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(SoundEvent sound) {
-		this.worldObj.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
@@ -100,13 +98,13 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	/* IStreamable */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeInt(numPlayersUsing);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		numPlayersUsing = data.readInt();
 	}

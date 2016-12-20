@@ -5,16 +5,14 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
 
 /**
  * Stores beekeeping logic for bee housings.
@@ -27,6 +25,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 
 	/**
 	 * Checks that the bees can work, setting error conditions on the housing where needed
+	 *
 	 * @return true if no errors are present and doWork should be called
 	 */
 	boolean canWork();
@@ -75,6 +74,5 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 * Used by bee fx to direct bees to nearby flowers.
 	 * These positions are synced to the client from the server.
 	 */
-	@Nonnull
 	List<BlockPos> getFlowerPositions();
 }

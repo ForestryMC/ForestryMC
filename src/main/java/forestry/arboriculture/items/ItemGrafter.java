@@ -29,7 +29,7 @@ import forestry.core.items.ItemForestryTool;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public ItemGrafter(int maxDamage) {
-		super(null);
+		super(ItemStack.EMPTY);
 		setMaxDamage(maxDamage);
 		setMaxStackSize(1);
 		setCreativeTab(Tabs.tabArboriculture);
@@ -48,10 +48,9 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 		Block block = state.getBlock();
-		if (block instanceof BlockLeaves || block.getMaterial(state) == Material.LEAVES) {
-			return true;
-		}
-		return super.canHarvestBlock(state, stack);
+		return block instanceof BlockLeaves ||
+				state.getMaterial() == Material.LEAVES ||
+				super.canHarvestBlock(state, stack);
 	}
 
 	@Override

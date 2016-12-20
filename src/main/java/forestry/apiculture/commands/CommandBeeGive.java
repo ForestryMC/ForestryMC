@@ -12,16 +12,9 @@ package forestry.apiculture.commands;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -34,6 +27,13 @@ import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
 import forestry.core.commands.TemplateNotFoundException;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandBeeGive extends SubCommand {
 
@@ -65,7 +65,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws SpeciesNotFoundException, TemplateNotFoundException, PlayerNotFoundException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 2) {
 			printHelp(sender);
 			return;
@@ -83,10 +83,6 @@ public class CommandBeeGive extends SubCommand {
 			player = CommandBase.getPlayer(server, sender, args[2]);
 		} else {
 			player = CommandBase.getPlayer(server, sender, sender.getName());
-		}
-		if (player == null) {
-			printHelp(sender);
-			return;
 		}
 
 		IBee bee = BeeManager.beeRoot.getBee(beeGenome);
@@ -139,7 +135,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (args.length == 1) {
 			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
 			tabCompletion.add("help");
@@ -147,9 +143,9 @@ public class CommandBeeGive extends SubCommand {
 		} else if (args.length == 2) {
 			return CommandHelpers.getListOfStringsMatchingLastWord(args, beeTypeArr);
 		} else if (args.length == 3) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getPlayerList().getAllUsernames());
+			return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	private static String[] getSpecies() {

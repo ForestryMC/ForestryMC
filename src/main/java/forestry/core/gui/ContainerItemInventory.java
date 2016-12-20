@@ -47,7 +47,7 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
+		return inventory.isUsableByPlayer(entityplayer);
 	}
 
 	@Override

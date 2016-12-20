@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+
+import net.minecraft.network.PacketBuffer;
 
 /**
  * Keeps track of all the IErrorStates for an object.
@@ -39,7 +39,7 @@ public interface IErrorLogic extends IErrorSource {
 	/**
 	 * Network serialization for syncing errors to the client from the server.
 	 */
-	void writeData(DataOutputStream data) throws IOException;
+	void writeData(PacketBuffer data);
 
-	void readData(DataInputStream data) throws IOException;
+	void readData(PacketBuffer data);
 }

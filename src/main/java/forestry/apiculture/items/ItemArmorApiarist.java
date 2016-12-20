@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.apiculture.ApicultureCapabilities;
@@ -60,9 +59,9 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 		return false;
 	}
 
-	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	@Nullable
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {

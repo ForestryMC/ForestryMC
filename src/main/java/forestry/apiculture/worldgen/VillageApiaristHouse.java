@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -107,6 +107,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		this.fenceGate = woodAccess.getBlock(woodType, WoodBlockKind.FENCE_GATE, fireproof);
 	}
 
+	@Nullable
 	public static VillageApiaristHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> pieces, Random random, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
 		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(structureMinX, structureMinY, structureMinZ, -4, 0, 0, 12, 9, 12, facing);
 		if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(pieces, bbox) != null) {
@@ -117,7 +118,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	}
 
 	@Override
-	public boolean addComponentParts(@Nonnull World world, @Nonnull Random random, @Nonnull StructureBoundingBox structBoundingBox) {
+	public boolean addComponentParts(World world, Random random, StructureBoundingBox structBoundingBox) {
 
 		if (averageGroundLevel < 0) {
 			averageGroundLevel = getAverageGroundLevel(world, structBoundingBox);
@@ -165,7 +166,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		fillWithBlocks(world, structBoundingBox, 8, 3, 0, 8, 3, 5, planks, planks, false);
 		fillWithBlocks(world, structBoundingBox, 1, 2, 0, 7, 3, 0, planks, planks, false);
 		fillWithBlocks(world, structBoundingBox, 1, 2, 5, 7, 3, 5, planks, planks, false);
-		
+
 		// Ceiling
 		IBlockState slabCeiling = slabs.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 		fillWithBlocks(world, structBoundingBox, 1, 4, 1, 7, 4, 4, slabCeiling, slabCeiling, false);

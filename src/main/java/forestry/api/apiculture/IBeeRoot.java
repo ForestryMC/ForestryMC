@@ -6,7 +6,6 @@
 package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.authlib.GameProfile;
@@ -53,7 +52,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(World world, GameProfile player);
+	IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 
@@ -75,8 +74,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	boolean isMated(ItemStack stack);
 
 	/**
-	 * @param genome
-	 *            Valid {@link IBeeGenome}
+	 * @param genome Valid {@link IBeeGenome}
 	 * @return {@link IBee} from the passed genome
 	 */
 	IBee getBee(IBeeGenome genome);
@@ -84,17 +82,16 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/**
 	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
 	 *
-	 * @param genome
-	 *            Valid {@link IBeeGenome}
-	 * @param mate
-	 *            Valid {@link IBee} representing the mate.
+	 * @param genome Valid {@link IBeeGenome}
+	 * @param mate   Valid {@link IBee} representing the mate.
 	 * @return Mated {@link IBee} from the passed genomes.
 	 */
 	IBee getBee(World world, IBeeGenome genome, IBee mate);
 
 	/* TEMPLATES */
+
 	@Override
-	ArrayList<IBee> getIndividualTemplates();
+	List<IBee> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override
@@ -103,10 +100,11 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* GAME MODE */
 	void resetBeekeepingMode();
 
-	ArrayList<IBeekeepingMode> getBeekeepingModes();
+	List<IBeekeepingMode> getBeekeepingModes();
 
 	IBeekeepingMode getBeekeepingMode(World world);
 
+	@Nullable
 	IBeekeepingMode getBeekeepingMode(String name);
 
 	void registerBeekeepingMode(IBeekeepingMode mode);

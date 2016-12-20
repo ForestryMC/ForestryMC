@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -53,11 +54,14 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
+	private static final List<IButterfly> butterflyTemplates = new ArrayList<>();
+
 
 	@Override
 	public String getUID() {
 		return UID;
 	}
+
 
 	@Override
 	public Class<? extends IIndividual> getMemberClass() {
@@ -88,7 +92,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Nullable
 	@Override
 	public EnumFlutterType getType(ItemStack stack) {
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return null;
 		}
 
@@ -101,11 +105,11 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return EnumFlutterType.CATERPILLAR;
 		} else if (PluginLepidopterology.items.cocoonGE == item) {
 			return EnumFlutterType.COCOON;
-		}else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public EnumFlutterType getIconType() {
 		return EnumFlutterType.BUTTERFLY;
@@ -123,12 +127,8 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public IButterfly getMember(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			return null;
-		}
-		if (!isMember(stack)) {
-			return null;
-		}
+		Preconditions.checkArgument(isMember(stack));
+		Preconditions.checkArgument(stack.getTagCompound() != null);
 
 		return new Butterfly(stack.getTagCompound());
 	}
@@ -140,9 +140,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
-		if (!(type instanceof EnumFlutterType)) {
-			return null;
-		}
+		Preconditions.checkArgument(type instanceof EnumFlutterType);
 
 		Item butterflyItem;
 		switch ((EnumFlutterType) type) {
@@ -173,9 +171,13 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
 		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
-	
+
 	@Override
 	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
+		if (nursery.getCaterpillar() == null) {
+			return false;
+		}
+
 		BlockPos pos = getNextPos(world, nursery.getCoordinates());
 		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state);
@@ -202,8 +204,8 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 		return true;
 	}
-	
-	private BlockPos getNextPos(World world, BlockPos pos){
+
+	private BlockPos getNextPos(World world, BlockPos pos) {
 		IBlockState blockState;
 		do {
 			pos = pos.down();
@@ -216,10 +218,6 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public boolean isMated(ItemStack stack) {
 		IButterfly butterfly = getMember(stack);
-		if (butterfly == null) {
-			return false;
-		}
-
 		return butterfly.getMate() != null;
 	}
 
@@ -245,12 +243,12 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<>();
 
 	@Override
-	public ArrayList<IButterfly> getIndividualTemplates() {
+	public List<IButterfly> getIndividualTemplates() {
 		return butterflyTemplates;
 	}
+
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
@@ -291,14 +289,14 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	/* BREEDING TRACKER */
 	@Override
-	public ILepidopteristTracker getBreedingTracker(World world, GameProfile player) {
+	public ILepidopteristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
 		String filename = "LepidopteristTracker." + (player == null ? "common" : player.getId());
-		LepidopteristTracker tracker = (LepidopteristTracker) world.loadItemData(LepidopteristTracker.class, filename);
+		LepidopteristTracker tracker = (LepidopteristTracker) world.loadData(LepidopteristTracker.class, filename);
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
 			tracker = new LepidopteristTracker(filename);
-			world.setItemData(filename, tracker);
+			world.setData(filename, tracker);
 		}
 
 		tracker.setUsername(player);
@@ -321,5 +319,4 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return FlutterlyzerPlugin.INSTANCE;
 	}
-	
 }

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.watchers.FakeSlotChangeWatcher;
 import forestry.core.inventory.watchers.FakeSlotPickupWatcher;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * Slot with a watcher callbacks.
@@ -41,9 +40,10 @@ public class SlotWatched extends SlotForestry {
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		super.onPickupFromSlot(player, itemStack);
-		pickupWatcher.onPickupFromSlot(getSlotIndex(), player);
+	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+		itemStack = super.onTake(player, itemStack);
+		pickupWatcher.onTake(getSlotIndex(), player);
+		return itemStack;
 	}
 
 	@Override

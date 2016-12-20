@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
@@ -39,6 +32,11 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FlutterlyzerPlugin implements IAlyzerPlugin {
 	public static final FlutterlyzerPlugin INSTANCE = new FlutterlyzerPlugin();
@@ -46,127 +44,119 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private FlutterlyzerPlugin() {
-		List<ItemStack> butterflyList = new ArrayList<>();
+		NonNullList<ItemStack> butterflyList = NonNullList.create();
 		PluginLepidopterology.items.butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
-			if (species != null) {
-				iconStacks.put(species.getUID(), butterflyStack);
-			}
+			iconStacks.put(species.getUID(), butterflyStack);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void drawAnalyticsPage1(GuiScreen gui, ItemStack itemStack) {
-		if(gui instanceof GuiAlyzer){
+		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
-			if (butterfly == null) {
-				return;
-			}
-	
+
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
-	
+
 			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.newLine();
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), butterfly, EnumButterflyChromosome.SPECIES, null, null);
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),
 					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SIZE).getName(), butterfly, EnumButterflyChromosome.SPEED);
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.lifespan"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
 					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.LIFESPAN).getName(), butterfly,
 					EnumButterflyChromosome.LIFESPAN);
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.speed"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getName(),
 					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SPEED).getName(), butterfly, EnumButterflyChromosome.SPEED);
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.metabolism"), GenericRatings.rateMetabolism(butterfly.getGenome().getMetabolism()),
 					GenericRatings.rateMetabolism(((IAlleleInteger) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.METABOLISM)).getValue()), butterfly, EnumButterflyChromosome.METABOLISM);
 			textLayout.newLine();
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.fertility"), GuiAlyzer.COLUMN_0);
 			guiAlyzer.drawFertilityInfo(butterfly.getGenome().getFertility(), GuiAlyzer.COLUMN_1, guiAlyzer.getColorCoding(butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.FERTILITY)
 					.isDominant()), 8);
 			guiAlyzer.drawFertilityInfo(((IAlleleInteger) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FERTILITY)).getValue(), GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(butterfly
 					.getGenome().getInactiveAllele(EnumButterflyChromosome.FERTILITY).isDominant()), 8);
-	
+
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.flowers"), butterfly.getGenome().getFlowerProvider().getDescription(),
 					((IAlleleFlowers) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider()
 							.getDescription(), butterfly, EnumButterflyChromosome.FLOWER_PROVIDER);
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.effect"), butterfly.getGenome().getEffect().getName(),
 					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT).getName(), butterfly,
 					EnumButterflyChromosome.EFFECT);
-	
+
 			textLayout.newLine();
-	
+
 			textLayout.endPage();
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void drawAnalyticsPage2(GuiScreen gui, ItemStack itemStack) {
-		if(gui instanceof GuiAlyzer){
+		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
-			if (butterfly == null) {
-				return;
-			}
-	
+
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
-	
+
 			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.newLine();
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
 					AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
 			textLayout.newLine();
-	
+
 			IAlleleTolerance tempToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 			IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 			textLayout.drawLine("  " + Translator.translateToLocal("for.gui.tolerance"), GuiAlyzer.COLUMN_0);
 			guiAlyzer.drawToleranceInfo(tempToleranceActive, GuiAlyzer.COLUMN_1);
 			guiAlyzer.drawToleranceInfo(tempToleranceInactive, GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.newLine();
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
 					AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
 			textLayout.newLine();
-	
+
 			IAlleleTolerance humidToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
 			IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
 			textLayout.drawLine("  " + Translator.translateToLocal("for.gui.tolerance"), GuiAlyzer.COLUMN_0);
 			guiAlyzer.drawToleranceInfo(humidToleranceActive, GuiAlyzer.COLUMN_1);
 			guiAlyzer.drawToleranceInfo(humidToleranceInactive, GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.newLine();
 			textLayout.newLine();
-	
+
 			String yes = Translator.translateToLocal("for.yes");
 			String no = Translator.translateToLocal("for.no");
-	
+
 			String diurnal0, diurnal1, nocturnal0, nocturnal1;
 			if (butterfly.getGenome().getNocturnal()) {
 				nocturnal0 = diurnal0 = yes;
@@ -180,30 +170,30 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 				nocturnal1 = butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
 				diurnal1 = !butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
 			}
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.diurnal"), GuiAlyzer.COLUMN_0);
 			textLayout.drawLine(diurnal0, GuiAlyzer.COLUMN_1, guiAlyzer.getColorCoding(false));
 			textLayout.drawLine(diurnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
 			textLayout.newLine();
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.nocturnal"), GuiAlyzer.COLUMN_0);
 			textLayout.drawLine(nocturnal0, GuiAlyzer.COLUMN_1, guiAlyzer.getColorCoding(false));
 			textLayout.drawLine(nocturnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
 			textLayout.newLine();
-	
+
 			String primary = StringUtil.readableBoolean(butterfly.getGenome().getTolerantFlyer(), yes, no);
 			String secondary = StringUtil.readableBoolean(((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue(), yes,
 					no);
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.flyer"), primary, secondary, butterfly, EnumButterflyChromosome.TOLERANT_FLYER);
 			textLayout.newLine();
-	
+
 			primary = StringUtil.readableBoolean(butterfly.getGenome().getFireResist(), yes, no);
 			secondary = StringUtil.readableBoolean(((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue(), yes,
 					no);
-	
+
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.fireresist"), primary, secondary, butterfly, EnumButterflyChromosome.FIRE_RESIST);
-	
+
 			textLayout.endPage();
 		}
 	}
@@ -211,20 +201,17 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void drawAnalyticsPage3(GuiScreen gui, ItemStack itemStack) {
-		if(gui instanceof GuiAlyzer){
+		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
-			if (butterfly == null) {
-				return;
-			}
-	
+
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
-	
+
 			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.loot.butterfly") + ":", GuiAlyzer.COLUMN_0);
 			textLayout.newLine();
-	
+
 			int x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
 				Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
@@ -234,13 +221,13 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 					textLayout.newLine();
 				}
 			}
-	
+
 			textLayout.newLine();
 			textLayout.newLine();
-	
+
 			textLayout.drawLine(Translator.translateToLocal("for.gui.loot.caterpillar") + ":", GuiAlyzer.COLUMN_0);
 			textLayout.newLine();
-	
+
 			x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
 				Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
@@ -250,7 +237,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 					textLayout.newLine();
 				}
 			}
-	
+
 			textLayout.endPage();
 		}
 	}
@@ -259,7 +246,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 	public Map<String, ItemStack> getIconStacks() {
 		return iconStacks;
 	}
-	
+
 	@Override
 	public List<String> getHints() {
 		return Config.hints.get("flutterlyzer");

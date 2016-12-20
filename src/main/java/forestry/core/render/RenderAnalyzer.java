@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -40,22 +42,25 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	@Override
 	public void renderTileEntityAt(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (analyzer != null) {
-			IBlockState blockState = analyzer.getWorldObj().getBlockState(analyzer.getPos());
-			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
-				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
-				return;
+			World worldObj = analyzer.getWorldObj();
+			if (worldObj.isBlockLoaded(analyzer.getPos())) {
+				IBlockState blockState = worldObj.getBlockState(analyzer.getPos());
+				if (blockState.getBlock() instanceof BlockBase) {
+					EnumFacing facing = blockState.getValue(BlockBase.FACING);
+					render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
+					return;
+				}
 			}
 		}
-		render(null, null, EnumFacing.WEST, x, y, z);
+		render(ItemStack.EMPTY, null, EnumFacing.WEST, x, y, z);
 	}
 
-	private void render(ItemStack itemstack, World world, EnumFacing orientation, double x, double y, double z) {
+	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
 
-		dummyEntityItem.worldObj = world;
+		dummyEntityItem.world = world;
 
 		model.render(orientation, (float) x, (float) y, (float) z);
-		if (itemstack == null) {
+		if (itemstack.isEmpty() || world == null) {
 			return;
 		}
 		float renderScale = 1.0f;

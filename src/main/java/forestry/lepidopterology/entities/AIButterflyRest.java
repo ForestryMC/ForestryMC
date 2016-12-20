@@ -46,14 +46,14 @@ public class AIButterflyRest extends AIButterflyBase {
 		}
 
 		pos = pos.add(x, -1, z);
-		if (entity.worldObj.isAirBlock(pos)) {
+		if (entity.world.isAirBlock(pos)) {
 			return false;
 		}
-		IBlockState blockState = entity.worldObj.getBlockState(pos);
+		IBlockState blockState = entity.world.getBlockState(pos);
 		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
 			return false;
 		}
-		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, pos.getY(), z)) {
+		if (!entity.getButterfly().isAcceptedEnvironment(entity.world, x, pos.getY(), z)) {
 			return false;
 		}
 
@@ -84,21 +84,21 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	private boolean canLand(BlockPos pos) {
-		if (!entity.worldObj.isBlockLoaded(pos)) {
+		if (!entity.world.isBlockLoaded(pos)) {
 			return false;
 		}
-		IBlockState blockState = entity.worldObj.getBlockState(pos);
+		IBlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!block.isPassable(entity.worldObj, pos)) {
+		if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
 		if (isPlant(blockState)) {
 			return true;
 		}
 
-		IBlockState blockStateBelow = entity.worldObj.getBlockState(pos.down());
+		IBlockState blockStateBelow = entity.world.getBlockState(pos.down());
 		Block blockBelow = blockStateBelow.getBlock();
-		return isRest(blockBelow) || blockBelow.isLeaves(blockStateBelow, entity.worldObj, pos.down());
+		return isRest(blockBelow) || blockBelow.isLeaves(blockStateBelow, entity.world, pos.down());
 	}
 
 	private static boolean isRest(Block block) {

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,6 +32,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	public static final String SAVE_NAME = "POBox_";
 	public static final short SLOT_SIZE = 84;
 
+	@Nullable
 	private IMailAddress address;
 	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters").disableAutomation();
 
@@ -40,6 +44,7 @@ public class POBox extends WorldSavedData implements IInventory {
 		this.address = address;
 	}
 
+	@SuppressWarnings("unused")
 	public POBox(String savename) {
 		super(savename);
 	}
@@ -65,6 +70,7 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	public boolean storeLetter(ItemStack letterstack) {
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
+		Preconditions.checkNotNull(letter, "Letter stack must be a valid letter");
 
 		// Mark letter as processed
 		letter.setProcessed(true);
@@ -82,14 +88,17 @@ public class POBox extends WorldSavedData implements IInventory {
 		int playerLetters = 0;
 		int tradeLetters = 0;
 		for (int i = 0; i < letters.getSizeInventory(); i++) {
-			if (letters.getStackInSlot(i) == null) {
+			if (letters.getStackInSlot(i).isEmpty()) {
 				continue;
 			}
-			ILetter letter = new Letter(letters.getStackInSlot(i).getTagCompound());
-			if (letter.getSender().getType() == EnumAddressee.PLAYER) {
-				playerLetters++;
-			} else {
-				tradeLetters++;
+			NBTTagCompound tagCompound = letters.getStackInSlot(i).getTagCompound();
+			if (tagCompound != null) {
+				ILetter letter = new Letter(tagCompound);
+				if (letter.getSender().getType() == EnumAddressee.PLAYER) {
+					playerLetters++;
+				} else {
+					tradeLetters++;
+				}
 			}
 		}
 
@@ -97,6 +106,12 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	/* IINVENTORY */
+
+	@Override
+	public boolean isEmpty() {
+		return letters.isEmpty();
+	}
+
 	@Override
 	public void markDirty() {
 		super.markDirty();
@@ -140,8 +155,8 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return letters.isUseableByPlayer(var1);
+	public boolean isUsableByPlayer(EntityPlayer var1) {
+		return letters.isUsableByPlayer(var1);
 	}
 
 	@Override

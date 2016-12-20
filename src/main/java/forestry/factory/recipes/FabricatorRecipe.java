@@ -10,48 +10,46 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
+import forestry.api.recipes.IFabricatorRecipe;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.ShapedRecipeCustom;
-
 public class FabricatorRecipe implements IFabricatorRecipe {
-
 	private final ItemStack plan;
 	private final FluidStack molten;
-	private final ShapedRecipeCustom internal;
+	private final NonNullList<NonNullList<ItemStack>> ingredients;
+	private final ItemStack result;
 
-	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] ingredients) {
-		this(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, ingredients));
-	}
-
-	public FabricatorRecipe(ItemStack plan, FluidStack molten, ShapedRecipeCustom internal) {
+	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients) {
+		Preconditions.checkNotNull(plan);
+		Preconditions.checkNotNull(molten);
+		Preconditions.checkNotNull(result);
+		Preconditions.checkArgument(!result.isEmpty());
+		Preconditions.checkNotNull(ingredients);
 		this.plan = plan;
 		this.molten = molten;
-		this.internal = internal;
+		this.result = result;
+		this.ingredients = ingredients;
 	}
 
 	@Override
-	public Object[] getIngredients() {
-		return internal.getIngredients();
+	public NonNullList<NonNullList<ItemStack>> getIngredients() {
+		return ingredients;
 	}
 
 	@Override
 	public int getWidth() {
-		return internal.getWidth();
+		return 3;
 	}
 
 	@Override
 	public int getHeight() {
-		return internal.getHeight();
+		return 3;
 	}
 
 	@Override
-	@Nullable
 	public ItemStack getPlan() {
 		return plan;
 	}
@@ -63,6 +61,6 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return internal.getRecipeOutput();
+		return result;
 	}
 }

@@ -26,6 +26,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
+import net.minecraft.world.World;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	private final ModelRenderer boiler;
@@ -50,7 +51,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
-	public RenderEngine() {
+	public RenderEngine(String baseTexture) {
 		ModelBase model = new EngineModelBase();
 		boiler = new ModelRenderer(model, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
@@ -75,10 +76,6 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		extension.rotationPointX = 8F;
 		extension.rotationPointY = 8F;
 		extension.rotationPointZ = 8F;
-	}
-
-	public RenderEngine(String baseTexture) {
-		this();
 
 		textures = new ResourceLocation[]{
 				new ForestryResource(baseTexture + "base.png"),
@@ -94,11 +91,14 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	@Override
 	public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (engine != null) {
-			IBlockState blockState = engine.getWorldObj().getBlockState(engine.getPos());
-			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
-				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
-				return;
+			World worldObj = engine.getWorldObj();
+			if (worldObj.isBlockLoaded(engine.getPos())) {
+				IBlockState blockState = worldObj.getBlockState(engine.getPos());
+				if (blockState.getBlock() instanceof BlockBase) {
+					EnumFacing facing = blockState.getValue(BlockBase.FACING);
+					render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
+					return;
+				}
 			}
 		}
 		render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);

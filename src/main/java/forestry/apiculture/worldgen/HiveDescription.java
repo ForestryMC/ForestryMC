@@ -65,7 +65,7 @@ public enum HiveDescription implements IHiveDescription {
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
-			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
+			return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {

@@ -12,6 +12,13 @@ package forestry.food.items;
 
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.food.IBeverageEffect;
+import forestry.core.config.Config;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestryFood;
+import forestry.core.items.ItemOverlay;
+import forestry.food.BeverageEffect;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,19 +30,11 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestryFood;
-import forestry.core.items.ItemOverlay;
-import forestry.food.BeverageEffect;
 
 public class ItemBeverage extends ItemForestryFood implements IColoredItem {
 	public interface IBeverageInfo extends ItemOverlay.IOverlayInfo {
@@ -68,7 +67,7 @@ public class ItemBeverage extends ItemForestryFood implements IColoredItem {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		List<IBeverageEffect> effects = BeverageEffect.loadEffects(stack);
 
-		stack.stackSize--;
+		stack.shrink(1);
 
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
@@ -114,23 +113,23 @@ public class ItemBeverage extends ItemForestryFood implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
-	{
-		int meta = itemStackIn.getItemDamage();
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStack = playerIn.getHeldItem(hand);
+		int meta = itemStack.getItemDamage();
 		IBeverageInfo beverage = beverages[meta];
 		if (playerIn.canEat(beverage.isAlwaysEdible())) {
 			playerIn.setActiveHand(hand);
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 		} else {
-			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+			return new ActionResult<>(EnumActionResult.FAIL, itemStack);
 		}
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < beverages.length; i++) {
 			if (Config.isDebug || !beverages[i].isSecret()) {
-				itemList.add(new ItemStack(this, 1, i));
+				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}
@@ -140,11 +139,10 @@ public class ItemBeverage extends ItemForestryFood implements IColoredItem {
 		List<IBeverageEffect> effects = BeverageEffect.loadEffects(itemstack);
 
 		for (IBeverageEffect effect : effects) {
-			if (effect.getDescription() != null) {
-				list.add(effect.getDescription());
-			}
+			list.add(effect.getDescription());
 		}
 	}
+
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {

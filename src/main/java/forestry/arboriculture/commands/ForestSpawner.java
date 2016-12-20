@@ -30,14 +30,11 @@ public class ForestSpawner implements ITreeSpawner {
 		int z = (int) Math.round(player.posZ + 16 * look.zCoord);
 
 		for (int i = 0; i < 16; i++) {
-			int spawnX = x + player.worldObj.rand.nextInt(32) - 16;
-			int spawnZ = z + player.worldObj.rand.nextInt(32) - 16;
+			int spawnX = x + player.world.rand.nextInt(32) - 16;
+			int spawnZ = z + player.world.rand.nextInt(32) - 16;
 			BlockPos pos = new BlockPos(spawnX, y, spawnZ);
 
 			WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, pos);
-			if (gen == null) {
-				return false;
-			}
 			TreeGenHelper.generateTree(gen, player, pos);
 		}
 		return true;

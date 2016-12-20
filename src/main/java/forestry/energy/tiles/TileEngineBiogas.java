@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -19,12 +18,11 @@ import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineBiogas;
@@ -60,12 +58,12 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
-	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
+	@Nullable
 	public Fluid getBurnTankFluidType() {
 		return burnTank.getFluidType();
 	}
@@ -107,7 +105,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			} else if (shutdown)
 
 			{
-				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluid().getFluid() == FluidRegistry.LAVA) {
+				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, true);
 				}
@@ -190,7 +188,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
-	private static int determineFuelValue(Fluid fluid) {
+	private static int determineFuelValue(@Nullable Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
 		} else {
@@ -238,7 +236,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		tankManager.readFromNBT(nbt);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
@@ -249,7 +246,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeBoolean(shutdown);
 		tankManager.writeData(data);
@@ -257,7 +254,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
 		tankManager.readData(data);
@@ -265,13 +262,13 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

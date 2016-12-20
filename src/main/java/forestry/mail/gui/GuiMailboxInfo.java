@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
@@ -41,6 +43,7 @@ public class GuiMailboxInfo extends Gui {
 	private static final int HEIGHT = 17;
 
 	private final FontRenderer fontRendererObj;
+	@Nullable
 	private POBoxInfo poInfo;
 	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
@@ -96,7 +99,7 @@ public class GuiMailboxInfo extends Gui {
 		}
 
 		if (playJingle) {
-			EntityPlayerSP thePlayer = Proxies.common.getClientInstance().thePlayer;
+			EntityPlayerSP thePlayer = Proxies.common.getClientInstance().player;
 			World world = Proxies.common.getRenderWorld();
 			world.playSound(null, thePlayer.posX, thePlayer.posY, thePlayer.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0F);
 		}

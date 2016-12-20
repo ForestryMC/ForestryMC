@@ -61,7 +61,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 		tile.checkRecipe();
 	}
 
-	private ItemStack oldCraftPreview;
+	private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
 	@Override
 	public void detectAndSendChanges() {

@@ -1,15 +1,7 @@
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -21,9 +13,14 @@ import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WoodHelper {
-	@Nonnull
+
 	public static String getDisplayName(IWoodTyped wood, IWoodType woodType) {
 		WoodBlockKind blockKind = wood.getBlockKind();
 
@@ -51,7 +48,7 @@ public class WoodHelper {
 
 		return displayName;
 	}
-	
+
 	public static ResourceLocation getDefaultResourceLocations(IWoodTyped typed) {
 		return new ResourceLocation(Constants.MOD_ID, typed.getBlockKind().toString());
 	}
@@ -71,16 +68,16 @@ public class WoodHelper {
 
 	@SideOnly(Side.CLIENT)
 	public static class WoodMeshDefinition implements IWoodItemMeshDefinition {
-		@Nonnull
-		public IWoodTyped wood;
 
-		public WoodMeshDefinition(@Nonnull IWoodTyped wood) {
+		public final IWoodTyped wood;
+
+		public WoodMeshDefinition(IWoodTyped wood) {
 			this.wood = wood;
 		}
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if(!WoodModelLoader.INSTANCE.isRegistered){
+			if (!WoodModelLoader.INSTANCE.isRegistered) {
 				return new ModelResourceLocation(getDefaultModelLocation(stack), "inventory");
 			}
 			int meta = stack.getMetadata();
@@ -94,7 +91,7 @@ public class WoodHelper {
 				throw new IllegalArgumentException("Unknown wood type: " + woodType);
 			}
 		}
-		
+
 		@Override
 		public ResourceLocation getDefaultModelLocation(ItemStack stack) {
 			WoodBlockKind blockKind = wood.getBlockKind();

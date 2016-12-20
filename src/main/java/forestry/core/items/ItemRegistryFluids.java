@@ -36,8 +36,12 @@ public class ItemRegistryFluids extends ItemRegistry {
 	public ItemStack getContainer(EnumContainerType type, Fluid fluid) {
 		ItemStack container = new ItemStack(containers.get(type));
 		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
-		return container;
+		if (fluidHandler != null) {
+			fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
+			return container;
+		} else {
+			return ItemStack.EMPTY;
+		}
 	}
 
 	public ItemRegistryFluids() {

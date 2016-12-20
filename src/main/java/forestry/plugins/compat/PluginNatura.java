@@ -10,17 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
@@ -37,18 +29,31 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.NATURA, name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends BlankForestryPlugin {
 
 	private static final String NATURA = "Natura";
 
+	@Nullable
 	private static Block logNatura;
+	@Nullable
 	private static Block logWillow;
-
+	@Nullable
 	private static Block leavesNatura;
+	@Nullable
 	private static Block saplingNatura;
+	@Nullable
 	private static Block saplingNaturaRare;
+
 	private static ItemStack berryBlight;
 	private static ItemStack berryDusk;
 	private static ItemStack berrySky;
@@ -73,11 +78,11 @@ public class PluginNatura extends BlankForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		logNatura = GameRegistry.findBlock(NATURA, "tree");
-		logWillow = GameRegistry.findBlock(NATURA, "willow");
-		leavesNatura = GameRegistry.findBlock(NATURA, "floraleaves");
-		saplingNatura = GameRegistry.findBlock(NATURA, "florasapling");
-		saplingNaturaRare = GameRegistry.findBlock(NATURA, "Rare Sapling");
+		logNatura = getBlock("tree");
+		logWillow = getBlock("willow");
+		leavesNatura = getBlock("floraleaves");
+		saplingNatura = getBlock("florasapling");
+		saplingNaturaRare = getBlock("Rare Sapling");
 
 		ArrayList<String> saplingItemKeys = new ArrayList<>();
 
@@ -89,28 +94,24 @@ public class PluginNatura extends BlankForestryPlugin {
 		}
 
 		for (String key : saplingItemKeys) {
-			Item saplingItem = GameRegistry.findItem(NATURA, key);
+			ItemStack saplingWild = getItemStack(key, OreDictionary.WILDCARD_VALUE);
+			if (!saplingWild.isEmpty()) {
+				RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
-			ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
-			RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
-
-			String saplingName = ItemStackUtil.getItemNameFromRegistryAsString(saplingItem);
-			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+				String saplingName = ItemStackUtil.getItemNameFromRegistryAsString(saplingWild.getItem());
+				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			}
 		}
 
-		Item netherBerry = GameRegistry.findItem(NATURA, "berry.nether");
-		Item berry = GameRegistry.findItem(NATURA, "berry");
-		Item barley = GameRegistry.findItem(NATURA, "barleyFood");
-		
-		berryBlight = new ItemStack(netherBerry, 1, 0);
-		berryDusk = new ItemStack(netherBerry, 1, 1);
-		berrySky = new ItemStack(netherBerry, 1, 2);
-		berrySting = new ItemStack(netherBerry, 1, 3);
-		berryRasp = new ItemStack(berry, 1, 0);
-		berryBlue = new ItemStack(berry, 1, 1);
-		berryBlack = new ItemStack(berry, 1, 2);
-		berryMalo = new ItemStack(berry, 1, 3);
-		itemBarley = new ItemStack(barley);
+		berryBlight = getItemStack("berry.nether", 0);
+		berryDusk = getItemStack("berry.nether", 1);
+		berrySky = getItemStack("berry.nether", 2);
+		berrySting = getItemStack("berry.nether", 3);
+		berryRasp = getItemStack("berry", 0);
+		berryBlue = getItemStack("berry", 1);
+		berryBlack = getItemStack("berry", 2);
+		berryMalo = getItemStack("berry", 3);
+		itemBarley = getItemStack("barleyFood", 0);
 	}
 
 	@Override
@@ -119,31 +120,31 @@ public class PluginNatura extends BlankForestryPlugin {
 
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
-		if (berryBlight != null) {
+		if (!berryBlight.isEmpty()) {
 			crateRegistry.registerCrate(berryBlight);
 		}
-		if (berryDusk != null) {
+		if (!berryDusk.isEmpty()) {
 			crateRegistry.registerCrate(berryDusk);
 		}
-		if (berrySky != null) {
+		if (!berrySky.isEmpty()) {
 			crateRegistry.registerCrate(berrySky);
 		}
-		if (berrySting != null) {
+		if (!berrySting.isEmpty()) {
 			crateRegistry.registerCrate(berrySting);
 		}
-		if (berryRasp != null) {
+		if (!berryRasp.isEmpty()) {
 			crateRegistry.registerCrate(berryRasp);
 		}
-		if (berryBlue != null) {
+		if (!berryBlue.isEmpty()) {
 			crateRegistry.registerCrate(berryBlue);
 		}
-		if (berryBlack != null) {
+		if (!berryBlack.isEmpty()) {
 			crateRegistry.registerCrate(berryBlack);
 		}
-		if (berryMalo != null) {
+		if (!berryMalo.isEmpty()) {
 			crateRegistry.registerCrate(berryMalo);
 		}
-		if (itemBarley != null) {
+		if (!itemBarley.isEmpty()) {
 			crateRegistry.registerCrate(itemBarley);
 		}
 		if (saplingNatura != null) {
@@ -164,11 +165,11 @@ public class PluginNatura extends BlankForestryPlugin {
 			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 3));
 			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 4));
 		}
-		Item potashApple = GameRegistry.findItem(NATURA, "Natura.netherfood");
-		if (potashApple != null) {
-			crateRegistry.registerCrate(new ItemStack(potashApple, 1, 0));
+		ItemStack potashApple = getItemStack("Natura.netherfood", 0);
+		if (!potashApple.isEmpty()) {
+			crateRegistry.registerCrate(potashApple);
 		}
-		Item glowShroom = GameRegistry.findItem(NATURA, "Glowshroom");
+		Item glowShroom = getItem("Glowshroom");
 		if (glowShroom != null) {
 			crateRegistry.registerCrate(new ItemStack(glowShroom, 1, 0));
 			crateRegistry.registerCrate(new ItemStack(glowShroom, 1, 1));
@@ -179,22 +180,25 @@ public class PluginNatura extends BlankForestryPlugin {
 			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 1));
 			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 2));
 			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 3));
+		}
+		if (logWillow != null) {
 			crateRegistry.registerCrate(new ItemStack(logWillow, 1, 0));
 		}
-		Item bloodWood = GameRegistry.findItem(NATURA, "bloodwood");
+
+		Item bloodWood = getItem("bloodwood");
 		if (bloodWood != null) {
 			crateRegistry.registerCrate(new ItemStack(bloodWood, 1, 0));
 		}
-		Item darkTree = GameRegistry.findItem(NATURA, "Dark Tree");
+		Item darkTree = getItem("Dark Tree");
 		if (darkTree != null) {
 			crateRegistry.registerCrate(new ItemStack(darkTree, 1, 0));
 			crateRegistry.registerCrate(new ItemStack(darkTree, 1, 1));
 		}
-		Item heatSand = GameRegistry.findItem(NATURA, "heatsand");
+		Item heatSand = getItem("heatsand");
 		if (heatSand != null) {
 			crateRegistry.registerCrate(new ItemStack(heatSand, 1, 0));
 		}
-		Item taintedSoil = GameRegistry.findItem(NATURA, "soil.tainted");
+		Item taintedSoil = getItem("soil.tainted");
 		if (taintedSoil != null) {
 			crateRegistry.registerCrate(new ItemStack(taintedSoil, 1, 0));
 		}
@@ -202,71 +206,74 @@ public class PluginNatura extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Item seed = GameRegistry.findItem(NATURA, "barley.seed");
-		ItemStack seedBarley = new ItemStack(seed, 1, 0);
-		ItemStack seedCotton = new ItemStack(seed, 1, 1);
-
-		ArrayList<ItemStack> seedList = new ArrayList<>();
-		if (seedBarley != null) {
-			seedList.add(seedBarley);
-			RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.MYCELIUM), 5000);
-		}
-		if (seedCotton != null) {
-			seedList.add(seedCotton);
-		}
-
 		int amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		for (ItemStack aSeedList : seedList) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEED_OIL.getFluid(amount));
+
+		Item seed = getItem("barley.seed");
+		if (seed != null) {
+			ItemStack seedBarley = new ItemStack(seed, 1, 0);
+			ItemStack seedCotton = new ItemStack(seed, 1, 1);
+
+			ArrayList<ItemStack> seedList = new ArrayList<>();
+			if (!seedBarley.isEmpty()) {
+				seedList.add(seedBarley);
+				RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.MYCELIUM), 5000);
+			}
+			if (!seedCotton.isEmpty()) {
+				seedList.add(seedCotton);
+			}
+
+			for (ItemStack aSeedList : seedList) {
+				RecipeManagers.squeezerManager.addRecipe(10, aSeedList, Fluids.SEED_OIL.getFluid(amount));
+			}
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
-			Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
+			Block cropBlock = getBlock("N Crops");
 			//TODO: Natura for 1.9
 			//			Farmables.farmables.get("farmWheat").add(new FarmableHandPlanted(seedBarley, cropBlock, 3));
 			//			Farmables.farmables.get("farmWheat").add(new FarmableHandPlanted(seedCotton, cropBlock, 8));
 		}
-		
+
 		List<ItemStack> berries = new ArrayList<>();
-		if (berryBlight != null) {
+		if (!berryBlight.isEmpty()) {
 			berries.add(berryBlight);
 		}
-		if (berryDusk != null) {
+		if (!berryDusk.isEmpty()) {
 			berries.add(berryDusk);
 		}
-		if (berrySky != null) {
+		if (!berrySky.isEmpty()) {
 			berries.add(berrySky);
 		}
-		if (berrySting != null) {
+		if (!berrySting.isEmpty()) {
 			berries.add(berrySting);
 		}
-		if (berryRasp != null) {
+		if (!berryRasp.isEmpty()) {
 			berries.add(berryRasp);
 		}
-		if (berryBlue != null) {
+		if (!berryBlue.isEmpty()) {
 			berries.add(berryBlue);
 		}
-		if (berryBlack != null) {
+		if (!berryBlack.isEmpty()) {
 			berries.add(berryBlack);
 		}
-		if (berryMalo != null) {
+		if (!berryMalo.isEmpty()) {
 			berries.add(berryMalo);
 		}
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
-		ItemStack netherFood = new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0);
+		ItemStack netherFood = getItemStack("Natura.netherfood", 0);
 		ItemStack mulch = PluginCore.items.mulch.getItemStack();
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{netherFood}, Fluids.JUICE.getFluid(amount), mulch, ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
+		RecipeManagers.squeezerManager.addRecipe(10, netherFood, Fluids.JUICE.getFluid(amount), mulch, ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 
 		for (ItemStack berry : berries) {
-			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[]{berry}, Fluids.JUICE.getFluid(amount));
+			RecipeManagers.squeezerManager.addRecipe(3, berry, Fluids.JUICE.getFluid(amount));
 		}
 
-		if (itemBarley != null) {
+		if (!itemBarley.isEmpty()) {
 			RecipeUtil.addFermenterRecipes(itemBarley, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 			if (compostWheatAmount > 0) {
@@ -277,4 +284,32 @@ public class PluginNatura extends BlankForestryPlugin {
 		}
 	}
 
+	@Nullable
+	private static Block getBlock(String blockName) {
+		ResourceLocation key = new ResourceLocation(NATURA, blockName);
+		if (ForgeRegistries.BLOCKS.containsKey(key)) {
+			return ForgeRegistries.BLOCKS.getValue(key);
+		} else {
+			return null;
+		}
+	}
+
+	@Nullable
+	private static Item getItem(String itemName) {
+		ResourceLocation key = new ResourceLocation(NATURA, itemName);
+		if (ForgeRegistries.ITEMS.containsKey(key)) {
+			return ForgeRegistries.ITEMS.getValue(key);
+		} else {
+			return null;
+		}
+	}
+
+	private static ItemStack getItemStack(String itemName, int meta) {
+		ResourceLocation key = new ResourceLocation(NATURA, itemName);
+		if (ForgeRegistries.ITEMS.containsKey(key)) {
+			return new ItemStack(ForgeRegistries.ITEMS.getValue(key), 1, meta);
+		} else {
+			return ItemStack.EMPTY;
+		}
+	}
 }

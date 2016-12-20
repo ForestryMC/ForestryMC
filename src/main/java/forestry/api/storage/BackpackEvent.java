@@ -10,7 +10,6 @@ import net.minecraft.inventory.IInventory;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-
 public abstract class BackpackEvent extends Event {
 
 	public final EntityPlayer player;

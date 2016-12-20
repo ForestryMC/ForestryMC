@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
+
 /**
  * Basic effect allele. 
  */

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,21 +46,17 @@ public class ModelBaker implements IModelBaker {
 	private static final float quadsUV[] = new float[]{0, 0, 1, 1, 0, 0, 1, 1};
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 	private final List<Pair<IBlockState, IBakedModel>> bakedModels = new ArrayList<>();
-	@Nonnull
+
 	protected AxisAlignedBB renderBounds = Block.FULL_BLOCK_AABB;
 
-	protected ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().DEFAULT_BLOCK);
+	protected final ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().DEFAULT_BLOCK);
 
 	protected final FaceBakery faceBakery = new FaceBakery();
 
-	protected final float[] defUVs = new float[] { 0, 0, 1, 1 };
+	protected final float[] defUVs = new float[]{0, 0, 1, 1};
 
 	@Override
-	public void setRenderBounds(@Nonnull AxisAlignedBB renderBounds) {
-		if (renderBounds == null) {
-			return;
-		}
-
+	public void setRenderBounds(AxisAlignedBB renderBounds) {
 		this.renderBounds = renderBounds;
 	}
 
@@ -76,32 +71,32 @@ public class ModelBaker implements IModelBaker {
 	public void setColorIndex(int colorIndex) {
 		this.colorIndex = colorIndex;
 	}
-	
+
 	@Override
-	public void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+	public void addModel(AxisAlignedBB renderBounds, TextureAtlasSprite[] textures, int colorIndex) {
 		setRenderBounds(renderBounds);
-		
+
 		setColorIndex(colorIndex);
-		
+
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			addFace(facing, textures[facing.ordinal()]);
 		}
 
 		setRenderBounds(Block.FULL_BLOCK_AABB);
 	}
-	
+
 	@Override
-	public void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex) {
-		addModel(renderBounds, new TextureAtlasSprite[]{ texture, texture, texture, texture, texture, texture }, colorIndex);
+	public void addModel(AxisAlignedBB renderBounds, TextureAtlasSprite texture, int colorIndex) {
+		addModel(renderBounds, new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
 	}
-	
+
 	@Override
-	public void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+	public void addBlockModel(Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, TextureAtlasSprite[] textures, int colorIndex) {
 		setRenderBounds(renderBounds);
-		
+
 		setColorIndex(colorIndex);
-		
-		if(pos != null){
+
+		if (pos != null) {
 			World world = Proxies.common.getRenderWorld();
 			IBlockState blockState = world.getBlockState(pos);
 			for (EnumFacing facing : EnumFacing.VALUES) {
@@ -109,7 +104,7 @@ public class ModelBaker implements IModelBaker {
 					addFace(facing, textures[facing.ordinal()]);
 				}
 			}
-		}else {
+		} else {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				addFace(facing, textures[facing.ordinal()]);
 			}
@@ -119,15 +114,13 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite texture, int colorIndex) {
-		addBlockModel(block, renderBounds, pos, new TextureAtlasSprite[]{ texture, texture, texture, texture, texture, texture }, colorIndex);
+	public void addBlockModel(Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, TextureAtlasSprite texture, int colorIndex) {
+		addBlockModel(block, renderBounds, pos, new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
 	}
-	
+
 	@Override
-	public void addBakedModel(@Nullable IBlockState state, @Nonnull IBakedModel model) {
-		if(model != null){
-			this.bakedModels.add(Pair.of(state, model));
-		}
+	public void addBakedModel(@Nullable IBlockState state, IBakedModel model) {
+		this.bakedModels.add(Pair.of(state, model));
 	}
 
 	protected static float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
@@ -137,43 +130,43 @@ public class ModelBaker implements IModelBaker {
 		float to_b = 0;
 
 		switch (face) {
-		case UP:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case DOWN:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case SOUTH:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.y / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.y / 16.0f;
-			break;
-		case NORTH:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.y / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.y / 16.0f;
-			break;
-		case EAST:
-			from_a = from_16.y / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.y / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case WEST:
-			from_a = from_16.y / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.y / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		default:
+			case UP:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case DOWN:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case SOUTH:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.y / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.y / 16.0f;
+				break;
+			case NORTH:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.y / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.y / 16.0f;
+				break;
+			case EAST:
+				from_a = from_16.y / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.y / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case WEST:
+				from_a = from_16.y / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.y / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			default:
 		}
 
 		from_a = 1.0f - from_a;
@@ -197,11 +190,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFace(@Nonnull EnumFacing facing, @Nonnull TextureAtlasSprite sprite) {
-		if (sprite == null) {
-			return;
-		}
-
+	public void addFace(EnumFacing facing, TextureAtlasSprite sprite) {
 		Vector3f to = new Vector3f((float) renderBounds.minX * 16.0f, (float) renderBounds.minY * 16.0f, (float) renderBounds.minZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderBounds.maxX * 16.0f, (float) renderBounds.maxY * 16.0f, (float) renderBounds.maxZ * 16.0f);
 
@@ -215,9 +204,9 @@ public class ModelBaker implements IModelBaker {
 		if (flip) {
 			mr = ModelRotation.X0_Y180;
 		}
-		
+
 		//Add baked models to the current model.
-		for(Pair<IBlockState, IBakedModel> bakedModel : bakedModels){
+		for (Pair<IBlockState, IBakedModel> bakedModel : bakedModels) {
 			currentModel.addModelQuads(bakedModel);
 		}
 
@@ -232,12 +221,12 @@ public class ModelBaker implements IModelBaker {
 
 			currentModel.addQuad(myFace, bf);
 		}
-		
+
 		return currentModel;
 	}
-	
+
 	@Override
-	public void setModelState(IModelState modelState){
+	public void setModelState(@Nullable IModelState modelState) {
 		currentModel.setModelState(modelState);
 	}
 

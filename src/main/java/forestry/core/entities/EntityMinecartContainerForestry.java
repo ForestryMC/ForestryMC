@@ -54,8 +54,8 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 
 	@Override
 	public void setDead() {
-		if (dropContentsWhenDead && !worldObj.isRemote) {
-			InventoryUtil.dropInventory(getInternalInventory(), worldObj, posX, posY, posZ);
+		if (dropContentsWhenDead && !world.isRemote) {
+			InventoryUtil.dropInventory(getInternalInventory(), world, posX, posY, posZ);
 		}
 		super.setDead();
 	}
@@ -76,8 +76,14 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 
 	/* IInventory */
+
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isEmpty() {
+		return getInternalInventory().isEmpty();
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return !isDead && player.getDistanceSqToEntity(this) <= 64.0D;
 	}
 

@@ -29,10 +29,10 @@ import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.ItemStack;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
-	
+
 	/* RESEARCH */
 	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<>();
-	
+
 	@Override
 	public Map<ItemStack, Float> getResearchCatalysts() {
 		return Collections.unmodifiableMap(researchCatalysts);
@@ -50,7 +50,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	public Map<String, IAllele[]> getGenomeTemplates() {
 		return speciesTemplates;
 	}
-	
+
 	@Override
 	public void registerTemplate(IAllele[] template) {
 		if (template == null) {

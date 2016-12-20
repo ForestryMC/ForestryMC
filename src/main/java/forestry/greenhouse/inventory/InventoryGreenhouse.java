@@ -32,7 +32,7 @@ public class InventoryGreenhouse extends InventoryAdapterRestricted {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-		return greenhouseController.getTankManager().canFillFluidType(fluid);
+		return fluid != null && greenhouseController.getTankManager().canFillFluidType(fluid);
 	}
 
 	public void drainCan(TankManager tankManager) {

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +33,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.core.IStateMapperRegister;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.render.FruitPodStateMapper;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.core.proxy.Proxies;
@@ -45,21 +44,19 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 
 	public static List<BlockFruitPod> create() {
 		List<BlockFruitPod> blocks = new ArrayList<>();
-		for (IAlleleFruit fruit : AlleleFruit.getFruitAllelesWithModels()) {
+		for (IAlleleFruit fruit : AlleleFruits.getFruitAllelesWithModels()) {
 			BlockFruitPod block = new BlockFruitPod(fruit);
 			blocks.add(block);
 		}
 		return blocks;
 	}
 
-	@Nonnull
 	private final IAlleleFruit fruit;
 
-	private BlockFruitPod(@Nonnull IAlleleFruit fruit) {
+	private BlockFruitPod( IAlleleFruit fruit) {
 		this.fruit = fruit;
 	}
-
-	@Nonnull
+	
 	public IAlleleFruit getFruit() {
 		return fruit;
 	}
@@ -68,7 +65,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (tile == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return tile.getPickBlock();
 	}
@@ -135,10 +132,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
-		if (podTile != null) {
-			return podTile.canMature();
-		}
-		return false;
+		return podTile != null && podTile.canMature();
 	}
 
 	@Override

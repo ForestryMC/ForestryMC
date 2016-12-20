@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,7 +41,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
-import forestry.arboriculture.blocks.property.PropertyTree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
@@ -52,7 +52,8 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
-	
+
+	@Nullable
 	public static TileSapling getSaplingTile(IBlockAccess world, BlockPos pos) {
 		return TileUtil.getTile(world, pos, TileSapling.class);
 	}
@@ -75,8 +76,9 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	/* COLLISION BOX */
 
+	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
 
@@ -141,16 +143,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		}
 
 		ITree tree = tile.getTree();
-		if (tree == null) {
-			return false;
-		}
-
-		return tree.canStay(world, pos);
+		return tree != null && tree.canStay(world, pos);
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		super.neighborChanged(state, worldIn, pos, blockIn);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
 			dropAsSapling(worldIn, pos);
 			worldIn.setBlockToAir(pos);
@@ -167,7 +165,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileSapling sapling = getSaplingTile(world, pos);
 		if (sapling == null || sapling.getTree() == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
@@ -203,10 +201,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 			return false;
 		}
 		TileSapling saplingTile = getSaplingTile(world, pos);
-		if (saplingTile != null) {
-			return saplingTile.canAcceptBoneMeal(rand);
-		}
-		return true;
+		return saplingTile == null || saplingTile.canAcceptBoneMeal(rand);
 	}
 	
 	@Override

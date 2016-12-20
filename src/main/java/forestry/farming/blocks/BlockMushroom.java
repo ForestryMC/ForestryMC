@@ -29,6 +29,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -158,12 +159,10 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		this.generateGiantMushroom(worldIn, pos, state, rand);
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(itemIn, 1, 0));
+		list.add(new ItemStack(itemIn, 1, 1));
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class FermenterRecipeMaker {
 	public static List<FermenterRecipeWrapper> getFermenterRecipes(IStackHelper stackHelper) {
 		List<FermenterRecipeWrapper> recipes = new ArrayList<>();
 		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
-			if (recipe.getResource() != null) {
+			if (!recipe.getResource().isEmpty()) {
 				if (recipe.getResource().getItem() instanceof IVariableFermentable) {
 					for (ItemStack stack : stackHelper.getSubtypes(recipe.getResource())) {
 						recipes.add(new FermenterRecipeWrapper(recipe, stack));
@@ -28,7 +28,7 @@ public class FermenterRecipeMaker {
 					recipes.add(new FermenterRecipeWrapper(recipe, recipe.getResource()));
 				}
 			} else {
-				Log.error("Null resource for recipe");
+				Log.error("Empty resource for recipe");
 			}
 		}
 		return recipes;

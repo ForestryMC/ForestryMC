@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,9 +37,11 @@ public class Config {
 	public static final String CATEGORY_FLUIDS = "fluids";
 	public static final String CATEGORY_FARM = "farm";
 
+	@Nullable
 	public static LocalizedConfiguration configCommon;
+	@Nullable
 	public static LocalizedConfiguration configFluid;
-
+	@Nullable
 	public static String gameMode;
 
 	private static final Set<String> disabledStructures = new HashSet<>();
@@ -300,10 +303,8 @@ public class Config {
 
 		for (String key : prop.stringPropertyNames()) {
 			String[] parsedHints = parseHints(prop.getProperty(key));
-			if (parsedHints != null) {
-				for (String parsedHint : parsedHints) {
-					hints.put(key, parsedHint);
-				}
+			for (String parsedHint : parsedHints) {
+				hints.put(key, parsedHint);
 			}
 		}
 	}

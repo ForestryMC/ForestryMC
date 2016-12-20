@@ -14,7 +14,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.energy.gui.widgets.BiogasSlot;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {

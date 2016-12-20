@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -77,7 +77,7 @@ public class TileEngineClockwork extends TileEngine {
 		tension = nbttagcompound.getFloat("Wound");
 	}
 	
-	@Nonnull
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -155,11 +155,13 @@ public class TileEngineClockwork extends TileEngine {
 	}
 
 	@Override
+	@Nullable
 	public Object getGui(EntityPlayer player, int data) {
 		return null;
 	}
 
 	@Override
+	@Nullable
 	public Object getContainer(EntityPlayer player, int data) {
 		return null;
 	}

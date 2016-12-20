@@ -12,12 +12,11 @@ package forestry.farming.multiblock;
 
 import java.io.IOException;
 
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
@@ -80,12 +79,12 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeVarInt(storedFertilizer);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		storedFertilizer = data.readVarInt();
 	}
 }

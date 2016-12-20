@@ -5,9 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,12 +46,13 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(World world, GameProfile player);
+	IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
 	/**
 	 * Register a leaf tick handler.
+	 *
 	 * @param handler the {@link ILeafTickHandler} to register.
 	 */
 	void registerLeafTickHandler(ILeafTickHandler handler);
@@ -67,6 +66,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	@Override
 	EnumGermlingType getType(ItemStack stack);
 
+	@Nullable
 	ITree getTree(World world, BlockPos pos);
 
 	ITree getTree(World world, ITreeGenome genome);
@@ -79,7 +79,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	@Override
 	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	boolean setFruitBlock(@Nonnull World world, @Nonnull IAlleleFruit allele, float sappiness, BlockPos pos);
+	boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
@@ -93,8 +93,9 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	void setTreekeepingMode(World world, String name);
 
 	/* TEMPLATES */
+
 	@Override
-	ArrayList<ITree> getIndividualTemplates();
+	List<ITree> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override

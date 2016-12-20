@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.factory.tiles.TileBottler;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler> {
 
@@ -50,15 +50,15 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler>
 		textLayout.line = 5;
 		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);
-		
+
 		bindTexture(textureFile);
-		
+
 		TileBottler bottler = inventory;
 		int progressArrow = bottler.getProgressScaled(22);
-		if(progressArrow > 0){
-			if(bottler.isFillRecipe){
+		if (progressArrow > 0) {
+			if (bottler.isFillRecipe) {
 				drawTexturedModalRect(guiLeft + 108, guiTop + 35, 177, 74, progressArrow, 16);
-			}else{
+			} else {
 				drawTexturedModalRect(guiLeft + 46, guiTop + 35, 177, 74, progressArrow, 16);
 			}
 		}

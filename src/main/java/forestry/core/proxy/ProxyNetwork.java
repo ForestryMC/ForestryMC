@@ -13,6 +13,7 @@ package forestry.core.proxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerChunkMap;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -21,20 +22,19 @@ import net.minecraftforge.common.util.FakePlayer;
 import forestry.Forestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.ILocatedPacket;
 
 public class ProxyNetwork {
 
-	public <P extends IForestryPacketClient & ILocatedPacket> void sendNetworkPacket(P packet, World world) {
-		if (packet == null || !(world instanceof WorldServer)) {
+	public <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
+		if (!(world instanceof WorldServer)) {
 			return;
 		}
 
 		WorldServer worldServer = (WorldServer) world;
 		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
-		int chunkX = packet.getPos().getX() >> 4;
-		int chunkZ = packet.getPos().getZ() >> 4;
+		int chunkX = pos.getX() >> 4;
+		int chunkZ = pos.getZ() >> 4;
 
 		for (Object playerObj : world.playerEntities) {
 			if (playerObj instanceof EntityPlayerMP) {

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -64,8 +62,7 @@ public class WoodProviderVanilla implements IWoodProvider {
 		woodTop = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name + "_top"));
 		woodBark = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name));
 	}
-
-	@Nonnull
+	
 	@Override
 	public TextureAtlasSprite getSprite(boolean isTop) {
 		if (isTop) {

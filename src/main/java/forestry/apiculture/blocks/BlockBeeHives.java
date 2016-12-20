@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -74,7 +75,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		return getDefaultState().withProperty(HIVE_TYPES, HiveType.VALUES[meta]);
 	}
 
-	public IBlockState getStateForType(@Nonnull HiveType type) {
+	public IBlockState getStateForType(HiveType type) {
 		return getDefaultState().withProperty(HIVE_TYPES, type);
 	}
 
@@ -168,7 +169,11 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		return PluginApiculture.hiveRegistry.getDrops(hiveName);
 	}
 
+	@Nullable
 	private static String getHiveNameForMeta(int meta) {
+		if (meta < 0 || meta >= HiveType.VALUES.length) {
+			return null;
+		}
 		return HiveType.VALUES[meta].getHiveUid();
 	}
 
@@ -177,11 +182,11 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (IBlockState blockState : getBlockState().getValidStates()) {
 			if (getHiveType(blockState) != HiveType.SWARM) {
 				int meta = getMetaFromState(blockState);
-				itemList.add(new ItemStack(this, 1, meta));
+				list.add(new ItemStack(this, 1, meta));
 			}
 		}
 	}

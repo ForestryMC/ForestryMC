@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.mail.inventory;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
@@ -31,12 +26,19 @@ import forestry.core.utils.SlotUtil;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
 import forestry.mail.items.ItemStamps;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemInventoryLetter extends ItemInventory implements IErrorSource, IHintSource {
-	private ILetter letter;
+	private final ILetter letter;
 
-	public ItemInventoryLetter(EntityPlayer player,ItemStack itemstack) {
+	public ItemInventoryLetter(EntityPlayer player, ItemStack itemstack) {
 		super(player, 0, itemstack);
+		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		Preconditions.checkNotNull(tagCompound);
+		letter = new Letter(tagCompound);
 	}
 
 	public ILetter getLetter() {
@@ -45,42 +47,29 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 
 	public void onLetterClosed() {
 		ItemStack parent = getParent();
-		if (parent == null) {
-			return;
-		}
-
 		LetterProperties.closeLetter(parent, letter);
 	}
 
 	public void onLetterOpened() {
 		ItemStack parent = getParent();
-		if (parent == null) {
-			return;
-		}
-
 		LetterProperties.openLetter(parent);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound == null) {
-			return;
-		}
-
-		letter = new Letter(nbttagcompound);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		ItemStack result = letter.decrStackSize(i, j);
-		letter.writeToNBT(getParent().getTagCompound());
+	public ItemStack decrStackSize(int index, int count) {
+		ItemStack result = letter.decrStackSize(index, count);
+		NBTTagCompound tagCompound = getParent().getTagCompound();
+		Preconditions.checkNotNull(tagCompound);
+		letter.writeToNBT(tagCompound);
 		return result;
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		letter.setInventorySlotContents(i, itemstack);
-		letter.writeToNBT(getParent().getTagCompound());
+	public void setInventorySlotContents(int index, ItemStack itemstack) {
+		letter.setInventorySlotContents(index, itemstack);
+		NBTTagCompound tagCompound = getParent().getTagCompound();
+		Preconditions.checkNotNull(tagCompound);
+		letter.writeToNBT(tagCompound);
 	}
 
 	@Override
@@ -104,10 +93,10 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return letter.isUseableByPlayer(entityplayer);
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+		return letter.isUsableByPlayer(entityplayer);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		return letter.removeStackFromSlot(slot);

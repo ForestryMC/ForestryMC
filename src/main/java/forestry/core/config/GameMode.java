@@ -21,7 +21,6 @@ import forestry.core.utils.Log;
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";
 	private String identifier = "EASY";
-	private final String category;
 
 	private final Map<String, Boolean> booleanSettings = new HashMap<>();
 	private final Map<String, Integer> integerSettings = new HashMap<>();
@@ -66,7 +65,7 @@ public class GameMode implements IGameMode {
 	public GameMode(String identifier) {
 
 		this.identifier = identifier;
-		this.category = "gamemodes/" + identifier;
+		String category = "gamemodes/" + identifier;
 
 		File configFile = new File(Forestry.instance.getConfigFolder(), category + ".cfg");
 

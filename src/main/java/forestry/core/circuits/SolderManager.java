@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class SolderManager implements ISolderManager {
 		recipes.add(new CircuitRecipe(layout, resource, circuit));
 	}
 
+	@Nullable
 	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
 		CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
 		if (circuitRecipe == null) {
@@ -44,11 +46,8 @@ public class SolderManager implements ISolderManager {
 		return circuitRecipe.getCircuit();
 	}
 
+	@Nullable
 	public static CircuitRecipe getMatchingRecipe(ICircuitLayout layout, ItemStack resource) {
-		if (layout == null || resource == null) {
-			return null;
-		}
-
 		for (CircuitRecipe recipe : recipes) {
 			if (recipe.matches(layout, resource)) {
 				return recipe;

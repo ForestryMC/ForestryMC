@@ -10,26 +10,22 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.google.common.base.Joiner;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.ICrashCallable;
-
+import com.google.common.base.Joiner;
 import forestry.core.config.Constants;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ICrashCallable;
 
 /**
  * ICrashCallable for listing disabled modules for crash reports.
  **/
 public class ForestryModEnvWarningCallable implements ICrashCallable {
-	@Nonnull
 	private final String disabledModulesMessage;
 
 	public static void register() {
@@ -47,17 +43,15 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 		}
 	}
 
-	private ForestryModEnvWarningCallable(@Nonnull String disabledModulesMessage) {
+	private ForestryModEnvWarningCallable(String disabledModulesMessage) {
 		this.disabledModulesMessage = disabledModulesMessage;
 	}
 
-	@Nonnull
 	@Override
 	public String call() {
 		return disabledModulesMessage;
 	}
 
-	@Nonnull
 	@Override
 	public String getLabel() {
 		return Constants.MOD_ID + " ";

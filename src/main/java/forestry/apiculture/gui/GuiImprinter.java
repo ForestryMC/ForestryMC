@@ -11,13 +11,8 @@
 package forestry.apiculture.gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.PluginApiculture;
@@ -30,6 +25,9 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
 
@@ -44,7 +42,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 		xSize = 176;
 		ySize = 185;
 
-		List<ItemStack> beeList = new ArrayList<>();
+		NonNullList<ItemStack> beeList = NonNullList.create();
 		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);

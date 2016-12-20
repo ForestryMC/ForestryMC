@@ -12,26 +12,24 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
-public class PacketActiveUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private boolean active;
-
-	public PacketActiveUpdate() {
-	}
+public class PacketActiveUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final boolean active;
 
 	public PacketActiveUpdate(IActivatable tile) {
-		super(tile.getCoordinates());
+		this.pos = tile.getCoordinates();
 		this.active = tile.isActive();
 	}
 
@@ -41,27 +39,26 @@ public class PacketActiveUpdate extends PacketCoordinates implements IForestryPa
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeBoolean(active);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		active = data.readBoolean();
-	}
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+			BlockPos pos = data.readBlockPos();
+			boolean active = data.readBoolean();
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IActivatable) {
-			((IActivatable) tile).setActive(active);
-		}else{
-			if(tile instanceof IMultiblockComponent){
-				IMultiblockComponent component = (IMultiblockComponent) tile;
-				if(component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable){
-					((IActivatable)component.getMultiblockLogic().getController()).setActive(active);
+			TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(pos);
+			if (tile instanceof IActivatable) {
+				((IActivatable) tile).setActive(active);
+			} else {
+				if (tile instanceof IMultiblockComponent) {
+					IMultiblockComponent component = (IMultiblockComponent) tile;
+					if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
+						((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
+					}
 				}
 			}
 		}

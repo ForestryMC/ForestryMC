@@ -26,17 +26,17 @@ public class FakeCharcoalPileController extends FakeMultiblockController impleme
 
 	@Override
 	public BlockPos getMinimumCoord() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
 	public BlockPos getMaximumCoord() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
 	public BlockPos getCoordinates() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 }

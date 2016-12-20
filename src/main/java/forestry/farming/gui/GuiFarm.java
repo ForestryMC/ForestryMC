@@ -18,7 +18,6 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.farming.gui.widgets.FarmLogicSlot;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
 

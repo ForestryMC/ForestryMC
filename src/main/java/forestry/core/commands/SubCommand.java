@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -42,6 +42,7 @@ public abstract class SubCommand implements IForestryCommand {
 	private final String name;
 	private final List<String> aliases = new ArrayList<>();
 	private PermLevel permLevel = PermLevel.EVERYONE;
+	@Nullable
 	private IForestryCommand parent;
 	private final SortedSet<SubCommand> children = new TreeSet<>();
 
@@ -50,7 +51,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public final String getCommandName() {
+	public String getName() {
 		return name;
 	}
 
@@ -74,13 +75,13 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return aliases;
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, pos);
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, targetPos);
 	}
 
 	@Override
@@ -90,7 +91,7 @@ public abstract class SubCommand implements IForestryCommand {
 		}
 	}
 
-	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		printHelp(sender);
 	}
 
@@ -106,7 +107,7 @@ public abstract class SubCommand implements IForestryCommand {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
+		return sender.canUseCommand(getPermissionLevel(), getName());
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "/" + getFullCommandString() + " help";
 	}
 
@@ -126,12 +127,15 @@ public abstract class SubCommand implements IForestryCommand {
 
 	@Override
 	public String getFullCommandString() {
-		return parent.getFullCommandString() + " " + getCommandName();
+		if (parent == null) {
+			return getName();
+		}
+		return parent.getFullCommandString() + " " + getName();
 	}
 
 	@Override
-	public int compareTo(@Nonnull ICommand command) {
-		return this.getCommandName().compareTo(command.getCommandName());
+	public int compareTo(ICommand command) {
+		return this.getName().compareTo(command.getName());
 	}
 
 }

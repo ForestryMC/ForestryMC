@@ -5,6 +5,7 @@ import forestry.core.models.ModelEntry;
 import forestry.core.proxy.Proxies;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
+@SuppressWarnings("unused")
 public class ProxyStorageClient extends ProxyStorage {
 
 	@Override

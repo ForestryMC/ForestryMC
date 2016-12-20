@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import java.util.List;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
@@ -56,7 +58,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products) {
+	public List<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, List<ItemStack> products) {
 		return products;
 	}
 

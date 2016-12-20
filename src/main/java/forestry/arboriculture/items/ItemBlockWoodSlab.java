@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.blocks.slab.BlockForestrySlab;
+import forestry.arboriculture.blocks.BlockForestrySlab;
 
 public class ItemBlockWoodSlab extends ItemSlab {
 	public ItemBlockWoodSlab(BlockForestrySlab block, BlockForestrySlab slab, BlockForestrySlab doubleSlab) {

@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.renderer.GlStateManager;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -24,27 +22,27 @@ import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class LedgerManager {
 	private final List<Ledger> ledgers = new ArrayList<>();
 	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
 
 	private IErrorSource errorSource;
-	private final int maxWidth;
+	private int maxWidth;
 
 	public final GuiForestry gui;
 
-	public LedgerManager(GuiForestry gui, int maxWidth) {
+	public LedgerManager(GuiForestry gui) {
 		this.gui = gui;
 		this.errorSource = FakeErrorSource.instance;
+	}
+
+	public void setMaxWidth(int maxWidth) {
 		this.maxWidth = maxWidth;
 	}
 
 	public void add(IErrorSource errorSource) {
-		if (errorSource == null) {
-			return;
-		}
-
 		this.errorSource = errorSource;
 		int maxErrorLedgerCount = (gui.getSizeY() - 10) / Ledger.minHeight;
 		for (int i = 0; i < maxErrorLedgerCount; i++) {
@@ -72,6 +70,7 @@ public class LedgerManager {
 		this.ledgers.add(ledgers.size() - 1, ledger);
 	}
 
+	@Nullable
 	private Ledger getAtPosition(int mX, int mY) {
 		if (!ledgers.isEmpty()) {
 			final int xShift = (gui.width - gui.getSizeX()) / 2 + gui.getSizeX();
@@ -112,7 +111,6 @@ public class LedgerManager {
 		return null;
 	}
 
-	@Nonnull
 	public List<Rectangle> getLedgerAreas() {
 		List<Rectangle> areas = new ArrayList<>();
 		for (Ledger ledger : ledgers) {

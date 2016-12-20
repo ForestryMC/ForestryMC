@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import javax.annotation.Nullable;
+
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -34,6 +36,7 @@ public class GameTokenWidget extends Widget {
 		this.index = index;
 	}
 
+	@Nullable
 	private EscritoireGameToken getToken() {
 		return game.getToken(index);
 	}

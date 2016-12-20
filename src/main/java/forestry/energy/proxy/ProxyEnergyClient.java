@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.render.RenderEngine;
 
+@SuppressWarnings("unused")
 public class ProxyEnergyClient extends ProxyEnergy {
 
 	@Override

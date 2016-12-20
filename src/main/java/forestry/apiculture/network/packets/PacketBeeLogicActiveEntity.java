@@ -12,27 +12,23 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketEntityUpdate;
-import forestry.core.proxy.Proxies;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 
-public class PacketBeeLogicActiveEntity extends PacketEntityUpdate implements IForestryPacketClient {
-	private BeekeepingLogic beekeepingLogic;
-
-	public PacketBeeLogicActiveEntity() {
-	}
+public class PacketBeeLogicActiveEntity extends ForestryPacket implements IForestryPacketClient {
+	private final Entity entity;
+	private final BeekeepingLogic beekeepingLogic;
 
 	public PacketBeeLogicActiveEntity(IBeeHousing housing, Entity entity) {
-		super(entity);
+		this.entity = entity;
 		this.beekeepingLogic = (BeekeepingLogic) housing.getBeekeepingLogic();
 	}
 
@@ -42,19 +38,21 @@ public class PacketBeeLogicActiveEntity extends PacketEntityUpdate implements IF
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeEntityById(entity);
 		beekeepingLogic.writeData(data);
 	}
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Entity entity = getTarget(Proxies.common.getRenderWorld());
-		if (entity instanceof IBeeHousing) {
-			IBeeHousing beeHousing = (IBeeHousing) entity;
-			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-			if (beekeepingLogic instanceof BeekeepingLogic) {
-				((BeekeepingLogic) beekeepingLogic).readData(data);
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			Entity entity = data.readEntityById(player.world);
+			if (entity instanceof IBeeHousing) {
+				IBeeHousing beeHousing = (IBeeHousing) entity;
+				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+				if (beekeepingLogic instanceof BeekeepingLogic) {
+					((BeekeepingLogic) beekeepingLogic).readData(data);
+				}
 			}
 		}
 	}

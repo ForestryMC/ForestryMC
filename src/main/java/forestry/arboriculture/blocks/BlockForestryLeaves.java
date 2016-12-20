@@ -33,8 +33,8 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.IColoredBlock;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
@@ -58,6 +58,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -113,9 +114,8 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		return new TileLeaves();
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 
 	}
 
@@ -135,12 +135,11 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		float saplingModifier = 1.0f;
 
 		ItemStack held = player.inventory.getCurrentItem();
-		if (held != null && held.getItem() instanceof IToolGrafter) {
+		if (held.getItem() instanceof IToolGrafter) {
 			saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, pos);
 			held.damageItem(1, player);
-			if (held.stackSize <= 0) {
+			if (held.isEmpty()) {
 				net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, held, EnumHand.MAIN_HAND);
-				player.setHeldItem(EnumHand.MAIN_HAND, null);
 			}
 		}
 
@@ -196,12 +195,12 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		ITree tree = leaves.getTree();
 		if (tree == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		String speciesUid = tree.getGenome().getPrimary().getUID();
@@ -219,12 +218,18 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 				speciesUid = tree.getGenome().getPrimary().getUID();
 			}
 		}
-		
-		return Collections.singletonList(PluginArboriculture.blocks.getDecorativeLeaves(speciesUid));
+
+		ItemStack decorativeLeaves = PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
+		if (decorativeLeaves.isEmpty()) {
+			return Collections.emptyList();
+		} else {
+			return Collections.singletonList(decorativeLeaves);
+		}
 	}
-	
+
+	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		TileLeaves tileLeaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
 			return null;
@@ -304,17 +309,18 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
-		if (heldItem != null && heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
 			ItemStackUtil.dropItemStackAsEntity(butterfly, worldIn, pos);
 			((TileLeaves) tile).setCaterpillar(null);
 			return true;
 		}
 
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}
 
 	/* IGrowable */
@@ -322,10 +328,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (leafTile != null) {
-			return leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
-		}
-		return false;
+		return leafTile != null && leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
 	}
 
 	@Override
@@ -342,17 +345,18 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	}
 
 	@Override
-	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
-		if (leaves == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
+	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+		if (worldIn != null && pos != null) {
+			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
+			if (leaves != null) {
+				if (tintIndex == 0) {
+					EntityPlayer thePlayer = Proxies.common.getPlayer();
+					return leaves.getFoliageColour(thePlayer);
+				} else {
+					return leaves.getFruitColour();
+				}
+			}
 		}
-
-		if (tintIndex == 0) {
-			EntityPlayer thePlayer = Proxies.common.getPlayer();
-			return leaves.getFoliageColour(thePlayer);
-		} else {
-			return leaves.getFruitColour();
-		}
+		return PluginArboriculture.proxy.getFoliageColorBasic();
 	}
 }

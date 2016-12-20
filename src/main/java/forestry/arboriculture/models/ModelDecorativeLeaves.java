@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenome;
@@ -36,27 +34,23 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected TreeDefinition getInventoryKey(@Nonnull ItemStack stack) {
+	protected TreeDefinition getInventoryKey(ItemStack stack) {
 		Block block = Block.getBlockFromItem(stack.getItem());
-		if (!(block instanceof BlockDecorativeLeaves)) {
-			return null;
-		}
+		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "ItemStack must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
 		return bBlock.getTreeType(stack.getMetadata());
 	}
 
 	@Override
-	protected TreeDefinition getWorldKey(@Nonnull IBlockState state) {
+	protected TreeDefinition getWorldKey(IBlockState state) {
 		Block block = state.getBlock();
-		if (!(block instanceof BlockDecorativeLeaves)) {
-			return null;
-		}
+		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
 		return state.getValue(bBlock.getVariant());
 	}
 
 	@Override
-	protected void bakeBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull TreeDefinition treeDefinition, @Nonnull IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker, boolean inventory) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 
 		ITreeGenome genome = treeDefinition.getGenome();
@@ -80,23 +74,12 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 		baker.setParticleSprite(leafSprite);
 	}
 
-	@Nullable
 	@Override
-	protected IBakedModel bakeModel(@Nonnull IBlockState state, @Nonnull TreeDefinition key) {
-		if (key == null) {
-			return null;
-		}
-
+	protected IBakedModel bakeModel(IBlockState state, TreeDefinition key, BlockDecorativeLeaves block) {
 		IModelBaker baker = new ModelBaker();
 
-		Block block = state.getBlock();
-		if (!blockClass.isInstance(block)) {
-			return null;
-		}
-		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-
 		baker.setRenderBounds(Block.FULL_BLOCK_AABB);
-		bakeBlock(bBlock, key, baker, false);
+		bakeBlock(block, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);

@@ -12,35 +12,42 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.circuits.ContainerSolderingIron;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-
-public class PacketGuiLayoutSelect extends PacketString implements IForestryPacketClient {
-
-	public PacketGuiLayoutSelect() {
-	}
+public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPacketClient {
+	private final String string;
 
 	public PacketGuiLayoutSelect(String string) {
-		super(string);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Container container = player.openContainer;
-		if (!(container instanceof ContainerSolderingIron)) {
-			return;
-		}
-
-		((ContainerSolderingIron) container).setLayout(getString());
+		this.string = string;
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.GUI_LAYOUT_SELECT;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeString(string);
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			String string = data.readString();
+			Container container = player.openContainer;
+			if (!(container instanceof ContainerSolderingIron)) {
+				return;
+			}
+
+			((ContainerSolderingIron) container).setLayout(string);
+		}
 	}
 }

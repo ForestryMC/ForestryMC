@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,10 +60,9 @@ public final class CommandSaveStats extends SubCommand {
 		this.modeHelper = modeHelper;
 	}
 
-
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+		return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 	}
 
 	@Override
@@ -91,32 +91,28 @@ public final class CommandSaveStats extends SubCommand {
 		statistics.add("");
 
 		IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
-		if (tracker == null) {
-			statistics.add(Translator.translateToLocal("for.chat.command.forestry.stats.save.error4"));
-		} else {
-			saveHelper.addExtraInfo(statistics, tracker);
+		saveHelper.addExtraInfo(statistics, tracker);
 
-			Collection<IAlleleSpecies> species = saveHelper.getSpecies();
+		Collection<IAlleleSpecies> species = saveHelper.getSpecies();
 
-			String speciesCount = Translator.translateToLocal("for.gui.speciescount");
-			String speciesCountLine = String.format("%s (%s):", speciesCount, species.size());
-			statistics.add(speciesCountLine);
-			statistics.add(StringUtil.line(speciesCountLine.length()));
+		String speciesCount = Translator.translateToLocal("for.gui.speciescount");
+		String speciesCountLine = String.format("%s (%s):", speciesCount, species.size());
+		statistics.add(speciesCountLine);
+		statistics.add(StringUtil.line(speciesCountLine.length()));
 
-			statistics.add(discoveredSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
-			statistics.add(blacklistedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
-			statistics.add(notCountedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
-			statistics.add("");
+		statistics.add(discoveredSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
+		statistics.add(blacklistedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
+		statistics.add(notCountedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
+		statistics.add("");
 
-			String header = generateSpeciesListHeader();
-			statistics.add(header);
+		String header = generateSpeciesListHeader();
+		statistics.add(header);
 
-			statistics.add(StringUtil.line(header.length()));
-			statistics.add("");
+		statistics.add(StringUtil.line(header.length()));
+		statistics.add("");
 
-			for (IAlleleSpecies allele : species) {
-				statistics.add(generateSpeciesListEntry(allele, tracker));
-			}
+		for (IAlleleSpecies allele : species) {
+			statistics.add(generateSpeciesListEntry(allele, tracker));
 		}
 
 		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD_ID + "/stats/" + player.getDisplayNameString() + '-' + saveHelper.getFileSuffix() + ".log");

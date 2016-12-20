@@ -29,7 +29,7 @@ public interface ITreeGenData {
 	@Nullable
 	BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	boolean setLeaves(World world, GameProfile owner, BlockPos pos);
+	boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos);
 
 	boolean setLogBlock(World world, BlockPos pos, EnumFacing facing);
 

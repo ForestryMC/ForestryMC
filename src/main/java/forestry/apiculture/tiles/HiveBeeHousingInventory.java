@@ -1,6 +1,6 @@
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
@@ -10,12 +10,14 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousingInventory;
 
 class HiveBeeHousingInventory implements IBeeHousingInventory {
+	@Nullable
 	private ItemStack queen;
+	@Nullable
 	private ItemStack drone;
 
 	private final TileHive hive;
 
-	public HiveBeeHousingInventory(@Nonnull TileHive hive) {
+	public HiveBeeHousingInventory(TileHive hive) {
 		this.hive = hive;
 	}
 
@@ -23,9 +25,7 @@ class HiveBeeHousingInventory implements IBeeHousingInventory {
 	public ItemStack getQueen() {
 		if (queen == null) {
 			IBee bee = hive.getContainedBee();
-			if (bee != null) {
-				queen = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.QUEEN);
-			}
+			queen = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.QUEEN);
 		}
 		return queen;
 	}
@@ -34,9 +34,7 @@ class HiveBeeHousingInventory implements IBeeHousingInventory {
 	public ItemStack getDrone() {
 		if (drone == null) {
 			IBee bee = hive.getContainedBee();
-			if (bee != null) {
-				drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE);
-			}
+			drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE);
 		}
 		return drone;
 	}

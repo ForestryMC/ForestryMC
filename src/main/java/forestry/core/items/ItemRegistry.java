@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -38,11 +36,9 @@ public abstract class ItemRegistry {
 		OreDictionary.registerOre(oreDictName, itemStack);
 	}
 
-	@Nonnull
 	public static ItemStack createItemForOreName(String oreName) {
 		ItemStack oreItem = new ItemStack(registerItem(new ItemForestry(), oreName));
 		OreDictionary.registerOre(oreName, oreItem);
 		return oreItem;
 	}
-
 }

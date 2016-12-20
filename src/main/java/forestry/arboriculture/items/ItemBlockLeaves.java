@@ -34,7 +34,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			return Translator.translateToLocal("trees.grammar.leaves.type");
 		}
 
@@ -60,7 +60,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 
 	@Override
 	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
-		if (!itemStack.hasTagCompound()) {
+		if (itemStack.getTagCompound() == null) {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
 		}
 

@@ -1,10 +1,18 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,26 +26,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.property.PropertyTreeType;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
 
 public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock, IShearable {
 	private static final int VARIANTS_PER_BLOCK = 16;
@@ -48,7 +46,6 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		for (int blockNumber = 0; blockNumber < blockCount; blockNumber++) {
 			final PropertyTreeType variant = PropertyTreeType.create("variant", blockNumber, VARIANTS_PER_BLOCK);
 			BlockDecorativeLeaves block = new BlockDecorativeLeaves(blockNumber) {
-				@Nonnull
 				@Override
 				public PropertyTreeType getVariant() {
 					return variant;
@@ -74,7 +71,6 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		return blockNumber;
 	}
 
-	@Nonnull
 	public abstract PropertyTreeType getVariant();
 
 	@Override
@@ -82,18 +78,18 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		return new BlockStateContainer(this, getVariant());
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (IBlockState state : getBlockState().getValidStates()) {
 			int meta = getMetaFromState(state);
-			ItemStack itemStack = new ItemStack(item, 1, meta);
+			ItemStack itemStack = new ItemStack(itemIn, 1, meta);
 			list.add(itemStack);
 		}
 	}
 
+	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		TreeDefinition treeDefinition = blockState.getValue(getVariant());
 		if (TreeDefinition.Willow.equals(treeDefinition)) {
 			return null;
@@ -113,8 +109,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
-	public boolean isVisuallyOpaque()
-	{
+	public boolean causesSuffocation(IBlockState state) {
 		return false;
 	}
 
@@ -145,7 +140,6 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		return getDefaultState().withProperty(getVariant(), type);
 	}
 
-	@Nonnull
 	public TreeDefinition getTreeType(int meta) {
 		int variantCount = getVariant().getAllowedValues().size();
 		int variantMeta = (meta % variantCount) + blockNumber * VARIANTS_PER_BLOCK;
@@ -168,7 +162,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		TreeDefinition type = getTreeType(meta);
 		return getDefaultState().withProperty(getVariant(), type);
 	}
@@ -208,12 +202,8 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		TreeDefinition treeDefinition = state.getValue(getVariant());
-		if (treeDefinition == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
-		}
-
 		ITreeGenome genome = treeDefinition.getGenome();
 
 		if (tintIndex == 0) {

@@ -54,7 +54,7 @@ public class ParticleBeeTargetEntity extends Particle {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
 			this.motionX = (origin.xCoord - this.posX) * 0.03;
@@ -125,8 +125,8 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	// avoid calculating collisions
 	@Override
-	public void moveEntity(double x, double y, double z) {
-		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+	public void move(double x, double y, double z) {
+		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
 		this.resetPositionToBB();
 	}
 

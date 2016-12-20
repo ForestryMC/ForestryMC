@@ -10,27 +10,23 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import forestry.api.core.ILocatable;
-
 import java.io.IOException;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.ILocatable;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtilForestry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -42,9 +38,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -56,7 +50,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-	@Nonnull
+
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 
 	private int tickCount = rand.nextInt(256);
@@ -66,7 +60,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		return tileCache;
 	}
 
-	public void onNeighborTileChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
 		tileCache.onNeighborChange();
 	}
 
@@ -87,7 +81,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final void update() {
 		tickCount++;
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			updateServerSide();
 		} else {
 			updateClientSide();
@@ -116,7 +110,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		inventory.readFromNBT(data);
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
@@ -130,7 +124,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
@@ -138,7 +132,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
@@ -146,17 +140,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* INetworkedEntity */
 	protected final void sendNetworkUpdate() {
 		PacketTileStream packet = new PacketTileStream(this);
-		Proxies.net.sendNetworkPacket(packet, worldObj);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 	}
 
 	/* IStreamable */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 
 	}
 
@@ -165,7 +159,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	@Override
 	public World getWorldObj() {
-		return worldObj;
+		return world;
 	}
 
 	/* ITriggerProvider */
@@ -184,7 +178,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
+		return world.isBlockIndirectlyGettingPowered(getPos()) > 0;
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -213,13 +207,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	protected final void setInternalInventory(IInventoryAdapter inv) {
-		if (inv == null) {
-			throw new NullPointerException("Inventory cannot be null");
-		}
+		Preconditions.checkNotNull(inv);
 		this.inventory = inv;
 	}
 
 	/* ISidedInventory */
+
+	@Override
+	public boolean isEmpty() {
+		return getInternalInventory().isEmpty();
+	}
+
 	@Override
 	public final int getSizeInventory() {
 		return getInternalInventory().getSizeInventory();
@@ -234,7 +232,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return getInternalInventory().removeStackFromSlot(slotIndex);
@@ -259,7 +257,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final void closeInventory(EntityPlayer player) {
 		getInternalInventory().closeInventory(player);
 	}
-	
+
 	@Override
 	public String getName() {
 		return getUnlocalizedTitle();
@@ -269,12 +267,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public ITextComponent getDisplayName() {
 		return new TextComponentTranslation(getUnlocalizedTitle());
 	}
-	
+
 	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
+	public final boolean isUsableByPlayer(EntityPlayer player) {
+		return getInternalInventory().isUsableByPlayer(player);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return getInternalInventory().hasCustomName();
@@ -294,7 +292,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public boolean isLocked(int slotIndex) {
 		return getInternalInventory().isLocked(slotIndex);
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return getInternalInventory().getSlotsForFace(side);
@@ -314,46 +312,44 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final BlockPos getCoordinates() {
 		return getPos();
 	}
-	
+
 	@Override
 	public int getField(int id) {
 		return 0;
 	}
-	
+
 	@Override
 	public int getFieldCount() {
 		return 0;
 	}
-	
+
 	@Override
 	public void setField(int id, int value) {
 	}
-	
+
 	@Override
 	public void clear() {
 	}
-	
-	@Nonnull
+
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
-			if(facing != null){
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (facing != null) {
 				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(inventory, facing);
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
-			}else{
+			} else {
 				InvWrapper invWrapper = new InvWrapper(inventory);
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
 			}
-			
+
 		}
 		return super.getCapability(capability, facing);
 	}
-	
+
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
 	}
 }

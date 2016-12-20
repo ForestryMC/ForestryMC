@@ -10,20 +10,10 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import forestry.api.core.ILocatable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
+import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.config.Constants;
@@ -33,6 +23,13 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.PlayerUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, IGuiHandlerTile {
 	@Nullable
@@ -61,7 +58,6 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		getInternalInventory().readFromNBT(data);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
@@ -86,6 +82,11 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return getInternalInventory().isEmpty();
+	}
+
+	@Override
 	public final int getSizeInventory() {
 		return getInternalInventory().getSizeInventory();
 	}
@@ -99,7 +100,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	public final ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return getInternalInventory().removeStackFromSlot(slotIndex);
@@ -129,15 +130,15 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	public final String getName() {
 		return getInternalInventory().getName();
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return getInternalInventory().getDisplayName();
 	}
 
 	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
+	public final boolean isUsableByPlayer(EntityPlayer player) {
+		return getInternalInventory().isUsableByPlayer(player);
 	}
 
 	@Override
@@ -149,7 +150,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		if (allowsAutomation()) {
@@ -161,20 +162,12 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 	@Override
 	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		if (allowsAutomation()) {
-			return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
-		} else {
-			return false;
-		}
+		return allowsAutomation() && getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		if (allowsAutomation()) {
-			return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
-		} else {
-			return false;
-		}
+		return allowsAutomation() && getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
 	@Override
@@ -190,36 +183,37 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	/* ILocatable */
 	@Override
 	public final World getWorldObj() {
-		return worldObj;
+		return world;
 	}
 
 	/* IMultiblockComponent */
-	@Nonnull
+
 	@Override
+	@Nullable
 	public final GameProfile getOwner() {
 		return owner;
 	}
 
-	public final void setOwner(@Nonnull GameProfile owner) {
+	public final void setOwner(GameProfile owner) {
 		this.owner = owner;
 	}
-	
+
 	/* Fields */
 	@Override
 	public int getField(int id) {
 		return getInternalInventory().getField(id);
 	}
-	
+
 	@Override
 	public int getFieldCount() {
 		return getInternalInventory().getFieldCount();
 	}
-	
+
 	@Override
 	public void setField(int id, int value) {
 		getInternalInventory().setField(id, value);
 	}
-	
+
 	@Override
 	public void clear() {
 		getInternalInventory().clear();

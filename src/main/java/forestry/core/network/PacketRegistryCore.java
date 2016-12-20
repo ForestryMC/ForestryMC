@@ -30,28 +30,28 @@ import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.network.packets.PacketUpdateClimateControl;
 
-public class PacketRegistryCore extends PacketRegistry {
+public class PacketRegistryCore implements IPacketRegistry {
 	@Override
 	public void registerPackets() {
-		registerClientPacket(new PacketErrorUpdate());
-		registerClientPacket(new PacketErrorUpdateEntity());
-		registerClientPacket(new PacketGuiUpdate());
-		registerClientPacket(new PacketGuiUpdateEntity());
-		registerClientPacket(new PacketGuiLayoutSelect());
-		registerClientPacket(new PacketGuiEnergy());
-		registerClientPacket(new PacketSocketUpdate());
-		registerClientPacket(new PacketTileStream());
-		registerClientPacket(new PacketItemStackDisplay());
-		registerClientPacket(new PacketFXSignal());
-		registerClientPacket(new PacketTankLevelUpdate());
-		registerClientPacket(new PacketGenomeTrackerSync());
-		registerClientPacket(new PacketCamouflageSelectClient());
+		PacketIdClient.ERROR_UPDATE.setPacketHandler(new PacketErrorUpdate.Handler());
+		PacketIdClient.ERROR_UPDATE_ENTITY.setPacketHandler(new PacketErrorUpdateEntity.Handler());
+		PacketIdClient.GUI_UPDATE.setPacketHandler(new PacketGuiUpdate.Handler());
+		PacketIdClient.GUI_UPDATE_ENTITY.setPacketHandler(new PacketGuiUpdateEntity.Handler());
+		PacketIdClient.GUI_LAYOUT_SELECT.setPacketHandler(new PacketGuiLayoutSelect.Handler());
+		PacketIdClient.GUI_ENERGY.setPacketHandler(new PacketGuiEnergy.Handler());
+		PacketIdClient.SOCKET_UPDATE.setPacketHandler(new PacketSocketUpdate.Handler());
+		PacketIdClient.TILE_FORESTRY_UPDATE.setPacketHandler(new PacketTileStream.Handler());
+		PacketIdClient.ITEMSTACK_DISPLAY.setPacketHandler(new PacketItemStackDisplay.Handler());
+		PacketIdClient.FX_SIGNAL.setPacketHandler(new PacketFXSignal.Handler());
+		PacketIdClient.TANK_LEVEL_UPDATE.setPacketHandler(new PacketTankLevelUpdate.Handler());
+		PacketIdClient.GENOME_TRACKER_UPDATE.setPacketHandler(new PacketGenomeTrackerSync.Handler());
+		PacketIdClient.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectClient.Handler());
 
-		registerServerPacket(new PacketGuiSelectRequest());
-		registerServerPacket(new PacketPipetteClick());
-		registerServerPacket(new PacketChipsetClick());
-		registerServerPacket(new PacketSolderingIronClick());
-		registerServerPacket(new PacketCamouflageSelectServer());
-		registerServerPacket(new PacketUpdateClimateControl());
+		PacketIdServer.GUI_SELECTION_REQUEST.setPacketHandler(new PacketGuiSelectRequest.Handler());
+		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
+		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
+		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
+		PacketIdServer.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectServer.Handler());
+		PacketIdServer.CLIMATE_CONTROL_UPDATE.setPacketHandler(new PacketUpdateClimateControl.Handler());
 	}
 }

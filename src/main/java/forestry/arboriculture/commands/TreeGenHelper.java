@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
@@ -26,30 +20,31 @@ import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.WorldGenBase;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public final class TreeGenHelper {
 
 	public static WorldGenerator getWorldGen(String treeName, EntityPlayer player, BlockPos pos) throws SpeciesNotFoundException, TemplateNotFoundException {
 		ITreeGenome treeGenome = getTreeGenome(treeName);
-		if (treeGenome == null) {
-			return null;
-		}
-
-		ITree tree = TreeManager.treeRoot.getTree(player.worldObj, treeGenome);
-		return tree.getTreeGenerator(player.worldObj, pos, true);
+		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
+		return tree.getTreeGenerator(player.world, pos, true);
 	}
 
 	public static void generateTree(WorldGenerator gen, EntityPlayer player, BlockPos pos) {
-		World world = player.worldObj;
-		
-		if(world.isAirBlock(pos.down())){
+		World world = player.world;
+
+		if (world.isAirBlock(pos.down())) {
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
-		}else{
+		} else {
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		if (BlockUtil.canPlaceTree(blockState, world, pos)){
+		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof WorldGenBase) {
 				((WorldGenBase) gen).generate(world, world.rand, pos, true);
 			} else {

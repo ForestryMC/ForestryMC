@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.google.common.collect.ForwardingList;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ForwardingList;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
@@ -29,17 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
-
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamable;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -66,16 +58,6 @@ public abstract class NBTUtilForestry {
 		EnumNBTType(Class<? extends NBTBase> c) {
 			this.classObject = c;
 		}
-
-		public static EnumNBTType fromClass(Class<? extends NBTBase> c) {
-			for (EnumNBTType type : VALUES) {
-				if (type.classObject == c) {
-					return type;
-				}
-			}
-			return null;
-		}
-
 	}
 
 	public static <T extends NBTBase> NBTList<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
@@ -101,18 +83,11 @@ public abstract class NBTUtilForestry {
 	}
 
 	public static NBTTagCompound writeStreamableToNbt(IStreamable streamable, NBTTagCompound nbt) {
-		ByteBufOutputStream buf = new ByteBufOutputStream(Unpooled.buffer());
-		DataOutputStreamForestry data = new DataOutputStreamForestry(buf);
-		try {
-			streamable.writeData(data);
-		} catch (IOException e) {
-			Log.error("Failed to write streamable data", e);
-			return nbt;
-		}
+		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
+		streamable.writeData(data);
 
-		ByteBuf buffer = buf.buffer();
-		byte[] bytes = new byte[buffer.readableBytes()];
-		buf.buffer().getBytes(0, bytes);
+		byte[] bytes = new byte[data.readableBytes()];
+		data.getBytes(0, bytes);
 		nbt.setByteArray("dataBytes", bytes);
 		return nbt;
 	}
@@ -120,8 +95,7 @@ public abstract class NBTUtilForestry {
 	public static void readStreamableFromNbt(IStreamable streamable, NBTTagCompound nbt) {
 		if (nbt.hasKey("dataBytes")) {
 			byte[] bytes = nbt.getByteArray("dataBytes");
-			ByteBufInputStream buf = new ByteBufInputStream(Unpooled.wrappedBuffer(bytes));
-			DataInputStreamForestry data = new DataInputStreamForestry(buf);
+			PacketBufferForestry data = new PacketBufferForestry(Unpooled.wrappedBuffer(bytes));
 			try {
 				streamable.readData(data);
 			} catch (IOException e) {

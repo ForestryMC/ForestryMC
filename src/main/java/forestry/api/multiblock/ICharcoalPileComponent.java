@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import javax.annotation.Nonnull;
-
 import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -19,22 +17,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * They are automatically detected and handled by the charcoal pile when they join its structure.
  */
 public interface ICharcoalPileComponent<T extends IMultiblockLogicCharcoalPile> extends IMultiblockComponent {
-	
+
 	@Override
 	T getMultiblockLogic();
 
 	IAlleleTreeSpecies getTreeSpecies();
 
-	void setTreeSpecies(@Nonnull IAlleleTreeSpecies treeSpecies);
-	
+	void setTreeSpecies(IAlleleTreeSpecies treeSpecies);
+
 	@Override
-	@Nonnull
 	GameProfile getOwner();
-	
-	void setOwner(@Nonnull GameProfile owner);
-	
+
+	void setOwner(GameProfile owner);
+
 	EnumPileType getPileType();
-	
+
 	@SideOnly(Side.CLIENT)
 	IAlleleTreeSpecies getNextWoodPile();
 

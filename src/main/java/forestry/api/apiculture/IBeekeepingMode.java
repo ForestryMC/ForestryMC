@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +20,7 @@ public interface IBeekeepingMode {
 	/**
 	 * @return Localized list of strings outlining the behaviour of this beekeeping mode.
 	 */
-	ArrayList<String> getDescription();
+	List<String> getDescription();
 
 	/**
 	 * @return Float used to modify the wear on comb frames.
@@ -47,7 +47,6 @@ public interface IBeekeepingMode {
 	boolean isOverworked(IBee queen, IBeeHousing housing);
 
 	/**
-	 *
 	 * @param queen
 	 * @param offspring
 	 * @param housing

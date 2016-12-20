@@ -10,25 +10,26 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
+import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-
-import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";
@@ -36,19 +37,36 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private static final Random rand = new Random();
 
 	private final IItemHandler itemHandler = new InvWrapper(this);
-	@Nonnull
+
 	protected final EntityPlayer player;
 	private final ItemStack parent;
-	private final ItemStack[] inventoryStacks;
+	private final NonNullList<ItemStack> inventoryStacks;
 
-	public ItemInventory(@Nonnull EntityPlayer player, int size, ItemStack parent) {
+	public ItemInventory(EntityPlayer player, int size, ItemStack parent) {
+		Preconditions.checkArgument(!parent.isEmpty(), "Parent cannot be empty.");
+
 		this.player = player;
 		this.parent = parent;
-		this.inventoryStacks = new ItemStack[size];
+		this.inventoryStacks = NonNullList.withSize(size, ItemStack.EMPTY);
 
-		setUID(); // Set a uid to identify the itemStack on SMP
+		NBTTagCompound nbt = parent.getTagCompound();
+		if (nbt == null) {
+			nbt = new NBTTagCompound();
+			parent.setTagCompound(nbt);
+		}
+		setUID(nbt); // Set a uid to identify the itemStack on SMP
 
-		readFromNBT(parent.getTagCompound());
+		NBTTagCompound nbtSlots = nbt.getCompoundTag(KEY_SLOTS);
+		for (int i = 0; i < inventoryStacks.size(); i++) {
+			String slotKey = getSlotNBTKey(i);
+			if (nbtSlots.hasKey(slotKey)) {
+				NBTTagCompound itemNbt = nbtSlots.getCompoundTag(slotKey);
+				ItemStack itemStack = new ItemStack(itemNbt);
+				inventoryStacks.set(i, itemStack);
+			} else {
+				inventoryStacks.set(i, ItemStack.EMPTY);
+			}
+		}
 	}
 
 	public static int getOccupiedSlotCount(ItemStack itemStack) {
@@ -61,14 +79,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return slotNbt.getKeySet().size();
 	}
 
-	private void setUID() {
-		ItemStack parent = getParent();
-
-		if (parent.getTagCompound() == null) {
-			parent.setTagCompound(new NBTTagCompound());
-		}
-
-		NBTTagCompound nbt = parent.getTagCompound();
+	private void setUID(NBTTagCompound nbt) {
 		if (!nbt.hasKey(KEY_UID)) {
 			nbt.setInteger(KEY_UID, rand.nextInt());
 		}
@@ -90,7 +101,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {
-		if (base == null || comparison == null) {
+		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
 		}
 
@@ -98,45 +109,34 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return false;
 		}
 
-		if (!base.hasTagCompound() || !comparison.hasTagCompound()) {
+		NBTTagCompound baseTagCompound = base.getTagCompound();
+		NBTTagCompound comparisonTagCompound = comparison.getTagCompound();
+		if (baseTagCompound == null || comparisonTagCompound == null) {
 			return false;
 		}
 
-		String baseUID = base.getTagCompound().getString(KEY_UID);
-		String comparisonUID = comparison.getTagCompound().getString(KEY_UID);
-		return baseUID != null && comparisonUID != null && baseUID.equals(comparisonUID);
-	}
-
-	public void readFromNBT(NBTTagCompound nbt) {
-
-		if (nbt == null) {
-			return;
+		if (!baseTagCompound.hasKey(KEY_UID) || !comparisonTagCompound.hasKey(KEY_UID)) {
+			return false;
 		}
 
-		NBTTagCompound nbtSlots = nbt.getCompoundTag(KEY_SLOTS);
-		for (int i = 0; i < inventoryStacks.length; i++) {
-			String slotKey = getSlotNBTKey(i);
-			if (nbtSlots.hasKey(slotKey)) {
-				NBTTagCompound itemNbt = nbtSlots.getCompoundTag(slotKey);
-				ItemStack itemStack = ItemStack.loadItemStackFromNBT(itemNbt);
-				inventoryStacks[i] = itemStack;
-			} else {
-				inventoryStacks[i] = null;
-			}
-		}
+		String baseUID = baseTagCompound.getString(KEY_UID);
+		String comparisonUID = comparisonTagCompound.getString(KEY_UID);
+		return baseUID.equals(comparisonUID);
 	}
 
 	private void writeToParentNBT() {
 		ItemStack parent = getParent();
-		if (parent == null) {
-			return;
-		}
 
 		NBTTagCompound nbt = parent.getTagCompound();
+		if (nbt == null) {
+			nbt = new NBTTagCompound();
+			parent.setTagCompound(nbt);
+		}
+
 		NBTTagCompound slotsNbt = new NBTTagCompound();
 		for (int i = 0; i < getSizeInventory(); i++) {
 			ItemStack itemStack = getStackInSlot(i);
-			if (itemStack != null) {
+			if (!itemStack.isEmpty()) {
 				String slotKey = getSlotNBTKey(i);
 				NBTTagCompound itemNbt = new NBTTagCompound();
 				itemStack.writeToNBT(itemNbt);
@@ -155,29 +155,31 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		ItemStack stack = getStackInSlot(i);
-		if (stack == null) {
-			return null;
+	public boolean isEmpty() {
+		for (ItemStack itemstack : this.inventoryStacks) {
+			if (!itemstack.isEmpty()) {
+				return false;
+			}
 		}
 
-		if (stack.stackSize <= j) {
-			setInventorySlotContents(i, null);
-			return stack;
-		} else {
-			ItemStack product = stack.splitStack(j);
-			setInventorySlotContents(i, stack);
-			return product;
+		return true;
+	}
+
+
+	@Override
+	public ItemStack decrStackSize(int index, int count) {
+		ItemStack itemstack = ItemStackHelper.getAndSplit(this.inventoryStacks, index, count);
+
+		if (!itemstack.isEmpty()) {
+			this.markDirty();
 		}
+
+		return itemstack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		if (itemstack != null && itemstack.stackSize == 0) {
-			itemstack = null;
-		}
-
-		inventoryStacks[i] = itemstack;
+	public void setInventorySlotContents(int index, ItemStack itemstack) {
+		inventoryStacks.set(index, itemstack);
 
 		ItemStack parent = getParent();
 
@@ -195,9 +197,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			slotNbt = nbt.getCompoundTag(KEY_SLOTS);
 		}
 
-		String slotKey = getSlotNBTKey(i);
+		String slotKey = getSlotNBTKey(index);
 
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			slotNbt.removeTag(slotKey);
 		} else {
 			NBTTagCompound itemNbt = new NBTTagCompound();
@@ -209,19 +211,19 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventoryStacks[i];
+		return inventoryStacks.get(i);
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return inventoryStacks.length;
+		return inventoryStacks.size();
 	}
-	
+
 	@Override
 	public String getName() {
 		return "BeeBag";
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TextComponentString(getName());
@@ -238,10 +240,10 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return true;
@@ -259,13 +261,13 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	@Override
 	public void closeInventory(EntityPlayer player) {
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack toReturn = getStackInSlot(slot);
 
-		if (toReturn != null) {
-			setInventorySlotContents(slot, null);
+		if (!toReturn.isEmpty()) {
+			setInventorySlotContents(slot, ItemStack.EMPTY);
 		}
 
 		return toReturn;
@@ -281,36 +283,37 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	public boolean isLocked(int slotIndex) {
 		return false;
 	}
-	
+
 	/* Fields */
 	@Override
 	public int getField(int id) {
 		return 0;
 	}
-	
+
 	@Override
 	public int getFieldCount() {
 		return 0;
 	}
-	
+
 	@Override
 	public void clear() {
 	}
-	
+
 	@Override
 	public void setField(int id, int value) {
 	}
-	
+
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
 		}
 		return null;
 	}
-	
+
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 	}
 

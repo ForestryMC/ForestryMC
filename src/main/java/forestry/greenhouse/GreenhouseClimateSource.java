@@ -22,25 +22,26 @@ import forestry.core.climate.ClimateSource;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseClimatiser;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class GreenhouseClimateSource<P extends TileGreenhouseClimatiser> extends ClimateSource<P> {
 
 	public GreenhouseClimateSource(int ticksForChange) {
 		super(ticksForChange);
 	}
-	
+
 	@Override
 	public boolean changeClimate(int tickCount, IClimateRegion region) {
-		World world = region.getWorld();
+		if (provider == null) {
+			return false;
+		}
 		IClimatiserDefinition definition = provider.getDefinition();
 		IMultiblockLogic logic = provider.getMultiblockLogic();
 		IMultiblockController controller = logic.getController();
 		Iterable<BlockPos> positionsInRange = provider.getPositionsInRange();
-		
+
 		boolean hasChange = false;
 		boolean isActive = false;
-		if(logic.isConnected() && controller.isAssembled() && controller instanceof IGreenhouseControllerInternal && positionsInRange != null && positionsInRange.iterator().hasNext() && region != null){
+		if (logic.isConnected() && controller.isAssembled() && controller instanceof IGreenhouseControllerInternal && positionsInRange.iterator().hasNext()) {
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
 			IClimateControl climateControl = getClimateControl(greenhouseInternal);
 			float controlTemp = climateControl.getControlTemperature();
@@ -49,63 +50,63 @@ public class GreenhouseClimateSource<P extends TileGreenhouseClimatiser> extends
 			EnumClimatiserTypes type = definition.getType();
 			EnumClimatiserModes mode = definition.getMode();
 			float maxChange = definition.getChange();
-			if(isActive){
-				if(canChange(type, EnumClimatiserTypes.TEMPERATURE)){
-					if(region.getTemperature() < controlTemp) {
-						if(!canChange(mode, EnumClimatiserModes.POSITIVE)){
+			if (isActive) {
+				if (canChange(type, EnumClimatiserTypes.TEMPERATURE)) {
+					if (region.getTemperature() < controlTemp) {
+						if (!canChange(mode, EnumClimatiserModes.POSITIVE)) {
 							isActive = false;
 						}
-					}else if(region.getTemperature() > controlTemp){
-						if(!canChange(mode, EnumClimatiserModes.NEGATIVE)){
+					} else if (region.getTemperature() > controlTemp) {
+						if (!canChange(mode, EnumClimatiserModes.NEGATIVE)) {
 							isActive = false;
 						}
 					}
 				}
 				if (canChange(type, EnumClimatiserTypes.HUMIDITY)) {
-					if(region.getTemperature() < controlHum) {
-						if(!canChange(mode, EnumClimatiserModes.POSITIVE)){
+					if (region.getTemperature() < controlHum) {
+						if (!canChange(mode, EnumClimatiserModes.POSITIVE)) {
 							isActive = false;
 						}
-					}else if(region.getTemperature() > controlHum){
-						if(!canChange(mode, EnumClimatiserModes.NEGATIVE)){
+					} else if (region.getTemperature() > controlHum) {
+						if (!canChange(mode, EnumClimatiserModes.NEGATIVE)) {
 							isActive = false;
 						}
 					}
 				}
 			}
-			
-			if (isActive) {	
-				for(BlockPos pos : positionsInRange){
+
+			if (isActive) {
+				for (BlockPos pos : positionsInRange) {
 					IClimatePosition position = region.getPositions().get(pos);
-					if(position != null){
+					if (position != null) {
 						double distance = pos.distanceSq(provider.getCoordinates());
 						double range = definition.getRange();
-						if(distance <= range){
+						if (distance <= range) {
 							float change = maxChange;
-							if(distance > 0){
+							if (distance > 0) {
 								change = (float) (maxChange / distance);
 							}
 							if (canChange(type, EnumClimatiserTypes.TEMPERATURE)) {
-								if(position.getTemperature() < controlTemp) {
-									if(canChange(mode, EnumClimatiserModes.POSITIVE)){
+								if (position.getTemperature() < controlTemp) {
+									if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
 										position.addTemperature(Math.min(change, controlTemp - position.getTemperature()));
 										hasChange = true;
 									}
-								}else if(position.getTemperature() > controlTemp){
-									if(canChange(mode, EnumClimatiserModes.NEGATIVE)){
+								} else if (position.getTemperature() > controlTemp) {
+									if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
 										position.addTemperature(-Math.min(position.getTemperature() - controlTemp, change));
 										hasChange = true;
 									}
 								}
 							}
 							if (canChange(type, EnumClimatiserTypes.HUMIDITY)) {
-								if(position.getHumidity() < controlHum) {
-									if(canChange(mode, EnumClimatiserModes.POSITIVE)){
+								if (position.getHumidity() < controlHum) {
+									if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
 										position.addHumidity(Math.min(change, controlHum - position.getHumidity()));
 										hasChange = true;
 									}
-								}else if(position.getHumidity() > controlHum){
-									if(canChange(mode, EnumClimatiserModes.NEGATIVE)){
+								} else if (position.getHumidity() > controlHum) {
+									if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
 										position.addHumidity(-Math.min(position.getHumidity() - controlHum, change));
 										hasChange = true;
 									}
@@ -116,27 +117,21 @@ public class GreenhouseClimateSource<P extends TileGreenhouseClimatiser> extends
 				}
 			}
 		}
-		if(provider.isActive() != isActive){
+		if (provider.isActive() != isActive) {
 			provider.setActive(isActive);
 		}
 		return hasChange;
 	}
-	
-	protected boolean canChange(EnumClimatiserTypes climatiserType, EnumClimatiserTypes type){
-		if(type == climatiserType || climatiserType == EnumClimatiserTypes.NONE){
-			return true;
-		}
-		return false;
+
+	protected boolean canChange(EnumClimatiserTypes climatiserType, EnumClimatiserTypes type) {
+		return type == climatiserType || climatiserType == EnumClimatiserTypes.NONE;
 	}
-	
-	protected boolean canChange(EnumClimatiserModes climatiserMode, EnumClimatiserModes mode){
-		if(mode == climatiserMode || climatiserMode == EnumClimatiserModes.NONE){
-			return true;
-		}
-		return false;
+
+	protected boolean canChange(EnumClimatiserModes climatiserMode, EnumClimatiserModes mode) {
+		return mode == climatiserMode || climatiserMode == EnumClimatiserModes.NONE;
 	}
-	
-	protected IClimateControl getClimateControl(IGreenhouseControllerInternal greenhouseInternal){
+
+	protected IClimateControl getClimateControl(IGreenhouseControllerInternal greenhouseInternal) {
 		return greenhouseInternal.getClimateControl();
 	}
 

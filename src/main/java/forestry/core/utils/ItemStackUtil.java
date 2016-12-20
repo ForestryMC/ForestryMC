@@ -22,11 +22,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -43,7 +42,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (lhs == null || rhs == null) {
+		if (lhs.isEmpty() || rhs.isEmpty()) {
 			return false;
 		}
 
@@ -59,21 +58,21 @@ public abstract class ItemStackUtil {
 
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
-	
+
 	/**
-	 *
 	 * @return The registry name of the item as {@link ResourceLocation}
 	 */
+	@Nullable
 	public static ResourceLocation getItemNameFromRegistry(Item item) {
-		if (item == null) {
+		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
+		if (itemRegistry.containsValue(item)) {
+			return itemRegistry.getKey(item);
+		} else {
 			return null;
 		}
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-		return itemRegistry.getKey(item);
 	}
-	
+
 	/**
-	 *
 	 * @return The registry name of the item as {@link String}
 	 */
 	@Nullable
@@ -87,15 +86,11 @@ public abstract class ItemStackUtil {
 
 	@Nullable
 	public static String getStringForItemStack(ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return null;
 		}
 
 		Item item = itemStack.getItem();
-		if (item == null) {
-			return null;
-		}
-
 		String itemStackString = getItemNameFromRegistryAsString(item);
 		if (itemStackString == null) {
 			return null;
@@ -108,64 +103,48 @@ public abstract class ItemStackUtil {
 			return itemStackString;
 		}
 	}
-	
+
 	/**
-	 * @return The item from the item registry
 	 * @param itemName The registry name from the item as {@link String}
+	 * @return The item from the item registry
 	 */
+	@Nullable
 	public static Item getItemFromRegistry(String itemName) {
 		return getItemFromRegistry(new ResourceLocation(itemName));
 	}
-	
+
 	/**
-	 * @return The item from the item registry
 	 * @param itemName The registry name from the item as {@link ResourceLocation}
+	 * @return The item from the item registry
 	 */
+	@Nullable
 	public static Item getItemFromRegistry(ResourceLocation itemName) {
-		if (itemName == null) {
+		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
+		if (!itemRegistry.containsKey(itemName)) {
 			return null;
 		}
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
 		return itemRegistry.getValue(itemName);
 	}
-	
+
 	/**
-	 *
-	 * @return The registry name of the block as {@link ResourceLocation}
-	 */
-	public static ResourceLocation getBlockNameFromRegistry(Block block) {
-		if (block == null) {
-			return null;
-		}
-		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
-		return blockRegistry.getKey(block);
-	}
-	
-	/**
-	 *
-	 * @return The registry name of the block as {@link String}
-	 */
-	public static String getBlockNameFromRegistryAsSting(Block block) {
-		return getBlockNameFromRegistry(block).toString();
-	}
-	
-	/**
-	 * @return The block from the block registry
 	 * @param itemName The registry name from the block as {@link String}
+	 * @return The block from the block registry
 	 */
+	@Nullable
 	public static Block getBlockFromRegistry(String itemName) {
 		return getBlockFromRegistry(new ResourceLocation(itemName));
 	}
-	
+
 	/**
-	 * @return The block from the block registry
 	 * @param itemName The registry name from the block as {@link ResourceLocation}
+	 * @return The block from the block registry
 	 */
+	@Nullable
 	public static Block getBlockFromRegistry(ResourceLocation itemName) {
-		if (itemName == null) {
+		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
+		if (!blockRegistry.containsKey(itemName)) {
 			return null;
 		}
-		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
 		return blockRegistry.getValue(itemName);
 	}
 
@@ -173,7 +152,7 @@ public abstract class ItemStackUtil {
 	 * Merges the giving stack into the receiving stack as far as possible
 	 */
 	public static void mergeStacks(ItemStack giver, ItemStack receptor) {
-		if (receptor.stackSize >= 64) {
+		if (receptor.getCount() >= receptor.getMaxStackSize()) {
 			return;
 		}
 
@@ -181,47 +160,40 @@ public abstract class ItemStackUtil {
 			return;
 		}
 
-		if (giver.stackSize <= receptor.getMaxStackSize() - receptor.stackSize) {
-			receptor.stackSize += giver.stackSize;
-			giver.stackSize = 0;
+		if (giver.getCount() <= receptor.getMaxStackSize() - receptor.getCount()) {
+			receptor.grow(giver.getCount());
+			giver.setCount(0);
 			return;
 		}
 
-		ItemStack temp = giver.splitStack(receptor.getMaxStackSize() - receptor.stackSize);
-		receptor.stackSize += temp.stackSize;
-		temp.stackSize = 0;
+		ItemStack temp = giver.splitStack(receptor.getMaxStackSize() - receptor.getCount());
+		receptor.grow(temp.getCount());
+		temp.setCount(0);
 	}
 
 	/**
-	 * Creates a split stack of the specified amount, preserving NBT data,
+	 * Creates a copy stack of the specified amount, preserving NBT data,
 	 * without decreasing the source stack.
 	 */
-	public static ItemStack createSplitStack(ItemStack stack, int amount) {
-		ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());
-		if (stack.getTagCompound() != null) {
-			NBTTagCompound nbttagcompound = stack.getTagCompound().copy();
-			split.setTagCompound(nbttagcompound);
-		}
-		return split;
+
+	public static ItemStack createCopyWithCount(ItemStack stack, int count) {
+		ItemStack copy = stack.copy();
+		copy.setCount(count);
+		return copy;
 	}
 
-	/**
-	 */
-	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-		List<ItemStack> condensed = new ArrayList<>();
+	public static NonNullList<ItemStack> condenseStacks(NonNullList<ItemStack> stacks) {
+		NonNullList<ItemStack> condensed = NonNullList.create();
 
 		for (ItemStack stack : stacks) {
-			if (stack == null) {
-				continue;
-			}
-			if (stack.stackSize <= 0) {
+			if (stack.isEmpty()) {
 				continue;
 			}
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
 				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
-					cached.stackSize += stack.stackSize;
+					cached.grow(stack.getCount());
 					matched = true;
 				}
 			}
@@ -233,7 +205,7 @@ public abstract class ItemStackUtil {
 
 		}
 
-		return condensed.toArray(new ItemStack[condensed.size()]);
+		return condensed;
 	}
 
 	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
@@ -248,25 +220,25 @@ public abstract class ItemStackUtil {
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
-	public static int containsSets(ItemStack[] set, ItemStack[] stock) {
+	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock) {
 		return containsSets(set, stock, false, false);
 	}
 
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
-	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
+	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, boolean oreDictionary, boolean craftingTools) {
 		int totalSets = 0;
 
-		ItemStack[] condensedRequired = ItemStackUtil.condenseStacks(set);
-		ItemStack[] condensedOffered = ItemStackUtil.condenseStacks(stock);
+		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(set);
+		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(stock);
 
 		for (ItemStack req : condensedRequired) {
 
 			int reqCount = 0;
 			for (ItemStack offer : condensedOffered) {
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
-					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
+					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
 					reqCount = Math.max(reqCount, stackCount);
 				}
 			}
@@ -283,21 +255,17 @@ public abstract class ItemStackUtil {
 		return totalSets;
 	}
 
-	public static boolean equalSets(ItemStack[] set1, ItemStack[] set2) {
+	public static boolean equalSets(NonNullList<ItemStack> set1, NonNullList<ItemStack> set2) {
 		if (set1 == set2) {
 			return true;
 		}
 
-		if (set1 == null || set2 == null) {
+		if (set1.size() != set2.size()) {
 			return false;
 		}
 
-		if (set1.length != set2.length) {
-			return false;
-		}
-
-		for (int i = 0; i < set1.length; i++) {
-			if (!isIdenticalItem(set1[i], set2[i])) {
+		for (int i = 0; i < set1.size(); i++) {
+			if (!isIdenticalItem(set1.get(i), set2.get(i))) {
 				return false;
 			}
 		}
@@ -309,7 +277,7 @@ public abstract class ItemStackUtil {
 	 * Compare two item stacks for crafting equivalency without oreDictionary or craftingTools
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison) {
-		if (base == null || comparison == null) {
+		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
 		}
 
@@ -324,7 +292,7 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (!base.hasTagCompound() || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
@@ -335,7 +303,7 @@ public abstract class ItemStackUtil {
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (base == null || comparison == null) {
+		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
 		}
 
@@ -347,7 +315,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (base.hasTagCompound() && !base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
 			}
@@ -377,7 +345,7 @@ public abstract class ItemStackUtil {
 	}
 
 	public static boolean isCraftingToolEquivalent(ItemStack base, ItemStack comparison) {
-		if (base == null || comparison == null) {
+		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
 		}
 
@@ -387,7 +355,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (!base.hasTagCompound() || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
 			// tool uses meta for damage
 			return true;
 		} else {
@@ -402,13 +370,13 @@ public abstract class ItemStackUtil {
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
 		dropItemStackAsEntity(items, world, x, y, z, 10);
 	}
-	
+
 	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
 		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
-		if (items == null || items.stackSize <= 0 || world.isRemote) {
+		if (items.isEmpty() || world.isRemote) {
 			return;
 		}
 
@@ -419,18 +387,19 @@ public abstract class ItemStackUtil {
 		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
 		entityitem.setPickupDelay(delayForPickup);
 
-		world.spawnEntityInWorld(entityitem);
+		world.spawnEntity(entityitem);
 	}
+
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
 		int size = max <= 0 ? 0 : rand.nextInt(max);
 		ItemStack created = template.copy();
 		if (size <= 0) {
-			created.stackSize = 1;
+			created.setCount(1);
 		} else if (size > created.getMaxStackSize()) {
-			created.stackSize = created.getMaxStackSize();
+			created.setCount(created.getMaxStackSize());
 		} else {
-			created.stackSize = size;
+			created.setCount(size);
 		}
 		return created;
 	}
@@ -449,7 +418,7 @@ public abstract class ItemStackUtil {
 	public static boolean equals(Block block, ItemStack stack) {
 		return block == getBlock(stack);
 	}
-	
+
 	public static boolean equals(IBlockState state, ItemStack stack) {
 		return state.getBlock() == getBlock(stack) && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
 	}
@@ -458,18 +427,24 @@ public abstract class ItemStackUtil {
 		return block == getBlock(stack) && meta == stack.getItemDamage();
 	}
 
+
 	public static List<ItemStack> parseItemStackStrings(String[] itemStackStrings, int missingMetaValue) {
 		List<Stack> stacks = Stack.parseStackStrings(itemStackStrings, missingMetaValue);
 		return getItemStacks(stacks);
 	}
 
+
 	public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
 		List<Stack> stacks = Stack.parseStackStrings(itemStackStrings, missingMetaValue);
 		return getItemStacks(stacks);
 	}
-	
+
+	@Nullable
 	public static ItemStack parseItemStackString(String itemStackString, int missingMetaValue) {
 		Stack stack = Stack.parseStackString(itemStackString, missingMetaValue);
+		if (stack == null) {
+			return null;
+		}
 		return getItemStack(stack);
 	}
 
@@ -485,7 +460,8 @@ public abstract class ItemStackUtil {
 		}
 		return itemStacks;
 	}
-	
+
+	@Nullable
 	private static ItemStack getItemStack(Stack stack) {
 		Item item = stack.getItem();
 		if (item != null) {

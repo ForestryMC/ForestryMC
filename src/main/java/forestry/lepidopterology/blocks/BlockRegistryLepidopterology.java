@@ -12,7 +12,7 @@ package forestry.lepidopterology.blocks;
 
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 
 public class BlockRegistryLepidopterology extends BlockRegistry {
 	public final BlockLepidopterology butterflyChest;
@@ -23,7 +23,7 @@ public class BlockRegistryLepidopterology extends BlockRegistry {
 		butterflyChest = new BlockLepidopterology(BlockTypeLepidopterologyTesr.LEPICHEST);
 		registerBlock(butterflyChest, new ItemBlockForestry(butterflyChest), "butterfly_chest");
 
-		AlleleButterflyCocoon.createAlleles();
+		ButterflyAlleles.registerCocoonAlleles();
 		cocoon = new BlockCocoon();
 		registerBlock(cocoon, new ItemBlockForestry(cocoon), "cocoon");
 

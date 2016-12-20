@@ -1,35 +1,38 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.jei.FactoryJeiPlugin;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
-	
-	public CarpenterRecipeWrapper(@Nonnull ICarpenterRecipe recipe) {
+
+	public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {
 		super(recipe);
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		ICarpenterRecipe recipe = getRecipe();
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-		Object[] inputs = craftingGridRecipe.getIngredients();
-		IStackHelper stackHelper = FactoryJeiPlugin.jeiHelpers.getStackHelper();
+		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getIngredients();
 
-		List<List<ItemStack>> inputStacks = stackHelper.expandRecipeItemStackInputs(Arrays.asList(inputs));
+		List<List<ItemStack>> inputStacks = new ArrayList<>();
+		for (List<ItemStack> stacks : inputs) {
+			List<ItemStack> copy = new ArrayList<>();
+			copy.addAll(stacks);
+			inputStacks.add(copy);
+		}
+
 		ItemStack box = recipe.getBox();
-		if (box != null) {
+		if (!box.isEmpty()) {
 			inputStacks.add(Collections.singletonList(box));
 		}
 		ingredients.setInputLists(ItemStack.class, inputStacks);

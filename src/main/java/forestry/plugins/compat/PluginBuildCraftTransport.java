@@ -13,7 +13,8 @@ package forestry.plugins.compat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -42,7 +43,7 @@ public class PluginBuildCraftTransport extends BlankForestryPlugin {
 	@Override
 	public void registerRecipes() {
 		Item beeswax = PluginCore.items.beeswax;
-		Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
+		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "pipeWaterproof"));
 		if (pipeWaterproof != null) {
 			RecipeUtil.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
 		} else {

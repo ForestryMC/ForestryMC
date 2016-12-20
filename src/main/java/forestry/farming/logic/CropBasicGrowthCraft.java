@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -42,15 +40,16 @@ public class CropBasicGrowthCraft extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvest = block.getDrops(world, pos, blockState, 0);
+		NonNullList<ItemStack> harvest = NonNullList.create();
+		harvest.addAll(block.getDrops(world, pos, blockState, 0));
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 
 		if (isGrape) {
 			world.setBlockToAir(pos);

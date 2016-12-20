@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
-
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
@@ -33,24 +23,30 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.ITitled;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
-
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
 	protected TileFarm() {
 		super(new MultiblockLogicFarm());
 	}
-	
+
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
@@ -58,13 +54,13 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
 		markDirty();
 	}
 
@@ -80,7 +76,6 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(nbttagcompound);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -93,14 +88,14 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
 	public EnumFarmBlockTexture getFarmBlockTexture() {
 		return farmBlockTexture;
 	}
-	
+
 	public EnumFarmBlockType getFarmBlockType() {
 		return EnumFarmBlockType.VALUES[getBlockMetadata()];
 	}
@@ -149,12 +144,12 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	/* IStreamableGui */
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		getMultiblockLogic().getController().writeGuiData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 

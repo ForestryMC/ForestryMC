@@ -5,17 +5,19 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nullable;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IHousing;
 import forestry.api.genetics.IIndividual;
 
 public interface IButterflyNursery extends IHousing, IClimateProvider {
-	
+	@Nullable
 	IButterfly getCaterpillar();
 	
 	IIndividual getNanny();
 	
-	void setCaterpillar(IButterfly butterfly);
+	void setCaterpillar(@Nullable IButterfly butterfly);
 	
 	boolean canNurse(IButterfly butterfly);
 	

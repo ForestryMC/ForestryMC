@@ -35,6 +35,7 @@ import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.render.TextureManager;
 import forestry.core.worldgen.WorldGenerator;
 
+@SuppressWarnings("unused")
 public class ProxyClient extends ProxyCommon {
 
 	@Override
@@ -64,7 +65,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public World getRenderWorld() {
-		return getClientInstance().theWorld;
+		return getClientInstance().world;
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public EntityPlayer getPlayer() {
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 
 	@Override

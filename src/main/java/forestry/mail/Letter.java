@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.mail;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -27,6 +20,12 @@ import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import org.apache.commons.lang3.StringUtils;
 
 public class Letter implements ILetter {
 	private static final Random rand = new Random();
@@ -38,27 +37,23 @@ public class Letter implements ILetter {
 	private boolean isProcessed = false;
 
 	private IMailAddress sender;
-	private IMailAddress[] recipient;
+	@Nullable
+	private IMailAddress recipient;
 
-	private String text;
+	private String text = "";
 	private final InventoryAdapter inventory = new InventoryAdapter(22, "INV");
 	private final String uid;
 
 	public Letter(IMailAddress sender, IMailAddress recipient) {
 		this.sender = sender;
-		this.recipient = new IMailAddress[]{recipient};
+		this.recipient = recipient;
 		this.uid = String.valueOf(rand.nextInt());
 	}
 
-	public Letter(@Nonnull NBTTagCompound nbttagcompound) {
+	public Letter(NBTTagCompound nbttagcompound) {
 		this.isProcessed = nbttagcompound.getBoolean("PRC");
 		this.sender = new MailAddress(nbttagcompound.getCompoundTag("SDR"));
-
-		int recipientCount = nbttagcompound.getShort("CRC");
-		this.recipient = new MailAddress[recipientCount];
-		for (int i = 0; i < recipientCount; i++) {
-			this.recipient[i] = new MailAddress(nbttagcompound.getCompoundTag("RC" + i));
-		}
+		this.recipient = new MailAddress(nbttagcompound.getCompoundTag("RC"));
 
 		this.text = nbttagcompound.getString("TXT");
 		this.uid = nbttagcompound.getString("UID");
@@ -74,11 +69,10 @@ public class Letter implements ILetter {
 		this.sender.writeToNBT(subcompound);
 		nbttagcompound.setTag("SDR", subcompound);
 
-		nbttagcompound.setShort("CRC", (short) recipient.length);
-		for (int i = 0; i < recipient.length; i++) {
+		if (this.recipient != null) {
 			subcompound = new NBTTagCompound();
-			this.recipient[i].writeToNBT(subcompound);
-			nbttagcompound.setTag("RC" + i, subcompound);
+			this.recipient.writeToNBT(subcompound);
+			nbttagcompound.setTag("RC", subcompound);
 		}
 
 		nbttagcompound.setString("TXT", this.text);
@@ -88,12 +82,12 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public ItemStack[] getPostage() {
+	public NonNullList<ItemStack> getPostage() {
 		return InventoryUtil.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
 	}
 
 	@Override
-	public ItemStack[] getAttachments() {
+	public NonNullList<ItemStack> getAttachments() {
 		return InventoryUtil.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
 	}
 
@@ -115,7 +109,7 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void addAttachments(ItemStack[] itemstacks) {
+	public void addAttachments(NonNullList<ItemStack> itemstacks) {
 		for (ItemStack stack : itemstacks) {
 			addAttachment(stack);
 		}
@@ -124,7 +118,7 @@ public class Letter implements ILetter {
 	@Override
 	public void invalidatePostage() {
 		for (int i = SLOT_POSTAGE_1; i < SLOT_POSTAGE_1 + SLOT_POSTAGE_COUNT; i++) {
-			inventory.setInventorySlotContents(i, null);
+			inventory.setInventorySlotContents(i, ItemStack.EMPTY);
 		}
 	}
 
@@ -142,7 +136,7 @@ public class Letter implements ILetter {
 	public boolean isMailable() {
 		// Can't resend an already sent letter
 		// Requires at least one recipient
-		return !isProcessed && recipient != null && recipient.length > 0;
+		return !isProcessed && recipient != null;
 	}
 
 	@Override
@@ -158,7 +152,7 @@ public class Letter implements ILetter {
 				continue;
 			}
 
-			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.stackSize;
+			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.getCount();
 		}
 
 		return posted >= requiredPostage();
@@ -184,16 +178,7 @@ public class Letter implements ILetter {
 
 	@Override
 	public boolean hasRecipient() {
-		if (getRecipients().length <= 0) {
-			return false;
-		}
-
-		IMailAddress recipient = getRecipients()[0];
-		if (recipient == null) {
-			return false;
-		}
-
-		return !StringUtils.isBlank(recipient.getName());
+		return recipient != null && !StringUtils.isBlank(recipient.getName());
 	}
 
 	@Override
@@ -207,30 +192,22 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void setRecipient(IMailAddress address) {
-		if (address == null) {
-			this.recipient = new IMailAddress[]{};
-		} else {
-			this.recipient = new IMailAddress[]{address};
-		}
+	public void setRecipient(@Nullable IMailAddress address) {
+		this.recipient = address;
 	}
 
 	@Override
-	public IMailAddress[] getRecipients() {
+	@Nullable
+	public IMailAddress getRecipient() {
 		return recipient;
 	}
 
 	@Override
 	public String getRecipientString() {
-		StringBuilder recipientString = new StringBuilder();
-		for (IMailAddress address : recipient) {
-			if (recipientString.length() > 0) {
-				recipientString.append(", ");
-			}
-			recipientString.append(address.getName());
+		if (recipient == null) {
+			return "";
 		}
-
-		return recipientString.toString();
+		return recipient.getName();
 	}
 
 	@Override
@@ -245,15 +222,20 @@ public class Letter implements ILetter {
 
 	@Override
 	public void addTooltip(List<String> list) {
-		if (this.sender != null && StringUtils.isNotBlank(this.sender.getName())) {
+		if (StringUtils.isNotBlank(this.sender.getName())) {
 			list.add(Translator.translateToLocal("for.gui.mail.from") + ": " + this.sender.getName());
 		}
-		if (this.recipient != null && this.recipient.length > 0) {
+		if (this.recipient != null) {
 			list.add(Translator.translateToLocal("for.gui.mail.to") + ": " + this.getRecipientString());
 		}
 	}
 
 	// / IINVENTORY
+	@Override
+	public boolean isEmpty() {
+		return inventory.isEmpty();
+	}
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.getSizeInventory();
@@ -268,7 +250,7 @@ public class Letter implements ILetter {
 	public ItemStack decrStackSize(int var1, int var2) {
 		return inventory.decrStackSize(var1, var2);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return inventory.removeStackFromSlot(index);
@@ -295,7 +277,7 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
+	public boolean isUsableByPlayer(EntityPlayer var1) {
 		return true;
 	}
 

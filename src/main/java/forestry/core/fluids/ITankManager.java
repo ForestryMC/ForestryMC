@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
@@ -35,5 +36,5 @@ public interface ITankManager extends IFluidHandler {
 	/**
 	 * For updating tanks on the client
 	 */
-	void processTankUpdate(int tankIndex, FluidStack contents);
+	void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
 }

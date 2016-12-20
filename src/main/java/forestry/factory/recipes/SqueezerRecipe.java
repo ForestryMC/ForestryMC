@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ISqueezerRecipe;
@@ -21,13 +21,17 @@ import forestry.api.recipes.ISqueezerRecipe;
 public class SqueezerRecipe implements ISqueezerRecipe {
 
 	private final int processingTime;
-	private final ItemStack[] resources;
+	private final NonNullList<ItemStack> resources;
 	private final FluidStack fluidOutput;
-	@Nullable
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerRecipe(int processingTime, ItemStack[] resources, FluidStack fluidOutput, @Nullable ItemStack remnants, float remnantsChance) {
+	public SqueezerRecipe(int processingTime, NonNullList<ItemStack> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
+		Preconditions.checkNotNull(resources);
+		Preconditions.checkArgument(!resources.isEmpty());
+		Preconditions.checkNotNull(fluidOutput);
+		Preconditions.checkNotNull(remnants);
+
 		this.processingTime = processingTime;
 		this.resources = resources;
 		this.fluidOutput = fluidOutput;
@@ -36,12 +40,11 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 	}
 
 	@Override
-	public ItemStack[] getResources() {
+	public NonNullList<ItemStack> getResources() {
 		return resources;
 	}
 
 	@Override
-	@Nullable
 	public ItemStack getRemnants() {
 		return remnants;
 	}

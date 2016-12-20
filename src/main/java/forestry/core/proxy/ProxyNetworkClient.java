@@ -14,6 +14,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 
 import forestry.core.network.IForestryPacketServer;
 
+@SuppressWarnings("unused")
 public class ProxyNetworkClient extends ProxyNetwork {
 
 	@Override

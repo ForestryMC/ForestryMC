@@ -22,7 +22,7 @@ public class BiomeHelper {
 			return isBiomeHellishCache.get(biomeGen);
 		}
 
-		boolean isBiomeHellish = BiomeDictionary.isBiomeOfType(biomeGen, BiomeDictionary.Type.NETHER);
+		boolean isBiomeHellish = BiomeDictionary.hasType(biomeGen, BiomeDictionary.Type.NETHER);
 		isBiomeHellishCache.put(biomeGen, isBiomeHellish);
 		return isBiomeHellish;
 	}

@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.food.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.food.BeverageManager;
 import forestry.core.inventory.ItemInventory;
 import forestry.food.PluginFood;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemInventoryInfuser extends ItemInventory {
 	private static final short inputSlot = 0;
@@ -32,60 +33,42 @@ public class ItemInventoryInfuser extends ItemInventory {
 
 		// Need input
 		ItemStack input = getStackInSlot(inputSlot);
-		if (input == null) {
-			return;
-		}
+		if (!input.isEmpty() &&
+				getStackInSlot(outputSlot).isEmpty() &&
+				PluginFood.items.beverage == input.getItem()) {
 
-		// Output slot may not be occupied
-		if (getStackInSlot(outputSlot) != null) {
-			return;
-		}
+			// Create the seasoned item
+			NonNullList<ItemStack> ingredients = NonNullList.create();
+			for (int i = 0; i < ingredientSlotCount; i++) {
+				ingredients.add(getStackInSlot(i + ingredientSlot1));
+			}
 
-		// Need a valid base
-		if (PluginFood.items.beverage != input.getItem()) {
-			return;
-		}
+			// Only continue if there is anything to season
+			if (BeverageManager.infuserManager.hasMixtures(ingredients)) {
 
-		// Create the seasoned item
-		ItemStack[] ingredients = new ItemStack[4];
-		for (int i = 0; i < 4; i++) {
-			ingredients[i] = getStackInSlot(i + ingredientSlot1);
-		}
+				ItemStack seasoned = BeverageManager.infuserManager.getSeasoned(input, ingredients);
+				if (!seasoned.isEmpty()) {
 
-		// Only continue if there is anything to season
-		if (!BeverageManager.infuserManager.hasMixtures(ingredients)) {
-			return;
-		}
+					// Remove required ingredients.
+					NonNullList<ItemStack> toRemove = BeverageManager.infuserManager.getRequired(ingredients);
+					for (ItemStack templ : toRemove) {
+						ItemStack ghost = templ.copy();
 
-		ItemStack seasoned = BeverageManager.infuserManager.getSeasoned(input, ingredients);
-		if (seasoned == null) {
-			return;
-		}
-
-		// Remove required ingredients.
-		ItemStack[] toRemove = BeverageManager.infuserManager.getRequired(ingredients);
-		for (ItemStack templ : toRemove) {
-			ItemStack ghost = templ.copy();
-
-			for (int i = ingredientSlot1; i < this.getSizeInventory(); i++) {
-				ItemStack ingredient = getStackInSlot(i);
-				if (ingredient == null) {
-					continue;
-				}
-				if (ghost.stackSize <= 0) {
-					break;
-				}
-
-				if (ghost.getItemDamage() >= 0 && ingredient.isItemEqual(ghost)
-						|| ghost.getItemDamage() < 0 && ghost.getItem() == ingredient.getItem()) {
-					ItemStack removed = decrStackSize(i, 1);
-					ghost.stackSize -= removed.stackSize;
+						for (int i = ingredientSlot1; i < this.getSizeInventory() && !ghost.isEmpty(); i++) {
+							ItemStack ingredient = getStackInSlot(i);
+							if (!ingredient.isEmpty() && OreDictionary.itemMatches(ghost, ingredient, false)) {
+								ItemStack removed = decrStackSize(i, 1);
+								ghost.shrink(removed.getCount());
+							}
+						}
+					}
+					decrStackSize(inputSlot, 1);
+					setInventorySlotContents(outputSlot, seasoned);
 				}
 			}
 		}
-		decrStackSize(inputSlot, 1);
-		setInventorySlotContents(outputSlot, seasoned);
 	}
+
 
 	@Override
 	public String getName() {

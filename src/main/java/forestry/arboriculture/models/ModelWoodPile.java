@@ -1,5 +1,6 @@
 package forestry.arboriculture.models;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +14,8 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TilePile;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.tiles.TileUtil;
@@ -41,40 +42,39 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelWoodPile extends BlankModel{
+public class ModelWoodPile extends BlankModel {
 
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
+	@Nullable
 	private static IModel modelWoodPileItem;
+	@Nullable
 	private static IModel modelWoodPileBlock;
 	private static final Cache<String, IBakedModel> blockCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 	private static final Cache<String, IBakedModel> itemCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
-	
+
 	/**
 	 * Init the model with datas from the ModelBakeEvent.
 	 */
-	public static void onModelBake(ModelBakeEvent event){
+	public static void onModelBake(ModelBakeEvent event) {
 		blockCache.invalidateAll();
 		itemCache.invalidateAll();
 	}
-	
+
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		if(state instanceof IExtendedBlockState){
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+		if (state instanceof IExtendedBlockState) {
 			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-	
+
 			IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-			
+
 			TilePile pile = TileUtil.getTile(world, pos, TilePile.class);
-			
-			if(pile == null){
+
+			if (pile == null) {
 				return Collections.emptyList();
 			}
 			IAlleleTreeSpecies treeSpecies = pile.getTreeSpecies();
-			if (treeSpecies == null) {
-				treeSpecies = (IAlleleTreeSpecies) TreeManager.treeRoot.getDefaultTemplate()[TreeManager.treeRoot.getSpeciesChromosomeType().ordinal()];
-			}
-			
+
 			if (modelWoodPileBlock == null) {
 				try {
 					modelWoodPileBlock = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:block/woodPile"));
@@ -106,43 +106,42 @@ public class ModelWoodPile extends BlankModel{
 	public TextureAtlasSprite getParticleTexture() {
 		return TreeDefinition.Oak.getGenome().getPrimary().getWoodProvider().getSprite(false);
 	}
-	
+
 	@Override
 	protected ItemOverrideList createOverrides() {
 		return new PileItemOverrideList();
 	}
 
 	private IBakedModel bakeModel(IAlleleTreeSpecies treeSpecies, boolean isItem) {
-		if(treeSpecies == null || treeSpecies.getWoodProvider() == null || treeSpecies.getWoodProvider().getSprite(false) == null){
-			return null;
-		}
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		String treeUID = treeSpecies.getUID();
 		Cache<String, IBakedModel> map = isItem ? itemCache : blockCache;
-		if(map.getIfPresent(treeUID) == null){
+		IBakedModel model = map.getIfPresent(treeUID);
+		if (model == null) {
 			textures.put("woodBark", treeSpecies.getWoodProvider().getSprite(false).getIconName());
 			textures.put("woodTop", treeSpecies.getWoodProvider().getSprite(true).getIconName());
 			IModel retextureWoodPile = ModelProcessingHelper.retexture(isItem ? modelWoodPileItem : modelWoodPileBlock, textures.build());
-			map.put(treeUID, retextureWoodPile.bake(ModelRotation.X0_Y0, isItem ? DefaultVertexFormats.ITEM : DefaultVertexFormats.BLOCK, textureGetter));
+			model = retextureWoodPile.bake(ModelRotation.X0_Y0, isItem ? DefaultVertexFormats.ITEM : DefaultVertexFormats.BLOCK, textureGetter);
+			map.put(treeUID, model);
 		}
-		return map.getIfPresent(treeUID);
+		return model;
 	}
-	
+
 	private class PileItemOverrideList extends ItemOverrideList {
 		public PileItemOverrideList() {
 			super(Collections.emptyList());
 		}
 
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			if (modelWoodPileItem == null) {
 				try {
 					modelWoodPileItem = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/woodPile"));
 				} catch (Exception e) {
-					return null;
+					return originalModel;
 				}
 				if (modelWoodPileItem == null) {
-					return null;
+					return originalModel;
 				}
 			}
 			IAlleleTreeSpecies treeSpecies = BlockPile.getTreeSpecies(stack);

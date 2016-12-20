@@ -54,9 +54,9 @@ import forestry.storage.PluginStorage;
 
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankModel {
-
+	@Nullable
 	private static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> itemTransforms;
-	private static Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
+	private static final Map<String, IBakedModel> cache = new HashMap<>();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
 
@@ -112,7 +112,7 @@ public class ModelCrate extends BlankModel {
 	private List<IBakedModel> bakeModel(ItemCrated crateItem) {
 		List<IBakedModel> models = new ArrayList<>();
 		ItemStack contained = crateItem.getContained();
-		if (contained != null) {
+		if (!contained.isEmpty()) {
 			IBakedModel containedModel = getModel(contained);
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, -0.0625F, 0.5F));
@@ -123,21 +123,21 @@ public class ModelCrate extends BlankModel {
 	private class CrateOverrideList extends ItemOverrideList{
 		
 		public CrateOverrideList() {
-			super(new ArrayList());
+			super(new ArrayList<>());
 		}
 		
 		/**
 		 * Bake the crated model
 		 */
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
 			String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
 			IBakedModel model = cache.get(crateUID);
 			if(model == null)
 			{
 				//Fastest list with a unknown quad size
-				List<BakedQuad> list = new LinkedList<BakedQuad>();
+				List<BakedQuad> list = new LinkedList<>();
 				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 				for(BakedQuad quad : ForgeHooksClient.handleCameraTransforms(baseBaked, TransformType.GROUND, false).getQuads(null, null, 0L))
 				{
@@ -158,10 +158,10 @@ public class ModelCrate extends BlankModel {
 	
 	public static class BakedCrateModel extends BlankModel implements IPerspectiveAwareModel
 	{
-		BakedCrateModel other;
-		boolean gui;
-		List<BakedQuad> quads = new ArrayList<BakedQuad>();
-		private List<BakedQuad> emptyList = new ArrayList<BakedQuad>();
+		private final BakedCrateModel other;
+		private final boolean gui;
+		private final List<BakedQuad> quads = new ArrayList<>();
+		private final List<BakedQuad> emptyList = new ArrayList<>();
 		
 		public BakedCrateModel(BakedCrateModel noneGui)
 		{

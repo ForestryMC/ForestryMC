@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -28,6 +23,10 @@ import forestry.apiculture.tiles.FakeBeeHousingInventory;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
+import net.minecraft.init.Biomes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
 	public static final FakeAlvearyController instance = new FakeAlvearyController();
@@ -46,7 +45,6 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 		return Collections.emptyList();
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return FakeBeeHousingInventory.instance;
@@ -66,30 +64,31 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	public boolean canBlockSeeTheSky() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isRaining() {
 		return false;
 	}
 
 	@Override
+	@Nullable
 	public GameProfile getOwner() {
 		return null;
 	}
 
 	@Override
 	public BlockPos getCoordinates() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
 	public Vec3d getBeeFXCoordinates() {
-		return null;
+		return new Vec3d(0, 0, 0);
 	}
 
 	@Override
 	public Biome getBiome() {
-		return null;
+		return Biomes.PLAINS;
 	}
 
 	@Override

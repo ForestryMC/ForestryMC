@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 
@@ -51,9 +48,9 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		Collection<ItemStack> products = produce;
-		produce = new ArrayList<>();
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		NonNullList<ItemStack> products = produce;
+		produce = NonNullList.create();
 		return products;
 	}
 

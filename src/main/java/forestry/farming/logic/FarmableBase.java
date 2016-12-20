@@ -35,11 +35,8 @@ public abstract class FarmableBase implements IFarmable {
 			return null;
 		}
 
-		if (replant) {
-			return new CropDestroy(world, blockState, pos, plantedState);
-		} else {
-			return new CropDestroy(world, blockState, pos, null);
-		}
+		IBlockState replantState = replant ? plantedState : null;
+		return new CropDestroy(world, blockState, pos, replantState);
 	}
 
 	@Override

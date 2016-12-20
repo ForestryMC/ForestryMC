@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
@@ -13,14 +12,12 @@ import java.util.Collection;
 import net.minecraft.util.math.BlockPos;
 
 public interface IInternalBlock {
-	
-	@Nonnull
+
 	BlockPos getPos();
 	
 	@Nullable
 	IInternalBlock getRoot();
-	
-	@Nonnull
+
 	Collection<IInternalBlockFace> getFaces();
 
 }

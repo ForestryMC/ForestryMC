@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -67,7 +65,7 @@ public abstract class BlockUtil {
 		}
 		return null;
 	}
-	
+
 	public static boolean isValidPodLocation(World world, BlockPos pos, EnumFacing direction) {
 		pos = pos.offset(direction);
 		if (!world.isBlockLoaded(pos)) {
@@ -83,13 +81,16 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isWoodSlabBlock(IBlockState blockState, Block block, IBlockAccess world, BlockPos pos) {
-		if (blockState == null || block == null || block.isAir(blockState, world, pos)) {
+		if (block.isAir(blockState, world, pos)) {
 			return false;
 		}
-		if(Item.getItemFromBlock(block) == null){
+
+		ItemStack stack = new ItemStack(block);
+		if (stack.isEmpty()) {
 			return false;
 		}
-		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
+
+		int[] oreIds = OreDictionary.getOreIDs(stack);
 		for (int oreId : oreIds) {
 			if (oreId == slabWoodId) {
 				return true;
@@ -104,14 +105,16 @@ public abstract class BlockUtil {
 		return block.isReplaceable(world, pos) && !(block instanceof BlockStaticLiquid);
 	}
 
-	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, @Nonnull AxisAlignedBB bounds) {
+	@Nullable
+	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, AxisAlignedBB bounds) {
 		return collisionRayTrace(pos, startVec, endVec, bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ);
 	}
 
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
-	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	@Nullable
+	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
 		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
@@ -147,7 +150,7 @@ public abstract class BlockUtil {
 
 		Vec3d minHit = null;
 
-		if (vec32 != null && (minHit == null || startVec.squareDistanceTo(vec32) < startVec.squareDistanceTo(minHit))) {
+		if (vec32 != null) {
 			minHit = vec32;
 		}
 
@@ -207,21 +210,21 @@ public abstract class BlockUtil {
 	/**
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
-	private static boolean isVecInsideYZBounds(Vec3d vec, double minY, double minZ, double maxY, double maxZ) {
+	private static boolean isVecInsideYZBounds(@Nullable Vec3d vec, double minY, double minZ, double maxY, double maxZ) {
 		return vec != null && vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
-	private static boolean isVecInsideXZBounds(Vec3d vec, double minX, double minZ, double maxX, double maxZ) {
+	private static boolean isVecInsideXZBounds(@Nullable Vec3d vec, double minX, double minZ, double maxX, double maxZ) {
 		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
-	private static boolean isVecInsideXYBounds(Vec3d vec, double minX, double minY, double maxX, double maxY) {
+	private static boolean isVecInsideXYBounds(@Nullable Vec3d vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY;
 	}
 	
@@ -229,19 +232,19 @@ public abstract class BlockUtil {
 
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && !block.getMaterial(blockState).isLiquid();
+		return block.isReplaceable(world, pos) && !blockState.getMaterial().isLiquid();
 	}
-	
-	public static boolean canPlaceTree(IBlockState blockState, World world, BlockPos pos){
+
+	public static boolean canPlaceTree(IBlockState blockState, World world, BlockPos pos) {
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
-		if(block.isReplaceable(world, downPos) && block.getMaterial(blockState).isLiquid() || block.isLeaves(blockState, world, downPos) || block.isWood(world, downPos)){
-			return false;
-		}
-		return true;
+		return !(block.isReplaceable(world, downPos) &&
+				blockState.getMaterial().isLiquid()) &&
+				!block.isLeaves(blockState, world, downPos) &&
+				!block.isWood(world, downPos);
 	}
-	
-	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos){
+
+	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
 		IBlockState blockState;
 
 		do {
@@ -251,8 +254,8 @@ public abstract class BlockUtil {
 
 		return pos;
 	}
-	
-	public static BlockPos getNextSolidDownPos(World world, BlockPos pos){
+
+	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
 		IBlockState blockState;
 
 		do {
@@ -263,7 +266,9 @@ public abstract class BlockUtil {
 		return pos;
 	}
 
-	/** Copied from {@link Block#shouldSideBeRendered} */
+	/**
+	 * Copied from {@link Block#shouldSideBeRendered}
+	 */
 	public static boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(blockAccess, pos);
 
@@ -302,28 +307,28 @@ public abstract class BlockUtil {
 		return !blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
 	}
 
-	public static boolean setBlockWithPlaceSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState blockState) {
+	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, IBlockState blockState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-			Proxies.net.sendNetworkPacket(packet, world);
+			Proxies.net.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean setBlockWithBreakSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState blockState, @Nonnull IBlockState oldState) {
+	public static boolean setBlockWithBreakSound(World world, BlockPos pos, IBlockState blockState, IBlockState oldState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
-			Proxies.net.sendNetworkPacket(packet, world);
+			Proxies.net.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean setBlockToAirWithSound(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState oldState) {
+	public static boolean setBlockToAirWithSound(World world, BlockPos pos, IBlockState oldState) {
 		if (world.setBlockToAir(pos)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
-			Proxies.net.sendNetworkPacket(packet, world);
+			Proxies.net.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;
@@ -331,7 +336,7 @@ public abstract class BlockUtil {
 
 	@Nullable
 	public static <T extends Comparable<T>> IProperty<T> getProperty(Block block, String propertyName, Class<T> valueClass) {
-		for (IProperty<?> property : block.getDefaultState().getPropertyNames()) {
+		for (IProperty<?> property : block.getDefaultState().getPropertyKeys()) {
 			if (property.getName().equals(propertyName)) {
 				if (property.getValueClass().isAssignableFrom(valueClass)) {
 					//noinspection unchecked

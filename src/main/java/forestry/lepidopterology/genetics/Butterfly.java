@@ -10,23 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
+import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -52,18 +41,25 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
-
 	private static final Random rand = new Random();
 
-	@Nonnull
 	private final IButterflyGenome genome;
 	@Nullable
 	private IButterflyGenome mate;
 
 	/* CONSTRUCTOR */
-	public Butterfly(@Nonnull NBTTagCompound nbt) {
+	public Butterfly(NBTTagCompound nbt) {
 		super(nbt);
 
 		if (nbt.hasKey("Genome")) {
@@ -77,7 +73,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 	}
 
-	public Butterfly(@Nonnull IButterflyGenome genome) {
+	public Butterfly(IButterflyGenome genome) {
 		super(genome.getLifespan());
 		this.genome = genome;
 	}
@@ -117,7 +113,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		return new Butterfly(nbttagcompound);
 	}
 
-	@Nonnull
 	@Override
 	public IButterflyGenome getGenome() {
 		return genome;
@@ -140,13 +135,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			boolean noneMatched = true;
 
 			if (getGenome().getPrimary().strictSpawnMatch()) {
-				BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
-				if (types.length == 1 && getGenome().getPrimary().getSpawnBiomes().contains(types[0])) {
+				Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
+				if (types.size() == 1 && getGenome().getPrimary().getSpawnBiomes().containsAll(types)) {
 					noneMatched = false;
 				}
 			} else {
 				for (BiomeDictionary.Type type : getGenome().getPrimary().getSpawnBiomes()) {
-					if (BiomeDictionary.isBiomeOfType(biome, type)) {
+					if (BiomeDictionary.hasType(biome, type)) {
 						noneMatched = false;
 						break;
 					}
@@ -163,17 +158,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public boolean canTakeFlight(World world, double x, double y, double z) {
-		if (!canFly(world)) {
-			return false;
-		}
-		return isAcceptedEnvironment(world, x, y, z);
+		return canFly(world) &&
+				isAcceptedEnvironment(world, x, y, z);
 	}
 
 	private boolean canFly(World world) {
-		if (world.isRaining() && !getGenome().getTolerantFlyer()) {
-			return false;
-		}
-		return isActiveThisTime(world.isDaytime());
+		return (!world.isRaining() || getGenome().getTolerantFlyer()) &&
+				isActiveThisTime(world.isDaytime());
 	}
 
 	@Override
@@ -191,6 +182,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
+	@Nullable
 	public IButterfly spawnCaterpillar(World world, IButterflyNursery nursery) {
 		// We need a mated queen to produce offspring.
 		if (mate == null) {
@@ -221,6 +213,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		return new Butterfly(new ButterflyGenome(chromosomes));
 	}
 
+	@Nullable
 	private static IChromosome[] mutateSpecies(World world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
@@ -278,24 +271,24 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public ItemStack[] getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel) {
-		ArrayList<ItemStack> drop = new ArrayList<>();
+	public NonNullList<ItemStack> getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel) {
+		NonNullList<ItemStack> drop = NonNullList.create();
 
 		EntityCreature creature = entity.getEntity();
 		float metabolism = (float) getGenome().getMetabolism() / 10;
 
 		for (Map.Entry<ItemStack, Float> entry : getGenome().getPrimary().getButterflyLoot().entrySet()) {
-			if (creature.worldObj.rand.nextFloat() < entry.getValue() * metabolism) {
+			if (creature.world.rand.nextFloat() < entry.getValue() * metabolism) {
 				drop.add(entry.getKey().copy());
 			}
 		}
 
-		return drop.toArray(new ItemStack[drop.size()]);
+		return drop;
 	}
 
 	@Override
-	public ItemStack[] getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel) {
-		ArrayList<ItemStack> drop = new ArrayList<>();
+	public NonNullList<ItemStack> getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel) {
+		NonNullList<ItemStack> drop = NonNullList.create();
 		float metabolism = (float) getGenome().getMetabolism() / 10;
 
 		for (Map.Entry<ItemStack, Float> entry : getGenome().getPrimary().getCaterpillarLoot().entrySet()) {
@@ -304,12 +297,12 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			}
 		}
 
-		return drop.toArray(new ItemStack[drop.size()]);
+		return drop;
 	}
-	
+
 	@Override
-	public ItemStack[] getCocoonDrop(IButterflyCocoon cocoon) {
-		ArrayList<ItemStack> drop = new ArrayList<>();
+	public NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon) {
+		NonNullList<ItemStack> drop = NonNullList.create();
 		float metabolism = (float) getGenome().getMetabolism() / 10;
 
 		for (Map.Entry<ItemStack, Float> entry : getGenome().getCocoon().getCocoonLoot().entrySet()) {
@@ -317,24 +310,24 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 				drop.add(entry.getKey().copy());
 			}
 		}
-		
-		if(PluginLepidopterology.getSerumChance() > 0){
-			if(rand.nextFloat() < PluginLepidopterology.getSerumChance() * metabolism){
+
+		if (PluginLepidopterology.getSerumChance() > 0) {
+			if (rand.nextFloat() < PluginLepidopterology.getSerumChance() * metabolism) {
 				ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.SERUM);
-				if(PluginLepidopterology.getSecondSerumChance() > 0){
-					if(rand.nextFloat() < PluginLepidopterology.getSecondSerumChance() * metabolism){
-						stack.stackSize = 2;
+				if (PluginLepidopterology.getSecondSerumChance() > 0) {
+					if (rand.nextFloat() < PluginLepidopterology.getSecondSerumChance() * metabolism) {
+						stack.setCount(2);
 					}
 				}
 				drop.add(ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.SERUM));
 			}
 		}
-		
-		if(cocoon.isSolid()){
+
+		if (cocoon.isSolid()) {
 			drop.add(ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.BUTTERFLY));
 		}
 
-		return drop.toArray(new ItemStack[drop.size()]);
+		return drop;
 	}
 
 }

@@ -10,20 +10,20 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
+import forestry.core.config.Constants;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
-
-import forestry.core.config.Constants;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamable;
-import forestry.core.utils.InventoryUtil;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * With permission from Krapht.
@@ -32,6 +32,8 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
 	private final IInventory inventory;
 	private boolean allowAutomation = true;
+	@Nullable
+	private int[] slotMap;
 
 	//private boolean debug = false;
 
@@ -65,7 +67,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getName(), inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
 			}
 		}
@@ -73,8 +75,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		return copy;
 	}
 
-
 	/* IINVENTORY */
+	@Override
+	public boolean isEmpty() {
+		return inventory.isEmpty();
+	}
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.getSizeInventory();
@@ -109,25 +115,25 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	public void markDirty() {
 		inventory.markDirty();
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return inventory.removeStackFromSlot(slotIndex);
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
-		return null;
+		return new TextComponentString("");
 	}
 
 	@Override
@@ -154,11 +160,9 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	/* ISIDEDINVENTORY */
-	private int[] slotMap;
-	
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
-		if (allowAutomation) {
+		if (allowAutomation && slotMap != null) {
 			return slotMap;
 		}
 		return Constants.SLOTS_NONE;
@@ -195,30 +199,30 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeInventory(inventory);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		data.readInventory(inventory);
 	}
-	
+
 	/* FIELDS */
 	@Override
 	public int getField(int id) {
 		return 0;
 	}
-	
+
 	@Override
 	public int getFieldCount() {
 		return 0;
 	}
-	
+
 	@Override
 	public void setField(int id, int value) {
 	}
-	
+
 	@Override
 	public void clear() {
 	}

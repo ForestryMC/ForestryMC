@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -33,6 +35,7 @@ public class SlotOutput extends SlotWatched {
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@Nullable
 	public TextureAtlasSprite getBackgroundSprite() {
 		return null;
 	}

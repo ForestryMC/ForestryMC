@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -23,7 +24,7 @@ public class Classification implements IClassification {
 	private final EnumClassLevel level;
 	private final String uid;
 	private final String scientific;
-
+	@Nullable
 	private IClassification parent;
 
 	private final ArrayList<IAlleleSpecies> members = new ArrayList<>();
@@ -47,6 +48,7 @@ public class Classification implements IClassification {
 	}
 
 	@Override
+	@Nullable
 	public IClassification getParent() {
 		return parent;
 	}

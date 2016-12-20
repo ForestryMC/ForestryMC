@@ -62,18 +62,18 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(ITextureManager manager) {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(iconName, texture);
+		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(texture);
 	}
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
-		Biome currentBiome = player.worldObj.getBiome(player.getPosition());
+		Biome currentBiome = player.world.getBiome(player.getPosition());
 
-		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.worldObj, player.getPosition());
+		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.world, player.getPosition());
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
-		EnumHumidity humidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(player.worldObj, player.getPosition()));
+		EnumHumidity humidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(player.world, player.getPosition()));
 
 		list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
 		list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));

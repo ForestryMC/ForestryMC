@@ -10,16 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -35,13 +29,16 @@ import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implements IApiary {
-	@Nonnull
+
 	private static final IBeeModifier beeModifier = new ApiaryBeeModifier();
-	@Nonnull
+
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
-	@Nonnull
 	private final InventoryApiary inventory = new InventoryApiary();
 
 	@SuppressWarnings("unused")
@@ -68,12 +65,11 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 		return inventory;
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
 	}
-	
+
 	@Override
 	public IBlockState getDisplayTile() {
 		return PluginApiculture.blocks.apiary.getDefaultState();

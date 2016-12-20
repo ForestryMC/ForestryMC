@@ -57,7 +57,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 			int row = i * 20;
 			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
-			if (tube == null) {
+			if (tube.isEmpty()) {
 				ICircuitSocketType socketType = layout.getSocketType();
 				if (CircuitSocketType.FARM.equals(socketType)) {
 					FarmDirection farmDirection = FarmDirection.values()[i];

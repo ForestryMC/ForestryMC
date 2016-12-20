@@ -101,9 +101,9 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		ItemStack contained = entity.getEntityItem();
 		for (Resurrectable entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
-				EntityUtil.spawnEntity(entity.worldObj, entry.risen, entity.posX, entity.posY, entity.posZ);
-				contained.stackSize--;
-				if (contained.stackSize <= 0) {
+				EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);
+				contained.shrink(1);
+				if (contained.getCount() <= 0) {
 					entity.setDead();
 				}
 				return true;

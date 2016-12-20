@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
-import javax.annotation.Nonnull;
-
 import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -25,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class ModelBakerFace {
-	@Nonnull
 	public final EnumFacing face;
 
 	public final Vector3f to;
@@ -37,7 +34,7 @@ public class ModelBakerFace {
 
 	public final int colorIndex;
 
-	public ModelBakerFace(@Nonnull EnumFacing face, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite sprite) {
+	public ModelBakerFace(EnumFacing face, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite sprite) {
 		this.colorIndex = colorIndex;
 		this.face = face;
 		this.to = to;

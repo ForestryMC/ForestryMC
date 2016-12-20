@@ -13,6 +13,7 @@ package forestry.mail.gui;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
+import forestry.core.utils.Log;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -28,7 +29,6 @@ import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.packets.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
 import forestry.mail.inventory.ItemInventoryLetter;
@@ -38,6 +38,7 @@ import forestry.mail.network.packets.PacketLetterTextSet;
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
+	@Nullable
 	private ITradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, ItemInventoryLetter inventory) {
@@ -58,7 +59,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		}
 
 		// Rip open delivered mails
-		if (!player.worldObj.isRemote) {
+		if (!player.world.isRemote) {
 			if (inventory.getLetter().isProcessed()) {
 				inventory.onLetterOpened();
 			}
@@ -67,9 +68,9 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		// Set recipient type
 		ILetter letter = inventory.getLetter();
 		if (letter != null) {
-			IMailAddress[] recipients = letter.getRecipients();
-			if (recipients != null && recipients.length > 0) {
-				this.carrierType = recipients[0].getType();
+			IMailAddress recipient = letter.getRecipient();
+			if (recipient != null) {
+				this.carrierType = recipient.getType();
 			}
 		}
 	}
@@ -77,7 +78,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!entityplayer.worldObj.isRemote) {
+		if (!entityplayer.world.isRemote) {
 			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
@@ -121,13 +122,18 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	public void handleRequestLetterInfo(EntityPlayer player, String recipientName, EnumAddressee type) {
-		IMailAddress recipient = getRecipient(player.getServer(), recipientName, type);
+		MinecraftServer server = player.getServer();
+		if (server == null) {
+			Log.error("Could not get server");
+			return;
+		}
+		IMailAddress recipient = getRecipient(server, recipientName, type);
 
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
 		if (recipient == null || recipient.getType() == EnumAddressee.TRADER) {
-			updateTradeInfo(player.worldObj, recipient);
+			updateTradeInfo(player.world, recipient);
 		}
 		
 		// Update info on client
@@ -152,12 +158,9 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		}
 	}
 
+	@Nullable
 	public IMailAddress getRecipient() {
-		if (getLetter().getRecipients().length > 0) {
-			return getLetter().getRecipients()[0];
-		} else {
-			return null;
-		}
+		return getLetter().getRecipient();
 	}
 
 	public String getText() {
@@ -170,13 +173,12 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		Proxies.net.sendToServer(new PacketLetterTextSet(text));
 	}
 
-	public void handleSetText(PacketString packet) {
-		String text = packet.getString();
+	public void handleSetText(String text) {
 		getLetter().setText(text);
 	}
 
 	/* Managing Trade info */
-	private void updateTradeInfo(World world, IMailAddress address) {
+	private void updateTradeInfo(World world, @Nullable IMailAddress address) {
 		// Updating is done by the server.
 		if (world.isRemote) {
 			return;
@@ -197,20 +199,21 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Override
-	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
-		carrierType = packet.type;
-		if (packet.type == EnumAddressee.PLAYER) {
-			getLetter().setRecipient(packet.address);
-		} else if (packet.type == EnumAddressee.TRADER) {
-			this.setTradeInfo(packet.tradeInfo);
+	public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
+		carrierType = type;
+		if (type == EnumAddressee.PLAYER) {
+			getLetter().setRecipient(address);
+		} else if (type == EnumAddressee.TRADER) {
+			this.setTradeInfo(tradeInfo);
 		}
 	}
 
+	@Nullable
 	public ITradeStationInfo getTradeInfo() {
 		return this.tradeInfo;
 	}
 
-	private void setTradeInfo(ITradeStationInfo info) {
+	private void setTradeInfo(@Nullable ITradeStationInfo info) {
 		this.tradeInfo = info;
 		if (tradeInfo == null) {
 			getLetter().setRecipient(null);

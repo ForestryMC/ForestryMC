@@ -11,13 +11,12 @@
 package forestry.food;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
 
 import forestry.api.food.IBeverageEffect;
 import forestry.api.food.IInfuserManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 /**
  * contains the available mixtures.
@@ -28,11 +27,13 @@ public class InfuserMixtureManager implements IInfuserManager {
 
 	@Override
 	public void addMixture(int meta, ItemStack ingredient, IBeverageEffect effect) {
-		this.mixtures.add(new InfuserMixture(meta, ingredient, effect));
+		NonNullList<ItemStack> ingredients = NonNullList.create();
+		ingredients.add(ingredient);
+		this.mixtures.add(new InfuserMixture(meta, ingredients, effect));
 	}
 
 	@Override
-	public void addMixture(int meta, ItemStack[] ingredients, IBeverageEffect effect) {
+	public void addMixture(int meta, NonNullList<ItemStack> ingredients, IBeverageEffect effect) {
 		this.mixtures.add(new InfuserMixture(meta, ingredients, effect));
 	}
 
@@ -47,9 +48,9 @@ public class InfuserMixtureManager implements IInfuserManager {
 		return false;
 	}
 
-	private InfuserMixture[] getMatchingMixtures(ItemStack[] ingredients) {
+	private List<InfuserMixture> getMatchingMixtures(NonNullList<ItemStack> ingredients) {
 
-		ArrayList<InfuserMixture> matches = new ArrayList<>();
+		List<InfuserMixture> matches = new ArrayList<>();
 
 		for (InfuserMixture mixture : mixtures) {
 			if (mixture.matches(ingredients)) {
@@ -57,29 +58,29 @@ public class InfuserMixtureManager implements IInfuserManager {
 			}
 		}
 
-		return matches.toArray(new InfuserMixture[matches.size()]);
+		return matches;
 	}
 
 	@Override
-	public boolean hasMixtures(ItemStack[] ingredients) {
-		return getMatchingMixtures(ingredients).length > 0;
+	public boolean hasMixtures(NonNullList<ItemStack> ingredients) {
+		return !getMatchingMixtures(ingredients).isEmpty();
 	}
 
 	@Override
-	public ItemStack[] getRequired(ItemStack[] ingredients) {
-		InfuserMixture[] mixtures = getMatchingMixtures(ingredients);
-		ArrayList<ItemStack> required = new ArrayList<>();
+	public NonNullList<ItemStack> getRequired(NonNullList<ItemStack> ingredients) {
+		List<InfuserMixture> mixtures = getMatchingMixtures(ingredients);
+		NonNullList<ItemStack> required = NonNullList.create();
 
 		for (InfuserMixture mixture : mixtures) {
-			required.addAll(Arrays.asList(mixture.getIngredients()));
+			required.addAll(mixture.getIngredients());
 		}
 
-		return required.toArray(new ItemStack[required.size()]);
+		return required;
 	}
 
 	@Override
-	public ItemStack getSeasoned(ItemStack base, ItemStack[] ingredients) {
-		InfuserMixture[] mixtures = getMatchingMixtures(ingredients);
+	public ItemStack getSeasoned(ItemStack base, NonNullList<ItemStack> ingredients) {
+		List<InfuserMixture> mixtures = getMatchingMixtures(ingredients);
 		List<IBeverageEffect> effects = BeverageEffect.loadEffects(base);
 
 		int weight = 0;

@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileNaturalistChest;
+import net.minecraft.world.World;
 
 public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNaturalistChest> {
 
@@ -36,11 +37,14 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 	@Override
 	public void renderTileEntityAt(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (chest != null) {
-			IBlockState blockState = chest.getWorldObj().getBlockState(chest.getPos());
-			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
-				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(facing, chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
-				return;
+			World worldObj = chest.getWorldObj();
+			if (worldObj.isBlockLoaded(chest.getPos())) {
+				IBlockState blockState = worldObj.getBlockState(chest.getPos());
+				if (blockState.getBlock() instanceof BlockBase) {
+					EnumFacing facing = blockState.getValue(BlockBase.FACING);
+					render(facing, chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
+					return;
+				}
 			}
 		}
 		render(EnumFacing.SOUTH, 0, 0, x, y, z, 0);

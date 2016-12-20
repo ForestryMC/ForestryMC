@@ -17,8 +17,7 @@ import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
@@ -39,7 +38,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		active = false;
 		burnTime = 0;
 	}
-	
+
 	@Override
 	public void setActive(boolean active) {
 		if (this.active == active) {
@@ -48,22 +47,16 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 
 		this.active = active;
 
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getMinimumCoord(), getMaximumCoord());
-			} else {
-				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
-			}
+		if (world.isRemote) {
+			world.markBlockRangeForRenderUpdate(getMinimumCoord(), getMaximumCoord());
+		} else {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), getCoordinates(), world);
 		}
 	}
 
 	@Override
 	public boolean isActive() {
 		return active;
-	}
-
-	public int getBurnTime() {
-		return burnTime;
 	}
 
 	@Override
@@ -102,17 +95,16 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 	protected void onAssimilate(IMultiblockControllerInternal assimilated) {
 		if (!(assimilated instanceof CharcoalPileController)) {
 			Log.warning("[%s] Charcoal Kiln @ %s is attempting to assimilate a non-Charcoal Kiln machine! That machine's data will be lost!",
-					worldObj.isRemote ? "CLIENT" : "SERVER", getReferenceCoord());
-			return;
+					world.isRemote ? "CLIENT" : "SERVER", getReferenceCoord());
 		}
 	}
-	
+
 	@Override
 	protected boolean updateServer(int tickCount) {
 		if (!isActive()) {
 			return false;
 		}
-		if(woodBurnTime == 0){
+		if (woodBurnTime == 0) {
 			int validComps = 0;
 			int newBurnTime = 0;
 			for (IMultiblockComponent part : connectedParts) {
@@ -121,33 +113,33 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 					validComps++;
 					IWoodProvider woodProvider = comp.getTreeSpecies().getWoodProvider();
 					int charcoalAmount = woodProvider.getCarbonization();
-					while(worldObj.rand.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)){
+					while (world.rand.nextFloat() < woodProvider.getCharcoalChance(charcoalAmount)) {
 						charcoalAmount++;
 					}
 					newBurnTime += charcoalAmount * 500;
 				}
 			}
-			if(validComps > 0){
+			if (validComps > 0) {
 				woodBurnTime = newBurnTime;
-			}else{
+			} else {
 				woodBurnTime = 0;
 			}
 		}
 		if (burnTime >= woodBurnTime) {
-			for(IMultiblockComponent part : connectedParts) {
+			for (IMultiblockComponent part : connectedParts) {
 				BlockPos pos = part.getCoordinates();
-				IBlockState state = worldObj.getBlockState(pos);
+				IBlockState state = world.getBlockState(pos);
 				IBlockState ashPileState = PluginArboriculture.blocks.piles.get(EnumPileType.ASH).getDefaultState().withProperty(BlockPile.PILE_POSITION, state.getValue(BlockPile.PILE_POSITION));
-				
-				worldObj.setBlockState(pos, ashPileState);
+
+				world.setBlockState(pos, ashPileState);
 			}
-			MultiblockRegistry.addDirtyController(worldObj, this);
+			MultiblockRegistry.addDirtyController(world, this);
 		} else {
 			burnTime++;
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String getUnlocalizedType() {
 		return "for.multiblock.charcoal.pile.type";
@@ -155,10 +147,9 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 
 	@Override
 	public BlockPos getCoordinates() {
-		BlockPos coord = getReferenceCoord();
-		return new BlockPos(coord);
+		return getReferenceCoord();
 	}
-	
+
 	@Override
 	protected void updateClient(int tickCount) {
 	}
@@ -168,13 +159,13 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		int minX = getSizeLimits().getMinimumXSize();
 		int minY = getSizeLimits().getMinimumYSize();
 		int minZ = getSizeLimits().getMinimumZSize();
-		
+
 		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
 		BlockPos maximumCoord = getMaximumCoord();
 		BlockPos minimumCoord = getMinimumCoord();
-		
+
 		int deltaX = maximumCoord.getX() - minimumCoord.getX() + 1;
 		int deltaY = maximumCoord.getY() - minimumCoord.getY() + 1;
 		int deltaZ = maximumCoord.getZ() - minimumCoord.getZ() + 1;
@@ -199,7 +190,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		if (deltaZ < minZ) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
 		}
-		
+
 		TileEntity te;
 		IMultiblockComponent part;
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
@@ -207,18 +198,18 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 		for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
 			int partsOnLayer = 0;
 			int layer = y - getMinimumCoord().getY();
-			
+
 			BlockPos currentMaximumCoord = maximumCoord.add(-layer, 0, -layer);
 			BlockPos currentMinimumCoord = minimumCoord.add(layer, 0, layer);
-			
+
 			for (int z = currentMinimumCoord.getZ(); z <= currentMaximumCoord.getZ(); z++) {
 				for (int x = currentMinimumCoord.getX(); x <= currentMaximumCoord.getX(); x++) {
 					// Okay, figure out what sort of block this should be.
 					BlockPos pos = new BlockPos(x, y, z);
-					te = this.worldObj.getTileEntity(pos);
+					te = this.world.getTileEntity(pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
-						
+
 						// Ensure this part should actually be allowed within a cube of this controller's type
 						if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 							throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
@@ -227,7 +218,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors
 						part = null;
 					}
-					
+
 					// Validate block type against both part-level and material-level validators.
 					int extremes = 0;
 
@@ -237,7 +228,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 					if (z == currentMinimumCoord.getZ()) {
 						extremes++;
 					}
-					
+
 					if (x == currentMaximumCoord.getX()) {
 						extremes++;
 					}
@@ -247,33 +238,33 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 					if (z == currentMaximumCoord.getZ()) {
 						extremes++;
 					}
-					
+
 					if (extremes >= 1) {
 						// Side
 						int exteriorLevel = y - currentMinimumCoord.getY();
 						if (part != null) {
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
-							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, pos);
+							isBlockGoodForExteriorLevel(exteriorLevel, this.world, pos);
 						}
 					} else {
 						if (part != null) {
 							isGoodForInterior(part);
 						} else {
-							isBlockGoodForInterior(this.worldObj, pos);
+							isBlockGoodForInterior(this.world, pos);
 						}
 					}
 					components.add(pos);
 					partsOnLayer++;
 				}
 			}
-			
+
 			if (partsOnLayer < 4) {
 				throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.charcoal.pile.error.small"));
 			}
 		}
-		for(IMultiblockComponent comp : connectedParts){
-			if(!components.contains(comp.getCoordinates())){
+		for (IMultiblockComponent comp : connectedParts) {
+			if (!components.contains(comp.getCoordinates())) {
 				throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.charcoal.pile.error.large", comp.getCoordinates().getX(), comp.getCoordinates().getY(), comp.getCoordinates().getZ()));
 			}
 		}
@@ -303,27 +294,27 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 	public void decodeDescriptionPacket(NBTTagCompound data) {
 		readFromNBT(data);
 	}
-	
+
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		data.writeInt(burnTime);
 		data.writeBoolean(active);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		burnTime = data.readInt();
 		active = data.readBoolean();
 	}
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return null;
+		return EnumTemperature.NORMAL;
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return null;
+		return EnumHumidity.NORMAL;
 	}
 
 	@Override
@@ -338,22 +329,22 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 
 	@Override
 	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
-		if(!(part instanceof ICharcoalPileComponent)){
+		if (!(part instanceof ICharcoalPileComponent)) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.charcoal.pile.error.invalid.exterior", part.getCoordinates().getX(), part.getCoordinates().getY(), part.getCoordinates().getZ()));
 		}
 		ICharcoalPileComponent component = (ICharcoalPileComponent) part;
-		if(component.getPileType() != EnumPileType.DIRT){
+		if (component.getPileType() != EnumPileType.DIRT) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.charcoal.pile.error.invalid.exterior", part.getCoordinates().getX(), part.getCoordinates().getY(), part.getCoordinates().getZ()));
 		}
 	}
 
 	@Override
 	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
-		if(!(part instanceof ICharcoalPileComponent)){
+		if (!(part instanceof ICharcoalPileComponent)) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.charcoal.pile.error.invalid.interior", part.getCoordinates().getX(), part.getCoordinates().getY(), part.getCoordinates().getZ()));
 		}
 		ICharcoalPileComponent component = (ICharcoalPileComponent) part;
-		if(component.getPileType() != EnumPileType.WOOD){
+		if (component.getPileType() != EnumPileType.WOOD) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.charcoal.pile.error.invalid.interior", part.getCoordinates().getX(), part.getCoordinates().getY(), part.getCoordinates().getZ()));
 		}
 	}

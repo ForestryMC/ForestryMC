@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumPileType;
@@ -37,11 +38,11 @@ import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.arboriculture.blocks.BlockArbLog;
+import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
-import forestry.arboriculture.blocks.log.BlockArbLog;
-import forestry.arboriculture.blocks.slab.BlockArbSlab;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -50,9 +51,9 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleGrowth;
-import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
+import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
@@ -69,8 +70,8 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemFruit.EnumFruit;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -79,7 +80,6 @@ import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.VillagerTradeLists;
-import forestry.factory.recipes.FabricatorRecipe;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -115,15 +115,18 @@ import net.minecraftforge.oredict.OreDictionary;
 @ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends BlankForestryPlugin {
 
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
 	public static String treekeepingMode = "NORMAL";
 
 	public static final List<Block> validFences = new ArrayList<>();
 
+	@Nullable
 	public static ItemRegistryArboriculture items;
+	@Nullable
 	public static BlockRegistryArboriculture blocks;
-
+	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerArborist;
 
 	@Override
@@ -165,6 +168,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+		Preconditions.checkState(blocks != null, "Blocks have not been created");
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -195,7 +199,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
-		
+
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerArbDoor());
 	}
 
@@ -210,7 +214,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		super.doInit();
 
 		// Create alleles
-		createAlleles();
+		registerAlleles();
 		TreeDefinition.initTrees();
 		registerErsatzGenomes();
 
@@ -219,6 +223,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		GameRegistry.registerTileEntity(TilePile.class, "forestry.Piles");
 
+		Preconditions.checkState(blocks != null, "Blocks have not been created");
+		Preconditions.checkState(items != null, "Items have not been created");
 		blocks.treeChest.init();
 
 		if (Config.enableVillagers) {
@@ -260,6 +266,10 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
+		ItemRegistryCore coreItems = PluginCore.items;
+		Preconditions.checkState(coreItems != null, "Core Items have not been created");
+		Preconditions.checkState(blocks != null, "Blocks have not been created");
+		Preconditions.checkState(items != null, "Items have not been created");
 
 		for (BlockArbLog log : blocks.logs) {
 			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
@@ -288,38 +298,38 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			ItemStack fireproofStairs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.STAIRS, true);
 
 			if (woodType instanceof EnumForestryWoodType) {
-				planks.stackSize = 4;
-				logs.stackSize = 1;
+				planks.setCount(4);
+				logs.setCount(1);
 				RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
 
-				slabs.stackSize = 6;
-				planks.stackSize = 1;
+				slabs.setCount(6);
+				planks.setCount(1);
 				RecipeUtil.addPriorityRecipe(slabs.copy(), "###", '#', planks.copy());
 
-				fences.stackSize = 3;
-				planks.stackSize = 1;
+				fences.setCount(3);
+				planks.setCount(1);
 				RecipeUtil.addRecipe(fences.copy(),
 						"#X#",
 						"#X#",
 						'#', planks.copy(), 'X', "stickWood");
 
-				fenceGates.stackSize = 1;
-				planks.stackSize = 1;
+				fenceGates.setCount(1);
+				planks.setCount(1);
 				RecipeUtil.addRecipe(fenceGates.copy(),
 						"X#X",
 						"X#X",
 						'#', planks.copy(), 'X', "stickWood");
 
-				stairs.stackSize = 4;
-				planks.stackSize = 1;
+				stairs.setCount(4);
+				planks.setCount(1);
 				RecipeUtil.addPriorityRecipe(stairs.copy(),
 						"#  ",
 						"## ",
 						"###",
 						'#', planks.copy());
 
-				doors.stackSize = 3;
-				planks.stackSize = 1;
+				doors.setCount(3);
+				planks.setCount(1);
 				RecipeUtil.addPriorityRecipe(doors.copy(),
 						"## ",
 						"## ",
@@ -327,40 +337,40 @@ public class PluginArboriculture extends BlankForestryPlugin {
 						'#', planks.copy());
 			}
 
-			fireproofPlanks.stackSize = 4;
-			fireproofLogs.stackSize = 1;
+			fireproofPlanks.setCount(4);
+			fireproofLogs.setCount(1);
 			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
 
-			fireproofSlabs.stackSize = 6;
-			fireproofPlanks.stackSize = 1;
+			fireproofSlabs.setCount(6);
+			fireproofPlanks.setCount(1);
 			RecipeUtil.addPriorityRecipe(fireproofSlabs.copy(),
 					"###",
 					'#', fireproofPlanks.copy());
 
-			fireproofFences.stackSize = 3;
-			fireproofPlanks.stackSize = 1;
+			fireproofFences.setCount(3);
+			fireproofPlanks.setCount(1);
 			RecipeUtil.addRecipe(fireproofFences.copy(),
 					"#X#",
 					"#X#",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
-			fireproofFenceGates.stackSize = 1;
-			fireproofPlanks.stackSize = 1;
+			fireproofFenceGates.setCount(1);
+			fireproofPlanks.setCount(1);
 			RecipeUtil.addRecipe(fireproofFenceGates.copy(),
 					"X#X",
 					"X#X",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
-			fireproofStairs.stackSize = 4;
-			fireproofPlanks.stackSize = 1;
+			fireproofStairs.setCount(4);
+			fireproofPlanks.setCount(1);
 			RecipeUtil.addPriorityRecipe(fireproofStairs.copy(),
 					"#  ",
 					"## ",
 					"###",
 					'#', fireproofPlanks.copy());
 
-			doors.stackSize = 3;
-			fireproofPlanks.stackSize = 1;
+			doors.setCount(3);
+			fireproofPlanks.setCount(1);
 			RecipeUtil.addPriorityRecipe(doors.copy(),
 					"## ",
 					"## ",
@@ -369,23 +379,23 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			// Fabricator recipes
 			if (ForestryAPI.enabledPlugins.containsAll(Arrays.asList(ForestryPluginUids.FACTORY, ForestryPluginUids.APICULTURE))) {
-				logs.stackSize = 1;
-				fireproofLogs.stackSize = 1;
-				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
+				logs.setCount(1);
+				fireproofLogs.setCount(1);
+				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
 						" # ",
 						"#X#",
 						" # ",
-						'#', PluginCore.items.refractoryWax,
-						'X', logs.copy()}));
+						'#', coreItems.refractoryWax,
+						'X', logs.copy()});
 
-				planks.stackSize = 1;
-				fireproofPlanks.stackSize = 5;
-				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[]{
+				planks.setCount(1);
+				fireproofPlanks.setCount(5);
+				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
-						'#', PluginCore.items.refractoryWax,
-						'X', planks.copy()}));
+						'#', coreItems.refractoryWax,
+						'X', planks.copy()});
 			}
 		}
 
@@ -395,14 +405,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 			int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 			int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
-			ItemStack mulch = new ItemStack(PluginCore.items.mulch);
-			RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEED_OIL.getFluid(5 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEED_OIL.getFluid(18 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEED_OIL.getFluid(22 * seedOilMultiplier), mulch, 2);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.LEMON.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PLUM.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
+			ItemStack mulch = new ItemStack(coreItems.mulch);
+			RecipeManagers.squeezerManager.addRecipe(20, EnumFruit.CHERRY.getStack(), Fluids.SEED_OIL.getFluid(5 * seedOilMultiplier), mulch, 5);
+			RecipeManagers.squeezerManager.addRecipe(60, EnumFruit.WALNUT.getStack(), Fluids.SEED_OIL.getFluid(18 * seedOilMultiplier), mulch, 5);
+			RecipeManagers.squeezerManager.addRecipe(70, EnumFruit.CHESTNUT.getStack(), Fluids.SEED_OIL.getFluid(22 * seedOilMultiplier), mulch, 2);
+			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.LEMON.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
+			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PLUM.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
+			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PAPAYA.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
+			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.DATES.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
 
 			RecipeUtil.addFermenterRecipes(items.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
@@ -422,28 +432,23 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'#', "blockGlass",
 				'X', "treeSapling",
 				'Y', "chestWood");
-		
+
 		//Wood Piles
 		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
 			IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
 			ItemStack log = treeSpecies.getWoodProvider().getWoodStack().copy();
-			log.stackSize = 1;
+			log.setCount(1);
 			ItemStack woodPile = BlockPile.createWoodPile(treeSpecies);
 			RecipeUtil.addShapelessRecipe(woodPile, log, log, log, log);
 		}
-		
+
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.DIRT), 4), Items.CLAY_BALL, PluginCore.items.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, PluginCore.items.fertilizerBio, Items.CLAY_BALL);
-		
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.piles.get(EnumPileType.DIRT), 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
 	}
 
-	private static void createAlleles() {
-
-		TreeBranchDefinition.createAlleles();
-
-		AlleleGrowth.createAlleles();
-		AlleleLeafEffect.createAlleles();
-		AllelePlantType.createAlleles();
+	private static void registerAlleles() {
+		TreeBranchDefinition.registerAlleles();
+		AlleleLeafEffects.registerAlleles();
 	}
 
 	private static void registerErsatzGenomes() {
@@ -509,7 +514,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		return new FuelHandler();
+		Preconditions.checkState(items != null, "Items have not been created");
+		return new FuelHandler(items.sapling);
 	}
 
 	@Override
@@ -534,19 +540,25 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		Preconditions.checkState(blocks != null, "Blocks have not been created");
 		// sapling itemBlock is different from the normal item
 		hiddenItems.add(new ItemStack(blocks.saplingGE));
 	}
 
 	private static class FuelHandler implements IFuelHandler {
+		private final ItemGermlingGE sapling;
+
+		public FuelHandler(ItemGermlingGE sapling) {
+			this.sapling = sapling;
+		}
+
 		@Override
 		public int getBurnTime(ItemStack fuel) {
 			Item item = fuel.getItem();
-
-			if (items.sapling == item) {
+			if (sapling == item) {
 				return 100;
 			}
-			
+
 			Block block = Block.getBlockFromItem(item);
 
 			if (block instanceof IWoodTyped) {
@@ -555,7 +567,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					return 0;
 				} else if (block instanceof BlockArbSlab) {
 					return 150;
-				}else{
+				} else {
 					return 300;
 				}
 			}
@@ -563,38 +575,38 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			return 0;
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
 		WoodTextures.deserializeFile(Proxies.render.getSelectedTexturePack());
-		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
+		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}
 		List<ResourceLocation> textures = new ArrayList<>();
-		for(IWoodType type : TreeManager.woodAccess.getRegisteredWoodTypes()){
+		for (IWoodType type : TreeManager.woodAccess.getRegisteredWoodTypes()) {
 			textures.add(new ResourceLocation(type.getHeartTexture()));
 			textures.add(new ResourceLocation(type.getBarkTexture()));
 			textures.add(new ResourceLocation(type.getDoorLowerTexture()));
 			textures.add(new ResourceLocation(type.getDoorUpperTexture()));
 			textures.add(new ResourceLocation(type.getPlankTexture()));
-			for(WoodBlockKind kind : WoodBlockKind.values()){
-				for(Entry<String, String> loc : WoodTextures.getLocations(type, kind).entrySet()){
+			for (WoodBlockKind kind : WoodBlockKind.values()) {
+				for (Entry<String, String> loc : WoodTextures.getLocations(type, kind).entrySet()) {
 					textures.add(new ResourceLocation(loc.getValue()));
 				}
 			}
 		}
-		for(ResourceLocation loc : textures){
+		for (ResourceLocation loc : textures) {
 			TextureManager.getInstance();
 			TextureManager.registerSprite(loc);
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onModelBake(ModelBakeEvent event) {
-		((ProxyArboricultureClient)proxy).onModelBake(event);
+		((ProxyArboricultureClient) proxy).onModelBake(event);
 	}
 
 	@SubscribeEvent
@@ -605,19 +617,18 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			EntityPlayer player = event.getHarvester();
 			if (player != null) {
 				ItemStack harvestingTool = player.getHeldItemMainhand();
-				if (harvestingTool != null && harvestingTool.getItem() instanceof ItemGrafter) {
+				if (harvestingTool.getItem() instanceof ItemGrafter) {
 					if (event.getDrops().isEmpty()) {
 						World world = event.getWorld();
 						Item itemDropped = block.getItemDropped(state, world.rand, 3);
-						if (itemDropped != null) {
+						if (itemDropped != Items.AIR) {
 							event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
 						}
 					}
 
 					harvestingTool.damageItem(1, player);
-					if (harvestingTool.stackSize <= 0) {
+					if (harvestingTool.isEmpty()) {
 						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, EnumHand.MAIN_HAND);
-						player.setHeldItem(EnumHand.MAIN_HAND, null);
 					}
 				}
 			}

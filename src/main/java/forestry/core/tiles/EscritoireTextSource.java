@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
@@ -45,12 +47,14 @@ public class EscritoireTextSource {
 		researchNotes.put(Notes.empty, Translator.translateToLocal("for.gui.escritoire.instructions"));
 	}
 
+	@Nullable
 	private String researchNote;
+	@Nullable
 	private Notes lastNoteLevel;
 
 	public String getText(EscritoireGame escritoireGame) {
 		Notes noteLevel = getNoteLevel(escritoireGame);
-		if (lastNoteLevel != noteLevel) {
+		if (lastNoteLevel != noteLevel || researchNote == null) {
 			researchNote = getRandomNote(noteLevel);
 			lastNoteLevel = noteLevel;
 		}

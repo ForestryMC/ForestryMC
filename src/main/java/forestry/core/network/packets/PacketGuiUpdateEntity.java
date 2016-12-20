@@ -12,42 +12,42 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketIdClient;
-
-public class PacketGuiUpdateEntity extends PacketEntityUpdate implements IForestryPacketClient {
-	private IStreamableGui streamableGui;
-
-	public PacketGuiUpdateEntity() {
-	}
+public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPacketClient {
+	private final Entity entity;
+	private final IStreamableGui streamableGui;
 
 	public PacketGuiUpdateEntity(IStreamableGui streamableGui, Entity entity) {
-		super(entity);
+		this.entity = entity;
 		this.streamableGui = streamableGui;
-	}
-
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		streamableGui.writeGuiData(data);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Entity entity = getTarget(player.getEntityWorld());
-		if (entity instanceof IStreamableGui) {
-			((IStreamableGui) entity).readGuiData(data);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.GUI_UPDATE_ENTITY;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeEntityById(entity);
+		streamableGui.writeGuiData(data);
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			Entity entity = data.readEntityById(player.world);
+			if (entity instanceof IStreamableGui) {
+				((IStreamableGui) entity).readGuiData(data);
+			}
+		}
 	}
 }

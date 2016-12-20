@@ -10,20 +10,8 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
@@ -31,21 +19,29 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gui.ContainerAnalyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -57,8 +53,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private final IInventory invInput;
 	private final IInventory invOutput;
 
+	@Nullable
 	private IIndividual specimenToAnalyze;
-	private ItemStack individualOnDisplayClient;
+	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
@@ -71,7 +68,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* SAVING & LOADING */
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -85,7 +82,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		tankManager.readFromNBT(nbttagcompound);
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
-		if (stackToAnalyze != null) {
+		if (!stackToAnalyze.isEmpty()) {
 			specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
 		}
 	}
@@ -104,7 +101,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public boolean workCycle() {
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
-		if (stackToAnalyze == null) {
+		if (stackToAnalyze.isEmpty() || specimenToAnalyze == null) {
 			return false;
 		}
 
@@ -127,13 +124,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return false;
 		}
 
-		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, null);
+		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		Proxies.net.sendNetworkPacket(packet, worldObj);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 
 		return true;
 	}
 
+	@Nullable
 	private Integer getInputSlotIndex() {
 		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
 			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
@@ -146,7 +144,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* Network */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		data.writeItemStack(displayStack);
@@ -154,7 +152,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
 		tankManager.readData(data);
@@ -164,7 +162,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -175,14 +173,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 
-		boolean hasSpecimen = specimen != null;
+		boolean hasSpecimen = !specimen.isEmpty();
 		boolean hasResource = true;
 		boolean hasSpace = true;
 
 		if (hasSpecimen) {
 			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
-			if (!specimenToAnalyze.isAnalyzed()) {
+			if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
 				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
 				hasResource = drained != null && drained.amount == HONEY_REQUIRED;
 			}
@@ -196,7 +194,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	private void moveSpecimenToAnalyzeSlot() {
-		if (getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE) != null) {
+		if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
 			return;
 		}
 
@@ -206,15 +204,12 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-		if (inputStack == null) {
+		if (inputStack.isEmpty()) {
 			return;
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
-			ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(inputStack);
-			if (ersatz != null) {
-				inputStack = ersatz;
-			}
+			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
 		specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(inputStack);
@@ -223,7 +218,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
-		invInput.setInventorySlotContents(slotIndex, null);
+		invInput.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
 
 		if (specimenToAnalyze.isAnalyzed()) {
 			setTicksPerWorkCycle(1);
@@ -234,31 +229,32 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		Proxies.net.sendNetworkPacket(packet, worldObj);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 	}
 
 	public ItemStack getIndividualOnDisplay() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			return individualOnDisplayClient;
 		}
 		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 	}
 
 	/* ILiquidTankTile */
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
+
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

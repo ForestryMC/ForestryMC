@@ -47,7 +47,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 		if (key instanceof ItemStack) {
 			return (ItemStack) key;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 }

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.network;
 
-import forestry.arboriculture.network.packets.PacketRipeningUpdate;
-import forestry.core.network.PacketRegistry;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
 
-public class PacketRegistryArboriculture extends PacketRegistry {
+public class PacketRegistryArboriculture implements IPacketRegistry {
 	@Override
 	public void registerPackets() {
-		registerClientPacket(new PacketRipeningUpdate());
+		PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
 	}
 }

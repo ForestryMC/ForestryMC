@@ -23,10 +23,10 @@ public class TileGreenhouseDoor extends TileGreenhouse {
 		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
 			super.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);
 			TileGreenhouseDoor otherDoorTile = null;
-			if(worldObj.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
-				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.up());
-			}else if(worldObj.getTileEntity(pos.down()) instanceof TileGreenhouseDoor){
-				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.down());
+			if(world.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) world.getTileEntity(pos.up());
+			}else if(world.getTileEntity(pos.down()) instanceof TileGreenhouseDoor){
+				otherDoorTile = (TileGreenhouseDoor) world.getTileEntity(pos.down());
 			}
 			if(otherDoorTile != null){
 				return otherDoorTile.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);

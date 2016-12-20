@@ -35,7 +35,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 			return false;
 		}
 
-		return armorApiarist.protectEntity(entity, stack, cause, doProtect);
+		return armorApiarist != null && armorApiarist.protectEntity(entity, stack, cause, doProtect);
 	}
 
 	@Override

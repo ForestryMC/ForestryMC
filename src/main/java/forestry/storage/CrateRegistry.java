@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	private static void registerCrate(@Nonnull ItemStack stack, @Nullable String oreDictName) {
-		if (stack == null || stack.getItem() == null) {
+	private static void registerCrate(ItemStack stack, @Nullable String oreDictName) {
+		if (stack.isEmpty()) {
 			Log.warning("Tried to make a crate without an item");
 			return;
 		}
@@ -52,7 +49,7 @@ public class CrateRegistry implements ICrateRegistry {
 	}
 
 	@Override
-	public void registerCrate(@Nonnull String oreDictName) {
+	public void registerCrate(String oreDictName) {
 		if (OreDictionary.doesOreNameExist(oreDictName)) {
 			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
 				if (stack != null) {
@@ -64,17 +61,17 @@ public class CrateRegistry implements ICrateRegistry {
 	}
 
 	@Override
-	public void registerCrate(@Nonnull Block block) {
+	public void registerCrate(Block block) {
 		registerCrate(new ItemStack(block), null);
 	}
 
 	@Override
-	public void registerCrate(@Nonnull Item item) {
+	public void registerCrate(Item item) {
 		registerCrate(new ItemStack(item), null);
 	}
 
 	@Override
-	public void registerCrate(@Nonnull ItemStack stack) {
+	public void registerCrate(ItemStack stack) {
 		registerCrate(stack, null);
 	}
 }

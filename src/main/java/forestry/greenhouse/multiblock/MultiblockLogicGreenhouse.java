@@ -23,7 +23,7 @@ public class MultiblockLogicGreenhouse extends MultiblockLogic<IGreenhouseContro
 
 	@Override
 	public IGreenhouseControllerInternal getController() {
-		if (super.isConnected()) {
+		if (controller != null) {
 			return controller;
 		} else {
 			return FakeGreenhouseController.instance;

@@ -1,46 +1,33 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class SqueezerRecipeHandler<R extends AbstractSqueezerRecipeWrapper> implements IRecipeHandler<R> {
-	
-	@Nonnull
 	private final Class<R> recipeClass;
-	
-	public SqueezerRecipeHandler(@Nonnull Class<R> recipeClass) {
+
+	public SqueezerRecipeHandler(Class<R> recipeClass) {
 		this.recipeClass = recipeClass;
 	}
-	
-	@Nonnull
+
 	@Override
 	public Class<R> getRecipeClass() {
 		return recipeClass;
 	}
 
-	@Nonnull
 	@Override
-	public String getRecipeCategoryUid() {
+	public String getRecipeCategoryUid(R recipe) {
 		return ForestryRecipeCategoryUid.SQUEEZER;
 	}
 
-	@Nonnull
 	@Override
-	public String getRecipeCategoryUid(@Nonnull R recipe) {
-		return ForestryRecipeCategoryUid.SQUEEZER;
-	}
-
-	@Nonnull
-	@Override
-	public IRecipeWrapper getRecipeWrapper(@Nonnull R recipe) {
+	public IRecipeWrapper getRecipeWrapper(R recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(@Nonnull R wrapper) {
+	public boolean isRecipeValid(R wrapper) {
 		return true;
 	}
 

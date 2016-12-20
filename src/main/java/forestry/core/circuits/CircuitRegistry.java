@@ -38,11 +38,11 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuitLibrary getCircuitLibrary(World world, String playerName) {
-		CircuitLibrary library = (CircuitLibrary) world.loadItemData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
+		CircuitLibrary library = (CircuitLibrary) world.loadData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
 
 		if (library == null) {
 			library = new CircuitLibrary(playerName);
-			world.setItemData("CircuitLibrary_" + playerName, library);
+			world.setData("CircuitLibrary_" + playerName, library);
 		}
 
 		return library;
@@ -100,7 +100,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public boolean isChipset(ItemStack itemstack) {
-		return itemstack != null && itemstack.getItem() == PluginCore.items.circuitboards;
+		return itemstack.getItem() == PluginCore.items.circuitboards;
 	}
 
 	@Override

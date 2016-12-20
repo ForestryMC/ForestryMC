@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.World;
 
 public interface IIndividualLiving extends IIndividual {
@@ -12,6 +14,7 @@ public interface IIndividualLiving extends IIndividual {
 	/**
 	 * @return Genetic information of the mate, null if unmated.
 	 */
+	@Nullable
 	IGenome getMate();
 
 	/**

@@ -10,15 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map.Entry;
 import java.util.Stack;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -36,6 +30,11 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
@@ -85,7 +84,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 
 		// Try to spawn princess
-		if (worldObj.rand.nextInt(1000) >= chance) {
+		if (world.rand.nextInt(1000) >= chance) {
 			return;
 		}
 
@@ -100,6 +99,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 	}
 
+	@Nullable
 	private ItemStack getPrincessStack() {
 		ItemStack princessStack = getMultiblockLogic().getController().getBeeInventory().getQueen();
 
@@ -111,10 +111,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	private int consumeInducerAndGetChance() {
-		if (getInternalInventory() == null) {
-			return 0;
-		}
-
 		for (int slotIndex = 0; slotIndex < getSizeInventory(); slotIndex++) {
 			ItemStack stack = getStackInSlot(slotIndex);
 			for (Entry<ItemStack, Integer> entry : BeeManager.inducers.entrySet()) {
@@ -134,10 +130,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int x = getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40;
-		int z = getPos().getZ() + worldObj.rand.nextInt(40 * 2) - 40;
+		int x = getPos().getX() + world.rand.nextInt(40 * 2) - 40;
+		int z = getPos().getZ() + world.rand.nextInt(40 * 2) - 40;
 
-		if (HiveDecorator.tryGenHive(worldObj, worldObj.rand, x, z, hive)) {
+		if (HiveDecorator.tryGenHive(world, world.rand, x, z, hive)) {
 			pendingSpawns.pop();
 		}
 	}
@@ -165,11 +161,11 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingSpawns", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingSpawns.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
+			pendingSpawns.add(new ItemStack(nbttagcompound1));
 		}
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -202,8 +198,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 		this.active = active;
 
-		if (worldObj != null && !worldObj.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
+		if (world != null && !world.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
 	}
 

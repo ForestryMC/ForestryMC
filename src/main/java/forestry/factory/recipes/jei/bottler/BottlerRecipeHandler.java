@@ -12,11 +12,6 @@ public class BottlerRecipeHandler implements IRecipeHandler<BottlerRecipeWrapper
 	}
 
 	@Override
-	public String getRecipeCategoryUid() {
-		return ForestryRecipeCategoryUid.BOTTLER;
-	}
-
-	@Override
 	public String getRecipeCategoryUid(BottlerRecipeWrapper recipe) {
 		return ForestryRecipeCategoryUid.BOTTLER;
 	}

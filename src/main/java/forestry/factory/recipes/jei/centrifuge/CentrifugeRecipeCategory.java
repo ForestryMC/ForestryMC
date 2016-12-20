@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.centrifuge;
 
-import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,44 +25,38 @@ import net.minecraft.util.ResourceLocation;
 public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeRecipeWrapper> {
 
 	private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
-	
-	private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = new Comparator<Entry<ItemStack, Float>>() {
-		@Override
-		public int compare(Entry<ItemStack, Float> o1, Entry<ItemStack, Float> o2) {
-			return o2.getValue().compareTo(o1.getValue());
-		}
-	};
-	
+
+	private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = (o1, o2) -> o2.getValue().compareTo(o1.getValue());
+
 	private static final int inputSlot = 0;
 	private static final int outputSlot = 1;
-	
+
 	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket2.png");
-	@Nonnull
 	private final IDrawableAnimated arrow;
 
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 11, 18, 154, 54), "tile.for.centrifuge.name");
-		
+
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 	}
-	
-	@Nonnull
+
+
 	@Override
 	public String getUid() {
 		return ForestryRecipeCategoryUid.CENTRIFUGE;
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		arrow.draw(minecraft, 32, 18);
 		arrow.draw(minecraft, 56, 18);
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull CentrifugeRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, CentrifugeRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		
+
 		guiItemStacks.init(inputSlot, true, 4, 18);
 		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
 		guiItemStacks.set(inputSlot, inputs.get(0));
@@ -73,7 +66,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
 		setResults(tooltip, products, guiItemStacks);
 		guiItemStacks.addTooltipCallback(tooltip);
 	}
-	
+
 	private static void setResults(ForestryTooltipCallback tooltip, Map<ItemStack, Float> outputs, IGuiItemStackGroup guiItemStacks) {
 		Set<Entry<ItemStack, Float>> entrySet = outputs.entrySet();
 		if (entrySet.isEmpty()) {

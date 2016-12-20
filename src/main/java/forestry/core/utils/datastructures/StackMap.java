@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Map for fluids and items. Can add things like ore dictionary strings etc.
@@ -24,10 +27,9 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	
 	@Override
 	public final T put(P key, T value) {
-		if (isValidKey(key) && key != null && value != null) {
-			return super.put(key, value);
-		}
-		return null;
+		Preconditions.checkArgument(isValidKey(key), "Key is invalid");
+		Preconditions.checkNotNull(value);
+		return super.put(key, value);
 	}
 
 	private static final long serialVersionUID = 5383477742290646466L;
@@ -47,6 +49,7 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	}
 
 	@Override
+	@Nullable
 	public final T get(Object key) {
 		P stack = getStack(key);
 		if (stack == null) {
@@ -83,6 +86,7 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	 * @param key
 	 * @return
 	 */
+	@Nullable
 	protected abstract P getStack(Object key);
 
 }

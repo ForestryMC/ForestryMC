@@ -1,11 +1,10 @@
 package forestry.farming.models;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 import forestry.api.core.IModelBaker;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.blocks.BlockFarm;
@@ -52,7 +51,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected Key getInventoryKey(@Nonnull ItemStack stack) {
+	protected Key getInventoryKey(ItemStack stack) {
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
 		EnumFarmBlockType type = EnumFarmBlockType.VALUES[stack.getItemDamage()];
 
@@ -60,7 +59,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state) {
+	protected Key getWorldKey(IBlockState state) {
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
@@ -78,7 +77,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected void bakeBlock(@Nonnull BlockFarm blockFarm, @Nonnull Key key, @Nonnull IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockFarm blockFarm, Key key, IModelBaker baker, boolean inventory) {
 		TextureAtlasSprite[] textures = getSprites(key.texture);
 
 		// Add the plain block.

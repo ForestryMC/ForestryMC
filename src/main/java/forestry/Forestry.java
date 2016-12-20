@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateEventHandler;
@@ -26,7 +28,6 @@ import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
-import forestry.plugins.compat.PluginIC2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -50,14 +51,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.10]",
-		dependencies = "required-after:Forge@[12.18.1.2080,);"
-				+ "after:JEI@[3.11.2.278,);"
-				+ "after:" + PluginIC2.modId + ";")
+		acceptedMinecraftVersions = "[1.11]",
+		dependencies = "required-after:forge@[13.19.1.2189,);"
+				+ "after:JEI@[4.1.1,);")
+//				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
+	@SuppressWarnings("NullableProblems")
 	@Mod.Instance(Constants.MOD_ID)
 	public static Forestry instance;
+	@Nullable
 	private File configFolder;
 
 	public Forestry() {
@@ -68,6 +71,7 @@ public class Forestry {
 		FluidRegistry.enableUniversalBucket();
 	}
 
+	@Nullable
 	public static PacketHandler packetHandler;
 
 	@EventHandler
@@ -85,10 +89,12 @@ public class Forestry {
 
 		PluginManager.runSetup(event);
 
-		ForestryAPI.activeMode = new GameMode(Config.gameMode);
+		String gameMode = Config.gameMode;
+		Preconditions.checkState(gameMode != null);
+		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		PluginManager.runPreInit();
-		
+
 		Proxies.render.registerModels();
 	}
 
@@ -122,6 +128,7 @@ public class Forestry {
 		PluginManager.serverStarting(event.getServer());
 	}
 
+	@Nullable
 	public File getConfigFolder() {
 		return configFolder;
 	}

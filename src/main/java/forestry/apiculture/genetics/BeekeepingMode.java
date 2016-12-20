@@ -11,6 +11,7 @@
 package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -53,8 +54,8 @@ public class BeekeepingMode implements IBeekeepingMode {
 	}
 
 	@Override
-	public ArrayList<String> getDescription() {
-		ArrayList<String> ret = new ArrayList<>();
+	public List<String> getDescription() {
+		List<String> ret = new ArrayList<>();
 		ret.add("beemode." + name.toLowerCase(Locale.ENGLISH) + ".desc");
 		return ret;
 	}

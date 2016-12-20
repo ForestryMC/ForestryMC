@@ -10,16 +10,7 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
@@ -31,6 +22,11 @@ import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 
 public class TileMailbox extends TileBase {
 
@@ -42,7 +38,7 @@ public class TileMailbox extends TileBase {
 	/* GUI */
 	@Override
 	public void openGui(EntityPlayer player, ItemStack heldItem) {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 
@@ -50,9 +46,9 @@ public class TileMailbox extends TileBase {
 		if (PostManager.postRegistry.isLetter(heldItem)) {
 			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.addChatMessage(new TextComponentString(result.getDescription()));
+				player.sendMessage(new TextComponentString(result.getDescription()));
 			} else {
-				heldItem.stackSize--;
+				heldItem.shrink(1);
 			}
 		} else {
 			super.openGui(player, heldItem);
@@ -60,13 +56,13 @@ public class TileMailbox extends TileBase {
 	}
 
 	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory(World world, @Nonnull GameProfile playerProfile) {
+	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
 		if (world.isRemote) {
 			return getInternalInventory();
 		}
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
-		return PostRegistry.getOrCreatePOBox(worldObj, address);
+		return PostRegistry.getOrCreatePOBox(world, address);
 	}
 
 	private IPostalState tryDispatchLetter(ItemStack letterStack) {
@@ -74,7 +70,7 @@ public class TileMailbox extends TileBase {
 		IPostalState result;
 
 		if (letter != null) {
-			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterStack, true);
+			result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
 		}

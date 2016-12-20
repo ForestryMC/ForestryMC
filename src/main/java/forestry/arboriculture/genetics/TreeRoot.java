@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -44,7 +45,6 @@ import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockSapling;
-import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Config;
@@ -69,11 +69,11 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
-
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
+	@Nullable
 	private static ITreekeepingMode activeTreekeepingMode;
-	public static final ArrayList<ITree> treeTemplates = new ArrayList<>();
+	public static final List<ITree> treeTemplates = new ArrayList<>();
 
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
@@ -124,8 +124,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	/* TREE SPECIFIC */
 	@Override
+	@Nullable
 	public EnumGermlingType getType(ItemStack stack) {
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return null;
 		}
 
@@ -158,12 +159,8 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public ITree getMember(ItemStack itemstack) {
 		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
-		if (!isMember(itemstack)) {
-			return null;
-		}
-		if (itemstack.getTagCompound() == null) {
-			return null;
-		}
+		Preconditions.checkArgument(isMember(itemstack), "ItemStack must be a tree.");
+		Preconditions.checkArgument(itemstack.getTagCompound() != null, "ItemStack must have a tag compound.");
 
 		return new Tree(itemstack.getTagCompound());
 	}
@@ -180,12 +177,8 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ItemStack getMemberStack(IIndividual tree, ISpeciesType type) {
-		if (!isMember(tree)) {
-			return null;
-		}
-		if (!(type instanceof EnumGermlingType)) {
-			return null;
-		}
+		Preconditions.checkArgument(tree instanceof ITree, "individual is not a tree");
+		Preconditions.checkArgument(type instanceof EnumGermlingType, "type is not an EnumGermlingType");
 
 		Item germlingItem;
 		switch ((EnumGermlingType) type) {
@@ -234,13 +227,13 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		sapling.getOwnerHandler().setOwner(owner);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 
 		return true;
 	}
 
 	@Override
-	public boolean setFruitBlock(@Nonnull World world, @Nonnull IAlleleFruit allele, float sappiness, BlockPos pos) {
+	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos) {
 
 		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
 		if (facing == null) {
@@ -268,7 +261,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			world.setBlockToAir(pos);
 			return false;
 		}
-		pod.setProperties(allele, sappiness);
+		pod.setProperties(genome, allele, sappiness);
 		world.markBlockRangeForRenderUpdate(pos, pos);
 		return true;
 	}
@@ -296,14 +289,14 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	/* BREEDING TRACKER */
 	@Override
-	public IArboristTracker getBreedingTracker(World world, GameProfile player) {
+	public IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
 		String filename = "ArboristTracker." + (player == null ? "common" : player.getId());
-		ArboristTracker tracker = (ArboristTracker) world.loadItemData(ArboristTracker.class, filename);
+		ArboristTracker tracker = (ArboristTracker) world.loadData(ArboristTracker.class, filename);
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
 			tracker = new ArboristTracker(filename);
-			world.setItemData(filename, tracker);
+			world.setData(filename, tracker);
 		}
 
 		tracker.setUsername(player);
@@ -315,7 +308,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	/* BREEDING MODES */
 
 	@Override
-	public ArrayList<ITreekeepingMode> getTreekeepingModes() {
+	public List<ITreekeepingMode> getTreekeepingModes() {
 		return this.treekeepingModes;
 	}
 
@@ -364,7 +357,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	/* TEMPLATES */
 
 	@Override
-	public ArrayList<ITree> getIndividualTemplates() {
+	public List<ITree> getIndividualTemplates() {
 		return treeTemplates;
 	}
 
@@ -435,19 +428,16 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ICheckPollinatable createPollinatable(IIndividual individual) {
-		if(individual instanceof ITree){
-			return new CheckPollinatableTree((ITree)individual);
-		}
-		return null;
+		Preconditions.checkArgument(individual instanceof ITree, "individual must be a tree");
+		return new CheckPollinatableTree((ITree) individual);
 	}
 
 	@Override
-	public IPollinatable tryConvertToPollinatable(GameProfile owner, World world, BlockPos pos, IIndividual pollen) {
-		if(pollen instanceof ITree){
-			if (Config.pollinateVanillaTrees) {
-				((ITree)pollen).setLeaves(world, owner, pos);
-				return (IPollinatable) world.getTileEntity(pos);
-			}
+	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual pollen) {
+		Preconditions.checkArgument(pollen instanceof ITree, "pollen must be an instance of ITree");
+		if (Config.pollinateVanillaTrees) {
+			((ITree) pollen).setLeaves(world, owner, pos);
+			return (IPollinatable) world.getTileEntity(pos);
 		}
 		return null;
 	}

@@ -1,8 +1,8 @@
 package forestry.core.owner;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import com.google.common.base.Optional;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,6 +20,7 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 
 	}
 
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	@Override
 	public void write(PacketBuffer buf, Optional<GameProfile> value) {
 		if (!value.isPresent()) {
@@ -27,7 +28,7 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 		} else {
 			buf.writeBoolean(true);
 			GameProfile gameProfile = value.get();
-			buf.writeUuid(gameProfile.getId());
+			buf.writeUniqueId(gameProfile.getId());
 			buf.writeString(gameProfile.getName());
 		}
 	}
@@ -35,12 +36,12 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 	@Override
 	public Optional<GameProfile> read(PacketBuffer buf) {
 		if (buf.readBoolean()) {
-			UUID uuid = buf.readUuid();
-			String name = buf.readStringFromBuffer(1024);
+			UUID uuid = buf.readUniqueId();
+			String name = buf.readString(1024);
 			GameProfile gameProfile = new GameProfile(uuid, name);
 			return Optional.of(gameProfile);
 		} else {
-			return Optional.absent();
+			return Optional.empty();
 		}
 	}
 

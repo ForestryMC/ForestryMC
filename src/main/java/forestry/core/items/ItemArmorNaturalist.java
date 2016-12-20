@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
@@ -38,7 +37,6 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	@Nonnull
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
@@ -55,9 +53,8 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 		return false;
 	}
 
-	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {

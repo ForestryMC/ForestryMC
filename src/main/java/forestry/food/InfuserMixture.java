@@ -13,26 +13,23 @@ package forestry.food;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.IBeverageEffect;
+import net.minecraft.util.NonNullList;
 
 /**
  * describes the itemstacks required to achieve a certain effect.
  */
 public class InfuserMixture {
 	private final int meta;
-	private final ItemStack[] ingredients;
+	private final NonNullList<ItemStack> ingredients;
 	private final IBeverageEffect effect;
 
-	public InfuserMixture(int meta, ItemStack ingredient, IBeverageEffect effect) {
-		this(meta, new ItemStack[]{ingredient}, effect);
-	}
-
-	public InfuserMixture(int meta, ItemStack ingredients[], IBeverageEffect effect) {
+	public InfuserMixture(int meta, NonNullList<ItemStack> ingredients, IBeverageEffect effect) {
 		this.meta = meta;
 		this.ingredients = ingredients;
 		this.effect = effect;
 	}
 
-	public ItemStack[] getIngredients() {
+	public NonNullList<ItemStack> getIngredients() {
 		return ingredients;
 	}
 
@@ -48,10 +45,10 @@ public class InfuserMixture {
 		return false;
 	}
 
-	public boolean matches(ItemStack[] res) {
+	public boolean matches(NonNullList<ItemStack> res) {
 
 		// No recipe without resource!
-		if (res == null || res.length <= 0) {
+		if (res.isEmpty()) {
 			return false;
 		}
 
@@ -66,12 +63,12 @@ public class InfuserMixture {
 
 				// Check item matching
 				if (stack.getItemDamage() < 0 && stack.getItem() == matchStack.getItem()) {
-					if (stack.stackSize <= matchStack.stackSize) {
+					if (stack.getCount() <= matchStack.getCount()) {
 						matched = true;
 						break;
 					}
 				} else if (stack.getItemDamage() >= 0 && stack.isItemEqual(matchStack)) {
-					if (stack.stackSize <= matchStack.stackSize) {
+					if (stack.getCount() <= matchStack.getCount()) {
 						matched = true;
 						break;
 					}
@@ -94,6 +91,6 @@ public class InfuserMixture {
 	}
 
 	public int getWeight() {
-		return ingredients.length;
+		return ingredients.size();
 	}
 }

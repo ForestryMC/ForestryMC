@@ -59,14 +59,16 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborChange(world, pos, neighbor);
 
-		try {
-			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof TileForestry) {
-				((TileForestry) tile).onNeighborTileChange(world, pos, neighbor);
+		if (world instanceof World) {
+			try {
+				TileEntity tile = world.getTileEntity(pos);
+				if (tile instanceof TileForestry) {
+					((TileForestry) tile).onNeighborTileChange((World) world, pos, neighbor);
+				}
+			} catch (StackOverflowError error) {
+				Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
+				throw error;
 			}
-		} catch (StackOverflowError error) {
-			Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
-			throw error;
 		}
 	}
 }

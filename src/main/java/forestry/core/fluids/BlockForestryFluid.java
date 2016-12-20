@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Random;
 
@@ -129,19 +130,15 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
-			return false;
-		}
-		return super.canDisplace(world, pos);
+		return !blockState.getMaterial().isLiquid() &&
+				super.canDisplace(world, pos);
 	}
 	
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
-			return false;
-		}
-		return super.displaceIfPossible(world, pos);
+		return !blockState.getMaterial().isLiquid() &&
+				super.displaceIfPossible(world, pos);
 	}
 
 	@Override
@@ -150,14 +147,14 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, @Nullable EnumFacing face) {
 		return flammability;
 	}
 
 	private static boolean isFlammable(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		return block.isFlammable(world, pos, null);
+		return block.isFlammable(world, pos, EnumFacing.UP);
 	}
 
 	@Override
@@ -208,14 +205,12 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				++y;
 				z += rand.nextInt(3) - 1;
 				IBlockState blockState = world.getBlockState(new BlockPos(x, y, z));
-				Block block = blockState.getBlock();
-
-				if (block.getMaterial(blockState) == Material.AIR) {
+				if (blockState.getMaterial() == Material.AIR) {
 					if (isNeighborFlammable(world, x, y, z)) {
 						world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState());
 						return;
 					}
-				} else if (block.getMaterial(blockState).blocksMovement()) {
+				} else if (blockState.getMaterial().blocksMovement()) {
 					return;
 				}
 			}

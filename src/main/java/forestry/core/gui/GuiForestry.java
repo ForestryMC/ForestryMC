@@ -47,22 +47,24 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
+	@Nullable
 	protected final I inventory;
 	protected final C container;
 
 	public final ResourceLocation textureFile;
 	protected final WidgetManager widgetManager;
-	protected LedgerManager ledgerManager;
-	protected TextLayoutHelper textLayout;
+	protected final LedgerManager ledgerManager;
+	protected final TextLayoutHelper textLayout;
 
-	protected GuiForestry(String texture, C container, I inventory) {
+	protected GuiForestry(String texture, C container, @Nullable I inventory) {
 		this(new ForestryResource(texture), container, inventory);
 	}
 
-	protected GuiForestry(ResourceLocation texture, C container, I inventory) {
+	protected GuiForestry(ResourceLocation texture, C container, @Nullable I inventory) {
 		super(container);
 
 		this.widgetManager = new WidgetManager(this);
+		this.ledgerManager = new LedgerManager(this);
 
 		this.textureFile = texture;
 
@@ -78,7 +80,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		super.initGui();
 
 		int maxLedgerWidth = (this.width - this.xSize) / 2;
-		this.ledgerManager = new LedgerManager(this, maxLedgerWidth);
+
+		this.ledgerManager.setMaxWidth(maxLedgerWidth);
 
 		addLedgers();
 	}
@@ -109,7 +112,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		if (Config.enableHints && inventory instanceof IHintSource) {
 			IHintSource hintSource = (IHintSource) inventory;
 			List<String> hints = hintSource.getHints();
-			if (hints != null && !hints.isEmpty()) {
+			if (!hints.isEmpty()) {
 				ledgerManager.add(new HintLedger(ledgerManager, hintSource));
 			}
 		}
@@ -141,11 +144,11 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		ledgerManager.handleMouseClicked(xPos, yPos, mouseButton);
 		widgetManager.handleMouseClicked(xPos, yPos, mouseButton);
 	}
-	
+
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
 		super.mouseReleased(mouseX, mouseY, state);
-		
+
 		widgetManager.handleMouseRelease(mouseX, mouseY, state);
 	}
 
@@ -171,6 +174,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return null;
 	}
 
+	@Nullable
 	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
 			Slot slot = this.inventorySlots.inventorySlots.get(k);
@@ -184,16 +188,16 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	private boolean isMouseOverSlot(Slot par1Slot, int mouseX, int mouseY) {
-		return isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, mouseX, mouseY);
+		return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(mouseX, mouseY);
 
-		InventoryPlayer playerInv = mc.thePlayer.inventory;
+		InventoryPlayer playerInv = mc.player.inventory;
 
-		if (playerInv.getItemStack() == null) {
+		if (playerInv.getItemStack().isEmpty()) {
 			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
 			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);

@@ -1,5 +1,7 @@
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
+
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,7 @@ public class ContainerFiller {
 	private final int inputSlot;
 	private final int outputSlot;
 
+	@Nullable
 	private ItemStack usedInput;
 	private int fillingProgress;
 

@@ -17,6 +17,7 @@ import forestry.core.proxy.Proxies;
 import forestry.farming.PluginFarming;
 import forestry.farming.models.ModelFarmBlock;
 
+@SuppressWarnings("unused")
 public class ProxyFarmingClient extends ProxyFarming {
 
 	@Override

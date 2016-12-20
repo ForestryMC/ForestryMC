@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,29 +29,16 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 public abstract class TileUtil {
 
 	public static boolean isUsableByPlayer(EntityPlayer player, TileEntity tile) {
-		if (tile == null) {
-			return false;
-		}
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
-		
-		if (tile.isInvalid()) {
-			return false;
-		}
-		
-		if (world.getTileEntity(pos) != tile) {
-			return false;
-		}
 
-		return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
-
+		return !tile.isInvalid() &&
+				world.getTileEntity(pos) == tile &&
+				player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Nullable
-	public static <T extends TileEntity> T getTile(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull Class<T> tileClass) {
-		if(pos == null){
-			return null;
-		}
+	public static <T extends TileEntity> T getTile( IBlockAccess world,  BlockPos pos,  Class<T> tileClass) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
@@ -61,6 +47,7 @@ public abstract class TileUtil {
 		}
 	}
 
+	@Nullable
 	public static IItemHandler getInventoryFromTile(@Nullable TileEntity tile, @Nullable EnumFacing side) {
 		if (tile == null) {
 			return null;

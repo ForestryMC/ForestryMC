@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
@@ -24,17 +26,7 @@ import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.arboriculture.blocks.fence.BlockArbFence;
-import forestry.arboriculture.blocks.fence.BlockFireproofVanillaFence;
-import forestry.arboriculture.blocks.log.BlockArbLog;
-import forestry.arboriculture.blocks.log.BlockFireproofVanillaLog;
-import forestry.arboriculture.blocks.planks.BlockArbPlanks;
-import forestry.arboriculture.blocks.planks.BlockFireproofVanillaPlanks;
-import forestry.arboriculture.blocks.slab.BlockArbSlab;
-import forestry.arboriculture.blocks.slab.BlockFireproofVanillaSlab;
-import forestry.arboriculture.blocks.slab.BlockForestrySlab;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockPile;
@@ -264,7 +256,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		}
 		
 		// Pods
-		AlleleFruit.createAlleles();
+		AlleleFruits.registerAlleles();
 		podsMap = new HashMap<>();
 		for (BlockFruitPod pod : BlockFruitPod.create()) {
 			IAlleleFruit fruit = pod.getFruit();
@@ -280,11 +272,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public ItemStack getDecorativeLeaves(String speciesUid) {
 		ItemStack itemStack = speciesToLeavesDecorative.get(speciesUid);
 		if (itemStack == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return itemStack.copy();
 	}
 
+	@Nullable
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
 		return podsMap.get(fruit.getUID());
 	}

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -29,6 +31,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
 	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
+	@Nullable
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;
 

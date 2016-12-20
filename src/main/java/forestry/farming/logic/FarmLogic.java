@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -25,6 +24,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -48,23 +48,18 @@ public abstract class FarmLogic implements IFarmLogic {
 	public ResourceLocation getTextureMap() {
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
-	
+
 	@Override
 	public abstract ItemStack getIconItemStack();
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
-
-	@Deprecated
-	protected final boolean isAirBlock(@Nonnull Block block, @Nonnull IBlockState blockState, @Nonnull World world, @Nonnull BlockPos blockPos) {
-		return block.isAir(blockState, world, blockPos);
-	}
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
 		return block == Blocks.WATER;
 	}
-	
+
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
 		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
@@ -85,11 +80,11 @@ public abstract class FarmLogic implements IFarmLogic {
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
 	}
 
-	protected List<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
+	protected NonNullList<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
 		List<EntityItem> entityItems = world.getEntitiesWithinAABB(EntityItem.class, harvestBox, entitySelectorFarm);
-		List<ItemStack> stacks = new ArrayList<>();
+		NonNullList<ItemStack> stacks = NonNullList.create();
 		for (EntityItem entity : entityItems) {
 			ItemStack contained = entity.getEntityItem();
 			stacks.add(contained.copy());
@@ -106,8 +101,8 @@ public abstract class FarmLogic implements IFarmLogic {
 		}
 
 		@Override
-		public boolean apply(EntityItem entity) {
-			if (entity.isDead) {
+		public boolean apply(@Nullable EntityItem entity) {
+			if (entity == null || entity.isDead) {
 				return false;
 			}
 

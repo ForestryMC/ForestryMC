@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -34,6 +35,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	private static ModelResourceLocation[] models;
 
 	@Override

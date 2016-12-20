@@ -75,19 +75,15 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
-			if (ingredient == null) {
-				continue;
+			if (!ingredient.isEmpty()) {
+				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
+				if (recipe != null) {
+					if (doConsume) {
+						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
+					}
+					circuits[i] = recipe.getCircuit();
+				}
 			}
-
-			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
-			if (recipe == null) {
-				continue;
-			}
-
-			if (doConsume) {
-				decrStackSize(ingredientSlot1 + i, recipe.getResource().stackSize);
-			}
-			circuits[i] = recipe.getCircuit();
 		}
 
 		return circuits;
@@ -101,10 +97,10 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-		if (inputCircuitBoard == null || inputCircuitBoard.stackSize > 1) {
+		if (inputCircuitBoard.isEmpty() || inputCircuitBoard.getCount() > 1) {
 			return;
 		}
-		if (getStackInSlot(finishedCircuitBoardSlot) != null) {
+		if (!getStackInSlot(finishedCircuitBoardSlot).isEmpty()) {
 			return;
 		}
 
@@ -128,7 +124,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
 		setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
-		setInventorySlotContents(inputCircuitBoardSlot, null);
+		setInventorySlotContents(inputCircuitBoardSlot, ItemStack.EMPTY);
 	}
 
 	private int getCircuitCount() {
@@ -152,14 +148,14 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-		if (blankCircuitBoard == null) {
+		if (blankCircuitBoard.isEmpty()) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blankCircuitBoard.getItemDamage()];
 
 			int circuitCount = 0;
 			for (short i = 0; i < type.getSockets(); i++) {
-				if (getStackInSlot(ingredientSlot1 + i) != null) {
+				if (!getStackInSlot(ingredientSlot1 + i).isEmpty()) {
 					circuitCount++;
 				}
 			}
@@ -179,7 +175,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return false;
 		}
 

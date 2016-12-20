@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.World;
 
 public interface ICommandModeHelper {
 	String[] getModeNames();
 
+	@Nullable
 	String getModeNameMatching(String desired);
 
 	String getModeName(World world);

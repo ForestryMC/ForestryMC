@@ -1,15 +1,8 @@
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -29,6 +22,11 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
@@ -36,7 +34,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private BeeAlyzerPlugin() {
-		ArrayList<ItemStack> beeList = new ArrayList<>();
+		NonNullList<ItemStack> beeList = NonNullList.create();
 		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
@@ -56,6 +54,9 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 				return;
 			}
 			EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
+			if (type == null) {
+				return;
+			}
 	
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 	

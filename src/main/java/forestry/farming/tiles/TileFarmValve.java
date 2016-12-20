@@ -11,6 +11,7 @@
 package forestry.farming.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.EnumFacing;
 
@@ -28,7 +29,7 @@ public class TileFarmValve extends TileFarm implements ILiquidTankTile {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return true;
 		}
@@ -36,7 +37,8 @@ public class TileFarmValve extends TileFarm implements ILiquidTankTile {
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return super.getCapability(capability, facing);
 		}

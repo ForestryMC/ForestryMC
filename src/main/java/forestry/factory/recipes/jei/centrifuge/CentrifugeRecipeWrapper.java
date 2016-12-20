@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.centrifuge;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
@@ -11,13 +10,12 @@ import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
 
 public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRecipe> {
-	
-	public CentrifugeRecipeWrapper(@Nonnull ICentrifugeRecipe recipe) {
+	public CentrifugeRecipeWrapper(ICentrifugeRecipe recipe) {
 		super(recipe);
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		ICentrifugeRecipe recipe = getRecipe();
 
 		ingredients.setInputs(ItemStack.class, Collections.singletonList(recipe.getInput()));

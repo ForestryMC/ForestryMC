@@ -1,5 +1,6 @@
 package forestry.storage.inventory;
 
+import com.google.common.base.Preconditions;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.items.ItemBackpack;
@@ -14,14 +15,8 @@ public class ItemInventoryBackpack extends ItemInventory {
 	public ItemInventoryBackpack(EntityPlayer player, int size, ItemStack parent) {
 		super(player, size, parent);
 
-		if (parent == null) {
-			throw new IllegalArgumentException("Parent cannot be null.");
-		}
-
 		Item item = parent.getItem();
-		if (!(item instanceof ItemBackpack)) {
-			throw new IllegalArgumentException("Parent must be a backpack.");
-		}
+		Preconditions.checkArgument(item instanceof ItemBackpack, "Parent must be a backpack.");
 
 		this.backpackDefinition = ((ItemBackpack) item).getDefinition();
 

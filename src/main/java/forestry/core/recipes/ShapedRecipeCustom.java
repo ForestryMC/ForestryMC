@@ -12,34 +12,31 @@ package forestry.core.recipes;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
 	//Added in for future ease of change, but hard coded for now.
 	private static final int MAX_CRAFT_GRID_WIDTH = 3;
 	private static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-	private ItemStack output = null;
-	private Object[] input = null;
+	private NonNullList<NonNullList<ItemStack>> input;
 	private int width;
 	private int height;
 	private boolean mirrored = true;
 
 	public ShapedRecipeCustom(ItemStack result, Object... recipe) {
 		super(result, recipe);
-		output = result.copy();
+		ItemStack output = result.copy();
 
 		String shape = "";
 		int idx = 0;
@@ -80,18 +77,27 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 			throw new RuntimeException(ret);
 		}
 
-		HashMap<Character, Object> itemMap = new HashMap<>();
+		HashMap<Character, NonNullList<ItemStack>> itemMap = new HashMap<>();
 
 		for (; idx < recipe.length; idx += 2) {
 			Character chr = (Character) recipe[idx];
 			Object in = recipe[idx + 1];
 
 			if (in instanceof ItemStack) {
-				itemMap.put(chr, ((ItemStack) in).copy());
+				ItemStack copy = ((ItemStack) in).copy();
+				NonNullList<ItemStack> ingredient = NonNullList.create();
+				ingredient.add(copy);
+				itemMap.put(chr, ingredient);
 			} else if (in instanceof Item) {
-				itemMap.put(chr, new ItemStack((Item) in));
+				ItemStack itemStack = new ItemStack((Item) in);
+				NonNullList<ItemStack> ingredient = NonNullList.create();
+				ingredient.add(itemStack);
+				itemMap.put(chr, ingredient);
 			} else if (in instanceof Block) {
-				itemMap.put(chr, new ItemStack((Block) in, 1, OreDictionary.WILDCARD_VALUE));
+				ItemStack itemStack = new ItemStack((Block) in, 1, OreDictionary.WILDCARD_VALUE);
+				NonNullList<ItemStack> ingredient = NonNullList.create();
+				ingredient.add(itemStack);
+				itemMap.put(chr, ingredient);
 			} else if (in instanceof String) {
 				itemMap.put(chr, OreDictionary.getOres((String) in));
 			} else {
@@ -104,10 +110,13 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 			}
 		}
 
-		input = new Object[width * height];
+		input = NonNullList.withSize(9, NonNullList.create());
 		int x = 0;
 		for (char chr : shape.toCharArray()) {
-			input[x++] = itemMap.get(chr);
+			NonNullList<ItemStack> stacks = itemMap.get(chr);
+			if (stacks != null) {
+				input.set(x++, stacks);
+			}
 		}
 	}
 
@@ -122,8 +131,8 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	}
 
 	@Override
-	public Object[] getIngredients() {
-		return getInput();
+	public NonNullList<NonNullList<ItemStack>> getIngredients() {
+		return input;
 	}
 
 	@Override
@@ -144,40 +153,35 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
 		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
 			for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
 				int subX = x - startX;
 				int subY = y - startY;
-				Object target = null;
+				NonNullList<ItemStack> target = null;
 
 				if (subX >= 0 && subY >= 0 && subX < width && subY < height) {
 					if (mirror) {
-						target = input[width - subX - 1 + subY * width];
+						target = input.get(width - subX - 1 + subY * width);
 					} else {
-						target = input[subX + subY * width];
+						target = input.get(subX + subY * width);
 					}
 				}
 
-				ItemStack slot = inv.getStackInRowAndColumn(x, y);
+				ItemStack stackInSlot = inv.getStackInRowAndColumn(x, y);
 
-				if (target instanceof ItemStack) {
-					if (!ItemStackUtil.isCraftingEquivalent((ItemStack) target, slot)) {
-						return false;
-					}
-				} else if (target instanceof List) {
+				if (target != null) {
 					boolean matched = false;
 
-					Iterator<ItemStack> itr = ((List<ItemStack>) target).iterator();
+					Iterator<ItemStack> itr = target.iterator();
 					while (itr.hasNext() && !matched) {
-						matched = ItemStackUtil.isCraftingEquivalent(itr.next(), slot);
+						matched = ItemStackUtil.isCraftingEquivalent(itr.next(), stackInSlot);
 					}
 
 					if (!matched) {
 						return false;
 					}
-				} else if (target == null && slot != null) {
+				} else if (!stackInSlot.isEmpty()) {
 					return false;
 				}
 			}

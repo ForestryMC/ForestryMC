@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,7 @@ import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
-	protected <T extends Block> void registerBlock(T block, ItemBlock itemBlock, String name) {
+	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}

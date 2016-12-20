@@ -11,11 +11,11 @@
 package forestry.farming.logic;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -41,12 +41,13 @@ public class CropDestroy extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		Collection<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);
+		NonNullList<ItemStack> harvested = NonNullList.create();
+		harvested.addAll(block.getDrops(world, pos, blockState, 0));
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
 
 		if (replantState != null) {
 			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);

@@ -10,30 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
@@ -48,17 +29,33 @@ import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
-import forestry.apiculture.network.packets.PacketAlveryChange;
+import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockAlveary extends BlockStructure implements IStateMapperRegister {
 	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	private static final PropertyEnum<AlvearyPlainType> PLAIN_TYPE = PropertyEnum.create("type", AlvearyPlainType.class);
-	
+
 	private enum State implements IStringSerializable {
 		ON, OFF;
 
@@ -67,7 +64,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
-	
+
 	private enum AlvearyPlainType implements IStringSerializable {
 		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
 
@@ -81,7 +78,6 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		Map<BlockAlvearyType, BlockAlveary> blockMap = new EnumMap<>(BlockAlvearyType.class);
 		for (final BlockAlvearyType type : BlockAlvearyType.VALUES) {
 			BlockAlveary block = new BlockAlveary() {
-				@Nonnull
 				@Override
 				public BlockAlvearyType getAlvearyType() {
 					return type;
@@ -110,7 +106,6 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		setSoundType(SoundType.WOOD);
 	}
 
-	@Nonnull
 	public abstract BlockAlvearyType getAlvearyType();
 
 	@Override
@@ -151,7 +146,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0, "apiculture/alveary." + getAlvearyType());
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		BlockAlvearyType alvearyType = getAlvearyType();
@@ -164,7 +159,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			return new BlockStateContainer(this);
 		}
 	}
-	
+
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
@@ -211,7 +206,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		return super.getActualState(state, world, pos);
 	}
 
-	@Nonnull
+
 	private static List<EnumFacing> getBlocksTouching(IBlockAccess world, BlockPos blockPos) {
 		List<EnumFacing> touching = new ArrayList<>();
 		for (EnumFacing direction : EnumFacing.HORIZONTALS) {
@@ -222,19 +217,18 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		}
 		return touching;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static class AlvearyStateMapper extends StateMapperBase {
-		@Nonnull
 		private final BlockAlvearyType type;
 
-		public AlvearyStateMapper(@Nonnull BlockAlvearyType type) {
+		public AlvearyStateMapper(BlockAlvearyType type) {
 			this.type = type;
 		}
 
@@ -249,7 +243,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity instanceof TileAlveary) {
 			TileAlveary tileAlveary = (TileAlveary) tileEntity;
@@ -257,9 +251,8 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			// We must check that the slabs on top were not removed
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
 			alveary.reassemble();
-			if(alveary.getReferenceCoord() != null){
-				Proxies.net.sendNetworkPacket(new PacketAlveryChange(alveary), worldIn);
-			}
+			BlockPos referenceCoord = alveary.getReferenceCoord();
+			Proxies.net.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
 		}
 	}
 }

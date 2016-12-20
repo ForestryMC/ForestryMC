@@ -1,6 +1,5 @@
 package forestry.plugins.compat;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
@@ -59,8 +58,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 		FluidStack seedFluid = Fluids.SEED_OIL.getFluid(amount);
 		for (Item seed : Arrays.asList(canolaSeed, flaxSeed, riceSeed, coffeeSeed)) {
 			if (seed != null) {
-				ItemStack[] resources = {new ItemStack(seed)};
-				RecipeManagers.squeezerManager.addRecipe(10, resources, seedFluid);
+				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(seed), seedFluid);
 			}
 		}
 
@@ -70,7 +68,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 			Item misc = getItem("itemMisc");
 			if (misc != null) {
 				ItemStack canola = new ItemStack(misc, 1, 13);
-				RecipeManagers.squeezerManager.addRecipe(15, new ItemStack[]{canola}, new FluidStack(canolaOil, 80));
+				RecipeManagers.squeezerManager.addRecipe(15, canola, new FluidStack(canolaOil, 80));
 			}
 
 			//add canola oil fermenting in still
@@ -81,7 +79,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 		}
 	}
 
-	private static void registerSeedPlant(@Nullable Item seedItem, @Nonnull String blockName) {
+	private static void registerSeedPlant(@Nullable Item seedItem, String blockName) {
 		if (seedItem != null) {
 			Block plantBlock = getBlock(blockName);
 			if (plantBlock != null) {
@@ -94,7 +92,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 	}
 
 	@Nullable
-	private static Fluid getFluid(@Nonnull String fluidName) {
+	private static Fluid getFluid(String fluidName) {
 		Fluid fluid = FluidRegistry.getFluid(fluidName);
 		if (fluid == null) {
 			Log.error("Could not find fluid {}", fluidName);
@@ -103,7 +101,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 	}
 
 	@Nullable
-	private static Block getBlock(@Nonnull String blockName) {
+	private static Block getBlock(String blockName) {
 		ResourceLocation key = new ResourceLocation(ACT_ADD, blockName);
 		if (ForgeRegistries.BLOCKS.containsKey(key)) {
 			return ForgeRegistries.BLOCKS.getValue(key);
@@ -114,7 +112,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 	}
 
 	@Nullable
-	private static Item getItem(@Nonnull String itemName) {
+	private static Item getItem(String itemName) {
 		ResourceLocation key = new ResourceLocation(ACT_ADD, itemName);
 		if (ForgeRegistries.ITEMS.containsKey(key)) {
 			return ForgeRegistries.ITEMS.getValue(key);

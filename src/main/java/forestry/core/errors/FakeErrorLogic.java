@@ -12,12 +12,11 @@ package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
+import net.minecraft.network.PacketBuffer;
 
 public class FakeErrorLogic implements IErrorLogic {
 
@@ -48,12 +47,12 @@ public class FakeErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(PacketBuffer data) {
 
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(PacketBuffer data) {
 
 	}
 

@@ -51,7 +51,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 
 		@Override
 		protected void initializeTemplate(IAllele[] template) {
-			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
+			AlleleHelper.getInstance().set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
 		}
 	}
 }

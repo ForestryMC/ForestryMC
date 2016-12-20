@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.passive.IAnimals;
 
@@ -23,9 +25,10 @@ public interface IEntityButterfly extends IAnimals {
 	 */
 	EntityCreature getEntity();
 
+	@Nullable
 	IIndividual getPollen();
 
-	void setPollen(IIndividual pollen);
+	void setPollen(@Nullable IIndividual pollen);
 	
 	boolean canMateWith(IEntityButterfly butterfly);
 	

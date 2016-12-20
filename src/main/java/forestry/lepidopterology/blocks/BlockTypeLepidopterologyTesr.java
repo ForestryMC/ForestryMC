@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.math.AxisAlignedBB;
 
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -24,16 +20,17 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
-	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeLepidopterologyTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
+	<T extends TileForestry> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
 		if (boundingBox != null) {
 			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
 		} else {
@@ -41,7 +38,6 @@ public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 		}
 	}
 
-	@Nonnull
 	@Override
 	public IMachinePropertiesTesr<?> getMachineProperties() {
 		return machineProperties;

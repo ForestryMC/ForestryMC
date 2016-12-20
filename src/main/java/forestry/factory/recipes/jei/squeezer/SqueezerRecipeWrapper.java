@@ -1,26 +1,23 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-
 import forestry.api.recipes.ISqueezerRecipe;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerRecipe> {
-	
-	public SqueezerRecipeWrapper(@Nonnull ISqueezerRecipe recipe) {
+	public SqueezerRecipeWrapper(ISqueezerRecipe recipe) {
 		super(recipe);
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
-		ItemStack[] resources = getRecipe().getResources();
-		ingredients.setInputs(ItemStack.class, Arrays.asList(resources));
+	public void getIngredients(IIngredients ingredients) {
+		NonNullList<ItemStack> resources = getRecipe().getResources();
+		ingredients.setInputs(ItemStack.class, resources);
 
 		ItemStack remnants = getRecipe().getRemnants();
-		if (remnants != null) {
+		if (!remnants.isEmpty()) {
 			ingredients.setOutput(ItemStack.class, remnants);
 		}
 

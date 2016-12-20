@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
@@ -23,8 +21,7 @@ import forestry.api.core.IModelManager;
 public interface IGermlingModelProvider {
 	@SideOnly(Side.CLIENT)
 	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
-
-	@Nonnull
+	
 	ModelResourceLocation getModel(EnumGermlingType type);
 
 	/**

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import javax.annotation.Nullable;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;

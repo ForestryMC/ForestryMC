@@ -10,14 +10,9 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.IOException;
-
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public interface IForestryPacket {
-	void readData(DataInputStreamForestry data) throws IOException;
-
 	FMLProxyPacket getPacket();
-
 	IPacketId getPacketId();
 }

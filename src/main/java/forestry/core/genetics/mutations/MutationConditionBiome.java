@@ -37,7 +37,7 @@ public class MutationConditionBiome implements IMutationCondition {
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		Biome biome = climate.getBiome();
 		for (BiomeDictionary.Type type : validBiomeTypes) {
-			if (BiomeDictionary.isBiomeOfType(biome, type)) {
+			if (BiomeDictionary.hasType(biome, type)) {
 				return 1;
 			}
 		}

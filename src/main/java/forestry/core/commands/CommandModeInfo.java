@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +74,7 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(args, modeStringArr);
 	}
 }

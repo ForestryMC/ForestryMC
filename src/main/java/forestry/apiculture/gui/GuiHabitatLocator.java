@@ -10,28 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import com.google.common.collect.LinkedListMultimap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import forestry.apiculture.gui.widgets.HabitatSlot;
+import com.google.common.collect.LinkedListMultimap;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
 	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
@@ -89,9 +84,10 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		fontRendererObj.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
-		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);
+		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();
 		for (Biome biome : inventory.getBiomesToSearch()) {
-			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
+			Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
+			activeBiomeTypes.addAll(biomeTypes);
 		}
 
 		for (HabitatSlot habitatSlot : habitatSlots) {

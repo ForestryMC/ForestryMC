@@ -11,27 +11,27 @@
 package forestry.mail.inventory;
 
 import java.util.ArrayList;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import java.util.List;
 
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.TradeStation;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 public class InventoryTradeStation extends InventoryAdapter {
 
 	public InventoryTradeStation() {
 		super(TradeStation.SLOT_SIZE, "INV");
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
-		ArrayList<Integer> slots = new ArrayList<>();
+		List<Integer> slots = new ArrayList<>();
 
 		for (int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
 			slots.add(i);

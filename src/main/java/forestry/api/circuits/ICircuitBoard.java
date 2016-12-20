@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import forestry.api.core.INbtWritable;
@@ -26,13 +25,11 @@ public interface ICircuitBoard extends INbtWritable {
 
 	void onTick(Object tile);
 
-	@Nonnull
 	ICircuit[] getCircuits();
 
 	/**
 	 * Specifies where a circuit can be used.
 	 */
-	@Nonnull
 	ICircuitSocketType getSocketType();
 
 }

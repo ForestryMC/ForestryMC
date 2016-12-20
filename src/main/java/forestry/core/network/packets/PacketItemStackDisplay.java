@@ -10,55 +10,50 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.IItemStackDisplay;
+import forestry.core.tiles.TileForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.IItemStackDisplay;
-import forestry.core.tiles.TileForestry;
+public class PacketItemStackDisplay extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final ItemStack itemStack;
 
-public class PacketItemStackDisplay extends PacketCoordinates implements IForestryPacketClient {
-
-	private ItemStack itemStack;
-
-	public PacketItemStackDisplay() {
-	}
-	
-	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, @Nullable ItemStack itemStack) {
-		super(tile);
+	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
+		this.pos = tile.getPos();
 		this.itemStack = itemStack;
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeItemStack(itemStack);
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		itemStack = data.readItemStack();
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IItemStackDisplay) {
-			((IItemStackDisplay) tile).handleItemStackForDisplay(itemStack);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.ITEMSTACK_DISPLAY;
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			ItemStack itemStack = data.readItemStack();
+
+			TileEntity tile = player.world.getTileEntity(pos);
+			if (tile instanceof IItemStackDisplay) {
+				((IItemStackDisplay) tile).handleItemStackForDisplay(itemStack);
+			}
+		}
 	}
 }

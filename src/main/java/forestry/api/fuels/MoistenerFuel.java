@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.fuels;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
 public class MoistenerFuel {
@@ -14,6 +15,10 @@ public class MoistenerFuel {
 	private final int stage;
 
 	public MoistenerFuel(ItemStack item, ItemStack product, int stage, int moistenerValue) {
+		Preconditions.checkNotNull(item);
+		Preconditions.checkNotNull(product);
+		Preconditions.checkArgument(!item.isEmpty());
+		Preconditions.checkArgument(!product.isEmpty());
 		this.item = item;
 		this.product = product;
 		this.stage = stage;

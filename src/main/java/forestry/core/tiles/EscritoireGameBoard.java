@@ -10,27 +10,25 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import forestry.api.genetics.IAllele;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	private static final Random rand = new Random();
@@ -44,7 +42,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 	}
 
-	public EscritoireGameBoard(@Nonnull NBTTagCompound nbt) {
+	public EscritoireGameBoard(NBTTagCompound nbt) {
 		tokenCount = nbt.getInteger("TokenCount");
 
 		if (tokenCount > 0) {
@@ -82,6 +80,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		return true;
 	}
 
+	@Nullable
 	public EscritoireGameToken getToken(int index) {
 		if (index >= tokenCount) {
 			return null;
@@ -112,6 +111,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		return unrevealed;
 	}
 
+	@Nullable
 	private EscritoireGameToken getSelected() {
 		for (EscritoireGameToken token : gameTokens) {
 			if (token.isSelected()) {
@@ -217,13 +217,13 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 	/* IStreamable */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeVarInt(tokenCount);
 		data.writeStreamables(gameTokens);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		tokenCount = data.readVarInt();
 		data.readStreamables(gameTokens, EscritoireGameToken.class);
 	}

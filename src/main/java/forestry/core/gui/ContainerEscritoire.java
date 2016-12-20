@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryEscritoire;
-import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
@@ -53,17 +52,16 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 		EscritoireGame.Status status = tile.getGame().getStatus();
 		if (status != EscritoireGame.Status.PLAYING) {
 			return;
 		}
 
-		int index = packet.getPrimaryIndex();
-		if (index == -1) {
+		if (primary == -1) {
 			tile.probe();
 		} else {
-			tile.choose(player.getGameProfile(), index);
+			tile.choose(player.getGameProfile(), primary);
 		}
 	}
 }

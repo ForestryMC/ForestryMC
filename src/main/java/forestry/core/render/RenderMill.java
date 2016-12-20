@@ -21,12 +21,9 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
-
-	private final ModelBase model = new MillModelBase();
-
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
-	private ResourceLocation[] textures;
+	private final ResourceLocation[] textures;
 
 	private final ModelRenderer pedestal;
 	private final ModelRenderer column;
@@ -34,7 +31,8 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	private final ModelRenderer blade1;
 	private final ModelRenderer blade2;
 
-	public RenderMill() {
+	public RenderMill(String baseTexture) {
+		ModelBase model = new MillModelBase();
 		pedestal = new ModelRenderer(model, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.rotationPointX = 8;
@@ -64,11 +62,6 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		blade2.rotationPointX = 8;
 		blade2.rotationPointY = 8;
 		blade2.rotationPointZ = 8;
-
-	}
-
-	public RenderMill(String baseTexture) {
-		this();
 
 		textures = new ResourceLocation[12];
 
@@ -117,9 +110,6 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		float[] translate = {0, 0, 0};
 		float tfactor = step / 16;
 
-		if (orientation == null) {
-			orientation = EnumFacing.WEST;
-		}
 		switch (orientation) {
 			case EAST:
 				// angle [2] = (float) Math.PI / 2;

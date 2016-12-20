@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -47,16 +45,16 @@ public class CropFruit extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof IFruitBearer)) {
-			return Collections.emptySet();
+			return NonNullList.create();
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
-		return ((IFruitBearer) tile).pickFruit(null);
+		Proxies.net.sendNetworkPacket(packet, pos, world);
+		return ((IFruitBearer) tile).pickFruit(ItemStack.EMPTY);
 	}
 
 }

@@ -68,7 +68,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
 					BlockPos pos = new BlockPos(x, y, z);
-					te = this.worldObj.getTileEntity(pos);
+					te = this.world.getTileEntity(pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
 						
@@ -110,13 +110,13 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 						if (part != null) {
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
-							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, pos);
+							isBlockGoodForExteriorLevel(exteriorLevel, this.world, pos);
 						}
 					} else {
 						if (part != null) {
 							isGoodForInterior(part);
 						} else {
-							isBlockGoodForInterior(this.worldObj, pos);
+							isBlockGoodForInterior(this.world, pos);
 						}
 					}
 				}

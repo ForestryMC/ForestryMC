@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
@@ -26,21 +27,10 @@ public class FermenterRecipe implements IFermenterRecipe {
 	private final FluidStack fluidResource;
 
 	public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
-		if (resource == null) {
-			throw new NullPointerException("Fermenter Resource cannot be null!");
-		}
-		
-		if (resource.getItem() == null) {
-			throw new NullPointerException("Fermenter Resource item cannot be null!");
-		}
-
-		if (output == null) {
-			throw new NullPointerException("Fermenter Output cannot be null!");
-		}
-
-		if (fluidResource == null) {
-			throw new NullPointerException("Fermenter Liquid cannot be null!");
-		}
+		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
+		Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
+		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
+		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
 		this.resource = resource;
 		this.fermentationValue = fermentationValue;

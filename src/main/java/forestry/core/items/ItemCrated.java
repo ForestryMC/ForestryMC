@@ -12,6 +12,10 @@ package forestry.core.items;
 
 import javax.annotation.Nullable;
 
+import forestry.api.core.IModelManager;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -22,28 +26,20 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
-
 public class ItemCrated extends ItemForestry implements IColoredItem {
-	@Nullable
 	private final ItemStack contained;
 	@Nullable
 	private final String oreDictName;
 
-	public ItemCrated(@Nullable ItemStack contained, @Nullable String oreDictName) {
+	public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
 		this.contained = contained;
 		this.oreDictName = oreDictName;
 	}
 
-	@Nullable
 	public ItemStack getContained() {
 		return contained;
 	}
@@ -54,24 +50,25 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
-			if (contained == null || itemStackIn.stackSize == 0) {
-				return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
+			if (contained.isEmpty() || heldItem.isEmpty()) {
+				return ActionResult.newResult(EnumActionResult.PASS, heldItem);
 			}
 
-			itemStackIn.stackSize--;
+			heldItem.shrink(1);
 
 			ItemStack dropStack = contained.copy();
-			dropStack.stackSize = 9;
+			dropStack.setCount(9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, 40);
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (contained == null) {
+		if (contained.isEmpty()) {
 			return Translator.translateToLocal("item.for.crate.name");
 		} else {
 			String containedName = Proxies.common.getDisplayName(contained);
@@ -82,7 +79,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if (contained == null) {
+		if (contained.isEmpty()) {
 			manager.registerItemModel(item, 0);
 			manager.registerItemModel(item, 1, "crate-filled");
 		} else {
@@ -95,11 +92,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int renderPass) {
 		ItemColors colors = Proxies.common.getClientInstance().getItemColors();
-		if (getContained() == null || renderPass == 100) {
+		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}
 		int color = colors.getColorFromItemstack(contained, renderPass);
-		if(color != -1){
+		if (color != -1) {
 			return color;
 		}
 		return -1;

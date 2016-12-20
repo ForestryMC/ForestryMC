@@ -10,10 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -23,14 +20,12 @@ import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class TileBeeHouse extends TileBeeHousingBase {
-	@Nonnull
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 
-	@Nonnull
 	private final IBeeListener beeListener;
-	@Nonnull
 	private final InventoryBeeHousing beeInventory;
 
 	public TileBeeHouse() {
@@ -42,7 +37,6 @@ public class TileBeeHouse extends TileBeeHousingBase {
 		setInternalInventory(beeInventory);
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return beeInventory;

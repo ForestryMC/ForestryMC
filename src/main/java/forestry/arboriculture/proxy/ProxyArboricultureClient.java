@@ -10,6 +10,31 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableMap;
+import forestry.api.arboriculture.EnumPileType;
+import forestry.api.arboriculture.IWoodItemMeshDefinition;
+import forestry.api.arboriculture.IWoodStateMapper;
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.BlockArbSlab;
+import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.models.ModelDecorativeLeaves;
+import forestry.arboriculture.models.ModelLeaves;
+import forestry.arboriculture.models.ModelWoodPile;
+import forestry.arboriculture.models.WoodModelLoader;
+import forestry.arboriculture.models.WoodTextures;
+import forestry.arboriculture.render.CharcoalPileRenderer;
+import forestry.arboriculture.tiles.TilePile;
+import forestry.core.models.BlockModelEntry;
+import forestry.core.models.SimpleRetexturedModel;
+import forestry.core.models.WoodModelEntry;
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -32,36 +57,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.ImmutableMap;
-
-import forestry.api.arboriculture.EnumPileType;
-import forestry.api.arboriculture.IWoodItemMeshDefinition;
-import forestry.api.arboriculture.IWoodStateMapper;
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.slab.BlockArbSlab;
-import forestry.arboriculture.models.ModelDecorativeLeaves;
-import forestry.arboriculture.models.ModelLeaves;
-import forestry.arboriculture.models.ModelWoodPile;
-import forestry.arboriculture.models.WoodModelLoader;
-import forestry.arboriculture.models.WoodTextures;
-import forestry.arboriculture.render.CharcoalPileRenderer;
-import forestry.arboriculture.tiles.TilePile;
-import forestry.core.models.BlockModelEntry;
-import forestry.core.models.SimpleRetexturedModel;
-import forestry.core.models.WoodModelEntry;
-import forestry.core.proxy.Proxies;
-
 public class ProxyArboricultureClient extends ProxyArboriculture {
-	private static Set<WoodModelEntry> woodModelEntrys = new HashSet<>();
-	
+	private static final Set<WoodModelEntry> woodModelEntrys = new HashSet<>();
+
 	@Override
 	public void initializeModels() {
 		{
@@ -78,87 +76,87 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation, new ModelDecorativeLeaves(), leaves);
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
-		
+
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:pile", "type=wood");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:woodPile", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
-		
+
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePile.class, new CharcoalPileRenderer());
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
-		for(BlockArbSlab slab : PluginArboriculture.blocks.slabsDouble){
+		for (BlockArbSlab slab : PluginArboriculture.blocks.slabsDouble) {
 			registerWoodModel(slab, true);
 		}
-		for(BlockArbSlab slab : PluginArboriculture.blocks.slabsDoubleFireproof){
+		for (BlockArbSlab slab : PluginArboriculture.blocks.slabsDoubleFireproof) {
 			registerWoodModel(slab, true);
 		}
 	}
-	
+
 	@SubscribeEvent
-	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event){
+	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
 		WoodModelLoader.INSTANCE.isRegistered = true;
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		Map<ResourceLocation, Exception> loadingExceptions = ObfuscationReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), 2);
-		
-		if(minecraft.getBlockRendererDispatcher() != null){
+
+		if (minecraft.getBlockRendererDispatcher() != null) {
 			BlockStateMapper stateMapper = minecraft.getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper();
 			Map<Item, ItemMeshDefinition> definitions = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesher.class, minecraft.getRenderItem().getItemModelMesher(), 2);
 			Map<Block, IStateMapper> blockStateMap = ObfuscationReflectionHelper.getPrivateValue(BlockStateMapper.class, stateMapper, 0);
-			
-			for(WoodModelEntry<T> entry : woodModelEntrys){
+
+			for (WoodModelEntry<T> entry : woodModelEntrys) {
 				T woodTyped = entry.woodTyped;
 				WoodBlockKind woodKind = woodTyped.getBlockKind();
-				
+
 				IStateMapper mapper = blockStateMap.get(woodTyped);
-				if(mapper instanceof IWoodStateMapper){
+				if (mapper instanceof IWoodStateMapper) {
 					IWoodStateMapper woodMapper = (IWoodStateMapper) mapper;
-					try{
-						for(IBlockState state : woodTyped.getBlockState().getValidStates()) {
+					try {
+						for (IBlockState state : woodTyped.getBlockState().getValidStates()) {
 							IWoodType woodType;
 							ItemStack itemStack;
-							if(entry.withVariants){
+							if (entry.withVariants) {
 								int meta = woodTyped.getMetaFromState(state);
 								woodType = woodTyped.getWoodType(meta);
 								itemStack = new ItemStack(woodTyped, 1, meta);
-							}else{
+							} else {
 								woodType = woodTyped.getWoodType(0);
 								itemStack = new ItemStack(woodTyped);
 							}
 							ImmutableMap<String, String> customTextures = WoodTextures.getLocations(woodType, woodKind);
-							if(woodKind.retextureItem){
+							if (woodKind.retextureItem) {
 								ItemMeshDefinition definition = definitions.get(itemStack.getItem());
-								if(definition instanceof IWoodItemMeshDefinition){
+								if (definition instanceof IWoodItemMeshDefinition) {
 									IWoodItemMeshDefinition woodDefinition = (IWoodItemMeshDefinition) definition;
 									IModel basicItemModel = ModelLoaderRegistry.getModel(woodDefinition.getDefaultModelLocation(itemStack));
 									ModelResourceLocation basicItemLocation = definition.getModelLocation(itemStack);
-											
+
 									registry.putObject(basicItemLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType, customTextures)));
 								}
 							}
 							IModel basicModel = ModelLoaderRegistry.getModel(woodMapper.getDefaultModelResourceLocation(state));
 							ModelResourceLocation basicLocation = woodMapper.getModelLocation(state);
-							if(loadingExceptions.containsKey(basicLocation)){
+							if (loadingExceptions.containsKey(basicLocation)) {
 								loadingExceptions.remove(basicLocation);
 							}
 							registry.putObject(basicLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType, customTextures)));
 						}
-					}catch(Exception e){
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		
+
 		loadingExceptions.putAll(WoodModelLoader.loadingExceptions);
 		ModelWoodPile.onModelBake(event);
 	}
-	
+
 	@Override
-	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants){
-		woodModelEntrys.add(new WoodModelEntry(woodTyped, withVariants));
+	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants) {
+		woodModelEntrys.add(new WoodModelEntry<>(woodTyped, withVariants));
 	}
 
 	@Override

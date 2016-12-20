@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ForwardingCollection;
 
 import java.util.Collection;
@@ -23,9 +25,6 @@ import java.util.LinkedList;
 public class RevolvingList<T> extends ForwardingCollection<T> {
 
 	private final Deque<T> list = new LinkedList<>();
-
-	public RevolvingList() {
-	}
 
 	public RevolvingList(Collection<? extends T> collection) {
 		list.addAll(collection);
@@ -50,6 +49,7 @@ public class RevolvingList<T> extends ForwardingCollection<T> {
 		list.addLast(list.removeFirst());
 	}
 
+	@Nullable
 	public T getCurrent() {
 		if (list.isEmpty()) {
 			return null;
@@ -57,7 +57,7 @@ public class RevolvingList<T> extends ForwardingCollection<T> {
 		return list.getFirst();
 	}
 
-	public void setCurrent(T e) {
+	public void setCurrent(@Nullable T e) {
 		if (!contains(e)) {
 			return;
 		}

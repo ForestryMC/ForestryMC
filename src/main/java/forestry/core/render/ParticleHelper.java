@@ -72,8 +72,10 @@ public class ParticleHelper {
 			}
 
 			ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
-			callback.addHitEffects(fx, world, pos, iblockstate);
-			effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+			if (fx != null) {
+				callback.addHitEffects(fx, world, pos, iblockstate);
+				effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+			}
 		}
 		return true;
 	}
@@ -101,8 +103,10 @@ public class ParticleHelper {
 					double pz = pos.getZ() + (k + 0.5D) / iterations;
 
 					ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
-					callback.addDestroyEffects(fx, world, pos, state);
-					effectRenderer.addEffect(fx.setBlockPos(pos));
+					if (fx != null) {
+						callback.addDestroyEffects(fx, world, pos, state);
+						effectRenderer.addEffect(fx.setBlockPos(pos));
+					}
 				}
 			}
 		}

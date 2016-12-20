@@ -2,17 +2,15 @@ package forestry.arboriculture.render;
 
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryStateMapper;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class FruitPodStateMapper extends ForestryStateMapper {
@@ -34,5 +32,5 @@ public class FruitPodStateMapper extends ForestryStateMapper {
 		}
 		return mapStateModelLocations;
 	}
-	
+
 }

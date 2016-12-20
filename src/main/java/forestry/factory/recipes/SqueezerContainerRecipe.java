@@ -12,9 +12,11 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -22,11 +24,14 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
 	private final ItemStack emptyContainer;
 	private final int processingTime;
-	@Nullable
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerContainerRecipe(ItemStack emptyContainer, int processingTime, @Nullable ItemStack remnants, float remnantsChance) {
+	public SqueezerContainerRecipe(ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+		Preconditions.checkNotNull(emptyContainer);
+		Preconditions.checkArgument(!emptyContainer.isEmpty());
+		Preconditions.checkNotNull(remnants);
+
 		this.emptyContainer = emptyContainer;
 		this.processingTime = processingTime;
 		this.remnants = remnants;
@@ -43,7 +48,6 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		return processingTime;
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getRemnants() {
 		return remnants;
@@ -55,16 +59,19 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 	}
 
 	@Override
+	@Nullable
 	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
-		if (filledContainer == null) {
+		if (filledContainer.isEmpty()) {
 			return null;
 		}
 		FluidStack fluidOutput = FluidUtil.getFluidContained(filledContainer);
 		if (fluidOutput == null) {
 			return null;
 		}
-		ItemStack filledContainerCopy = ItemStackUtil.createSplitStack(filledContainer, 1);
-		return new SqueezerRecipe(processingTime, new ItemStack[]{filledContainerCopy}, fluidOutput, remnants, remnantsChance);
+		ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
+		NonNullList<ItemStack> input = NonNullList.create();
+		input.add(filledContainerCopy);
+		return new SqueezerRecipe(processingTime, input, fluidOutput, remnants, remnantsChance);
 	}
 
 }

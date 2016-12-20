@@ -10,8 +10,22 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.ITextureManager;
+import forestry.core.circuits.ISocketable;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.MachineParticleCallback;
+import forestry.core.render.MachineStateMapper;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -36,45 +50,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.ITextureManager;
-import forestry.core.circuits.ISocketable;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.MachineStateMapper;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
-
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister, IBlockRotatable {
-	/** use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order. */
+	/**
+	 * use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order.
+	 */
 	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.DOWN, EnumFacing.UP);
 
 	private final boolean hasTESR;
 	private final boolean hasCustom;
-	@Nonnull
 	public final P blockType;
 
-	/* PROPERTIES */
-
 	private final ParticleHelper.Callback particleCallback;
-	
 	protected final BlockStateContainer blockState;
 
-	public BlockBase(@Nonnull P blockType, Material material) {
+	public BlockBase(P blockType, Material material) {
 		super(material);
 
 		this.blockType = blockType;
@@ -87,11 +85,11 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.blockState = this.createBlockState();
 		IBlockState state = this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
 		this.setDefaultState(state);
-		
+
 		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}
-	
-	public BlockBase(@Nonnull P blockType) {
+
+	public BlockBase(P blockType) {
 		this(blockType, Material.IRON);
 	}
 
@@ -114,18 +112,19 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		}
 	}
 
-	@Nonnull
+
 	private IMachineProperties getDefinition() {
 		return blockType.getMachineProperties();
 	}
 
+	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		IMachineProperties definition = getDefinition();
 		return definition.getBoundingBox(pos, blockState);
 	}
 
-	@Nonnull
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
@@ -147,16 +146,20 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	/* INTERACTION */
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile != null) {
 			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
+				ItemStack heldItem = playerIn.getHeldItem(hand);
 				if (!playerIn.isSneaking()) {
-					if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
-						IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-						if (FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn)) {
+					if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
+						IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+						FluidActionResult fluidActionResult = FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn);
+						if (fluidActionResult.isSuccess()) {
+							playerIn.setHeldItem(hand, fluidActionResult.getResult());
 							return true;
 						}
 					}
@@ -180,7 +183,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	protected EnumFacing getPlacementRotation(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
-		int l = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
+		int l = MathHelper.floor(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		if (l == 1) {
 			return EnumFacing.EAST;
 		}
@@ -224,19 +227,19 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public void registerModel(Item item, IModelManager manager) {
 		blockType.getMachineProperties().registerModel(item, manager);
 	}
-	
+
 	/* STATES */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(blockType));
 	}
-	
+
 	@Override
-    public boolean isFullCube(IBlockState state){
+	public boolean isFullCube(IBlockState state) {
 		IMachineProperties definition = getDefinition();
-        return definition.isFullCube(state);
-    }
+		return definition.isFullCube(state);
+	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -252,7 +255,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).getIndex();
 	}
-	
+
 	@Override
 	public BlockStateContainer getBlockState() {
 		return this.blockState;
@@ -277,9 +280,9 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* Particles */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
-			return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
+			return ParticleHelper.addBlockHitEffects(world, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
 		}
 		return false;
 	}

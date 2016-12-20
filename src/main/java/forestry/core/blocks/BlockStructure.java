@@ -48,7 +48,7 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (playerIn.isSneaking()) {
 			return false;
 		}
@@ -61,23 +61,24 @@ public abstract class BlockStructure extends BlockForestry {
 		MultiblockTileEntityForestry part = (MultiblockTileEntityForestry) tile;
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
+		ItemStack heldItem = playerIn.getHeldItem(hand);
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
-		if (heldItem == null) {
+		if (heldItem.isEmpty()) {
 			if (controller != null) {
 				if (!controller.isAssembled()) {
 					String validationError = controller.getLastValidationError();
 					if (validationError != null) {
 						long tick = worldIn.getTotalWorldTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.addChatMessage(new TextComponentString(validationError));
+							playerIn.sendMessage(new TextComponentString(validationError));
 							previousMessageTick = tick;
 						}
 						return true;
 					}
 				}
 			} else {
-				playerIn.addChatMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
+				playerIn.sendMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
 				return true;
 			}
 		}

@@ -12,47 +12,49 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
+import net.minecraft.util.math.BlockPos;
 
-public class PacketErrorUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private IErrorLogic errorLogic;
-
-	public PacketErrorUpdate() {
-	}
+public class PacketErrorUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final IErrorLogic errorLogic;
 
 	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
-		super(tile);
+		this.pos = tile.getPos();
 		this.errorLogic = errorLogicSource.getErrorLogic();
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		errorLogic.writeData(data);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IErrorLogicSource) {
-			IErrorLogicSource errorSourceTile = (IErrorLogicSource) tile;
-			errorLogic = errorSourceTile.getErrorLogic();
-			errorLogic.readData(data);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.ERROR_UPDATE;
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+
+			TileEntity tile = player.world.getTileEntity(pos);
+			if (tile instanceof IErrorLogicSource) {
+				IErrorLogicSource errorSourceTile = (IErrorLogicSource) tile;
+				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
+				errorLogic.readData(data);
+			}
+		}
 	}
 }

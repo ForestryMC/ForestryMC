@@ -12,6 +12,7 @@ package forestry.lepidopterology.genetics;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.base.Preconditions;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -45,9 +46,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
-			return null;
-		}
+		Preconditions.checkArgument(ButterflyManager.butterflyRoot.isMember(itemStack), "Must be a butterfly");
 
 		IAlleleSpecies species = getSpeciesDirectly(ButterflyManager.butterflyRoot, itemStack);
 		if (species instanceof IAlleleButterflySpecies) {

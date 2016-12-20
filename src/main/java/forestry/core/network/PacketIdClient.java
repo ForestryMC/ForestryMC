@@ -12,7 +12,7 @@ package forestry.core.network;
 
 import javax.annotation.Nonnull;
 
-import forestry.core.network.packets.PacketDummyClient;
+import forestry.core.network.packets.PacketHandlerDummyClient;
 
 /** Packets sent to the client from the server */
 public enum PacketIdClient implements IPacketId {
@@ -64,18 +64,18 @@ public enum PacketIdClient implements IPacketId {
 	public static final PacketIdClient[] VALUES = values();
 
 	@Nonnull
-	private IForestryPacketClient packetHandler;
+	private IForestryPacketHandlerClient packetHandler;
 
 	PacketIdClient() {
-		this.packetHandler = PacketDummyClient.instance;
+		this.packetHandler = PacketHandlerDummyClient.instance;
 	}
 
-	public void setPacketHandler(@Nonnull IForestryPacketClient packetHandler) {
+	public void setPacketHandler(@Nonnull IForestryPacketHandlerClient packetHandler) {
 		this.packetHandler = packetHandler;
 	}
 
 	@Nonnull
-	public IForestryPacketClient getPacketHandler() {
+	public IForestryPacketHandlerClient getPacketHandler() {
 		return packetHandler;
 	}
 }

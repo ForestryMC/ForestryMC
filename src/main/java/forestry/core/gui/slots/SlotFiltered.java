@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -25,6 +27,7 @@ import forestry.core.tiles.IFilterSlotDelegate;
  */
 public class SlotFiltered extends SlotWatched {
 	private final IFilterSlotDelegate filterSlotDelegate;
+	@Nullable
 	private String backgroundTexture = null;
 	private String blockedTexture = "slots/blocked";
 
@@ -36,13 +39,8 @@ public class SlotFiltered extends SlotWatched {
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
 		int slotIndex = getSlotIndex();
-		if (filterSlotDelegate.isLocked(slotIndex)) {
-			return false;
-		}
-		if (itemstack != null) {
-			return filterSlotDelegate.canSlotAccept(slotIndex, itemstack);
-		}
-		return true;
+		return !filterSlotDelegate.isLocked(slotIndex) &&
+				(itemstack == null || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
 	}
 
 	public SlotFiltered setBlockedTexture(String ident) {
@@ -57,6 +55,7 @@ public class SlotFiltered extends SlotWatched {
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@Nullable
 	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {

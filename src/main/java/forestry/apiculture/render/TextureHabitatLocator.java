@@ -48,8 +48,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	public void updateAnimation() {
 		Minecraft minecraft = Minecraft.getMinecraft();
 
-		if (minecraft.theWorld != null && minecraft.thePlayer != null) {
-			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw);
+		if (minecraft.world != null && minecraft.player != null) {
+			updateCompass(minecraft.world, minecraft.player.posX, minecraft.player.posZ, minecraft.player.rotationYaw);
 		} else {
 			updateCompass(null, 0.0d, 0.0d, 0.0d);
 		}

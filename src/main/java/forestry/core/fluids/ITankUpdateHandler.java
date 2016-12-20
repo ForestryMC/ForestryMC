@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.fluids.tanks.StandardTank;
-
 public interface ITankUpdateHandler {
 	void updateTankLevels(StandardTank tank);
 }

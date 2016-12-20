@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -18,18 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.blocks.BlockArbDoor;
+import forestry.arboriculture.blocks.BlockForestryFence;
 import forestry.arboriculture.blocks.BlockForestryFenceGate;
+import forestry.arboriculture.blocks.BlockForestryLog;
+import forestry.arboriculture.blocks.BlockForestryPlanks;
+import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
-import forestry.arboriculture.blocks.fence.BlockForestryFence;
-import forestry.arboriculture.blocks.log.BlockForestryLog;
-import forestry.arboriculture.blocks.planks.BlockForestryPlanks;
-import forestry.arboriculture.blocks.property.PropertyWoodType;
-import forestry.arboriculture.blocks.slab.BlockForestrySlab;
+import forestry.arboriculture.blocks.PropertyWoodType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockNewLog;
 import net.minecraft.block.BlockOldLog;
@@ -52,32 +52,24 @@ public class WoodAccess implements IWoodAccess {
 	}
 
 	private static class WoodMap {
-		@Nonnull
 		private final Map<IWoodType, ItemStack> normalItems = new HashMap<>();
-		@Nonnull
 		private final Map<IWoodType, ItemStack> fireproofItems = new HashMap<>();
-		@Nonnull
 		private final Map<IWoodType, IBlockState> normalBlocks = new HashMap<>();
-		@Nonnull
 		private final Map<IWoodType, IBlockState> fireproofBlocks = new HashMap<>();
-		@Nonnull
 		private final WoodBlockKind woodBlockKind;
 
-		public WoodMap(@Nonnull WoodBlockKind woodBlockKind) {
+		public WoodMap(WoodBlockKind woodBlockKind) {
 			this.woodBlockKind = woodBlockKind;
 		}
 
-		@Nonnull
 		public String getName() {
 			return woodBlockKind.name();
 		}
 
-		@Nonnull
 		public Map<IWoodType, ItemStack> getItem(boolean fireproof) {
 			return fireproof ? this.fireproofItems : this.normalItems;
 		}
 
-		@Nonnull
 		public Map<IWoodType, IBlockState> getBlock(boolean fireproof) {
 			return fireproof ? this.fireproofBlocks : this.normalBlocks;
 		}
@@ -106,7 +98,7 @@ public class WoodAccess implements IWoodAccess {
 			registerWithVariants(block, WoodBlockKind.FENCE, block.getVariant());
 		}
 	}
-	
+
 	public static void registerFenceGates(List<BlockForestryFenceGate> blocks) {
 		for (BlockForestryFenceGate block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.FENCE_GATE);
@@ -195,7 +187,7 @@ public class WoodAccess implements IWoodAccess {
 			int meta = woodTyped.getMetaFromState(blockState);
 			IWoodType woodType = woodTyped.getWoodType(meta);
 			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
-			if(!(woodType instanceof EnumVanillaWoodType)){
+			if (!(woodType instanceof EnumVanillaWoodType)) {
 				PluginArboriculture.proxy.registerWoodModel(woodTyped, true);
 			}
 			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
@@ -210,7 +202,7 @@ public class WoodAccess implements IWoodAccess {
 		IBlockState blockState = woodTyped.getDefaultState();
 		IWoodType woodType = woodTyped.getWoodType(0);
 		ItemStack itemStack = new ItemStack(woodTyped);
-		if(!(woodType instanceof EnumVanillaWoodType)){
+		if (!(woodType instanceof EnumVanillaWoodType)) {
 			PluginArboriculture.proxy.registerWoodModel(woodTyped, false);
 		}
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);
@@ -220,11 +212,9 @@ public class WoodAccess implements IWoodAccess {
 		if (woodBlockKind == WoodBlockKind.DOOR) {
 			fireproof = true;
 		}
-		if (itemStack == null || itemStack.getItem() == null) {
-			throw new NullPointerException("Invalid itemStack: " + itemStack);
-		}
+		Preconditions.checkArgument(!itemStack.isEmpty(), "Empty Itemstack");
 		WoodMap woodMap = woodMaps.get(woodBlockKind);
-		if(!registeredWoodTypes.contains(woodType)){
+		if (!registeredWoodTypes.contains(woodType)) {
 			registeredWoodTypes.add(woodType);
 		}
 		woodMap.getItem(fireproof).put(woodType, itemStack);
@@ -258,7 +248,7 @@ public class WoodAccess implements IWoodAccess {
 		}
 		return blockState;
 	}
-	
+
 	@Override
 	public List<IWoodType> getRegisteredWoodTypes() {
 		return registeredWoodTypes;

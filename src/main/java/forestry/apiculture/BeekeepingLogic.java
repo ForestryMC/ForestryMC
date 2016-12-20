@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,20 +19,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import com.google.common.base.Preconditions;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -47,11 +38,18 @@ import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
@@ -65,6 +63,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private int beeProgressMax;
 
 	private int queenWorkCycleThrottle;
+	@Nullable
 	private IEffectData effectData[] = new IEffectData[2];
 
 	private final Stack<ItemStack> spawn = new Stack<>();
@@ -75,8 +74,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	// Client
 	private boolean active;
+	@Nullable
 	private IBee queen;
-	private ItemStack queenStack; // used to detect server changes and sync clientQueen
+	private ItemStack queenStack = ItemStack.EMPTY; // used to detect server changes and sync clientQueen
 
 	public BeekeepingLogic(IBeeHousing housing) {
 		this.housing = housing;
@@ -91,7 +91,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		queenWorkCycleThrottle = nbttagcompound.getInteger("Throttle");
 
 		NBTTagCompound queenNBT = nbttagcompound.getCompoundTag("queen");
-		queenStack = ItemStack.loadItemStackFromNBT(queenNBT);
+		queenStack = new ItemStack(queenNBT);
 		queen = BeeManager.beeRoot.getMember(queenStack);
 
 		setActive(nbttagcompound.getBoolean("Active"));
@@ -100,7 +100,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Offspring", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			spawn.add(ItemStack.loadItemStackFromNBT(nbttaglist.getCompoundTagAt(i)));
+			spawn.add(new ItemStack(nbttaglist.getCompoundTagAt(i)));
 		}
 	}
 
@@ -109,7 +109,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		nbttagcompound.setInteger("BreedingTime", beeProgress);
 		nbttagcompound.setInteger("Throttle", queenWorkCycleThrottle);
 
-		if (queenStack != null) {
+		if (!queenStack.isEmpty()) {
 			NBTTagCompound queenNBT = new NBTTagCompound();
 			queenStack.writeToNBT(queenNBT);
 			nbttagcompound.setTag("queen", queenNBT);
@@ -132,7 +132,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeBoolean(active);
 		if (active) {
 			data.writeItemStack(queenStack);
@@ -141,7 +141,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
@@ -190,14 +190,18 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 				IBee dyingQueen = BeeManager.beeRoot.getMember(queenStack);
 				Collection<ItemStack> spawned = killQueen(dyingQueen, housing, beeListener);
 				spawn.addAll(spawned);
-				queenStack = null;
+				queenStack = ItemStack.EMPTY;
 			}
 		} else {
-			queenStack = null;
+			queenStack = ItemStack.EMPTY;
 		}
 
 		if (this.queenStack != queenStack) {
-			this.queen = BeeManager.beeRoot.getMember(queenStack);
+			if (!queenStack.isEmpty()) {
+				this.queen = BeeManager.beeRoot.getMember(queenStack);
+			} else {
+				this.queen = null;
+			}
 			this.queenStack = queenStack;
 			hasFlowersCache.clear();
 			queenCanWorkCache.clear();
@@ -248,7 +252,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 	}
 
-	private void queenWorkTick(@Nullable IBee queen, @Nonnull ItemStack queenStack) {
+	private void queenWorkTick(@Nullable IBee queen, ItemStack queenStack) {
 		if (queen == null) {
 			beeProgress = 0;
 			beeProgressMax = 0;
@@ -268,7 +272,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			pollenHandler.doPollination(queen, housing, beeListener);
 
 			// Age the queen
-			float lifespanModifier = beeModifier.getLifespanModifier(queen.getGenome(), queen.getMate(), 1.0f);
+			IBeeGenome mate = queen.getMate();
+			Preconditions.checkState(mate != null);
+			float lifespanModifier = beeModifier.getLifespanModifier(queen.getGenome(), mate, 1.0f);
 			queen.age(housing.getWorldObj(), lifespanModifier);
 
 			// Write the changed queen back into the item stack.
@@ -284,10 +290,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	private static void doProduction(IBee queen, IBeeHousing beeHousing, IBeeListener beeListener) {
 		// Produce and add stacks
-		ItemStack[] products = queen.produceStacks(beeHousing);
-		if (products == null) {
-			return;
-		}
+		List<ItemStack> products = queen.produceStacks(beeHousing);
 		beeListener.wearOutEquipment(1);
 
 		IBeeHousingInventory beeInventory = beeHousing.getBeeInventory();
@@ -313,9 +316,11 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		return housingHasSpace;
 	}
 
-	/** Checks if a queen is alive. Much faster than reading the whole bee nbt */
+	/**
+	 * Checks if a queen is alive. Much faster than reading the whole bee nbt
+	 */
 	private static boolean isQueenAlive(ItemStack queenStack) {
-		if (queenStack == null) {
+		if (queenStack.isEmpty()) {
 			return false;
 		}
 		NBTTagCompound nbtTagCompound = queenStack.getTagCompound();
@@ -365,10 +370,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
-		beeInventory.getDrone().stackSize--;
-		if (beeInventory.getDrone().stackSize <= 0) {
-			beeInventory.setDrone(null);
-		}
+		beeInventory.getDrone().shrink(1);
 
 		// Reset breeding time
 		queen = princess;
@@ -377,10 +379,6 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	private static Collection<ItemStack> killQueen(IBee queen, IBeeHousing beeHousing, IBeeListener beeListener) {
-		if (queen == null) {
-			return Collections.emptySet();
-		}
-
 		IBeeHousingInventory beeInventory = beeHousing.getBeeInventory();
 
 		Collection<ItemStack> spawn;
@@ -388,8 +386,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (queen.canSpawn()) {
 			spawn = spawnOffspring(queen, beeHousing);
 			beeListener.onQueenDeath();
-			beeInventory.getQueen().stackSize = 0;
-			beeInventory.setQueen(null);
+			beeInventory.getQueen().setCount(0);
+			beeInventory.setQueen(ItemStack.EMPTY);
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
@@ -399,7 +397,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			convert.setTagCompound(nbttagcompound);
 
 			spawn = Collections.singleton(convert);
-			beeInventory.setQueen(null);
+			beeInventory.setQueen(ItemStack.EMPTY);
 		}
 
 		return spawn;
@@ -457,9 +455,10 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		World world = housing.getWorldObj();
 		if (world != null && !world.isRemote) {
 			if (housing instanceof Entity) {
-				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(housing, (Entity) housing), world);
+				Entity housingEntity = (Entity) this.housing;
+				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.getPosition(), world);
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), world);
+				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
 			}
 		}
 	}
@@ -501,7 +500,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-	@Nonnull
+
 	public List<BlockPos> getFlowerPositions() {
 		return hasFlowersCache.getFlowerCoords();
 	}
@@ -532,6 +531,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private static class PollenHandler {
 		private static final int MAX_POLLINATION_ATTEMPTS = 20;
 
+		@Nullable
 		private IIndividual pollen;
 		private int attemptedPollinations = 0;
 

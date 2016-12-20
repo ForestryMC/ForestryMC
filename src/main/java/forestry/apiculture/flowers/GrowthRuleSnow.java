@@ -27,11 +27,8 @@ public class GrowthRuleSnow implements IFlowerGrowthRule {
 		}
 
 		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
-		if (ground != Blocks.DIRT && ground != Blocks.GRASS) {
-			return false;
-		}
-
-		return helper.plantRandomFlower(flowerType, world, pos);
+		return (ground == Blocks.DIRT || ground == Blocks.GRASS) &&
+				helper.plantRandomFlower(flowerType, world, pos);
 	}
 
 }

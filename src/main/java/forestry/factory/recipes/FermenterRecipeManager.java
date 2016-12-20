@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +42,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
 	}
 
+	@Nullable
 	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
 		for (IFermenterRecipe recipe : recipes) {
 			if (matches(recipe, res, liqu)) {
@@ -57,11 +59,11 @@ public class FermenterRecipeManager implements IFermenterManager {
 		}
 
 		FluidStack fluid = recipe.getFluidResource();
-		return liqu != null && liqu.isFluidEqual(fluid);
+		return liqu.isFluidEqual(fluid);
 	}
 
 	public static boolean isResource(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return false;
 		}
 

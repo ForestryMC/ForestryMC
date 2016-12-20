@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.food;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 		return this.id;
 	}
 
+	@Nullable
 	protected String getLevel() {
 		return null;
 	}

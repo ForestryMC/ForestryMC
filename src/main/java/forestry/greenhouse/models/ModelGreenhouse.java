@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.greenhouse.models;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
@@ -37,11 +37,14 @@ import org.apache.commons.lang3.tuple.Pair;
 // DO NOT CACHE THIS. PLEASE. I BEG YOU. NOT IN THE CURRENT STATE.
 public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGreenhouse.Key> {
 	public static class Key {
+		@Nullable
 		public final IExtendedBlockState state;
+		@Nullable
 		public final IBlockAccess world;
+		@Nullable
 		public final BlockPos pos;
 
-		public Key(IExtendedBlockState state, IBlockAccess world, BlockPos pos) {
+		public Key(@Nullable IExtendedBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
 			this.state = state;
 			this.world = world;
 			this.pos = pos;
@@ -53,12 +56,12 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 	}
 
 	@Override
-	protected Key getInventoryKey(@Nonnull ItemStack stack) {
+	protected Key getInventoryKey(ItemStack stack) {
 		return new Key(null, null, null);
 	}
 
 	@Override
-	protected Key getWorldKey(@Nonnull IBlockState state) {
+	protected Key getWorldKey(IBlockState state) {
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
@@ -66,7 +69,7 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 	}
 
 	@Override
-	protected void bakeBlock(@Nonnull BlockGreenhouse block, @Nonnull Key key, @Nonnull IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockGreenhouse block, Key key, IModelBaker baker, boolean inventory) {
 		ItemStack camouflageStack = key.world != null ? CamouflageUtil.getCamouflageBlock(key.world, key.pos) : null;
 		IBlockAccess world = key.world;
 		BlockPos pos = key.pos;
@@ -75,13 +78,11 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 			ICamouflageHandler camouflageHandler = CamouflageUtil.getCamouflageHandler(world, pos);
 			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
 			ICamouflageItemHandler itemHandler = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflageStack);
-			if(itemHandler != null){
+			if (itemHandler != null && camouflageHandler != null && camouflageTile != null) {
 				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
 
-				if(model != null){
-					baker.addBakedModel(model.getLeft(), model.getRight());
-					baker.setParticleSprite(model.getRight().getParticleTexture());
-				}
+				baker.addBakedModel(model.getLeft(), model.getRight());
+				baker.setParticleSprite(model.getRight().getParticleTexture());
 			}
 		}
 

@@ -7,7 +7,6 @@ package forestry.api.multiblock;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.climate.IClimateControl;
@@ -34,7 +33,6 @@ public interface IGreenhouseController extends IMultiblockController, IGreenhous
 	IClimateRegion getRegion();
 	
 	@Override
-	@Nonnull
 	IClimateControl getClimateControl();
 
 }

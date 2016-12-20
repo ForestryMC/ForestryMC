@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import javax.annotation.Nullable;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
@@ -21,11 +23,15 @@ import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemRegistry;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemRegistryStorage extends ItemRegistry {
 	public final ItemCrated crate;
+	@Nullable
 	public final Item apiaristBackpack;
+	@Nullable
 	public final Item lepidopteristBackpack;
+
 	public final Item minerBackpack;
 	public final Item minerBackpackT2;
 	public final Item diggerBackpack;
@@ -41,7 +47,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 
 	public ItemRegistryStorage() {
 		// CRATE
-		crate = registerItem(new ItemCrated(null, null), "crate");
+		crate = registerItem(new ItemCrated(ItemStack.EMPTY, null), "crate");
 		
 		// BACKPACKS
 		IBackpackInterface backpackInterface = BackpackManager.backpackInterface;

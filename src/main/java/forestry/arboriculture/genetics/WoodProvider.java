@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
@@ -37,7 +36,7 @@ public class WoodProvider implements IWoodProvider {
 		this.name = woodType.toString().toLowerCase(Locale.ENGLISH);
 		this.woodType = woodType;
 	}
-	
+
 	@Override
 	public void registerSprites(Item item, ITextureManager manager) {
 		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
@@ -45,16 +44,15 @@ public class WoodProvider implements IWoodProvider {
 		woodBark = textureMap.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/wood/bark." + name));
 	}
 
-	@Nonnull
 	@Override
 	public TextureAtlasSprite getSprite(boolean isTop) {
-		if(isTop){
+		if (isTop) {
 			return woodTop;
-		}else{
+		} else {
 			return woodBark;
 		}
 	}
-	
+
 	@Override
 	public ItemStack getWoodStack() {
 		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
@@ -64,9 +62,9 @@ public class WoodProvider implements IWoodProvider {
 	public int getCarbonization() {
 		return woodType.getCarbonization();
 	}
-	
+
 	@Override
-	public float getCharcoalChance(int numberOfCharcoal){
+	public float getCharcoalChance(int numberOfCharcoal) {
 		return woodType.getCharcoalChance(numberOfCharcoal);
 	}
 

@@ -22,6 +22,7 @@ import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,13 +38,11 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	public MutationConditionRequiresResource(String oreDictName) {
 		this.displayName = oreDictName;
 		for (ItemStack ore : OreDictionary.getOres(oreDictName)) {
-			if (ore != null) {
+			if (!ore.isEmpty()) {
 				Item oreItem = ore.getItem();
-				if (oreItem != null) {
-					Block oreBlock = Block.getBlockFromItem(oreItem);
-					if (oreBlock != null) {
-						this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
-					}
+				Block oreBlock = Block.getBlockFromItem(oreItem);
+				if (oreBlock != Blocks.AIR) {
+					this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
 				}
 			}
 		}

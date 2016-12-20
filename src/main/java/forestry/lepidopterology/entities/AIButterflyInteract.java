@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.math.BlockPos;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
-
+	@Nullable
 	protected BlockPos rest;
 
 	private boolean canInteract = false;
@@ -31,7 +33,7 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 		}
 
 		rest = new BlockPos((int) entity.posX, (int) Math.floor(entity.posY) - 1, (int) entity.posZ);
-		if (entity.worldObj.isAirBlock(rest)) {
+		if (entity.world.isAirBlock(rest)) {
 			return false;
 		}
 

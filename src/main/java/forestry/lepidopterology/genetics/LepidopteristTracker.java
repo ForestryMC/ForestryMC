@@ -28,7 +28,7 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return ButterflyManager.butterflyRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		return ButterflyManager.butterflyRoot.getBreedingTracker(player.world, player.getGameProfile());
 	}
 
 	@Override

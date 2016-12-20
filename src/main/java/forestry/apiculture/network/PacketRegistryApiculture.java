@@ -11,27 +11,28 @@
 package forestry.apiculture.network;
 
 import forestry.apiculture.network.packets.PacketActiveUpdate;
-import forestry.apiculture.network.packets.PacketAlveryChange;
+import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
 import forestry.apiculture.network.packets.PacketCandleUpdate;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
-import forestry.core.network.PacketRegistry;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 
-public class PacketRegistryApiculture extends PacketRegistry {
+public class PacketRegistryApiculture implements IPacketRegistry {
 	@Override
 	public void registerPackets() {
-		registerClientPacket(new PacketImprintSelectionResponse());
-		registerClientPacket(new PacketActiveUpdate());
-		registerClientPacket(new PacketBeeLogicActive());
-		registerClientPacket(new PacketBeeLogicActiveEntity());
-		registerClientPacket(new PacketHabitatBiomePointer());
-		registerClientPacket(new PacketCandleUpdate());
-		
-		registerServerPacket(new PacketBeeLogicEntityRequest());
-		
-		registerClientPacket(new PacketAlveryChange());
+		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse.Handler());
+		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate.Handler());
+		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeeLogicActive.Handler());
+		PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY.setPacketHandler(new PacketBeeLogicActiveEntity.Handler());
+		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer.Handler());
+		PacketIdClient.CANDLE_UPDATE.setPacketHandler(new PacketCandleUpdate.Handler());
+		PacketIdClient.ALVERAY_CONTROLLER_CHANGE.setPacketHandler(new PacketAlvearyChange.Handler());
+
+		PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST.setPacketHandler(new PacketBeeLogicEntityRequest.Handler());
 	}
 }

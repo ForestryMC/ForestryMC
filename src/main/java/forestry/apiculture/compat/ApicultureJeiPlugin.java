@@ -24,9 +24,9 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 			return species == null ? null : species.getUID();
 		};
 
-		subtypeRegistry.registerNbtInterpreter(items.beeDroneGE, beeSubtypeInterpreter);
-		subtypeRegistry.registerNbtInterpreter(items.beePrincessGE, beeSubtypeInterpreter);
-		subtypeRegistry.registerNbtInterpreter(items.beeQueenGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(items.beeDroneGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(items.beePrincessGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(items.beeQueenGE, beeSubtypeInterpreter);
 	}
 
 	@Override

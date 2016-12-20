@@ -27,11 +27,8 @@ public class GrowthRuleMycelium implements IFlowerGrowthRule {
 		}
 
 		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
-		if (ground != Blocks.MYCELIUM) {
-			return false;
-		}
-
-		return helper.plantRandomFlower(flowerType, world, pos);
+		return ground == Blocks.MYCELIUM &&
+				helper.plantRandomFlower(flowerType, world, pos);
 	}
 
 }

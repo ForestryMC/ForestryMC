@@ -10,22 +10,8 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -34,11 +20,10 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -46,12 +31,24 @@ import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
+	@Nullable
 	private IFermenterRecipe currentRecipe;
 	private float currentResourceModifier;
 	private int fermentationTime = 0;
@@ -74,7 +71,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -103,13 +99,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -130,6 +126,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean workCycle() {
+		if (currentRecipe == null) {
+			return false;
+		}
+
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), true);
@@ -155,7 +155,9 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		ItemStack resource = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
 		FluidStack fluid = resourceTank.getFluid();
 
-		currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
+		if (fluid != null) {
+			currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
+		}
 
 		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
 
@@ -166,24 +168,18 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	private void checkFuel() {
-		if (fuelBurnTime > 0) {
-			return;
+		if (fuelBurnTime <= 0) {
+			ItemStack fuel = getStackInSlot(InventoryFermenter.SLOT_FUEL);
+			if (!fuel.isEmpty()) {
+				FermenterFuel fermenterFuel = FuelManager.fermenterFuel.get(fuel);
+				if (fermenterFuel != null) {
+					fuelBurnTime = fuelTotalTime = fermenterFuel.getBurnDuration();
+					fuelCurrentFerment = fermenterFuel.getFermentPerCycle();
+
+					decrStackSize(InventoryFermenter.SLOT_FUEL, 1);
+				}
+			}
 		}
-
-		ItemStack fuel = getStackInSlot(InventoryFermenter.SLOT_FUEL);
-		if (fuel == null) {
-			return;
-		}
-
-		FermenterFuel fermenterFuel = FuelManager.fermenterFuel.get(fuel);
-		if (fermenterFuel == null) {
-			return;
-		}
-
-		fuelBurnTime = fuelTotalTime = fermenterFuel.getBurnDuration();
-		fuelCurrentFerment = fermenterFuel.getFermentPerCycle();
-
-		decrStackSize(InventoryFermenter.SLOT_FUEL, 1);
 	}
 
 	private static float determineResourceMod(ItemStack itemstack) {
@@ -198,21 +194,21 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		ItemStack fermentationStack = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
-		if (fermentationStack == null) {
+		if (fermentationStack.isEmpty()) {
 			return false;
 		}
 
-		return (float) fermentationStack.stackSize / (float) fermentationStack.getMaxStackSize() > percentage;
+		return (float) fermentationStack.getCount() / (float) fermentationStack.getMaxStackSize() > percentage;
 	}
 
 	@Override
 	public boolean hasFuelMin(float percentage) {
 		ItemStack fuelStack = getStackInSlot(InventoryFermenter.SLOT_FUEL);
-		if (fuelStack == null) {
+		if (fuelStack.isEmpty()) {
 			return false;
 		}
 
-		return (float) fuelStack.stackSize / (float) fuelStack.getMaxStackSize() > percentage;
+		return (float) fuelStack.getCount() / (float) fuelStack.getMaxStackSize() > percentage;
 	}
 
 	@Override
@@ -224,7 +220,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
-		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
+		boolean hasResource = fermentationTime > 0 || !getStackInSlot(InventoryFermenter.SLOT_RESOURCE).isEmpty();
 		FluidStack drained = resourceTank.drain(fermented, false);
 		boolean hasFluidResource = drained != null && drained.amount == fermented;
 		boolean hasFluidSpace = true;
@@ -297,7 +293,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		iCrafting.sendProgressBarUpdate(container, 3, fermentationTotalTime);
 	}
 
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -325,13 +321,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

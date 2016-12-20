@@ -47,7 +47,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	}
 
 	private static boolean isEnergy(ItemStack itemstack) {
-		if (itemstack == null || itemstack.stackSize <= 0) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
@@ -57,12 +57,11 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 	@Override
 	public void onSlotClick(int slotIndex, EntityPlayer player) {
-
-		if (getStackInSlot(SLOT_ANALYZED) != null) {
+		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
 			if (locatorLogic.isBiomeFound()) {
 				return;
 			}
-		} else if (getStackInSlot(SLOT_SPECIMEN) != null) {
+		} else if (!getStackInSlot(SLOT_SPECIMEN).isEmpty()) {
 			// Requires energy
 			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return;
@@ -72,17 +71,13 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 			decrStackSize(SLOT_ENERGY, 1);
 
 			setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, null);
+			setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
 		}
 
 		IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
-
-		// No bee, abort
-		if (bee == null) {
-			return;
+		if (bee != null) {
+			locatorLogic.startBiomeSearch(bee, player);
 		}
-
-		locatorLogic.startBiomeSearch(bee, player);
 	}
 
 	public Set<Biome> getBiomesToSearch() {
@@ -98,7 +93,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	/* IErrorSource */
 	@Override
 	public ImmutableSet<IErrorState> getErrorStates() {
-		if (getStackInSlot(SLOT_ANALYZED) != null) {
+		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
 			return ImmutableSet.of();
 		}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
@@ -31,9 +32,11 @@ import forestry.core.config.Config;
 import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
-
+	@Nullable
 	private WorldGenMinable apatiteGenerator;
+	@Nullable
 	private WorldGenMinable copperGenerator;
+	@Nullable
 	private WorldGenMinable tinGenerator;
 
 	public WorldGenerator() {
@@ -59,7 +62,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
-		if (apatiteGenerator == null) {
+		if (apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
 			BlockResourceOre resourcesBlock = PluginCore.blocks.resources;
 
 			IBlockState apatiteBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.APATITE.getMeta());

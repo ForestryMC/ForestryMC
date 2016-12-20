@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -53,6 +54,7 @@ public final class AdjacentTileCache {
 		listeners.add(listener);
 	}
 
+	@Nullable
 	private TileEntity searchSide(EnumFacing side) {
 		World world = source.getWorld();
 		BlockPos pos = source.getPos().offset(side);
@@ -84,7 +86,7 @@ public final class AdjacentTileCache {
 		Arrays.fill(delay, DELAY_MIN);
 	}
 
-	protected void setTile(int side, TileEntity tile) {
+	protected void setTile(int side, @Nullable TileEntity tile) {
 		if (cache[side] != tile) {
 			cache[side] = tile;
 			changed();

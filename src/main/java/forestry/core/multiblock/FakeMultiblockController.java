@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,8 +20,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.errors.FakeErrorLogic;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.FakeOwnerHandler;
 import forestry.core.owner.IOwnerHandler;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,7 +65,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 
 	@Override
 	public BlockPos getReferenceCoord() {
-		return null;
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
@@ -110,13 +108,13 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 
 	}
 
-	@Nonnull
+
 	@Override
 	public Set<IMultiblockComponent> checkForDisconnections() {
 		return Collections.emptySet();
 	}
 
-	@Nonnull
+
 	@Override
 	public Set<IMultiblockComponent> detachAllBlocks() {
 		return Collections.emptySet();
@@ -138,7 +136,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	@Nonnull
+
 	public Collection<IMultiblockComponent> getComponents() {
 		return Collections.emptyList();
 	}
@@ -184,12 +182,12 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 
 	}
 }

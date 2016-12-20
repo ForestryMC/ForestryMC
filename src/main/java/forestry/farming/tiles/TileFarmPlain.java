@@ -22,7 +22,7 @@ public class TileFarmPlain extends TileFarm {
 		// set band block meta
 		int bandY = maxCoord.getY() - 1;
 		if (getPos().getY() == bandY) {
-			this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(1), 2);
+			this.world.setBlockState(getPos(), getBlockType().getStateFromMeta(1), 2);
 		}
 	}
 
@@ -31,6 +31,6 @@ public class TileFarmPlain extends TileFarm {
 		super.onMachineBroken();
 
 		// set band block meta back to normal
-		this.worldObj.setBlockState(getPos(), getBlockType().getDefaultState(), 2);
+		this.world.setBlockState(getPos(), getBlockType().getDefaultState(), 2);
 	}
 }

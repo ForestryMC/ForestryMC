@@ -27,12 +27,13 @@ public class ItemAssemblyKit extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
-			itemStackIn.stackSize--;
+			heldItem.shrink(1);
 			EntityItem entity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, assembled.copy());
-			worldIn.spawnEntityInWorld(entity);
+			worldIn.spawnEntity(entity);
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
 	}
 }

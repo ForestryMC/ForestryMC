@@ -10,23 +10,19 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nonnull;
-
-import forestry.api.core.ILocatable;
-
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -58,14 +54,14 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	@Override
 	public World getWorldObj() {
-		return worldObj;
+		return world;
 	}
 
 	@Override
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
 
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 
@@ -107,7 +103,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	/* INVENTORY */
-	@Nonnull
+
 	public IInventoryAdapter getInternalInventory() {
 		return FakeInventoryAdapter.instance();
 	}
@@ -131,7 +127,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	public final ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return getInternalInventory().removeStackFromSlot(slotIndex);
@@ -156,22 +152,22 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	public final void closeInventory(EntityPlayer player) {
 		getInternalInventory().closeInventory(player);
 	}
-	
+
 	@Override
 	public String getName() {
 		return getInternalInventory().getName();
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return getInternalInventory().getDisplayName();
 	}
 
 	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
+	public final boolean isUsableByPlayer(EntityPlayer player) {
+		return getInternalInventory().isUsableByPlayer(player);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return getInternalInventory().hasCustomName();
@@ -181,7 +177,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return getInternalInventory().getSlotsForFace(side);
@@ -196,22 +192,22 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
-	
+
 	@Override
 	public int getField(int id) {
 		return getInternalInventory().getField(id);
 	}
-	
+
 	@Override
 	public int getFieldCount() {
 		return getInternalInventory().getFieldCount();
 	}
-	
+
 	@Override
 	public void setField(int id, int value) {
 		getInternalInventory().setField(id, value);
 	}
-	
+
 	@Override
 	public void clear() {
 		getInternalInventory().clear();

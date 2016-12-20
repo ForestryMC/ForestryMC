@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
@@ -96,7 +97,7 @@ public class TRSRBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		if (side != null) {
 			return faces.get(side);
 		}
@@ -130,13 +131,13 @@ public class TRSRBakedModel implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return null;
+		return original.getOverrides();
 	}
 
 	public static class Transformer extends VertexTransformer {
 
-		protected Matrix4f transformation;
-		protected Matrix3f normalTransformation;
+		protected final Matrix4f transformation;
+		protected final Matrix3f normalTransformation;
 
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));

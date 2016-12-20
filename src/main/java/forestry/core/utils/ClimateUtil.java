@@ -20,21 +20,16 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
 import forestry.core.climate.ClimateRoom;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import net.minecraft.util.math.BlockPos;
+import forestry.core.network.PacketBufferForestry;
 
 public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-			EnumTemperature baseTemp, EnumTolerance tolTemp,
-			EnumHumidity baseHumid, EnumTolerance tolHumid) {
-		if (!getToleratedTemperature(baseTemp, tolTemp).contains(temperature)) {
-			return false;
-		}
-		
-		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+								  EnumTemperature baseTemp, EnumTolerance tolTemp,
+								  EnumHumidity baseHumid, EnumTolerance tolHumid) {
+		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
+				getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 
 	@Override
@@ -46,7 +41,7 @@ public class ClimateUtil implements IClimateHelper {
 	public boolean isWithinLimits(EnumHumidity humidity, EnumHumidity baseHumid, EnumTolerance tolHumid) {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
-	
+
 	@Override
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
 
@@ -209,24 +204,22 @@ public class ClimateUtil implements IClimateHelper {
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
-	
-	public static void writeRoomPositionData(IClimatePosition position, DataOutputStreamForestry data) throws IOException {
-		data.writeInt(position.getPos().getX());
-		data.writeInt(position.getPos().getY());
-		data.writeInt(position.getPos().getZ());
+
+	public static void writeRoomPositionData(IClimatePosition position, PacketBufferForestry data) {
+		data.writeBlockPos(position.getPos());
 		writePositionData(position, data);
 	}
-	
-	public static void writePositionData(IClimatePosition position, DataOutputStreamForestry data) throws IOException {
+
+	public static void writePositionData(IClimatePosition position, PacketBufferForestry data) {
 		data.writeFloat(position.getTemperature());
 		data.writeFloat(position.getHumidity());
 	}
-	
-	public static void readRoomPositionData(ClimateRoom room, DataInputStreamForestry data) throws IOException {
-		room.addPosition(new BlockPos(data.readInt(), data.readInt(), data.readInt()), data.readFloat(), data.readFloat());
+
+	public static void readRoomPositionData(ClimateRoom room, PacketBufferForestry data) {
+		room.addPosition(data.readBlockPos(), data.readFloat(), data.readFloat());
 	}
-	
-	public static void readPositionData(IClimatePosition position, DataInputStreamForestry data) throws IOException {
+
+	public static void readPositionData(IClimatePosition position, PacketBufferForestry data) {
 		position.setTemperature(data.readFloat());
 		position.setHumidity(data.readFloat());
 	}

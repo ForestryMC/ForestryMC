@@ -56,7 +56,7 @@ public class FarmableVanillaSapling implements IFarmable {
 			EnumActionResult actionResult = germling.copy().onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
 			if (actionResult == EnumActionResult.SUCCESS) {
 				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.SAPLING.getDefaultState());
-				Proxies.net.sendNetworkPacket(packet, world);
+				Proxies.net.sendNetworkPacket(packet, pos, world);
 				return true;
 			}
 			return false;

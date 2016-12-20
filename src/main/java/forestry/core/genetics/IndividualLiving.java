@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
@@ -25,12 +24,12 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 
 	protected IndividualLiving() {
 	}
-	
+
 	protected IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
 	}
 
-	protected IndividualLiving(@Nonnull NBTTagCompound nbt) {
+	protected IndividualLiving(NBTTagCompound nbt) {
 		super(nbt);
 		health = nbt.getInteger("Health");
 		maxHealth = nbt.getInteger("MaxH");
@@ -44,11 +43,10 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		nbttagcompound.setInteger("Health", health);
 		nbttagcompound.setInteger("MaxH", maxHealth);
 
-		if (getGenome() != null) {
-			NBTTagCompound nbtGenome = new NBTTagCompound();
-			getGenome().writeToNBT(nbtGenome);
-			nbttagcompound.setTag("Genome", nbtGenome);
-		}
+		NBTTagCompound nbtGenome = new NBTTagCompound();
+		getGenome().writeToNBT(nbtGenome);
+		nbttagcompound.setTag("Genome", nbtGenome);
+
 		if (getMate() != null) {
 			NBTTagCompound nbtMate = new NBTTagCompound();
 			getMate().writeToNBT(nbtMate);
@@ -59,6 +57,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 
 	/* GENERATION */
 	@Override
+	@Nullable
 	public abstract IGenome getMate();
 
 	@Override

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.io.IOException;
@@ -20,23 +19,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import forestry.core.items.DrinkProperties;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-
-import forestry.core.items.DrinkProperties;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
 
 public enum Fluids {
 
@@ -102,7 +98,7 @@ public enum Fluids {
 			return new BlockForestryFluid(this);
 		}
 
-		@Nonnull
+
 		@Override
 		public List<ItemStack> getOtherContainers() {
 			return Collections.singletonList(
@@ -122,7 +118,7 @@ public enum Fluids {
 			return new BlockForestryFluid(this, 4, true);
 		}
 	};
-	
+
 	private static final Map<String, Fluids> tagToFluid = new HashMap<>();
 
 	static {
@@ -133,16 +129,16 @@ public enum Fluids {
 
 	private final String tag;
 	private final int density, viscosity;
-	@Nonnull
+
 	private final Color particleColor;
 
 	private final ResourceLocation[] resources = new ResourceLocation[2];
-	
-	Fluids(@Nonnull Color particleColor) {
+
+	Fluids(Color particleColor) {
 		this(particleColor, 1000, 1000);
 	}
-	
-	Fluids(@Nonnull Color particleColor, int density, int viscosity) {
+
+	Fluids(Color particleColor, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
 		this.particleColor = particleColor;
 		this.density = density;
@@ -170,6 +166,7 @@ public enum Fluids {
 		return viscosity;
 	}
 
+	@Nullable
 	public final Fluid getFluid() {
 		return FluidRegistry.getFluid(getTag());
 	}
@@ -178,15 +175,6 @@ public enum Fluids {
 		return FluidRegistry.getFluidStack(getTag(), mb);
 	}
 
-	public final Block getBlock() {
-		Fluid fluid = getFluid();
-		if (fluid == null) {
-			return null;
-		}
-		return fluid.getBlock();
-	}
-
-	@Nonnull
 	public final Color getParticleColor() {
 		return particleColor;
 	}
@@ -196,29 +184,11 @@ public enum Fluids {
 	}
 
 	public final boolean is(FluidStack fluidStack) {
-		return fluidStack != null && getFluid() == fluidStack.getFluid();
+		return getFluid() == fluidStack.getFluid();
 	}
 
-	public final boolean isContained(ItemStack containerStack) {
-		FluidStack fluidStackInContainer = FluidUtil.getFluidContained(containerStack);
-		return fluidStackInContainer != null && fluidStackInContainer.getFluid() == getFluid();
-	}
-
-	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-		if (fluidStack != null && fluid == fluidStack.getFluid()) {
-			return true;
-		}
-		return fluid == null && fluidStack == null;
-	}
-
-	public static boolean areEqual(FluidStack a, FluidStack b) {
-		if (a == b) {
-			return true;
-		}
-		if (a == null || b == null) {
-			return false;
-		}
-		return a.isFluidEqual(b);
+	public static boolean areEqual(@Nullable Fluid fluid, FluidStack fluidStack) {
+		return fluid == fluidStack.getFluid();
 	}
 
 	@Nullable
@@ -239,7 +209,6 @@ public enum Fluids {
 	/**
 	 * Add non-forestry containers for this fluid.
 	 */
-	@Nonnull
 	public List<ItemStack> getOtherContainers() {
 		return Collections.emptyList();
 	}
@@ -259,7 +228,7 @@ public enum Fluids {
 	public DrinkProperties getDrinkProperties() {
 		return null;
 	}
-	
+
 	public boolean flowTextureExists() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			return true;
@@ -267,13 +236,14 @@ public enum Fluids {
 		try {
 			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
 			Minecraft minecraft = Proxies.common.getClientInstance();
-			if(minecraft != null){
+			if (minecraft != null) {
 				IResourceManager resourceManager = minecraft.getResourceManager();
 				return resourceManager.getResource(resourceLocation) != null;
 			}
+			return false;
 		} catch (IOException e) {
+			return false;
 		}
-		return false;
 	}
 
 	public ResourceLocation[] getResources() {

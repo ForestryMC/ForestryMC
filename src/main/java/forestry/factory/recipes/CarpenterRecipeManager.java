@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,12 +44,13 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Override
-	public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
+	public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
 		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
 		addRecipe(recipe);
 	}
 
-	public static ICarpenterRecipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
+	@Nullable
+	public static ICarpenterRecipe findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
 		for (ICarpenterRecipe recipe : recipes) {
 			if (matches(recipe, liquid, item, inventorycrafting)) {
 				return recipe;
@@ -57,7 +59,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return null;
 	}
 
-	public static boolean matches(ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+	public static boolean matches(@Nullable ICarpenterRecipe recipe, @Nullable  FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
 		if (recipe == null) {
 			return false;
 		}
@@ -70,7 +72,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		}
 
 		ItemStack box = recipe.getBox();
-		if (box != null && !ItemStackUtil.isCraftingEquivalent(box, item)) {
+		if (!box.isEmpty() && !ItemStackUtil.isCraftingEquivalent(box, item)) {
 			return false;
 		}
 
@@ -79,7 +81,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	public static boolean isBox(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return false;
 		}
 

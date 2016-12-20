@@ -10,20 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nonnull;
-
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
@@ -36,11 +25,12 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.ItemStackUtil;
@@ -50,33 +40,39 @@ import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled, ICamouflageHandler, ICamouflagedTile {
-
 	protected ItemStack camouflageBlock;
 
 	protected TileGreenhouse() {
 		super(new MultiblockLogicGreenhouse());
-		camouflageBlock = null;
+		camouflageBlock = ItemStack.EMPTY;
 	}
-	
+
 	@Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate){
-    	if(newSate.getBlock() instanceof BlockGreenhouseDoor && oldState.getBlock() instanceof BlockGreenhouseDoor){
-    		return false;
-    	}
-        return super.shouldRefresh(world, pos, oldState, newSate);
-    }
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		if (newSate.getBlock() instanceof BlockGreenhouseDoor && oldState.getBlock() instanceof BlockGreenhouseDoor) {
+			return false;
+		}
+		return super.shouldRefresh(world, pos, oldState, newSate);
+	}
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
 		markDirty();
 	}
 
@@ -84,17 +80,16 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		
+
 		if (data.hasKey("CamouflageBlock")) {
-			camouflageBlock = ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock"));
+			camouflageBlock = new ItemStack(data.getCompoundTag("CamouflageBlock"));
 		}
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
-		if (camouflageBlock != null) {
+		if (!camouflageBlock.isEmpty()) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("CamouflageBlock", nbtTag);
@@ -104,10 +99,10 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 
 	@Override
 	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
-		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
+		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)) {
 			this.camouflageBlock = camouflageBlock;
-			
-			if (sendClientUpdate && worldObj != null && worldObj.isRemote) {
+
+			if (sendClientUpdate && world != null && world.isRemote) {
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
@@ -115,20 +110,20 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean canHandleType(String type) {
 		return type.equals(getCamouflageType());
 	}
-	
+
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
 		return camouflageBlock;
 	}
-	
+
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/* TILEFORESTRY */
@@ -136,7 +131,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
 		super.encodeDescriptionPacket(packetData);
-		if (camouflageBlock != null) {
+		if (!camouflageBlock.isEmpty()) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			packetData.setTag("CamouflageBlock", nbtTag);
@@ -147,7 +142,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
 		if (packetData.hasKey("CamouflageBlock")) {
-			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")), true);
+			setCamouflageBlock(getCamouflageType(), new ItemStack(packetData.getCompoundTag("CamouflageBlock")), true);
 		}
 	}
 
@@ -173,15 +168,15 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public String getUnlocalizedTitle() {
 		return "for.gui.greenhouse.title";
 	}
-	
+
 	/* IStreamableGui */
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		getMultiblockLogic().getController().writeGuiData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 
@@ -194,20 +189,20 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerGreenhouse(player.inventory, this);
 	}
-	
+
 	@Override
 	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			return CamouflageManager.GLASS;
-		}else if (((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.DOOR) {
+		} else if (((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.DOOR) {
 			return CamouflageManager.DOOR;
 		}
 		return CamouflageManager.DEFAULT;
 	}
-	
+
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return getMultiblockLogic().getController().getInternalInventory();
 	}
-	
+
 }

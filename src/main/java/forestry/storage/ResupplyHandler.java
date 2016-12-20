@@ -32,7 +32,7 @@ public class ResupplyHandler implements IResupplyHandler {
 	private static List<ItemStack> backpacks(InventoryPlayer playerInventory) {
 		List<ItemStack> backpacks = new ArrayList<>();
 		for (ItemStack itemStack : playerInventory.mainInventory) {
-			if (itemStack != null && itemStack.stackSize > 0 && itemStack.getItem() instanceof ItemBackpack) {
+			if (itemStack.getItem() instanceof ItemBackpack) {
 				backpacks.add(itemStack);
 			}
 		}
@@ -74,7 +74,7 @@ public class ResupplyHandler implements IResupplyHandler {
 			for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
 
 				ItemStack itemStack = backpackInventory.getStackInSlot(i);
-				if (itemStack == null || itemStack.stackSize <= 0) {
+				if (itemStack.isEmpty()) {
 					continue;
 				}
 
@@ -98,18 +98,18 @@ public class ResupplyHandler implements IResupplyHandler {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
 			// We only add to existing stacks.
-			if (inventoryStack == null) {
+			if (inventoryStack.isEmpty()) {
 				continue;
 			}
 
 			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
+			if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
 				continue;
 			}
 
 			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-				inventoryStack.stackSize++;
-				itemstack.stackSize--;
+				inventoryStack.grow(1);
+				itemstack.shrink(1);
 				return true;
 			}
 		}

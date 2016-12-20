@@ -122,10 +122,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		int primary = packet.getPrimaryIndex();
-		int secondary = packet.getSecondaryIndex();
-
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 		switch (primary) {
 			case -1: { // clicked clear button
 				tile.clearCraftMatrix();
@@ -140,7 +137,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 				break;
 			}
 			case 1: { // right clicked a memorized recipe
-				long time = player.worldObj.getTotalWorldTime();
+				long time = player.world.getTotalWorldTime();
 				RecipeMemory memory = tile.getMemory();
 				memory.toggleLock(time, secondary);
 				break;

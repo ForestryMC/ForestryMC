@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public interface IAlleleRegistry {
 	 * @param uid Unique id for the species class, i.e. "rootBees", "rootTrees", "rootButterflies".
 	 * @return {@link ISpeciesRoot} if it exists, null otherwise.
 	 */
+	@Nullable
 	ISpeciesRoot getSpeciesRoot(String uid);
 
 	/**
@@ -46,6 +48,7 @@ public interface IAlleleRegistry {
 	 * @param stack An itemstack possibly containing NBT data which can be converted by a species root.
 	 * @return {@link ISpeciesRoot} if found, null otherwise.
 	 */
+	@Nullable
 	ISpeciesRoot getSpeciesRoot(ItemStack stack);
 
 	/**
@@ -53,7 +56,13 @@ public interface IAlleleRegistry {
 	 * @param clz Class extending {@link IIndividual}.
 	 * @return {@link ISpeciesRoot} if found, null otherwise.
 	 */
+	@Nullable
 	ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz);
+
+	/**
+	 * Retrieve a matching {@link ISpeciesRoot} for the given {@link IIndividual}
+	 */
+	ISpeciesRoot getSpeciesRoot(IIndividual individual);
 
 	/* INDIVIDUAL */
 
@@ -72,6 +81,7 @@ public interface IAlleleRegistry {
 	 *            Stack to retrieve genetic information for.
 	 * @return IIndividual containing genetic information, null if none could be extracted.
 	 */
+	@Nullable
 	IIndividual getIndividual(ItemStack stack);
 
 	/* ALLELES */

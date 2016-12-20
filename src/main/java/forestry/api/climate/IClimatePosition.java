@@ -5,18 +5,14 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import net.minecraft.util.math.BlockPos;
 
 public interface IClimatePosition extends INbtReadable, INbtWritable {
-	
-	@Nonnull 
+
 	IClimateRegion getClimateRegion();
-	
-	@Nonnull 
+
 	BlockPos getPos();
 	
 	void setTemperature(float temperature);

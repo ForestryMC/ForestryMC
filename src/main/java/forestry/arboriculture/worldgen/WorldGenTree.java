@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,6 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		this.heightVariation = heightVariation;
 	}
 
-	@Nonnull
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);

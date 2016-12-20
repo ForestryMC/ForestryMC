@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import forestry.core.gui.IHintSource;
 public abstract class TileBase extends TileForestry implements IHintSource {
 	protected final List<String> hints;
 
-	protected TileBase(String hintKey) {
+	protected TileBase(@Nullable String hintKey) {
 		this.hints = new ArrayList<>(Config.hints.get(hintKey));
 	}
 

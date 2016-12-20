@@ -17,9 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
@@ -54,12 +51,12 @@ public abstract class ItemGE extends ItemForestry {
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		IAlleleSpecies species = getSpecies(stack);
-		return species != null && species.hasEffect();
+		return species.hasEffect();
 	}
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			return;
 		}
 
@@ -74,10 +71,5 @@ public abstract class ItemGE extends ItemForestry {
 		} else {
 			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
-		return 0xffffff;
 	}
 }

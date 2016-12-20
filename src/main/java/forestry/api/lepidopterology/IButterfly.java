@@ -5,16 +5,15 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 
 public interface IButterfly extends IIndividualLiving {
 
-	@Nonnull
 	@Override
 	IButterflyGenome getGenome();
 
@@ -28,7 +27,7 @@ public interface IButterfly extends IIndividualLiving {
 	 * @return Physical size of the butterfly.
 	 */
 	float getSize();
-	
+
 	/**
 	 * @param world
 	 * @param x
@@ -60,30 +59,31 @@ public interface IButterfly extends IIndividualLiving {
 	 * @param world
 	 * @return create a caterpillar with the two genome's from the nursery.
 	 */
+	@Nullable
 	IButterfly spawnCaterpillar(World world, IButterflyNursery nursery);
-	
+
 	/**
 	 * @param entity
 	 * @param playerKill Whether or not the butterfly was killed by a player.
-	 * @param lootLevel Loot level according to the weapon used to kill the butterfly.
+	 * @param lootLevel  Loot level according to the weapon used to kill the butterfly.
 	 * @return Array of itemstacks to drop on death of the given entity.
 	 */
-	ItemStack[] getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel);
+	NonNullList<ItemStack> getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel);
 
 	/**
 	 * @param nursery
 	 * @param playerKill Whether or not the nursery was broken by a player.
-	 * @param lootLevel Fortune level.
+	 * @param lootLevel  Fortune level.
 	 * @return Array of itemstacks to drop on breaking of the nursery.
 	 */
-	ItemStack[] getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel);
-	
+	NonNullList<ItemStack> getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel);
+
 	/**
 	 * @param cocoon
 	 * @return Array of itemstacks to drop on breaking of the cocoon.
 	 */
-	ItemStack[] getCocoonDrop(IButterflyCocoon cocoon);
-	
+	NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon);
+
 	/**
 	 * Create an exact copy of this butterfly.
 	 */

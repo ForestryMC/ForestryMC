@@ -6,7 +6,6 @@
 package forestry.api.lepidopterology;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.authlib.GameProfile;
@@ -43,15 +42,16 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
 	/* BUTTERFLY SPECIFIC */
 	@Override
-	ILepidopteristTracker getBreedingTracker(World world, GameProfile player);
+	ILepidopteristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/**
 	 * Spawns the given butterfly in the world.
+	 *
 	 * @param butterfly
 	 * @return butterfly entity on success, null otherwise.
 	 */
 	EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
-	
+
 	boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age);
 
 	/**
@@ -61,7 +61,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
 	/* TEMPLATES */
 	@Override
-	ArrayList<IButterfly> getIndividualTemplates();
+	List<IButterfly> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override

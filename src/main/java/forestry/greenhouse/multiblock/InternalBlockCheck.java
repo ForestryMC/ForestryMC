@@ -1,14 +1,12 @@
 package forestry.greenhouse.multiblock;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.minecraft.util.math.BlockPos;
-
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Used to check if a blockPos is in a collection of IInternalBlock
@@ -20,7 +18,6 @@ public class InternalBlockCheck implements IInternalBlock {
 		this.pos = pos;
 	}
 
-	@Nonnull
 	@Override
 	public BlockPos getPos() {
 		return pos;
@@ -32,7 +29,6 @@ public class InternalBlockCheck implements IInternalBlock {
 		return null;
 	}
 
-	@Nonnull
 	@Override
 	public Collection<IInternalBlockFace> getFaces() {
 		return Collections.emptyList();

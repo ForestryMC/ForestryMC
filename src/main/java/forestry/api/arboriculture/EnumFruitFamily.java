@@ -14,7 +14,8 @@ public enum EnumFruitFamily implements IFruitFamily {
 	PRUNES("prunes", "Prunus domestica"),
 	POMES("pomes", "Pomum"),
 	JUNGLE("jungle", "Tropicus"),
-	NUX("nuts", "Nux");
+	NUX("nuts", "Nux"),
+	NONE("none", "None");
 
 	private final String uid;
 	private final String scientific;

@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 public abstract class ForestryStateMapper implements IStateMapper {
 
-	protected Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
+	protected final Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
 	@SuppressWarnings("unchecked")
 	public String getPropertyString(Map<IProperty<?>, Comparable<?>> map) {

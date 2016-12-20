@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.energy.tiles.TileEngineBiogas;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.energy.tiles.TileEngineBiogas;
 
 public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas> {
 	public static final short SLOT_CAN = 0;
@@ -29,12 +28,14 @@ public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas
 	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN) {
 			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return tile.getTankManager().canFillFluidType(fluid);
+			if (fluid != null) {
+				return tile.getTankManager().canFillFluidType(fluid);
+			}
 		}
 
 		return false;

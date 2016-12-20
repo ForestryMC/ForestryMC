@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,9 +19,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
+import net.minecraft.util.text.TextComponentString;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
-
+	@Nullable
 	private static FakeInventoryAdapter instance;
 
 	public static FakeInventoryAdapter instance() {
@@ -31,6 +34,11 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	private FakeInventoryAdapter() {
 
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return true;
 	}
 
 	@Override
@@ -65,17 +73,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	@Override
 	public ItemStack getStackInSlot(int p_70301_1_) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -85,12 +93,12 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	
 	@Override
 	public ITextComponent getDisplayName() {
-		return null;
+		return new TextComponentString(getName());
 	}
 	
 	@Override
 	public String getName() {
-		return null;
+		return "";
 	}
 	
 	@Override
@@ -109,7 +117,7 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return false;
 	}
 

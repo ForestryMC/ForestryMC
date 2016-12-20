@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -44,35 +42,45 @@ import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.greenhouse.description")
 public class PluginGreenhouse extends BlankForestryPlugin {
 
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.greenhouse.proxy.ProxyGreenhouseClient", serverSide = "forestry.greenhouse.proxy.ProxyGreenhouse")
 	public static ProxyGreenhouse proxy;
-	
+
+	@Nullable
 	public static BlockRegistryGreenhouse blocks;
-	
+
 	@Override
 	public void setupAPI() {
 		GreenhouseManager.greenhouseHelper = new GreenhouseHelper();
 	}
-	
+
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryGreenhouse();
 	}
-	
+
 	@Override
 	public void registerRecipes() {
-		
+		ItemRegistryCore coreItems = PluginCore.items;
+		Preconditions.checkState(coreItems != null);
+		Preconditions.checkState(blocks != null);
+
 		Block greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
 		RecipeUtil.addRecipe(greenhousePlainBlock,
 				"###",
 				"#X#",
 				"###",
 				'X', Blocks.BRICK_BLOCK,
-				'#', PluginCore.items.craftingMaterial.getCamouflagedPaneling());
+				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
 		RecipeUtil.addRecipe(greenhouseGlassBlock,
@@ -80,7 +88,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"#X#",
 				"###",
 				'X', "blockGlass",
-				'#', PluginCore.items.craftingMaterial.getCamouflagedPaneling());
+				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseHatchInputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_INPUT);
 		RecipeUtil.addRecipe(greenhouseHatchInputBlock,
@@ -89,7 +97,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'H', OreDictUtil.TRAPDOOR_WOOD,
 				'#', "gearTin",
-				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseHatchOutputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_OUTPUT);
 		RecipeUtil.addRecipe(greenhouseHatchOutputBlock,
@@ -98,7 +106,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'H', OreDictUtil.TRAPDOOR_WOOD,
 				'#', "gearTin",
-				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CONTROL);
 		RecipeUtil.addRecipe(greenhouseControlBlock,
@@ -106,7 +114,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"#T#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'#', OreDictUtil.DUST_REDSTONE,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		Block greenhouseGearBoxBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GEARBOX);
 		RecipeUtil.addRecipe(greenhouseGearBoxBlock,
@@ -130,7 +138,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"T#T",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'#', OreDictUtil.INGOT_TIN,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		Block greenhouseFanlock = blocks.getGreenhouseBlock(BlockGreenhouseType.FAN);
 		RecipeUtil.addRecipe(greenhouseFanlock,
@@ -139,7 +147,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"T#T",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'#', OreDictUtil.INGOT_IRON,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.TIN, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
 
 		Block greenhouseDryerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DRYER);
 		RecipeUtil.addRecipe(greenhouseDryerBlock,
@@ -148,7 +156,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"T#T",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'#', OreDictUtil.INGOT_TIN,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
 		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.SPRINKLER);
 		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
@@ -156,9 +164,9 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"GIG",
 				" I ",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS),
-				'I', OreDictUtil.INGOT_IRON,   
+				'I', OreDictUtil.INGOT_IRON,
 				'G', OreDictUtil.GEAR_TIN,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
 
 		Block greenhouseDoorBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DOOR);
 		RecipeUtil.addRecipe(greenhouseDoorBlock,
@@ -167,7 +175,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"GG ",
 				"GG ",
 				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS));
-		
+
 		Block greenhouseWindowBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW);
 		RecipeUtil.addRecipe(greenhouseWindowBlock,
 				true,
@@ -176,7 +184,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"GGS",
 				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS),
 				'S', OreDictUtil.STICK_WOOD);
-		
+
 		Block greenhouseWindowRoofBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP);
 		RecipeUtil.addRecipe(greenhouseWindowRoofBlock,
 				true,
@@ -185,7 +193,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"GGG",
 				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS),
 				'S', OreDictUtil.STICK_WOOD);
-		
+
 		Block greenhouseClimateControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CLIMATE_CONTROL);
 		RecipeUtil.addRecipe(greenhouseClimateControlBlock,
 				true,
@@ -196,10 +204,10 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'I', OreDictUtil.INGOT_BRONZE,
 				'G', OreDictUtil.GEAR_TIN,
 				'R', OreDictUtil.DUST_REDSTONE,
-				'T', PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1),
-				'E', PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1));
+				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1),
+				'E', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
-		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)){
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			Block greenhouseButterflyHatchBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.BUTTERFLY_HATCH);
 			RecipeUtil.addRecipe(greenhouseButterflyHatchBlock,
 					true,
@@ -210,14 +218,14 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 					'I', OreDictUtil.INGOT_IRON,
 					'G', OreDictUtil.GEAR_COPPER,
 					'B', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
-					'S', PluginCore.items.craftingMaterial.getSilkWisp());
+					'S', coreItems.craftingMaterial.getSilkWisp());
 		}
 	}
-	
+
 	@Override
 	public void doInit() {
 		super.doInit();
-		
+
 		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.GreenhouseFan");
 		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.GreenhouseHeater");
 		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.GreenhouseDryer");
@@ -234,15 +242,15 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 			GameRegistry.registerTileEntity(TileGreenhouseButterflyHatch.class, "forestry.GreenhouseButterflyHatch");
 		}
 	}
-	
+
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
-		
+
 		proxy.initializeModels();
-		
+
 		GreenhouseManager.greenhouseHelper.addGreenhouseLogic(GreenhouseLogicGreenhouseEffect.class);
 		GreenhouseManager.greenhouseHelper.addGreenhouseLogic(GreenhouseLogicGreenhouseDoor.class);
 	}
-	
+
 }

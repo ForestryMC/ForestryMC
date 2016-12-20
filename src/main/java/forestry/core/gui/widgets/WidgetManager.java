@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class WidgetManager {
 		return widgets;
 	}
 
+	@Nullable
 	public Widget getAtPosition(int mX, int mY) {
 		for (Widget slot : widgets) {
 			if (slot.isMouseOver(mX, mY)) {

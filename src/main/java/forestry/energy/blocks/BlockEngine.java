@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
 		EnumFacing orientation = state.getValue(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
@@ -105,11 +106,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		if (rotate(world, pos)) {
-			return true;
-		}
-
-		return super.rotateBlock(world, pos, axis);
+		return rotate(world, pos) ||
+				super.rotateBlock(world, pos, axis);
 	}
 
 	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {

@@ -28,7 +28,7 @@ import forestry.core.proxy.Proxies;
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
 		FontRenderer font = null;
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			font = stack.getItem().getFontRenderer(stack);
 		}
 		if (font == null) {
@@ -41,10 +41,6 @@ public class GuiUtil {
 	}
 
 	public static void drawToolTips(GuiForestry gui, ToolTip toolTips, int mouseX, int mouseY) {
-		if (toolTips == null) {
-			return;
-		}
-
 		List<String> lines = toolTips.getLines();
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();

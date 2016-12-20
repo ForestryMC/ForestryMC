@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
 import java.util.Locale;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.core.PluginCore;
 import forestry.core.utils.OreDictUtil;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFruit extends ItemForestryFood {
 
@@ -87,16 +85,16 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < EnumFruit.values().length; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+			subItems.add(new ItemStack(this, 1, i));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= EnumFruit.VALUES.length) {
-			return null;
+			return super.getUnlocalizedName(stack);
 		}
 
 		return super.getUnlocalizedName(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);

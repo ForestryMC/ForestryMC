@@ -10,25 +10,22 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.WorldGenHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class WorldGenAcacia extends WorldGenTree {
 
 	public WorldGenAcacia(ITreeGenData tree) {
 		super(tree, 5, 2);
 	}
-	
-	@Nonnull
+
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		WorldGenHelper.Direction leanDirection = WorldGenHelper.Direction.getRandom(rand);
@@ -49,7 +46,7 @@ public class WorldGenAcacia extends WorldGenTree {
 			int zOffset = treeTop.getZ();
 			float canopyMultiplier = (1.5f * height - yOffset + 2) / 4.0f;
 			int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
-			
+
 			branchEnds.add(new BlockPos(xOffset, startPos.getY() + yOffset--, zOffset));
 			yOffset--;
 
@@ -65,7 +62,7 @@ public class WorldGenAcacia extends WorldGenTree {
 	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		for (BlockPos branchEnd : branchEnds) {
-			int leafSpawn =  branchEnd.getY() - startPos.getY();
+			int leafSpawn = branchEnd.getY() - startPos.getY();
 			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
 			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
 			float canopyWidth = rand.nextBoolean() ? 1.0f : 1.5f;

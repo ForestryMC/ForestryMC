@@ -31,7 +31,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack stack, int pass) {
 		int value = 0xffffff;
-		if (pass == 1 && stack.hasTagCompound()) {
+		if (pass == 1 && stack.getTagCompound() != null) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey(BlockCandle.colourTagName)) {
 				value = tag.getInteger(BlockCandle.colourTagName);
@@ -43,7 +43,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		String value = getBlock().getUnlocalizedName();
-		if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
+		if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}
 

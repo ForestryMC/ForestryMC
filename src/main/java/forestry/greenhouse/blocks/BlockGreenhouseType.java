@@ -91,7 +91,7 @@ public enum BlockGreenhouseType {
 	 * @return The texture sprite from the type and the {@link IBlockState} of the greenhouse block
 	 */
 	@SideOnly(Side.CLIENT)
-	public static TextureAtlasSprite getSprite(BlockGreenhouseType type, EnumFacing facing, @Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
+	public static TextureAtlasSprite getSprite(BlockGreenhouseType type, @Nullable EnumFacing facing, @Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
 		TileEntity tile = null;
 		if (world != null && pos != null) {
 			tile = world.getTileEntity(pos);
@@ -136,15 +136,15 @@ public enum BlockGreenhouseType {
 				} else if (hatch.getOutwardsDir().getOpposite() == facing) {
 					return sprites.get(BlockGreenhouseSprites.HATCH_INPUT);
 				}
-				return null;
+				return Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 			case CLIMATE_CONTROL:
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
-					return null;
+					return Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 				}
 				return sprites.get(BlockGreenhouseSprites.CLIMATE_CONTROL);
 			case BUTTERFLY_HATCH:
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
-					return null;
+					return Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 				}
 				return sprites.get(BlockGreenhouseSprites.BUTTERFLY_HATCH);
 			default:

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -24,11 +23,10 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -42,6 +40,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -56,7 +55,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private final TankManager tankManager;
 	private final StandardTank productTank;
 	private final InventorySqueezer inventory;
-
+	@Nullable
 	private ISqueezerRecipe currentRecipe;
 
 	public TileSqueezer() {
@@ -68,7 +67,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	/* LOADING & SAVING */
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -84,7 +83,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		sockets.readFromNBT(nbttagcompound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
-		if (chip != null) {
+		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
@@ -93,25 +92,25 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		super.writeGuiData(data);
 		sockets.writeData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		sockets.readData(data);
 	}
@@ -122,12 +121,18 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			inventory.fillContainers(productTank.getFluid(), tankManager);
+			FluidStack fluid = productTank.getFluid();
+			if (fluid != null) {
+				inventory.fillContainers(fluid, tankManager);
+			}
 		}
 	}
 
 	@Override
 	public boolean workCycle() {
+		if (currentRecipe == null) {
+			return false;
+		}
 		if (!inventory.removeResources(currentRecipe.getResources())) {
 			return false;
 		}
@@ -135,7 +140,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
 		productTank.fillInternal(resultFluid, true);
 
-		if (currentRecipe.getRemnants() != null && worldObj.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
+		if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
 			inventory.addRemnant(remnant, true);
 		}
@@ -146,7 +151,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private boolean checkRecipe() {
 		ISqueezerRecipe matchingRecipe = null;
 		if (inventory.hasResources()) {
-			ItemStack[] resources = inventory.getResources();
+			NonNullList<ItemStack> resources = inventory.getResources();
 
 			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
 				matchingRecipe = currentRecipe;
@@ -183,7 +188,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
 				canFill = productTank.fillInternal(resultFluid, false) == resultFluid.amount;
 
-				if (currentRecipe.getRemnants() != null) {
+				if (!currentRecipe.getRemnants().isEmpty()) {
 					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);
 				}
 			}
@@ -203,7 +208,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		return new TankRenderInfo(productTank);
 	}
 
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -222,29 +227,24 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
-
-		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack)) {
-			return;
-		}
-
-		// Dispose correctly of old chipsets
-		if (sockets.getStackInSlot(slot) != null) {
-			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
-				if (chipset != null) {
-					chipset.onRemoval(this);
+		if (stack.isEmpty() || ChipsetManager.circuitRegistry.isChipset(stack)) {
+			// Dispose correctly of old chipsets
+			if (!sockets.getStackInSlot(slot).isEmpty()) {
+				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
+					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+					if (chipset != null) {
+						chipset.onRemoval(this);
+					}
 				}
 			}
-		}
 
-		sockets.setInventorySlotContents(slot, stack);
-		if (stack == null) {
-			return;
-		}
-
-		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
-		if (chipset != null) {
-			chipset.onInsertion(this);
+			sockets.setInventorySlotContents(slot, stack);
+			if (!stack.isEmpty()) {
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
+				if (chipset != null) {
+					chipset.onInsertion(this);
+				}
+			}
 		}
 	}
 
@@ -254,13 +254,13 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

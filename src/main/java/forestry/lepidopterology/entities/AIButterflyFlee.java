@@ -22,7 +22,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 	@Override
 	public boolean shouldExecute() {
 
-		EntityPlayer player = entity.worldObj.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
+		EntityPlayer player = entity.world.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
 
 		if (player == null || player.isSneaking()) {
 			return false;

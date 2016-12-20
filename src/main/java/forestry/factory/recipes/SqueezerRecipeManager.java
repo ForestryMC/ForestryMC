@@ -17,6 +17,7 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ISqueezerManager;
@@ -31,18 +32,32 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 	public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
 
 	@Override
-	public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, @Nullable ItemStack remnants, int chance) {
+	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
 		ISqueezerRecipe recipe = new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f);
 		addRecipe(recipe);
 	}
 
 	@Override
-	public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid) {
-		addRecipe(timePerItem, resources, liquid, null, 0);
+	public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
+		NonNullList<ItemStack> resourcesList = NonNullList.create();
+		resourcesList.add(resources);
+		addRecipe(timePerItem, resourcesList, liquid, remnants, chance);
 	}
 
 	@Override
-	public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
+	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
+		addRecipe(timePerItem, resources, liquid, ItemStack.EMPTY, 0);
+	}
+
+	@Override
+	public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
+		NonNullList<ItemStack> resourcesList = NonNullList.create();
+		resourcesList.add(resources);
+		addRecipe(timePerItem, resourcesList, liquid);
+	}
+
+	@Override
+	public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance) {
 		containerRecipes.put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
 	}
 
@@ -55,7 +70,8 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 		return containerRecipes.get(new ItemStack(filledContainer.getItem()));
 	}
 
-	public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
+	@Nullable
+	public static ISqueezerRecipe findMatchingRecipe(NonNullList<ItemStack> items) {
 		// Find container recipes
 		for (ItemStack itemStack : items) {
 			ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);

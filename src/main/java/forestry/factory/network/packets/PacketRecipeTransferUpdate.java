@@ -12,63 +12,62 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.tiles.TileBase;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 
-public class PacketRecipeTransferUpdate extends PacketCoordinates implements IForestryPacketClient {
-	private ItemStack[] craftingInventory;
+public class PacketRecipeTransferUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final NonNullList<ItemStack> craftingInventory;
 
-	public PacketRecipeTransferUpdate() {
-	}
-
-	public PacketRecipeTransferUpdate(TileBase base, ItemStack[] craftingInventory) {
-		super(base);
+	public PacketRecipeTransferUpdate(TileBase base, NonNullList<ItemStack> craftingInventory) {
+		this.pos = base.getPos();
 		this.craftingInventory = craftingInventory;
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeItemStacks(craftingInventory);
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		craftingInventory = data.readItemStacks();
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
-		if (tile instanceof TileCarpenter) {
-			TileCarpenter carpenter = (TileCarpenter) tile;
-			int index = 0;
-			for(ItemStack stack : craftingInventory){
-				carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
-				index++;
-			}
-		}else if(tile instanceof TileFabricator){
-			TileFabricator fabricator = (TileFabricator) tile;
-			int index = 0;
-			for(ItemStack stack : craftingInventory){
-				fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
-				index++;
-			}
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.RECIPE_TRANSFER_UPDATE;
+	}
+
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
+
+			TileEntity tile = player.world.getTileEntity(pos);
+			if (tile instanceof TileCarpenter) {
+				TileCarpenter carpenter = (TileCarpenter) tile;
+				int index = 0;
+				for (ItemStack stack : craftingInventory) {
+					carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
+					index++;
+				}
+			} else if (tile instanceof TileFabricator) {
+				TileFabricator fabricator = (TileFabricator) tile;
+				int index = 0;
+				for (ItemStack stack : craftingInventory) {
+					fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
+					index++;
+				}
+			}
+		}
 	}
 }

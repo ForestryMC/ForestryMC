@@ -48,7 +48,7 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		if(block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)){
-			if (!itemstack.hasTagCompound()) {
+			if (itemstack.getTagCompound() == null) {
 				return "Unknown";
 			}
 			IAlleleTreeSpecies species = BlockPile.getTreeSpecies(itemstack);
@@ -74,7 +74,7 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 		if (placed) {
 			if (block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)) {
 				if (block.hasTileEntity(newState)) {
-					if (stack.hasTagCompound()) {
+					if (stack.getTagCompound() != null) {
 						TilePile tile = TileUtil.getTile(world, pos, TilePile.class);
 						if (tile != null) {
 							tile.readFromNBT(stack.getTagCompound());

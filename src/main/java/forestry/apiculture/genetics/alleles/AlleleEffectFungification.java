@@ -1,5 +1,6 @@
 package forestry.apiculture.genetics.alleles;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -105,14 +106,14 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		if (cow instanceof EntityMooshroom) {
 			return false;
 		}
-		World worldObj = cow.worldObj;
+		World world = cow.world;
 		cow.setDead();
-		EntityMooshroom mooshroom = new EntityMooshroom(worldObj);
+		EntityMooshroom mooshroom = new EntityMooshroom(world);
 		mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
-		worldObj.spawnEntityInWorld(mooshroom);
-		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
+		world.spawnEntity(mooshroom);
+		world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

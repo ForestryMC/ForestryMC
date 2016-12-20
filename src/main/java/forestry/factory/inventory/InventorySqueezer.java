@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -23,6 +17,11 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.tiles.TileSqueezer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 
 public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	public static final short SLOT_RESOURCE_1 = 0;
@@ -64,11 +63,11 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		return !InventoryUtil.isEmpty(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 	}
 
-	public ItemStack[] getResources() {
+	public NonNullList<ItemStack> getResources() {
 		return InventoryUtil.getStacks(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 	}
 
-	public boolean removeResources(ItemStack[] stacks) {
+	public boolean removeResources(NonNullList<ItemStack> stacks) {
 		IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 		return InventoryUtil.removeSets(inventory, 1, stacks, null, false, true, false, true);
 	}
@@ -78,7 +77,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	}
 
 	public void fillContainers(FluidStack fluidStack, TankManager tankManager) {
-		if (getStackInSlot(SLOT_CAN_INPUT) == null || fluidStack == null) {
+		if (getStackInSlot(SLOT_CAN_INPUT).isEmpty()) {
 			return;
 		}
 		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);

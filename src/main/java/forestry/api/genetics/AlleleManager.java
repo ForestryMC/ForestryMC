@@ -23,12 +23,12 @@ public class AlleleManager {
 	/**
 	 * Translates plain leaf blocks into genetic data. Used by bees and butterflies to convert and pollinate foreign leaf blocks.
 	 */
-	public static Map<Block, ILeafTranslator> leafTranslators = new HashMap<>();
+	public static final Map<Block, ILeafTranslator> leafTranslators = new HashMap<>();
 
 	/**
 	 * Translates plain saplings into genetic data. Used by the treealyzer and the farm to convert foreign saplings.
 	 */
-	public static Map<Item, ISaplingTranslator> saplingTranslation = new HashMap<>();
+	public static final Map<Item, ISaplingTranslator> saplingTranslation = new HashMap<>();
 
 	/**
 	 * Queryable instance of an {@link IClimateHelper} for easier implementation.

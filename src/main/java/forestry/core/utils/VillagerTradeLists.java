@@ -1,10 +1,10 @@
 package forestry.core.utils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,22 +18,21 @@ public class VillagerTradeLists {
 	 * that takes ItemStacks as parameters and has emerald price info
 	 */
 	public static class GiveItemForItemAndEmerald implements EntityVillager.ITradeList {
-		@Nonnull
-		public ItemStack buyingItemStack;
+		public final ItemStack buyingItemStack;
+		public final ItemStack sellingItemstack;
+
 		@Nullable
-		public EntityVillager.PriceInfo buyingPriceInfo;
+		public final EntityVillager.PriceInfo buyingPriceInfo;
 		@Nullable
-		public EntityVillager.PriceInfo emeraldPriceInfo;
-		@Nonnull
-		public ItemStack sellingItemstack;
+		public final EntityVillager.PriceInfo emeraldPriceInfo;
 		@Nullable
-		public EntityVillager.PriceInfo sellingPriceInfo;
+		public final EntityVillager.PriceInfo sellingPriceInfo;
 
 		public GiveItemForItemAndEmerald(
-				@Nonnull ItemStack buyingItemStack,
+				ItemStack buyingItemStack,
 				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
 				@Nullable EntityVillager.PriceInfo emeraldPriceInfo,
-				@Nonnull ItemStack sellingItemstack,
+				ItemStack sellingItemstack,
 				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
@@ -43,7 +42,7 @@ public class VillagerTradeLists {
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
 			int buyAmount = 1;
 			if (this.buyingPriceInfo != null) {
 				buyAmount = this.buyingPriceInfo.getPrice(random);
@@ -60,9 +59,9 @@ public class VillagerTradeLists {
 			}
 
 			ItemStack buyItemStack = this.buyingItemStack.copy();
-			buyItemStack.stackSize = buyAmount;
+			buyItemStack.setCount(buyAmount);
 			ItemStack sellItemStack = this.sellingItemstack.copy();
-			sellItemStack.stackSize = sellAmount;
+			sellItemStack.setCount(sellAmount);
 			recipeList.add(new MerchantRecipe(buyItemStack, new ItemStack(Items.EMERALD, emeraldAmount, 0), sellItemStack));
 		}
 	}
@@ -72,10 +71,11 @@ public class VillagerTradeLists {
 	 * that takes itemStack as a parameter
 	 */
 	public static class GiveEmeraldForItems implements EntityVillager.ITradeList {
-		public ItemStack buyingItem;
-		public EntityVillager.PriceInfo price;
+		public final ItemStack buyingItem;
+		@Nullable
+		public final EntityVillager.PriceInfo price;
 
-		public GiveEmeraldForItems(ItemStack itemIn, EntityVillager.PriceInfo priceIn) {
+		public GiveEmeraldForItems(ItemStack itemIn, @Nullable EntityVillager.PriceInfo priceIn) {
 			this.buyingItem = itemIn;
 			this.price = priceIn;
 		}
@@ -84,14 +84,14 @@ public class VillagerTradeLists {
 		 * Affects the given MerchantRecipeList to possibly add or remove MerchantRecipes.
 		 */
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
 			int buyAmount = 1;
 			if (this.price != null) {
 				buyAmount = this.price.getPrice(random);
 			}
 
 			ItemStack itemToBuy = this.buyingItem.copy();
-			itemToBuy.stackSize = buyAmount;
+			itemToBuy.setCount(buyAmount);
 			recipeList.add(new MerchantRecipe(itemToBuy, Items.EMERALD));
 		}
 	}
@@ -101,21 +101,20 @@ public class VillagerTradeLists {
 	 * that copies itemStacks properly
 	 */
 	public static class GiveItemForEmeralds implements EntityVillager.ITradeList {
+		public final ItemStack itemToSell;
 		@Nullable
-		public EntityVillager.PriceInfo emeraldPriceInfo;
-		@Nonnull
-		public ItemStack itemToSell;
+		public final EntityVillager.PriceInfo emeraldPriceInfo;
 		@Nullable
-		public EntityVillager.PriceInfo sellInfo;
+		public final EntityVillager.PriceInfo sellInfo;
 
-		public GiveItemForEmeralds(@Nullable EntityVillager.PriceInfo emeraldPriceInfo, @Nonnull ItemStack itemToSell, @Nullable EntityVillager.PriceInfo sellInfo) {
+		public GiveItemForEmeralds(@Nullable EntityVillager.PriceInfo emeraldPriceInfo, ItemStack itemToSell, @Nullable EntityVillager.PriceInfo sellInfo) {
 			this.emeraldPriceInfo = emeraldPriceInfo;
 			this.itemToSell = itemToSell;
 			this.sellInfo = sellInfo;
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
 			int i = 1;
 			if (this.sellInfo != null) {
 				i = this.sellInfo.getPrice(random);
@@ -127,7 +126,7 @@ public class VillagerTradeLists {
 			}
 
 			ItemStack sellStack = this.itemToSell.copy();
-			sellStack.stackSize = i;
+			sellStack.setCount(i);
 
 			ItemStack emeralds = new ItemStack(Items.EMERALD, j);
 
@@ -136,16 +135,16 @@ public class VillagerTradeLists {
 	}
 
 	public static class GiveItemForLogsAndEmeralds implements EntityVillager.ITradeList {
-		@Nonnull
-		public ItemStack itemToSell;
-		@Nonnull
-		public EntityVillager.PriceInfo itemInfo;
-		@Nonnull
-		public EntityVillager.PriceInfo logsInfo;
-		@Nonnull
-		public EntityVillager.PriceInfo emeraldsInfo;
 
-		public GiveItemForLogsAndEmeralds(@Nonnull ItemStack itemToSell, @Nonnull EntityVillager.PriceInfo itemInfo, @Nonnull EntityVillager.PriceInfo logsInfo, @Nonnull EntityVillager.PriceInfo emeraldsInfo) {
+		public final ItemStack itemToSell;
+
+		public final EntityVillager.PriceInfo itemInfo;
+
+		public final EntityVillager.PriceInfo logsInfo;
+
+		public final EntityVillager.PriceInfo emeraldsInfo;
+
+		public GiveItemForLogsAndEmeralds(ItemStack itemToSell, EntityVillager.PriceInfo itemInfo, EntityVillager.PriceInfo logsInfo, EntityVillager.PriceInfo emeraldsInfo) {
 			this.itemToSell = itemToSell;
 			this.itemInfo = itemInfo;
 			this.logsInfo = logsInfo;
@@ -153,13 +152,13 @@ public class VillagerTradeLists {
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
 			int itemAmount = this.itemInfo.getPrice(random);
 			int emeraldsAmount = this.emeraldsInfo.getPrice(random);
 			int logsAmount = this.logsInfo.getPrice(random);
 
 			ItemStack itemToSell = this.itemToSell.copy();
-			itemToSell.stackSize = itemAmount;
+			itemToSell.setCount(itemAmount);
 
 			int logMeta = random.nextInt(6);
 			Block log;
@@ -174,26 +173,27 @@ public class VillagerTradeLists {
 			recipeList.add(new MerchantRecipe(randomLog, new ItemStack(Items.EMERALD, emeraldsAmount), itemToSell));
 		}
 	}
+
 	public static class GiveItemForTwoItems implements EntityVillager.ITradeList {
-		@Nonnull
-		public ItemStack buyingItemStack;
+
+		public final ItemStack buyingItemStack;
 		@Nullable
-		public EntityVillager.PriceInfo buyingPriceInfo;
-		@Nonnull
-		public ItemStack buyingItemStackTwo;
+		public final EntityVillager.PriceInfo buyingPriceInfo;
+
+		public final ItemStack buyingItemStackTwo;
 		@Nullable
-		public EntityVillager.PriceInfo buyingPriceItemTwoInfo;
-		@Nonnull
-		public ItemStack sellingItemstack;
+		public final EntityVillager.PriceInfo buyingPriceItemTwoInfo;
+
+		public final ItemStack sellingItemstack;
 		@Nullable
-		public EntityVillager.PriceInfo sellingPriceInfo;
+		public final EntityVillager.PriceInfo sellingPriceInfo;
 
 		public GiveItemForTwoItems(
-				@Nonnull ItemStack buyingItemStack,
+				ItemStack buyingItemStack,
 				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
-				@Nonnull ItemStack buyingItemStackTwo,
+				ItemStack buyingItemStackTwo,
 				@Nullable EntityVillager.PriceInfo buyingPriceItemTwoInfo,
-				@Nonnull ItemStack sellingItemstack,
+				ItemStack sellingItemstack,
 				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
@@ -204,7 +204,7 @@ public class VillagerTradeLists {
 		}
 
 		@Override
-		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
 			int buyAmount = 1;
 			if (this.buyingPriceInfo != null) {
 				buyAmount = this.buyingPriceInfo.getPrice(random);
@@ -221,11 +221,11 @@ public class VillagerTradeLists {
 			}
 
 			ItemStack buyItemStack = this.buyingItemStack.copy();
-			buyItemStack.stackSize = buyAmount;
+			buyItemStack.setCount(buyAmount);
 			ItemStack buyItemStackTwo = this.buyingItemStackTwo.copy();
-			buyItemStackTwo.stackSize = buyTwoAmount;
+			buyItemStackTwo.setCount(buyTwoAmount);
 			ItemStack sellItemStack = this.sellingItemstack.copy();
-			sellItemStack.stackSize = sellAmount;
+			sellItemStack.setCount(sellAmount);
 			recipeList.add(new MerchantRecipe(buyItemStack, buyItemStackTwo, sellItemStack));
 		}
 	}

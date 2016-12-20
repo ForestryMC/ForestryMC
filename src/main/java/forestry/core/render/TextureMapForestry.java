@@ -159,24 +159,9 @@ public class TextureMapForestry extends TextureMap {
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Applying mipmap");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Sprite being mipmapped");
-			crashreportcategory.setDetail("Sprite name", new ICrashReportDetail<String>() {
-				@Override
-				public String call() throws Exception {
-					return texture.getIconName();
-				}
-			});
-			crashreportcategory.setDetail("Sprite size", new ICrashReportDetail<String>() {
-				@Override
-				public String call() throws Exception {
-					return texture.getIconWidth() + " x " + texture.getIconHeight();
-				}
-			});
-			crashreportcategory.setDetail("Sprite frames", new ICrashReportDetail<String>() {
-				@Override
-				public String call() throws Exception {
-					return texture.getFrameCount() + " frames";
-				}
-			});
+			crashreportcategory.setDetail("Sprite name", texture::getIconName);
+			crashreportcategory.setDetail("Sprite size", () -> texture.getIconWidth() + " x " + texture.getIconHeight());
+			crashreportcategory.setDetail("Sprite frames", () -> texture.getFrameCount() + " frames");
 			crashreportcategory.addCrashSection("Mipmap levels", 0);
 			throw new ReportedException(crashreport);
 		}

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import javax.annotation.Nonnull;
-
 import static forestry.arboriculture.multiblock.EnumPilePosition.*;
 
 import forestry.api.arboriculture.EnumPileType;
@@ -35,12 +33,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
-	
 	public CharcoalPileRenderer() {
 	}
-	
+
 	@Override
-	public void renderTileEntityAt(@Nonnull TilePile pile, double x, double y, double z, float p_147500_8_, int destroyStage) {
+	public void renderTileEntityAt(TilePile pile, double x, double y, double z, float p_147500_8_, int destroyStage) {
 		IBlockState state = pile.getWorld().getBlockState(pile.getPos());
 		if (!(state.getBlock() instanceof BlockPile)) {
 			return;
@@ -54,7 +51,7 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 			GlStateManager.pushMatrix();
 			GlStateManager.disableLighting();
 			Proxies.common.getClientInstance().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			
+
 			boolean withWood = pile.getPileType() != EnumPileType.ASH;
 			boolean isOnTop = logic.getController().getMaximumCoord().getY() == pile.getPos().getY();
 			// TODO Add brightness to the textures.
@@ -64,9 +61,9 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 				treeSpecies = (IAlleleTreeSpecies) TreeManager.treeRoot.getDefaultTemplate()[TreeManager.treeRoot.getSpeciesChromosomeType().ordinal()];
 			}
 			TextureAtlasSprite dirtSprite;
-			if(pile.getPileType() == EnumPileType.ASH){
+			if (pile.getPileType() == EnumPileType.ASH) {
 				dirtSprite = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/ash"));
-			}else{
+			} else {
 				dirtSprite = TextureManager.registerSprite(new ResourceLocation("forestry:blocks/loam"));
 			}
 			TextureAtlasSprite woodSprite = treeSpecies.getWoodProvider().getSprite(false);
@@ -76,35 +73,35 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 			} else if (pilePosition == FRONT) {
 				GlStateManager.rotate(180, 0F, 0F, 1F);
 				GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-				
+
 				renderPileSide(withWood, dirtSprite, woodSprite, woodTopSprite, brightness);
 			} else if (pilePosition == SIDE_LEFT) {
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileSide(withWood, dirtSprite, woodSprite, woodTopSprite, brightness);
 			} else if (pilePosition == SIDE_RIGHT) {
 				GlStateManager.rotate(180, 0F, 1F, 0F);
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileSide(withWood, dirtSprite, woodSprite, woodTopSprite, brightness);
 			} else if (pilePosition == CORNER_BACK_RIGHT) {
 				GlStateManager.rotate(180, 0F, 1F, 0F);
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileCorner(withWood, dirtSprite, woodSprite, woodTopSprite, brightness, isOnTop);
 			} else if (pilePosition == CORNER_BACK_LEFT) {
 				GlStateManager.rotate(90, 0F, 1F, 0F);
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileCorner(withWood, dirtSprite, woodSprite, woodTopSprite, brightness, isOnTop);
 			} else if (pilePosition == CORNER_FRONT_LEFT) {
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileCorner(withWood, dirtSprite, woodSprite, woodTopSprite, brightness, isOnTop);
 			} else if (pilePosition == CORNER_FRONT_RIGHT) {
 				GlStateManager.rotate(270, 0F, 1F, 0F);
 				GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
-				
+
 				renderPileCorner(withWood, dirtSprite, woodSprite, woodTopSprite, brightness, isOnTop);
 			}
 			GlStateManager.enableLighting();
@@ -116,64 +113,64 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 	public static void renderPileSide(boolean withWood, TextureAtlasSprite dirtSprite, TextureAtlasSprite woodSprite, TextureAtlasSprite woodTopSprite, int brightness) {
 		Tessellator t = Tessellator.getInstance();
 		VertexBuffer buffer = t.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
-		
+
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		buffer.pos(0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
-		
-		if(withWood){
+
+		if (withWood) {
 			buffer.pos(0.1, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(0.1, -0.5, -0.5).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.1, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.1, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(0.1, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(0.1, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.1, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.1, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.1, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.1, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.1, -0.5, -0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.1, 0.3, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.1, -0.5, -0.7).tex(woodTopSprite.getMinU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(0.1, -0.5, -0.7).tex(woodTopSprite.getMaxU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(0.1, -0.5, -0.5).tex(woodTopSprite.getMaxU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(-0.1, -0.5, -0.5).tex(woodTopSprite.getMinU(), woodTopSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.5, 0.3, 0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.5, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.5).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.5, 0.5, 0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.5, 0.5).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.5, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(0.5, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.5, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
@@ -185,62 +182,62 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 	public static void renderPileCorner(boolean withWood, TextureAtlasSprite dirtSprite, TextureAtlasSprite woodSprite, TextureAtlasSprite woodTopSprite, int brightness, boolean isTop) {
 		Tessellator t = Tessellator.getInstance();
 		VertexBuffer buffer = t.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
-		
+
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
-		
+
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, -0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		buffer.pos(-0.5, 0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(-0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMinV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMinU(), dirtSprite.getMaxV()).endVertex();
 		buffer.pos(0.5, -0.5, 0.5).tex(dirtSprite.getMaxU(), dirtSprite.getMaxV()).endVertex();
-		
+
 		if (isTop && withWood) {
-			
+
 			buffer.pos(-0.3, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.3, -0.5, -0.5).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.3, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.3, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.3, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.3, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.5, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.5, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
-			
+
 			buffer.pos(-0.5, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(-0.5, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.5, -0.5, -0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(-0.5, 0.3, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(-0.5, -0.5, -0.7).tex(woodTopSprite.getMinU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(-0.3, -0.5, -0.7).tex(woodTopSprite.getMaxU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(-0.3, -0.5, -0.5).tex(woodTopSprite.getMaxU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(-0.5, -0.5, -0.5).tex(woodTopSprite.getMinU(), woodTopSprite.getMaxV()).endVertex();
 		}
-        t.draw();
-		
+		t.draw();
+
 		GlStateManager.rotate(270.0F, 0.0F, 1.0F, 0.0F);
-		if(withWood){
-	        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		if (withWood) {
+			buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 			if (isTop) {
-				
+
 				buffer.pos(0.5, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 				buffer.pos(0.5, -0.5, -0.5).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 				buffer.pos(0.5, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
@@ -250,40 +247,40 @@ public class CharcoalPileRenderer extends TileEntitySpecialRenderer<TilePile> {
 				buffer.pos(0.5, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 				buffer.pos(0.3, -0.5, -0.7).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 				buffer.pos(0.3, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-				
+
 				buffer.pos(0.3, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 				buffer.pos(0.3, -0.5, -0.7).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 				buffer.pos(0.3, -0.5, -0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 				buffer.pos(0.3, 0.3, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-				
+
 				buffer.pos(0.3, -0.5, -0.7).tex(woodTopSprite.getMinU(), woodTopSprite.getMinV()).endVertex();
 				buffer.pos(0.5, -0.5, -0.7).tex(woodTopSprite.getMaxU(), woodTopSprite.getMinV()).endVertex();
 				buffer.pos(0.5, -0.5, -0.5).tex(woodTopSprite.getMaxU(), woodTopSprite.getMaxV()).endVertex();
 				buffer.pos(0.3, -0.5, -0.5).tex(woodTopSprite.getMinU(), woodTopSprite.getMaxV()).endVertex();
 			}
-			
+
 			buffer.pos(0.3, 0.5, 0.5).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.5, 0.5).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.5, 0.3).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.5, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(0.3, 0.3, 0.5).tex(woodSprite.getMaxU(), woodSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.3, 0.3).tex(woodSprite.getMaxU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.3).tex(woodSprite.getMinU(), woodSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.5).tex(woodSprite.getMinU(), woodSprite.getMaxV()).endVertex();
-			
+
 			buffer.pos(0.5, 0.5, 0.3).tex(woodTopSprite.getMinU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(0.5, 0.3, 0.3).tex(woodTopSprite.getMinU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.3, 0.3).tex(woodTopSprite.getMaxU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.5, 0.3).tex(woodTopSprite.getMaxU(), woodTopSprite.getMinV()).endVertex();
-			
+
 			buffer.pos(0.3, 0.5, 0.3).tex(woodTopSprite.getMinU(), woodTopSprite.getMinV()).endVertex();
 			buffer.pos(0.3, 0.3, 0.3).tex(woodTopSprite.getMinU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.3, 0.5).tex(woodTopSprite.getMaxU(), woodTopSprite.getMaxV()).endVertex();
 			buffer.pos(0.3, 0.5, 0.5).tex(woodTopSprite.getMaxU(), woodTopSprite.getMinV()).endVertex();
 			t.draw();
 		}
-		
+
 		GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
 	}
 }

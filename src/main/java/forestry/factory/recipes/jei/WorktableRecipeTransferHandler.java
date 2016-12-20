@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +10,6 @@ import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.recipes.MemorizedRecipe;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,14 +21,9 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 		return ContainerWorktable.class;
 	}
 
-	@Override
-	public String getRecipeCategoryUid() {
-		return VanillaRecipeCategoryUid.CRAFTING;
-	}
-
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(@Nonnull ContainerWorktable container, @Nonnull IRecipeLayout recipeLayout, @Nonnull EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerWorktable container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
 		Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 
 		InventoryCraftingForestry inventory = new InventoryCraftingForestry(container);

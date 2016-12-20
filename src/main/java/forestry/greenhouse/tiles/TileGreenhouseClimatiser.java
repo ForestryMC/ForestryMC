@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nullable;
+
+import java.util.Collections;
+
 import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -27,66 +31,64 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivatable, IGreenhouseComponent.Climatiser {
-	
+
 	protected static final int WORK_CYCLES = 1;
 	protected static final int ENERGY_PER_OPERATION = 150;
-	
+
 	private final IClimatiserDefinition definition;
 	private final ClimateSource source;
-	
+
+	@Nullable
 	protected EnumFacing inwards;
+	@Nullable
 	protected EnumFacing leftwards;
+	@Nullable
 	protected BlockPos maxPos;
+	@Nullable
 	protected BlockPos minPos;
-	
+
 	private boolean active;
-	
+
 	protected TileGreenhouseClimatiser(IClimatiserDefinition definition, int ticksForChange) {
 		this(definition, new GreenhouseClimateSource(ticksForChange));
 	}
-	
+
 	protected TileGreenhouseClimatiser(IClimatiserDefinition definition, ClimateSource source) {
 		this.definition = definition;
 		this.source = source;
 		this.source.setProvider(this);
 	}
-	
+
 	protected TileGreenhouseClimatiser(IClimatiserDefinition definition) {
 		this(definition, 20 + ENERGY_PER_OPERATION / 25);
 	}
-	
+
 	@Override
 	public void onMachineBroken() {
 		inwards = null;
 		leftwards = null;
-		
+
 		minPos = null;
 		maxPos = null;
 	}
-	
+
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		recalculateDirections(minCoord, maxCoord);
-		int range = Math.round((float)definition.getRange() / 2);
-		
-		if(leftwards != null){
-			maxPos = getCoordinates().offset(inwards, range).offset(leftwards, range).offset(EnumFacing.UP, range);
-			minPos = getCoordinates().offset(inwards).offset(leftwards.getOpposite(), range).offset(EnumFacing.DOWN, range);
-			
-		}else{
-			maxPos = getCoordinates().offset(inwards, range).offset(EnumFacing.EAST, range).offset(EnumFacing.NORTH, range);
-			minPos = getCoordinates().offset(inwards).offset(EnumFacing.WEST, range).offset(EnumFacing.SOUTH, range);
+		int range = Math.round((float) definition.getRange() / 2);
+
+		if (inwards != null) {
+			if (leftwards != null) {
+				maxPos = getCoordinates().offset(inwards, range).offset(leftwards, range).offset(EnumFacing.UP, range);
+				minPos = getCoordinates().offset(inwards).offset(leftwards.getOpposite(), range).offset(EnumFacing.DOWN, range);
+
+			} else {
+				maxPos = getCoordinates().offset(inwards, range).offset(EnumFacing.EAST, range).offset(EnumFacing.NORTH, range);
+				minPos = getCoordinates().offset(inwards).offset(EnumFacing.WEST, range).offset(EnumFacing.SOUTH, range);
+			}
 		}
 	}
-	
-	public BlockPos getMinPos()	{
-		return minPos;
-	}
-	
-	public BlockPos getMaxPos()	{
-		return maxPos;
-	}
-	
+
 	/* Network */
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
@@ -105,7 +107,7 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 	public boolean isActive() {
 		return active;
 	}
-	
+
 	public void recalculateDirections(BlockPos minCoord, BlockPos maxCoord) {
 		inwards = null;
 		leftwards = null;
@@ -138,38 +140,35 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 			} else {
 				inwards = EnumFacing.UP;
 			}
-		}else{
+		} else {
 			inwards = EnumFacing.DOWN;
 		}
 	}
-	
+
 	@Override
 	public IClimatiserDefinition getDefinition() {
 		return definition;
 	}
-	
+
 	@Override
 	public IClimateSource getClimateSource() {
 		return source;
 	}
-	
-	public boolean canWork(){
+
+	public boolean canWork() {
 		MultiblockLogicGreenhouse logic = getMultiblockLogic();
-		if (logic == null || !logic.isConnected()) {
+		if (!logic.isConnected()) {
 			return false;
 		}
 
 		EnergyManager energyManager = logic.getController().getEnergyManager();
-		if (energyManager == null) {
-			return false;
-		}
 
 		return EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION);
 	}
-	
-	public Iterable<BlockPos> getPositionsInRange(){
-		if(maxPos == null || minPos == null){
-			return null;
+
+	public Iterable<BlockPos> getPositionsInRange() {
+		if (maxPos == null || minPos == null) {
+			return Collections.emptyList();
 		}
 		return BlockPos.getAllInBox(maxPos, minPos);
 	}
@@ -182,11 +181,11 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 
 		this.active = active;
 
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getCoordinates(), getCoordinates());
+		if (world != null) {
+			if (world.isRemote) {
+				world.markBlockRangeForRenderUpdate(getCoordinates(), getCoordinates());
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
+				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), getCoordinates(), world);
 			}
 		}
 	}

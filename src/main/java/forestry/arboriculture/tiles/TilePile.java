@@ -1,6 +1,6 @@
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -23,10 +23,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharcoalPile> implements ICharcoalPileComponent<MultiblockLogicCharcoalPile>{
-
+public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharcoalPile> implements ICharcoalPileComponent<MultiblockLogicCharcoalPile> {
+	@Nullable
 	private IAlleleTreeSpecies treeSpecies;
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	private BlockPos woodPos;
 
 	public TilePile() {
@@ -36,13 +37,13 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
-		if (worldObj.isRemote) {
-			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world.isRemote) {
+			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
-		
-		if(getPileType() != EnumPileType.ASH){
-			this.worldObj.setBlockState(getPos(), updateState(), 2);
+		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
+
+		if (getPileType() != EnumPileType.ASH) {
+			this.world.setBlockState(getPos(), updateState(), 2);
 		}
 	}
 
@@ -55,25 +56,25 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	public void onMachineBroken() {
 		// Re-render this block on the client
-		if (worldObj.isRemote) {
-			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world.isRemote) {
+			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
 			woodPos = null;
 		}
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
 		markDirty();
-		if(getPileType() != EnumPileType.ASH){
-			this.worldObj.setBlockState(getPos(), updateState(), 2);
+		if (getPileType() != EnumPileType.ASH) {
+			this.world.setBlockState(getPos(), updateState(), 2);
 		}
 	}
-	
+
 	private IBlockState updateState() {
-		TilePile pile = TileUtil.getTile(worldObj, pos, TilePile.class);
-		EnumPilePosition pileType =  EnumPilePosition.INTERIOR;
-		if(pile != null && pile.getMultiblockLogic().isConnected() && pile.getMultiblockLogic().getController().isAssembled()){
+		TilePile pile = TileUtil.getTile(world, pos, TilePile.class);
+		EnumPilePosition pileType = EnumPilePosition.INTERIOR;
+		if (pile != null && pile.getMultiblockLogic().isConnected() && pile.getMultiblockLogic().getController().isAssembled()) {
 			BlockPos maxCoord = pile.getMultiblockLogic().getController().getMaximumCoord();
 			BlockPos minCoord = pile.getMultiblockLogic().getController().getMinimumCoord();
 			int level = pos.getY() - minCoord.getY();
-			
+
 			int levelMinX = minCoord.getX() + level;
 			int levelMinY = minCoord.getY() + level;
 			int levelMinZ = minCoord.getZ() + level;
@@ -87,8 +88,8 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 			if (levelMaxZ == pos.getZ() || levelMinZ == pos.getZ()) {
 				facesMatching++;
 			}
-			
-			if ( facesMatching > 0 ) {
+
+			if (facesMatching > 0) {
 				if (levelMaxX == pos.getX()) {
 					if (levelMaxZ == pos.getZ()) {
 						pileType = EnumPilePosition.CORNER_BACK_RIGHT;
@@ -126,7 +127,7 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		}
 		return getBlockType().getDefaultState().withProperty(BlockPile.PILE_POSITION, pileType);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
@@ -143,8 +144,8 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 			setTreeSpecies(treeSpecies);
 		}
 	}
-	
-	@Nonnull
+
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		data = super.writeToNBT(data);
@@ -153,7 +154,7 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		}
 		return data;
 	}
-	
+
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
 		super.encodeDescriptionPacket(packetData);
@@ -173,99 +174,99 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	}
 	
 	/* CLIENT INFORMATION */
-	
+
 	/* CONTAINED TREE */
 	@Override
-	public void setTreeSpecies(@Nonnull IAlleleTreeSpecies treeSpecies) {
+	public void setTreeSpecies(IAlleleTreeSpecies treeSpecies) {
 		this.treeSpecies = treeSpecies;
-		if (worldObj != null && worldObj.isRemote) {
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world != null && world.isRemote) {
+			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
-	
+
 	@Override
 	public IAlleleTreeSpecies getTreeSpecies() {
 		return this.treeSpecies;
 	}
-	
+
 	@Override
 	public EnumPileType getPileType() {
-		IBlockState state = worldObj.getBlockState(pos);
-		return ((BlockPile)state.getBlock()).getPileType();
+		IBlockState state = world.getBlockState(pos);
+		return ((BlockPile) state.getBlock()).getPileType();
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IAlleleTreeSpecies getNextWoodPile() {
-		if(woodPos == null){
+		if (woodPos == null) {
 			woodPos = getNextWoodPilePos();
 		}
-		TilePile pile = TileUtil.getTile(worldObj, woodPos, TilePile.class);
+		TilePile pile = TileUtil.getTile(world, woodPos, TilePile.class);
 		if (pile != null) {
 			return pile.getTreeSpecies();
 		}
 		return null;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-	private BlockPos getNextWoodPilePos(){
-		EnumPilePosition pilePos = worldObj.getBlockState(pos).getValue(BlockPile.PILE_POSITION);
+	private BlockPos getNextWoodPilePos() {
+		EnumPilePosition pilePos = world.getBlockState(pos).getValue(BlockPile.PILE_POSITION);
 		int layer = pos.getY() - getMultiblockLogic().getController().getMinimumCoord().getY();
 		IBlockState state;
 		Block woodPile = PluginArboriculture.blocks.piles.get(EnumPileType.WOOD);
 		switch (pilePos) {
-		case BACK:
-			state = worldObj.getBlockState(pos.add(0, 0, 1));
-			if(state.getBlock() != woodPile){
+			case BACK:
+				state = world.getBlockState(pos.add(0, 0, 1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(0, 0, 1);
+			case FRONT:
+				state = world.getBlockState(pos.add(0, 0, -1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(0, 0, -1);
+			case SIDE_LEFT:
+				state = world.getBlockState(pos.add(1, 0, 0));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(1, 0, 0);
+			case SIDE_RIGHT:
+				state = world.getBlockState(pos.add(-1, 0, 0));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(-1, 0, 0);
+			case CORNER_FRONT_LEFT:
+				state = world.getBlockState(pos.add(1, 0, 1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(1, 0, 1);
+			case CORNER_FRONT_RIGHT:
+				state = world.getBlockState(pos.add(-1, 0, 1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(-1, 0, 1);
+			case CORNER_BACK_LEFT:
+				state = world.getBlockState(pos.add(1, 0, -1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(1, 0, -1);
+			case CORNER_BACK_RIGHT:
+				state = world.getBlockState(pos.add(-1, 0, -1));
+				if (state.getBlock() != woodPile) {
+					return pos.add(0, -1, 0);
+				}
+				return pos.add(-1, 0, -1);
+			default:
 				return pos.add(0, -1, 0);
-			}
-			return pos.add(0, 0, 1);
-		case FRONT:
-			state = worldObj.getBlockState(pos.add(0, 0, -1));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(0, 0, -1);
-		case SIDE_LEFT:
-			state = worldObj.getBlockState(pos.add(1, 0, 0));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(1, 0, 0);
-		case SIDE_RIGHT:
-			state = worldObj.getBlockState(pos.add(-1, 0, 0));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(-1, 0, 0);
-		case CORNER_FRONT_LEFT:
-			state = worldObj.getBlockState(pos.add(1, 0, 1));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(1, 0, 1);
-		case CORNER_FRONT_RIGHT:
-			state = worldObj.getBlockState(pos.add(-1, 0, 1));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(-1, 0, 1);
-		case CORNER_BACK_LEFT:
-			state = worldObj.getBlockState(pos.add(1, 0, -1));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(1, 0, -1);
-		case CORNER_BACK_RIGHT:
-			state = worldObj.getBlockState(pos.add(-1, 0, -1));
-			if(state.getBlock() != woodPile){
-				return pos.add(0, -1, 0);
-			}
-			return pos.add(-1, 0, -1);
-		default:
-			return pos.add(0, -1, 0);
 		}
-		
+
 	}
 
 	@Override

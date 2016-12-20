@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableMap;
 
 import java.awt.Color;
@@ -39,6 +41,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -149,12 +152,12 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, 0));
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (!(tileEntity instanceof TileCandle)) {
 			return false;
@@ -166,19 +169,21 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		boolean flag = false;
 		boolean toggleLitState = true;
 
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+
 		if (!isLit) {
-			if (heldItem == null || !lightingItems.contains(heldItem.getItem())) {
+			if (heldItem.isEmpty() || !lightingItems.contains(heldItem.getItem())) {
 				toggleLitState = false;
 			} else if (ItemStackUtil.equals(this, heldItem) && isLit(heldItem)) {
 				toggleLitState = true;
 			}
 		}
 
-		if (heldItem != null) {
+		if (!heldItem.isEmpty()) {
 			if (ItemStackUtil.equals(this, heldItem)) {
 				if (!isLit(heldItem)) {
 					// Copy the colour of an unlit, coloured candle.
-					if (heldItem.hasTagCompound() && heldItem.getTagCompound().hasKey(colourTagName)) {
+					if (heldItem.getTagCompound() != null && heldItem.getTagCompound().hasKey(colourTagName)) {
 						tileCandle.setColour(heldItem.getTagCompound().getInteger(colourTagName));
 					} else {
 						// Reset to white if item has no
@@ -262,11 +267,10 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	private ItemStack getCandleDrop(IBlockAccess world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (!(tileEntity instanceof TileCandle)) {
-			return null;
+		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+		if (tileCandle == null) {
+			return new ItemStack(this);
 		}
-		TileCandle tileCandle = (TileCandle) tileEntity;
 		int colour = tileCandle.getColour();
 
 		int newMeta = tileCandle.isLit() ? 1 : 0;
@@ -282,15 +286,17 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		TileCandle tileCandle = (TileCandle) world.getTileEntity(pos);
-		int colour = getColourValueFromItemStack(stack);
-		boolean isLit = isLit(stack);
-		tileCandle.setColour(colour);
-		tileCandle.setLit(isLit);
-		if (tileCandle.isLit()) {
-			world.theProfiler.startSection("checkLight");
-			world.checkLight(pos);
-			world.theProfiler.endSection();
+		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+		if (tileCandle != null) {
+			int colour = getColourValueFromItemStack(stack);
+			boolean isLit = isLit(stack);
+			tileCandle.setColour(colour);
+			tileCandle.setLit(isLit);
+			if (tileCandle.isLit()) {
+				world.theProfiler.startSection("checkLight");
+				world.checkLight(pos);
+				world.theProfiler.endSection();
+			}
 		}
 	}
 
@@ -304,7 +310,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	private static int getColourValueFromItemStack(ItemStack itemStack) {
 		int value = 0xffffff; // default to white.
-		if (itemStack.hasTagCompound()) {
+		if (itemStack.getTagCompound() != null) {
 			NBTTagCompound tag = itemStack.getTagCompound();
 			if (tag.hasKey(colourTagName)) {
 				value = tag.getInteger(colourTagName);
@@ -318,10 +324,6 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public static void addItemToLightingList(Item item) {
-		if (item == null) {
-			throw new NullPointerException();
-		}
-
 		if (!lightingItems.contains(item)) {
 			lightingItems.add(item);
 		}
@@ -336,10 +338,12 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
-		if (tileCandle != null) {
-			return tileCandle.getColour();
+	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+		if (worldIn != null && pos != null) {
+			TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
+			if (tileCandle != null) {
+				return tileCandle.getColour();
+			}
 		}
 		return 0xffffff;
 	}

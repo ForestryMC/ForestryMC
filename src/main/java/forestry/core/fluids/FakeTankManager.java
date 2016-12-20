@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
@@ -57,7 +58,7 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 	}
 
 	@Override
-	public void processTankUpdate(int tankIndex, FluidStack contents) {
+	public void processTankUpdate(int tankIndex, @Nullable FluidStack contents) {
 
 	}
 }

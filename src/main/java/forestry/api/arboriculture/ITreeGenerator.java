@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,5 +24,5 @@ public interface ITreeGenerator {
 
 	boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
 
-	boolean setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos);
+	boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos);
 }

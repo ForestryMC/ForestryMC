@@ -72,15 +72,15 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	
 	COCOON(IAlleleButterflyCocoon.class);
 	
-	Class<? extends IAllele> clss;
+	private final Class<? extends IAllele> alleleClass;
 	
-	EnumButterflyChromosome(Class<? extends IAllele> clss) {
-		this.clss = clss;
+	EnumButterflyChromosome(Class<? extends IAllele> alleleClass) {
+		this.alleleClass = alleleClass;
 	}
 
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return clss;
+		return alleleClass;
 	}
 
 	@Override

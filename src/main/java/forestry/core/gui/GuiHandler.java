@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
+import forestry.api.core.ForestryAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,10 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import forestry.api.core.ForestryAPI;
 
 public class GuiHandler implements IGuiHandler {
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerEntity guiHandler) {
@@ -30,7 +30,7 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerEntity guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, guiHandler.getIdOfEntity(), 0, 0);
+		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.world, guiHandler.getIdOfEntity(), 0, 0);
 	}
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerItem guiHandler) {
@@ -39,7 +39,7 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerItem guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, 0, 0, 0);
+		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.world, 0, 0, 0);
 	}
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerTile guiHandler) {
@@ -49,7 +49,7 @@ public class GuiHandler implements IGuiHandler {
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerTile guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
 		BlockPos coordinates = guiHandler.getCoordinates();
-		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, coordinates.getX(), coordinates.getY(), coordinates.getZ());
+		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
 	}
 
 	private static int encodeGuiData(IGuiHandlerForestry guiHandler, short data) {
@@ -57,6 +57,7 @@ public class GuiHandler implements IGuiHandler {
 		return data << 16 | guiId.getId();
 	}
 
+	@Nullable
 	private static GuiId decodeGuiID(int guiData) {
 		int guiId = guiData & 0xFF;
 		return GuiIdRegistry.getGuiId(guiId);
@@ -67,6 +68,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+	@Nullable
 	public Object getClientGuiElement(int guiData, EntityPlayer player, World world, int x, int y, int z) {
 		GuiId guiId = decodeGuiID(guiData);
 		if (guiId == null) {
@@ -79,7 +81,7 @@ public class GuiHandler implements IGuiHandler {
 			case Item: {
 				for (EnumHand hand : EnumHand.values()) {
 					ItemStack heldItem = player.getHeldItem(hand);
-					if (heldItem != null) {
+					if (!heldItem.isEmpty()) {
 						Item item = heldItem.getItem();
 						if (guiId.getGuiHandlerClass().isInstance(item)) {
 							return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
@@ -107,6 +109,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+	@Nullable
 	public Object getServerGuiElement(int guiData, EntityPlayer player, World world, int x, int y, int z) {
 		GuiId guiId = decodeGuiID(guiData);
 		if (guiId == null) {
@@ -119,7 +122,7 @@ public class GuiHandler implements IGuiHandler {
 			case Item: {
 				for (EnumHand hand : EnumHand.values()) {
 					ItemStack heldItem = player.getHeldItem(hand);
-					if (heldItem != null) {
+					if (!heldItem.isEmpty()) {
 						Item item = heldItem.getItem();
 						if (guiId.getGuiHandlerClass().isInstance(item)) {
 							return ((IGuiHandlerItem) item).getContainer(player, heldItem, data);

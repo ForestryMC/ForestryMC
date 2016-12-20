@@ -19,6 +19,7 @@ import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
 
+@SuppressWarnings("unused")
 public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 
 	@Override

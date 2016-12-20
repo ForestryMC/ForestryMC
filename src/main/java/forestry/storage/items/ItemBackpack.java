@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -21,9 +22,9 @@ import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiHandler;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.filters.StandardStackFilters;
-import forestry.core.inventory.manipulators.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.StandardStackFilters;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
@@ -76,17 +77,18 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (!playerIn.isSneaking()) {
-			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
-			switchMode(itemStackIn);
-			return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+			ItemStack heldItem = playerIn.getHeldItem(handIn);
+			switchMode(heldItem);
+			return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
 		}
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (getInventoryHit(worldIn, pos, facing) != null) {
 			return EnumActionResult.SUCCESS;
 		}
@@ -94,12 +96,13 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		// We only do this when shift is clicked
 		if (player.isSneaking()) {
-			return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
+			ItemStack heldItem = player.getHeldItem(hand);
+			return evaluateTileHit(heldItem, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
 		}
-		return super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand);
+		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
 	}
 
 	public static void tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -113,7 +116,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		if (MinecraftForge.EVENT_BUS.post(new BackpackStowEvent(player, backpack.getDefinition(), inventory, stack))) {
 			return;
 		}
-		if (stack.stackSize <= 0) {
+		if (stack.isEmpty()) {
 			return;
 		}
 
@@ -121,7 +124,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(itemHandler);
 		ItemStack remainder = manipulator.addStack(stack);
 
-		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
+		stack.setCount(remainder == null ? 0 : remainder.getCount());
 	}
 
 	private static void switchMode(ItemStack itemstack) {
@@ -134,9 +137,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		itemstack.setItemDamage(nextMode);
 	}
 
+	@Nullable
 	private static IItemHandler getInventoryHit(World world, BlockPos pos, EnumFacing side) {
 		TileEntity targeted = world.getTileEntity(pos);
-		return TileUtil.getInventoryFromTile(targeted, null);
+		return TileUtil.getInventoryFromTile(targeted, side);
 	}
 
 	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
@@ -263,11 +267,8 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		}
 	}
 
-	@Nullable
 	public static BackpackMode getMode(ItemStack backpack) {
-		if (!(backpack.getItem() instanceof ItemBackpack)) {
-			return null;
-		}
+		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
 
 		int meta = backpack.getItemDamage();
 
@@ -291,6 +292,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
+	@Nullable
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
 			return null;
@@ -307,6 +309,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
+	@Nullable
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
 			return null;

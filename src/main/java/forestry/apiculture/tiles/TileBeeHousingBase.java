@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import com.mojang.authlib.GameProfile;
@@ -22,9 +21,8 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.apiculture.gui.IGuiBeeHousingInventory;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
@@ -55,7 +53,6 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	/* LOADING & SAVING */
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -71,7 +68,6 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		ownerHandler.readFromNBT(nbttagcompound);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound updateTag = super.getUpdateTag();
@@ -81,7 +77,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		beeLogic.readFromNBT(tag);
 		ownerHandler.readFromNBT(tag);
@@ -95,7 +91,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	/* ICLIMATISED */
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), worldObj, getPos());
+		return EnumTemperature.getFromBiome(getBiome(), world, getPos());
 	}
 
 	@Override
@@ -105,12 +101,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public float getExactTemperature() {
-		return ForestryAPI.climateManager.getTemperature(worldObj, getPos());
+		return ForestryAPI.climateManager.getTemperature(world, getPos());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return ForestryAPI.climateManager.getHumidity(worldObj, getPos());
+		return ForestryAPI.climateManager.getHumidity(world, getPos());
 	}
 
 	/* UPDATING */
@@ -120,7 +116,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 			beeLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				doPollenFX(worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
+				doPollenFX(world, getPos().getX(), getPos().getY(), getPos().getZ());
 			}
 		}
 	}
@@ -153,19 +149,19 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		data.writeVarInt(beeLogic.getBeeProgressPercent());
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(worldObj, getPos());
-		if(position != null){
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getPos());
+		if (position != null) {
 			ClimateUtil.writePositionData(position, data);
 		}
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		breedingProgressPercent = data.readVarInt();
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(worldObj, getPos());
-		if(position != null){
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getPos());
+		if (position != null) {
 			ClimateUtil.readPositionData(position, data);
 		}
 	}
@@ -173,22 +169,22 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public Biome getBiome() {
-		return worldObj.getBiome(getPos());
+		return world.getBiome(getPos());
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getLightFromNeighbors(getPos().up());
+		return world.getLightFromNeighbors(getPos().up());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeSky(getPos().up());
+		return world.canBlockSeeSky(getPos().up());
 	}
-	
+
 	@Override
 	public boolean isRaining() {
-		return worldObj.isRainingAt(getPos().up());
+		return world.isRainingAt(getPos().up());
 	}
 
 	@Override

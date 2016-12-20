@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
-
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -40,11 +30,18 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised, IHintSource {
 	private final String unlocalizedTitle;
@@ -61,10 +58,10 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
-		if (worldObj.isRemote) {
-			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world.isRemote) {
+			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
 	}
 
 	@Override
@@ -75,10 +72,10 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	public void onMachineBroken() {
 		// Re-render this block on the client
-		if (worldObj.isRemote) {
-			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world.isRemote) {
+			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
 		markDirty();
 	}
 
@@ -99,7 +96,6 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 		return getMultiblockLogic().getController().getBeeListeners();
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return getMultiblockLogic().getController().getBeeInventory();
@@ -180,12 +176,12 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 
 	/* IStreamableGui */
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		getMultiblockLogic().getController().writeGuiData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 

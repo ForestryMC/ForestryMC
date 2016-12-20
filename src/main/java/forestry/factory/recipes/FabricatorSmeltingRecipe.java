@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -23,12 +24,9 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 	private final int meltingPoint;
 
 	public FabricatorSmeltingRecipe(ItemStack resource, FluidStack molten, int meltingPoint) {
-		if (resource == null) {
-			throw new IllegalArgumentException("Resource cannot be null");
-		}
-		if (molten == null) {
-			throw new IllegalArgumentException("Molten cannot be null");
-		}
+		Preconditions.checkNotNull(resource);
+		Preconditions.checkArgument(!resource.isEmpty());
+		Preconditions.checkNotNull(molten);
 
 		this.resource = resource;
 		this.product = molten;

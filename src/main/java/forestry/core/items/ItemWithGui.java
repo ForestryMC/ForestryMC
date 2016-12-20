@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -18,22 +21,19 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerItem;
-
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
 	public ItemWithGui() {
 		setMaxStackSize(1);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (!worldIn.isRemote) {
 			openGui(playerIn);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	protected void openGui(EntityPlayer entityplayer) {

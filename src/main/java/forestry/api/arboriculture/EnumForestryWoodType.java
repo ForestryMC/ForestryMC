@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Random;
 
@@ -62,7 +61,7 @@ public enum EnumForestryWoodType implements IWoodType {
 	public float getHardness() {
 		return hardness;
 	}
-	
+
 	public static EnumForestryWoodType getRandom(Random random) {
 		return VALUES[random.nextInt(VALUES.length)];
 	}
@@ -71,7 +70,7 @@ public enum EnumForestryWoodType implements IWoodType {
 	public String toString() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
-	
+
 	@Override
 	public String getName() {
 		return toString();
@@ -82,7 +81,6 @@ public enum EnumForestryWoodType implements IWoodType {
 		return ordinal();
 	}
 
-	@Nonnull
 	public static EnumForestryWoodType byMetadata(int meta) {
 		if (meta < 0 || meta >= VALUES.length) {
 			meta = 0;
@@ -94,14 +92,14 @@ public enum EnumForestryWoodType implements IWoodType {
 	public int getCarbonization() {
 		return carbonization;
 	}
-	
+
 	@Override
 	public float getCharcoalChance(int numberOfCharcoal) {
-		if(numberOfCharcoal == 3){
+		if (numberOfCharcoal == 3) {
 			return 0.75F;
-		}else if(numberOfCharcoal == 4){
+		} else if (numberOfCharcoal == 4) {
 			return 0.5F;
-		}else if(numberOfCharcoal == 5){
+		} else if (numberOfCharcoal == 5) {
 			return 0.25F;
 		}
 		return 0.15F;

@@ -8,6 +8,7 @@ package forestry.api.farming;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 public interface IFarmListener {
@@ -33,7 +34,7 @@ public interface IFarmListener {
 	 *
 	 * @param collected Collection of collected stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
 	 */
-	void hasCollected(Collection<ItemStack> collected, IFarmLogic logic);
+	void hasCollected(NonNullList<ItemStack> collected, IFarmLogic logic);
 
 	/**
 	 * Called after farmland has successfully been cultivated by a farm logic.

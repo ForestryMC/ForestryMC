@@ -5,18 +5,16 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
 
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -28,7 +26,6 @@ public interface IBee extends IIndividualLiving {
 	/**
 	 * @return Bee's genetic information.
 	 */
-	@Nonnull
 	@Override
 	IBeeGenome getGenome();
 
@@ -51,6 +48,7 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Set the natural flag on this bee.
+	 *
 	 * @param flag
 	 */
 	void setIsNatural(boolean flag);
@@ -66,6 +64,7 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Determines whether the queen can work.
+	 *
 	 * @param housing the {@link IBeeHousing} the bee currently resides in.
 	 * @return an empty set if the queen can work, a set of error states if the queen can not work
 	 */
@@ -77,14 +76,16 @@ public interface IBee extends IIndividualLiving {
 
 	ItemStack[] getSpecialtyList();
 
-	ItemStack[] produceStacks(IBeeHousing housing);
+	List<ItemStack> produceStacks(IBeeHousing housing);
 
+	@Nullable
 	IBee spawnPrincess(IBeeHousing housing);
 
 	IBee[] spawnDrones(IBeeHousing housing);
 
 	void plantFlowerRandom(IBeeHousing housing);
 
+	@Nullable
 	IIndividual retrievePollen(IBeeHousing housing);
 
 	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);

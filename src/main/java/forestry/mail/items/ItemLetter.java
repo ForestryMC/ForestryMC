@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,12 +41,13 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (itemStackIn.stackSize == 1) {
-			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
+		if (heldItem.getCount() == 1) {
+			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
-			playerIn.addChatMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
-			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
+			playerIn.sendMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
+			return ActionResult.newResult(EnumActionResult.FAIL, heldItem);
 		}
 	}
 
@@ -74,10 +76,10 @@ public class ItemLetter extends ItemWithGui {
 		ILetter letter = new Letter(nbttagcompound);
 		letter.addTooltip(list);
 	}
-	
+
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		LetterProperties.getSubItems(item, tab, list);
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		LetterProperties.getSubItems(item, tab, subItems);
 	}
 
 	public List<ItemStack> getEmptiedLetters() {
