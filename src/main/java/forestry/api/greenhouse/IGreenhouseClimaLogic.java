@@ -7,5 +7,5 @@ package forestry.api.greenhouse;
 
 public interface IGreenhouseClimaLogic extends IGreenhouseLogic {
 
-	
+
 }

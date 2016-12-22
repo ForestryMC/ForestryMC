@@ -12,16 +12,15 @@ package forestry.core.genetics;
 
 import java.util.List;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
@@ -47,7 +46,7 @@ public abstract class ItemGE extends ItemForestry {
 	public boolean getShareTag() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		IAlleleSpecies species = getSpecies(stack);

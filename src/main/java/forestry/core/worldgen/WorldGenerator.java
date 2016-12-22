@@ -13,23 +13,21 @@ package forestry.core.worldgen;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import forestry.core.PluginCore;
+import forestry.core.blocks.BlockResourceOre;
+import forestry.core.blocks.EnumResourceType;
+import forestry.core.config.Config;
+import forestry.plugins.PluginManager;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import forestry.core.PluginCore;
-import forestry.core.blocks.BlockResourceOre;
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.config.Config;
-import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
 	@Nullable

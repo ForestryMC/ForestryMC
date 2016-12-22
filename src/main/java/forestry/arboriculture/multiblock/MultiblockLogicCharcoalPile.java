@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.multiblock;
 
-import net.minecraft.world.World;
 import forestry.api.multiblock.IMultiblockLogicCharcoalPile;
 import forestry.core.multiblock.MultiblockLogic;
+import net.minecraft.world.World;
 
 public class MultiblockLogicCharcoalPile extends MultiblockLogic<ICharcoalPileControllerInternal> implements IMultiblockLogicCharcoalPile {
 

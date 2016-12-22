@@ -15,14 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -30,6 +22,12 @@ import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
 import forestry.core.commands.TemplateNotFoundException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.StringUtils;
 
 public final class CommandTreeSpawn extends SubCommand {
 

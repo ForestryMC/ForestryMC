@@ -15,18 +15,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeManager implements ICarpenterManager {
 
@@ -59,7 +57,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return null;
 	}
 
-	public static boolean matches(@Nullable ICarpenterRecipe recipe, @Nullable  FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+	public static boolean matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
 		if (recipe == null) {
 			return false;
 		}

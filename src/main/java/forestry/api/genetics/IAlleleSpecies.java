@@ -5,13 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
  * Basic species allele.
@@ -53,6 +51,7 @@ public interface IAlleleSpecies extends IAllele {
 	/**
 	 * Complexity determines the difficulty researching a species. The values of primary and secondary are
 	 * added together (and rounded) to determine the amount of pairs needed for successful research.
+	 *
 	 * @return Values between 3 - 11 are useful.
 	 */
 	int getComplexity();

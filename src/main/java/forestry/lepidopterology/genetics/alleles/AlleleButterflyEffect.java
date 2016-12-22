@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
-import javax.annotation.Nullable;
-
 import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;

@@ -10,25 +10,23 @@
  ******************************************************************************/
 package forestry.greenhouse.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
-import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenhouseButterflyHatch> {
 
 	public ContainerGreenhouseButterflyHatch(InventoryPlayer playerInventory, TileGreenhouseButterflyHatch tile) {
 		super(tile, playerInventory, 8, 84);
-		
+
 		addSlotToContainer(new SlotOutput(tile, 0, 60, 40));
 		addSlotToContainer(new SlotOutput(tile, 1, 80, 27));
 		addSlotToContainer(new SlotOutput(tile, 2, 101, 40));
 		addSlotToContainer(new SlotOutput(tile, 3, 80, 53));
 	}
-	
+
 	public IFluidTank getTank(int slot) {
 		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
 	}

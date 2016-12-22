@@ -359,7 +359,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	}
 
 	@Override
-	public int colorMultiplier(IBlockState state, @Nullable  IBlockAccess worldIn, @Nullable  BlockPos pos, int tintIndex) {
+	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (pos == null || worldIn == null) {
 			return 0xffffff;
 		}

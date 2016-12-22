@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.factory.tiles.TileCentrifuge;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, TileCentrifuge> {
 

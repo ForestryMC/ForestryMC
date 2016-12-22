@@ -13,13 +13,19 @@ import net.minecraft.item.ItemStack;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 
-	/** The item for this recipe to match against. **/
+	/**
+	 * The item for this recipe to match against.
+	 **/
 	ItemStack getInput();
 
-	/** The time it takes to process one item. Default is 20. **/
+	/**
+	 * The time it takes to process one item. Default is 20.
+	 **/
 	int getProcessingTime();
 
-	/** Returns the randomized products from processing one input item. **/
+	/**
+	 * Returns the randomized products from processing one input item.
+	 **/
 	Collection<ItemStack> getProducts(Random random);
 
 	/**

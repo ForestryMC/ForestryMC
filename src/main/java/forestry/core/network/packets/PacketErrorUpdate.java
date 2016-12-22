@@ -12,16 +12,15 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerClient;
-import forestry.core.network.PacketBufferForestry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class PacketErrorUpdate extends ForestryPacket implements IForestryPacketClient {

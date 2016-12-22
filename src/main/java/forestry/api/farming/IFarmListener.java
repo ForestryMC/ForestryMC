@@ -25,7 +25,7 @@ public interface IFarmListener {
 	 * Called after a crop has been harvested, but before harvested items are stowed in the farms inventory.
 	 *
 	 * @param harvested Collection of harvested stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
-	 * @param crop Harvested {@link ICrop}
+	 * @param crop      Harvested {@link ICrop}
 	 */
 	void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop);
 

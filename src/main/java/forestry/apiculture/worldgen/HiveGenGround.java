@@ -59,6 +59,6 @@ public class HiveGenGround extends HiveGen {
 			blockState = world.getBlockState(pos);
 		}
 
-   		return pos.up();
+		return pos.up();
 	}
 }

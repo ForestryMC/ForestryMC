@@ -75,9 +75,9 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	 * Determines the bee's effect.
 	 */
 	EFFECT(IAlleleBeeEffect.class);
-	
+
 	private final Class<? extends IAllele> alleleClass;
-	
+
 	EnumBeeChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
 	}

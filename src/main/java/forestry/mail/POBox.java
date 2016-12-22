@@ -13,19 +13,18 @@ package forestry.mail;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.WorldSavedData;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.WorldSavedData;
 
 public class POBox extends WorldSavedData implements IInventory {
 
@@ -138,7 +137,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	public ItemStack decrStackSize(int var1, int var2) {
 		return letters.decrStackSize(var1, var2);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return letters.removeStackFromSlot(index);

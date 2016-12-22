@@ -19,26 +19,26 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public class DefaultClimateProvider implements IClimateProvider {
-    private final World world;
-    private final BlockPos pos;
+	private final World world;
+	private final BlockPos pos;
 
-    public DefaultClimateProvider(World world, BlockPos pos) {
-        this.world = world;
-        this.pos = pos;
-    }
+	public DefaultClimateProvider(World world, BlockPos pos) {
+		this.world = world;
+		this.pos = pos;
+	}
 
-    @Override
-    public Biome getBiome() {
-        return world.getBiome(pos);
-    }
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(pos);
+	}
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        return EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, pos));
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, pos));
+	}
 }

@@ -11,14 +11,12 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import forestry.core.utils.Translator;
 
 public class EscritoireTextSource {

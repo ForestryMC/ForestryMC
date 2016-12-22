@@ -14,7 +14,20 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.farming.models.EnumFarmBlockTexture;
+import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -35,7 +48,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -43,24 +55,10 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
-
 public class BlockFarm extends BlockStructure {
 
 	public static final PropertyEnum<EnumFarmBlockType> META = PropertyEnum.create("meta", EnumFarmBlockType.class);
-	
+
 	public BlockFarm() {
 		super(Material.ROCK);
 		setHardness(1.0f);
@@ -68,7 +66,7 @@ public class BlockFarm extends BlockStructure {
 		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
 		setCreativeTab(Tabs.tabAgriculture);
 	}
-	
+
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
@@ -117,11 +115,11 @@ public class BlockFarm extends BlockStructure {
 		}
 		return drops.get(0);
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
-		
+
 		if (stack.getTagCompound() == null) {
 			return;
 		}
@@ -142,7 +140,7 @@ public class BlockFarm extends BlockStructure {
 		}
 		return world.setBlockToAir(pos);
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
@@ -182,12 +180,12 @@ public class BlockFarm extends BlockStructure {
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < 6;i++){
-			if(i == 1){
+		for (int i = 0; i < 6; i++) {
+			if (i == 1) {
 				continue;
 			}
 			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));

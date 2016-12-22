@@ -13,7 +13,6 @@ package forestry.core.models;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
-
 import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,5 +28,5 @@ public class DefaultTextureGetter implements Function<ResourceLocation, TextureA
 		Preconditions.checkNotNull(location);
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
 	}
-	
+
 }

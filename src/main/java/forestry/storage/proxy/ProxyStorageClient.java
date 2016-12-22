@@ -13,5 +13,5 @@ public class ProxyStorageClient extends ProxyStorage {
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", "crate-filled");
 		Proxies.render.registerModel(new ModelEntry(modelLocation, new ModelCrate()));
 	}
-	
+
 }

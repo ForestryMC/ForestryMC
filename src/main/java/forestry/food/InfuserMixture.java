@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.food;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.food.IBeverageEffect;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 /**

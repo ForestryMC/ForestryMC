@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,11 +25,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.proxy.Proxies;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -38,7 +36,7 @@ public class ParticleHelper {
 	@SideOnly(Side.CLIENT)
 	public static boolean addBlockHitEffects(World world, BlockPos pos, EnumFacing side, ParticleManager effectRenderer, Callback callback) {
 		IBlockState iblockstate = world.getBlockState(pos);
-		if(iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+		if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -47,27 +45,27 @@ public class ParticleHelper {
 			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
 			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
 			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
-			if(side == EnumFacing.DOWN) {
+			if (side == EnumFacing.DOWN) {
 				py = y + axisalignedbb.minY - f;
 			}
 
-			if(side == EnumFacing.UP) {
+			if (side == EnumFacing.UP) {
 				py = y + axisalignedbb.maxY + f;
 			}
 
-			if(side == EnumFacing.NORTH) {
+			if (side == EnumFacing.NORTH) {
 				pz = z + axisalignedbb.minZ - f;
 			}
 
-			if(side == EnumFacing.SOUTH) {
+			if (side == EnumFacing.SOUTH) {
 				pz = z + axisalignedbb.maxZ + f;
 			}
 
-			if(side == EnumFacing.WEST) {
+			if (side == EnumFacing.WEST) {
 				px = x + axisalignedbb.minX - f;
 			}
 
-			if(side == EnumFacing.EAST) {
+			if (side == EnumFacing.EAST) {
 				px = x + axisalignedbb.maxX + f;
 			}
 
@@ -93,7 +91,7 @@ public class ParticleHelper {
 		if (block != state.getBlock()) {
 			return true;
 		}
-		
+
 		byte iterations = 4;
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {

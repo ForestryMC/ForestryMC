@@ -57,7 +57,9 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	private static int beeSpeciesCount = -1;
 	private static final List<IBee> beeTemplates = new ArrayList<>();
-	/** List of possible mutations on species alleles. */
+	/**
+	 * List of possible mutations on species alleles.
+	 */
 	private static final List<IBeeMutation> beeMutations = new ArrayList<>();
 	public static final String UID = "rootBees";
 

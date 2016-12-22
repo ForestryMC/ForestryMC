@@ -13,16 +13,15 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.core.PluginCore;
+import forestry.core.blocks.BlockBogEarth;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.core.PluginCore;
-import forestry.core.blocks.BlockBogEarth;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 	private static final ItemStack bogEarth = PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);

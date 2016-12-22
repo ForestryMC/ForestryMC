@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -25,6 +17,13 @@ import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IColoredItem {
 
@@ -66,7 +65,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 
 		TileLeaves tileLeaves = new TileLeaves();
 		tileLeaves.readFromNBT(itemStack.getTagCompound());
-		
+
 		if (renderPass == 0) {
 			EntityPlayer player = Proxies.common.getPlayer();
 			return tileLeaves.getFoliageColour(player);
@@ -74,7 +73,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 			return tileLeaves.getFruitColour();
 		}
 	}
-	
+
 	@Override
 	public boolean placeBlockAt(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
 		return false;

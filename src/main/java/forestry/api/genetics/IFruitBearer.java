@@ -28,8 +28,7 @@ public interface IFruitBearer {
 	/**
 	 * Picks the fruits of this tile, resetting it to unripe fruits.
 	 *
-	 * @param tool
-	 *            Tool used in picking the fruits. May be empty.
+	 * @param tool Tool used in picking the fruits. May be empty.
 	 * @return Picked fruits.
 	 */
 	NonNullList<ItemStack> pickFruit(ItemStack tool);
@@ -42,8 +41,7 @@ public interface IFruitBearer {
 	/**
 	 * Increases the ripeness of the fruit. Adding 1.0f will fully ripen the fruit.
 	 *
-	 * @param add
-	 *            Float to add to the ripeness. Will truncate to valid values.
+	 * @param add Float to add to the ripeness. Will truncate to valid values.
 	 */
 	void addRipeness(float add);
 }

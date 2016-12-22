@@ -29,28 +29,28 @@ public class AlleleEffects {
 	public static final IAlleleBeeEffect effectFertile;
 	public static final IAlleleBeeEffect effectMycophilic;
 	private static final List<IAlleleBeeEffect> beeEffects;
-	
+
 	static {
 		beeEffects = Arrays.asList(
-			effectNone = new AlleleEffectNone("none", true),
-			effectAggressive = new AlleleEffectAggressive(),
-			effectHeroic = new AlleleEffectHeroic(),
-			effectBeatific = new AlleleEffectPotion("beatific", false, MobEffects.REGENERATION, 100),
-			effectMiasmic = new AlleleEffectPotion("miasmic", false, MobEffects.POISON, 600, 100, 0.1f),
-			effectMisanthrope = new AlleleEffectMisanthrope(),
-			effectGlacial = new AlleleEffectGlacial(),
-			effectRadioactive = new AlleleEffectRadioactive(),
-			effectCreeper = new AlleleEffectCreeper(),
-			effectIgnition = new AlleleEffectIgnition(),
-			effectExploration = new AlleleEffectExploration(),
-			effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
-			effectSnowing = new AlleleEffectSnowing(),
-			effectDrunkard = new AlleleEffectPotion("drunkard", false, MobEffects.NAUSEA, 100),
-			effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
-			effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
-			effectRepulsion = new AlleleEffectRepulsion(),
-			effectFertile = new AlleleEffectFertile(),
-			effectMycophilic = new AlleleEffectFungification()
+				effectNone = new AlleleEffectNone("none", true),
+				effectAggressive = new AlleleEffectAggressive(),
+				effectHeroic = new AlleleEffectHeroic(),
+				effectBeatific = new AlleleEffectPotion("beatific", false, MobEffects.REGENERATION, 100),
+				effectMiasmic = new AlleleEffectPotion("miasmic", false, MobEffects.POISON, 600, 100, 0.1f),
+				effectMisanthrope = new AlleleEffectMisanthrope(),
+				effectGlacial = new AlleleEffectGlacial(),
+				effectRadioactive = new AlleleEffectRadioactive(),
+				effectCreeper = new AlleleEffectCreeper(),
+				effectIgnition = new AlleleEffectIgnition(),
+				effectExploration = new AlleleEffectExploration(),
+				effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
+				effectSnowing = new AlleleEffectSnowing(),
+				effectDrunkard = new AlleleEffectPotion("drunkard", false, MobEffects.NAUSEA, 100),
+				effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
+				effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
+				effectRepulsion = new AlleleEffectRepulsion(),
+				effectFertile = new AlleleEffectFertile(),
+				effectMycophilic = new AlleleEffectFungification()
 		);
 	}
 

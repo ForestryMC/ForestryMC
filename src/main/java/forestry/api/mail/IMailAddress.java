@@ -8,7 +8,6 @@ package forestry.api.mail;
 import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.INbtWritable;
 
 public interface IMailAddress extends INbtWritable {

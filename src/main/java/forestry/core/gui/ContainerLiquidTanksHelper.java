@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.api.core.IToolPipette;
+import forestry.core.network.packets.PacketPipetteClick;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.ILiquidTankTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
-
-import forestry.api.core.IToolPipette;
-import forestry.core.network.packets.PacketPipetteClick;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.ILiquidTankTile;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {

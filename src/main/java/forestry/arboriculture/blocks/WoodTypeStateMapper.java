@@ -31,30 +31,30 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 	private final PropertyWoodType<?> propertyWoodType;
 	private final List<IProperty> propertiesToRemove = new ArrayList<>();
 
-	public WoodTypeStateMapper( IWoodTyped woodTyped, @Nullable PropertyWoodType<?> propertyWoodType) {
+	public WoodTypeStateMapper(IWoodTyped woodTyped, @Nullable PropertyWoodType<?> propertyWoodType) {
 		this.woodTyped = woodTyped;
 		this.blockPath = woodTyped.getBlockKind().toString();
 		this.propertyWoodType = propertyWoodType;
 	}
 
-	public WoodTypeStateMapper( IWoodTyped woodTyped,  String blockPath, @Nullable PropertyWoodType<?> propertyWoodType) {
+	public WoodTypeStateMapper(IWoodTyped woodTyped, String blockPath, @Nullable PropertyWoodType<?> propertyWoodType) {
 		this.woodTyped = woodTyped;
 		this.blockPath = blockPath;
 		this.propertyWoodType = propertyWoodType;
 	}
-	
-	public WoodTypeStateMapper addPropertyToRemove(IProperty property){
+
+	public WoodTypeStateMapper addPropertyToRemove(IProperty property) {
 		this.propertiesToRemove.add(property);
 		return this;
 	}
-	
+
 	@Override
 	public ModelResourceLocation getModelLocation(IBlockState state) {
 		return getModelResourceLocation(state);
 	}
-	
+
 	@Override
-	protected ModelResourceLocation getModelResourceLocation( IBlockState state) {
+	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
 		final Map<IProperty<?>, Comparable<?>> properties;
 		if (propertyWoodType != null) {
 			properties = Maps.newLinkedHashMap(state.getProperties());
@@ -71,16 +71,16 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		int meta = block.getMetaFromState(state);
 		IWoodType woodType = woodTyped.getWoodType(meta);
 		if (woodType instanceof EnumForestryWoodType) {
-			if(WoodModelLoader.INSTANCE.isRegistered){
+			if (WoodModelLoader.INSTANCE.isRegistered) {
 				return getForestryModelResourceLocation(woodType, properties);
-			}else{
+			} else {
 				return getDefaultModelResourceLocation(state);
 			}
 		} else {
 			return getVanillaModelResourceLocation(block, woodType, properties);
 		}
 	}
-	
+
 	@Override
 	public ModelResourceLocation getDefaultModelResourceLocation(IBlockState state) {
 		final Map<IProperty<?>, Comparable<?>> properties;

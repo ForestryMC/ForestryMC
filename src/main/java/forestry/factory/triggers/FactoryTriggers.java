@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.factory.triggers;
 
-import forestry.core.triggers.Trigger;
-
 public class FactoryTriggers {
 //	public static Trigger lowResource25;
 //	public static Trigger lowResource10;

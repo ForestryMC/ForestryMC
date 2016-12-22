@@ -69,11 +69,11 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	 * Extra effect to surroundings. (?)
 	 */
 	EFFECT(IAlleleButterflyEffect.class),
-	
+
 	COCOON(IAlleleButterflyCocoon.class);
-	
+
 	private final Class<? extends IAllele> alleleClass;
-	
+
 	EnumButterflyChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
 	}

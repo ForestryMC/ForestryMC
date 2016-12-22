@@ -8,28 +8,24 @@ package forestry.api.arboriculture;
 public interface ITreeModifier {
 
 	/**
-	 *
 	 * @param genome
 	 * @return Float used to modify the height.
 	 */
 	float getHeightModifier(ITreeGenome genome, float currentModifier);
 
 	/**
-	 *
 	 * @param genome
 	 * @return Float used to modify the yield.
 	 */
 	float getYieldModifier(ITreeGenome genome, float currentModifier);
 
 	/**
-	 *
 	 * @param genome
 	 * @return Float used to modify the sappiness.
 	 */
 	float getSappinessModifier(ITreeGenome genome, float currentModifier);
 
 	/**
-	 *
 	 * @param genome
 	 * @return Float used to modify the maturation.
 	 */

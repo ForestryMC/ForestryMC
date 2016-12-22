@@ -19,10 +19,10 @@ import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.ILiquidTankTile;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,7 +50,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		super(BlockAlvearyType.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
-		
+
 		Fluid water = FluidRegistry.WATER;
 		Fluid lava = FluidRegistry.LAVA;
 		Fluid liquidIce = Fluids.ICE.getFluid();

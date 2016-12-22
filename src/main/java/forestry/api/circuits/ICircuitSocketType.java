@@ -10,9 +10,13 @@ package forestry.api.circuits;
  * See CircuitSocketType for Forestry's uses.
  */
 public interface ICircuitSocketType {
-	/** unique identifier for this socket type */
+	/**
+	 * unique identifier for this socket type
+	 */
 	String getUid();
 
-	/** comparison using uid */
+	/**
+	 * comparison using uid
+	 */
 	boolean equals(ICircuitSocketType socketType);
 }

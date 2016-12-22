@@ -122,12 +122,12 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	}
 
 	@Override
-	public boolean hasCapability( Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability( Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

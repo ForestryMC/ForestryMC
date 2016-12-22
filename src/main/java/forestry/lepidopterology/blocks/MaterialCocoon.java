@@ -17,7 +17,7 @@ public class MaterialCocoon extends Material {
 
 	public MaterialCocoon() {
 		super(MapColor.CLOTH);
-		
+
 		setRequiresTool();
 	}
 

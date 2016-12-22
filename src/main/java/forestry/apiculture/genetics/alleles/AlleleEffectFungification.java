@@ -1,6 +1,5 @@
 package forestry.apiculture.genetics.alleles;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -23,7 +22,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private static final int MAX_BLOCK_FIND_TRIES = 10;
 	private static final int ENTITY_THROTTLE = 6;
-	
+
 	public AlleleEffectFungification() {
 		super("mycophilic", true, 20, false, false);
 	}
@@ -41,7 +40,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		doBlockEffect(genome, housing);
-		
+
 		int entityThrottle = storedData.getInteger(1);
 		if (entityThrottle >= ENTITY_THROTTLE) {
 			doEntityEffect(genome, housing);
@@ -50,7 +49,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			++entityThrottle;
 		}
 		storedData.setInteger(1, entityThrottle);
-		
+
 		return storedData;
 	}
 

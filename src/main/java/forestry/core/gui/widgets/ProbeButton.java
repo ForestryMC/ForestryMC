@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
-
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class ProbeButton extends Widget {
 

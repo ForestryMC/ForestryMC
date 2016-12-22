@@ -57,7 +57,6 @@ import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
-import forestry.factory.triggers.FactoryTriggers;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;

@@ -5,20 +5,19 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.multiblock.IGreenhouseController;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 
 	public final IGreenhouseController controller;
 	private final String name;
-	
+
 	public DefaultGreenhouseLogic(IGreenhouseController controller, String name) {
 		this.controller = controller;
 		this.name = name;
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		return nbt;
@@ -35,7 +34,7 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 	@Override
 	public void onEvent(EnumGreenhouseEventType type, Object event) {
 	}
-	
+
 	@Override
 	public IGreenhouseController getController() {
 		return controller;

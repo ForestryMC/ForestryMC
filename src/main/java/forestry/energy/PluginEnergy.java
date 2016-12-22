@@ -13,12 +13,6 @@ package forestry.energy;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.SidedProxy;
-
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
@@ -27,6 +21,10 @@ import forestry.energy.proxy.ProxyEnergy;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.SidedProxy;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends BlankForestryPlugin {

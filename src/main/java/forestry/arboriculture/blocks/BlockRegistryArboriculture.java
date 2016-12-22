@@ -18,15 +18,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockPile;
@@ -36,6 +33,8 @@ import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
@@ -155,7 +154,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerBlock(block, new ItemBlockWood(block), "fences.vanilla.fireproof." + block.getBlockNumber());
 			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
 		}
-		
+
 		fenceGates = new ArrayList<>();
 		fenceGatesFireproof = new ArrayList<>();
 		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
@@ -224,13 +223,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);
 			doors.add(door);
 		}
-		
+
 		// Saplings
 		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
 		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "saplingGE");
 		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
-		
+
 		// Leaves
 		leaves = new BlockForestryLeaves();
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
@@ -249,12 +248,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 				speciesToLeavesDecorative.put(speciesUid, new ItemStack(leaves, 1, meta));
 			}
 		}
-		
+
 		piles = BlockPile.create();
-		for(Entry<EnumPileType, BlockPile> pile : piles.entrySet()){
+		for (Entry<EnumPileType, BlockPile> pile : piles.entrySet()) {
 			registerBlock(pile.getValue(), new ItemBlockPile(pile.getValue()), "pile_" + pile.getKey().name().toLowerCase(Locale.ENGLISH));
 		}
-		
+
 		// Pods
 		AlleleFruits.registerAlleles();
 		podsMap = new HashMap<>();

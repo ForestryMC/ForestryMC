@@ -13,13 +13,12 @@ package forestry.core.gui.ledgers;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 public class HintLedger extends Ledger {
 

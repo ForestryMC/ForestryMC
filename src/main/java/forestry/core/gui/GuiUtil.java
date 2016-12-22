@@ -13,17 +13,15 @@ package forestry.core.gui;
 import java.util.Collection;
 import java.util.List;
 
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.proxy.Proxies;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.client.config.GuiUtils;
-
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
 
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {

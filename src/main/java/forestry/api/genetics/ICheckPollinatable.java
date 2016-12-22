@@ -31,7 +31,7 @@ public interface ICheckPollinatable {
 
 	/**
 	 * Checks whether this can mate with the given pollen.
-	 *
+	 * <p>
 	 * Must be the one to check genetic equivalency.
 	 *
 	 * @param pollen IIndividual representing the pollen.

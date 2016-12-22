@@ -8,6 +8,6 @@ package forestry.api.climate;
 import forestry.api.core.ILocatable;
 
 public interface IClimateSourceProvider extends ILocatable {
-	
+
 	IClimateSource getClimateSource();
 }

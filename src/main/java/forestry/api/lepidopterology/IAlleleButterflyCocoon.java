@@ -17,11 +17,11 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
-	
+
 	ModelResourceLocation getCocoonItemModel(int age);
-	
+
 	String getCocoonName();
-	
+
 	Map<ItemStack, Float> getCocoonLoot();
-	
+
 }

@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-
+import com.google.common.collect.ImmutableMap;
 import forestry.api.recipes.ICentrifugeRecipe;
+import net.minecraft.item.ItemStack;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 

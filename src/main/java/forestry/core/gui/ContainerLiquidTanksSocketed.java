@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.circuits.ISocketable;
+import forestry.core.tiles.ILiquidTankTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.fluids.IFluidTank;
-
-import forestry.core.circuits.ISocketable;
-import forestry.core.tiles.ILiquidTankTile;
 
 public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankTile & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
 
@@ -49,7 +47,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, listeners);
 	}
-	
+
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);

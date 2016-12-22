@@ -11,10 +11,10 @@ public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayC
 
 	public GuiCamouflageSprayCan(EntityPlayer player, ItemInventoryCamouflageSprayCan inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/camouflageSprayCan.png", new ContainerCamouflageSprayCan(inventory, player.inventory), inventory);
-		
+
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 80, 39, inventory, null));
 	}
-	
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);

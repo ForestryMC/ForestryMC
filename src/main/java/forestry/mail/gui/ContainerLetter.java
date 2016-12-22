@@ -13,13 +13,7 @@ package forestry.mail.gui;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-import forestry.core.utils.Log;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -30,10 +24,14 @@ import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.mail.Letter;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
@@ -130,12 +128,12 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		IMailAddress recipient = getRecipient(server, recipientName, type);
 
 		getLetter().setRecipient(recipient);
-		
+
 		// Update the trading info
 		if (recipient == null || recipient.getType() == EnumAddressee.TRADER) {
 			updateTradeInfo(player.world, recipient);
 		}
-		
+
 		// Update info on client
 		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
 	}

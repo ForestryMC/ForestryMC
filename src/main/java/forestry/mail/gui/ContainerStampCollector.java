@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 

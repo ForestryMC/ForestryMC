@@ -11,9 +11,6 @@
 package forestry.core.genetics.alleles;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.HashMultimap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,10 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
+import com.google.common.collect.HashMultimap;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -40,6 +35,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.PluginCore;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
+import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry {
 

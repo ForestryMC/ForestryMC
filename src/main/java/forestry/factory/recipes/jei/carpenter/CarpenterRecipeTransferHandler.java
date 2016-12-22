@@ -23,18 +23,18 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 
 	@Override
 	public IRecipeTransferError transferRecipe(ContainerCarpenter container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
-		if(doTransfer){
+		if (doTransfer) {
 			IInventory craftingInventory = container.getCarpenter().getCraftingInventory();
 			NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
-			for(Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()){
+			for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
 				IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();
-				if(guiIngredient != null && guiIngredient.getDisplayedIngredient() != null){
+				if (guiIngredient != null && guiIngredient.getDisplayedIngredient() != null) {
 					int index = guiIngredientEntry.getKey();
 					if (index >= 2) {
-	                    ItemStack ingredient = guiIngredient.getDisplayedIngredient().copy();
-	                    craftingInventory.setInventorySlotContents(index - 2, ingredient);
-	                    items.set(index - 2, ingredient);
-	                }
+						ItemStack ingredient = guiIngredient.getDisplayedIngredient().copy();
+						craftingInventory.setInventorySlotContents(index - 2, ingredient);
+						items.set(index - 2, ingredient);
+					}
 				}
 			}
 			Proxies.net.sendToServer(new PacketRecipeTransferRequest(container.getCarpenter(), items));

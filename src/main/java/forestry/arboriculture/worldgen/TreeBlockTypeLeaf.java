@@ -12,13 +12,11 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nullable;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.world.ITreeGenData;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.world.ITreeGenData;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
 	private final ITreeGenData tree;

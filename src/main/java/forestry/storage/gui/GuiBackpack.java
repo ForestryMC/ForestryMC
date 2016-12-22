@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.inventory.IInventory;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+import net.minecraft.inventory.IInventory;
 
 public class GuiBackpack extends GuiForestry<ContainerBackpack, IInventory> {
 

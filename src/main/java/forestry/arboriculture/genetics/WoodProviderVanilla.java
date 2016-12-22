@@ -31,7 +31,7 @@ public class WoodProviderVanilla implements IWoodProvider {
 	public WoodProviderVanilla(EnumVanillaWoodType woodType) {
 		this.woodType = woodType;
 	}
-	
+
 	@Override
 	public void registerSprites(Item item, ITextureManager manager) {
 		String name;
@@ -62,7 +62,7 @@ public class WoodProviderVanilla implements IWoodProvider {
 		woodTop = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name + "_top"));
 		woodBark = textureMap.registerSprite(new ResourceLocation("minecraft", "blocks/log_" + name));
 	}
-	
+
 	@Override
 	public TextureAtlasSprite getSprite(boolean isTop) {
 		if (isTop) {
@@ -71,14 +71,14 @@ public class WoodProviderVanilla implements IWoodProvider {
 			return woodBark;
 		}
 	}
-	
+
 	@Override
 	public ItemStack getWoodStack() {
 		return TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 	}
-	
+
 	@Override
-	public float getCharcoalChance(int numberOfCharcoal){
+	public float getCharcoalChance(int numberOfCharcoal) {
 		return woodType.getCharcoalChance(numberOfCharcoal);
 	}
 

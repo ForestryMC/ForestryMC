@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
@@ -24,6 +21,8 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.packets.PacketGuiLayoutSelect;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 

@@ -18,10 +18,14 @@ public interface IAlleleSpeciesBuilder {
 
 	IAlleleSpeciesBuilder setHasEffect();
 
-	/** Secret species are not shown in creative mode. */
+	/**
+	 * Secret species are not shown in creative mode.
+	 */
 	IAlleleSpeciesBuilder setIsSecret();
 
-	/** Uncounted species do not count toward total species discovered. */
+	/**
+	 * Uncounted species do not count toward total species discovered.
+	 */
 	IAlleleSpeciesBuilder setIsNotCounted();
 
 	/**

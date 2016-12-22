@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.tiles.TileBottler;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
 	public ContainerBottler(InventoryPlayer player, TileBottler tile) {
 		super(tile, player, 8, 84);
-		
+
 		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 18, 7));
 		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_EMPTYING_PROCESSING, 18, 35).setPickupWatcher(tile));
 		this.addSlotToContainer(new SlotOutput(tile, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, 18, 63));

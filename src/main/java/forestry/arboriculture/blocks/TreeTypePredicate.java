@@ -1,9 +1,8 @@
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Predicate;
-
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
 import forestry.arboriculture.genetics.TreeDefinition;
 
 public class TreeTypePredicate implements Predicate<TreeDefinition> {

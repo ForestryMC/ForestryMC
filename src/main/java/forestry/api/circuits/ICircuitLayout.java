@@ -7,13 +7,19 @@ package forestry.api.circuits;
 
 public interface ICircuitLayout {
 
-	/** unique ID for this circuit layout */
+	/**
+	 * unique ID for this circuit layout
+	 */
 	String getUID();
 
-	/** localized name for this circuit layout */
+	/**
+	 * localized name for this circuit layout
+	 */
 	String getName();
 
-	/** localized string for how this circuit layout is used */
+	/**
+	 * localized string for how this circuit layout is used
+	 */
 	String getUsage();
 
 	/**

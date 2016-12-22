@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import com.google.common.collect.ImmutableSet;
-
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;

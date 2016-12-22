@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.world.World;
 
 public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNaturalistChest> {
@@ -30,7 +29,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 	public RenderNaturalistChest(String textureName) {
 		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/" + textureName + ".png");
 	}
-	
+
 	/**
 	 * @param chest If it null its render the item else it render the tile entity.
 	 */

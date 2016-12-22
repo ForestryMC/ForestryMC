@@ -12,6 +12,12 @@ package forestry.energy.render;
 
 import javax.annotation.Nullable;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
+import forestry.core.tiles.TemperatureState;
+import forestry.core.tiles.TileEngine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -19,13 +25,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
-import forestry.core.tiles.TemperatureState;
-import forestry.core.tiles.TileEngine;
 import net.minecraft.world.World;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
@@ -87,7 +86,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
-	
+
 	@Override
 	public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (engine != null) {

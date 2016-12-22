@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 /**
  * Biological classifications from domain down to genus.
- *
+ * <p>
  * Used by the *alyzers to display hierarchies.
  */
 public interface IClassification {

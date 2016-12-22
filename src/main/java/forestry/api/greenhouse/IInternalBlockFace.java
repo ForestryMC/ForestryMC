@@ -5,13 +5,13 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public interface IInternalBlockFace {
-	
+
 	boolean isTested();
-	
+
 	void setTested(boolean tested);
 
 	EnumFacing getFace();

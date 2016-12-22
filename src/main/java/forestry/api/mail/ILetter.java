@@ -8,10 +8,9 @@ package forestry.api.mail;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import forestry.api.core.INbtWritable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import forestry.api.core.INbtWritable;
 import net.minecraft.util.NonNullList;
 
 public interface ILetter extends IInventory, INbtWritable {

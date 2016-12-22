@@ -1,13 +1,12 @@
 package forestry.core.genetics.alleles;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 import forestry.core.utils.Translator;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
  * Alleles that have a category with several values inherit from this class.
  * For example, temperature tolerances or speeds are categories with several values.
- *
+ * <p>
  * This class helps localization by allowing specific names like
  * forestry.allele.speed.fast
  * and can fall back on generic names like

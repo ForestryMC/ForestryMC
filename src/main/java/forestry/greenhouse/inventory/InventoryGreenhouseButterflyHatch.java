@@ -16,7 +16,7 @@ import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 public class InventoryGreenhouseButterflyHatch extends InventoryAdapterTile<TileGreenhouseButterflyHatch> {
 
 	public static final int SLOTS = 4;
-	
+
 	public InventoryGreenhouseButterflyHatch(TileGreenhouseButterflyHatch tile) {
 		super(tile, SLOTS, "Items");
 	}

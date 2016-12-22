@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.greenhouse.logics;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
 
 	private int workTimer;
-	
+
 	public GreenhouseLogicGreenhouseDoor(IGreenhouseController controller) {
 		super(controller, "GreenhouseDoor");
 	}
-	
+
 	@Override
 	public void work() {
 		/*if (controller == null || !controller.isAssembled()) {
@@ -44,7 +43,7 @@ public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implem
 			workTimer = 0;
 		}*/
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("workTimer", workTimer);

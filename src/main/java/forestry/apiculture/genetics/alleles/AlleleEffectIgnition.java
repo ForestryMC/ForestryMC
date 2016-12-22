@@ -12,15 +12,14 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	private static final int ignitionChance = 50;

@@ -5,15 +5,13 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nullable;
-
 /**
- * Basic effect allele. 
+ * Basic effect allele.
  */
 public interface IAlleleEffect extends IAllele {
 	/**
 	 * @return true if this effect can combine with the effect on other allele (i.e. run before or after). combination can only occur if both effects are
-	 *         combinable.
+	 * combinable.
 	 */
 	boolean isCombinable();
 

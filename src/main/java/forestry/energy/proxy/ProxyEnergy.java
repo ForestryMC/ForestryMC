@@ -12,9 +12,8 @@ package forestry.energy.proxy;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import forestry.core.tiles.TileEngine;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class ProxyEnergy {
 	@Nullable

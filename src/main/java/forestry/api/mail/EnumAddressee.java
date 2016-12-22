@@ -19,7 +19,7 @@ public enum EnumAddressee {
 				return addr;
 			}
 		}
-		
+
 		return null;
 	}
 

@@ -101,7 +101,7 @@ public class TextureManager implements ITextureManager {
 			spriteRegisters.add((ISpriteRegister) item);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 		for (ISpriteRegister spriteRegister : spriteRegisters) {

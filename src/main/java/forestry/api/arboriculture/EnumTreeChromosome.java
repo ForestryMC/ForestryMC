@@ -51,15 +51,15 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 * Amount of random ticks which need to elapse before a sapling will grow into a tree.
 	 */
 	MATURATION(IAlleleInteger.class),
-	
+
 	GIRTH(IAlleleInteger.class),
 	/**
 	 * Determines if the tree can burn.
 	 */
 	FIREPROOF(IAlleleBoolean.class),;
-	
+
 	private final Class<? extends IAllele> alleleClass;
-	
+
 	EnumTreeChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
 	}

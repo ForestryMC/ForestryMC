@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -29,7 +27,7 @@ public class ItemRegistryCore extends ItemRegistry {
 
 	/* Research */
 	public final ItemResearchNote researchNote;
-	
+
 	/* Alyzer */
 	public final ItemAlyzer portableAlyzer;
 
@@ -88,10 +86,10 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry beeswax;
 	public final ItemForestry refractoryWax;
 	public final ItemFruit fruits;
-	
+
 	/* Camouflage */
 	public final ItemCamouflageSprayCan camouflageSprayCan;
-	
+
 	public ItemRegistryCore() {
 		fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizerCompound");
@@ -100,7 +98,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "researchNote");
-		
+
 		portableAlyzer = registerItem(new ItemAlyzer(), "portableAlyzer");
 
 		ingotCopper = createItemForOreName(OreDictUtil.INGOT_COPPER);
@@ -189,7 +187,7 @@ public class ItemRegistryCore extends ItemRegistry {
 			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
 			OreDictionary.registerOre(def.getOreDict(), fruit);
 		}
-		
+
 		// CAMOUFLAGE
 		camouflageSprayCan = registerItem(new ItemCamouflageSprayCan(), "camouflageSprayCan");
 	}

@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
@@ -35,7 +33,7 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
 		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
-		
+
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bogEarth");
 		bogEarth.setHarvestLevel("shovel", 0);
@@ -43,14 +41,14 @@ public class BlockRegistryCore extends BlockRegistry {
 		humus = new BlockHumus();
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");
 		humus.setHarvestLevel("shovel", 0);
-		
+
 		resources = new BlockResourceOre();
 		registerBlock(resources, new ItemBlockForestry(resources), "resources");
 		resources.setHarvestLevel("pickaxe", 1);
 		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
 		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
 		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
-		
+
 		BlockResourceStorage resourceStorage = new BlockResourceStorage();
 		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);

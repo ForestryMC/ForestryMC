@@ -13,7 +13,6 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * Some miscellaneous lists and settings for bees.
  *
  * @author SirSengir

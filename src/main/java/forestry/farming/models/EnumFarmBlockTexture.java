@@ -12,16 +12,14 @@ package forestry.farming.models;
 
 import javax.annotation.Nullable;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.proxy.Proxies;
 
 public enum EnumFarmBlockTexture {
 	BRICK_STONE(new ItemStack(Blocks.STONEBRICK, 1, 0)),
@@ -41,7 +39,7 @@ public enum EnumFarmBlockTexture {
 	EnumFarmBlockTexture(ItemStack base) {
 		this.base = base;
 	}
-	
+
 	/**
 	 * @return The texture sprite from the material of the farm block
 	 */

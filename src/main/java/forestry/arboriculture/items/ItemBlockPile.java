@@ -44,10 +44,10 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 	public int getMetadata(int i) {
 		return i;
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if(block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)){
+		if (block == PluginArboriculture.blocks.piles.get(EnumPileType.WOOD)) {
 			if (itemstack.getTagCompound() == null) {
 				return "Unknown";
 			}
@@ -62,7 +62,7 @@ public class ItemBlockPile<B extends Block> extends ItemBlockForestry<Block> {
 			}
 			String typeString = Translator.translateToLocal("for.trees.grammar.pile.type");
 			return Translator.translateToLocal("for.trees.grammar.pile").replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", typeString);
-		}else{
+		} else {
 			return Translator.translateToLocal("for.trees.pile.dirt");
 		}
 	}

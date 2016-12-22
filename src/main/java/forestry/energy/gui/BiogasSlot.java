@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.Translator;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class BiogasSlot extends ReservoirWidget {
 	public BiogasSlot(WidgetManager manager, int xPos, int yPos, int slot) {

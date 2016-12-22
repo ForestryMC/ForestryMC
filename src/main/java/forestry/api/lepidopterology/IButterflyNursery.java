@@ -14,11 +14,11 @@ import forestry.api.genetics.IIndividual;
 public interface IButterflyNursery extends IHousing, IClimateProvider {
 	@Nullable
 	IButterfly getCaterpillar();
-	
+
 	IIndividual getNanny();
-	
+
 	void setCaterpillar(@Nullable IButterfly butterfly);
-	
+
 	boolean canNurse(IButterfly butterfly);
-	
+
 }

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileSqueezer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, TileSqueezer> {
 

@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.config.Constants;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-
-import forestry.core.config.Constants;
 
 public class Log {
 

@@ -4,15 +4,15 @@ import java.util.Locale;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum EnumPilePosition implements IStringSerializable{
+public enum EnumPilePosition implements IStringSerializable {
 	INTERIOR,
-	FRONT, 
-	BACK, 
-	SIDE_RIGHT, 
-	SIDE_LEFT, 
-	CORNER_FRONT_LEFT, 
-	CORNER_FRONT_RIGHT, 
-	CORNER_BACK_LEFT, 
+	FRONT,
+	BACK,
+	SIDE_RIGHT,
+	SIDE_LEFT,
+	CORNER_FRONT_LEFT,
+	CORNER_FRONT_RIGHT,
+	CORNER_BACK_LEFT,
 	CORNER_BACK_RIGHT;
 
 	@Override

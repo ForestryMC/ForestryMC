@@ -28,7 +28,7 @@ public class ParticleColoredDripParticle extends Particle {
 	public ParticleColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.motionX = this.motionY = this.motionZ = 0.0D;
-		
+
 		this.particleRed = red;
 		this.particleGreen = green;
 		this.particleBlue = blue;
@@ -76,20 +76,20 @@ public class ParticleColoredDripParticle extends Particle {
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
 		}
-		
+
 		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
 		IBlockState iblockstate = this.world.getBlockState(blockpos);
 		Material material = iblockstate.getMaterial();
-		
+
 		if (material.isLiquid() || material.isSolid()) {
 			double d0 = 0.0D;
-			
+
 			if (iblockstate.getBlock() instanceof BlockLiquid) {
 				d0 = BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL));
 			}
-			
+
 			double d1 = MathHelper.floor(this.posY) + 1 - d0;
-			
+
 			if (this.posY < d1) {
 				this.setExpired();
 			}

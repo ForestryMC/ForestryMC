@@ -14,7 +14,7 @@ public interface ITreeGenome extends IGenome {
 
 	@Override
 	IAlleleTreeSpecies getSecondary();
-	
+
 	IFruitProvider getFruitProvider();
 
 	float getHeight();
@@ -23,7 +23,7 @@ public interface ITreeGenome extends IGenome {
 
 	/**
 	 * @return Determines either a) how many fruit leaves there are or b) the chance for any fruit leave to drop a sapling. Exact usage determined by the
-	 *         IFruitProvider
+	 * IFruitProvider
 	 */
 	float getYield();
 

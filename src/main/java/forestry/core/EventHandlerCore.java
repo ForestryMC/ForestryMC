@@ -12,12 +12,19 @@ package forestry.core;
 
 import java.util.Collection;
 
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.config.Constants;
+import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.loot.LootTableLoader;
 import forestry.core.models.ModelBlockCached;
+import forestry.core.render.TextureManager;
+import forestry.plugins.PluginManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
-
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -27,15 +34,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.Constants;
-import forestry.core.errors.ErrorStateRegistry;
-import forestry.core.loot.LootTableLoader;
-import forestry.core.render.TextureManager;
-import forestry.plugins.PluginManager;
 
 public class EventHandlerCore {
 
@@ -89,7 +87,7 @@ public class EventHandlerCore {
 			handler.onWorldUnload(event.getWorld());
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {

@@ -12,14 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import forestry.core.network.PacketBufferForestry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
@@ -29,9 +22,14 @@ import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
@@ -50,7 +48,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		game.readFromNBT(nbttagcompound);
 	}
 
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -118,20 +116,20 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		game.readData(data);
 	}
-	
+
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		data.writeItemStack(displayStack);
 	}
-	
+
 	@Override
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
 	}
-	
+
 	/* ISlotPickupWatcher */
 	@Override
 	public void onTake(int slotIndex, EntityPlayer player) {
@@ -141,16 +139,16 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			Proxies.net.sendNetworkPacket(packet, pos, world);
 		}
 	}
-	
+
 	@Override
-	public void setInventorySlotContents(int slotIndex,  ItemStack itemstack) {
+	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		super.setInventorySlotContents(slotIndex, itemstack);
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
 			Proxies.net.sendNetworkPacket(packet, pos, world);
 		}
 	}
-	
+
 	@Override
 	public Object getGui(EntityPlayer player, int data) {
 		return new GuiEscritoire(player, this);
@@ -160,7 +158,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerEscritoire(player, this);
 	}
-	
+
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
@@ -168,7 +166,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
-	
+
 	public ItemStack getIndividualOnDisplay() {
 		if (world.isRemote) {
 			return individualOnDisplayClient;

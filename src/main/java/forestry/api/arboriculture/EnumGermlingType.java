@@ -11,7 +11,7 @@ public enum EnumGermlingType implements ISpeciesType {
 	SAPLING("sapling"), POLLEN("pollen");
 
 	public static final EnumGermlingType[] VALUES = values();
-	
+
 	private final String name;
 
 	EnumGermlingType(String name) {

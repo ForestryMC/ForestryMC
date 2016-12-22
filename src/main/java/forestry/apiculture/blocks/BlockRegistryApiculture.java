@@ -12,14 +12,13 @@ package forestry.apiculture.blocks;
 
 import java.util.Map;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 
 public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockApiculture apiary;

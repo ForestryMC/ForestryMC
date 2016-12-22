@@ -15,7 +15,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.render.FruitPodStateMapper;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
@@ -27,18 +35,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.core.IStateMapperRegister;
-import forestry.arboriculture.render.FruitPodStateMapper;
-import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, ITileEntityProvider {
 
@@ -53,10 +51,10 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 
 	private final IAlleleFruit fruit;
 
-	private BlockFruitPod( IAlleleFruit fruit) {
+	private BlockFruitPod(IAlleleFruit fruit) {
 		this.fruit = fruit;
 	}
-	
+
 	public IAlleleFruit getFruit() {
 		return fruit;
 	}
@@ -99,18 +97,18 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
 		EnumFacing facing = state.getValue(FACING);
 		return BlockUtil.isValidPodLocation(world, pos, facing);
 	}
-	
+
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		world.removeTileEntity(pos);
@@ -121,7 +119,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileFruitPod();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {

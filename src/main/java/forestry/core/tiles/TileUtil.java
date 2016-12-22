@@ -20,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -38,7 +37,7 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static <T extends TileEntity> T getTile( IBlockAccess world,  BlockPos pos,  Class<T> tileClass) {
+	public static <T extends TileEntity> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);

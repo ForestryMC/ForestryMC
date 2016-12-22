@@ -14,17 +14,17 @@ public interface IClimatePosition extends INbtReadable, INbtWritable {
 	IClimateRegion getClimateRegion();
 
 	BlockPos getPos();
-	
+
 	void setTemperature(float temperature);
-	
+
 	void addTemperature(float temperature);
-	
+
 	float getTemperature();
 
 	void setHumidity(float humidity);
-	
+
 	void addHumidity(float humidity);
-	
+
 	float getHumidity();
 
 }

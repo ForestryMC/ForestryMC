@@ -8,5 +8,5 @@ package forestry.api.greenhouse;
 public enum EnumGreenhouseEventType {
 
 	CAMOUFLAGE
-	
+
 }

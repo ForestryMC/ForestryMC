@@ -14,7 +14,7 @@ public interface IClimateSource {
 
 	/**
 	 * @param tickCount The current tick count.
-	 * @param region The climate region, in that the source stands.
+	 * @param region    The climate region, in that the source stands.
 	 * @return Return true if the the climate has changed.
 	 */
 	boolean changeClimate(int tickCount, IClimateRegion region);

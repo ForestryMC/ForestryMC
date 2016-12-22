@@ -29,6 +29,7 @@ public interface IFlowerProvider {
 	/**
 	 * Allows the flower provider to affect the produce at the given location.
 	 * If this flowerProvider does not affect the products, it should return the products unchanged.
+	 *
 	 * @return Array of itemstacks being the (modified or unmodified) produce.
 	 */
 	List<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, List<ItemStack> products);

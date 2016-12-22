@@ -11,12 +11,10 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import forestry.api.recipes.IFermenterRecipe;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.recipes.IFermenterRecipe;
 
 public class FermenterRecipe implements IFermenterRecipe {
 

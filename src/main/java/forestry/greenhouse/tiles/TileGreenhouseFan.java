@@ -22,5 +22,5 @@ public class TileGreenhouseFan extends TileGreenhouseClimatiser {
 	public TileGreenhouseFan() {
 		super(DEFINITION);
 	}
-	
+
 }

@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
 import forestry.core.gui.widgets.ProbeButton;
@@ -25,6 +19,11 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);

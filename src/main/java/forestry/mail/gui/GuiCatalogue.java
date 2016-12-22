@@ -13,15 +13,6 @@ package forestry.mail.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.core.config.SessionVars;
@@ -30,6 +21,13 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.input.Keyboard;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 

@@ -138,16 +138,16 @@ public class ProxyRenderClient extends ProxyRender {
 	public void bindTexture(ResourceLocation location) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 	}
-	
+
 	@Override
 	public void registerBlockModel(@Nonnull final BlockModelEntry index) {
 		ModelManager.getInstance().registerCustomBlockModel(index);
-		if(index.addStateMapper){
+		if (index.addStateMapper) {
 			StateMapperBase ignoreState = new BlockModeStateMapper(index);
 			registerStateMapper(index.block, ignoreState);
 		}
 	}
-	
+
 	@Override
 	public void registerModel(@Nonnull ModelEntry index) {
 		ModelManager.getInstance().registerCustomModel(index);
@@ -179,9 +179,9 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
 		return ModelLoaderRegistry.loadASM(location, parameters);
-    }
+	}
 
 	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {
@@ -315,7 +315,7 @@ public class ProxyRenderClient extends ProxyRender {
 		float red = (color >> 16 & 255) / 255.0F;
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
-		
+
 		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
 		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
 		if (particle != null) {

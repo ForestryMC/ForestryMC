@@ -10,17 +10,11 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.ImmutableSet;
-
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.collect.ImmutableSet;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.ICentrifugeManager;
@@ -39,6 +33,9 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 
 public class DummyManagers {
 

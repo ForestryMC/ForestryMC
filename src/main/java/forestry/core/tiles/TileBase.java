@@ -14,17 +14,16 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Config;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IHintSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Config;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IHintSource;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 	protected final List<String> hints;

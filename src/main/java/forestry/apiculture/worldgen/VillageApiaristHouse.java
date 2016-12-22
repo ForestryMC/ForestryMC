@@ -189,7 +189,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		setBlockState(world, planks, 0, 2, 4, structBoundingBox);
 		setBlockState(world, planks, 8, 2, 1, structBoundingBox);
 		setBlockState(world, planks, 8, 2, 4, structBoundingBox);
-		
+
 		IBlockState glassPaneState = Blocks.GLASS_PANE.getDefaultState();
 
 		// Windows on east side

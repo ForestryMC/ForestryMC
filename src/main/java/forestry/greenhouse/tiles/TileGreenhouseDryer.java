@@ -16,7 +16,7 @@ import forestry.api.climate.IClimatiserDefinition;
 import forestry.core.climate.ClimatiserDefinition;
 
 public class TileGreenhouseDryer extends TileGreenhouseClimatiser {
-	
+
 	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.NEGATIVE, 5D, EnumClimatiserTypes.HUMIDITY);
 
 	public TileGreenhouseDryer() {

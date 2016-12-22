@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
 
-import net.minecraft.item.ItemStack;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
@@ -30,6 +29,7 @@ import forestry.api.lepidopterology.IButterflyMutationBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
+import net.minecraft.item.ItemStack;
 
 public enum ButterflyDefinition implements IButterflyDefinition {
 	CabbageWhite(ButterflyBranchDefinition.Pieris, "cabbageWhite", "rapae", new Color(0xccffee), true, 1.0f) {
@@ -347,21 +347,22 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	protected void setAlleles(IAllele[] alleles) {
 
 	}
-	protected void registerMutations(){
-		
+
+	protected void registerMutations() {
+
 	}
-	
+
 	protected final IButterflyMutationBuilder registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
 		IAlleleButterflySpecies species1 = null;
 		IAlleleButterflySpecies species2 = null;
-		if(parent1 instanceof ButterflyDefinition){
+		if (parent1 instanceof ButterflyDefinition) {
 			species1 = ((ButterflyDefinition) parent1).species;
-		}else if(parent1 instanceof MothDefinition){
+		} else if (parent1 instanceof MothDefinition) {
 			species1 = ((MothDefinition) parent1).getSpecies();
 		}
-		if(parent2 instanceof ButterflyDefinition){
+		if (parent2 instanceof ButterflyDefinition) {
 			species2 = ((ButterflyDefinition) parent2).species;
-		}else if(parent2 instanceof MothDefinition){
+		} else if (parent2 instanceof MothDefinition) {
 			species2 = ((MothDefinition) parent2).getSpecies();
 		}
 		return ButterflyManager.butterflyMutationFactory.createMutation(species1, species2, getTemplate(), chance);
@@ -387,7 +388,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		IButterfly butterfly = getIndividual();
 		return ButterflyManager.butterflyRoot.getMemberStack(butterfly, flutterType);
 	}
-	
+
 	public IAlleleButterflySpecies getSpecies() {
 		return species;
 	}

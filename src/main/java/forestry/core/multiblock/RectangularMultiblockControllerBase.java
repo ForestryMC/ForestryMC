@@ -1,11 +1,10 @@
 package forestry.core.multiblock;
 
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.Translator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.multiblock.IMultiblockComponent;
 
 public abstract class RectangularMultiblockControllerBase extends MultiblockControllerForestry {
 
@@ -25,15 +24,15 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		if (connectedParts.size() < sizeLimits.getMinimumNumberOfBlocksForAssembledMachine()) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
-		
+
 		BlockPos maximumCoord = getMaximumCoord();
 		BlockPos minimumCoord = getMinimumCoord();
-		
+
 		// Quickly check for exceeded dimensions
 		int deltaX = maximumCoord.getX() - minimumCoord.getX() + 1;
 		int deltaY = maximumCoord.getY() - minimumCoord.getY() + 1;
 		int deltaZ = maximumCoord.getZ() - minimumCoord.getZ() + 1;
-		
+
 		int maxX = sizeLimits.getMaximumXSize();
 		int maxY = sizeLimits.getMaximumYSize();
 		int maxZ = sizeLimits.getMaximumZSize();
@@ -71,7 +70,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 					te = this.world.getTileEntity(pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
-						
+
 						// Ensure this part should actually be allowed within a cube of this controller's type
 						if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 							throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
@@ -80,7 +79,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors
 						part = null;
 					}
-					
+
 					// Validate block type against both part-level and material-level validators.
 					int extremes = 0;
 
@@ -93,7 +92,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 					if (z == minimumCoord.getZ()) {
 						extremes++;
 					}
-					
+
 					if (x == maximumCoord.getX()) {
 						extremes++;
 					}
@@ -103,7 +102,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 					if (z == maximumCoord.getZ()) {
 						extremes++;
 					}
-					
+
 					if (extremes >= 1) {
 						// Side
 						int exteriorLevel = y - minimumCoord.getY();
@@ -123,7 +122,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 			}
 		}
 	}
-	
+
 	protected IMultiblockSizeLimits getSizeLimits() {
 		return sizeLimits;
 	}

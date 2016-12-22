@@ -19,9 +19,9 @@ public interface IGreenhouseHelper {
 	 */
 	@Nullable
 	IGreenhouseController getGreenhouseController(World world, BlockPos pos);
-	
+
 	void addGreenhouseLogic(Class<? extends IGreenhouseLogic> logic);
-	
+
 	List<Class<? extends IGreenhouseLogic>> getGreenhouseLogics();
-	
+
 }

@@ -10,24 +10,11 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.animation.ITimeValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-
+import com.google.common.collect.ImmutableMap;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.core.fluids.Fluids;
@@ -38,6 +25,16 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 public class ProxyRender {
 
@@ -82,10 +79,10 @@ public class ProxyRender {
 	public TileEntitySpecialRenderer<TileNaturalistChest> getRenderChest(String textureName) {
 		return null;
 	}
-	
+
 	public void registerBlockModel(BlockModelEntry index) {
 	}
-	
+
 	public void registerModel(ModelEntry index) {
 	}
 
@@ -104,14 +101,14 @@ public class ProxyRender {
 
 	public void bindTexture(ResourceLocation location) {
 	}
-	
+
 	public void registerModels() {
 	}
 
 	public void registerItemAndBlockColors() {
 	}
-	
-	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+
+	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
 		return null;
 	}
 

@@ -14,6 +14,9 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Random;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.entities.ParticleColoredDripParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -29,17 +32,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.entities.ParticleColoredDripParticle;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
@@ -120,7 +118,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				double px = d0 + rand.nextFloat();
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
-				
+
 				Particle fx = new ParticleColoredDripParticle(worldIn, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 			}
@@ -133,7 +131,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		return !blockState.getMaterial().isLiquid() &&
 				super.canDisplace(world, pos);
 	}
-	
+
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
@@ -181,17 +179,17 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			return super.getMaterial(state);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		
+
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
-		
+
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();

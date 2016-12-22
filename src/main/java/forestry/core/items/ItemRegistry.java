@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {

@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.food.inventory.ItemInventoryInfuser;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerInfuser extends ContainerItemInventory<ItemInventoryInfuser> {
 

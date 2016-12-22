@@ -11,9 +11,6 @@
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
-
-import java.io.IOException;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import net.minecraft.network.PacketBuffer;

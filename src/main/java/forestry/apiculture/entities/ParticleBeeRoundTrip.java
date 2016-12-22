@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import forestry.apiculture.proxy.ProxyApicultureClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.apiculture.proxy.ProxyApicultureClient;
 
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;

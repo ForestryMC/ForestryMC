@@ -15,15 +15,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Translator;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

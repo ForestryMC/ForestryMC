@@ -31,7 +31,7 @@ public interface IBackpackDefinition {
 
 	/**
 	 * Filters items that can be put into a backpack.
-	 *
+	 * <p>
 	 * For Backpack Implementers: you can create a new filter with
 	 * {@link IBackpackInterface#createBackpackFilter()} or
 	 * {@link IBackpackInterface#createNaturalistBackpackFilter(String)}

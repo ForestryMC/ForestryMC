@@ -131,7 +131,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	public boolean canBlockSeeTheSky() {
 		return getMultiblockLogic().getController().canBlockSeeTheSky();
 	}
-	
+
 	@Override
 	public boolean isRaining() {
 		return getMultiblockLogic().getController().isRaining();

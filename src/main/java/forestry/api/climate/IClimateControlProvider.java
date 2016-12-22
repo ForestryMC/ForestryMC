@@ -10,5 +10,5 @@ import forestry.api.core.ILocatable;
 public interface IClimateControlProvider extends ILocatable {
 
 	IClimateControl getClimateControl();
-	
+
 }

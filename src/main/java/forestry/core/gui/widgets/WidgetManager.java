@@ -14,10 +14,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 
 public class WidgetManager {
 

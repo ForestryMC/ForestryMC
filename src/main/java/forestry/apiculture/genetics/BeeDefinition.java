@@ -531,7 +531,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void setAlleles(IAllele[] template) {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.EFFECT, AlleleEffects.effectReanimation);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(HERMITIC, ENDED, 4);
@@ -551,7 +551,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.EFFECT, AlleleEffects.effectResurrection);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(SPECTRAL, ENDED, 2);
@@ -633,7 +633,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(MONASTIC, DEMONIC, 4).setIsSecret();
@@ -651,7 +651,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(DEMONIC, VINDICTIVE, 8).setIsSecret();
@@ -671,7 +671,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(VENGEFUL, VINDICTIVE, 4);
@@ -970,7 +970,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTEST);
 			AlleleHelper.getInstance().set(template, EnumBeeChromosome.EFFECT, AlleleEffects.effectRepulsion);
 		}
-		
+
 		@Override
 		protected void registerMutations() {
 			registerMutation(MONASTIC, SECLUDED, 8);
@@ -986,7 +986,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	private IAllele[] template;
 	@Nullable
 	private IBeeGenome genome;
-	
+
 	BeeDefinition(BeeBranchDefinition branch, String binomial, boolean dominant, Color primary, Color secondary) {
 		String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
 		String species = "species" + WordUtils.capitalize(lowercaseName);
@@ -1023,9 +1023,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot));
 	}
-	
+
 	public static void preInit() {
-		
+
 	}
 
 	private void init() {

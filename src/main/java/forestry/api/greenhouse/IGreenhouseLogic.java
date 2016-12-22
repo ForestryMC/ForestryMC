@@ -17,11 +17,11 @@ import forestry.api.multiblock.IGreenhouseController;
 public interface IGreenhouseLogic extends INbtWritable, INbtReadable {
 
 	void work();
-	
+
 	void onEvent(EnumGreenhouseEventType type, Object event);
-	
+
 	IGreenhouseController getController();
-	
+
 	String getName();
-	
+
 }

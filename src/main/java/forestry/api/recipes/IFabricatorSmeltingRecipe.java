@@ -11,7 +11,6 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {

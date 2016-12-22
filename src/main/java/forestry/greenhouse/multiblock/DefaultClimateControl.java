@@ -5,10 +5,10 @@ import forestry.api.climate.IClimateControl;
 public class DefaultClimateControl implements IClimateControl {
 
 	public static final DefaultClimateControl instance = new DefaultClimateControl();
-	
+
 	public DefaultClimateControl() {
 	}
-	
+
 	@Override
 	public float getControlTemperature() {
 		return 2.0F;
@@ -20,7 +20,7 @@ public class DefaultClimateControl implements IClimateControl {
 	}
 
 	@Override
-	public void setControlTemperature(float temperature) {		
+	public void setControlTemperature(float temperature) {
 	}
 
 	@Override

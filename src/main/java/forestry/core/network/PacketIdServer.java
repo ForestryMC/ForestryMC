@@ -14,7 +14,9 @@ import javax.annotation.Nonnull;
 
 import forestry.core.network.packets.PacketHandlerDummyServer;
 
-/** Packets sent to the server from the client */
+/**
+ * Packets sent to the server from the client
+ */
 public enum PacketIdServer implements IPacketId {
 	INVALID,
 

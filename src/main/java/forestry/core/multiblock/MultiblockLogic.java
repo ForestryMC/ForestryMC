@@ -12,13 +12,12 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.core.utils.Log;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
 	private final Class<T> controllerClass;
@@ -60,8 +59,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * been initialized, but any attempts to read data about the world can cause infinite loops -
 	 * if you call getTileEntity on this TileEntity's coordinate from within validate(), you will
 	 * blow your call stack.
-	 *
+	 * <p>
 	 * TL;DR: Here there be dragons.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#validate()
 	 */
 	@Override
@@ -72,6 +72,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	/**
 	 * Called when a block is removed by game actions, such as a player breaking the block
 	 * or the block being changed into another block.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#invalidate()
 	 */
 	@Override
@@ -83,6 +84,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * Called from Minecraft's tile entity loop, after all tile entities have been ticked,
 	 * as the chunk in which this tile entity is contained is unloading.
 	 * Happens before the Forge TickEnd event.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#onChunkUnload()
 	 */
 	@Override
@@ -179,6 +181,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * Override this to easily modify the description packet's data without having
 	 * to worry about sending the packet itself.
 	 * Decode this data in decodeDescriptionPacket.
+	 *
 	 * @param packetData An NBT compound tag into which you should write your custom description data.
 	 */
 	@Override
@@ -193,6 +196,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	/**
 	 * Override this to easily read in data from a TileEntity's description packet.
 	 * Encoded in encodeDescriptionPacket.
+	 *
 	 * @param packetData The NBT data from the tile entity's description packet.
 	 */
 	@Override

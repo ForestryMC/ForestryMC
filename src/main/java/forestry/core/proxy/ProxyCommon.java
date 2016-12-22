@@ -12,6 +12,9 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import forestry.core.TickHandlerCoreServer;
+import forestry.core.multiblock.MultiblockServerTickHandler;
+import forestry.core.worldgen.WorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -20,27 +23,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
-
-import forestry.core.TickHandlerCoreServer;
-import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommon {
 
 	public String getMinecraftVersion() {
 		return Loader.instance().getMinecraftModContainer().getVersion();
 	}
-	
-	public void registerItem(Item item){
-		
+
+	public void registerItem(Item item) {
+
 	}
-	
-	public void registerBlock(Block block){
-		
+
+	public void registerBlock(Block block) {
+
 	}
 
 	public void registerTickHandlers(WorldGenerator worldGenerator) {

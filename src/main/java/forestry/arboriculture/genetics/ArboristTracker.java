@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
-	/** Required for creation from map storage */
+	/**
+	 * Required for creation from map storage
+	 */
 	public ArboristTracker(String s) {
 		super(s);
 	}

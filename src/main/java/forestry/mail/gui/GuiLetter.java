@@ -13,13 +13,6 @@ package forestry.mail.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Keyboard;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.config.Constants;
@@ -33,6 +26,10 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter> {
 
@@ -218,7 +215,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 
 		String recipient = SessionVars.getStringVar("mail.letter.recipient");
 		String typeName = SessionVars.getStringVar("mail.letter.addressee");
-		
+
 		if (StringUtils.isNotBlank(recipient) && StringUtils.isNotBlank(typeName)) {
 			address.setText(recipient);
 

@@ -38,7 +38,7 @@ public class GenericRatings {
 		if (neverSleeps) {
 			active = StringUtil.append(", ", active, naturalNocturnal ? Translator.translateToLocal("for.gui.diurnal") : Translator.translateToLocal("for.gui.nocturnal"));
 		}
-		
+
 		return active;
 	}
 }

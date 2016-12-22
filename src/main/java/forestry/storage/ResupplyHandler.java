@@ -13,19 +13,17 @@ package forestry.storage;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
-
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ResupplyHandler implements IResupplyHandler {
 

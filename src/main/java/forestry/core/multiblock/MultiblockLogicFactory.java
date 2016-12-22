@@ -36,7 +36,7 @@ public class MultiblockLogicFactory implements IMultiblockLogicFactory {
 	public IMultiblockLogicGreenhouse createGreenhouseLogic() {
 		return new MultiblockLogicGreenhouse();
 	}
-	
+
 	@Override
 	public IMultiblockLogicCharcoalPile createCharcoalPileLogic() {
 		return new MultiblockLogicCharcoalPile();

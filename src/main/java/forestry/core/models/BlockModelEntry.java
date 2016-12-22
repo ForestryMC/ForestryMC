@@ -28,7 +28,7 @@ public class BlockModelEntry {
 	public BlockModelEntry(ModelResourceLocation blockModelLocation, ModelResourceLocation itemModelLocation, IBakedModel model, Block block) {
 		this(blockModelLocation, itemModelLocation, model, block, true);
 	}
-	
+
 	public BlockModelEntry(ModelResourceLocation blockModelLocation, @Nullable ModelResourceLocation itemModelLocation, IBakedModel model, Block block, boolean addStateMapper) {
 		this.blockModelLocation = blockModelLocation;
 		this.itemModelLocation = itemModelLocation;

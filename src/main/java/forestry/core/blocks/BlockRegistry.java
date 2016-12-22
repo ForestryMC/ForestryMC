@@ -12,15 +12,13 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {

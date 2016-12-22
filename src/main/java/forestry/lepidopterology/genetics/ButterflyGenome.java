@@ -73,12 +73,12 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public float getSize() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
 	}
-	
+
 	@Override
 	public int getLifespan() {
 		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
 	}
-	
+
 	@Override
 	public float getSpeed() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
@@ -128,7 +128,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public IAlleleButterflyEffect getEffect() {
 		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
 	}
-	
+
 	@Override
 	public IAlleleButterflyCocoon getCocoon() {
 		return (IAlleleButterflyCocoon) getActiveAllele(EnumButterflyChromosome.COCOON);

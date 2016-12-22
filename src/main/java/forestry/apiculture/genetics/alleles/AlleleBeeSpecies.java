@@ -15,16 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -45,6 +36,12 @@ import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
@@ -109,7 +106,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		nocturnal = true;
 		return this;
 	}
-	
+
 	@Override
 	public IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
 		this.beeModelProvider = beeIconProvider;
@@ -179,10 +176,10 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public boolean isJubilant(IBeeGenome genome, IBeeHousing housing) {
 		return jubilanceProvider.isJubilant(this, genome, housing);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerModels(Item item, IModelManager manager){
+	public void registerModels(Item item, IModelManager manager) {
 		beeModelProvider.registerModels(item, manager);
 	}
 

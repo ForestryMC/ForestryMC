@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public interface ICamouflagedTile {
 
 	String getCamouflageType();
-	
+
 	BlockPos getCoordinates();
-	
+
 }

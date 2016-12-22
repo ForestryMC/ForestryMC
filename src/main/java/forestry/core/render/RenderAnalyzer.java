@@ -12,6 +12,10 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
+import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.blocks.BlockBase;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileAnalyzer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -20,11 +24,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.blocks.BlockBase;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 
@@ -35,7 +34,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	public RenderAnalyzer(String baseTexture) {
 		this.model = new ModelAnalyzer(baseTexture);
 	}
-	
+
 	/**
 	 * @param analyzer If it null its render the item else it render the tile entity.
 	 */
@@ -76,7 +75,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 			dummyEntityItem.onUpdate();
 		}
 		RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
-		
+
 		rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();
 

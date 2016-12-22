@@ -19,10 +19,10 @@ public class PluginMalisisDoors extends BlankForestryPlugin {
 	public String getFailMessage() {
 		return "Malisis Door's not found";
 	}
-	
+
 	@Override
 	public void preInit() {
 		CamouflageManager.camouflageAccess.addModIdToBlackList("door", "malisisdoors");
 	}
-	
+
 }

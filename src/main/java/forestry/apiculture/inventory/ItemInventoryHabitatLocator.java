@@ -10,16 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
-
+import com.google.common.collect.ImmutableSet;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.IErrorSource;
@@ -31,6 +25,10 @@ import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource, IHintSource {
 

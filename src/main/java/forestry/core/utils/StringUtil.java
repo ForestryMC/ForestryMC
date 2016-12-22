@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-
-import forestry.core.proxy.Proxies;
 
 public class StringUtil {
 

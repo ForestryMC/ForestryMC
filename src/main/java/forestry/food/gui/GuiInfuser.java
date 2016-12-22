@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.api.food.BeverageManager;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.food.inventory.ItemInventoryInfuser;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfuser> {
 

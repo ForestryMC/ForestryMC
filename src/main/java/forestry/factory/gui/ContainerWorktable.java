@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
@@ -33,6 +27,11 @@ import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);

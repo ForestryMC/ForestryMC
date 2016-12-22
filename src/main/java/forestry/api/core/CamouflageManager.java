@@ -6,13 +6,13 @@
 package forestry.api.core;
 
 public class CamouflageManager {
-	
+
 	public static ICamouflageAccess camouflageAccess;
-	
+
 	public static final String DEFAULT = "default";
-	
+
 	public static final String GLASS = "glass";
-	
+
 	public static final String DOOR = "door";
 
 }

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.inventory.ItemInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.slots.SlotLocked;
-import forestry.core.inventory.ItemInventory;
 
 public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
@@ -53,12 +52,12 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	@Override
 	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
 		ItemStack result = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
-		if(slotId > 0){
+		if (slotId > 0) {
 			inventory.onSlotClick(inventorySlots.get(slotId).getSlotIndex(), player);
 		}
 		return result;
 	}
-	
+
 	public I getItemInventory() {
 		return inventory;
 	}

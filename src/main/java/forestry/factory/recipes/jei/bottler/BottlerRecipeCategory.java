@@ -19,14 +19,14 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 	private static final int inputEmpty = 2;
 	private static final int outputFull = 3;
 	private static final int tankIndex = 0;
-	
+
 	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/bottler.png");
 
 	private final IDrawable slot;
 	private final IDrawable tank;
 	private final IDrawable arrowDown;
 	private final IDrawable tankOverlay;
-	
+
 	public BottlerRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createBlankDrawable(62, 60), "tile.for.bottler.name");
 

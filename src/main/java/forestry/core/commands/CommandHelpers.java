@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import forestry.core.utils.Translator;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -25,8 +26,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-
-import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -46,7 +45,7 @@ public class CommandHelpers {
 	/**
 	 * Avoid using this function if at all possible. Commands are processed on the server,
 	 * which has no localization information.
-	 *
+	 * <p>
 	 * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
 	 * Messages will not be localized properly if you use StringUtil.localize().
 	 */

@@ -15,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.utils.Translator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public abstract class BeverageEffect implements IBeverageEffect {
 	private final int id;

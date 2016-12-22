@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.util.math.Vec3i;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.core.ForestryAPI;
@@ -33,6 +31,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.util.math.Vec3i;
 
 public class AlleleHelper implements IAlleleHelper {
 

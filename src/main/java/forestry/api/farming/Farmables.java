@@ -5,13 +5,12 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import net.minecraft.item.ItemStack;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.item.ItemStack;
 
 public class Farmables {
 	/**
@@ -20,7 +19,7 @@ public class Farmables {
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
 	 */
 	public static final Multimap<String, IFarmable> farmables = HashMultimap.create();
-	
+
 	public static final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
 
 }

@@ -486,7 +486,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public boolean canDoBeeFX() {
-		if(Proxies.common.getClientInstance().isGamePaused()){
+		if (Proxies.common.getClientInstance().isGamePaused()) {
 			return false;
 		}
 		return active;

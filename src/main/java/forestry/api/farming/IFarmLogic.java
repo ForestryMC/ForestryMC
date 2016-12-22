@@ -12,7 +12,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,12 +32,12 @@ public interface IFarmLogic {
 	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
 
 	IFarmLogic setManual(boolean manual);
-	
+
 	@SideOnly(Side.CLIENT)
 	ResourceLocation getTextureMap();
-	
+
 	String getName();
-	
+
 	/**
 	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.
 	 */

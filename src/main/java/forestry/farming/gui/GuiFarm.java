@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,6 +18,7 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 

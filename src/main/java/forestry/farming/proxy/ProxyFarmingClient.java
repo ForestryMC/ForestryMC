@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-
 import forestry.core.models.BlockModelEntry;
 import forestry.core.proxy.Proxies;
 import forestry.farming.PluginFarming;
 import forestry.farming.models.ModelFarmBlock;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 @SuppressWarnings("unused")
 public class ProxyFarmingClient extends ProxyFarming {

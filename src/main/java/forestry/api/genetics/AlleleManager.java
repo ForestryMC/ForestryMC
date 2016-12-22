@@ -12,7 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
 /**
- * Holds a static reference to the {@link IAlleleRegistry}. 
+ * Holds a static reference to the {@link IAlleleRegistry}.
  */
 public class AlleleManager {
 	/**

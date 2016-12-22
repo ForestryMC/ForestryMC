@@ -17,19 +17,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class FruitProviderPod extends FruitProviderNone {
 
@@ -42,7 +41,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	private final EnumPodType type;
-	
+
 	private final Map<ItemStack, Float> drops;
 
 	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
@@ -90,7 +89,7 @@ public class FruitProviderPod extends FruitProviderNone {
 			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getSappiness(), pos);
 		}
 	}
-	
+
 	@Override
 	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		return null;
@@ -100,7 +99,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	public ResourceLocation getDecorativeSprite() {
 		return null;
 	}
-	
+
 	@Override
 	public Map<ItemStack, Float> getProducts() {
 		return Collections.unmodifiableMap(drops);
@@ -109,7 +108,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	@Override
 	public void registerSprites() {
 	}
-	
+
 	@Override
 	public String getModelName() {
 		return type.getModelName();

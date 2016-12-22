@@ -61,7 +61,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	public boolean canBeRidden() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isPoweredCart() {
 		return false;
@@ -101,7 +101,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		ItemStack cartItem = getCartItem();
 		return cartItem.getUnlocalizedName() + ".name";
 	}
-	
+
 	@Override
 	public int getIdOfEntity() {
 		return getEntityId();

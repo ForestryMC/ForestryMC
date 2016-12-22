@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
@@ -25,6 +22,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -102,10 +101,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
@@ -116,10 +115,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean isNaturalOffspring(IBee queen) {
 		return queen.isNatural();

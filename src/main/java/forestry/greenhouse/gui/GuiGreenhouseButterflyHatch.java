@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.greenhouse.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiGreenhouseButterflyHatch extends GuiForestryTitled<ContainerGreenhouseButterflyHatch, TileGreenhouseButterflyHatch> {
 
 	public GuiGreenhouseButterflyHatch(EntityPlayer player, TileGreenhouseButterflyHatch tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/greenhouse_butterfly_hatch.png", new ContainerGreenhouseButterflyHatch(player.inventory, tile), tile);
-		
+
 		//Add the tile camouflage slots
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 17, inventory, tile.getCamouflageType()));
 	}
@@ -31,7 +30,7 @@ public class GuiGreenhouseButterflyHatch extends GuiForestryTitled<ContainerGree
 	@Override
 	protected void addLedgers() {
 		IGreenhouseControllerInternal greenhouseController = inventory.getMultiblockLogic().getController();
-		
+
 		ledgerManager.add(new ClimateLedger(ledgerManager, greenhouseController));
 		super.addLedgers();
 	}

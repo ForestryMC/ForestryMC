@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,10 +20,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.utils.InventoryUtil;
 
 public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
@@ -90,17 +89,17 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return false;
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return this.getStackInSlot(slotIndex);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return true;
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TextComponentString(getName());
@@ -132,7 +131,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	/* Fields */
-	
+
 	@Override
 	public int getField(int id) {
 		return 0;

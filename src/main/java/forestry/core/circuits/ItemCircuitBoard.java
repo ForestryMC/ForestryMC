@@ -44,7 +44,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 		subItems.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 		subItems.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
 	}
-	
+
 	/* MODELS*/
 	@SideOnly(Side.CLIENT)
 	@Override

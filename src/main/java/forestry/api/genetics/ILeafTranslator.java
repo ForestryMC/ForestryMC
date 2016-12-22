@@ -2,9 +2,8 @@ package forestry.api.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-
 import forestry.api.arboriculture.ITree;
+import net.minecraft.block.state.IBlockState;
 
 /**
  * Translates blockStates for a single plain leaf block into genetic data.

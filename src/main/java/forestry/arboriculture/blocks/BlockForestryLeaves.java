@@ -75,9 +75,9 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	public BlockForestryLeaves() {
 		setCreativeTab(Tabs.tabArboriculture);
-        setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
+		setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
 	}
-	
+
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
@@ -88,8 +88,8 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[]{DECAYABLE, CHECK_DECAY}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
-	
-    @Override
+
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 		if (!state.getValue(DECAYABLE)) {
@@ -147,7 +147,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		List<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
 		drops.set(leafDrops);
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> ret = drops.get();
@@ -190,7 +190,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 		return prod;
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
@@ -236,14 +236,14 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		}
 		return super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
 		entityIn.motionX *= 0.4D;
 		entityIn.motionZ *= 0.4D;
 	}
-	
+
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		LeafDecayHelper.leafDecay(this, world, pos);
@@ -278,7 +278,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	public BlockPlanks.EnumType getWoodType(int meta) {
 		return BlockPlanks.EnumType.OAK;
 	}
-	
+
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -335,7 +335,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		return true;
 	}
-	
+
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);

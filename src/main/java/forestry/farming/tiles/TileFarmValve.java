@@ -13,13 +13,11 @@ package forestry.farming.tiles;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
 	@Nonnull

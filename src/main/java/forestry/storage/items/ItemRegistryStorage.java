@@ -48,7 +48,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 	public ItemRegistryStorage() {
 		// CRATE
 		crate = registerItem(new ItemCrated(ItemStack.EMPTY, null), "crate");
-		
+
 		// BACKPACKS
 		IBackpackInterface backpackInterface = BackpackManager.backpackInterface;
 
@@ -58,7 +58,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		} else {
 			apiaristBackpack = null;
 		}
-		
+
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			lepidopteristBackpack = registerItem(backpackInterface.createNaturalistBackpack("lepidopterist", ButterflyManager.butterflyRoot), "lepidopteristBag");
 			lepidopteristBackpack.setCreativeTab(Tabs.tabLepidopterology);

@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core;
 
+import forestry.core.utils.GeneticsUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-
-import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
 

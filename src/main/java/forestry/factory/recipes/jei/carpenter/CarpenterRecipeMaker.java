@@ -10,7 +10,7 @@ public class CarpenterRecipeMaker {
 
 	private CarpenterRecipeMaker() {
 	}
-	
+
 	public static List<CarpenterRecipeWrapper> getCarpenterRecipes() {
 		List<CarpenterRecipeWrapper> recipes = new ArrayList<>();
 		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
@@ -18,5 +18,5 @@ public class CarpenterRecipeMaker {
 		}
 		return recipes;
 	}
-	
+
 }

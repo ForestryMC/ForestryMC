@@ -14,9 +14,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.food.IIngredientManager;
+import net.minecraft.item.ItemStack;
 
 public class InfuserIngredientManager implements IIngredientManager {
 	private final List<InfuserIngredient> ingredients = new ArrayList<>();

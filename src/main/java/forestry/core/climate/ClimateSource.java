@@ -20,11 +20,11 @@ public abstract class ClimateSource<P extends IClimateSourceProvider> implements
 	@Nullable
 	protected P provider;
 	protected final int ticksForChange;
-	
+
 	public ClimateSource(int ticksForChange) {
 		this.ticksForChange = ticksForChange;
 	}
-	
+
 	public void setProvider(P provider) {
 		this.provider = provider;
 	}

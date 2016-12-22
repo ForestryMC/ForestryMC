@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileMill;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
@@ -78,7 +77,7 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	public RenderMill(String baseTexture, byte charges) {
 		this(baseTexture);
 	}
-	
+
 	/**
 	 * @param mill If it null its render the item else it render the tile entity.
 	 */

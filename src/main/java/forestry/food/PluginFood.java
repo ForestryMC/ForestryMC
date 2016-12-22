@@ -13,8 +13,6 @@ package forestry.food;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.food.BeverageManager;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.EnumPollenCluster;
@@ -25,6 +23,7 @@ import forestry.food.items.ItemRegistryFood;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.item.ItemStack;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends BlankForestryPlugin {

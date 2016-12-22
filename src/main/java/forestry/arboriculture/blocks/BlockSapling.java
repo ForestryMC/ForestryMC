@@ -15,6 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.render.SaplingStateMapper;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -31,22 +43,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.render.SaplingStateMapper;
-import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
 	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
@@ -64,8 +62,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-	{
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return SAPLING_AABB;
 	}
 
@@ -93,40 +90,40 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return false;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 	/* STATES */
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return 0;
 	}
-	
+
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileSapling sapling = getSaplingTile(world, pos);
-		if(sapling != null && sapling.getTree() != null){
+		if (sapling != null && sapling.getTree() != null) {
 			state = state.withProperty(TREE, sapling.getTree().getGenome().getPrimary());
-		}else{
+		} else {
 			state = state.withProperty(TREE, TreeDefinition.Oak.getGenome().getPrimary());
 		}
 		return state;
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, TREE);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
 	}
-	
+
 	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -203,7 +200,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		TileSapling saplingTile = getSaplingTile(world, pos);
 		return saplingTile == null || saplingTile.canAcceptBoneMeal(rand);
 	}
-	
+
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		return true;

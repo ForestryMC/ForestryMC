@@ -7,5 +7,5 @@ public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, 
 	 */
 	@Override
 	int compareTo(A o);
-	
+
 }

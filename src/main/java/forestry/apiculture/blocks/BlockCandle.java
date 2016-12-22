@@ -11,9 +11,6 @@
 package forestry.apiculture.blocks;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableMap;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +20,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -46,25 +51,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider, IColoredBlock {
 
 	private static final ImmutableMap<String, Integer> colours;
 	public static final Set<Item> lightingItems;
 	public static final String colourTagName = "colour";
-	
+
 	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 
 	private enum State implements IStringSerializable {
@@ -81,7 +77,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			return name;
 		}
 	}
-	
+
 	static {
 		colours = ImmutableMap.<String, Integer>builder()
 				.put("dyeWhite", new Color(255, 255, 255).getRGB())
@@ -115,12 +111,12 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		setCreativeTab(Tabs.tabApiculture);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(STATE, State.OFF));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, STATE);
 	}
-	
+
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
@@ -244,7 +240,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			drop.set(itemStack);
 		}
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack dropStack = drop.get();

@@ -14,6 +14,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Potion;
@@ -21,12 +26,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.proxy.Proxies;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 

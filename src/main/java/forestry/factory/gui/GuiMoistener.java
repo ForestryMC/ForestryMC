@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileMoistener;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiMoistener extends GuiForestryTitled<ContainerMoistener, TileMoistener> {
 

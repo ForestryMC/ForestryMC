@@ -11,6 +11,7 @@
 package forestry.arboriculture;
 
 import java.util.Collection;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 
@@ -20,6 +21,6 @@ public interface IWoodTyped {
 	boolean isFireproof();
 
 	IWoodType getWoodType(int meta);
-	
+
 	Collection<? extends IWoodType> getWoodTypes();
 }

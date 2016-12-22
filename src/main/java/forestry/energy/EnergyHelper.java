@@ -20,7 +20,7 @@ public class EnergyHelper {
 	 * @return true if the energy to do work was consumed
 	 */
 	public static boolean consumeEnergyToDoWork(EnergyManager energyManager, int ticksPerWorkCycle, int energyPerWorkCycle) {
-		if(energyPerWorkCycle == 0){
+		if (energyPerWorkCycle == 0) {
 			return true;
 		}
 		int energyPerCycle = (int) Math.ceil(energyPerWorkCycle / (float) ticksPerWorkCycle);
@@ -53,7 +53,7 @@ public class EnergyHelper {
 		int extractable = energyManager.extractEnergy(amount, true);
 		if (extractable > 0) {
 			EnumFacing side = orientation.getOpposite();
-			final int  sent = sendEnergyToTile(tile, side, extractable, simulate);
+			final int sent = sendEnergyToTile(tile, side, extractable, simulate);
 			energyManager.extractEnergy(sent, simulate);
 			return sent;
 		}

@@ -12,12 +12,11 @@ package forestry.food.items;
 
 import java.util.Collections;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemRegistry;
 import forestry.food.BeverageEffect;
 import forestry.food.BeverageEffects;
+import net.minecraft.item.ItemStack;
 
 public class ItemRegistryFood extends ItemRegistry {
 	public final ItemForestryFood honeyedSlice;

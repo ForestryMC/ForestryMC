@@ -5,20 +5,23 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.api.genetics.IFruitFamily;
+import net.minecraftforge.common.EnumPlantType;
 
 public interface IAlleleTreeSpeciesBuilder extends IAlleleSpeciesBuilder {
 
 	@Override
 	IAlleleTreeSpecies build();
 
-	/** Add a fruit family for this tree. Trees can have multiple fruit families. */
+	/**
+	 * Add a fruit family for this tree. Trees can have multiple fruit families.
+	 */
 	IAlleleTreeSpeciesBuilder addFruitFamily(IFruitFamily family);
 
-	/** Set the minecraft plant type for this tree. Default is Plains. */
+	/**
+	 * Set the minecraft plant type for this tree. Default is Plains.
+	 */
 	IAlleleTreeSpeciesBuilder setPlantType(EnumPlantType type);
 
 }

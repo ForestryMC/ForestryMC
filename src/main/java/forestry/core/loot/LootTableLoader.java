@@ -1,16 +1,15 @@
 package forestry.core.loot;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.net.URL;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-
-import java.io.IOException;
-import java.net.URL;
-
+import forestry.core.utils.Log;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -22,8 +21,6 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-
-import forestry.core.utils.Log;
 
 /**
  * Copy of {@link LootTableManager} that can load Forestry's loot table additions.

@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.config.Constants;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
@@ -36,19 +39,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.config.Constants;
 
 public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable {
 
 	public static final PropertyEnum<MushroomType> VARIANT = PropertyEnum.create("mushroom", MushroomType.class);
 	public static final PropertyBool MATURE = PropertyBool.create("mature");
-	
+
 	public enum MushroomType implements IStringSerializable {
 		BROWN {
 			@Override
@@ -64,7 +62,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		};
 
 		public abstract ItemStack getDrop();
-		
+
 		@Override
 		public String getName() {
 			return name().toLowerCase(Locale.ENGLISH);
@@ -81,7 +79,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		setTickRandomly(true);
 		setSoundType(SoundType.PLANT);
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, VARIANT, MATURE);
@@ -128,7 +126,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (world.isRemote || rand.nextInt(2) != 0) {
@@ -154,7 +152,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 			world.setBlockState(pos, getStateFromMeta(type.ordinal()), 0);
 		}
 	}
-	
+
 	public void grow(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		this.generateGiantMushroom(worldIn, pos, state, rand);
 	}
@@ -171,7 +169,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		manager.registerItemModel(item, 0, "minecraft", "brown_mushroom");
 		manager.registerItemModel(item, 1, "minecraft", "red_mushroom");
 	}
-	
+
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
 		return true;

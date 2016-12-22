@@ -17,5 +17,5 @@ public interface IMultiblockLogicCharcoalPile extends IMultiblockLogic {
 	 */
 	@Override
 	ICharcoalPileController getController();
-	
+
 }

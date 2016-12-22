@@ -664,7 +664,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	/**
 	 * Check all internal blocks.
 	 */
-	private void checkInternalBlocks() throws MultiblockValidationException{
+	private void checkInternalBlocks() throws MultiblockValidationException {
 		Stack<IInternalBlock> blocksToCheck = new Stack<>();
 		IInternalBlock internalBlock = createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)));
 		blocksToCheck.add(internalBlock);

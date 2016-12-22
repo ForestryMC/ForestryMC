@@ -10,14 +10,9 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
+import com.google.common.collect.ImmutableSet;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -32,6 +27,9 @@ import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.utils.datastructures.RevolvingList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource, IHintSource {
 

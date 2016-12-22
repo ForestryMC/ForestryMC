@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryRaintank;
 import forestry.factory.tiles.TileRaintank;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
 
 public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 

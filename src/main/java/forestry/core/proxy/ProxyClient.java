@@ -12,6 +12,11 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import forestry.core.TickHandlerCoreClient;
+import forestry.core.models.ModelManager;
+import forestry.core.multiblock.MultiblockClientTickHandler;
+import forestry.core.render.TextureManager;
+import forestry.core.worldgen.WorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,16 +29,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
-
 import org.lwjgl.input.Keyboard;
-
-import forestry.core.TickHandlerCoreClient;
-import forestry.core.models.ModelManager;
-import forestry.core.multiblock.MultiblockClientTickHandler;
-import forestry.core.render.TextureManager;
-import forestry.core.worldgen.WorldGenerator;
 
 @SuppressWarnings("unused")
 public class ProxyClient extends ProxyCommon {
@@ -45,13 +42,13 @@ public class ProxyClient extends ProxyCommon {
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
 	}
-	
+
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);
 		TextureManager.getInstance().registerBlock(block);
 	}
-	
+
 	@Override
 	public void registerItem(Item item) {
 		ModelManager.getInstance().registerItemClient(item);

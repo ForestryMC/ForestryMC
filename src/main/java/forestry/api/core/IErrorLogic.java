@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import java.io.IOException;
-
 import net.minecraft.network.PacketBuffer;
 
 /**
@@ -17,6 +15,7 @@ public interface IErrorLogic extends IErrorSource {
 
 	/**
 	 * Sets the errorState when condition is true, and unsets it when condition is false.
+	 *
 	 * @return condition
 	 */
 	boolean setCondition(boolean condition, IErrorState errorState);

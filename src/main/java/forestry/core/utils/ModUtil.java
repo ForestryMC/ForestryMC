@@ -57,7 +57,7 @@ public abstract class ModUtil {
 	/**
 	 * Checks to see if an API within a specific version range is loaded.
 	 *
-	 * @param apiName the package name of the package-info.java file to check. (for example "cofh.api.energy")
+	 * @param apiName            the package name of the package-info.java file to check. (for example "cofh.api.energy")
 	 * @param versionRangeString the version range, as defined in {@link VersionParser}.
 	 */
 	public static boolean isAPILoaded(String apiName, @Nullable String versionRangeString) {

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraftforge.fml.common.Optional;
 
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_RECIPES, name = "BuildCraft 6 Recipes", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")

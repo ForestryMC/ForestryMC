@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
  * @author Alex Binnie
  */
 public abstract class StackMap<P, T> extends HashMap<P, T> {
-	
+
 	@Override
 	public final T put(P key, T value) {
 		Preconditions.checkArgument(isValidKey(key), "Key is invalid");
@@ -71,7 +71,7 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	 * @return
 	 */
 	protected abstract boolean areEqual(P a, Object b);
-	
+
 	/**
 	 * Can this key be added to the map
 	 *

@@ -9,14 +9,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *  Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
- *
- *  This enum concerns temperature.
+ * Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
+ * <p>
+ * This enum concerns temperature.
  */
 public enum EnumTemperature {
 	NONE("None", "habitats/ocean"), ICY("Icy", "habitats/snow"), COLD("Cold", "habitats/taiga"),
@@ -43,6 +42,7 @@ public enum EnumTemperature {
 	 * Determines the EnumTemperature given a floating point representation of
 	 * Minecraft temperature. Hellish biomes are handled based on their biome
 	 * type - check BiomeHelper.isBiomeHellish.
+	 *
 	 * @param rawTemp raw temperature value
 	 * @return EnumTemperature corresponding to value of rawTemp
 	 */

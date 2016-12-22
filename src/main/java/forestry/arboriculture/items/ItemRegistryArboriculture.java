@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.core.items.ItemRegistry;
 import forestry.core.utils.OreDictUtil;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryArboriculture extends ItemRegistry {
 	public final ItemGermlingGE sapling;
@@ -25,7 +24,7 @@ public class ItemRegistryArboriculture extends ItemRegistry {
 	public ItemRegistryArboriculture() {
 		sapling = registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
 		OreDictionary.registerOre(OreDictUtil.TREE_SAPLING, sapling.getWildcard());
-		
+
 		pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
 
 		grafter = registerItem(new ItemGrafter(9), "grafter");

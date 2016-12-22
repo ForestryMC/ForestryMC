@@ -17,51 +17,51 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 
 public class SimpleRetexturedModel extends BlankModel {
-	
+
 	public final IModel model;
 	@Nullable
 	public IBakedModel bakedModel;
-	
+
 	public SimpleRetexturedModel(IModel model) {
 		this.model = model;
 	}
-	
+
 	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		return getModel().getQuads(state, side, rand);
 	}
-	
+
 	@Override
 	protected ItemOverrideList createOverrides() {
 		return new RetexturedOverrideList(model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, new DefaultTextureGetter()));
 	}
-	
+
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		return getModel().getParticleTexture();
 	}
-	
-	private IBakedModel getModel(){
-		if(bakedModel == null){
+
+	private IBakedModel getModel() {
+		if (bakedModel == null) {
 			return bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, new DefaultTextureGetter());
 		}
 		return bakedModel;
 	}
-	
-	private static class RetexturedOverrideList extends ItemOverrideList{
+
+	private static class RetexturedOverrideList extends ItemOverrideList {
 		public final IBakedModel bakedModel;
-		
+
 		public RetexturedOverrideList(IBakedModel bakedModel) {
 			super(Collections.emptyList());
-			
+
 			this.bakedModel = bakedModel;
 		}
-		
+
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			return bakedModel;
 		}
-		
+
 	}
 
 }

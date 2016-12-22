@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
 	public GuiEngineBiogas(InventoryPlayer inventory, TileEngineBiogas tile) {

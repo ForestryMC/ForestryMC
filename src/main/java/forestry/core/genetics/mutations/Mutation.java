@@ -14,11 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -28,6 +23,10 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 

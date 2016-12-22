@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -18,8 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.utils.BlockUtil;
 
 public class FarmableCocoa extends FarmableAgingCrop {
 

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * When implemented as a capability by armor items, protects the wearer from negative bee effects.
+ *
  * @see ApicultureCapabilities#ARMOR_APIARIST
  */
 public interface IArmorApiarist {

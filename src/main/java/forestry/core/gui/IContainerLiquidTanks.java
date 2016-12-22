@@ -12,7 +12,6 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import net.minecraftforge.fluids.IFluidTank;
 
 public interface IContainerLiquidTanks {

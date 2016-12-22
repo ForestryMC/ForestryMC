@@ -16,6 +16,7 @@ public interface IFlowerGrowthRule {
 	 * Checks a position for suitability, and then plants a flower there.
 	 * Returns true on success.
 	 * For implementers, you can plant a random flower using IFlowerGrowthHelper.plantRandomFlower
+	 *
 	 * @since Forestry 4.0.8
 	 */
 	boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos);

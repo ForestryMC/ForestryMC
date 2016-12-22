@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -19,10 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.utils.InventoryUtil;
 
 public abstract class EntityMinecartContainerForestry extends EntityMinecartForestry implements ISidedInventory, IFilterSlotDelegate {
 	/**
@@ -101,7 +100,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slotIndex) {
 		return getInternalInventory().removeStackFromSlot(slotIndex);
@@ -126,12 +125,12 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	public final void closeInventory(EntityPlayer player) {
 		getInternalInventory().closeInventory(player);
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return getInternalInventory().getDisplayName();
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
@@ -151,7 +150,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	public boolean isLocked(int slotIndex) {
 		return getInternalInventory().isLocked(slotIndex);
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return getInternalInventory().getSlotsForFace(side);

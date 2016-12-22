@@ -11,10 +11,10 @@
 package forestry.apiculture.multiblock;
 
 import forestry.api.multiblock.IAlvearyController;
-import forestry.core.owner.IOwnedTile;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.tiles.IClimatised;
 
 public interface IAlvearyControllerInternal extends IAlvearyController, IMultiblockControllerInternal, IClimatised, IOwnedTile, IStreamableGui {

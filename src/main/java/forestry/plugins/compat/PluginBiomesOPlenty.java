@@ -14,16 +14,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
@@ -37,6 +27,14 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends BlankForestryPlugin {
@@ -105,10 +103,10 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 			}
 		}
-		
+
 		//TODO BoP for 1.9: Add farmables
 //		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {
-			//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
+		//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
 //		}
 
 		Block boPTurnip = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(BoP, "turnip"));

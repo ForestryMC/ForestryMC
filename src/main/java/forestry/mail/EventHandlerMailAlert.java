@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.core.proxy.Proxies;
+import forestry.mail.gui.GuiMailboxInfo;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-
-import forestry.core.proxy.Proxies;
-import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class EventHandlerMailAlert {
 	@SubscribeEvent

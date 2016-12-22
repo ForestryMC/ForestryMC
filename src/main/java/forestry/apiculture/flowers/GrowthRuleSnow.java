@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import forestry.api.genetics.IFlowerGrowthHelper;
+import forestry.api.genetics.IFlowerGrowthRule;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.genetics.IFlowerGrowthHelper;
-import forestry.api.genetics.IFlowerGrowthRule;
 
 public class GrowthRuleSnow implements IFlowerGrowthRule {
 

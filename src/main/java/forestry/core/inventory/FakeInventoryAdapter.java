@@ -12,13 +12,12 @@ package forestry.core.inventory;
 
 import javax.annotation.Nullable;
 
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
-
-import forestry.core.config.Constants;
 import net.minecraft.util.text.TextComponentString;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
@@ -50,17 +49,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public boolean isLocked(int slotIndex) {
 		return false;
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return Constants.SLOTS_NONE;
 	}
-	
+
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
 		return false;
@@ -80,7 +79,7 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
 		return ItemStack.EMPTY;
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return ItemStack.EMPTY;
@@ -90,17 +89,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
 
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TextComponentString(getName());
 	}
-	
+
 	@Override
 	public String getName() {
 		return "";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;

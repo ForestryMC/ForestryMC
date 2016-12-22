@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.factory.tiles.TileFabricator;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiFabricator extends GuiForestryTitled<ContainerFabricator, TileFabricator> {
 

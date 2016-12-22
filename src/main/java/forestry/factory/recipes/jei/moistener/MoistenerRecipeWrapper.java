@@ -13,14 +13,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe> {
 	private final MoistenerFuel fuel;
-	
-	public MoistenerRecipeWrapper( IMoistenerRecipe recipe,  MoistenerFuel fuel) {
+
+	public MoistenerRecipeWrapper(IMoistenerRecipe recipe, MoistenerFuel fuel) {
 		super(recipe);
 		this.fuel = fuel;
 	}
 
 	@Override
-	public void getIngredients( IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		IMoistenerRecipe recipe = getRecipe();
 
 		List<ItemStack> itemStackInputs = new ArrayList<>();
@@ -37,7 +37,7 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 
 		ingredients.setInput(FluidStack.class, new FluidStack(FluidRegistry.WATER, recipe.getTimePerItem() / 4));
 	}
-	
+
 	public MoistenerFuel getFuel() {
 		return fuel;
 	}

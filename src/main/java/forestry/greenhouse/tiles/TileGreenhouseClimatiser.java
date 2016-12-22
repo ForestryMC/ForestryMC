@@ -11,7 +11,6 @@
 package forestry.greenhouse.tiles;
 
 import javax.annotation.Nullable;
-
 import java.util.Collections;
 
 import forestry.api.climate.IClimateSource;

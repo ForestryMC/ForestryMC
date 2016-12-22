@@ -13,8 +13,8 @@ public interface IMultiblockLogicFactory {
 	IMultiblockLogicAlveary createAlvearyLogic();
 
 	IMultiblockLogicFarm createFarmLogic();
-	
+
 	IMultiblockLogicGreenhouse createGreenhouseLogic();
-	
+
 	IMultiblockLogicCharcoalPile createCharcoalPileLogic();
 }

@@ -15,15 +15,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IFruitFamily;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
 	private final Map<ItemStack, Float> products = new HashMap<>();
@@ -78,7 +77,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 
 		return product;
 	}
-	
+
 	@Override
 	public Map<ItemStack, Float> getProducts() {
 		return Collections.unmodifiableMap(products);

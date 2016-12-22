@@ -12,12 +12,11 @@ package forestry.farming.multiblock;
 
 import java.io.IOException;
 
-import forestry.core.network.PacketBufferForestry;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;

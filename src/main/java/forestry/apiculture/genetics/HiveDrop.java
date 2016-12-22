@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IHiveDrop;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IHiveDrop;
 
 public class HiveDrop implements IHiveDrop {
 
@@ -39,7 +38,7 @@ public class HiveDrop implements IHiveDrop {
 		this.ignobleShare = share;
 		return this;
 	}
-	
+
 	@Override
 	public IBee getBeeType(IBlockAccess world, BlockPos pos) {
 		return beeTemplate.getIndividual();

@@ -13,6 +13,12 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+import forestry.api.core.ForestryAPI;
+import forestry.core.circuits.ISocketable;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.StandardStackFilters;
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.plugins.ForestryPluginUids;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -23,18 +29,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.api.core.ForestryAPI;
-import forestry.core.circuits.ISocketable;
-import forestry.core.inventory.StandardStackFilters;
-import forestry.core.inventory.ItemHandlerInventoryManipulator;
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.plugins.ForestryPluginUids;
 
 public abstract class InventoryUtil {
 
@@ -357,7 +355,7 @@ public abstract class InventoryUtil {
 		if (success && doAdd) {
 			addStack(inventory, stack, startSlot, slots, true);
 		}
-		
+
 		return success;
 	}
 
@@ -523,7 +521,7 @@ public abstract class InventoryUtil {
 			inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
 		}
 	}
-	
+
 	public static void dropInventory(IInventory inventory, World world, BlockPos pos) {
 		dropInventory(inventory, world, pos.getX(), pos.getY(), pos.getZ());
 	}
@@ -535,7 +533,7 @@ public abstract class InventoryUtil {
 			socketable.setSocket(slot, ItemStack.EMPTY);
 		}
 	}
-	
+
 	public static void dropSockets(ISocketable socketable, World world, BlockPos pos) {
 		dropSockets(socketable, world, pos.getX(), pos.getY(), pos.getZ());
 	}
@@ -578,7 +576,7 @@ public abstract class InventoryUtil {
 			inventory.setInventorySlotContents(index, new ItemStack(nbttagcompound2));
 		}
 	}
-	
+
 	public static void writeToNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {

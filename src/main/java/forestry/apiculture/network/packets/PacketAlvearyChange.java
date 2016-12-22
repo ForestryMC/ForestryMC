@@ -12,16 +12,15 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class PacketAlvearyChange extends ForestryPacket implements IForestryPacketClient {

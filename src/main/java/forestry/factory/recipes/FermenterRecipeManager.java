@@ -15,15 +15,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FermenterRecipeManager implements IFermenterManager {
 

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
 
 public class ModelAnalyzer extends ModelBase {
 

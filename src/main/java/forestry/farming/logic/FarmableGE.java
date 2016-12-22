@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.core.utils.GeneticsUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.core.utils.GeneticsUtil;
 
 public class FarmableGE implements IFarmable {
 

@@ -14,20 +14,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import forestry.core.utils.Log;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
-import forestry.core.utils.Log;
 
 public class ColourProperties implements IResourceManagerReloadListener {
 
 	public static final ColourProperties INSTANCE;
-	
-	static{
+
+	static {
 		INSTANCE = new ColourProperties();
 	}
-	
+
 	private final Properties defaultMappings = new Properties();
 	private final Properties mappings = new Properties();
 

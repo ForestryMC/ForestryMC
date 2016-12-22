@@ -13,11 +13,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *  Postal Carriers are systems which can be hooked into Forestry's mail system to handle mail delivery.
- *
- *  The two available carriers in vanilla Forestry are
- *       "player" - Delivers mail to individual players.
- *       "trader" - Handles mail addressed to trade stations.
+ * Postal Carriers are systems which can be hooked into Forestry's mail system to handle mail delivery.
+ * <p>
+ * The two available carriers in vanilla Forestry are
+ * "player" - Delivers mail to individual players.
+ * "trader" - Handles mail addressed to trade stations.
  */
 public interface IPostalCarrier {
 
@@ -40,11 +40,12 @@ public interface IPostalCarrier {
 
 	/**
 	 * Handle delivery of a letter addressed to this carrier.
-	 * @param world The world the {@link IPostOffice} handles.
-	 * @param office {link @IPostOffice} which received this letter and handed it to the carrier.
-	 * @param recipient An identifier for the recipient as typed by the player into the address field.
+	 *
+	 * @param world       The world the {@link IPostOffice} handles.
+	 * @param office      {link @IPostOffice} which received this letter and handed it to the carrier.
+	 * @param recipient   An identifier for the recipient as typed by the player into the address field.
 	 * @param letterstack ItemStack representing the letter. See {@link IPostRegistry} for helper functions to validate and extract it.
-	 * @param doDeliver Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
+	 * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
 	 * @return {link IPostalState} holding information on success or failure for delivery.
 	 */
 	IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);

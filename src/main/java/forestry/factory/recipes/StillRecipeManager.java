@@ -15,11 +15,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipeManager implements IStillManager {
 

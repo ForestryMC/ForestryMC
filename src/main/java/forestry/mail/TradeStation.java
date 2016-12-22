@@ -10,18 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.EnumTradeStationState;
@@ -39,6 +28,15 @@ import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "TradePO_";
@@ -169,7 +167,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* ILETTERHANDLER */
 	@Override
 	public IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
-		
+
 		boolean sendOwnerNotice = doLodge && owner != null;
 
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
@@ -244,7 +242,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		mailstack.setTagCompound(nbttagcompound);
 
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
-		
+
 		if (!responseState.isOk()) {
 			return new ResponseNotMailable(responseState);
 		}
@@ -289,11 +287,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			confirmstack.setTagCompound(nbttagcompound);
 
 			PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, confirmstack, doLodge);
-			
+
 			removePaper();
 			removeStamps(new int[]{0, 1});
 		}
-		
+
 		markDirty();
 
 		return EnumDeliveryState.OK;
@@ -329,7 +327,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	private int countStorablePayment(int max, NonNullList<ItemStack> exchange) {
-		
+
 		InventoryAdapter test = inventory.copy();
 		int count = 0;
 
@@ -368,7 +366,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// Checks if this trade station has enough paper.
 	private boolean hasPaper(int amountRequired) {
-		
+
 		int amountFound = 0;
 
 		for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
@@ -589,7 +587,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public ItemStack decrStackSize(int var1, int var2) {
 		return inventory.decrStackSize(var1, var2);
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return inventory.removeStackFromSlot(index);
@@ -627,12 +625,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public boolean hasCustomName() {
 		return true;
 	}
-	
+
 	@Override
 	public ITextComponent getDisplayName() {
 		return inventory.getDisplayName();
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return inventory.getSlotsForFace(side);

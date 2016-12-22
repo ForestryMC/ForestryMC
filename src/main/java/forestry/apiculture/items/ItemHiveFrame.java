@@ -13,9 +13,6 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -25,6 +22,8 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 

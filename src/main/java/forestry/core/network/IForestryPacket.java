@@ -14,5 +14,6 @@ import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public interface IForestryPacket {
 	FMLProxyPacket getPacket();
+
 	IPacketId getPacketId();
 }

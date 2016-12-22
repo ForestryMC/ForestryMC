@@ -11,13 +11,12 @@
 package forestry.mail.gui;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.mail.tiles.TileTrader;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
 
