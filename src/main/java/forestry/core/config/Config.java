@@ -34,6 +34,7 @@ public class Config {
 
 	public static final String CATEGORY_COMMON = "common";
 	public static final String CATEGORY_FLUIDS = "fluids";
+	public static final String CATEGORY_FARM = "farm";
 
 	public static LocalizedConfiguration configCommon;
 	public static LocalizedConfiguration configFluid;

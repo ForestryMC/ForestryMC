@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
@@ -23,24 +22,22 @@ import forestry.core.network.IStreamable;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;
-
-	private final int fertilizerValue = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value");
 	private int storedFertilizer;
 
 	public FarmFertilizerManager() {
 		storedFertilizer = 0;
 	}
 
-	public boolean hasFertilizer(int amount) {
-		if (fertilizerValue < 0) {
+	public boolean hasFertilizer(InventoryFarm inventory, int amount) {
+		if (inventory.getFertilizerValue() < 0) {
 			return true;
 		}
 
 		return storedFertilizer >= amount;
 	}
 
-	public void removeFertilizer(int amount) {
-		if (fertilizerValue < 0) {
+	public void removeFertilizer(InventoryFarm inventory, int amount) {
+		if (inventory.getFertilizerValue() < 0) {
 			return;
 		}
 
@@ -52,6 +49,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 
 	public boolean maintainFertilizer(InventoryFarm inventory) {
 		if (storedFertilizer <= BUFFER_FERTILIZER) {
+			int fertilizerValue = inventory.getFertilizerValue();
 			if (fertilizerValue < 0) {
 				storedFertilizer += 2000;
 			} else if (inventory.useFertilizer()) {
@@ -73,12 +71,12 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 		return data;
 	}
 
-	public int getStoredFertilizerScaled(int scale) {
+	public int getStoredFertilizerScaled(InventoryFarm inventory, int scale) {
 		if (storedFertilizer == 0) {
 			return 0;
 		}
 
-		return storedFertilizer * scale / (fertilizerValue + BUFFER_FERTILIZER);
+		return storedFertilizer * scale / (inventory.getFertilizerValue() + BUFFER_FERTILIZER);
 	}
 
 	@Override

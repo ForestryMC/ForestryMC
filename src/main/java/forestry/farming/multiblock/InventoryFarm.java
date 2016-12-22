@@ -11,22 +11,23 @@
 package forestry.farming.multiblock;
 
 import java.util.Stack;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
+import net.minecraftforge.oredict.OreDictionary;
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
+import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.core.PluginCore;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
@@ -49,6 +50,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	public static final int SLOT_CAN_COUNT = 1;
 
 	public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
+	
+	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 
 	private final FarmController farmController;
 
@@ -135,9 +138,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (itemstack == null) {
 			return false;
 		}
-
-		Item item = itemstack.getItem();
-		return PluginCore.items.fertilizerCompound == item;
+		
+ 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
+ 			ItemStack fertilizerItem = fertilizer.getKey();
+ 			if(itemstack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == itemstack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
+ 				return true;
+ 			}
+ 		}
+ 		return false;
 	}
 
 	@Override
@@ -204,6 +212,21 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 		return added;
 	}
+	
+	public int getFertilizerValue() {
+		ItemStack fertilizerStack = getStackInSlot(SLOT_FERTILIZER);
+ 		if (fertilizerStack == null || fertilizerStack.stackSize <= 0) {
+ 			return 0;
+ 		}
+ 		
+ 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
+ 			ItemStack fertilizerItem = fertilizer.getKey();
+ 			if(fertilizerStack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == fertilizerStack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
+ 				return fertilizer.getValue() * FERTILIZER_MODIFIER;
+ 			}
+ 		}
+ 		return 0;
+	 }
 
 	public boolean useFertilizer() {
 		ItemStack fertilizer = getStackInSlot(SLOT_FERTILIZER);

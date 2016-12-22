@@ -8,6 +8,10 @@ package forestry.api.farming;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.item.ItemStack;
+
+import java.util.LinkedHashMap;
+
 import javax.annotation.Nonnull;
 
 public class Farmables {
@@ -18,5 +22,8 @@ public class Farmables {
 	 */
 	@Nonnull
 	public static final Multimap<String, IFarmable> farmables = HashMultimap.create();
+	
+	@Nonnull
+	public static final LinkedHashMap<ItemStack, Integer> fertilizers = new LinkedHashMap();
 
 }
