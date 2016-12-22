@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -486,6 +487,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public boolean canDoBeeFX() {
+		if(Proxies.common.getClientInstance().isGamePaused()){
+			return false;
+		}
 		return active;
 	}
 
