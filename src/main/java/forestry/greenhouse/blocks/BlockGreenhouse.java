@@ -34,6 +34,7 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -112,7 +113,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			if (type == BlockGreenhouseType.DOOR) {
 				block = new BlockGreenhouseDoor();
 			} else {
-				block = new BlockGreenhouse() {
+				block = new BlockGreenhouse(type) {
 
 					@Override
 					public BlockGreenhouseType getGreenhouseType() {
@@ -122,7 +123,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 					@Override
 					public SoundType getSoundType() {
-						if (type == BlockGreenhouseType.SPRINKLER || type == BlockGreenhouseType.GLASS || type == BlockGreenhouseType.WINDOW || type == BlockGreenhouseType.WINDOW_UP) {
+						if (hasGlass()) {
 							return SoundType.GLASS;
 						}
 						return super.getSoundType();
@@ -134,14 +135,10 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		return blockMap;
 	}
 
-	public BlockGreenhouse() {
+	public BlockGreenhouse(BlockGreenhouseType type) {
 		super(Material.ROCK);
-		BlockGreenhouseType greenhouseType = getGreenhouseType();
 		IBlockState defaultState = this.blockState.getBaseState();
-		if (greenhouseType.activatable && greenhouseType != BlockGreenhouseType.SPRINKLER) {
-			defaultState = defaultState.withProperty(STATE, State.OFF);
-		}
-		if (greenhouseType == BlockGreenhouseType.WINDOW || greenhouseType == BlockGreenhouseType.WINDOW_UP) {
+		if (type == BlockGreenhouseType.WINDOW || type == BlockGreenhouseType.WINDOW_UP) {
 			defaultState = defaultState.withProperty(FACING, EnumFacing.NORTH);
 		}
 		setDefaultState(defaultState);
@@ -223,26 +220,8 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			return SPRINKLER_BOUNDS.offset(pos);
-		}
-		return super.getSelectedBoundingBox(state, worldIn, pos);
-	}
-
-	@Nullable
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			return SPRINKLER_BOUNDS;
-		}
-		return super.getCollisionBoundingBox(blockState, worldIn, pos);
-	}
-
-	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if (getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.WINDOW && getGreenhouseType() != BlockGreenhouseType.WINDOW_UP) {
+		if (getGreenhouseType() != BlockGreenhouseType.WINDOW && getGreenhouseType() != BlockGreenhouseType.WINDOW_UP) {
 			return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
 					.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 		}
@@ -251,9 +230,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			return new ExtendedBlockState(this, new IProperty[]{Properties.StaticProperty}, new IUnlistedProperty[]{Properties.AnimationProperty});
-		} else if (getGreenhouseType() == BlockGreenhouseType.WINDOW || getGreenhouseType() == BlockGreenhouseType.WINDOW_UP) {
+		if (getGreenhouseType() == BlockGreenhouseType.WINDOW || getGreenhouseType() == BlockGreenhouseType.WINDOW_UP) {
 			return new BlockStateContainer(this, STATE, FACING);
 		} else if (getGreenhouseType().activatable) {
 			return new ExtendedBlockState(this, new IProperty[]{STATE}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
@@ -264,18 +241,14 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			return state.withProperty(Properties.StaticProperty, true);
-		} else {
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if (tile instanceof IActivatable) {
-				state = state.withProperty(STATE, ((IActivatable) tile).isActive() ? State.ON : State.OFF);
-			}
-			if (tile instanceof TileGreenhouseWindow) {
-				TileGreenhouseWindow window = (TileGreenhouseWindow) tile;
-			}
-			return super.getActualState(state, worldIn, pos);
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if (tile instanceof IActivatable) {
+			state = state.withProperty(STATE, ((IActivatable) tile).isActive() ? State.ON : State.OFF);
 		}
+		if (tile instanceof TileGreenhouseWindow) {
+			TileGreenhouseWindow window = (TileGreenhouseWindow) tile;
+		}
+		return super.getActualState(state, worldIn, pos);
 	}
 
 	@Override
@@ -329,8 +302,6 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		switch (type) {
 			case GEARBOX:
 				return new TileGreenhouseGearbox();
-			case SPRINKLER:
-				return new TileGreenhouseSprinkler();
 			case DRYER:
 				return new TileGreenhouseDryer();
 			case VALVE:
@@ -352,7 +323,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			case HATCH_OUTPUT:
 				return new TileGreenhouseHatch();
 			case BUTTERFLY_HATCH:
-				return new TileGreenhouseHatch();
+				return new TileGreenhouseButterflyHatch();
 			default:
 				return new TileGreenhousePlain();
 		}
@@ -387,7 +358,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
-		if (getGreenhouseType() == BlockGreenhouseType.GLASS || getGreenhouseType() == BlockGreenhouseType.WINDOW || getGreenhouseType() == BlockGreenhouseType.WINDOW_UP || getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+		if (hasGlass()) {
 			return BlockRenderLayer.TRANSLUCENT;
 		}
 		return BlockRenderLayer.CUTOUT;
@@ -395,25 +366,17 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.WINDOW && getGreenhouseType() != BlockGreenhouseType.WINDOW_UP;
+		return !hasGlass();
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.WINDOW && getGreenhouseType() != BlockGreenhouseType.WINDOW_UP;
+		return !hasGlass();
 	}
-
-	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			if (worldIn.getBlockState(pos.up()).getBlock() == this) {
-				return false;
-			}
-			if (!(worldIn.getTileEntity(pos.up()) instanceof IGreenhouseComponent)) {
-				return false;
-			}
-		}
-		return super.canPlaceBlockAt(worldIn, pos);
+	
+	protected boolean hasGlass(){
+		BlockGreenhouseType type = getGreenhouseType();
+		return type == BlockGreenhouseType.GLASS || type == BlockGreenhouseType.WINDOW || type == BlockGreenhouseType.WINDOW_UP;
 	}
 
 	@Override
@@ -461,11 +424,10 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.sprinkler", "inventory"));
-		} else if (getGreenhouseType() == BlockGreenhouseType.WINDOW) {
+		BlockGreenhouseType type = getGreenhouseType();
+		if (type == BlockGreenhouseType.WINDOW) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.window", "inventory"));
-		} else if (getGreenhouseType() == BlockGreenhouseType.WINDOW_UP) {
+		} else if (type == BlockGreenhouseType.WINDOW_UP) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.window_up", "inventory"));
 		} else {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse", "inventory"));

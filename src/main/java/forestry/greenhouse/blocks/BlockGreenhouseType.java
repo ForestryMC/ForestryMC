@@ -8,6 +8,9 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockStone;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -22,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum BlockGreenhouseType {
 	PLAIN,
-	GLASS,
+	GLASS(Material.GLASS),
 	HATCH_INPUT(true),
 	HATCH_OUTPUT(true),
 	GEARBOX(true),
@@ -31,38 +34,59 @@ public enum BlockGreenhouseType {
 	HEATER(true, true),
 	DRYER(true, true),
 	CONTROL(true),
-	SPRINKLER(false, true),
+	HUMUDIFIER(true, true), //humidifier
 	DOOR,
 	CLIMATE_CONTROL(true),
-	WINDOW(true),
-	WINDOW_UP(true),
+	WINDOW(Material.GLASS, false, true),
+	WINDOW_UP(Material.GLASS, false, true),
 	BUTTERFLY_HATCH(true);
 
 	public static final BlockGreenhouseType[] VALUES = values();
 
 	public final boolean hasOverlaySprite;
 	public final boolean activatable;
+	public final Material material;
 
-	BlockGreenhouseType(boolean hasOverlaySprite, boolean activatable) {
+	BlockGreenhouseType(Material material, boolean hasOverlaySprite, boolean activatable) {
 		this.hasOverlaySprite = hasOverlaySprite;
 		this.activatable = activatable;
+		this.material = material;
+	}
+
+	BlockGreenhouseType(Material material, boolean hasOverlaySprite) {
+		this(material, hasOverlaySprite, false);
+	}
+
+	BlockGreenhouseType(Material material) {
+		this(material, false, false);
+	}
+	
+	BlockGreenhouseType(boolean hasOverlaySprite, boolean activatable) {
+		this(Material.ROCK, hasOverlaySprite, activatable);
 	}
 
 	BlockGreenhouseType(boolean hasOverlaySprite) {
-		this.hasOverlaySprite = hasOverlaySprite;
-		this.activatable = false;
+		this(Material.ROCK, hasOverlaySprite);
 	}
 
 	BlockGreenhouseType() {
-		this.hasOverlaySprite = false;
-		this.activatable = false;
+		this(Material.ROCK);
 	}
 
 	@SideOnly(Side.CLIENT)
 	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites;
 
 	private enum BlockGreenhouseSprites {
-		GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), CLIMATE_CONTROL("climate_control"), BUTTERFLY_HATCH("butterfly_hatch");
+		GEARS("gears"), 
+		VALVE("valve"), 
+		FAN_OFF("fan.off"), FAN_ON("fan.on"), 
+		HEATER_OFF("heater.off"), HEATER_ON("heater.on"), 
+		DRYER("dryer"), 
+		CONTROL("control"), 
+		HUMUDIFIER_OFF("humidifier.on"), HUMUDIFIER_ON("humidifier.on"), 
+		HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), 
+		CLIMATE_CONTROL("climate_control"), 
+		BUTTERFLY_HATCH("butterfly_hatch");
 
 		public static final BlockGreenhouseSprites[] VALUES = values();
 

@@ -70,11 +70,11 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 
 	@Override
 	protected void bakeBlock(BlockGreenhouse block, Key key, IModelBaker baker, boolean inventory) {
-		ItemStack camouflageStack = key.world != null ? CamouflageUtil.getCamouflageBlock(key.world, key.pos) : null;
+		ItemStack camouflageStack = key.world != null ? CamouflageUtil.getCamouflageBlock(key.world, key.pos) : ItemStack.EMPTY;
 		IBlockAccess world = key.world;
 		BlockPos pos = key.pos;
 
-		if (camouflageStack != null) {
+		if (!camouflageStack.isEmpty()) {
 			ICamouflageHandler camouflageHandler = CamouflageUtil.getCamouflageHandler(world, pos);
 			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
 			ICamouflageItemHandler itemHandler = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflageStack);
@@ -90,12 +90,12 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 		else if (block.getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos);
 
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
+			baker.addBlockModel(pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
 			baker.setParticleSprite(glassSprite);
 		} else {
 			TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos);
 
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
+			baker.addBlockModel(pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 			baker.setParticleSprite(plainSprite);
 		}
 
@@ -104,7 +104,7 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				sprite[facing.ordinal()] = BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, key.state, world, pos);
 			}
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, sprite, 101);
+			baker.addBlockModel(pos, sprite, 101);
 		}
 	}
 }

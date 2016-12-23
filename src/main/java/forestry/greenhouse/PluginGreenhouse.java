@@ -158,7 +158,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', OreDictUtil.INGOT_TIN,
 				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
-		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.SPRINKLER);
+		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HUMUDIFIER);
 		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
 				"TXT",
 				"GIG",

@@ -24,19 +24,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IModelBaker {
 
-	void setRenderBounds(AxisAlignedBB renderBounds);
-
-	void setRenderBounds(double d, double e, double f, double g, double h, double i);
-
 	void setColorIndex(int color);
 
-	void addBlockModel(Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, TextureAtlasSprite[] sprites, int colorIndex);
+	void addBlockModel(@Nullable BlockPos pos, TextureAtlasSprite[] sprites, int colorIndex);
 
-	void addBlockModel(Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, TextureAtlasSprite sprites, int colorIndex);
+	void addBlockModel(@Nullable BlockPos pos, TextureAtlasSprite sprites, int colorIndex);
 
-	void addModel(AxisAlignedBB renderBounds, TextureAtlasSprite[] textures, int colorIndex);
+	void addModel(TextureAtlasSprite[] textures, int colorIndex);
 
-	void addModel(AxisAlignedBB renderBounds, TextureAtlasSprite texture, int colorIndex);
+	void addModel(TextureAtlasSprite texture, int colorIndex);
 
 	void addBakedModel(@Nullable IBlockState state, IBakedModel model);
 

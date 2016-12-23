@@ -81,9 +81,9 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 		TextureAtlasSprite[] textures = getSprites(key.texture);
 
 		// Add the plain block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, textures, 0);
+		baker.addBlockModel(null, textures, 0);
 		// Add the overlay block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, getOverlaySprites(key.type), 0);
+		baker.addBlockModel(null, getOverlaySprites(key.type), 0);
 
 		// Set the particle sprite
 		baker.setParticleSprite(textures[0]);

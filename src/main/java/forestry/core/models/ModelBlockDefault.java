@@ -60,7 +60,6 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 			IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-			baker.setRenderBounds(state.getBoundingBox(world, pos));
 		}
 
 		bakeBlock(block, key, baker, false);
@@ -83,11 +82,6 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(blockClass.isInstance(block));
 		B bBlock = blockClass.cast(block);
-
-		// FIXME: This way of getting the IBlockState will probably backfire.
-		IBlockState state = block.getStateFromMeta(stack.getItemDamage());
-		AxisAlignedBB boundingBox = state.getBoundingBox(world, null);
-		baker.setRenderBounds(boundingBox);
 		bakeBlock(bBlock, key, baker, true);
 
 		return itemModel = baker.bakeModel(true);

@@ -20,6 +20,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import forestry.api.core.IModelBakerModel;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -38,7 +39,6 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
-	@Nullable
 	private TextureAtlasSprite particleSprite;
 	@Nullable
 	private IModelState modelState;
@@ -57,6 +57,7 @@ public class ModelBakerModel implements IModelBakerModel {
 		models = new ArrayList<>();
 		faceQuads = new EnumMap<>(EnumFacing.class);
 		generalQuads = new ArrayList<>();
+		particleSprite = Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
@@ -124,15 +125,15 @@ public class ModelBakerModel implements IModelBakerModel {
 		return ItemOverrideList.NONE;
 	}
 
-	public static float[] getDefaultRotation() {
+	private static float[] getDefaultRotation() {
 		return new float[]{-80, -45, 170};
 	}
 
-	public static float[] getDefaultTranslation() {
+	private static float[] getDefaultTranslation() {
 		return new float[]{0, 1.5F, -2.75F};
 	}
 
-	public static float[] getDefaultScale() {
+	private static float[] getDefaultScale() {
 		return new float[]{0.375F, 0.375F, 0.375F};
 	}
 

@@ -114,10 +114,10 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	@Override
 	protected void bakeBlock(BlockForestryLeaves block, Key key, IModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
-		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, key.leafSprite, 0);
+		baker.addBlockModel(null, key.leafSprite, 0);
 
 		if (key.fruitSprite != null) {
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, key.fruitSprite, 1);
+			baker.addBlockModel(null, key.fruitSprite, 1);
 		}
 
 		// Set the particle sprite

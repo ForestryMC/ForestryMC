@@ -603,7 +603,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					} else {
 						if (part != null) {
 							IBlockState state = world.getBlockState(part.getCoordinates());
-							if (state.getBlock() instanceof BlockGreenhouse && ((BlockGreenhouse) state.getBlock()).getGreenhouseType() == BlockGreenhouseType.SPRINKLER || !myClass.equals(part.getMultiblockLogic().getController().getClass())) {
+							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 								isGoodForInterior(part);
 							} else {
 								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));

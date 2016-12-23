@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-@SuppressWarnings("unused")
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
 	@Override
@@ -40,9 +39,6 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 				Proxies.render.registerBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
 						null, new ModelGreenhouse(),
 						greenhouseBlock, false));
-				continue;
-			} else if (greenhouseType == BlockGreenhouseType.SPRINKLER) {
-				ClientRegistry.bindTileEntitySpecialRenderer(TileGreenhouseSprinkler.class, new AnimationTESR<>());
 				continue;
 			} else if (greenhouseType == BlockGreenhouseType.BUTTERFLY_HATCH) {
 				if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {

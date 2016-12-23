@@ -64,6 +64,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.1875D, 1.0D, 1.0D);
 
 	public BlockGreenhouseDoor() {
+		super(BlockGreenhouseType.DOOR);
 		setSoundType(SoundType.GLASS);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, false).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, false).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(CAMOUFLAGED, false));
 	}
