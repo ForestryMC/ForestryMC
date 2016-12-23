@@ -14,6 +14,7 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.core.IModelManager;
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -29,8 +30,9 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
 
-	public ModelProviderGermling(String modelUid, ILeafSpriteProvider leafSpriteProvider) {
-		this.name = modelUid.substring("forestry.".length());
+	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {
+		String modelName = uid.substring("forestry.".length());
+		this.name = StringUtil.camelCaseToUnderscores(modelName);
 		this.leafSpriteProvider = leafSpriteProvider;
 	}
 

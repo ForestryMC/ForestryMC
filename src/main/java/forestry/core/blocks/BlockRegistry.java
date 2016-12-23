@@ -12,7 +12,10 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import java.util.Locale;
+
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -25,6 +28,11 @@ public abstract class BlockRegistry {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
+
+		if (!name.equals(name.toLowerCase(Locale.ENGLISH))) {
+			Log.error("Name must be lowercase");
+		}
+
 		block.setUnlocalizedName("for." + name);
 		block.setRegistryName(name);
 		GameRegistry.register(block);

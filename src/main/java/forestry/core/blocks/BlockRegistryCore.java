@@ -35,7 +35,7 @@ public class BlockRegistryCore extends BlockRegistry {
 		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
 
 		bogEarth = new BlockBogEarth();
-		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bogEarth");
+		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");
 		bogEarth.setHarvestLevel("shovel", 0);
 
 		humus = new BlockHumus();
@@ -50,7 +50,7 @@ public class BlockRegistryCore extends BlockRegistry {
 		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 
 		BlockResourceStorage resourceStorage = new BlockResourceStorage();
-		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resourceStorage");
+		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resource_storage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
 
 		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);

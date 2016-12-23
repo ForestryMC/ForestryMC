@@ -13,6 +13,7 @@ package forestry.lepidopterology.genetics;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -29,6 +30,7 @@ import forestry.api.lepidopterology.IButterflyMutationBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
+import forestry.core.utils.StringUtil;
 import net.minecraft.item.ItemStack;
 
 public enum ButterflyDefinition implements IButterflyDefinition {
@@ -313,7 +315,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
 		String unlocalizedDescription = "for.description." + uid;
 
-		String texture = "butterflies/" + uid;
+		String texture = StringUtil.camelCaseToUnderscores("butterflies/" + uid);
 
 		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.MOD_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
 		speciesBuilder.setRarity(rarity);

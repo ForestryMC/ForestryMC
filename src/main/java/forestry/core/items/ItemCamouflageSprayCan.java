@@ -34,7 +34,7 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		super.registerModel(item, manager);
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:camouflageSprayCanFilled"));
+		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:camouflage_spray_can_filled"));
 	}
 
 	@Override

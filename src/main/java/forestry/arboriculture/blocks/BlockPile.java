@@ -483,11 +483,11 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		if (getPileType() == EnumPileType.WOOD) {
-			manager.registerItemModel(item, 0, "woodPile");
+			manager.registerItemModel(item, 0, "wood_pile");
 		} else if (getPileType() == EnumPileType.DIRT) {
-			manager.registerItemModel(item, 0, "dirtPile");
+			manager.registerItemModel(item, 0, "dirt_pile");
 		} else if (getPileType() == EnumPileType.ASH) {
-			manager.registerItemModel(item, 0, "ashPile");
+			manager.registerItemModel(item, 0, "ash_pile");
 		}
 	}
 

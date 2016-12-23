@@ -91,30 +91,30 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemCamouflageSprayCan camouflageSprayCan;
 
 	public ItemRegistryCore() {
-		fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
-		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizerCompound");
+		fertilizerBio = registerItem(new ItemForestry(), "fertilizer_bio");
+		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
 		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
-		researchNote = registerItem(new ItemResearchNote(), "researchNote");
+		researchNote = registerItem(new ItemResearchNote(), "research_note");
 
-		portableAlyzer = registerItem(new ItemAlyzer(), "portableAlyzer");
+		portableAlyzer = registerItem(new ItemAlyzer(), "portable_alyzer");
 
-		ingotCopper = createItemForOreName(OreDictUtil.INGOT_COPPER);
-		ingotTin = createItemForOreName(OreDictUtil.INGOT_TIN);
-		ingotBronze = createItemForOreName(OreDictUtil.INGOT_BRONZE);
+		ingotCopper = createItemForOreName(OreDictUtil.INGOT_COPPER, "ingot_copper");
+		ingotTin = createItemForOreName(OreDictUtil.INGOT_TIN, "ingot_tin");
+		ingotBronze = createItemForOreName(OreDictUtil.INGOT_BRONZE, "ingot_bronze");
 
 		wrench = registerItem(new ItemWrench(), "wrench");
 		pipette = registerItem(new ItemPipette(), "pipette");
 
-		sturdyCasing = registerItem(new ItemForestry(), "sturdyMachine");
-		hardenedCasing = registerItem(new ItemForestry(), "hardenedMachine");
-		impregnatedCasing = registerItem(new ItemForestry(), "impregnatedCasing");
+		sturdyCasing = registerItem(new ItemForestry(), "sturdy_machine");
+		hardenedCasing = registerItem(new ItemForestry(), "hardened_machine");
+		impregnatedCasing = registerItem(new ItemForestry(), "impregnated_casing");
 
-		craftingMaterial = registerItem(new ItemCraftingMaterial(), "craftingMaterial");
+		craftingMaterial = registerItem(new ItemCraftingMaterial(), "crafting_material");
 
-		spectacles = registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
+		spectacles = registerItem(new ItemArmorNaturalist(), "naturalist_helmet");
 
 		peat = registerItem(new ItemForestry(), "peat");
 		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
@@ -122,55 +122,55 @@ public class ItemRegistryCore extends ItemRegistry {
 		ash = registerItem(new ItemForestry(), "ash");
 		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
-		bituminousPeat = registerItem(new ItemForestry(), "bituminousPeat");
+		bituminousPeat = registerItem(new ItemForestry(), "bituminous_peat");
 
-		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE);
-		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER);
-		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN);
+		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE, "gear_bronze");
+		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");
+		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN, "gear_tin");
 
 		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
 		solderingIron = new ItemSolderingIron();
 		solderingIron.setMaxDamage(5).setFull3D();
-		registerItem(solderingIron, "solderingIron");
+		registerItem(solderingIron, "soldering_iron");
 
-		tubes = registerItem(new ItemElectronTube(), "thermionicTubes");
+		tubes = registerItem(new ItemElectronTube(), "thermionic_tubes");
 
 		// / CARTONS
 		carton = registerItem(new ItemForestry(), "carton");
 
 		// / CRAFTING CARPENTER
-		stickImpregnated = registerItem(new ItemForestry(), "oakStick");
-		woodPulp = registerItem(new ItemForestry(), "woodPulp");
+		stickImpregnated = registerItem(new ItemForestry(), "oak_stick");
+		woodPulp = registerItem(new ItemForestry(), "wood_pulp");
 		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
 
 		// / RECLAMATION
-		brokenBronzePickaxe = registerItem(new ItemForestry(), "brokenBronzePickaxe");
-		brokenBronzeShovel = registerItem(new ItemForestry(), "brokenBronzeShovel");
+		brokenBronzePickaxe = registerItem(new ItemForestry(), "broken_bronze_pickaxe");
+		brokenBronzeShovel = registerItem(new ItemForestry(), "broken_bronze_shovel");
 
 		// / TOOLS
 		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe));
 		bronzePickaxe.setHarvestLevel("pickaxe", 3);
-		registerItem(bronzePickaxe, "bronzePickaxe");
+		registerItem(bronzePickaxe, "bronze_pickaxe");
 
 		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel));
 		bronzeShovel.setHarvestLevel("shovel", 3);
-		registerItem(bronzeShovel, "bronzeShovel");
+		registerItem(bronzeShovel, "bronze_shovel");
 
 		// / ASSEMBLY KITS
 		kitShovel = new ItemAssemblyKit(new ItemStack(bronzeShovel));
-		registerItem(kitShovel, "kitShovel");
+		registerItem(kitShovel, "kit_shovel");
 
 		kitPickaxe = new ItemAssemblyKit(new ItemStack(bronzePickaxe));
-		registerItem(kitPickaxe, "kitPickaxe");
+		registerItem(kitPickaxe, "kit_pickaxe");
 
 		// / MOISTENER RESOURCES
-		mouldyWheat = registerItem(new ItemForestry(), "mouldyWheat");
-		decayingWheat = registerItem(new ItemForestry(), "decayingWheat");
+		mouldyWheat = registerItem(new ItemForestry(), "mouldy_wheat");
+		decayingWheat = registerItem(new ItemForestry(), "decaying_wheat");
 		mulch = registerItem(new ItemForestry(), "mulch");
 
 		// / RAINMAKER SUBSTRATES
-		iodineCharge = registerItem(new ItemForestry(), "iodineCapsule");
+		iodineCharge = registerItem(new ItemForestry(), "iodine_capsule");
 
 		phosphor = registerItem(new ItemForestry(), "phosphor");
 
@@ -179,7 +179,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		beeswax.setCreativeTab(Tabs.tabApiculture);
 		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 
-		refractoryWax = registerItem(new ItemForestry(), "refractoryWax");
+		refractoryWax = registerItem(new ItemForestry(), "refractory_wax");
 
 		// FRUITS
 		fruits = registerItem(new ItemFruit(), "fruits");
@@ -189,7 +189,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		}
 
 		// CAMOUFLAGE
-		camouflageSprayCan = registerItem(new ItemCamouflageSprayCan(), "camouflageSprayCan");
+		camouflageSprayCan = registerItem(new ItemCamouflageSprayCan(), "camouflage_spray_can");
 	}
 
 }

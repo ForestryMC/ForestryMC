@@ -27,10 +27,10 @@ public class ItemRegistryFood extends ItemRegistry {
 
 	public ItemRegistryFood() {
 		// / FOOD ITEMS
-		honeyedSlice = registerItem(new ItemForestryFood(8, 0.6f), "honeyedSlice");
+		honeyedSlice = registerItem(new ItemForestryFood(8, 0.6f), "honeyed_slice");
 		beverage = registerItem(new ItemBeverage(), "beverage");
 		ambrosia = registerItem(new ItemAmbrosia().setIsDrink(), "ambrosia");
-		honeyPot = registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
+		honeyPot = registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honey_pot");
 
 		// / SEASONER
 		infuser = new ItemInfuser();

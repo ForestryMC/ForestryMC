@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
@@ -65,9 +66,9 @@ public class ModelButterflyItem extends BlankModel {
 
 		if (modelButterfly == null) {
 			try {
-				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterflyGE"));
+				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterfly_ge"));
 			} catch (Exception e) {
-				throw new IllegalArgumentException(e);
+				Throwables.propagate(e);
 			}
 			if (modelButterfly == null) {
 				throw new IllegalArgumentException("Could not bake butterfly model");

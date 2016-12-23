@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCraftingMaterial extends ItemForestry {
 
-	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling", "camouflagedPaneling"};
+	private final String[] definition = new String[]{"pulsating_dust", "pulsating_mesh", "silk_wisp", "woven_silk", "dissipation_charge", "ice_shard", "scented_paneling", "camouflaged_paneling"};
 
 	public ItemCraftingMaterial() {
 		setMaxDamage(0);

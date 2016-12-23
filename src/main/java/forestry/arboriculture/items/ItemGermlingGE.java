@@ -201,11 +201,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 	@Override
 	public float getFermentationModifier(ItemStack itemstack) {
-		ITree tree = TreeManager.treeRoot.getMember(itemstack);
-		if (tree == null) {
+		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
+		if (!TreeManager.treeRoot.isMember(itemstack)) {
 			return 1.0f;
 		}
 
+		ITree tree = TreeManager.treeRoot.getMember(itemstack);
 		return tree.getGenome().getSappiness() * 10;
 	}
 }

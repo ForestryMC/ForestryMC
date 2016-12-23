@@ -10,11 +10,20 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.Locale;
+import java.util.regex.Pattern;
+
 import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 public class StringUtil {
+
+	private static final Pattern camelCaseToUnderscores = Pattern.compile("(.)([A-Z])");
+
+	public static String camelCaseToUnderscores(String uid) {
+		return camelCaseToUnderscores.matcher(uid).replaceAll("$1_$2").toLowerCase(Locale.ENGLISH);
+	}
 
 	public static String append(String delim, String source, String appendix) {
 		if (source.length() <= 0) {

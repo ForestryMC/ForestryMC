@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayCan, ItemInventoryCamouflageSprayCan> {
 
 	public GuiCamouflageSprayCan(EntityPlayer player, ItemInventoryCamouflageSprayCan inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/camouflageSprayCan.png", new ContainerCamouflageSprayCan(inventory, player.inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/camouflage_spray_can.png", new ContainerCamouflageSprayCan(inventory, player.inventory), inventory);
 
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 80, 39, inventory, null));
 	}

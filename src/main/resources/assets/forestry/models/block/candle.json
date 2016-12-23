@@ -1,7 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "#candleStump"
+    "particle": "#candle_stump"
   },
     "elements": [
       {
@@ -17,12 +17,12 @@
           "down": {
             "uv": [ 7, 13, 9, 15 ],
             "tintindex": 0,
-            "texture": "#candleStump"
+            "texture": "#candle_stump"
           },
           "up": {
             "uv": [ 7, 6, 9, 8 ],
             "tintindex": 0,
-            "texture": "#candleStump"
+            "texture": "#candle_stump"
           }
         }
       },
@@ -39,12 +39,12 @@
           "west": {
             "uv": [ 0, 0, 16, 16 ],
             "tintindex": 0,
-            "texture": "candleStump"
+            "texture": "candle_stump"
           },
           "east": {
             "uv": [ 0, 0, 16, 16 ],
             "tintindex": 0,
-            "texture": "candleStump"
+            "texture": "candle_stump"
           }
         }
       },
@@ -61,12 +61,12 @@
           "north": {
             "uv": [ 0, 0, 16, 16 ],
             "tintindex": 0,
-            "texture": "#candleStump"
+            "texture": "#candle_stump"
           },
           "south": {
             "uv": [ 0, 0, 16, 16 ],
             "tintindex": 0,
-            "texture": "#candleStump"
+            "texture": "#candle_stump"
           }
         }
       },
@@ -82,11 +82,11 @@
         "faces": {
           "down": {
             "uv": [ 7, 13, 9, 15 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           },
           "up": {
             "uv": [ 7, 6, 9, 8 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           }
         }
       },
@@ -102,11 +102,11 @@
         "faces": {
           "west": {
             "uv": [ 0, 0, 16, 16 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           },
           "east": {
             "uv": [ 0, 0, 16, 16 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           }
         }
       },
@@ -122,11 +122,11 @@
         "faces": {
           "north": {
             "uv": [ 0, 0, 16, 16 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           },
           "south": {
             "uv": [ 0, 0, 16, 16 ],
-            "texture": "#candleTip"
+            "texture": "#candle_tip"
           }
         }
       } 

@@ -129,7 +129,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		//To delete the error message
-		manager.registerItemModel(item, 0, "germlings/sapling.treeLarch");
+		manager.registerItemModel(item, 0, "germlings/sapling.tree_larch");
 	}
 
 	/* PLANTING */

@@ -227,7 +227,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		// Saplings
 		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
-		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "saplingGE");
+		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "sapling_ge");
 		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
 
 		// Leaves

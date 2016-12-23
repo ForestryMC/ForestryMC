@@ -12,6 +12,7 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import com.google.common.base.Preconditions;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import net.minecraft.client.Minecraft;

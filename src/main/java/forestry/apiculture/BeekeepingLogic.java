@@ -90,9 +90,11 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		beeProgress = nbttagcompound.getInteger("BreedingTime");
 		queenWorkCycleThrottle = nbttagcompound.getInteger("Throttle");
 
-		NBTTagCompound queenNBT = nbttagcompound.getCompoundTag("queen");
-		queenStack = new ItemStack(queenNBT);
-		queen = BeeManager.beeRoot.getMember(queenStack);
+		if (nbttagcompound.hasKey("queen")) {
+			NBTTagCompound queenNBT = nbttagcompound.getCompoundTag("queen");
+			queenStack = new ItemStack(queenNBT);
+			queen = BeeManager.beeRoot.getMember(queenStack);
+		}
 
 		setActive(nbttagcompound.getBoolean("Active"));
 

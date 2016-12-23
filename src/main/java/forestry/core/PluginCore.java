@@ -489,7 +489,7 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflageSprayCan", "inventory");
+		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflage_spray_can", "inventory");
 		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
 		Proxies.render.registerModel(blockModelIndex);
 		ModelManager.getInstance().registerCustomModels(event);
