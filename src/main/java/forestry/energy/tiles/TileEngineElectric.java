@@ -10,7 +10,6 @@
 // ******************************************************************************/
 //package forestry.energy.tiles;
 //
-//import javax.annotation.Nonnull;
 //import java.io.IOException;
 //
 //import forestry.api.circuits.ChipsetManager;

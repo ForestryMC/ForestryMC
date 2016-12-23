@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
 import forestry.api.genetics.EnumTolerance;
@@ -58,13 +57,11 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	/* SPECIES */
 	@Override
-	@Nonnull
 	public IAlleleButterflySpecies getPrimary() {
 		return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES);
 	}
 
 	@Override
-	@Nonnull
 	public IAlleleButterflySpecies getSecondary() {
 		return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES);
 	}
@@ -135,7 +132,6 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	}
 
 	@Override
-	@Nonnull
 	public ISpeciesRoot getSpeciesRoot() {
 		return ButterflyManager.butterflyRoot;
 	}

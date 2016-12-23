@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,12 @@ import net.minecraft.util.text.TextFormatting;
 
 public class CircuitBoard<T> implements ICircuitBoard {
 
-	@Nonnull
 	private final EnumCircuitBoardType type;
 	@Nullable
 	private final ICircuitLayout layout;
-	@Nonnull
 	private final ICircuit[] circuits;
 
-	public CircuitBoard(@Nonnull EnumCircuitBoardType type, @Nullable ICircuitLayout layout, @Nonnull ICircuit[] circuits) {
+	public CircuitBoard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
 		this.type = type;
 		this.layout = layout;
 		this.circuits = circuits;
@@ -166,13 +163,11 @@ public class CircuitBoard<T> implements ICircuitBoard {
 		}
 	}
 
-	@Nonnull
 	@Override
 	public ICircuit[] getCircuits() {
 		return circuits;
 	}
 
-	@Nonnull
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return layout.getSocketType();

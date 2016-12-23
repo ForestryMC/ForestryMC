@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 
 import forestry.api.genetics.IClassification;
@@ -30,7 +29,7 @@ public interface ITreeFactory {
 	 * @param generator              The tree generator
 	 * @return a new tree species allele.
 	 */
-	IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, @Nonnull IWoodProvider woodProvider, ITreeGenerator generator);
+	IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, IWoodProvider woodProvider, ITreeGenerator generator);
 
 	/**
 	 * Get one of the built-in Forestry leaf types. Default type is deciduous.

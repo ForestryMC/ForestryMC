@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Stack;
 
@@ -36,7 +35,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public boolean isAcceptedGround(@Nonnull IBlockState blockState) {
+	public boolean isAcceptedGround(IBlockState blockState) {
 		return super.isAcceptedGround(blockState) || blockState.getBlock() == Blocks.FARMLAND;
 	}
 

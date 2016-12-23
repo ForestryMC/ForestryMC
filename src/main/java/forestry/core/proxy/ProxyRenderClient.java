@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
@@ -140,7 +139,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerBlockModel(@Nonnull final BlockModelEntry index) {
+	public void registerBlockModel(final BlockModelEntry index) {
 		ModelManager.getInstance().registerCustomBlockModel(index);
 		if (index.addStateMapper) {
 			StateMapperBase ignoreState = new BlockModeStateMapper(index);
@@ -149,7 +148,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerModel(@Nonnull ModelEntry index) {
+	public void registerModel(ModelEntry index) {
 		ModelManager.getInstance().registerCustomModel(index);
 	}
 
@@ -206,7 +205,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(@Nonnull IBeeHousing housing, @Nonnull IBeeGenome genome, @Nonnull List<BlockPos> flowerPositions) {
+	public void addBeeHiveFX(IBeeHousing housing, IBeeGenome genome, List<BlockPos> flowerPositions) {
 		World world = housing.getWorldObj();
 		if (!shouldSpawnParticle(world)) {
 			return;

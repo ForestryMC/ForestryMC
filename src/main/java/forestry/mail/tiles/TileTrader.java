@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import com.google.common.base.Preconditions;
@@ -71,7 +70,6 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	/* SAVING & LOADING */
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);

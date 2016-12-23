@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
@@ -57,7 +56,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		ownerHandler.readFromNBT(nbttagcompound);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -131,7 +129,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
 	}
 
-	@Nonnull
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
@@ -144,7 +141,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		handleUpdateTag(nbt);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
@@ -152,7 +148,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}

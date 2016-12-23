@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import javax.annotation.Nonnull;
 
 import forestry.core.network.packets.PacketHandlerDummyServer;
 
@@ -43,18 +42,16 @@ public enum PacketIdServer implements IPacketId {
 
 	public static final PacketIdServer[] VALUES = values();
 
-	@Nonnull
 	private IForestryPacketHandlerServer packetHandler;
 
 	PacketIdServer() {
 		this.packetHandler = PacketHandlerDummyServer.instance;
 	}
 
-	public void setPacketHandler(@Nonnull IForestryPacketHandlerServer packetHandler) {
+	public void setPacketHandler(IForestryPacketHandlerServer packetHandler) {
 		this.packetHandler = packetHandler;
 	}
 
-	@Nonnull
 	public IForestryPacketHandlerServer getPacketHandler() {
 		return packetHandler;
 	}

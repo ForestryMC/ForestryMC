@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.io.IOException;
@@ -261,7 +260,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
 	}
 
-	@Nonnull
 	public List<Rectangle> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
 	}

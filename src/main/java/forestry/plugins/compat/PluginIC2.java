@@ -10,7 +10,6 @@
 // ******************************************************************************/
 //package forestry.plugins.compat;
 //
-//import javax.annotation.Nonnull;
 //import java.util.Set;
 //
 //import com.google.common.collect.ImmutableMap;

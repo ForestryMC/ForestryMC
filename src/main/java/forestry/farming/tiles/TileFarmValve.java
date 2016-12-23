@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.core.fluids.ITankManager;
@@ -20,7 +19,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
-	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return getMultiblockLogic().getController().getTankManager();

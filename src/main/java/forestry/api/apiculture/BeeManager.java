@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class BeeManager {
 	/**
 	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
 	 */
-	@Nonnull
 	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
 
 	/**

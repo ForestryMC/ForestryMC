@@ -1,6 +1,5 @@
 package forestry.core.render;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Map;
 
@@ -33,14 +32,14 @@ public class TextureMapForestry extends TextureMap {
 	}
 
 	@Override
-	public void loadTexture(@Nonnull IResourceManager resourceManager) throws IOException {
+	public void loadTexture(IResourceManager resourceManager) throws IOException {
 		this.initMissingImage();
 		this.deleteGlTexture();
 		this.loadTextureAtlas(resourceManager);
 	}
 
 	@Override
-	public void loadTextureAtlas(@Nonnull IResourceManager resourceManager) {
+	public void loadTextureAtlas(IResourceManager resourceManager) {
 		int i = Minecraft.getGLMaximumTextureSize();
 		Stitcher stitcher = new Stitcher(i, i, 0, 0);
 		this.mapUploadedSprites.clear();

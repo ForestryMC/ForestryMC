@@ -36,12 +36,9 @@ public class SlotFiltered extends SlotWatched {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return true;
-		}
 		int slotIndex = getSlotIndex();
 		return !filterSlotDelegate.isLocked(slotIndex) &&
-				filterSlotDelegate.canSlotAccept(slotIndex, itemstack);
+				(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
 	}
 
 	public SlotFiltered setBlockedTexture(String ident) {

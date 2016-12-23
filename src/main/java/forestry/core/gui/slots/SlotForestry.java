@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
@@ -51,7 +50,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public void putStack(@Nonnull ItemStack itemStack) {
+	public void putStack(ItemStack itemStack) {
 		if (!isPhantom() || canAdjustPhantom()) {
 			super.putStack(itemStack);
 		}

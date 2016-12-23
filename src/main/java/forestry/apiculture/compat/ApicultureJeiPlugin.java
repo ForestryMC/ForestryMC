@@ -1,7 +1,5 @@
 package forestry.apiculture.compat;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.PluginApiculture;
@@ -30,7 +28,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 	}
 
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
+	public void register(IModRegistry registry) {
 		ItemRegistryApiculture items = PluginApiculture.items;
 
 		JeiUtil.addDescription(registry, "frames",

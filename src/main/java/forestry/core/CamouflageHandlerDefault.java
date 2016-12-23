@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
 import forestry.api.core.CamouflageManager;
@@ -31,7 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 
 	@Override
-	public boolean canHandle(@Nonnull ItemStack stack) {
+	public boolean canHandle(ItemStack stack) {
 		if (stack.isEmpty() || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) {
 			return false;
 		}
@@ -53,7 +52,7 @@ public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public Pair<IBlockState, IBakedModel> getModel(@Nonnull ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
+	public Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
 		Preconditions.checkNotNull(camouflageHandler);
 		Preconditions.checkArgument(!stack.isEmpty(), "Stack cannot be empty");
 

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -114,7 +113,7 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(@Nonnull IBeeHousing housing, @Nonnull IBeeGenome genome, @Nonnull List<BlockPos> flowerPositions) {
+	public void addBeeHiveFX(IBeeHousing housing, IBeeGenome genome, List<BlockPos> flowerPositions) {
 	}
 
 	public void addEntityHoneyDustFX(World world, double x, double y, double z) {

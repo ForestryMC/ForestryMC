@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +44,6 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 		return "";
 	}
 
-	@Nonnull
 	@Override
 	public Set<String> getDependencyUids() {
 		Set<String> dependencyUids = new HashSet<>();
