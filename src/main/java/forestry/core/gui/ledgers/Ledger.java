@@ -37,7 +37,7 @@ public abstract class Ledger {
 	protected int maxHeight = 24;
 
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
-	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledgerLeft.png");
+	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
 
 	private final LedgerManager manager;
 
