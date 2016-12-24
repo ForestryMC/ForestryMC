@@ -152,6 +152,11 @@ public class ClimateManager implements IClimateManager {
 		}
 		return null;
 	}
+	
+	@Override
+	public void onWorldUnload(World world) {
+		regions.remove(world);
+	}
 
 	@Override
 	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {

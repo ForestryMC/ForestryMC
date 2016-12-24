@@ -28,6 +28,8 @@ public interface IClimateManager {
 
 	void removeSource(IClimateSourceProvider source);
 
+	void onWorldUnload(World world);
+	
 	@Nullable
 	IClimatePosition getPosition(World world, BlockPos pos);
 

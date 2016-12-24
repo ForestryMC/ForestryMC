@@ -16,8 +16,11 @@ import java.util.Map;
 
 import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ForestryAPI;
+import forestry.core.multiblock.MultiblockRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -148,6 +151,11 @@ public class ClimateEventHandler {
 			
 		}
 	}*/
+	
+	@SubscribeEvent()
+	public void onWorldUnload(WorldEvent.Unload unloadWorldEvent) {
+		ForestryAPI.climateManager.onWorldUnload(unloadWorldEvent.getWorld());
+	}
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
