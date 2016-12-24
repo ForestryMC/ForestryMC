@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClimateEventHandler {
 
-	private final Map<Integer, Integer> serverTicks;
+	private final Map<World, Integer> serverTicks;
 
 	public ClimateEventHandler() {
 		serverTicks = new HashMap<>();
@@ -156,18 +156,17 @@ public class ClimateEventHandler {
 			MinecraftServer server = world.getMinecraftServer();
 			if (server != null) {
 				server.addScheduledTask(() -> {
-					Integer dim = event.world.provider.getDimension();
-					if (!serverTicks.containsKey(dim)) {
-						serverTicks.put(dim, 1);
+					if (!serverTicks.containsKey(world)) {
+						serverTicks.put(world, 1);
 					}
-					int ticks = serverTicks.get(dim);
-					Map<Integer, List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
-					if (regions.containsKey(dim)) {
-						for (IClimateRegion region : regions.get(dim)) {
+					int ticks = serverTicks.get(world);
+					Map<World, List<IClimateRegion>> regions = ForestryAPI.climateManager.getRegions();
+					if (regions.containsKey(world)) {
+						for (IClimateRegion region : regions.get(world)) {
 							region.updateClimate(ticks);
 						}
 					}
-					serverTicks.put(dim, ticks + 1);
+					serverTicks.put(world, ticks + 1);
 				});
 			}
 		}

@@ -18,12 +18,9 @@ import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.models.ModelGreenhouse;
-import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraftforge.client.model.animation.AnimationTESR;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 

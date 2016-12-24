@@ -15,11 +15,11 @@ import forestry.api.climate.EnumClimatiserTypes;
 import forestry.api.climate.IClimatiserDefinition;
 import forestry.core.climate.ClimatiserDefinition;
 
-public class TileGreenhouseHeater extends TileGreenhouseClimatiser {
+public class TileGreenhouseHumidifier extends TileGreenhouseClimatiser {
 
-	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.POSITIVE, 5F, EnumClimatiserTypes.TEMPERATURE);
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.POSITIVE, 5F, EnumClimatiserTypes.HUMIDITY);
 
-	public TileGreenhouseHeater() {
+	public TileGreenhouseHumidifier() {
 		super(DEFINITION);
 	}
 

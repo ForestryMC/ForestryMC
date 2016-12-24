@@ -88,6 +88,9 @@ public class EnergyHelper {
 	}
 
 	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
+		if(tile == null){
+			return false;
+		}
 		if (tile instanceof TileEngine) { // engine chaining
 			return true;
 		}

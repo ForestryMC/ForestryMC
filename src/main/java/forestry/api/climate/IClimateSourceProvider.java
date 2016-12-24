@@ -5,9 +5,14 @@
  ******************************************************************************/
 package forestry.api.climate;
 
+import java.util.Set;
+
 import forestry.api.core.ILocatable;
+import net.minecraft.util.math.BlockPos;
 
 public interface IClimateSourceProvider extends ILocatable {
 
 	IClimateSource getClimateSource();
+	
+	Set<BlockPos> getPositionsInRange();
 }

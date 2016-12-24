@@ -18,7 +18,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
-import forestry.core.climate.ClimateRoom;
+import forestry.core.climate.ClimateRegion;
 import forestry.core.network.PacketBufferForestry;
 
 public class ClimateUtil implements IClimateHelper {
@@ -214,8 +214,8 @@ public class ClimateUtil implements IClimateHelper {
 		data.writeFloat(position.getHumidity());
 	}
 
-	public static void readRoomPositionData(ClimateRoom room, PacketBufferForestry data) {
-		room.addPosition(data.readBlockPos(), data.readFloat(), data.readFloat());
+	public static void readRoomPositionData(ClimateRegion room, PacketBufferForestry data) {
+		room.setPosition(data.readBlockPos(), data.readFloat(), data.readFloat());
 	}
 
 	public static void readPositionData(IClimatePosition position, PacketBufferForestry data) {

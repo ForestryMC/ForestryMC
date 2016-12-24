@@ -36,7 +36,7 @@ import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
-import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
+import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.plugins.BlankForestryPlugin;
@@ -149,7 +149,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', OreDictUtil.INGOT_IRON,
 				'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
 
-		Block greenhouseDryerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DRYER);
+		Block greenhouseDryerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DEHUMIDIFIER);
 		RecipeUtil.addRecipe(greenhouseDryerBlock,
 				"T#T",
 				"#X#",
@@ -158,7 +158,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', OreDictUtil.INGOT_TIN,
 				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
-		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HUMUDIFIER);
+		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HUMIDIFIER);
 		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
 				"TXT",
 				"GIG",
@@ -229,7 +229,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.GreenhouseFan");
 		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.GreenhouseHeater");
 		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.GreenhouseDryer");
-		GameRegistry.registerTileEntity(TileGreenhouseSprinkler.class, "forestry.GreenhouseSprinkler");
+		GameRegistry.registerTileEntity(TileGreenhouseHumidifier.class, "forestry.GreenhouseSprinkler");
 		GameRegistry.registerTileEntity(TileGreenhouseValve.class, "forestry.GreenhouseValve");
 		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
 		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");

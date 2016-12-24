@@ -66,7 +66,7 @@ public class InternalBlock implements IInternalBlock {
 			return false;
 		}
 		IInternalBlock internalBlock = (IInternalBlock) obj;
-		return internalBlock.getPos().equals(getPos());
+		return getPos().equals(internalBlock.getPos());
 	}
 
 	@Override

@@ -34,6 +34,6 @@ public interface IClimateManager {
 	@Nullable
 	IClimateRegion getRegionForPos(World world, BlockPos pos);
 
-	Map<Integer, List<IClimateRegion>> getRegions();
+	Map<World, List<IClimateRegion>> getRegions();
 
 }

@@ -49,6 +49,10 @@ public class LedgerManager {
 			errorLedgers.add(new ErrorLedger(this));
 		}
 	}
+	
+	public void clear(){
+		this.ledgers.clear();
+	}
 
 	public void add(Ledger ledger) {
 		this.ledgers.add(ledger);

@@ -59,39 +59,36 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 				float maxChange = definition.getChange();
 
 				for (BlockPos pos : positionsInRange) {
-					IClimatePosition position = region.getPositions().get(pos);
+					IClimatePosition position = region.getPosition(pos);
 					if (position != null) {
 						double distance = pos.distanceSq(provider.getCoordinates());
-						double range = definition.getRange();
-						if (distance <= range) {
-							float change = maxChange;
-							if (distance > 0) {
-								change = (float) (maxChange / distance);
-							}
-							if (canChange(type, EnumClimatiserTypes.TEMPERATURE)) {
-								if (position.getTemperature() < controlTemp) {
-									if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
-										position.addTemperature(Math.min(change, controlTemp - position.getTemperature()));
-										hasChange = true;
-									}
-								} else if (position.getTemperature() > controlTemp) {
-									if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
-										position.addTemperature(-Math.min(position.getTemperature() - controlTemp, change));
-										hasChange = true;
-									}
+						float change = maxChange;
+						if (distance > 0) {
+							change = (float) (maxChange / distance);
+						}
+						if (canChange(type, EnumClimatiserTypes.TEMPERATURE)) {
+							if (position.getTemperature() < controlTemp) {
+								if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
+									position.addTemperature(Math.min(change, controlTemp - position.getTemperature()));
+									hasChange = true;
+								}
+							} else if (position.getTemperature() > controlTemp) {
+								if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
+									position.addTemperature(-Math.min(position.getTemperature() - controlTemp, change));
+									hasChange = true;
 								}
 							}
-							if (canChange(type, EnumClimatiserTypes.HUMIDITY)) {
-								if (position.getHumidity() < controlHum) {
-									if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
-										position.addHumidity(Math.min(change, controlHum - position.getHumidity()));
-										hasChange = true;
-									}
-								} else if (position.getHumidity() > controlHum) {
-									if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
-										position.addHumidity(-Math.min(position.getHumidity() - controlHum, change));
-										hasChange = true;
-									}
+						}
+						if (canChange(type, EnumClimatiserTypes.HUMIDITY)) {
+							if (position.getHumidity() < controlHum) {
+								if (canChange(mode, EnumClimatiserModes.POSITIVE)) {
+									position.addHumidity(Math.min(change, controlHum - position.getHumidity()));
+									hasChange = true;
+								}
+							} else if (position.getHumidity() > controlHum) {
+								if (canChange(mode, EnumClimatiserModes.NEGATIVE)) {
+									position.addHumidity(-Math.min(position.getHumidity() - controlHum, change));
+									hasChange = true;
 								}
 							}
 						}

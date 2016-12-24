@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.Log;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -116,7 +117,7 @@ public class MultiblockRegistry {
 	 * @param world The world whose controllers you wish to retrieve.
 	 * @return An unmodifiable set of controllers active in the given world.
 	 */
-	public static Set<IMultiblockControllerInternal> getControllersFromWorld(World world) {
+	public static Set<IMultiblockControllerInternal> getControllersFromWorld(IBlockAccess world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world).getControllers();
 		}

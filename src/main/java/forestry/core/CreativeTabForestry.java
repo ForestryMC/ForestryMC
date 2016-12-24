@@ -10,9 +10,21 @@
  ******************************************************************************/
 package forestry.core;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.apiculture.genetics.Bee;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.config.Constants;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -57,14 +69,11 @@ public class CreativeTabForestry extends CreativeTabs {
 				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "ffarm"));
 				break;
 			case 2:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "beeDroneGE"));
-				break;
+				return BeeManager.beeRoot.getMemberStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
 			case 3:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "sapling"));
-				break;
+				return TreeManager.treeRoot.getMemberStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
 			case 4:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "butterflyGE"));
-				break;
+				return ButterflyManager.butterflyRoot.getMemberStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
 			default:
 				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizerCompound"));
 				break;

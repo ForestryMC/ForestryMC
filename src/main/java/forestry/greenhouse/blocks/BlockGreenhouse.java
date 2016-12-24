@@ -21,7 +21,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
 import forestry.api.core.Tabs;
-import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
@@ -44,7 +43,7 @@ import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
-import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
+import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
@@ -81,7 +80,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -302,8 +300,10 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		switch (type) {
 			case GEARBOX:
 				return new TileGreenhouseGearbox();
-			case DRYER:
+			case DEHUMIDIFIER:
 				return new TileGreenhouseDryer();
+			case HUMIDIFIER:
+				return new TileGreenhouseHumidifier();
 			case VALVE:
 				return new TileGreenhouseValve();
 			case FAN:

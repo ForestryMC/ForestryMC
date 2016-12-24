@@ -10,7 +10,7 @@ import java.util.List;
 
 import forestry.api.multiblock.IGreenhouseController;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 public interface IGreenhouseHelper {
 
@@ -18,7 +18,7 @@ public interface IGreenhouseHelper {
 	 * @return A {@link IGreenhouseController} of a greenhouse, when the pos is a greenhouse
 	 */
 	@Nullable
-	IGreenhouseController getGreenhouseController(World world, BlockPos pos);
+	IGreenhouseController getGreenhouseController(IBlockAccess world, BlockPos pos);
 
 	void addGreenhouseLogic(Class<? extends IGreenhouseLogic> logic);
 

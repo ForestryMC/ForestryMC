@@ -9,6 +9,9 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * A IClimatePosition contains the climate infos (temperature and humidity) of one position.
+ */
 public interface IClimatePosition extends INbtReadable, INbtWritable {
 
 	IClimateRegion getClimateRegion();

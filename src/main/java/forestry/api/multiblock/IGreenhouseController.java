@@ -5,10 +5,8 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.climate.IClimateControl;
 import forestry.api.climate.IClimateControlProvider;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ICamouflageHandler;
@@ -28,10 +26,6 @@ public interface IGreenhouseController extends IMultiblockController, IGreenhous
 	 */
 	List<IGreenhouseLogic> getLogics();
 
-	@Nullable
 	IClimateRegion getRegion();
-
-	@Override
-	IClimateControl getClimateControl();
 
 }

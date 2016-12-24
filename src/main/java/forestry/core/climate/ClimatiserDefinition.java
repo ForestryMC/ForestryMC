@@ -18,10 +18,10 @@ public class ClimatiserDefinition implements IClimatiserDefinition {
 
 	protected final float change;
 	protected final EnumClimatiserModes mode;
-	protected final double range;
+	protected final float range;
 	protected final EnumClimatiserTypes type;
 
-	public ClimatiserDefinition(float change, EnumClimatiserModes mode, double range, EnumClimatiserTypes type) {
+	public ClimatiserDefinition(float change, EnumClimatiserModes mode, float range, EnumClimatiserTypes type) {
 		this.change = change;
 		this.mode = mode;
 		this.range = range;
@@ -34,7 +34,7 @@ public class ClimatiserDefinition implements IClimatiserDefinition {
 	}
 
 	@Override
-	public double getRange() {
+	public float getRange() {
 		return range;
 	}
 

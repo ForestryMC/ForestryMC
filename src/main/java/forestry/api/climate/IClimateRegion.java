@@ -6,7 +6,7 @@
 package forestry.api.climate;
 
 import java.util.Collection;
-import java.util.Map;
+import javax.annotation.Nullable;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -17,25 +17,30 @@ public interface IClimateRegion extends INbtReadable, INbtWritable {
 
 	World getWorld();
 
-	/**
-	 * Update the climate in a region.
-	 */
-	void updateClimate(int ticks);
-
 	int getTicksPerUpdate();
 
-	Map<BlockPos, IClimatePosition> getPositions();
+	void setPosition(BlockPos pos, float temperature, float humidity);
+	
+	@Nullable
+	IClimatePosition getPosition(BlockPos pos);
+	
+	Collection<IClimatePosition> getPositions();
 
 	void addSource(IClimateSource source);
 
 	void removeSource(IClimateSource source);
-
+	
 	Collection<IClimateSource> getSources();
 
-	Collection<BlockPos> getOtherPositions();
+	void calculateAverageClimate();
+	
+	float getAverageTemperature();
 
-	float getTemperature();
-
-	float getHumidity();
+	float getAverageHumidity();
+	
+	/**
+	 * Update the climate in a region.
+	 */
+	void updateClimate(int ticks);
 
 }

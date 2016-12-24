@@ -9,7 +9,7 @@ public interface IClimatiserDefinition {
 
 	float getChange();
 
-	double getRange();
+	float getRange();
 
 	EnumClimatiserModes getMode();
 

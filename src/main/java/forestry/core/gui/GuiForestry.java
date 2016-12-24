@@ -81,7 +81,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		int maxLedgerWidth = (this.width - this.xSize) / 2;
 
 		this.ledgerManager.setMaxWidth(maxLedgerWidth);
-
+		this.ledgerManager.clear();
+		
 		addLedgers();
 	}
 
@@ -247,10 +248,12 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return ySize;
 	}
 
+	@Override
 	public int getGuiLeft() {
 		return guiLeft;
 	}
 
+	@Override
 	public int getGuiTop() {
 		return guiTop;
 	}

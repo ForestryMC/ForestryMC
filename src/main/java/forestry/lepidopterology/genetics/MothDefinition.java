@@ -13,8 +13,6 @@ package forestry.lepidopterology.genetics;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.regex.Pattern;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;

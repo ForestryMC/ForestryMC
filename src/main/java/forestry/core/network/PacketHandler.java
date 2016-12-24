@@ -12,7 +12,6 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import com.google.common.base.Preconditions;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import net.minecraft.client.Minecraft;
@@ -51,7 +50,10 @@ public class PacketHandler {
 	public void onPacket(ClientCustomPacketEvent event) {
 		PacketBufferForestry data = new PacketBufferForestry(event.getPacket().payload());
 		EntityPlayer player = Proxies.common.getPlayer();
-
+		if(player == null){
+			return;
+		}
+		
 		byte packetIdOrdinal = data.readByte();
 		PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
 		IForestryPacketHandlerClient packetHandler = packetId.getPacketHandler();

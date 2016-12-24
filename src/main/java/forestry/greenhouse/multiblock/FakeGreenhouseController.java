@@ -102,10 +102,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public void clearRegion() {
-	}
-
-	@Override
 	public Set<Listener> getListenerComponents() {
 		return Collections.emptySet();
 	}

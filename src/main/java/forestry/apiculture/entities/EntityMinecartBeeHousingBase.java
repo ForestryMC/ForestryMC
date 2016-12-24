@@ -133,7 +133,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public boolean isRaining() {
-		return world.isRaining();
+		return world.isRainingAt(getPosition().up());
 	}
 
 	@Override

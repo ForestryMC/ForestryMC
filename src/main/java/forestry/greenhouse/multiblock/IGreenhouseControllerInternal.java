@@ -35,7 +35,6 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	 */
 	ITankManager getTankManager();
 
-
 	/**
 	 * @return The energy manager of the controller.
 	 */
@@ -47,14 +46,18 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	Set<IInternalBlock> getInternalBlocks();
 
 	/**
-	 * Set the region to null.
+	 * @return True if the greenhouse can work.
 	 */
-	void clearRegion();
-
 	boolean canWork();
 
+	/**
+	 * @return A Set with listener componets.
+	 */
 	Set<IGreenhouseComponent.Listener> getListenerComponents();
 
+	/**
+	 * @return A butterfly hatch, if one exists.
+	 */
 	@Nullable
 	IGreenhouseComponent.ButterflyHatch getButterflyHatch();
 }

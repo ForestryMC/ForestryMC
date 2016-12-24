@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import javax.annotation.Nullable;
+
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.worldgen.WorldGenerator;
@@ -77,6 +79,7 @@ public class ProxyCommon {
 		return FMLClientHandler.instance().getClient();
 	}
 
+	@Nullable
 	public EntityPlayer getPlayer() {
 		return null;
 	}

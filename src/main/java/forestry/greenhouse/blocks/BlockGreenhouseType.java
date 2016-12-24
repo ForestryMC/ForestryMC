@@ -8,8 +8,6 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -26,19 +24,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public enum BlockGreenhouseType {
 	PLAIN,
 	GLASS(Material.GLASS),
+	//item, energy / fluid
 	HATCH_INPUT(true),
 	HATCH_OUTPUT(true),
+	//energy
 	GEARBOX(true),
+	//water
 	VALVE(true),
-	FAN(true, true),
-	HEATER(true, true),
-	DRYER(true, true),
+	//temperature
+	HEATER(true, true), FAN(true, true),
+	//humidity
+	HUMIDIFIER(true, true), DEHUMIDIFIER(true, true),
+	//temperature and humidity
+	WINDOW(Material.GLASS, false, true),
+	//temperature and humidity
+	WINDOW_UP(Material.GLASS, false, true),
 	CONTROL(true),
-	HUMUDIFIER(true, true), //humidifier
 	DOOR,
 	CLIMATE_CONTROL(true),
-	WINDOW(Material.GLASS, false, true),
-	WINDOW_UP(Material.GLASS, false, true),
 	BUTTERFLY_HATCH(true);
 
 	public static final BlockGreenhouseType[] VALUES = values();
@@ -79,11 +82,11 @@ public enum BlockGreenhouseType {
 	private enum BlockGreenhouseSprites {
 		GEARS("gears"), 
 		VALVE("valve"), 
-		FAN_OFF("fan.off"), FAN_ON("fan.on"), 
 		HEATER_OFF("heater.off"), HEATER_ON("heater.on"), 
-		DRYER("dryer"), 
+		FAN_OFF("fan.off"), FAN_ON("fan.on"), 
+		HUMIDIFIER_OFF("humidifier.off"), HUMIDIFIER_ON("humidifier.on"), 
+		DEHUMIDIFIER_OFF("dehumidifier.off"), DEHUMIDIFIER_ON("dehumidifier.on"), 
 		CONTROL("control"), 
-		HUMUDIFIER_OFF("humidifier.on"), HUMUDIFIER_ON("humidifier.on"), 
 		HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), 
 		CLIMATE_CONTROL("climate_control"), 
 		BUTTERFLY_HATCH("butterfly_hatch");
@@ -128,20 +131,30 @@ public enum BlockGreenhouseType {
 				return sprites.get(BlockGreenhouseSprites.GEARS);
 			case VALVE:
 				return sprites.get(BlockGreenhouseSprites.VALVE);
-			case FAN:
-				if (state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
-					return sprites.get(BlockGreenhouseSprites.FAN_OFF);
-				} else {
-					return sprites.get(BlockGreenhouseSprites.FAN_ON);
-				}
 			case HEATER:
 				if (state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
 					return sprites.get(BlockGreenhouseSprites.HEATER_OFF);
 				} else {
 					return sprites.get(BlockGreenhouseSprites.HEATER_ON);
 				}
-			case DRYER:
-				return sprites.get(BlockGreenhouseSprites.DRYER);
+			case FAN:
+				if (state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
+					return sprites.get(BlockGreenhouseSprites.FAN_OFF);
+				} else {
+					return sprites.get(BlockGreenhouseSprites.FAN_ON);
+				}
+			case HUMIDIFIER:
+				if (state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
+					return sprites.get(BlockGreenhouseSprites.HUMIDIFIER_OFF);
+				} else {
+					return sprites.get(BlockGreenhouseSprites.HUMIDIFIER_ON);
+				}
+			case DEHUMIDIFIER:
+				if (state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
+					return sprites.get(BlockGreenhouseSprites.DEHUMIDIFIER_OFF);
+				} else {
+					return sprites.get(BlockGreenhouseSprites.DEHUMIDIFIER_ON);
+				}
 			case CONTROL:
 				return sprites.get(BlockGreenhouseSprites.CONTROL);
 			case HATCH_OUTPUT:

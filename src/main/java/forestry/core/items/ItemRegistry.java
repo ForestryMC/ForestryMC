@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import java.util.Locale;
 
-import com.google.common.base.Preconditions;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.plugins.PluginManager;

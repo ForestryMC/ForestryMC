@@ -17,37 +17,36 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class ClimatePosition implements IClimatePosition {
-	protected final IClimateRegion climateRegion;
+	protected final IClimateRegion region;
 
 	protected final BlockPos pos;
 	protected float temperature;
 	protected float humidity;
 
-	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos, NBTTagCompound nbtTag) {
-		this.climateRegion = climateRegion;
+	public ClimatePosition(IClimateRegion rRegion, BlockPos pos, NBTTagCompound nbtTag) {
+		this.region = rRegion;
 		this.pos = pos;
 		readFromNBT(nbtTag);
 	}
 
-	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos) {
-		Biome biome = climateRegion.getWorld().getBiome(pos);
-		this.climateRegion = climateRegion;
+	public ClimatePosition(IClimateRegion region, BlockPos pos) {
+		Biome biome = region.getWorld().getBiome(pos);
+		this.region = region;
 		this.pos = pos;
 		this.temperature = biome.getTemperature();
 		this.humidity = biome.getRainfall();
 	}
 
-	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos, float temperature, float humidity) {
-		this.climateRegion = climateRegion;
+	public ClimatePosition(IClimateRegion region, BlockPos pos, float temperature, float humidity) {
+		this.region = region;
 		this.pos = pos;
 		this.temperature = temperature;
 		this.humidity = humidity;
 	}
 
-
 	@Override
 	public IClimateRegion getClimateRegion() {
-		return climateRegion;
+		return region;
 	}
 
 	@Override
