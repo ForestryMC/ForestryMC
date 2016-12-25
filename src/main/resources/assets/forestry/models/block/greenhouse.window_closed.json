@@ -1,6 +1,7 @@
 {
 "textures": {
-    "texture": "blocks/glass_green"
+    "texture": "blocks/glass_green",
+	"particle": "#blocks/glass_green"
 },
 "elements": [ 
 {

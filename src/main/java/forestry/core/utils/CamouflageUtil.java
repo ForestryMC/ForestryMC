@@ -90,7 +90,8 @@ public class CamouflageUtil {
 			if (tile instanceof ICamouflageHandler) {
 				ICamouflageHandler tileHandler = (ICamouflageHandler) tile;
 				camouflageStack = tileHandler.getCamouflageBlock(type);
-			} else if (tile instanceof IMultiblockComponent) {
+			}
+			if (camouflageStack.isEmpty() && tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
 				IMultiblockController controller = component.getMultiblockLogic().getController();
 				if (controller.isAssembled() && controller instanceof ICamouflageHandler) {

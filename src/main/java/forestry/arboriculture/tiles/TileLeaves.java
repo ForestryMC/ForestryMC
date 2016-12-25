@@ -25,7 +25,6 @@ import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
@@ -44,6 +43,7 @@ import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import net.minecraft.block.state.IBlockState;
@@ -510,6 +510,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, pos));
+		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
 	}
 }

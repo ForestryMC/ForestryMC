@@ -34,7 +34,6 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -59,6 +58,7 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.TopDownBlockPosComparator;
 import forestry.core.utils.Translator;
@@ -387,13 +387,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getCoordinates();
-		return ForestryAPI.climateManager.getTemperature(getWorldObj(), coords);
+		return ClimateUtil.getTemperature(getWorldObj(), coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getCoordinates();
-		return ForestryAPI.climateManager.getHumidity(getWorldObj(), coords);
+		return ClimateUtil.getHumidity(getWorldObj(), coords);
 	}
 
 	@Override

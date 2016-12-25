@@ -45,4 +45,12 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 		return name;
 	}
 
+	@Override
+	public void onMachineAssembled() {
+	}
+
+	@Override
+	public void onMachineDisassembled() {
+	}
+
 }

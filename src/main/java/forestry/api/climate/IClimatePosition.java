@@ -29,5 +29,7 @@ public interface IClimatePosition extends INbtReadable, INbtWritable {
 	void addHumidity(float humidity);
 
 	float getHumidity();
+	
+	IClimateInfo getInfo();
 
 }

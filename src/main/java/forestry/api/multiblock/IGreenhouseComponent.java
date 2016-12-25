@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import forestry.api.climate.IClimateControl;
 import forestry.api.climate.IClimateControlProvider;
 import forestry.api.climate.IClimateSourceProvider;
 import forestry.api.climate.IClimatiserDefinition;
@@ -24,8 +23,6 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 
 	interface ClimateControl extends IGreenhouseComponent, IClimateControlProvider {
 
-		@Override
-		IClimateControl getClimateControl();
 	}
 
 	interface Door extends IGreenhouseComponent {

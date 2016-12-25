@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.climate;
 
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import net.minecraft.nbt.NBTTagCompound;
@@ -82,6 +83,11 @@ public class ClimatePosition implements IClimatePosition {
 	@Override
 	public float getHumidity() {
 		return humidity;
+	}
+	
+	@Override
+	public IClimateInfo getInfo() {
+		return new ClimateInfo(temperature, humidity);
 	}
 
 	@Override

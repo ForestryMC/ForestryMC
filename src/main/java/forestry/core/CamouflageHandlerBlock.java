@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class CamouflageHandlerDefault implements ICamouflageItemHandler {
+public class CamouflageHandlerBlock implements ICamouflageItemHandler {
 
 	@Override
 	public boolean canHandle(ItemStack stack) {
@@ -42,7 +42,7 @@ public class CamouflageHandlerDefault implements ICamouflageItemHandler {
 
 	@Override
 	public String getType() {
-		return CamouflageManager.DEFAULT;
+		return CamouflageManager.BLOCK;
 	}
 
 	@Override

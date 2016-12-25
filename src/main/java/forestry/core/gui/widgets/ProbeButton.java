@@ -51,10 +51,11 @@ public class ProbeButton extends Widget {
 	}
 
 	@Override
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
 		if (pressed) {
 			pressed = false;
 		}
+		return false;
 	}
 
 	@Override

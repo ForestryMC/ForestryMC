@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimateSourceProvider;
@@ -43,6 +43,7 @@ import forestry.api.multiblock.IGreenhouseComponent.ClimateControl;
 import forestry.api.multiblock.IGreenhouseComponent.Climatiser;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.climate.ClimateInfo;
 import forestry.core.climate.ClimatePosition;
 import forestry.core.climate.ClimateRegion;
 import forestry.core.config.Constants;
@@ -108,10 +109,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.energyManager = new EnergyManager(200, 100000);
 		this.inventory = new InventoryGreenhouse(this);
 
-		camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.DEFAULT);
+		camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.BLOCK);
 		camouflageGlassBlock = getDefaultCamouflageBlock(CamouflageManager.GLASS);
 		camouflageDoorBlock = getDefaultCamouflageBlock(CamouflageManager.DOOR);
 		this.region = new ClimateRegion(this);
+		createLogics();
 	}
 
 	/* CLIMATE */
@@ -154,7 +156,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		energyManager.writeToNBT(data);
 		inventory.writeToNBT(data);
 
-		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.DOOR);
 
@@ -177,7 +179,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		energyManager.readFromNBT(data);
 		inventory.readFromNBT(data);
 
-		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.DOOR);
 
@@ -218,7 +220,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		tankManager.writeData(data);
 		energyManager.writeData(data);
 		inventory.writeData(data);
-		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.DOOR);
 		region.writeData(data);
@@ -237,7 +239,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public boolean canHandleType(String type) {
-		return type.equals(CamouflageManager.DEFAULT) || type.equals(CamouflageManager.GLASS) || type.equals(CamouflageManager.DOOR);
+		return type.equals(CamouflageManager.BLOCK) || type.equals(CamouflageManager.GLASS) || type.equals(CamouflageManager.DOOR);
 	}
 
 	/* CAMOUFLAGE */
@@ -245,7 +247,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		ItemStack oldCamouflageBlock;
 		switch (type) {
-			case CamouflageManager.DEFAULT:
+			case CamouflageManager.BLOCK:
 				oldCamouflageBlock = camouflagePlainBlock;
 				break;
 			case CamouflageManager.GLASS:
@@ -260,7 +262,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)) {
 			switch (type) {
-				case CamouflageManager.DEFAULT:
+				case CamouflageManager.BLOCK:
 					camouflagePlainBlock = camouflageBlock;
 					break;
 				case CamouflageManager.GLASS:
@@ -284,7 +286,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
 		switch (type) {
-			case CamouflageManager.DEFAULT:
+			case CamouflageManager.BLOCK:
 				return camouflagePlainBlock;
 			case CamouflageManager.GLASS:
 				return camouflageGlassBlock;
@@ -298,7 +300,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
 		switch (type) {
-			case CamouflageManager.DEFAULT:
+			case CamouflageManager.BLOCK:
 				return new ItemStack(Blocks.BRICK_BLOCK);
 			case CamouflageManager.GLASS:
 				return new ItemStack(Blocks.STAINED_GLASS, 1, 13);
@@ -385,7 +387,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
 
-		createLogics();
 		Set<IClimatePosition> internalPositions = new HashSet<>();
 		for (IInternalBlock block : internalBlocks) {
 			if (block != null) {
@@ -403,6 +404,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			if (comp instanceof ICamouflagedTile) {
 				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
+		}
+		for(IGreenhouseLogic logic : logics){
+			logic.onMachineAssembled();
 		}
 	}
 
@@ -423,6 +427,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			if (comp instanceof ICamouflagedTile) {
 				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
+		}
+		for(IGreenhouseLogic logic : logics){
+			logic.onMachineDisassembled();
 		}
 	}
 
@@ -717,11 +724,18 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 
 	@Override
-	public IClimateControl getClimateControl() {
+	public IClimateInfo getControlClimate() {
 		if (climateControl == null) {
-			return DefaultClimateControl.instance;
+			return ClimateInfo.MAX;
 		}
-		return climateControl.getClimateControl();
+		return climateControl.getControlClimate();
+	}
+	
+	@Override
+	public void setControlClimate(IClimateInfo climateControl) {
+		if (this.climateControl != null) {
+			this.climateControl.setControlClimate(climateControl);
+		}
 	}
 
 	@Override

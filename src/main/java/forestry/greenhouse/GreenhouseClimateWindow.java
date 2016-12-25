@@ -4,13 +4,13 @@ import javax.annotation.Nullable;
 
 import forestry.api.climate.EnumClimatiserModes;
 import forestry.api.climate.EnumClimatiserTypes;
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.climate.BiomeClimateControl;
+import forestry.core.climate.BiomeClimateInfo;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
@@ -41,9 +41,9 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 		WindowMode windowMode = provider.getMode();
 		if (logic.isConnected() && controller.isAssembled() && controller instanceof IGreenhouseControllerInternal && positionsInRange.iterator().hasNext()) {
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
-			IClimateControl climateControl = getClimateControl(greenhouseInternal);
-			float controlTemp = climateControl.getControlTemperature();
-			float controlHum = climateControl.getControlHumidity();
+			IClimateInfo climateInfo = getClimateControl(greenhouseInternal);
+			float controlTemp = climateInfo.getTemperature();
+			float controlHum = climateInfo.getHumidity();
 			if (!greenhouseInternal.canWork()) {
 				if (windowMode == WindowMode.OPEN) {
 					provider.setMode(windowMode = WindowMode.CONTROL);
@@ -100,13 +100,13 @@ public class GreenhouseClimateWindow extends GreenhouseClimateSource<TileGreenho
 	}
 
 	@Override
-	protected IClimateControl getClimateControl(IGreenhouseControllerInternal greenhouseInternal) {
+	protected IClimateInfo getClimateControl(IGreenhouseControllerInternal greenhouseInternal) {
 		if (biome == null) {
 			BlockPos pos = provider.getCoordinates();
 			World world = provider.getWorld();
 			biome = world.getBiome(pos);
 		}
-		return BiomeClimateControl.getControl(biome);
+		return BiomeClimateInfo.getInfo(biome);
 	}
 
 }

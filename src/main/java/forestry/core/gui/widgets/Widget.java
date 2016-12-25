@@ -61,7 +61,8 @@ public abstract class Widget implements IToolTipProvider {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 	}
 
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+		return false;
 	}
 
 	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {

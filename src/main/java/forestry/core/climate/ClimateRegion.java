@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimateSource;
@@ -99,23 +99,23 @@ public class ClimateRegion implements IClimateRegion, IStreamable {
 				if (world.isBlockLoaded(pos)) {
 					hasChange |= updateSides(position);
 					if (!controller.isAssembled()) {
-						IClimateControl climateControl = getControl(pos);
+						IClimateInfo climateInfo = getControl(pos);
 
-						if (position.getTemperature() != climateControl.getControlTemperature()) {
-							if (position.getTemperature() > climateControl.getControlTemperature()) {
-								position.addTemperature(-Math.min(0.01F, position.getTemperature() - climateControl.getControlTemperature()));
+						if (position.getTemperature() != climateInfo.getTemperature()) {
+							if (position.getTemperature() > climateInfo.getTemperature()) {
+								position.addTemperature(-Math.min(0.01F, position.getTemperature() - climateInfo.getTemperature()));
 								hasChange = true;
 							} else {
-								position.addTemperature(Math.min(0.01F, climateControl.getControlTemperature() - position.getTemperature()));
+								position.addTemperature(Math.min(0.01F, climateInfo.getTemperature() - position.getTemperature()));
 								hasChange = true;
 							}
 						}
-						if (position.getHumidity() != climateControl.getControlHumidity()) {
-							if (position.getHumidity() > climateControl.getControlHumidity()) {
-								position.addHumidity(-Math.min(0.01F, position.getHumidity() - climateControl.getControlHumidity()));
+						if (position.getHumidity() != climateInfo.getHumidity()) {
+							if (position.getHumidity() > climateInfo.getHumidity()) {
+								position.addHumidity(-Math.min(0.01F, position.getHumidity() - climateInfo.getHumidity()));
 								hasChange = true;
 							} else {
-								position.addHumidity(Math.min(0.01F, climateControl.getControlHumidity() - position.getHumidity()));
+								position.addHumidity(Math.min(0.01F, climateInfo.getHumidity() - position.getHumidity()));
 								hasChange = true;
 							}
 						}
@@ -130,9 +130,9 @@ public class ClimateRegion implements IClimateRegion, IStreamable {
 
 	protected boolean updateSides(IClimatePosition positon) {
 		BlockPos pos = positon.getPos();
-		IClimateControl climateControl = getControl(pos);
+		IClimateInfo climateInfo = getControl(pos);
 		boolean hasChange = false;
-		if (climateControl.getControlTemperature() != temperature || climateControl.getControlHumidity() != humidity) {
+		if (climateInfo.getTemperature() != temperature || climateInfo.getHumidity() != humidity) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				IClimatePosition climatedInfoFace = getPosition(pos.offset(facing));
 				if (climatedInfoFace != null) {
@@ -154,13 +154,13 @@ public class ClimateRegion implements IClimateRegion, IStreamable {
 		return hasChange;
 	}
 
-	protected IClimateControl getControl(BlockPos pos) {
+	protected IClimateInfo getControl(BlockPos pos) {
 		if (world.isBlockLoaded(pos)) {
 			if (!controller.isAssembled()) {
-				return BiomeClimateControl.getControl(world.getBiome(pos));
+				return BiomeClimateInfo.getInfo(world.getBiome(pos));
 			}
 		}
-		return controller.getClimateControl();
+		return controller.getControlClimate();
 	}
 	
 	@Override

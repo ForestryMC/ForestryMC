@@ -16,10 +16,13 @@ import java.util.Locale;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
 import forestry.core.climate.ClimateRegion;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ClimateUtil implements IClimateHelper {
 
@@ -202,6 +205,14 @@ public class ClimateUtil implements IClimateHelper {
 	@Override
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	}
+	
+	public static float getTemperature(World world, BlockPos pos){
+		return ForestryAPI.climateManager.getInfo(world, pos).getTemperature();
+	}
+	
+	public static float getHumidity(World world, BlockPos pos){
+		return ForestryAPI.climateManager.getInfo(world, pos).getHumidity();
 	}
 
 	public static void writeRoomPositionData(IClimatePosition position, PacketBufferForestry data) {

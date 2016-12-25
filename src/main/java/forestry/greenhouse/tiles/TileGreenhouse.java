@@ -104,6 +104,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 
 			if (sendClientUpdate && world != null && world.isRemote) {
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
+				world.markBlockRangeForRenderUpdate(pos, pos);
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController(), this, this, type));
 			return true;
@@ -197,7 +198,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		} else if (((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.DOOR) {
 			return CamouflageManager.DOOR;
 		}
-		return CamouflageManager.DEFAULT;
+		return CamouflageManager.BLOCK;
 	}
 
 	@Override

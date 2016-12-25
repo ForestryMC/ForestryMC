@@ -36,23 +36,22 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 		super.registerModel(item, manager);
 		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:camouflage_spray_can_filled"));
 	}
-
+	
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX,
+			float hitY, float hitZ, EnumHand hand) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		ItemInventoryCamouflageSprayCan inventory = new ItemInventoryCamouflageSprayCan(player, heldItem);
 		ItemStack camouflage = inventory.getStackInSlot(0);
-		if (!camouflage.isEmpty()) {
-			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof ICamouflageHandler) {
-				ICamouflageHandler handler = (ICamouflageHandler) tile;
-				String type = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflage).getType();
-				if (handler.canHandleType(type)) {
-					if (world.isRemote) {
-						handler.setCamouflageBlock(type, camouflage, false);
-					}
-					return EnumActionResult.SUCCESS;
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof ICamouflageHandler) {
+			ICamouflageHandler handler = (ICamouflageHandler) tile;
+			String type = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflage).getType();
+			if (handler.canHandleType(type)) {
+				if(world.isRemote){
+					handler.setCamouflageBlock(type, camouflage, true);
 				}
+				return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.PASS;

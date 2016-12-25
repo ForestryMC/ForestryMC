@@ -69,10 +69,12 @@ public class WidgetManager {
 		}
 	}
 
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+		boolean hasToStop = false;
 		for (Widget slot : widgets) {
-			slot.handleMouseRelease(mouseX, mouseY, eventType);
+			hasToStop|=slot.handleMouseRelease(mouseX, mouseY, eventType);
 		}
+		return hasToStop;
 	}
 
 	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {

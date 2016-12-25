@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateManager;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateProvider;
@@ -98,25 +100,20 @@ public class ClimateManager implements IClimateManager {
 			}
 		}
 	}
-
+	
 	@Override
-	public float getTemperature(World world, BlockPos pos) {
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, pos);
-
-		if (position != null) {
-			return position.getTemperature();
-		}
-		return world.getBiome(pos).getTemperature();
+	public IClimateInfo createInfo(float temperature, float humidity) {
+		return new ClimateInfo(temperature, humidity);
 	}
-
+	
 	@Override
-	public float getHumidity(World world, BlockPos pos) {
+	public IClimateInfo getInfo(World world, BlockPos pos) {
 		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, pos);
 
 		if (position != null) {
-			return position.getHumidity();
+			return position.getInfo();
 		}
-		return world.getBiome(pos).getRainfall();
+		return BiomeClimateInfo.getInfo(world.getBiome(pos));
 	}
 
 	@Override

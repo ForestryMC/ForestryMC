@@ -202,7 +202,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		if (!controller.isAssembled()) {
 			return false;
 		}
-
+		
 		if (!worldIn.isRemote) {
 			part.openGui(playerIn);
 		}

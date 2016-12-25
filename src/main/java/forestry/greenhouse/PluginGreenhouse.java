@@ -23,7 +23,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
-import forestry.greenhouse.logics.GreenhouseLogicGreenhouseDoor;
 import forestry.greenhouse.logics.GreenhouseLogicGreenhouseEffect;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
@@ -160,12 +159,11 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 
 		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HUMIDIFIER);
 		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
-				"TXT",
-				"GIG",
-				" I ",
-				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS),
-				'I', OreDictUtil.INGOT_IRON,
-				'G', OreDictUtil.GEAR_TIN,
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', OreDictUtil.INGOT_TIN,
 				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
 
 		Block greenhouseDoorBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DOOR);
@@ -250,7 +248,6 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		proxy.initializeModels();
 
 		GreenhouseManager.greenhouseHelper.addGreenhouseLogic(GreenhouseLogicGreenhouseEffect.class);
-		GreenhouseManager.greenhouseHelper.addGreenhouseLogic(GreenhouseLogicGreenhouseDoor.class);
 	}
 
 }

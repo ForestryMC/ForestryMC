@@ -13,7 +13,6 @@ package forestry.greenhouse.multiblock;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.fluids.ITankManager;
@@ -39,11 +38,6 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	 * @return The energy manager of the controller.
 	 */
 	EnergyManager getEnergyManager();
-
-	/**
-	 * @return All internal blocks of the greenhouse.
-	 */
-	Set<IInternalBlock> getInternalBlocks();
 
 	/**
 	 * @return True if the greenhouse can work.

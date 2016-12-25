@@ -15,13 +15,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
+import forestry.core.climate.ClimateInfo;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -112,8 +113,13 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public IClimateControl getClimateControl() {
-		return DefaultClimateControl.instance;
+	public IClimateInfo getControlClimate() {
+		return ClimateInfo.MAX;
+	}
+	
+	@Override
+	public void setControlClimate(IClimateInfo climateControl) {
+		
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
+import forestry.core.utils.ClimateUtil;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -113,12 +114,12 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public float getExactTemperature() {
-		return ForestryAPI.climateManager.getTemperature(world, getPosition());
+		return ClimateUtil.getTemperature(world, getPosition());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return ForestryAPI.climateManager.getHumidity(world, getPosition());
+		return ClimateUtil.getHumidity(world, getPosition());
 	}
 
 	@Override

@@ -40,6 +40,7 @@ import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -312,7 +313,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	@Override
 	public EnumHumidity getHumidity() {
-		float humidity = ForestryAPI.climateManager.getHumidity(getWorld(), getPos());
+		float humidity = ClimateUtil.getHumidity(getWorld(), getPos());
 		return EnumHumidity.getFromValue(humidity);
 	}
 

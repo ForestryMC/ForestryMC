@@ -147,9 +147,10 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
+		if(widgetManager.handleMouseRelease(mouseX, mouseY, state)){
+			return;
+		}
 		super.mouseReleased(mouseX, mouseY, state);
-
-		widgetManager.handleMouseRelease(mouseX, mouseY, state);
 	}
 
 	@Override

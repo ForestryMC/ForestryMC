@@ -12,7 +12,7 @@ package forestry.greenhouse;
 
 import forestry.api.climate.EnumClimatiserModes;
 import forestry.api.climate.EnumClimatiserTypes;
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimatiserDefinition;
@@ -50,9 +50,9 @@ public class GreenhouseClimateSource<P extends TileGreenhouseClimatiser> extends
 		boolean isActive = false;
 		if (logic.isConnected() && controller.isAssembled() && controller instanceof IGreenhouseControllerInternal && positionsInRange.iterator().hasNext()) {
 			IGreenhouseControllerInternal greenhouseInternal = (IGreenhouseControllerInternal) controller;
-			IClimateControl climateControl = getClimateControl(greenhouseInternal);
-			float controlTemp = climateControl.getControlTemperature();
-			float controlHum = climateControl.getControlHumidity();
+			IClimateInfo climateInfo = getClimateControl(greenhouseInternal);
+			float controlTemp = climateInfo.getTemperature();
+			float controlHum = climateInfo.getHumidity();
 			isActive = greenhouseInternal.canWork() && provider.canWork();
 			EnumClimatiserTypes type = definition.getType();
 			EnumClimatiserModes mode = definition.getMode();
@@ -135,15 +135,15 @@ public class GreenhouseClimateSource<P extends TileGreenhouseClimatiser> extends
 	}
 
 	protected boolean canChange(EnumClimatiserTypes climatiserType, EnumClimatiserTypes type) {
-		return type == climatiserType || climatiserType == EnumClimatiserTypes.NONE;
+		return type == climatiserType || climatiserType == EnumClimatiserTypes.BOTH;
 	}
 
 	protected boolean canChange(EnumClimatiserModes climatiserMode, EnumClimatiserModes mode) {
-		return mode == climatiserMode || climatiserMode == EnumClimatiserModes.NONE;
+		return mode == climatiserMode || climatiserMode == EnumClimatiserModes.BOTH;
 	}
 
-	protected IClimateControl getClimateControl(IGreenhouseControllerInternal greenhouseInternal) {
-		return greenhouseInternal.getClimateControl();
+	protected IClimateInfo getClimateControl(IGreenhouseControllerInternal greenhouseInternal) {
+		return greenhouseInternal.getControlClimate();
 	}
 
 }

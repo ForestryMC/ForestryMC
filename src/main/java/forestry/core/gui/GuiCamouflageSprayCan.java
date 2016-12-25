@@ -1,5 +1,6 @@
 package forestry.core.gui;
 
+import forestry.api.core.CamouflageManager;
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
@@ -12,7 +13,7 @@ public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayC
 	public GuiCamouflageSprayCan(EntityPlayer player, ItemInventoryCamouflageSprayCan inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/camouflage_spray_can.png", new ContainerCamouflageSprayCan(inventory, player.inventory), inventory);
 
-		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 80, 39, inventory, null));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 80, 39, inventory, CamouflageManager.NONE));
 	}
 
 	@Override

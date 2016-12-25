@@ -211,7 +211,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			return CamouflageManager.GLASS;
 		}
-		return CamouflageManager.DEFAULT;
+		return CamouflageManager.BLOCK;
 	}
 
 	@Nullable

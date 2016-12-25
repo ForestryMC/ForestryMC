@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
 	@Nullable
 	private WindowMode mode;
-	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.001F, EnumClimatiserModes.NONE, 5F, EnumClimatiserTypes.NONE);
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.001F, EnumClimatiserModes.BOTH, 5F, EnumClimatiserTypes.BOTH);
 
 	public TileGreenhouseWindow() {
 		super(DEFINITION, new GreenhouseClimateWindow(20));

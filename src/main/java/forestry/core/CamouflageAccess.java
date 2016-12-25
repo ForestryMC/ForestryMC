@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageAccess;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.core.utils.Log;
@@ -29,6 +30,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 	private static final Map<String, List<ICamouflageItemHandler>> camouflageItemHandlers = new HashMap<>();
 	private static final Map<String, List<ItemStack>> camouflageItemBlacklist = new HashMap<>();
 	private static final Map<String, List<String>> blacklistedMods = new HashMap<>();
+	public static final ICamouflageItemHandler NONE = new CamouflageHandlerNone();
 
 	@Override
 	public void registerCamouflageItemHandler(ICamouflageItemHandler itemHandler) {
@@ -48,7 +50,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 	@Override
 	@Nullable
 	public List<ICamouflageItemHandler> getCamouflageItemHandler(String type) {
-		if (type == null) {
+		if (type.equals(CamouflageManager.NONE)) {
 			List<ICamouflageItemHandler> handlers = new ArrayList<>();
 			for (List<ICamouflageItemHandler> handler : camouflageItemHandlers.values()) {
 				handlers.addAll(handler);
@@ -114,12 +116,16 @@ public class CamouflageAccess implements ICamouflageAccess {
 
 		return false;
 	}
+	
+	@Override
+	public ICamouflageItemHandler getNoneItemHandler() {
+		return NONE;
+	}
 
 	@Override
-	@Nullable
 	public ICamouflageItemHandler getHandlerFromItem(ItemStack stack) {
 		if (stack.isEmpty()) {
-			return null;
+			return NONE;
 		}
 		for (List<ICamouflageItemHandler> handlers : camouflageItemHandlers.values()) {
 			for (ICamouflageItemHandler handler : handlers) {
@@ -128,7 +134,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 				}
 			}
 		}
-		return null;
+		return NONE;
 	}
 
 }

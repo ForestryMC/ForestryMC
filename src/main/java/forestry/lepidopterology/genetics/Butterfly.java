@@ -19,7 +19,6 @@ import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
@@ -39,6 +38,7 @@ import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import net.minecraft.entity.EntityCreature;
@@ -175,7 +175,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
 		Biome biome = world.getBiome(new BlockPos(x, y, z));
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, new BlockPos(x, y, z));
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, new BlockPos(x, y, z)));
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, new BlockPos(x, y, z)));
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
 				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
 				getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());

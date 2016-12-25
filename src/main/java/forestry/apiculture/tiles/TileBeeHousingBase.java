@@ -101,12 +101,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public float getExactTemperature() {
-		return ForestryAPI.climateManager.getTemperature(world, getPos());
+		return ClimateUtil.getTemperature(world, getPos());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return ForestryAPI.climateManager.getHumidity(world, getPos());
+		return ClimateUtil.getHumidity(world, getPos());
 	}
 
 	/* UPDATING */

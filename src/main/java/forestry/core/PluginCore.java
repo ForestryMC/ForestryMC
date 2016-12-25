@@ -131,7 +131,7 @@ public class PluginCore extends BlankForestryPlugin {
 
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDefault());
+		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerBlock());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
 	}
