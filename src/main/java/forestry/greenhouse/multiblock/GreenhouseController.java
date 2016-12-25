@@ -275,6 +275,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					return false;
 			}
 			if (sendClientUpdate && world.isRemote) {
+				for (IMultiblockComponent comp : connectedParts) {
+					if (comp instanceof ICamouflagedTile) {
+						ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+						if (camBlock.getCamouflageType().equals(type)) {
+							world.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+						}
+					}
+				}
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
 			}
 			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, null, this, type));

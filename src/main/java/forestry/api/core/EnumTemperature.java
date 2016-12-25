@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import forestry.core.utils.ClimateUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,6 +21,8 @@ public enum EnumTemperature {
 	NONE("None", "habitats/ocean"), ICY("Icy", "habitats/snow"), COLD("Cold", "habitats/taiga"),
 	NORMAL("Normal", "habitats/plains"), WARM("Warm", "habitats/jungle"), HOT("Hot", "habitats/desert"), HELLISH("Hellish", "habitats/nether");
 
+	public static EnumTemperature[] VALUES = values();
+	
 	public final String name;
 	public final String iconIndex;
 
@@ -35,7 +36,7 @@ public enum EnumTemperature {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
+	public TextureAtlasSprite getSprite() {
 		return ForestryAPI.textureManager.getDefault(iconIndex);
 	}
 
@@ -72,7 +73,7 @@ public enum EnumTemperature {
 		if (BiomeHelper.isBiomeHellish(biome)) {
 			return HELLISH;
 		}
-		float temperature = ClimateUtil.getTemperature(world, pos);
+		float temperature = ForestryAPI.climateManager.getInfo(world, pos).getTemperature();
 		return getFromValue(temperature);
 	}
 }

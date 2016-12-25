@@ -69,21 +69,23 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 		x+=50 + (previous.getHandlerSlot()  != null ? 20 : 0);
 		widgetManager.add(new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, inventory.getMultiblockLogic().getController(), tile, CamouflageManager.DOOR));
 		
+		widgetManager.add(new WidgetClimatePillar(widgetManager, guiLeft- 23, guiTop + 5));
+		
 		fieldsEnabeled = true;
-
-		temperatureField = new GuiTextField(0, fontRendererObj, guiLeft + 63, guiTop + 30, 50, 10);
-		humidityField = new GuiTextField(1, fontRendererObj, guiLeft + 63, guiTop + 60, 50, 10);
 	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
 
-		temperatureField = new GuiTextField(0, fontRendererObj, guiLeft + 63, guiTop + 30, 50, 10);
-		humidityField = new GuiTextField(1, fontRendererObj, guiLeft + 63, guiTop + 60, 50, 10);
+		temperatureField = new GuiTextField(0, fontRendererObj, guiLeft + 64, guiTop + 31, 50, 10);
+		humidityField = new GuiTextField(1, fontRendererObj, guiLeft + 64, guiTop + 61, 50, 10);
 
 		temperatureField.setValidator(numberFilter);
 		humidityField.setValidator(numberFilter);
+		
+		temperatureField.setEnableBackgroundDrawing(false);
+		humidityField.setEnableBackgroundDrawing(false);
 
 		IGreenhouseController controller = inventory.getMultiblockLogic().getController();
 		if (controller == null || controller.getControlClimate() == ClimateInfo.MAX) {
@@ -119,18 +121,28 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 			temperatureField.mouseClicked(mouseX, mouseY, mouseButton);
 			humidityField.mouseClicked(mouseX, mouseY, mouseButton);
 			IClimateControlProvider provider = inventory.getMultiblockLogic().getController();
-			IClimateInfo info = provider.getControlClimate();
-			if (temperatureWasFocused && !temperatureField.isFocused()) {
+			if (temperatureWasFocused && !temperatureField.isFocused() || humidityWasFocused && !humidityField.isFocused()) {
 				float temp = parseField(temperatureField);
-				temperatureField.setText(Float.toString(temp));
-				provider.setControlClimate(new ClimateInfo(temp, info.getHumidity()));
-			} else if (humidityWasFocused && !humidityField.isFocused()) {
 				float hum = parseField(humidityField);
-				humidityField.setText(Float.toString(hum));
-				provider.setControlClimate(new ClimateInfo(info.getTemperature(), hum));
+				setClimate(provider, temp, hum);
 			}
 			Proxies.net.sendToServer(new PacketUpdateClimateControl(provider));
 		}
+	}
+	
+	public void setClimate(float temp){
+		setClimate(inventory.getMultiblockLogic().getController(), temp);
+	}
+	
+	public void setClimate(IClimateControlProvider provider, float temp){
+		IClimateInfo info = provider.getControlClimate();
+		setClimate(provider, temp, info.getHumidity());
+	}
+	
+	public void setClimate(IClimateControlProvider provider, float temp, float hum){
+		temperatureField.setText(Float.toString(temp));
+		humidityField.setText(Float.toString(hum));
+		provider.setControlClimate(new ClimateInfo(temp, hum));
 	}
 
 	private float parseField(GuiTextField field) {
