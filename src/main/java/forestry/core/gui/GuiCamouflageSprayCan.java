@@ -20,7 +20,7 @@ public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayC
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-		String name = Translator.translateToLocal("for.gui.camouflage.spray.can");
+		String name = Translator.translateToLocal("for.gui.camouflage_spray_can");
 		textLayout.line = 6;
 		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);

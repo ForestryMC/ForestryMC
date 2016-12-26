@@ -43,6 +43,7 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -74,7 +75,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		Preconditions.checkState(blocks != null);
 
 		Block greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
-		RecipeUtil.addRecipe(greenhousePlainBlock,
+		RecipeUtil.addRecipe(new ItemStack(greenhousePlainBlock, 4),
 				"###",
 				"#X#",
 				"###",
@@ -82,7 +83,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
-		RecipeUtil.addRecipe(greenhouseGlassBlock,
+		RecipeUtil.addRecipe(new ItemStack(greenhouseGlassBlock, 4),
 				"###",
 				"#X#",
 				"###",
