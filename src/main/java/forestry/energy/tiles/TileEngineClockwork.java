@@ -38,7 +38,7 @@ public class TileEngineClockwork extends TileEngine {
 	private short delay = 0;
 
 	public TileEngineClockwork() {
-		super(null, ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super("", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	@Override

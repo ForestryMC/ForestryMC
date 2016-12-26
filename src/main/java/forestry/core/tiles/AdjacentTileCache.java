@@ -103,6 +103,7 @@ public final class AdjacentTileCache {
 		return source.getPos().getX() + side.getFrontOffsetX() == target.getPos().getX() && source.getPos().getY() + side.getFrontOffsetY() == target.getPos().getY() && source.getPos().getZ() + side.getFrontOffsetZ() == target.getPos().getZ();
 	}
 
+	@Nullable
 	public TileEntity getTileOnSide(EnumFacing side) {
 		int s = side.ordinal();
 		if (cache[s] != null) {

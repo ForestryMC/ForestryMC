@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 import forestry.api.circuits.ChipsetManager;
@@ -23,15 +23,13 @@ import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.circuits.SolderManager;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.utils.datastructures.RevolvingList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
 	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
@@ -51,6 +49,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		return 1;
 	}
 
+	@Nullable
 	public ICircuitLayout getLayout() {
 		return layouts.getCurrent();
 	}
@@ -185,10 +184,5 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			return recipe != null;
 		}
 		return false;
-	}
-
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("soldering.iron");
 	}
 }

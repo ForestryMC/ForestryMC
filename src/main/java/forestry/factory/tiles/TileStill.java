@@ -50,7 +50,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
-		super("still", 1100, 8000);
+		super(1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
 		resourceTank.setFilters(StillRecipeManager.recipeFluidInputs);

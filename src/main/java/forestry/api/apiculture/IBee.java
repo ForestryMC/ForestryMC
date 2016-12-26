@@ -14,6 +14,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.biome.Biome;
 
 /**
@@ -72,16 +73,16 @@ public interface IBee extends IIndividualLiving {
 
 	List<Biome> getSuitableBiomes();
 
-	ItemStack[] getProduceList();
+	NonNullList<ItemStack> getProduceList();
 
-	ItemStack[] getSpecialtyList();
+	NonNullList<ItemStack> getSpecialtyList();
 
-	List<ItemStack> produceStacks(IBeeHousing housing);
+	NonNullList<ItemStack> produceStacks(IBeeHousing housing);
 
 	@Nullable
 	IBee spawnPrincess(IBeeHousing housing);
 
-	IBee[] spawnDrones(IBeeHousing housing);
+	List<IBee> spawnDrones(IBeeHousing housing);
 
 	void plantFlowerRandom(IBeeHousing housing);
 

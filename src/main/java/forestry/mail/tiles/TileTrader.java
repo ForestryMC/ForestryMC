@@ -46,7 +46,6 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	private IMailAddress address;
 
 	public TileTrader() {
-		super("trade.station");
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}

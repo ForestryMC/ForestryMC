@@ -22,7 +22,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.apiculture.gui.IGuiBeeHousingInventory;
+import forestry.apiculture.gui.IGuiBeeHousingDelegate;
 import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.entities.EntityMinecartContainerForestry;
@@ -45,7 +45,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
+public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
 	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecart.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final Random random = new Random();

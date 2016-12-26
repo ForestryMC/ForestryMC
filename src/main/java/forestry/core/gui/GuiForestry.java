@@ -31,23 +31,19 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
-import forestry.core.tiles.IPowerHandler;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.EnergyManager;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
-	@Nullable
-	protected final I inventory;
+public abstract class GuiForestry<C extends Container> extends GuiContainer {
 	protected final C container;
 
 	public final ResourceLocation textureFile;
@@ -55,11 +51,11 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected final LedgerManager ledgerManager;
 	protected final TextLayoutHelper textLayout;
 
-	protected GuiForestry(String texture, C container, @Nullable I inventory) {
-		this(new ForestryResource(texture), container, inventory);
+	protected GuiForestry(String texture, C container) {
+		this(new ForestryResource(texture), container);
 	}
 
-	protected GuiForestry(ResourceLocation texture, C container, @Nullable I inventory) {
+	protected GuiForestry(ResourceLocation texture, C container) {
 		super(container);
 
 		this.widgetManager = new WidgetManager(this);
@@ -67,7 +63,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		this.textureFile = texture;
 
-		this.inventory = inventory;
 		this.container = container;
 
 		this.textLayout = new TextLayoutHelper(this, ColourProperties.INSTANCE);
@@ -82,44 +77,45 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		this.ledgerManager.setMaxWidth(maxLedgerWidth);
 		this.ledgerManager.clear();
-		
+
 		addLedgers();
 	}
 
-	protected void addLedgers() {
-		if (inventory instanceof IErrorSource) {
-			ledgerManager.add((IErrorSource) inventory);
-		}
+	protected abstract void addLedgers();
 
-		if (inventory instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) inventory;
-			ledgerManager.add(errorLogicSource.getErrorLogic());
-		}
+	protected final void addErrorLedger(IErrorSource errorSource) {
+		ledgerManager.add(errorSource);
+	}
 
-		if (inventory instanceof IClimatised) {
-			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
-		}
+	protected final void addErrorLedger(IErrorLogicSource errorSource) {
+		ledgerManager.add(errorSource.getErrorLogic());
+	}
 
+	protected final void addClimateLedger(IClimatised climatised) {
+		ledgerManager.add(new ClimateLedger(ledgerManager, climatised));
+	}
+
+	protected final void addPowerLedger(EnergyManager energyManager) {
 		if (Config.enableEnergyStat) {
-			if (inventory instanceof IPowerHandler && !(inventory instanceof TileEngine)) {
-				IPowerHandler powerHandler = (IPowerHandler) this.inventory;
-				if (powerHandler.getEnergyManager().getMaxEnergyStored() > 0) {
-					ledgerManager.add(new PowerLedger(ledgerManager, powerHandler));
-				}
-			}
+			ledgerManager.add(new PowerLedger(ledgerManager, energyManager));
 		}
+	}
 
-		if (Config.enableHints && inventory instanceof IHintSource) {
-			IHintSource hintSource = (IHintSource) inventory;
-			List<String> hints = hintSource.getHints();
-			if (!hints.isEmpty()) {
-				ledgerManager.add(new HintLedger(ledgerManager, hintSource));
-			}
+	protected final void addHintLedger(String hintsKey) {
+		if (Config.enableHints) {
+			List<String> hints = Config.hints.get(hintsKey);
+			ledgerManager.add(new HintLedger(ledgerManager, hints));
 		}
+	}
 
-		if (inventory instanceof IOwnedTile) {
-			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnedTile) inventory));
+	protected final void addHintLedger(List<String> hints) {
+		if (Config.enableHints) {
+			ledgerManager.add(new HintLedger(ledgerManager, hints));
 		}
+	}
+
+	protected final void addOwnerLedger(IOwnedTile ownedTile) {
+		ledgerManager.add(new OwnerLedger(ledgerManager, ownedTile));
 	}
 
 	@Override
@@ -147,7 +143,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
-		if(widgetManager.handleMouseRelease(mouseX, mouseY, state)){
+		if (widgetManager.handleMouseRelease(mouseX, mouseY, state)) {
 			return;
 		}
 		super.mouseReleased(mouseX, mouseY, state);

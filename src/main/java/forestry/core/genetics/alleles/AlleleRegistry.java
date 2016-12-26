@@ -162,9 +162,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 		alleleMap.put(allele.getUID(), allele);
 		if (allele instanceof IAlleleSpecies) {
 			IClassification branch = ((IAlleleSpecies) allele).getBranch();
-			if (branch != null) {
-				branch.addMemberSpecies((IAlleleSpecies) allele);
-			}
+			branch.addMemberSpecies((IAlleleSpecies) allele);
 		}
 
 		for (IAlleleHandler handler : this.alleleHandlers) {

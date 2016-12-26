@@ -31,8 +31,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
-public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter> {
-
+public class GuiLetter extends GuiForestry<ContainerLetter> {
+	private final ItemInventoryLetter itemInventory;
 	private final boolean isProcessedLetter;
 	private boolean checkedSessionVars;
 
@@ -44,8 +44,10 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 
 	private final ArrayList<Widget> tradeInfoWidgets;
 
-	public GuiLetter(EntityPlayer player, ItemInventoryLetter inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, inventory), inventory);
+	public GuiLetter(EntityPlayer player, ItemInventoryLetter itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, itemInventory));
+
+		this.itemInventory = itemInventory;
 		this.xSize = 194;
 		this.ySize = 227;
 
@@ -244,4 +246,9 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 		container.setText(this.text.getText());
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger("letter");
+	}
 }

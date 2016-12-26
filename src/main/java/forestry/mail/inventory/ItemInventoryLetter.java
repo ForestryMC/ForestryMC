@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.mail.inventory;
 
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.SlotUtil;
@@ -31,7 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ItemInventoryLetter extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	private final ILetter letter;
 
 	public ItemInventoryLetter(EntityPlayer player, ItemStack itemstack) {
@@ -131,11 +127,4 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 
 		return errorStates.build();
 	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("letter");
-	}
-
 }

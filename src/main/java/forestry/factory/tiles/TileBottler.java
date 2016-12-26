@@ -63,7 +63,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public boolean isFillRecipe;
 
 	public TileBottler() {
-		super("bottler", 1100, 4000);
+		super(1100, 4000);
 
 		setInternalInventory(new InventoryBottler(this));
 

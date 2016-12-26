@@ -39,7 +39,9 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -96,14 +98,17 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return null;
 		}
 
+		ItemRegistryLepidopterology butterflyItems = PluginLepidopterology.items;
+		Preconditions.checkState(butterflyItems != null);
+
 		Item item = stack.getItem();
-		if (PluginLepidopterology.items.butterflyGE == item) {
+		if (butterflyItems.butterflyGE == item) {
 			return EnumFlutterType.BUTTERFLY;
-		} else if (PluginLepidopterology.items.serumGE == item) {
+		} else if (butterflyItems.serumGE == item) {
 			return EnumFlutterType.SERUM;
-		} else if (PluginLepidopterology.items.caterpillarGE == item) {
+		} else if (butterflyItems.caterpillarGE == item) {
 			return EnumFlutterType.CATERPILLAR;
-		} else if (PluginLepidopterology.items.cocoonGE == item) {
+		} else if (butterflyItems.cocoonGE == item) {
 			return EnumFlutterType.COCOON;
 		} else {
 			return null;
@@ -127,8 +132,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public IButterfly getMember(ItemStack stack) {
-		Preconditions.checkArgument(isMember(stack));
-		Preconditions.checkArgument(stack.getTagCompound() != null);
+		if (!isMember(stack) || stack.getTagCompound() == null) {
+			return null;
+		}
 
 		return new Butterfly(stack.getTagCompound());
 	}
@@ -141,21 +147,23 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
 		Preconditions.checkArgument(type instanceof EnumFlutterType);
+		ItemRegistryLepidopterology items = PluginLepidopterology.items;
+		Preconditions.checkState(items != null);
 
 		Item butterflyItem;
 		switch ((EnumFlutterType) type) {
 			case SERUM:
-				butterflyItem = PluginLepidopterology.items.serumGE;
+				butterflyItem = items.serumGE;
 				break;
 			case CATERPILLAR:
-				butterflyItem = PluginLepidopterology.items.caterpillarGE;
+				butterflyItem = items.caterpillarGE;
 				break;
 			case COCOON:
-				butterflyItem = PluginLepidopterology.items.cocoonGE;
+				butterflyItem = items.cocoonGE;
 				break;
 			case BUTTERFLY:
 			default:
-				butterflyItem = PluginLepidopterology.items.butterflyGE;
+				butterflyItem = items.butterflyGE;
 				break;
 		}
 
@@ -178,15 +186,18 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return false;
 		}
 
+		BlockRegistryLepidopterology blocks = PluginLepidopterology.blocks;
+		Preconditions.checkState(blocks != null);
+
 		BlockPos pos = getNextPos(world, nursery.getCoordinates());
-		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
+		IBlockState state = blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		if (PluginLepidopterology.blocks.cocoon != block) {
+		if (blocks.cocoon != block) {
 			return false;
 		}
 
@@ -218,7 +229,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public boolean isMated(ItemStack stack) {
 		IButterfly butterfly = getMember(stack);
-		return butterfly.getMate() != null;
+		return butterfly != null && butterfly.getMate() != null;
 	}
 
 	/* GENOME CONVERSIONS */

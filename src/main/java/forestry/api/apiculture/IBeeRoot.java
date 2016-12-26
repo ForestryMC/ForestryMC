@@ -24,9 +24,10 @@ public interface IBeeRoot extends ISpeciesRoot {
 	boolean isMember(ItemStack stack);
 
 	/**
-	 * @return {@link IBee} pattern parsed from the passed stack's nbt data.
+	 * @return {@link IBee} pattern parsed from the passed stack's nbt data. Null if the ItemStack is not a valid member.
 	 */
 	@Override
+	@Nullable
 	IBee getMember(ItemStack stack);
 
 	@Override

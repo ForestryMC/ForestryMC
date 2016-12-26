@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextFormatting;
@@ -417,8 +419,8 @@ public class Bee extends IndividualLiving implements IBee {
 
 	// / PRODUCTION
 	@Override
-	public ItemStack[] getProduceList() {
-		ArrayList<ItemStack> products = new ArrayList<>();
+	public NonNullList<ItemStack> getProduceList() {
+		NonNullList<ItemStack> products = NonNullList.create();
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
@@ -443,21 +445,25 @@ public class Bee extends IndividualLiving implements IBee {
 
 		}
 
-		return products.toArray(new ItemStack[products.size()]);
+		return products;
 	}
 
 	@Override
-	public ItemStack[] getSpecialtyList() {
+	public NonNullList<ItemStack> getSpecialtyList() {
 		Set<ItemStack> specialties = genome.getPrimary().getSpecialtyChances().keySet();
-		return specialties.toArray(new ItemStack[specialties.size()]);
+		NonNullList<ItemStack> specialtyList = NonNullList.create();
+		for (ItemStack specialty : specialties) {
+			specialtyList.add(specialty);
+		}
+		return specialtyList;
 	}
 
 	@Override
-	public List<ItemStack> produceStacks(IBeeHousing housing) {
+	public NonNullList<ItemStack> produceStacks(IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 
-		List<ItemStack> products = new ArrayList<>();
+		NonNullList<ItemStack> products = NonNullList.create();
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
@@ -518,14 +524,13 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	@Nullable
-	public IBee[] spawnDrones(IBeeHousing housing) {
+	public List<IBee> spawnDrones(IBeeHousing housing) {
 
 		World world = housing.getWorldObj();
 
 		// We need a mated queen to produce offspring.
 		if (mate == null) {
-			return new IBee[]{};
+			return Collections.emptyList();
 		}
 
 		List<IBee> bees = new ArrayList<>();
@@ -543,11 +548,7 @@ public class Bee extends IndividualLiving implements IBee {
 			bees.add(offspring);
 		}
 
-		if (!bees.isEmpty()) {
-			return bees.toArray(new IBee[bees.size()]);
-		} else {
-			return null;
-		}
+		return bees;
 	}
 
 	private IBee createOffspring(IBeeHousing housing, IBeeGenome mate, int generation) {

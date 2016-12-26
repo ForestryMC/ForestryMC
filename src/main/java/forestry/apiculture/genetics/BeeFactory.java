@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.base.Preconditions;
 import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.IBeeFactory;
 import forestry.api.genetics.IClassification;
@@ -17,7 +18,23 @@ import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 
 public class BeeFactory implements IBeeFactory {
 	@Override
-	public IAlleleBeeSpeciesBuilder createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
+	public IAlleleBeeSpeciesBuilder createSpecies(
+			String uid,
+			boolean dominant,
+			String authority,
+			String unlocalizedName,
+			String unlocalizedDescription,
+			IClassification branch,
+			String binomial,
+			int primaryColor,
+			int secondaryColor) {
+		Preconditions.checkNotNull(uid);
+		Preconditions.checkNotNull(authority);
+		Preconditions.checkNotNull(unlocalizedName);
+		Preconditions.checkNotNull(unlocalizedDescription);
+		Preconditions.checkNotNull(branch);
+		Preconditions.checkNotNull(binomial);
+
 		return new AlleleBeeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, primaryColor, secondaryColor);
 	}
 

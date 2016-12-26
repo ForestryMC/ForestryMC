@@ -67,7 +67,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		if (nbttagcompound.hasKey("Genome")) {
 			this.genome = new TreeGenome(nbttagcompound.getCompoundTag("Genome"));
 		} else {
-			this.genome = TreeDefinition.Oak.getGenome();
+			throw new IllegalArgumentException("Nbt has no Genome " + nbttagcompound);
 		}
 
 		if (nbttagcompound.hasKey("Mate")) {
@@ -279,7 +279,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* REPRODUCTION */
 	@Override
-	public ITree[] getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier) {
+	public ITree[] getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
 		ArrayList<ITree> prod = new ArrayList<>();
 
 		float chance = genome.getFertility() * modifier;
@@ -295,7 +295,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return prod.toArray(new ITree[prod.size()]);
 	}
 
-	private ITree createOffspring(World world, ITreeGenome mate, GameProfile playerProfile, BlockPos pos) {
+	private ITree createOffspring(World world, ITreeGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
 		IChromosome[] parent2 = mate.getChromosomes();

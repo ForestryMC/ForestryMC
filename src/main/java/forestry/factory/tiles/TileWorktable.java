@@ -45,7 +45,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private MemorizedRecipe currentRecipe;
 
 	public TileWorktable() {
-		super("worktable");
 		setInternalInventory(new InventoryWorktable(this));
 
 		craftingDisplay = new InventoryGhostCrafting<>(this, 10);

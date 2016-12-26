@@ -16,12 +16,18 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator, TileAlvearyHygroregulator> {
+public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator> {
+	private final TileAlvearyHygroregulator tile;
 
 	public GuiAlvearyHygroregulator(InventoryPlayer inventory, TileAlvearyHygroregulator tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile), tile);
+		this.tile = tile;
 
 		widgetManager.add(new TankWidget(this.widgetManager, 104, 17, 0));
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+	}
 }

@@ -22,6 +22,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	boolean isMember(ItemStack stack);
 
 	@Override
+	@Nullable
 	IButterfly getMember(ItemStack stack);
 
 	@Override

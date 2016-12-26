@@ -38,9 +38,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
-			if (species != null) {
-				iconStacks.put(species.getUID(), beeStack);
-			}
+			iconStacks.put(species.getUID(), beeStack);
 		}
 	}
 
@@ -50,9 +48,6 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IBee bee = BeeManager.beeRoot.getMember(itemStack);
-			if (bee == null) {
-				return;
-			}
 			EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
 			if (type == null) {
 				return;
@@ -108,9 +103,6 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IBee bee = BeeManager.beeRoot.getMember(itemStack);
-			if (bee == null) {
-				return;
-			}
 			EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
@@ -215,9 +207,6 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IBee bee = BeeManager.beeRoot.getMember(itemStack);
-			if (bee == null) {
-				return;
-			}
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 			WidgetManager widgetManager = guiAlyzer.getWidgetManager();

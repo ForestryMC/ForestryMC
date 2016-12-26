@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.List;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.Translator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -58,7 +57,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public List<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, List<ItemStack> products) {
+	public NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products) {
 		return products;
 	}
 

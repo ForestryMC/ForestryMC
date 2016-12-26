@@ -21,7 +21,6 @@ import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.climate.ClimateInfo;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.network.packets.PacketUpdateClimateControl;
@@ -34,7 +33,7 @@ import forestry.greenhouse.tiles.TileGreenhouse;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGreenhouse> {
+public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
 	private static final Predicate<String> numberFilter = text -> {
 		if (text == null) {
@@ -51,23 +50,26 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 		Float f = Floats.tryParse(text);
 		return text.isEmpty() || f != null && Floats.isFinite(f) && f >= 0.0F;
 	};
+
+	private final TileGreenhouse tile;
 	private GuiTextField humidityField;
 	private GuiTextField temperatureField;
 	private boolean fieldsEnabeled;
 
 	public GuiGreenhouse(EntityPlayer player, TileGreenhouse tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/greenhouse.png", new ContainerGreenhouse(player.inventory, tile), tile);
+		this.tile = tile;
 
 		//Add the water tank
 		widgetManager.add(new TankWidget(widgetManager, 152, 16, 0).setOverlayOrigin(176, 0));
 		//Add the multiblock camouflage tabs
 		WidgetCamouflageTab previous;
 		int x = 3;
-		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, inventory.getMultiblockLogic().getController(), tile, CamouflageManager.BLOCK));
+		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, tile.getMultiblockLogic().getController(), tile, CamouflageManager.BLOCK));
 		x+=50 + (previous.getHandlerSlot()  != null ? 20 : 0);
-		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, inventory.getMultiblockLogic().getController(), tile, CamouflageManager.GLASS));
+		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, tile.getMultiblockLogic().getController(), tile, CamouflageManager.GLASS));
 		x+=50 + (previous.getHandlerSlot()  != null ? 20 : 0);
-		widgetManager.add(new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, inventory.getMultiblockLogic().getController(), tile, CamouflageManager.DOOR));
+		widgetManager.add(new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, tile.getMultiblockLogic().getController(), tile, CamouflageManager.DOOR));
 		
 		widgetManager.add(new WidgetClimatePillar(widgetManager, guiLeft- 23, guiTop + 5));
 		
@@ -87,7 +89,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 		temperatureField.setEnableBackgroundDrawing(false);
 		humidityField.setEnableBackgroundDrawing(false);
 
-		IGreenhouseController controller = inventory.getMultiblockLogic().getController();
+		IGreenhouseController controller = tile.getMultiblockLogic().getController();
 		if (controller == null || controller.getControlClimate() == ClimateInfo.MAX) {
 			temperatureField.setEnabled(false);
 			temperatureField.setVisible(false);
@@ -120,7 +122,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 			boolean humidityWasFocused = humidityField.isFocused();
 			temperatureField.mouseClicked(mouseX, mouseY, mouseButton);
 			humidityField.mouseClicked(mouseX, mouseY, mouseButton);
-			IClimateControlProvider provider = inventory.getMultiblockLogic().getController();
+			IClimateControlProvider provider = tile.getMultiblockLogic().getController();
 			if (temperatureWasFocused && !temperatureField.isFocused() || humidityWasFocused && !humidityField.isFocused()) {
 				float temp = parseField(temperatureField);
 				float hum = parseField(humidityField);
@@ -131,7 +133,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 	}
 	
 	public void setClimate(float temp){
-		setClimate(inventory.getMultiblockLogic().getController(), temp);
+		setClimate(tile.getMultiblockLogic().getController(), temp);
 	}
 	
 	public void setClimate(IClimateControlProvider provider, float temp){
@@ -180,11 +182,13 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 
 	@Override
 	protected void addLedgers() {
-		IGreenhouseControllerInternal greenhouseController = inventory.getMultiblockLogic().getController();
+		IGreenhouseControllerInternal greenhouseController = tile.getMultiblockLogic().getController();
 
-		ledgerManager.add(new ClimateLedger(ledgerManager, greenhouseController));
+		addErrorLedger(greenhouseController);
 		ledgerManager.add(new EnergyLedger());
-		super.addLedgers();
+		addClimateLedger(greenhouseController);
+		addHintLedger("greenhouse");
+		addOwnerLedger(tile);
 	}
 
 	protected class EnergyLedger extends Ledger {
@@ -210,12 +214,12 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
 			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 20);
-			drawText(inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF", x + 22, y + 32);
+			drawText(tile.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF", x + 22, y + 32);
 		}
 
 		@Override
 		public String getTooltip() {
-			return Translator.translateToLocal("for.gui.energy") + ": " + inventory.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF/t";
+			return Translator.translateToLocal("for.gui.energy") + ": " + tile.getMultiblockLogic().getController().getEnergyManager().getEnergyStored() + " RF/t";
 		}
 	}
 }

@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
-		super("philatelist");
 		setInternalInventory(new InventoryStampCollector(this));
 	}
 

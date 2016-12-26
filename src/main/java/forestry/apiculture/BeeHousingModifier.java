@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nullable;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
@@ -40,7 +42,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, final float currentModifier) {
+	public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getLifespanModifier(genome, mate, modifierValue * currentModifier);

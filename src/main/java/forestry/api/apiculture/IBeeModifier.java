@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nullable;
+
 public interface IBeeModifier {
 	/**
 	 * @param genome          Genome of the bee this modifier is called for.
@@ -26,7 +28,7 @@ public interface IBeeModifier {
 	 * @param currentModifier Current modifier.
 	 * @return Float used to modify the life span of queens.
 	 */
-	float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier);
+	float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier);
 
 	/**
 	 * @param genome          Genome of the bee this modifier is called for.

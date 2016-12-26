@@ -74,10 +74,10 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 				return false;
 			}
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
 
 			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN);
-			if (pollenStack != null) {
+			if (!pollenStack.isEmpty()) {
 				inventory.storePollenStack(pollenStack);
 				return true;
 			}

@@ -10,22 +10,17 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.google.common.collect.ImmutableSet;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.utils.GeneticsUtil;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_ENERGY = 0;
 	public static final int SLOT_SPECIMEN = 1;
 	public static final int SLOT_ANALYZE_1 = 2;
@@ -171,19 +166,5 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 
 	public boolean hasSpecimen() {
 		return !getSpecimen().isEmpty();
-	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		ItemStack specimen = getSpecimen();
-		if (!specimen.isEmpty()) {
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
-			if (speciesRoot != null) {
-				IAlyzerPlugin alyzerPlugin = speciesRoot.getAlyzerPlugin();
-				return alyzerPlugin.getHints();
-			}
-		}
-		return Collections.emptyList();
 	}
 }

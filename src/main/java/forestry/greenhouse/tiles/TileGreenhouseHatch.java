@@ -12,7 +12,6 @@ package forestry.greenhouse.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.List;
 
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.CamouflageManager;
@@ -24,8 +23,6 @@ import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.MultiblockTileEntityBase;
-import forestry.core.config.Config;
-import forestry.core.gui.IHintSource;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.CamouflageSelectionType;
@@ -49,7 +46,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IHintSource, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile {
 
 	@Nullable
 	private EnumFacing outwards;
@@ -187,12 +184,6 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		if (packetData.hasKey("CamouflageBlock")) {
 			setCamouflageBlock(getCamouflageType(), new ItemStack(packetData.getCompoundTag("CamouflageBlock")), true);
 		}
-	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("greenhouse");
 	}
 
 	/* IErrorLogicSource */

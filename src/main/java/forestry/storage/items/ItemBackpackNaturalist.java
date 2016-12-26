@@ -38,7 +38,7 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int page) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
 		ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
-		return new GuiNaturalistInventory(speciesRoot, player, container, inventory, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override

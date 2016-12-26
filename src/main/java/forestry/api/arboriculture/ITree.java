@@ -36,7 +36,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	/**
 	 * @since Forestry 4.0
 	 */
-	ITree[] getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier);
+	ITree[] getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
 	// Products, Chance
 	Map<ItemStack, Float> getProducts();

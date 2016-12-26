@@ -187,9 +187,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
+	@Nullable
 	public IBee getMember(ItemStack stack) {
-		Preconditions.checkArgument(isMember(stack), "ItemStack must be a bee.");
-		Preconditions.checkArgument(stack.getTagCompound() != null, "ItemStack must have a tag compound.");
+		if (!isMember(stack) || stack.getTagCompound() == null) {
+			return null;
+		}
 
 		return new Bee(stack.getTagCompound());
 	}

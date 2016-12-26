@@ -122,7 +122,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	/* RESEARCH */
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return 0f;
 		}
 

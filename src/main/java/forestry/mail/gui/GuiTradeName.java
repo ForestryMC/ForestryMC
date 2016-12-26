@@ -23,11 +23,13 @@ import net.minecraft.client.gui.GuiTextField;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
-public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
+public class GuiTradeName extends GuiForestry<ContainerTradeName> {
+	private final TileTrader tile;
 	private GuiTextField addressNameField;
 
 	public GuiTradeName(TileTrader tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile));
+		this.tile = tile;
 		this.xSize = 176;
 		this.ySize = 90;
 
@@ -86,9 +88,13 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 	private void setAddress() {
 		String address = addressNameField.getText();
 		if (StringUtils.isNotBlank(address)) {
-			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(inventory, address);
+			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
 			Proxies.net.sendToServer(packet);
 		}
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+	}
 }

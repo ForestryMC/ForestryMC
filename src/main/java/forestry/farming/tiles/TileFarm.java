@@ -11,7 +11,6 @@
 package forestry.farming.tiles;
 
 import java.io.IOException;
-import java.util.List;
 
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
@@ -19,8 +18,6 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.circuits.ISocketable;
-import forestry.core.config.Config;
-import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.IStreamableGui;
@@ -40,7 +37,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
+public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
 	protected TileFarm() {
@@ -113,12 +110,6 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		super.decodeDescriptionPacket(packetData);
 		EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.getFromCompound(packetData);
 		setFarmBlockTexture(farmBlockTexture);
-	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("farm");
 	}
 
 	/* ISocketable */

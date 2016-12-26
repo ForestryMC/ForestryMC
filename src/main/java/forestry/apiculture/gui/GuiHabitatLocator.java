@@ -28,7 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
-public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
+public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
 
 	static {
@@ -46,14 +46,16 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		habitats.put("End", BiomeDictionary.Type.END);
 	}
 
+	private final ItemInventoryHabitatLocator itemInventory;
 	private final List<HabitatSlot> habitatSlots = new ArrayList<>(habitats.size());
 
 	private int startX;
 	private int startY;
 
-	public GuiHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator item) {
-		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
+	public GuiHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, itemInventory));
 
+		this.itemInventory = itemInventory;
 		xSize = 176;
 		ySize = 184;
 
@@ -85,7 +87,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();
-		for (Biome biome : inventory.getBiomesToSearch()) {
+		for (Biome biome : itemInventory.getBiomesToSearch()) {
 			Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
 			activeBiomeTypes.addAll(biomeTypes);
 		}
@@ -106,5 +108,11 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger("habitat.locator");
 	}
 }

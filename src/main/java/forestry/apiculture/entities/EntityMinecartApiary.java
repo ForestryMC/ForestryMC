@@ -27,7 +27,6 @@ import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
-import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,8 +50,8 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	}
 
 	@Override
-	public List<String> getHints() {
-		return Config.hints.get("apiary");
+	public String getHintKey() {
+		return "apiary";
 	}
 
 	@Override

@@ -36,11 +36,12 @@ import net.minecraft.util.NonNullList;
 // TODO: split this into two different packets
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
 	public final EnumAddressee type;
+	@Nullable
 	public final ITradeStationInfo tradeInfo;
 	@Nullable
 	public final IMailAddress address;
 
-	public PacketLetterInfoResponse(EnumAddressee type, ITradeStationInfo info, @Nullable IMailAddress address) {
+	public PacketLetterInfoResponse(EnumAddressee type, @Nullable ITradeStationInfo info, @Nullable IMailAddress address) {
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
@@ -71,16 +72,21 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 			data.writeString(profile.getName());
 
 		} else if (type == EnumAddressee.TRADER) {
-			data.writeString(tradeInfo.getAddress().getName());
+			if (tradeInfo == null) {
+				data.writeBoolean(false);
+			} else {
+				data.writeBoolean(true);
+				data.writeString(tradeInfo.getAddress().getName());
 
-			data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
-			data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
-			data.writeString(tradeInfo.getOwner().getName());
+				data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
+				data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
+				data.writeString(tradeInfo.getOwner().getName());
 
-			data.writeItemStack(tradeInfo.getTradegood());
-			data.writeItemStacks(tradeInfo.getRequired());
+				data.writeItemStack(tradeInfo.getTradegood());
+				data.writeItemStacks(tradeInfo.getRequired());
 
-			data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
+				data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
+			}
 		}
 	}
 
@@ -97,14 +103,18 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 					address = PostManager.postRegistry.getMailAddress(profile);
 				} else if (type == EnumAddressee.TRADER) {
-					address = PostManager.postRegistry.getMailAddress(data.readString());
-					GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+					if (data.readBoolean()) {
+						address = PostManager.postRegistry.getMailAddress(data.readString());
+						GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 
-					ItemStack tradegood = data.readItemStack();
-					NonNullList<ItemStack> required = data.readItemStacks();
+						ItemStack tradegood = data.readItemStack();
+						NonNullList<ItemStack> required = data.readItemStacks();
 
-					EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());
-					tradeInfo = new TradeStationInfo(address, owner, tradegood, required, state);
+						EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());
+						tradeInfo = new TradeStationInfo(address, owner, tradegood, required, state);
+					} else {
+						tradeInfo = null;
+					}
 				}
 				((ILetterInfoReceiver) container).handleLetterInfoUpdate(type, address, tradeInfo);
 			}

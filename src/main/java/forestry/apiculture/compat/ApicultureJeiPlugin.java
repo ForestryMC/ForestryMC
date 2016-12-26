@@ -1,5 +1,6 @@
 package forestry.apiculture.compat;
 
+import com.google.common.base.Preconditions;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.PluginApiculture;
@@ -16,6 +17,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
 		ItemRegistryApiculture items = PluginApiculture.items;
+		Preconditions.checkNotNull(items);
 
 		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
 			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
@@ -30,6 +32,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		ItemRegistryApiculture items = PluginApiculture.items;
+		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry, "frames",
 				items.frameImpregnated,

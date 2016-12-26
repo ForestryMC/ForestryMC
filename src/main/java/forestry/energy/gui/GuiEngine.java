@@ -17,10 +17,12 @@ import forestry.core.tiles.TileEngine;
 import forestry.core.utils.Translator;
 import net.minecraft.inventory.Container;
 
-public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C, I> {
+public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
+	protected final I tile;
 
 	protected GuiEngine(String texture, C container, I tile) {
 		super(texture, container, tile);
+		this.tile = tile;
 	}
 
 	@Override
@@ -52,19 +54,25 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
 			drawSubheader(Translator.translateToLocal("for.gui.currentOutput") + ':', x + 22, y + 20);
-			drawText(inventory.getCurrentOutput() + " RF/t", x + 22, y + 32);
+			drawText(tile.getCurrentOutput() + " RF/t", x + 22, y + 32);
 
 			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 44);
-			drawText(inventory.getEnergyManager().getEnergyStored() + " RF", x + 22, y + 56);
+			drawText(tile.getEnergyManager().getEnergyStored() + " RF", x + 22, y + 56);
 
 			drawSubheader(Translator.translateToLocal("for.gui.heat") + ':', x + 22, y + 68);
-			drawText((double) inventory.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
+			drawText((double) tile.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
 		}
 
 		@Override
 		public String getTooltip() {
-			return inventory.getCurrentOutput() + " RF/t";
+			return tile.getCurrentOutput() + " RF/t";
 		}
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger(tile.getHintKey());
+		ledgerManager.add(new EngineLedger());
+	}
 }

@@ -58,6 +58,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final EnumBackpackType type;
 
 	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
+		Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
+		Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
+
 		this.definition = definition;
 		this.type = type;
 	}

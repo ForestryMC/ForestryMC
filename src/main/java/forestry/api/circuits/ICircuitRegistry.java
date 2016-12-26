@@ -18,6 +18,7 @@ public interface ICircuitRegistry {
 
 	void registerCircuit(ICircuit circuit);
 
+	@Nullable
 	ICircuit getCircuit(String uid);
 
 	ICircuitLibrary getCircuitLibrary(World world, String playerName);
@@ -27,6 +28,7 @@ public interface ICircuitRegistry {
 
 	void registerLayout(ICircuitLayout layout);
 
+	@Nullable
 	ICircuitLayout getLayout(String uid);
 
 	ICircuitLayout getDefaultLayout();

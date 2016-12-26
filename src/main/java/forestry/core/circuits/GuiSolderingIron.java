@@ -26,13 +26,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemInventorySolderingIron> {
+public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
+	private final ItemInventorySolderingIron itemInventory;
 
-	public GuiSolderingIron(EntityPlayer player, ItemInventorySolderingIron inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, inventory), inventory);
+	public GuiSolderingIron(EntityPlayer player, ItemInventorySolderingIron itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, itemInventory));
 
-		xSize = 176;
-		ySize = 205;
+		this.itemInventory = itemInventory;
+		this.xSize = 176;
+		this.ySize = 205;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 
 		for (int i = 0; i < 4; i++) {
 			String description;
-			ItemStack tube = inventory.getStackInSlot(i + 2);
+			ItemStack tube = itemInventory.getStackInSlot(i + 2);
 			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
@@ -87,4 +89,9 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 		}
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger("soldering.iron");
+	}
 }
