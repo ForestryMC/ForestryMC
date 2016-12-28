@@ -13,6 +13,7 @@ package forestry.core.utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -37,7 +38,7 @@ public abstract class EntityUtil {
 		living.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0f), 0.0f);
 		living.rotationYawHead = living.rotationYaw;
 		living.renderYawOffset = living.rotationYaw;
-		living.onInitialSpawn(null, null);
+		living.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), null);
 		world.spawnEntityInWorld(living);
 		living.playLivingSound();
 		return living;
