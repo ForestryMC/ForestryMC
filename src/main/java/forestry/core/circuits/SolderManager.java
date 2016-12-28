@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
@@ -24,15 +25,10 @@ public class SolderManager implements ISolderManager {
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
-		if (layout == null) {
-			throw new IllegalArgumentException("layout may not be null");
-		}
-		if (resource == null) {
-			throw new IllegalArgumentException("resource may not be null");
-		}
-		if (circuit == null) {
-			throw new IllegalArgumentException("circuit may not be null");
-		}
+		Preconditions.checkNotNull(layout, "layout may not be null");
+		Preconditions.checkNotNull(resource, "resource may not be null");
+		Preconditions.checkNotNull(circuit, "circuit may not be null");
+
 		recipes.add(new CircuitRecipe(layout, resource, circuit));
 	}
 
@@ -46,13 +42,14 @@ public class SolderManager implements ISolderManager {
 	}
 
 	@Nullable
-	public static CircuitRecipe getMatchingRecipe(ICircuitLayout layout, ItemStack resource) {
-		for (CircuitRecipe recipe : recipes) {
-			if (recipe.matches(layout, resource)) {
-				return recipe;
+	public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+		if (layout != null) {
+			for (CircuitRecipe recipe : recipes) {
+				if (recipe.matches(layout, resource)) {
+					return recipe;
+				}
 			}
 		}
-
 		return null;
 	}
 }

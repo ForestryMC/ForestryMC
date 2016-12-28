@@ -15,7 +15,8 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
 import net.minecraft.inventory.Container;
 
-public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends GuiForestryTitled<C, IGuiBeeHousingInventory> {
+public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends GuiForestryTitled<C> {
+	private final IGuiBeeHousingDelegate delegate;
 
 	public enum Icon {
 		APIARY("/apiary.png"),
@@ -28,16 +29,17 @@ public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends G
 		}
 	}
 
-	public GuiBeeHousing(IGuiBeeHousingInventory tile, C container, Icon icon) {
-		super(Constants.TEXTURE_PATH_GUI + icon.path, container, tile);
-		ySize = 190;
+	public GuiBeeHousing(IGuiBeeHousingDelegate delegate, C container, Icon icon) {
+		super(Constants.TEXTURE_PATH_GUI + icon.path, container, delegate);
+		this.delegate = delegate;
+		this.ySize = 190;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		drawHealthMeter(guiLeft + 20, guiTop + 37, inventory.getHealthScaled(46), EnumTankLevel.rateTankLevel(inventory.getHealthScaled(100)));
+		drawHealthMeter(guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {
@@ -47,4 +49,11 @@ public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends G
 		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(delegate);
+		addClimateLedger(delegate);
+		addHintLedger(delegate.getHintKey());
+		addOwnerLedger(delegate);
+	}
 }

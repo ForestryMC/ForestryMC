@@ -16,20 +16,28 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileCarpenter;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, TileCarpenter> {
+public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
+	private final TileCarpenter tile;
 
 	public GuiCarpenter(InventoryPlayer inventory, TileCarpenter tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
-		this.ySize = 218;
 
-		widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
+		this.tile = tile;
+		this.ySize = 218;
+		this.widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		int progressScaled = inventory.getProgressScaled(16);
+		int progressScaled = tile.getProgressScaled(16);
 		drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addPowerLedger(tile.getEnergyManager());
+		addHintLedger("carpenter");
+	}
 }

@@ -29,18 +29,19 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
-
+public class GuiImprinter extends GuiForestry<ContainerImprinter> {
+	private final ItemInventoryImprinter itemInventory;
 	private int startX;
 	private int startY;
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(InventoryPlayer inventoryplayer, ItemInventoryImprinter inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
+	public GuiImprinter(InventoryPlayer inventoryplayer, ItemInventoryImprinter itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, itemInventory));
 
-		xSize = 176;
-		ySize = 185;
+		this.itemInventory = itemInventory;
+		this.xSize = 176;
+		this.ySize = 185;
 
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
@@ -59,11 +60,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 		int offset = (138 - fontRendererObj.getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
 		fontRendererObj.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies primary = inventory.getPrimary();
+		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
 		fontRendererObj.drawString(primary.getName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies secondary = inventory.getSecondary();
+		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
 		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
@@ -127,5 +128,10 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 
 	private static void sendSelectionChange(int index, int advance) {
 		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, advance));
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

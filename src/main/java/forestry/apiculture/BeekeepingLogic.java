@@ -63,7 +63,6 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private int beeProgressMax;
 
 	private int queenWorkCycleThrottle;
-	@Nullable
 	private IEffectData effectData[] = new IEffectData[2];
 
 	private final Stack<ItemStack> spawn = new Stack<>();
@@ -429,7 +428,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 
 		// Drones
-		IBee[] drones = queen.spawnDrones(beeHousing);
+		List<IBee> drones = queen.spawnDrones(beeHousing);
 		for (IBee drone : drones) {
 			ItemStack droneStack = BeeManager.beeRoot.getMemberStack(drone, EnumBeeType.DRONE);
 			breedingTracker.registerDrone(drone);
@@ -488,10 +487,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public boolean canDoBeeFX() {
-		if (Proxies.common.getClientInstance().isGamePaused()) {
-			return false;
-		}
-		return active;
+		return !Proxies.common.getClientInstance().isGamePaused() && active;
 	}
 
 	@Override

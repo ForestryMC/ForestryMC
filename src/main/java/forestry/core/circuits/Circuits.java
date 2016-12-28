@@ -2,6 +2,7 @@ package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuit;
 
+@SuppressWarnings({"unused", "NullableProblems"})
 public class Circuits {
 	public static ICircuit energyElectricChoke1;
 	public static ICircuit energyElectricEfficiency1;

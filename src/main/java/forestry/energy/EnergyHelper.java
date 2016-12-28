@@ -1,5 +1,7 @@
 package forestry.energy;
 
+import javax.annotation.Nullable;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.compat.tesla.TeslaHelper;
@@ -87,8 +89,8 @@ public class EnergyHelper {
 		return sendEnergy(energyManager, orientation, tile, Integer.MAX_VALUE, true) > 0;
 	}
 
-	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
-		if(tile == null){
+	public static boolean isEnergyReceiverOrEngine(EnumFacing side, @Nullable TileEntity tile) {
+		if (tile == null) {
 			return false;
 		}
 		if (tile instanceof TileEngine) { // engine chaining

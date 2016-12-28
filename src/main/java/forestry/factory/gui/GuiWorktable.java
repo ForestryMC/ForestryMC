@@ -23,14 +23,17 @@ import forestry.factory.tiles.TileWorktable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWorktable> {
+public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private static final int SPACING = 18;
+
+	private final TileWorktable tile;
 	private boolean hasRecipeConflict = false;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
+		this.tile = tile;
 
-		ySize = 218;
+		this.ySize = 218;
 
 		RecipeMemory recipeMemory = tile.getMemory();
 
@@ -51,8 +54,8 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 	public void updateScreen() {
 		super.updateScreen();
 
-		if (hasRecipeConflict != inventory.hasRecipeConflict()) {
-			hasRecipeConflict = inventory.hasRecipeConflict();
+		if (hasRecipeConflict != tile.hasRecipeConflict()) {
+			hasRecipeConflict = tile.hasRecipeConflict();
 			if (hasRecipeConflict) {
 				addButtons();
 			} else {
@@ -71,5 +74,11 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 		int id = 100 + button.id;
 		Proxies.net.sendToServer(new PacketGuiSelectRequest(id, 0));
 		Proxies.common.playButtonClick();
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("worktable");
 	}
 }

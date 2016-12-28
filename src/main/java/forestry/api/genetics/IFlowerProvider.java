@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,5 +31,5 @@ public interface IFlowerProvider {
 	 *
 	 * @return Array of itemstacks being the (modified or unmodified) produce.
 	 */
-	List<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, List<ItemStack> products);
+	NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
 }

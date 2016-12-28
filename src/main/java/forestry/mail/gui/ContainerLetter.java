@@ -65,11 +65,9 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
 		// Set recipient type
 		ILetter letter = inventory.getLetter();
-		if (letter != null) {
-			IMailAddress recipient = letter.getRecipient();
-			if (recipient != null) {
-				this.carrierType = recipient.getType();
-			}
+		IMailAddress recipient = letter.getRecipient();
+		if (recipient != null) {
+			this.carrierType = recipient.getType();
 		}
 	}
 

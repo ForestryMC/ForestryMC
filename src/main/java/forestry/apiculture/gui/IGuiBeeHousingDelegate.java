@@ -8,10 +8,18 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui;
+package forestry.apiculture.gui;
 
-import java.util.List;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.tiles.IClimatised;
+import forestry.core.tiles.ITitled;
 
-public interface IHintSource {
-	List<String> getHints();
+public interface IGuiBeeHousingDelegate extends ITitled, IErrorLogicSource, IOwnedTile, IClimatised {
+	/**
+	 * Returns scaled queen health or breeding progress
+	 */
+	int getHealthScaled(int i);
+
+	String getHintKey();
 }

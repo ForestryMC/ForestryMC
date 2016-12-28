@@ -11,7 +11,6 @@
 package forestry.apiculture.entities;
 
 import java.util.Collections;
-import java.util.List;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -22,7 +21,6 @@ import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
-import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,8 +44,8 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	}
 
 	@Override
-	public List<String> getHints() {
-		return Config.hints.get("bee.house");
+	public String getHintKey() {
+		return "bee.house";
 	}
 
 	@Override

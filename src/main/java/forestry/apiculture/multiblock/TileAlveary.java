@@ -11,7 +11,6 @@
 package forestry.apiculture.multiblock;
 
 import java.io.IOException;
-import java.util.List;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -26,8 +25,6 @@ import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.apiculture.gui.GuiAlveary;
-import forestry.core.config.Config;
-import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.IStreamableGui;
@@ -43,7 +40,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised, IHintSource {
+public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
@@ -155,12 +152,6 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	public String getUnlocalizedTitle() {
 		return unlocalizedTitle;
-	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("apiary");
 	}
 
 	/* IClimatised */

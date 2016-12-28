@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -21,16 +20,14 @@ import forestry.api.core.IErrorState;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 
-public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
 	private static final short SLOT_ENERGY = 2;
 	private static final short SLOT_SPECIMEN = 0;
@@ -72,7 +69,8 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 			setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
 		}
 
-		IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
+		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
+		IBee bee = BeeManager.beeRoot.getMember(analyzed);
 		if (bee != null) {
 			locatorLogic.startBiomeSearch(bee, player);
 		}
@@ -80,12 +78,6 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 	public Set<Biome> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
-	}
-
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("habitat.locator");
 	}
 
 	/* IErrorSource */

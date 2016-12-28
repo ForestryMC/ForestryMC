@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -73,6 +74,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ICircuitLayout getLayout(String uid) {
 		if (layoutMap.containsKey(uid)) {
 			return layoutMap.get(uid);
@@ -93,6 +95,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ICircuit getCircuit(String uid) {
 		return circuitMap.get(uid);
 	}

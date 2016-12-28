@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.core.network.PacketBufferForestry;
@@ -22,8 +21,7 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill(@Nullable String hintKey) {
-		super(hintKey);
+	protected TileMill() {
 		speed = 0.01F;
 	}
 

@@ -60,7 +60,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	private int fillingProgress;
 
 	public TileRaintank() {
-		super("raintank");
 		setInternalInventory(new InventoryRaintank(this));
 
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(FluidRegistry.WATER);

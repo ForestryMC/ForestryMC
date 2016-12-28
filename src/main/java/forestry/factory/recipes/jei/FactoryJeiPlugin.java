@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
@@ -116,6 +117,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
 		BlockRegistryFactory blocks = PluginFactory.blocks;
+		Preconditions.checkNotNull(blocks);
 
 		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
@@ -151,7 +153,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
-			return ((GuiForestry<?, ?>) guiContainer).getExtraGuiAreas();
+			return ((GuiForestry<?>) guiContainer).getExtraGuiAreas();
 		}
 
 		@Nullable

@@ -63,6 +63,9 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		} else if (nbt.hasKey("profile")) {
 			NBTTagCompound profileTag = nbt.getCompoundTag("profile");
 			gameProfile = PlayerUtil.readGameProfileFromNBT(profileTag);
+			if (gameProfile == null) {
+				gameProfile = invalidGameProfile;
+			}
 		}
 
 		this.type = type;
@@ -87,7 +90,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	@Override
 	public GameProfile getPlayerProfile() {
 		if (this.type != EnumAddressee.PLAYER) {
-			return null;
+			return invalidGameProfile;
 		}
 		return gameProfile;
 	}

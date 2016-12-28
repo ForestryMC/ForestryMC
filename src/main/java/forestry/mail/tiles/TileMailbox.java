@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 public class TileMailbox extends TileBase {
 
 	public TileMailbox() {
-		super("mailbox");
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 

@@ -61,6 +61,7 @@ public interface ISpeciesRoot {
 	 */
 	boolean isMember(IIndividual individual);
 
+	@Nullable
 	IIndividual getMember(ItemStack stack);
 
 	IIndividual getMember(NBTTagCompound compound);

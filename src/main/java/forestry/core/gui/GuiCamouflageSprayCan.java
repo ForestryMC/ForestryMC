@@ -8,10 +8,10 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayCan, ItemInventoryCamouflageSprayCan> {
+public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayCan> {
 
 	public GuiCamouflageSprayCan(EntityPlayer player, ItemInventoryCamouflageSprayCan inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/camouflage_spray_can.png", new ContainerCamouflageSprayCan(inventory, player.inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/camouflage_spray_can.png", new ContainerCamouflageSprayCan(inventory, player.inventory));
 
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 80, 39, inventory, CamouflageManager.NONE));
 	}
@@ -24,6 +24,11 @@ public class GuiCamouflageSprayCan extends GuiForestry<ContainerCamouflageSprayC
 		textLayout.line = 6;
 		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 
 }

@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import forestry.api.apiculture.BeeManager;
@@ -31,7 +32,6 @@ import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.core.utils.Log;
 import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -95,9 +95,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 	@Override
 	public void registerPlantableFlower(IBlockState blockState, double weight, String... flowerTypes) {
-		if (blockState == null) {
-			return;
-		}
+		Preconditions.checkNotNull(blockState);
+		Preconditions.checkArgument(blockState.getBlock() != Blocks.AIR, "Tried to register AIR as a flower. Bad idea.");
+
 		if (weight <= 0.0) {
 			weight = 0.0;
 		}
@@ -105,16 +105,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			weight = 1.0;
 		}
 
-		if (blockState.getBlock() == Blocks.AIR) {
-			Log.error("Tried to register AIR as a flower. Bad idea.");
-		}
-
 		Flower newFlower = new Flower(blockState, weight);
 
 		for (String flowerType : flowerTypes) {
-			if (flowerType == null) {
-				throw new NullPointerException("Tried to register flower with null type. " + blockState);
-			}
+			Preconditions.checkNotNull(flowerType, "Tried to register flower with null type. " + blockState);
 
 			Set<Flower> flowers = this.plantableFlowers.get(flowerType);
 			flowers.add(newFlower);
@@ -219,9 +213,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 	@Override
 	public void registerGrowthRule(IFlowerGrowthRule rule, String... flowerTypes) {
-		if (rule == null) {
-			return;
-		}
+		Preconditions.checkNotNull(rule);
 
 		for (String flowerType : flowerTypes) {
 			this.growthRules.get(flowerType).add(rule);

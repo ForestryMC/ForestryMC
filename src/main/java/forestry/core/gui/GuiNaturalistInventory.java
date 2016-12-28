@@ -36,14 +36,14 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
+public class GuiNaturalistInventory extends GuiForestry<Container> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
-		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
+	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, int page, int maxPages) {
+		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container);
 
 		this.speciesRoot = speciesRoot;
 
@@ -249,5 +249,10 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 
 		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
+	}
+
+	@Override
+	protected void addLedgers() {
+		addHintLedger("naturalist.chest");
 	}
 }

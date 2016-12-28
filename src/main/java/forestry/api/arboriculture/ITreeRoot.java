@@ -24,6 +24,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	boolean isMember(ItemStack itemstack);
 
 	@Override
+	@Nullable
 	ITree getMember(ItemStack itemstack);
 
 	@Override

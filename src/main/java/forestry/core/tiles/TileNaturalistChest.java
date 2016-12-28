@@ -35,7 +35,6 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	private int numPlayersUsing;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
-		super("naturalist.chest");
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}
@@ -112,7 +111,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	@Override
 	public Object getGui(EntityPlayer player, int page) {
 		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
-		return new GuiNaturalistInventory(speciesRoot, player, container, this, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override

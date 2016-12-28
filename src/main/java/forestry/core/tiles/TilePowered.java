@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -43,14 +42,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(String hintKey, int maxTransfer, int capacity) {
-		super(hintKey);
+	protected TilePowered(int maxTransfer, int capacity) {
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
 		this.ticksPerWorkCycle = 4;
+	}
 
-		hints.addAll(Config.hints.get("powered.machine"));
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 
 	public int getWorkCounter() {

@@ -25,17 +25,19 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
+public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);
 	private final EscritoireTextSource textSource = new EscritoireTextSource();
+	private final TileEscritoire tile;
 
 	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile));
 
-		xSize = 228;
-		ySize = 235;
+		this.tile = tile;
+		this.xSize = 228;
+		this.ySize = 235;
 
-		widgetManager.add(new ProbeButton(this, widgetManager, 14, 16));
+		this.widgetManager.add(new ProbeButton(this, widgetManager, 14, 16));
 
 		EscritoireGame game = tile.getGame();
 
@@ -80,7 +82,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		for (int i = 0; i <= inventory.getGame().getBountyLevel() / 4; i++) {
+		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
 			GuiUtil.drawItemStack(this, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
 		}
 
@@ -92,13 +94,19 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			textLayout.newLine();
 			textLayout.newLine();
 			String format = TextFormatting.UNDERLINE + TextFormatting.ITALIC.toString();
-			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
+			int attemptNo = EscritoireGame.BOUNTY_MAX - tile.getGame().getBountyLevel();
 			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
 			textLayout.drawLine(format + attemptNoString, 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			textLayout.newLine();
-			String escritoireText = textSource.getText(inventory.getGame());
+			String escritoireText = textSource.getText(tile.getGame());
 			textLayout.drawSplitLine(escritoireText, 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		}
 		textLayout.endPage();
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("escritoire");
 	}
 }

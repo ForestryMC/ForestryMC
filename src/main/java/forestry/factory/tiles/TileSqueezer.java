@@ -59,7 +59,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private ISqueezerRecipe currentRecipe;
 
 	public TileSqueezer() {
-		super("squeezer", 1100, Constants.MACHINE_MAX_ENERGY);
+		super(1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
 		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);

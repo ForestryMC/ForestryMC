@@ -14,19 +14,20 @@ import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 
-public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {
+public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
+	private final String unlocalizedTitle;
 
-	protected GuiForestryTitled(String texture, C container, I inventory) {
-		super(texture, container, inventory);
+	protected GuiForestryTitled(String texture, C container, ITitled titled) {
+		super(texture, container);
+		this.unlocalizedTitle = titled.getUnlocalizedTitle();
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-		String name = Translator.translateToLocal(inventory.getUnlocalizedTitle());
+		String name = Translator.translateToLocal(this.unlocalizedTitle);
 		textLayout.line = 6;
 		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);

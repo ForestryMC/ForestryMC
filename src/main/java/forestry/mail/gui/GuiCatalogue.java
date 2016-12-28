@@ -23,13 +23,12 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.input.Keyboard;
 
-public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
+public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 	private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
 
@@ -39,7 +38,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
 	public GuiCatalogue(EntityPlayer player) {
-		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player), null);
+		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
 		this.xSize = 192;
 		this.ySize = 192;
 
@@ -153,5 +152,10 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 				mc.player.closeScreen();
 				break;
 		}
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

@@ -20,10 +20,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler> {
+public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
+	private final TileBottler tile;
 
-	public GuiBottler(InventoryPlayer inventory, TileBottler processor) {
-		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
+	public GuiBottler(InventoryPlayer inventory, TileBottler tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, tile), tile);
+		this.tile = tile;
 		widgetManager.add(new TankWidget(this.widgetManager, 80, 14, 0));
 	}
 
@@ -46,14 +48,14 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler>
 		}
 		GlStateManager.popMatrix();
 
-		String name = Translator.translateToLocal(inventory.getUnlocalizedTitle());
+		String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
 		textLayout.line = 5;
 		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
 		bindTexture(textureFile);
 
 		bindTexture(textureFile);
 
-		TileBottler bottler = inventory;
+		TileBottler bottler = tile;
 		int progressArrow = bottler.getProgressScaled(22);
 		if (progressArrow > 0) {
 			if (bottler.isFillRecipe) {
@@ -62,5 +64,12 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler>
 				drawTexturedModalRect(guiLeft + 46, guiTop + 35, 177, 74, progressArrow, 16);
 			}
 		}
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("bottler");
+		addPowerLedger(tile.getEnergyManager());
 	}
 }

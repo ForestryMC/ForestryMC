@@ -37,7 +37,6 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	public TileEscritoire() {
-		super("escritoire");
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 

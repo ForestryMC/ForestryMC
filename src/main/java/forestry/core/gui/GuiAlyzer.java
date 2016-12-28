@@ -11,6 +11,8 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
@@ -21,6 +23,7 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
@@ -31,7 +34,6 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
@@ -41,19 +43,21 @@ import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
 
-public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
+public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	public static final int COLUMN_0 = 12;
 	public static final int COLUMN_1 = 90;
 	public static final int COLUMN_2 = 155;
 
-	public GuiAlyzer(EntityPlayer player, ItemInventoryAlyzer inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(inventory, player), inventory);
+	private final ItemInventoryAlyzer itemInventory;
 
+	public GuiAlyzer(EntityPlayer player, ItemInventoryAlyzer itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(itemInventory, player));
+
+		this.itemInventory = itemInventory;
 		this.xSize = 246;
 		this.ySize = 238;
 	}
@@ -136,7 +140,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			return;
 		}
 
-		ItemStack stackInSlot = inventory.getStackInSlot(specimenSlot);
+		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stackInSlot);
 		if (speciesRoot == null) {
 			return;
@@ -173,7 +177,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	private int getSpecimenSlot() {
 		for (int k = ItemInventoryAlyzer.SLOT_SPECIMEN; k <= ItemInventoryAlyzer.SLOT_ANALYZE_5; k++) {
-			ItemStack stackInSlot = inventory.getStackInSlot(k);
+			ItemStack stackInSlot = itemInventory.getStackInSlot(k);
 			if (stackInSlot.isEmpty()) {
 				continue;
 			}
@@ -475,8 +479,21 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		return widgetManager;
 	}
 
-	public LedgerManager getLedgerManager() {
-		return ledgerManager;
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger(getHints());
 	}
 
+	public List<String> getHints() {
+		ItemStack specimen = itemInventory.getSpecimen();
+		if (!specimen.isEmpty()) {
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
+			if (speciesRoot != null) {
+				IAlyzerPlugin alyzerPlugin = speciesRoot.getAlyzerPlugin();
+				return alyzerPlugin.getHints();
+			}
+		}
+		return Collections.emptyList();
+	}
 }

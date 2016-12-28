@@ -19,10 +19,6 @@ public class ItemInventoryBackpack extends ItemInventory {
 		Preconditions.checkArgument(item instanceof ItemBackpack, "Parent must be a backpack.");
 
 		this.backpackDefinition = ((ItemBackpack) item).getDefinition();
-
-		if (this.backpackDefinition == null) {
-			throw new IllegalArgumentException("Backpack must have a backpack definition.");
-		}
 	}
 
 	@Override

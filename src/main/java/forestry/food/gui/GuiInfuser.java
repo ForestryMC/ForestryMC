@@ -17,24 +17,25 @@ import forestry.core.render.ColourProperties;
 import forestry.food.inventory.ItemInventoryInfuser;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfuser> {
-
+public class GuiInfuser extends GuiForestry<ContainerInfuser> {
+	private final ItemInventoryInfuser itemInventory;
 	private int startX;
 	private int startY;
 
-	public GuiInfuser(InventoryPlayer inventoryplayer, ItemInventoryInfuser inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/infuser.png", new ContainerInfuser(inventoryplayer, inventory), inventory);
+	public GuiInfuser(InventoryPlayer inventoryplayer, ItemInventoryInfuser itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/infuser.png", new ContainerInfuser(inventoryplayer, itemInventory));
 
-		xSize = 176;
-		ySize = 185;
+		this.itemInventory = itemInventory;
+		this.xSize = 176;
+		this.ySize = 185;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		for (int l = 2; l < inventory.getSizeInventory(); l++) {
-			String description = BeverageManager.ingredientManager.getDescription(inventory.getStackInSlot(l));
+		for (int l = 2; l < itemInventory.getSizeInventory(); l++) {
+			String description = BeverageManager.ingredientManager.getDescription(itemInventory.getStackInSlot(l));
 			if (description == null) {
 				description = "(No effect)";
 			}
@@ -50,5 +51,10 @@ public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfus
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

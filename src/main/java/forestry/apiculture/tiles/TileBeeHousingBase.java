@@ -20,7 +20,7 @@ import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
-import forestry.apiculture.gui.IGuiBeeHousingInventory;
+import forestry.apiculture.gui.IGuiBeeHousingDelegate;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
@@ -35,7 +35,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
+public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingDelegate, IStreamableGui {
+	private final String hintKey;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private final IBeekeepingLogic beeLogic;
 
@@ -43,8 +44,13 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	private int breedingProgressPercent = 0;
 
 	protected TileBeeHousingBase(String hintKey) {
-		super(hintKey);
+		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
+	}
+
+	@Override
+	public String getHintKey() {
+		return hintKey;
 	}
 
 	@Override

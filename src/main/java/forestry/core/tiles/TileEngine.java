@@ -16,7 +16,6 @@ import java.io.IOException;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.blocks.BlockBase;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
@@ -52,15 +51,18 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected boolean forceCooldown = false;
 	public float progress;
 	protected final EnergyManager energyManager;
+	private final String hintKey;
 
-	protected TileEngine(@Nullable String hintKey, int maxHeat, int maxEnergy) {
-		super(hintKey);
+	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
+		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
 
 		energyManager.setExternalMode(EnergyTransferMode.EXTRACT);
+	}
 
-		hints.addAll(Config.hints.get("engine"));
+	public String getHintKey() {
+		return hintKey;
 	}
 
 	protected void addHeat(int i) {

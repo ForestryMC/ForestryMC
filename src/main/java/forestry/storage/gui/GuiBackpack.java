@@ -12,15 +12,19 @@ package forestry.storage.gui;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import net.minecraft.inventory.IInventory;
 
-public class GuiBackpack extends GuiForestry<ContainerBackpack, IInventory> {
+public class GuiBackpack extends GuiForestry<ContainerBackpack> {
 
 	public GuiBackpack(ContainerBackpack container) {
 		this(Constants.TEXTURE_PATH_GUI + "/backpack.png", container);
 	}
 
 	protected GuiBackpack(String texture, ContainerBackpack container) {
-		super(texture, container, null);
+		super(texture, container);
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

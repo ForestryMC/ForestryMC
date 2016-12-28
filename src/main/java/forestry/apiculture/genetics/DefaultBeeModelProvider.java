@@ -11,6 +11,7 @@
 package forestry.apiculture.genetics;
 
 import javax.annotation.Nullable;
+import java.util.EnumMap;
 import java.util.Locale;
 
 import forestry.api.apiculture.EnumBeeType;
@@ -34,7 +35,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	private static ModelResourceLocation[] models;
+	private static EnumMap<EnumBeeType, ModelResourceLocation> models;
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -44,16 +45,16 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 		String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
 
 		if (models == null) {
-			models = new ModelResourceLocation[EnumBeeType.values().length];
+			models = new EnumMap<>(EnumBeeType.class);
 		}
 
-		models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);
+		models.put(beeType, manager.getModelLocation(beeTypeNameBase));
 		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
-		return models[type.ordinal()];
+		return models.get(type);
 	}
 }

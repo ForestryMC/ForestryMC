@@ -28,7 +28,6 @@ public class TileMillRainmaker extends TileMill {
 	private boolean reverse;
 
 	public TileMillRainmaker() {
-		super(null);
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}

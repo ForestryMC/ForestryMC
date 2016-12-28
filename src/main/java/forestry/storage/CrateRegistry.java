@@ -27,7 +27,7 @@ public class CrateRegistry implements ICrateRegistry {
 
 	private static void registerCrate(ItemStack stack, @Nullable String oreDictName) {
 		if (stack.isEmpty()) {
-			Log.warning("Tried to make a crate without an item");
+			Log.error("Tried to make a crate without an item");
 			return;
 		}
 
@@ -35,7 +35,12 @@ public class CrateRegistry implements ICrateRegistry {
 		if (oreDictName != null) {
 			crateName = "crated." + oreDictName;
 		} else {
-			String itemName = ItemStackUtil.getStringForItemStack(stack).replace(':', '.');
+			String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
+			if (stringForItemStack == null) {
+				Log.error("Could not get string name for itemStack {}", stack);
+				return;
+			}
+			String itemName = stringForItemStack.replace(':', '.');
 			crateName = "crated." + itemName;
 		}
 

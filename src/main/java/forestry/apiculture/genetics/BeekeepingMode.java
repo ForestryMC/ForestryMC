@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -151,7 +152,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 		}
 
 		@Override
-		public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+		public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier) {
 			return this.lifespanModifier;
 		}
 

@@ -55,7 +55,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super("centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
+		super(800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
 		craftPreviewInventory = new InventoryCraftResult();
 	}
