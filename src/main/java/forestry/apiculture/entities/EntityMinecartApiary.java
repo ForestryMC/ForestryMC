@@ -71,12 +71,12 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public IBlockState getDisplayTile() {
-		return PluginApiculture.blocks.apiary.getDefaultState();
+		return PluginApiculture.getBlocks().apiary.getDefaultState();
 	}
 
 	@Override
 	public ItemStack getCartItem() {
-		return PluginApiculture.items.minecartBeehouse.getApiaryMinecart();
+		return PluginApiculture.getItems().minecartBeehouse.getApiaryMinecart();
 	}
 
 	@Override

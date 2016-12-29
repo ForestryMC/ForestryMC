@@ -537,10 +537,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return ItemStack.EMPTY;
 		}
 		IButterflyRoot root = species.getRoot();
-		IAllele[] template = root.getTemplate(species.getUID());
-		if (template == null) {
-			return ItemStack.EMPTY;
-		}
+		IAllele[] template = root.getTemplate(species);
 		IButterfly butterfly = root.templateAsIndividual(template);
 		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY);
 	}

@@ -136,7 +136,7 @@ public class VillagerArboristTrades {
 			}
 
 			IAlleleSpecies chosenSpecies = potentialSpecies.get(random.nextInt(potentialSpecies.size()));
-			IAllele[] template = TreeManager.treeRoot.getTemplate(chosenSpecies.getUID());
+			IAllele[] template = TreeManager.treeRoot.getTemplate(chosenSpecies);
 			IIndividual individual = TreeManager.treeRoot.templateAsIndividual(template);
 
 			ItemStack sellStack = TreeManager.treeRoot.getMemberStack(individual, type);

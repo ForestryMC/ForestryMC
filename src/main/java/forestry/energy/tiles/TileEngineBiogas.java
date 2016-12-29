@@ -115,12 +115,14 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			if (heatStage > 0.2) {
 				if (burnTank.getFluidAmount() > 0) {
 					FluidStack drained = burnTank.drainInternal(1, true);
-					currentOutput = determineFuelValue(drained.getFluid());
+					currentOutput = determineFuelValue(drained);
 					energyManager.generateEnergy(currentOutput);
 				} else {
 					FluidStack fuel = fuelTank.drainInternal(Fluid.BUCKET_VOLUME, true);
-					int burnTime = determineBurnTime(fuel.getFluid());
-					fuel.amount = burnTime;
+					int burnTime = determineBurnTime(fuel);
+					if (fuel != null) {
+						fuel.amount = burnTime;
+					}
 					burnTank.setCapacity(burnTime);
 					burnTank.setFluid(fuel);
 				}
@@ -154,9 +156,11 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		// Lose extra heat when using water as fuel.
 		if (fuelTank.getFluidAmount() > 0) {
 			FluidStack fuelFluidStack = fuelTank.getFluid();
-			EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
-			if (fuel != null) {
-				loss = loss * fuel.getDissipationMultiplier();
+			if (fuelFluidStack != null) {
+				EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
+				if (fuel != null) {
+					loss = loss * fuel.getDissipationMultiplier();
+				}
 			}
 		}
 
@@ -188,23 +192,27 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
-	private static int determineFuelValue(@Nullable Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
-		} else {
-			return 0;
+	private static int determineFuelValue(@Nullable FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
+				return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
+			}
 		}
+		return 0;
 	}
 
 	/**
 	 * @return Duration of burn cycle of one bucket
 	 */
-	private static int determineBurnTime(Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).getBurnDuration();
-		} else {
-			return 0;
+	private static int determineBurnTime(@Nullable FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
+				return FuelManager.bronzeEngineFuel.get(fluid).getBurnDuration();
+			}
 		}
+		return 0;
 	}
 
 	// / STATE INFORMATION

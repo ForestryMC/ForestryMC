@@ -116,7 +116,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
 		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
-		BlockRegistryFactory blocks = PluginFactory.blocks;
+		BlockRegistryFactory blocks = PluginFactory.getBlocks();
 		Preconditions.checkNotNull(blocks);
 
 		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);

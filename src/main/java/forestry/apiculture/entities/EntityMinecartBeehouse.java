@@ -50,12 +50,12 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 
 	@Override
 	public IBlockState getDisplayTile() {
-		return PluginApiculture.blocks.beeHouse.getDefaultState();
+		return PluginApiculture.getBlocks().beeHouse.getDefaultState();
 	}
 
 	@Override
 	public ItemStack getCartItem() {
-		return PluginApiculture.items.minecartBeehouse.getBeeHouseMinecart();
+		return PluginApiculture.getItems().minecartBeehouse.getBeeHouseMinecart();
 	}
 
 	/* IBeeHousing */

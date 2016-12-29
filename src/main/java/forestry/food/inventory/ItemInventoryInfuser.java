@@ -35,7 +35,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 		ItemStack input = getStackInSlot(inputSlot);
 		if (!input.isEmpty() &&
 				getStackInSlot(outputSlot).isEmpty() &&
-				PluginFood.items.beverage == input.getItem()) {
+				PluginFood.getItems().beverage == input.getItem()) {
 
 			// Create the seasoned item
 			NonNullList<ItemStack> ingredients = NonNullList.create();
@@ -78,7 +78,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == inputSlot) {
-			return PluginFood.items.beverage == itemStack.getItem();
+			return PluginFood.getItems().beverage == itemStack.getItem();
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
 			return BeverageManager.infuserManager.isIngredient(itemStack);
 		}

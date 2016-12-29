@@ -139,7 +139,7 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 	}
 
 	private static void addSqueezerRecipes() {
-		ItemStack mulch = new ItemStack(PluginCore.items.mulch);
+		ItemStack mulch = new ItemStack(PluginCore.getItems().mulch);
 
 		Item pinecone = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BoP, "pinecone"));
 		if (pinecone != null) {

@@ -116,7 +116,7 @@ public enum WoodModelLoader implements ICustomModelLoader {
 	}
 
 	private ModelBlockDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
-		List<ModelBlockDefinition> list = Lists.<ModelBlockDefinition>newArrayList();
+		List<ModelBlockDefinition> list = Lists.newArrayList();
 
 		try {
 			for (IResource iresource : Minecraft.getMinecraft().getResourceManager().getAllResources(fileIn)) {
@@ -197,7 +197,7 @@ public enum WoodModelLoader implements ICustomModelLoader {
 				// FIXME: log this?
 				IModel missing = ModelLoaderRegistry.getMissingModel();
 				models.add(missing);
-				builder.add(Pair.<IModel, IModelState>of(missing, TRSRTransformation.identity()));
+				builder.add(Pair.of(missing, TRSRTransformation.identity()));
 			}
 
 			defaultState = new MultiModelState(builder.build());
@@ -278,7 +278,7 @@ public enum WoodModelLoader implements ICustomModelLoader {
 			if (models.size() == 0) {
 				IModel missing = ModelLoaderRegistry.getMissingModel();
 				models.add(missing);
-				builder.add(Pair.<IModel, IModelState>of(missing, TRSRTransformation.identity()));
+				builder.add(Pair.of(missing, TRSRTransformation.identity()));
 			}
 			return new WeightedRandomModel(locations, models, variants, new MultiModelState(builder.build()));
 		}

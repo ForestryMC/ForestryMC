@@ -46,13 +46,14 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			return false;
 		}
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems == null) {
-			return false;
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
+
+			Item item = itemstack.getItem();
+			return beeItems.honeyDrop == item || beeItems.honeydew == item;
 		}
 
-		Item item = itemstack.getItem();
-		return beeItems.honeyDrop == item || beeItems.honeydew == item;
+		return false;
 	}
 
 	@Override
@@ -77,7 +78,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		IIndividual individual = speciesRoot.getMember(itemStack);
-		return individual.isAnalyzed();
+		return individual != null && individual.isAnalyzed();
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		IIndividual individual = speciesRoot.getMember(specimen);
 
 		// Analyze if necessary
-		if (!individual.isAnalyzed()) {
+		if (individual != null && !individual.isAnalyzed()) {
 			final boolean requiresEnergy = ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE);
 			if (requiresEnergy) {
 				// Requires energy

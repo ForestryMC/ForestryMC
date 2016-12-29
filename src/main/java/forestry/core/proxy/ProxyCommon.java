@@ -12,8 +12,6 @@ package forestry.core.proxy;
 
 import java.io.File;
 
-import javax.annotation.Nullable;
-
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.worldgen.WorldGenerator;
@@ -72,16 +70,15 @@ public class ProxyCommon {
 	}
 
 	public World getRenderWorld() {
-		return null;
+		throw new IllegalStateException("Cannot get render world on server");
 	}
 
 	public Minecraft getClientInstance() {
 		return FMLClientHandler.instance().getClient();
 	}
 
-	@Nullable
 	public EntityPlayer getPlayer() {
-		return null;
+		throw new IllegalStateException("Can't call getPlayer on the server");
 	}
 
 	public void playButtonClick() {

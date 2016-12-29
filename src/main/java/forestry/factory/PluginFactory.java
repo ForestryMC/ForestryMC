@@ -72,7 +72,12 @@ import net.minecraftforge.fluids.FluidStack;
 @ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends BlankForestryPlugin {
 	@Nullable
-	public static BlockRegistryFactory blocks;
+	private static BlockRegistryFactory blocks;
+
+	public static BlockRegistryFactory getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -125,8 +130,7 @@ public class PluginFactory extends BlankForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
 
 		// Set fuels and resources for the fermenter
 		ItemStack fertilizerCompound = coreItems.fertilizerCompound.getItemStack();
@@ -213,7 +217,7 @@ public class PluginFactory extends BlankForestryPlugin {
 	@Override
 	public void doInit() {
 		super.doInit();
-		Preconditions.checkState(blocks != null);
+		BlockRegistryFactory blocks = getBlocks();
 
 		blocks.bottler.init();
 		blocks.carpenter.init();
@@ -237,14 +241,10 @@ public class PluginFactory extends BlankForestryPlugin {
 	public void registerRecipes() {
 
 		// / FABRICATOR
-		ItemRegistryCore coreItems = PluginCore.items;
-		BlockRegistryCore coreBlocks = PluginCore.blocks;
-		ItemRegistryFluids fluidItems = PluginFluids.items;
-
-		Preconditions.checkState(coreItems != null);
-		Preconditions.checkState(coreBlocks != null);
-		Preconditions.checkState(fluidItems != null);
-		Preconditions.checkState(blocks != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		BlockRegistryCore coreBlocks = PluginCore.getBlocks();
+		ItemRegistryFluids fluidItems = PluginFluids.getItems();
+		BlockRegistryFactory blocks = getBlocks();
 
 		ItemElectronTube electronTube = coreItems.tubes;
 
@@ -325,8 +325,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = PluginApiculture.items;
-			Preconditions.checkState(beeItems != null);
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME);
 			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME * 4);
@@ -469,9 +468,10 @@ public class PluginFactory extends BlankForestryPlugin {
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
 
 		// RAIN SUBSTRATES
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
 
-		if (beeItems != null) {
+
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), ItemStack.EMPTY, coreItems.iodineCharge.getItemStack(),
 					"Z#Z",
 					"#Y#",

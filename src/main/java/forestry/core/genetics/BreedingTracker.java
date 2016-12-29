@@ -52,7 +52,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	private final Set<String> discoveredSpecies = new HashSet<>();
 	private final Set<String> discoveredMutations = new HashSet<>();
 	private final Set<String> researchedMutations = new HashSet<>();
-	@Nullable
 	private String modeName;
 
 	@Nullable
@@ -60,8 +59,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Nullable
 	private World world;
 
-	protected BreedingTracker(String s) {
+	protected BreedingTracker(String s, String defaultModeName) {
 		super(s);
+		this.modeName = defaultModeName;
 	}
 
 	public void setUsername(@Nullable GameProfile username) {
@@ -73,7 +73,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	@Override
-	@Nullable
 	public String getModeName() {
 		return modeName;
 	}

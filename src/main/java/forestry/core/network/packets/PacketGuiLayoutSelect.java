@@ -12,6 +12,8 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -22,10 +24,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
 public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPacketClient {
-	private final String string;
+	private final String layoutUid;
 
-	public PacketGuiLayoutSelect(String string) {
-		this.string = string;
+	public PacketGuiLayoutSelect(String layoutUid) {
+		this.layoutUid = layoutUid;
 	}
 
 	@Override
@@ -35,19 +37,22 @@ public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPa
 
 	@Override
 	protected void writeData(PacketBufferForestry data) throws IOException {
-		data.writeString(string);
+		data.writeString(layoutUid);
 	}
 
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
-			String string = data.readString();
+			String layoutUid = data.readString();
 			Container container = player.openContainer;
 			if (!(container instanceof ContainerSolderingIron)) {
 				return;
 			}
 
-			((ContainerSolderingIron) container).setLayout(string);
+			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(layoutUid);
+			if (layout != null) {
+				((ContainerSolderingIron) container).setLayout(layout);
+			}
 		}
 	}
 }

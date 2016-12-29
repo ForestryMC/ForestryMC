@@ -180,6 +180,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	@Nullable
 	public IAllele getAllele(String uid) {
 		IAllele allele = alleleMap.get(uid);
 
@@ -285,11 +286,11 @@ public class AlleleRegistry implements IAlleleRegistry {
 	/* RESEARCH */
 	@Override
 	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
-		return EnumNoteType.createSpeciesNoteStack(PluginCore.items.researchNote, researcher, species);
+		return EnumNoteType.createSpeciesNoteStack(PluginCore.getItems().researchNote, researcher, species);
 	}
 
 	@Override
 	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
-		return EnumNoteType.createMutationNoteStack(PluginCore.items.researchNote, researcher, mutation);
+		return EnumNoteType.createMutationNoteStack(PluginCore.getItems().researchNote, researcher, mutation);
 	}
 }

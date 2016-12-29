@@ -50,7 +50,7 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
 		}
 		IBlockState state = world.getBlockState(pos);
 		BlockPos blockedPos;
-		if (state.getBlock() == PluginGreenhouse.blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)) {
+		if (state.getBlock() == PluginGreenhouse.getBlocks().getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)) {
 			blockedPos = getCoordinates().offset(EnumFacing.UP);
 		} else {
 			blockedPos = getCoordinates().offset(state.getValue(BlockGreenhouse.FACING));
@@ -106,7 +106,7 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
 		return mode;
 	}
 
-	public static enum WindowMode {
+	public enum WindowMode {
 		PLAYER, BLOCK, CONTROL, OPEN
 	}
 

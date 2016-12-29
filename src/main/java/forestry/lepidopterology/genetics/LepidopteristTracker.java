@@ -24,7 +24,7 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 	 * Required for creation from map storage
 	 */
 	public LepidopteristTracker(String s) {
-		super(s);
+		super(s, "NORMAL");
 	}
 
 	@Override

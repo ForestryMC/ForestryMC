@@ -2,6 +2,7 @@ package forestry.plugins.compat;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
@@ -42,24 +43,31 @@ public class PluginImmersiveEngineering extends BlankForestryPlugin {
 	public void postInit() {
 		ItemStack hempSeed = getItemStack("seed");
 		Block hempCrop = getBlock("hemp");
-		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		IProperty age = hempCrop.getBlockState().getProperties().stream().filter(p -> p.getName().equals("type")).findAny().orElseGet(null);
+		if (hempCrop != null) {
+			int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+			IProperty age = hempCrop.getBlockState().getProperties().stream().filter(p -> p.getName().equals("type")).findAny().orElseGet(null);
 
-		if (hempSeed != null && hempCrop != Blocks.AIR && age != null) {
-			IBlockState planted = hempCrop.getDefaultState().withProperty(age, (Comparable) age.parseValue("bottom0").get());
-			IBlockState mature = hempCrop.getDefaultState().withProperty(age, (Comparable) age.parseValue("top0").get());
-			Farmables.farmables.get("farmWheat").add(new FarmableBase(hempSeed, planted, mature, false) {
-				@Override
-				public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
-					IBlockState stateUp = world.getBlockState(pos.up());
-					if (stateUp != matureState) {
-						return null;
-					}
-					return new CropDestroy(world, stateUp, pos.up(), null);
+			if (hempSeed != null && hempCrop != Blocks.AIR && age != null) {
+				Optional bottom0 = age.parseValue("bottom0");
+				Optional top0 = age.parseValue("top0");
+				if (bottom0.isPresent() && top0.isPresent()) {
+					IBlockState defaultState = hempCrop.getDefaultState();
+					IBlockState planted = defaultState.withProperty(age, (Comparable) bottom0.get());
+					IBlockState mature = defaultState.withProperty(age, (Comparable) top0.get());
+					Farmables.farmables.get("farmWheat").add(new FarmableBase(hempSeed, planted, mature, false) {
+						@Override
+						public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+							IBlockState stateUp = world.getBlockState(pos.up());
+							if (stateUp != matureState) {
+								return null;
+							}
+							return new CropDestroy(world, stateUp, pos.up(), null);
+						}
+					});
+
+					RecipeManagers.squeezerManager.addRecipe(10, hempSeed, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
-			});
-
-			RecipeManagers.squeezerManager.addRecipe(10, hempSeed, Fluids.SEED_OIL.getFluid(seedAmount));
+			}
 		}
 	}
 

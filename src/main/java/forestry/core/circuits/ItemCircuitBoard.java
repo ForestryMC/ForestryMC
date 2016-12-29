@@ -88,7 +88,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = PluginCore.items.circuitboards.get(type);
+		ItemStack chipset = PluginCore.getItems().circuitboards.get(type);
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		new CircuitBoard(type, layout, circuits).writeToNBT(nbttagcompound);
 		chipset.setTagCompound(nbttagcompound);

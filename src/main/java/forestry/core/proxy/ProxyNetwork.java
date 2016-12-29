@@ -51,7 +51,7 @@ public class ProxyNetwork {
 		}
 
 		EntityPlayerMP player = (EntityPlayerMP) entityplayer;
-		Forestry.packetHandler.sendPacket(packet.getPacket(), player);
+		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
 	}
 
 	public void sendToServer(IForestryPacketServer packet) {

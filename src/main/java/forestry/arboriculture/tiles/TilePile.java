@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.multiblock.ICharcoalPileComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.arboriculture.PluginArboriculture;
@@ -50,7 +51,7 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		Block newBlock = newState.getBlock();
-		return oldState.getBlock() != newBlock && newBlock != PluginArboriculture.blocks.piles.get(EnumPileType.ASH);
+		return oldState.getBlock() != newBlock && newBlock != PluginArboriculture.getBlocks().piles.get(EnumPileType.ASH);
 	}
 
 	@Override
@@ -140,8 +141,11 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 
 		if (data.hasKey("TreeSpecies")) {
 			String treeSpeciesUid = data.getString("TreeSpecies");
-			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
-			setTreeSpecies(treeSpecies);
+			IAllele allele = AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
+			if (allele instanceof IAlleleTreeSpecies) {
+				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) allele;
+				setTreeSpecies(treeSpecies);
+			}
 		}
 	}
 
@@ -168,8 +172,11 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		super.decodeDescriptionPacket(packetData);
 		if (packetData.hasKey("TreeSpecies")) {
 			String treeSpeciesUid = packetData.getString("TreeSpecies");
-			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
-			setTreeSpecies(treeSpecies);
+			IAllele allele = AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
+			if (allele instanceof IAlleleTreeSpecies) {
+				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) allele;
+				setTreeSpecies(treeSpecies);
+			}
 		}
 	}
 	
@@ -213,7 +220,7 @@ public class TilePile extends MultiblockTileEntityForestry<MultiblockLogicCharco
 		EnumPilePosition pilePos = world.getBlockState(pos).getValue(BlockPile.PILE_POSITION);
 		int layer = pos.getY() - getMultiblockLogic().getController().getMinimumCoord().getY();
 		IBlockState state;
-		Block woodPile = PluginArboriculture.blocks.piles.get(EnumPileType.WOOD);
+		Block woodPile = PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD);
 		switch (pilePos) {
 			case BACK:
 				state = world.getBlockState(pos.add(0, 0, 1));

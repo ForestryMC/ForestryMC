@@ -20,10 +20,10 @@ import forestry.api.core.ITextureManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.multiblock.ICharcoalPileComponent;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.multiblock.EnumPilePosition;
 import forestry.arboriculture.multiblock.ICharcoalPileControllerInternal;
 import forestry.arboriculture.render.PileParticleCallback;
@@ -214,8 +214,10 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
-		state = this.getActualState(state, worldIn, pos);
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+		if (!p_185477_7_) {
+			state = this.getActualState(state, worldIn, pos);
+		}
 
 		for (AxisAlignedBB axisalignedbb : getCollisionBoxList(state)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, axisalignedbb);
@@ -414,7 +416,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 				if (ashAmount <= 0) {
 					ashAmount = 1;
 				}
-				list.add(new ItemStack(PluginCore.items.ash, ashAmount));
+				list.add(new ItemStack(PluginCore.getItems().ash, ashAmount));
 			} else if (getPileType() == EnumPileType.DIRT) {
 				list.add(new ItemStack(this));
 			} else {
@@ -519,15 +521,13 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	public static IAlleleTreeSpecies getTreeSpecies(ItemStack stack) {
 		if (!stack.isEmpty() && stack.getTagCompound() != null) {
 			NBTTagCompound tagCompound = stack.getTagCompound();
-
-			// legacy
-			if (tagCompound.hasKey("ContainedTree")) {
-				ITree tree = new Tree(tagCompound.getCompoundTag("ContainedTree"));
-				return tree.getGenome().getPrimary();
+			if (tagCompound.hasKey("TreeSpecies")) {
+				String treeSpeciesUid = tagCompound.getString("TreeSpecies");
+				IAllele allele = AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
+				if (allele instanceof IAlleleSpecies) {
+					return (IAlleleTreeSpecies) allele;
+				}
 			}
-
-			String treeSpeciesUid = tagCompound.getString("TreeSpecies");
-			return (IAlleleTreeSpecies) AlleleManager.alleleRegistry.getAllele(treeSpeciesUid);
 		}
 		return null;
 	}
@@ -577,7 +577,7 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 
 	public static ItemStack createWoodPile(IAlleleTreeSpecies treeSpecies) {
-		ItemStack stack = new ItemStack(PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
+		ItemStack stack = new ItemStack(PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD));
 		NBTTagCompound nbtItem = new NBTTagCompound();
 		nbtItem.setString("TreeSpecies", treeSpecies.getUID());
 		stack.setTagCompound(nbtItem);

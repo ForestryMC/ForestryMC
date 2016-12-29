@@ -106,8 +106,9 @@ public class CommandBeeGive extends SubCommand {
 				continue;
 			}
 
-			if (AlleleManager.alleleRegistry.getAllele(uid) instanceof IAlleleBeeSpecies) {
-				species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(uid);
+			IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
+			if (allele instanceof IAlleleBeeSpecies) {
+				species = (IAlleleBeeSpecies) allele;
 				break;
 			}
 		}
@@ -125,11 +126,7 @@ public class CommandBeeGive extends SubCommand {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = BeeManager.beeRoot.getTemplate(species.getUID());
-
-		if (template == null) {
-			throw new TemplateNotFoundException(species);
-		}
+		IAllele[] template = BeeManager.beeRoot.getTemplate(species);
 
 		return BeeManager.beeRoot.templateAsGenome(template);
 	}

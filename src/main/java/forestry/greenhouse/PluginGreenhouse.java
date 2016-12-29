@@ -56,7 +56,12 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	public static ProxyGreenhouse proxy;
 
 	@Nullable
-	public static BlockRegistryGreenhouse blocks;
+	private static BlockRegistryGreenhouse blocks;
+
+	public static BlockRegistryGreenhouse getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -70,9 +75,8 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
-		Preconditions.checkState(blocks != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		BlockRegistryGreenhouse blocks = getBlocks();
 
 		Block greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
 		RecipeUtil.addRecipe(new ItemStack(greenhousePlainBlock, 4),

@@ -353,18 +353,25 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	}
 
 	protected final IButterflyMutationBuilder registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
-		IAlleleButterflySpecies species1 = null;
-		IAlleleButterflySpecies species2 = null;
+		IAlleleButterflySpecies species1;
+		IAlleleButterflySpecies species2;
+
 		if (parent1 instanceof ButterflyDefinition) {
 			species1 = ((ButterflyDefinition) parent1).species;
 		} else if (parent1 instanceof MothDefinition) {
 			species1 = ((MothDefinition) parent1).getSpecies();
+		} else {
+			throw new IllegalArgumentException("Unknown parent type " + parent1);
 		}
+
 		if (parent2 instanceof ButterflyDefinition) {
 			species2 = ((ButterflyDefinition) parent2).species;
 		} else if (parent2 instanceof MothDefinition) {
 			species2 = ((MothDefinition) parent2).getSpecies();
+		} else {
+			throw new IllegalArgumentException("Unknown parent type " + parent2);
 		}
+
 		return ButterflyManager.butterflyMutationFactory.createMutation(species1, species2, getTemplate(), chance);
 	}
 

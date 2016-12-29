@@ -129,7 +129,7 @@ public class CharcoalPileController extends RectangularMultiblockControllerBase 
 			for (IMultiblockComponent part : connectedParts) {
 				BlockPos pos = part.getCoordinates();
 				IBlockState state = world.getBlockState(pos);
-				IBlockState ashPileState = PluginArboriculture.blocks.piles.get(EnumPileType.ASH).getDefaultState().withProperty(BlockPile.PILE_POSITION, state.getValue(BlockPile.PILE_POSITION));
+				IBlockState ashPileState = PluginArboriculture.getBlocks().piles.get(EnumPileType.ASH).getDefaultState().withProperty(BlockPile.PILE_POSITION, state.getValue(BlockPile.PILE_POSITION));
 
 				world.setBlockState(pos, ashPileState);
 			}

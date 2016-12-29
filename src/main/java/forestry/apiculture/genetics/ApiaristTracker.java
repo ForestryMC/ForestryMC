@@ -16,6 +16,7 @@ import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.BreedingTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +27,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	 * Required for creation from map storage
 	 */
 	public ApiaristTracker(String s) {
-		super(s);
+		super(s, PluginApiculture.beekeepingMode);
 	}
 
 	private int queensTotal = 0;

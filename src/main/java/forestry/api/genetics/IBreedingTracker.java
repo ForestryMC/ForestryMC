@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nullable;
-
 import forestry.api.apiculture.IBeekeepingMode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +19,6 @@ public interface IBreedingTracker {
 	/**
 	 * @return Name of the current {@link IBeekeepingMode}.
 	 */
-	@Nullable
 	String getModeName();
 
 	/**

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -49,7 +50,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 	private TreeAlyzerPlugin() {
 		NonNullList<ItemStack> treeList = NonNullList.create();
-		PluginArboriculture.items.sapling.addCreativeItems(treeList, false);
+		PluginArboriculture.getItems().sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
 			iconStacks.put(species.getUID(), treeStack);
@@ -201,10 +202,10 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			IFruitFamily primary = tree.getGenome().getFruitProvider().getFamily();
 			IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS)).getProvider().getFamily();
 
-			if (primary != null) {
+			if (primary != null && !primary.getUID().equals(EnumFruitFamily.NONE.getUID())) {
 				textLayout.drawLine(primary.getName(), GuiAlyzer.COLUMN_1, fruitDominance0);
 			}
-			if (secondary != null) {
+			if (secondary != null && !secondary.getUID().equals(EnumFruitFamily.NONE.getUID())) {
 				textLayout.drawLine(secondary.getName(), GuiAlyzer.COLUMN_2, fruitDominance1);
 			}
 

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 import forestry.api.circuits.ICircuit;
+import forestry.api.core.ForestryAPI;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -48,9 +49,19 @@ import net.minecraftforge.fluids.FluidStack;
 @ForestryPlugin(pluginID = ForestryPluginUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends BlankForestryPlugin {
 	@Nullable
-	public static ItemRegistryMail items;
+	private static ItemRegistryMail items;
 	@Nullable
-	public static BlockRegistryMail blocks;
+	private static BlockRegistryMail blocks;
+
+	public static ItemRegistryMail getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryMail getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -85,8 +96,8 @@ public class PluginMail extends BlankForestryPlugin {
 	@Override
 	public void doInit() {
 		super.doInit();
-		Preconditions.checkState(blocks != null);
 
+		BlockRegistryMail blocks = getBlocks();
 		blocks.mailbox.init();
 		blocks.tradeStation.init();
 		blocks.stampCollector.init();
@@ -99,21 +110,20 @@ public class PluginMail extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
-		Preconditions.checkState(blocks != null);
-		Preconditions.checkState(items != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		ItemRegistryMail items = getItems();
+		BlockRegistryMail blocks = getBlocks();
 
-		Object stampGlue;
-		Object letterGlue;
+		ItemStack stampGlue;
+		ItemStack letterGlue;
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
-			stampGlue = beeItems.honeyDrop;
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
+			stampGlue = beeItems.honeyDrop.getItemStack();
 			letterGlue = beeItems.propolis.getWildcard();
 		} else {
-			stampGlue = Items.SLIME_BALL;
-			letterGlue = Items.SLIME_BALL;
+			stampGlue = new ItemStack(Items.SLIME_BALL);
+			letterGlue = new ItemStack(Items.SLIME_BALL);
 		}
 
 		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.PAPER, letterGlue);

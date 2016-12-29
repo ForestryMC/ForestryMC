@@ -44,7 +44,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		this.ySize = 185;
 
 		NonNullList<ItemStack> beeList = NonNullList.create();
-		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
+		PluginApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
 			if (species != null) {

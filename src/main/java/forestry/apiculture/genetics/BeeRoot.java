@@ -113,8 +113,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	public ItemStack getMemberStack(IIndividual individual, ISpeciesType type) {
 		Preconditions.checkArgument(individual instanceof IBee, "individual is not a bee");
 		Preconditions.checkArgument(type instanceof EnumBeeType, "type is not an EnumBeeType");
-		ItemRegistryApiculture apicultureItems = PluginApiculture.items;
-		Preconditions.checkState(apicultureItems != null, "Apiculture items are null");
+		ItemRegistryApiculture apicultureItems = PluginApiculture.getItems();
 
 		IBee bee = (IBee) individual;
 		Item beeItem;
@@ -150,8 +149,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public EnumBeeType getType(ItemStack stack) {
 		Item item = stack.getItem();
-		ItemRegistryApiculture apicultureItems = PluginApiculture.items;
-		Preconditions.checkState(apicultureItems != null, "Apiculture items are null");
+		ItemRegistryApiculture apicultureItems = PluginApiculture.getItems();
 
 		if (apicultureItems.beeDroneGE == item) {
 			return EnumBeeType.DRONE;
@@ -296,9 +294,6 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		// No beekeeping mode yet, get it.
 		IApiaristTracker tracker = getBreedingTracker(world, null);
 		String mode = tracker.getModeName();
-		if (mode == null || mode.isEmpty()) {
-			mode = PluginApiculture.beekeepingMode;
-		}
 
 		setBeekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set beekeeping mode for a world to " + mode);

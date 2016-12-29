@@ -13,6 +13,7 @@ package forestry.food;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
+import forestry.api.core.ForestryAPI;
 import forestry.api.food.BeverageManager;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.EnumPollenCluster;
@@ -28,7 +29,12 @@ import net.minecraft.item.ItemStack;
 @ForestryPlugin(pluginID = ForestryPluginUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends BlankForestryPlugin {
 	@Nullable
-	public static ItemRegistryFood items;
+	private static ItemRegistryFood items;
+
+	public static ItemRegistryFood getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -48,8 +54,8 @@ public class PluginFood extends BlankForestryPlugin {
 	public void preInit() {
 //		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.GLASS_BOTTLE));
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 			ItemStack normalPollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
 			ItemStack crystallinePollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
 
@@ -62,10 +68,8 @@ public class PluginFood extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(items != null);
-
 		// INFUSER
-		RecipeUtil.addRecipe(items.infuser.getItemStack(),
+		RecipeUtil.addRecipe(getItems().infuser.getItemStack(),
 				"X", "#", "X",
 				'#', "ingotIron",
 				'X', "ingotBronze");

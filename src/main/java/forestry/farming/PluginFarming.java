@@ -100,7 +100,12 @@ public class PluginFarming extends BlankForestryPlugin {
 	public static ProxyFarming proxy;
 
 	@Nullable
-	public static BlockRegistryFarming blocks;
+	private static BlockRegistryFarming blocks;
+
+	public static BlockRegistryFarming getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void registerItemsAndBlocks() {
@@ -109,7 +114,8 @@ public class PluginFarming extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
-		Preconditions.checkState(blocks != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		BlockRegistryFarming blocks = getBlocks();
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -146,8 +152,8 @@ public class PluginFarming extends BlankForestryPlugin {
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
 
-		//Foretsry fertilizer
-		Farmables.fertilizers.put(new ItemStack(PluginCore.items.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		//Forestry fertilizer
+		Farmables.fertilizers.put(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 
 		proxy.initializeModels();
 
@@ -231,16 +237,14 @@ public class PluginFarming extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(blocks != null);
-		Preconditions.checkState(coreItems != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		BlockRegistryFarming blocks = getBlocks();
 
 		ItemStack basic = blocks.farm.get(EnumFarmBlockType.PLAIN, 1);
 		ItemStack gearbox = blocks.farm.get(EnumFarmBlockType.GEARBOX, 1);
 		ItemStack hatch = blocks.farm.get(EnumFarmBlockType.HATCH, 1);
 		ItemStack valve = blocks.farm.get(EnumFarmBlockType.VALVE, 1);
 		ItemStack control = blocks.farm.get(EnumFarmBlockType.CONTROL, 1);
-
 
 		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
@@ -312,10 +316,8 @@ public class PluginFarming extends BlankForestryPlugin {
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		Preconditions.checkState(blocks != null);
-
 		// mushrooms are a workaround for the farm and should not be obtainable
-		hiddenItems.add(new ItemStack(blocks.mushroom, 1, OreDictionary.WILDCARD_VALUE));
+		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
 	@SubscribeEvent

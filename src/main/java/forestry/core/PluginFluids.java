@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
 	@Nullable
-	public static ItemRegistryFluids items;
+	private static ItemRegistryFluids items;
 
 	private static void createFluid(Fluids fluidDefinition) {
 		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
@@ -88,6 +88,11 @@ public class PluginFluids extends BlankForestryPlugin {
 		}
 	}
 
+	public static ItemRegistryFluids getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
 	@Override
 	public boolean canBeDisabled() {
 		return false;
@@ -104,14 +109,11 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
-		Preconditions.checkState(items != null);
-
 		if (RecipeManagers.squeezerManager != null) {
-			ItemRegistryCore itemRegistryCore = PluginCore.items;
-			Preconditions.checkState(itemRegistryCore != null);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
+			ItemRegistryCore itemRegistryCore = PluginCore.getItems();
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);

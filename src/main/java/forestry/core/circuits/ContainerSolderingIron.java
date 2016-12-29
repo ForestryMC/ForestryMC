@@ -74,7 +74,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 		Proxies.net.sendToPlayer(packetResponse, player);
 	}
 
-	public void setLayout(String layoutUID) {
-		inventory.setLayout(layoutUID);
+	public void setLayout(ICircuitLayout layout) {
+		inventory.setLayout(layout);
 	}
 }

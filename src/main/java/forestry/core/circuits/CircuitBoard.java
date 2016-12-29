@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
@@ -24,7 +25,7 @@ import forestry.core.utils.Translator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 
-public class CircuitBoard<T> implements ICircuitBoard {
+public class CircuitBoard implements ICircuitBoard {
 
 	private final EnumCircuitBoardType type;
 	@Nullable
@@ -170,6 +171,9 @@ public class CircuitBoard<T> implements ICircuitBoard {
 
 	@Override
 	public ICircuitSocketType getSocketType() {
+		if (layout == null) {
+			return CircuitSocketType.NONE;
+		}
 		return layout.getSocketType();
 	}
 }

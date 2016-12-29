@@ -123,7 +123,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PluginCore.items.fruits);
+		return new ItemStack(PluginCore.getItems().fruits);
 	}
 
 	@Override

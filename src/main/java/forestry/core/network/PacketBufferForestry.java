@@ -2,7 +2,6 @@ package forestry.core.network;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -34,32 +33,9 @@ public class PacketBufferForestry extends PacketBuffer {
 
 	public NonNullList<ItemStack> readItemStacks() throws IOException {
 		int stackCount = readVarInt();
-		NonNullList<ItemStack> itemStacks = NonNullList.withSize(stackCount, ItemStack.EMPTY);
+		NonNullList<ItemStack> itemStacks = NonNullList.create();
 		for (int i = 0; i < stackCount; i++) {
-			itemStacks.set(i, readItemStack());
-		}
-		return itemStacks;
-	}
-
-	public void readItemStacks(NonNullList<ItemStack> itemStacks) throws IOException {
-		int stackCount = readVarInt();
-		for (int i = 0; i < stackCount; i++) {
-			itemStacks.set(i, readItemStack());
-		}
-	}
-
-	public void writeItemStacksArray(ItemStack[] itemStacks) {
-		writeVarInt(itemStacks.length);
-		for (ItemStack stack : itemStacks) {
-			writeItemStack(stack);
-		}
-	}
-
-	public ItemStack[] readItemStacksArray() throws IOException {
-		int stackCount = readVarInt();
-		ItemStack[] itemStacks = new ItemStack[stackCount];
-		for (int i = 0; i < stackCount; i++) {
-			itemStacks[i] = readItemStack();
+			itemStacks.add(readItemStack());
 		}
 		return itemStacks;
 	}
@@ -145,15 +121,9 @@ public class PacketBufferForestry extends PacketBuffer {
 	}
 
 	@Nullable
-	public <T extends IStreamable> T readStreamable(Class<T> streamableClass) throws IOException {
+	public <T extends IStreamable> T readStreamable(IStreamableFactory<T> factory) throws IOException {
 		if (readBoolean()) {
-			try {
-				T streamable = streamableClass.newInstance();
-				streamable.readData(this);
-				return streamable;
-			} catch (IllegalAccessException | InstantiationException | IOException e) {
-				throw new InvalidObjectException("Failed to read Streamable for class " + streamableClass + " with error " + e);
-			}
+			return factory.create(this);
 		}
 		return null;
 	}
@@ -169,14 +139,18 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 	}
 
-	public <T extends IStreamable> void readStreamables(List<T> outputList, Class<T> streamableClass) throws IOException {
+	public <T extends IStreamable> void readStreamables(List<T> outputList, IStreamableFactory<T> factory) throws IOException {
 		outputList.clear();
 		int length = readVarInt();
 		if (length > 0) {
 			for (int i = 0; i < length; i++) {
-				T streamable = readStreamable(streamableClass);
+				T streamable = readStreamable(factory);
 				outputList.add(streamable);
 			}
 		}
+	}
+
+	public interface IStreamableFactory<T extends IStreamable> {
+		T create(PacketBufferForestry data) throws IOException;
 	}
 }

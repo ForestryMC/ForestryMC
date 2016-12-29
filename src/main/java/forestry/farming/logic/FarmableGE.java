@@ -34,7 +34,7 @@ public class FarmableGE implements IFarmable {
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		return PluginArboriculture.blocks.saplingGE == block;
+		return PluginArboriculture.getBlocks().saplingGE == block;
 	}
 
 	@Override

@@ -124,7 +124,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString("TP", type.toString());
 
-		if (gameProfile != null) {
+		if (gameProfile != invalidGameProfile) {
 			NBTTagCompound profileNbt = new NBTTagCompound();
 			PlayerUtil.writeGameProfile(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);

@@ -66,10 +66,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 		positionsInRange.clear();
 		float range = definition.getRange();
 
-		Iterator<BlockPos> positions = BlockPos.getAllInBox(pos.add(-range, -range, -range), pos.add(range, range, range)).iterator();
-		while(positions.hasNext()){
-			BlockPos pos = positions.next();
-			if(pos.distanceSq(this.pos) <= range){
+		Iterable<BlockPos> allInBox = BlockPos.getAllInBox(pos.add(-range, -range, -range), pos.add(range, range, range));
+		for (BlockPos pos : allInBox) {
+			if (pos.distanceSq(this.pos) <= range) {
 				positionsInRange.add(pos);
 			}
 		}

@@ -40,7 +40,7 @@ public class PluginBuildCraftTransport extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Item beeswax = PluginCore.items.beeswax;
+		Item beeswax = PluginCore.getItems().beeswax;
 		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "pipeWaterproof"));
 		if (pipeWaterproof != null) {
 			RecipeUtil.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);

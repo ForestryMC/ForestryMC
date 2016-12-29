@@ -362,7 +362,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		princess.writeToNBT(nbttagcompound);
-		queenStack = new ItemStack(PluginApiculture.items.beeQueenGE);
+		queenStack = new ItemStack(PluginApiculture.getItems().beeQueenGE);
 		queenStack.setTagCompound(nbttagcompound);
 
 		beeInventory.setQueen(queenStack);
@@ -392,7 +392,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
-			ItemStack convert = new ItemStack(PluginApiculture.items.beePrincessGE);
+			ItemStack convert = new ItemStack(PluginApiculture.getItems().beePrincessGE);
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			queen.writeToNBT(nbttagcompound);
 			convert.setTagCompound(nbttagcompound);

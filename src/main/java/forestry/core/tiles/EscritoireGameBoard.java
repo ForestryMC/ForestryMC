@@ -225,6 +225,6 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	@Override
 	public void readData(PacketBufferForestry data) throws IOException {
 		tokenCount = data.readVarInt();
-		data.readStreamables(gameTokens, EscritoireGameToken.class);
+		data.readStreamables(gameTokens, EscritoireGameToken::new);
 	}
 }

@@ -14,7 +14,9 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
+import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
@@ -365,7 +367,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (treeTemplate != null) {
 			if (fruitAlleleUID != null) {
 				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
-				if (fruitAllele != null) {
+				if (fruitAllele instanceof IAlleleFruit) {
 					treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
 				}
 			}
@@ -408,7 +410,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public IFruitFamily getFruitFamily() {
 		ITree tree = getTree();
 		if (tree == null) {
-			return null;
+			return EnumFruitFamily.NONE;
 		}
 		return tree.getGenome().getFruitProvider().getFamily();
 	}

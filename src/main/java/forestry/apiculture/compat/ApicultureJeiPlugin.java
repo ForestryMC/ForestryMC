@@ -16,7 +16,7 @@ import mezz.jei.api.JEIPlugin;
 public class ApicultureJeiPlugin extends BlankModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-		ItemRegistryApiculture items = PluginApiculture.items;
+		ItemRegistryApiculture items = PluginApiculture.getItems();
 		Preconditions.checkNotNull(items);
 
 		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
@@ -31,7 +31,7 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryApiculture items = PluginApiculture.items;
+		ItemRegistryApiculture items = PluginApiculture.getItems();
 		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry, "frames",

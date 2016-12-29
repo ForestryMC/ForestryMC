@@ -30,8 +30,10 @@ public class PickupHandlerCore implements IPickupHandler {
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemstack);
 		if (root != null) {
 			IIndividual individual = root.getMember(itemstack);
-			IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, entityPlayer.getGameProfile());
-			tracker.registerPickup(individual);
+			if (individual != null) {
+				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, entityPlayer.getGameProfile());
+				tracker.registerPickup(individual);
+			}
 		}
 
 		return false;

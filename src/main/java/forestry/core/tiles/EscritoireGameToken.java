@@ -47,9 +47,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private State state = State.UNREVEALED;
 
-	@SuppressWarnings("unused")
-	public EscritoireGameToken() {
-		// required for IStreamable serialization
+	public EscritoireGameToken(PacketBufferForestry data) throws IOException {
+		readData(data);
 	}
 
 	public EscritoireGameToken(String speciesUid) {
@@ -73,11 +72,9 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		if (allele instanceof IAlleleSpecies) {
 			IAlleleSpecies species = (IAlleleSpecies) allele;
 			ISpeciesRoot root = species.getRoot();
-			IAllele[] template = root.getTemplate(speciesUid);
-			if (template != null) {
-				this.tokenIndividual = root.templateAsIndividual(template);
-				this.tokenStack = root.getMemberStack(this.tokenIndividual, root.getIconType());
-			}
+			IAllele[] template = root.getTemplate(species);
+			this.tokenIndividual = root.templateAsIndividual(template);
+			this.tokenStack = root.getMemberStack(this.tokenIndividual, root.getIconType());
 		}
 	}
 

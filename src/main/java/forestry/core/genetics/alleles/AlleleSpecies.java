@@ -18,6 +18,7 @@ import java.util.Map;
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
@@ -30,6 +31,7 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import forestry.plugins.ForestryPluginUids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -74,8 +76,8 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 			return 0f;
 		}
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 			Item item = itemstack.getItem();
 			if (beeItems.honeyDrop == item) {
 				return 0.5f;

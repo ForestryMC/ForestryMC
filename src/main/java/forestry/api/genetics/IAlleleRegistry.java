@@ -123,6 +123,7 @@ public interface IAlleleRegistry {
 	 * @param uid String based unique identifier of the allele to retrieve.
 	 * @return IAllele if found or a replacement is found in the Deprecated Allele map, null otherwise.
 	 */
+	@Nullable
 	IAllele getAllele(String uid);
 
 	/**

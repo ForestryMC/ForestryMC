@@ -44,7 +44,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public IBlockState getBlockState() {
-		return PluginApiculture.blocks.beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
+		return PluginApiculture.getBlocks().beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
 	}
 
 	@Override

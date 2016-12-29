@@ -79,7 +79,7 @@ public class CreativeTabForestry extends CreativeTabs {
 				break;
 		}
 		if (iconItem == null) {
-			iconItem = PluginCore.items.wrench;
+			iconItem = PluginCore.getItems().wrench;
 		}
 		return new ItemStack(iconItem);
 	}

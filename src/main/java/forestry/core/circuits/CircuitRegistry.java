@@ -102,7 +102,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public boolean isChipset(ItemStack itemstack) {
-		return itemstack.getItem() == PluginCore.items.circuitboards;
+		return itemstack.getItem() == PluginCore.getItems().circuitboards;
 	}
 
 	@Override

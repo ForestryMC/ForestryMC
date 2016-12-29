@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.api.apiculture.BeeManager;
@@ -50,6 +51,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
+	@Nullable
 	public IBee getIndividual(ItemStack itemstack) {
 		return BeeManager.beeRoot.getMember(itemstack);
 	}

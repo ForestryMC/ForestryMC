@@ -239,6 +239,6 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public boolean isLetter(ItemStack itemstack) {
-		return itemstack.getItem() == PluginMail.items.letters;
+		return itemstack.getItem() == PluginMail.getItems().letters;
 	}
 }

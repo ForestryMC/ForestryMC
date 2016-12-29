@@ -191,7 +191,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockState escritoireBlock = PluginCore.blocks.escritoire.getDefaultState().withProperty(BlockBase.FACING, EnumFacing.EAST);
+			IBlockState escritoireBlock = PluginCore.getBlocks().escritoire.getDefaultState().withProperty(BlockBase.FACING, EnumFacing.EAST);
 			setBlockState(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
 
@@ -306,11 +306,11 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		}
 
 		IBlockState blockState = world.getBlockState(posNew);
-		if (PluginApiculture.blocks.beeHouse == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
+		if (PluginApiculture.getBlocks().beeHouse == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
 			return;
 		}
 
-		IBlockState beeHouseDefaultState = PluginApiculture.blocks.beeHouse.getDefaultState();
+		IBlockState beeHouseDefaultState = PluginApiculture.getBlocks().beeHouse.getDefaultState();
 		world.setBlockState(posNew, beeHouseDefaultState, Constants.FLAG_BLOCK_SYNC);
 
 		TileBeeHouse beeHouse = TileUtil.getTile(world, posNew, TileBeeHouse.class);

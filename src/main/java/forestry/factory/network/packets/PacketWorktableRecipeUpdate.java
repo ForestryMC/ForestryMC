@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.core.network.ForestryPacket;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
  */
 public class PacketWorktableRecipeUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
+	@Nullable
 	private final MemorizedRecipe recipe;
 
 	public PacketWorktableRecipeUpdate(TileWorktable worktable) {
@@ -50,8 +52,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			MemorizedRecipe recipe = new MemorizedRecipe();
-			recipe.readData(data);
+			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 
 			TileEntity tile = player.world.getTileEntity(pos);
 			if (tile instanceof TileWorktable) {

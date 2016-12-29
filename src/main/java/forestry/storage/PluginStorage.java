@@ -82,7 +82,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	private static final String CONFIG_CATEGORY = "backpacks";
 
 	@Nullable
-	public static ItemRegistryStorage items;
+	private static ItemRegistryStorage items;
 
 	private final Multimap<String, String> backpackAcceptedOreDictRegexpDefaults = HashMultimap.create();
 	private final Multimap<String, String> backpackRejectedOreDictRegexpDefaults = HashMultimap.create();
@@ -97,6 +97,11 @@ public class PluginStorage extends BlankForestryPlugin {
 			BackpackManager.ADVENTURER_UID,
 			BackpackManager.BUILDER_UID
 	);
+
+	public static ItemRegistryStorage getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -175,8 +180,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private void setDefaultsForConfig() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
 
 		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.MINER_UID).addAll(Arrays.asList(
 				"obsidian",
@@ -382,8 +386,8 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Items.SPRUCE_DOOR)
 		)));
 
-		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
-		if (beeBlocks != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			BlockRegistryApiculture beeBlocks = PluginApiculture.getBlocks();
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 					new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
@@ -529,10 +533,8 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private static void addCrating(ItemStack crateStack, Object uncrated) {
-		Preconditions.checkState(items != null);
-
 		FluidStack water = new FluidStack(FluidRegistry.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
-		ItemStack box = items.crate.getItemStack();
+		ItemStack box = getItems().crate.getItemStack();
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
 	}
 
@@ -582,15 +584,14 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(items != null);
-
-		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
-		if (items.apiaristBackpack != null && beeBlocks != null) {
+		ItemRegistryStorage items = getItems();
+		if (items.apiaristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			BlockRegistryApiculture beeBlocks = PluginApiculture.getBlocks();
 			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
 		}
 
-		BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.blocks;
-		if (items.lepidopteristBackpack != null && butterflyBlocks != null) {
+		if (items.lepidopteristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+			BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.getBlocks();
 			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
 			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
 		}
@@ -634,8 +635,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
 
 		ItemStack wovenSilk = coreItems.craftingMaterial.getWovenSilk();
 		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),

@@ -2,6 +2,7 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.BlockUtil;
@@ -10,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -57,6 +59,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
+	@Nullable
 	public RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec) {
 		return BlockUtil.collisionRayTrace(pos, startVec, endVec, boundingBox);
 	}
@@ -68,7 +71,9 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		String identifier = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
+		ResourceLocation itemNameFromRegistry = ItemStackUtil.getItemNameFromRegistry(item);
+		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
+		String identifier = itemNameFromRegistry.getResourcePath();
 		manager.registerItemModel(item, 0, identifier);
 	}
 

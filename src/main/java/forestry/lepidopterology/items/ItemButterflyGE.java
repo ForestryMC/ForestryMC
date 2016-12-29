@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.items;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
@@ -49,6 +51,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -72,6 +75,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
+	@Nullable
 	public IButterfly getIndividual(ItemStack itemstack) {
 		return ButterflyManager.butterflyRoot.getMember(itemstack);
 	}
@@ -129,6 +133,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getEntityItem());
+		if (butterfly == null) {
+			return false;
+		}
 
 		if (!butterfly.canTakeFlight(entityItem.world, entityItem.posX, entityItem.posY, entityItem.posZ)) {
 			return false;
@@ -176,8 +183,13 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	private static class CocoonMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
-			int age = itemstack.getTagCompound().getInteger(NBT_AGE);
-			IButterflyGenome genome = (IButterflyGenome) AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome();
+			NBTTagCompound tagCompound = itemstack.getTagCompound();
+			Preconditions.checkNotNull(tagCompound);
+			Preconditions.checkState(tagCompound.hasKey(NBT_AGE));
+			int age = tagCompound.getInteger(NBT_AGE);
+			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
+			Preconditions.checkNotNull(individual);
+			IButterflyGenome genome = (IButterflyGenome) individual.getGenome();
 			return genome.getCocoon().getCocoonItemModel(age);
 		}
 
@@ -197,7 +209,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		IBlockState blockState = worldIn.getBlockState(pos);
 		if (type == EnumFlutterType.COCOON) {
-			int age = stack.getTagCompound().getInteger(NBT_AGE);
+			NBTTagCompound tagCompound = stack.getTagCompound();
+			int age = tagCompound.getInteger(NBT_AGE);
 
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 			int yShift;

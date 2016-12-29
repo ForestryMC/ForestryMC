@@ -72,7 +72,12 @@ public class Forestry {
 	}
 
 	@Nullable
-	public static PacketHandler packetHandler;
+	private static PacketHandler packetHandler;
+
+	public static PacketHandler getPacketHandler() {
+		Preconditions.checkState(packetHandler != null);
+		return packetHandler;
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

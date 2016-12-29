@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nullable;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
@@ -24,7 +25,6 @@ import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -40,7 +40,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -61,10 +60,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
+	@Nullable
 	public ITree getIndividual(ItemStack itemstack) {
-		NBTTagCompound tagCompound = itemstack.getTagCompound();
-		Preconditions.checkArgument(tagCompound != null, "Itemstack must have a tag compound.");
-		return new Tree(tagCompound);
+		return TreeManager.treeRoot.getMember(itemstack);
 	}
 
 	@Override
@@ -140,10 +138,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			BlockPos pos = raytraceresult.getBlockPos();
 
 			ITree tree = TreeManager.treeRoot.getMember(itemStack);
-			if (type == EnumGermlingType.SAPLING) {
-				return onItemRightClickSapling(itemStack, worldIn, playerIn, pos, tree);
-			} else if (type == EnumGermlingType.POLLEN) {
-				return onItemRightClickPollen(itemStack, worldIn, playerIn, pos, tree);
+			if (tree != null) {
+				if (type == EnumGermlingType.SAPLING) {
+					return onItemRightClickSapling(itemStack, worldIn, playerIn, pos, tree);
+				} else if (type == EnumGermlingType.POLLEN) {
+					return onItemRightClickPollen(itemStack, worldIn, playerIn, pos, tree);
+				}
 			}
 		}
 		return new ActionResult<>(EnumActionResult.PASS, itemStack);
@@ -202,11 +202,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Override
 	public float getFermentationModifier(ItemStack itemstack) {
 		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
-		if (!TreeManager.treeRoot.isMember(itemstack)) {
+		ITree tree = TreeManager.treeRoot.getMember(itemstack);
+		if (tree == null) {
 			return 1.0f;
 		}
-
-		ITree tree = TreeManager.treeRoot.getMember(itemstack);
 		return tree.getGenome().getSappiness() * 10;
 	}
 }

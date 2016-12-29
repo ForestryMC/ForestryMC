@@ -50,7 +50,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public boolean canHarvestBlock(IBlockState block) {
-		if (this == PluginCore.items.bronzePickaxe) {
+		if (this == PluginCore.getItems().bronzePickaxe) {
 			Material material = block.getMaterial();
 			return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
 		}
@@ -64,7 +64,7 @@ public class ItemForestryTool extends ItemForestry {
 				return efficiencyOnProperMaterial;
 			}
 		}
-		if (this == PluginCore.items.bronzePickaxe) {
+		if (this == PluginCore.getItems().bronzePickaxe) {
 			Material material = state.getMaterial();
 			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getStrVsBlock(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
@@ -73,7 +73,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (this == PluginCore.items.bronzeShovel) {
+		if (this == PluginCore.getItems().bronzeShovel) {
 			ItemStack heldItem = player.getHeldItem(hand);
 			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 				return EnumActionResult.FAIL;

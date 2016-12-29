@@ -41,6 +41,7 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
+import forestry.core.items.ItemRegistryFluids;
 import forestry.core.loot.SetSpeciesNBT;
 import forestry.core.models.ModelCamouflageSprayCan;
 import forestry.core.models.ModelEntry;
@@ -83,7 +84,17 @@ public class PluginCore extends BlankForestryPlugin {
 	@Nullable
 	public static ItemRegistryCore items;
 	@Nullable
-	public static BlockRegistryCore blocks;
+	private static BlockRegistryCore blocks;
+
+	public static ItemRegistryCore getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryCore getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public boolean canBeDisabled() {
@@ -141,8 +152,7 @@ public class PluginCore extends BlankForestryPlugin {
 		super.doInit();
 
 		AlleleHelper alleleHelper = AlleleHelper.getInstance();
-		Preconditions.checkState(blocks != null);
-		Preconditions.checkState(alleleHelper != null);
+		BlockRegistryCore blocks = getBlocks();
 
 		blocks.analyzer.init();
 		blocks.escritoire.init();
@@ -164,10 +174,9 @@ public class PluginCore extends BlankForestryPlugin {
 	@Override
 	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		Preconditions.checkState(items != null);
-		Preconditions.checkState(blocks != null);
 
 		// forestry items
+		ItemRegistryCore items = getItems();
 		crateRegistry.registerCrate(items.peat);
 		crateRegistry.registerCrate(items.apatite);
 		crateRegistry.registerCrate(items.fertilizerCompound);
@@ -179,6 +188,7 @@ public class PluginCore extends BlankForestryPlugin {
 		crateRegistry.registerCrate(OreDictUtil.INGOT_BRONZE);
 
 		// forestry blocks
+		BlockRegistryCore blocks = getBlocks();
 		crateRegistry.registerCrate(blocks.humus);
 		crateRegistry.registerCrate(blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1));
 
@@ -236,8 +246,9 @@ public class PluginCore extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(blocks != null);
-		Preconditions.checkState(items != null);
+		BlockRegistryCore blocks = getBlocks();
+		ItemRegistryCore items = getItems();
+		ItemRegistryFluids fluidItems = PluginFluids.getItems();
 
 		/* SMELTING RECIPES */
 		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
@@ -257,7 +268,7 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / EMPTY CANS
 		int canAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.can");
-		ItemStack canOutput = PluginFluids.items.canEmpty.getItemStack(canAmount);
+		ItemStack canOutput = fluidItems.canEmpty.getItemStack(canAmount);
 		RecipeUtil.addRecipe(canOutput, " # ", "# #", '#', OreDictUtil.INGOT_TIN);
 
 		// / GEARS
@@ -385,9 +396,9 @@ public class PluginCore extends BlankForestryPlugin {
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 		if (bogEarthOutputCan > 0) {
 			ItemStack bogEarth = blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, FluidRegistry.WATER);
-			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, FluidRegistry.WATER);
-			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, FluidRegistry.WATER);
+			ItemStack canWater = fluidItems.getContainer(EnumContainerType.CAN, FluidRegistry.WATER);
+			ItemStack waxCapsuleWater = fluidItems.getContainer(EnumContainerType.CAPSULE, FluidRegistry.WATER);
+			ItemStack refractoryWater = fluidItems.getContainer(EnumContainerType.REFRACTORY, FluidRegistry.WATER);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', OreDictUtil.SAND);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', OreDictUtil.SAND);
 			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', OreDictUtil.SAND);
@@ -455,15 +466,13 @@ public class PluginCore extends BlankForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		Preconditions.checkState(items != null);
-		return new FuelHandler(items);
+		return new FuelHandler(getItems());
 	}
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		Preconditions.checkState(items != null);
 		// research note items are not useful without actually having completed research
-		hiddenItems.add(new ItemStack(items.researchNote));
+		hiddenItems.add(new ItemStack(getItems().researchNote));
 	}
 
 	private static class FuelHandler implements IFuelHandler {

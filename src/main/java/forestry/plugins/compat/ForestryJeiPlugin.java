@@ -2,7 +2,6 @@ package forestry.plugins.compat;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.items.ItemRegistryCore;
@@ -26,8 +25,7 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 			itemBlacklist.addItemToBlacklist(hiddenItem);
 		}
 
-		ItemRegistryCore items = PluginCore.items;
-		Preconditions.checkState(items != null);
+		ItemRegistryCore items = PluginCore.getItems();
 
 		JeiUtil.addDescription(registry,
 				items.solderingIron,
@@ -39,8 +37,7 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 				items.fertilizerCompound
 		);
 
-		BlockRegistryCore blocks = PluginCore.blocks;
-		Preconditions.checkState(blocks != null);
+		BlockRegistryCore blocks = PluginCore.getBlocks();
 
 		JeiUtil.addDescription(registry,
 				blocks.analyzer,
