@@ -214,8 +214,10 @@ public abstract class BlockPile extends BlockStructure implements ITileEntityPro
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
-		state = this.getActualState(state, worldIn, pos);
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+		if (!p_185477_7_) {
+			state = this.getActualState(state, worldIn, pos);
+		}
 
 		for (AxisAlignedBB axisalignedbb : getCollisionBoxList(state)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, axisalignedbb);
