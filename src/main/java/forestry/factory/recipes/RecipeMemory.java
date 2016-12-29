@@ -53,8 +53,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		NBTTagList nbttaglist = nbt.getTagList("RecipeMemory", 10);
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
-			MemorizedRecipe recipe = new MemorizedRecipe();
-			recipe.readFromNBT(recipeNbt);
+			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
 			memorizedRecipes.add(recipe);
 		}
 	}
@@ -202,6 +201,6 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 
 	@Override
 	public void readData(PacketBufferForestry data) throws IOException {
-		data.readStreamables(memorizedRecipes, MemorizedRecipe.class);
+		data.readStreamables(memorizedRecipes, MemorizedRecipe::new);
 	}
 }

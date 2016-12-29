@@ -47,9 +47,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private State state = State.UNREVEALED;
 
-	@SuppressWarnings("unused")
-	public EscritoireGameToken() {
-		// required for IStreamable serialization
+	public EscritoireGameToken(PacketBufferForestry data) throws IOException {
+		readData(data);
 	}
 
 	public EscritoireGameToken(String speciesUid) {

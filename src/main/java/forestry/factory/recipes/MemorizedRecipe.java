@@ -32,8 +32,12 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	private long lastUsed;
 	private boolean locked;
 
-	public MemorizedRecipe() {
-		// required for IStreamable serialization
+	public MemorizedRecipe(PacketBufferForestry data) throws IOException {
+		readData(data);
+	}
+
+	public MemorizedRecipe(NBTTagCompound nbt) {
+		readFromNBT(nbt);
 	}
 
 	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, NonNullList<ItemStack> recipeOutputs) {
