@@ -43,10 +43,8 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 	// override for pipe automation
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
-			return false;
-		}
-		return super.isItemValidForSlot(slotIndex, itemStack);
+		return !SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT) &&
+				super.isItemValidForSlot(slotIndex, itemStack);
 	}
 
 	public Collection<IHiveFrame> getFrames() {
@@ -76,9 +74,11 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 
 				ItemStack queenStack = getQueen();
 				IBee queen = BeeManager.beeRoot.getMember(queenStack);
-				ItemStack usedFrame = hiveFrame.frameUsed(beeHousing, hiveFrameStack, queen, wear);
+				if (queen != null) {
+					ItemStack usedFrame = hiveFrame.frameUsed(beeHousing, hiveFrameStack, queen, wear);
 
-				setInventorySlotContents(i, usedFrame);
+					setInventorySlotContents(i, usedFrame);
+				}
 			}
 		}
 	}

@@ -101,7 +101,7 @@ public class ItemResearchNote extends ItemForestry {
 				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.2", mutationChance));
 				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.3", speciesResult));
 
-				if (encoded.getSpecialConditions() != null && !encoded.getSpecialConditions().isEmpty()) {
+				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (String line : encoded.getSpecialConditions()) {
 						tooltips.add(TextFormatting.GOLD + line);
 					}

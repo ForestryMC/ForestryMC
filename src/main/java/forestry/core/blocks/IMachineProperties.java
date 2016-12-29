@@ -48,5 +48,6 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 
 	AxisAlignedBB getBoundingBox(BlockPos pos, IBlockState state);
 
+	@Nullable
 	RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec);
 }

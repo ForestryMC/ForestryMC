@@ -12,17 +12,17 @@ package forestry.plugins.compat;
 
 import javax.annotation.Nullable;
 
-import static forestry.core.PluginCore.items;
-
 import com.google.common.collect.ImmutableList;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.PluginCore;
 import forestry.core.PluginFluids;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableAgingCrop;
@@ -270,13 +270,14 @@ public class PluginHarvestCraft extends BlankForestryPlugin {
 			plants.add(vegetableName);
 		}
 
+		ItemRegistryCore coreItems = PluginCore.getItems();
 		for (String grainName : grains) {
 			ItemStack grain = getItemStack(grainName + "Item");
 			ItemStack grainSeed = getItemStack(grainName + "seedItem");
 			Block grainBlock = getBlock("pam" + grainName + "Crop");
 			if (grain != null && wheatamount > 0) {
-				RecipeUtil.addRecipe(items.fertilizerBio.getItemStack(wheatamount), " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', grain);
-				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, items.mouldyWheat.getItemStack(), 0, 300));
+				RecipeUtil.addRecipe(coreItems.fertilizerBio.getItemStack(wheatamount), " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', grain);
+				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, coreItems.mouldyWheat.getItemStack(), 0, 300));
 			}
 			if (grainSeed != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, grainSeed, Fluids.SEED_OIL.getFluid(seedamount));
@@ -383,7 +384,7 @@ public class PluginHarvestCraft extends BlankForestryPlugin {
 
 		ItemStack hcBeeswaxItem = getItemStack("beeswaxItem");
 		if (hcBeeswaxItem != null) {
-			RecipeUtil.addRecipe(PluginFluids.items.waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
+			RecipeUtil.addRecipe(PluginFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
 		}
 	}
 

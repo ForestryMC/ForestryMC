@@ -34,32 +34,9 @@ public class PacketBufferForestry extends PacketBuffer {
 
 	public NonNullList<ItemStack> readItemStacks() throws IOException {
 		int stackCount = readVarInt();
-		NonNullList<ItemStack> itemStacks = NonNullList.withSize(stackCount, ItemStack.EMPTY);
+		NonNullList<ItemStack> itemStacks = NonNullList.create();
 		for (int i = 0; i < stackCount; i++) {
-			itemStacks.set(i, readItemStack());
-		}
-		return itemStacks;
-	}
-
-	public void readItemStacks(NonNullList<ItemStack> itemStacks) throws IOException {
-		int stackCount = readVarInt();
-		for (int i = 0; i < stackCount; i++) {
-			itemStacks.set(i, readItemStack());
-		}
-	}
-
-	public void writeItemStacksArray(ItemStack[] itemStacks) {
-		writeVarInt(itemStacks.length);
-		for (ItemStack stack : itemStacks) {
-			writeItemStack(stack);
-		}
-	}
-
-	public ItemStack[] readItemStacksArray() throws IOException {
-		int stackCount = readVarInt();
-		ItemStack[] itemStacks = new ItemStack[stackCount];
-		for (int i = 0; i < stackCount; i++) {
-			itemStacks[i] = readItemStack();
+			itemStacks.add(readItemStack());
 		}
 		return itemStacks;
 	}

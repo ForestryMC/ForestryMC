@@ -131,8 +131,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		if (stack.isEmpty()) {
 			return null;
 		}
-		ItemRegistryArboriculture items = PluginArboriculture.items;
-		Preconditions.checkState(items != null);
+		ItemRegistryArboriculture items = PluginArboriculture.getItems();
 
 		Item item = stack.getItem();
 		if (items.sapling == item) {
@@ -184,8 +183,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public ItemStack getMemberStack(IIndividual tree, ISpeciesType type) {
 		Preconditions.checkArgument(tree instanceof ITree, "individual is not a tree");
 		Preconditions.checkArgument(type instanceof EnumGermlingType, "type is not an EnumGermlingType");
-		ItemRegistryArboriculture items = PluginArboriculture.items;
-		Preconditions.checkState(items != null);
+		ItemRegistryArboriculture items = PluginArboriculture.getItems();
 
 		Item germlingItem;
 		switch ((EnumGermlingType) type) {
@@ -211,8 +209,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
-		BlockRegistryArboriculture blocks = PluginArboriculture.blocks;
-		Preconditions.checkState(blocks != null);
+		BlockRegistryArboriculture blocks = PluginArboriculture.getBlocks();
 
 		IBlockState state = blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, tree.getGenome().getPrimary());
 		boolean placed = world.setBlockState(pos, state);
@@ -243,8 +240,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos) {
-		BlockRegistryArboriculture blocks = PluginArboriculture.blocks;
-		Preconditions.checkState(blocks != null);
+		BlockRegistryArboriculture blocks = PluginArboriculture.getBlocks();
 
 		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
 		if (facing != null) {
@@ -330,9 +326,6 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		// No Treekeeping mode yet, item it.
 		IArboristTracker tracker = getBreedingTracker(world, null);
 		String mode = tracker.getModeName();
-		if (mode == null || mode.isEmpty()) {
-			mode = PluginArboriculture.treekeepingMode;
-		}
 
 		setTreekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);

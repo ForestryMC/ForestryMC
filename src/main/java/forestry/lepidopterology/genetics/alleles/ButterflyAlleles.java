@@ -40,8 +40,8 @@ public class ButterflyAlleles {
 		cocoonDefault.getCocoonLoot().put(new ItemStack(Items.STRING), 0.75F);
 		cocoonDefault.getCocoonLoot().put(new ItemStack(Items.STRING, 3), 0.25F);
 
-		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.items.craftingMaterial, 3, 2), 0.75F);
-		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.items.craftingMaterial, 2, 2), 0.25F);
+		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.getItems().craftingMaterial, 3, 2), 0.75F);
+		cocoonSilk.getCocoonLoot().put(new ItemStack(PluginCore.getItems().craftingMaterial, 2, 2), 0.25F);
 	}
 
 

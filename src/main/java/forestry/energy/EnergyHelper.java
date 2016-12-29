@@ -41,7 +41,7 @@ public class EnergyHelper {
 	 *
 	 * @return amount sent
 	 */
-	public static int sendEnergy(EnergyManager energyManager, EnumFacing orientation, TileEntity tile) {
+	public static int sendEnergy(EnergyManager energyManager, EnumFacing orientation, @Nullable TileEntity tile) {
 		return sendEnergy(energyManager, orientation, tile, Integer.MAX_VALUE, false);
 	}
 
@@ -51,7 +51,7 @@ public class EnergyHelper {
 	 *
 	 * @return amount sent
 	 */
-	public static int sendEnergy(EnergyManager energyManager, EnumFacing orientation, TileEntity tile, int amount, boolean simulate) {
+	public static int sendEnergy(EnergyManager energyManager, EnumFacing orientation, @Nullable TileEntity tile, int amount, boolean simulate) {
 		int extractable = energyManager.extractEnergy(amount, true);
 		if (extractable > 0) {
 			EnumFacing side = orientation.getOpposite();
@@ -62,7 +62,11 @@ public class EnergyHelper {
 		return 0;
 	}
 
-	private static int sendEnergyToTile(TileEntity tile, EnumFacing side, int extractable, boolean simulate) {
+	private static int sendEnergyToTile(@Nullable TileEntity tile, EnumFacing side, int extractable, boolean simulate) {
+		if (tile == null) {
+			return 0;
+		}
+
 		if (tile instanceof TileEngine) { // engine chaining
 			TileEngine receptor = (TileEngine) tile;
 			return receptor.getEnergyManager().receiveEnergy(extractable, simulate);

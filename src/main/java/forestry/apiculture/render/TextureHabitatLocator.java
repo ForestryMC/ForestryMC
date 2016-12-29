@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -27,6 +29,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		return instance;
 	}
 
+	@Nullable
 	private BlockPos targetBiome;
 	private boolean targetBiomeFound;
 
@@ -38,7 +41,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		instance = this;
 	}
 
-	public void setTargetCoordinates(BlockPos coordinates) {
+	public void setTargetCoordinates(@Nullable BlockPos coordinates) {
 		this.targetBiome = coordinates;
 		this.targetBiomeFound = false;
 	}
@@ -54,7 +57,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		}
 	}
 
-	private void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
+	private void updateCompass(@Nullable World world, double playerX, double playerZ, double playerYaw) {
 
 		double targetAngle;
 

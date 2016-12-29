@@ -12,7 +12,7 @@ import mezz.jei.api.JEIPlugin;
 public class ArboricultureJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryArboriculture items = PluginArboriculture.items;
+		ItemRegistryArboriculture items = PluginArboriculture.getItems();
 		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry,

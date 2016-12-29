@@ -12,7 +12,6 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.List;
 
 import com.google.common.base.Preconditions;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -113,10 +112,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	/* ICrafterWorktable */
 	@Override
 	public boolean canTakeStack(int craftingSlotIndex) {
-		if (craftingSlotIndex == InventoryGhostCrafting.SLOT_CRAFTING_RESULT) {
-			return canCraftCurrentRecipe();
-		}
-		return true;
+		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
+				canCraftCurrentRecipe();
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -225,7 +222,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	public void setCurrentRecipe(InventoryCraftingForestry crafting) {
-		List<ItemStack> recipeOutputs = RecipeUtil.findMatchingRecipes(crafting, world);
+		NonNullList<ItemStack> recipeOutputs = RecipeUtil.findMatchingRecipes(crafting, world);
 		MemorizedRecipe recipe = recipeOutputs.isEmpty() ? null : new MemorizedRecipe(crafting, recipeOutputs);
 
 		if (currentRecipe != null && recipe != null) {

@@ -15,6 +15,7 @@ import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
@@ -37,6 +38,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.IBlockAccess;
@@ -138,7 +140,9 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		String itemName = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
+		ResourceLocation resourceLocation = ItemStackUtil.getItemNameFromRegistry(item);
+		Preconditions.checkNotNull(resourceLocation);
+		String itemName = resourceLocation.getResourcePath();
 		return getModelLocation(itemName);
 	}
 

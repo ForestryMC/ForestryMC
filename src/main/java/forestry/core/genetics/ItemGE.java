@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.api.genetics.IAlleleSpecies;
@@ -28,6 +29,7 @@ public abstract class ItemGE extends ItemForestry {
 		setHasSubtypes(true);
 	}
 
+	@Nullable
 	public abstract IIndividual getIndividual(ItemStack itemstack);
 
 	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
@@ -61,7 +63,7 @@ public abstract class ItemGE extends ItemForestry {
 
 		IIndividual individual = getIndividual(itemstack);
 
-		if (individual.isAnalyzed()) {
+		if (individual != null && individual.isAnalyzed()) {
 			if (Proxies.common.isShiftDown()) {
 				individual.addTooltip(list);
 			} else {

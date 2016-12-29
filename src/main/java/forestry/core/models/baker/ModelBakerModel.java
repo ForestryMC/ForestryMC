@@ -190,7 +190,7 @@ public class ModelBakerModel implements IModelBakerModel {
 		List<BakedQuad> quads = new ArrayList<>();
 		for (Pair<IBlockState, IBakedModel> model : this.models) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
-			if (modelQuads != null && !modelQuads.isEmpty()) {
+			if (!modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);
 			}
 		}

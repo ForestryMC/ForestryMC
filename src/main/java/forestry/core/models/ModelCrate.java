@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.ItemStackUtil;
@@ -123,12 +124,14 @@ public class ModelCrate extends BlankModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
-			String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
+			ResourceLocation itemName = ItemStackUtil.getItemNameFromRegistry(crated);
+			Preconditions.checkNotNull(itemName);
+			String crateUID = itemName.getResourcePath();
 			IBakedModel model = cache.get(crateUID);
 			if (model == null) {
 				//Fastest list with a unknown quad size
 				List<BakedQuad> list = new LinkedList<>();
-				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
+				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.getItems().crate, 1, 1));
 				for (BakedQuad quad : ForgeHooksClient.handleCameraTransforms(baseBaked, TransformType.GROUND, false).getQuads(null, null, 0L)) {
 					list.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
 				}

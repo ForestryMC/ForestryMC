@@ -82,11 +82,7 @@ public final class TreeGenHelper {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = TreeManager.treeRoot.getTemplate(species.getUID());
-
-		if (template == null) {
-			throw new TemplateNotFoundException(species);
-		}
+		IAllele[] template = TreeManager.treeRoot.getTemplate(species);
 
 		return TreeManager.treeRoot.templateAsGenome(template);
 	}

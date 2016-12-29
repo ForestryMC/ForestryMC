@@ -77,24 +77,28 @@ public class WoodAccess implements IWoodAccess {
 
 	public static void registerLogs(List<? extends BlockForestryLog> blocks) {
 		for (BlockForestryLog block : blocks) {
+			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.LOG, block.getVariant());
 		}
 	}
 
 	public static void registerPlanks(List<? extends BlockForestryPlanks> blocks) {
 		for (BlockForestryPlanks block : blocks) {
+			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.PLANKS, block.getVariant());
 		}
 	}
 
 	public static void registerSlabs(List<? extends BlockForestrySlab> blocks) {
 		for (BlockForestrySlab block : blocks) {
+			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.SLAB, block.getVariant());
 		}
 	}
 
 	public static void registerFences(List<? extends BlockForestryFence> blocks) {
 		for (BlockForestryFence block : blocks) {
+			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.FENCE, block.getVariant());
 		}
 	}

@@ -53,7 +53,7 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		public ItemStack getStack(int qty) {
-			return new ItemStack(PluginCore.items.fruits, qty, ordinal());
+			return new ItemStack(PluginCore.getItems().fruits, qty, ordinal());
 		}
 
 		public String getOreDict() {

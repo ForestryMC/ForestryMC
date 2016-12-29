@@ -98,7 +98,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return null;
 		}
 
-		ItemRegistryLepidopterology butterflyItems = PluginLepidopterology.items;
+		ItemRegistryLepidopterology butterflyItems = PluginLepidopterology.getItems();
 		Preconditions.checkState(butterflyItems != null);
 
 		Item item = stack.getItem();
@@ -147,7 +147,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
 		Preconditions.checkArgument(type instanceof EnumFlutterType);
-		ItemRegistryLepidopterology items = PluginLepidopterology.items;
+		ItemRegistryLepidopterology items = PluginLepidopterology.getItems();
 		Preconditions.checkState(items != null);
 
 		Item butterflyItem;
@@ -186,8 +186,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return false;
 		}
 
-		BlockRegistryLepidopterology blocks = PluginLepidopterology.blocks;
-		Preconditions.checkState(blocks != null);
+		BlockRegistryLepidopterology blocks = PluginLepidopterology.getBlocks();
 
 		BlockPos pos = getNextPos(world, nursery.getCoordinates());
 		IBlockState state = blocks.cocoon.getDefaultState();

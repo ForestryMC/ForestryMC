@@ -136,7 +136,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 			if (collected > 0) {
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				return PluginMail.items.stamps.get(stampDefinition, collected);
+				return PluginMail.getItems().stamps.get(stampDefinition, collected);
 			}
 		}
 

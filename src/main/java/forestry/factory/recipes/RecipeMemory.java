@@ -150,11 +150,10 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		return memorizedRecipes.get(recipeIndex);
 	}
 
-	@Nullable
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return recipe.getRecipeOutput();
 	}

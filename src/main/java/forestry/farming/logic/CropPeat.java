@@ -44,7 +44,7 @@ public class CropPeat extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		drops.add(PluginCore.items.peat.getItemStack());
+		drops.add(PluginCore.getItems().peat.getItemStack());
 
 		IBlockState blockState = world.getBlockState(pos);
 

@@ -118,6 +118,14 @@ public interface ISpeciesRoot {
 	IAllele[] getTemplate(String identifier);
 
 	/**
+	 * Retrieves a registered template using the passed species.
+	 *
+	 * @param species species
+	 * @return Array of {@link IAllele} representing a genome.
+	 */
+	IAllele[] getTemplate(IAlleleSpecies species);
+
+	/**
 	 * @return Default individual template for use when stuff breaks.
 	 */
 	IAllele[] getDefaultTemplate();

@@ -994,13 +994,13 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos) {
-		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getDefaultState());
+		boolean placed = world.setBlockState(pos, PluginArboriculture.getBlocks().leaves.getDefaultState());
 		if (!placed) {
 			return false;
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		if (PluginArboriculture.blocks.leaves != block) {
+		if (PluginArboriculture.getBlocks().leaves != block) {
 			world.setBlockToAir(pos);
 			return false;
 		}

@@ -204,7 +204,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		}
 
 		String speciesUid = tree.getGenome().getPrimary().getUID();
-		return PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
+		return PluginArboriculture.getBlocks().getDecorativeLeaves(speciesUid);
 	}
 
 	@Override
@@ -219,7 +219,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 			}
 		}
 
-		ItemStack decorativeLeaves = PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
+		ItemStack decorativeLeaves = PluginArboriculture.getBlocks().getDecorativeLeaves(speciesUid);
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {

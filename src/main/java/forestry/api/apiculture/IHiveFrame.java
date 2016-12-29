@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 
 public interface IHiveFrame {
@@ -18,9 +16,8 @@ public interface IHiveFrame {
 	 * @param frame   ItemStack containing the actual frame.
 	 * @param queen   Current queen in the caller.
 	 * @param wear    Integer denoting the amount worn out. The wear modifier of the current beekeeping mode has already been taken into account.
-	 * @return ItemStack containing the actual frame with adjusted damage, or null if it has been broken.
+	 * @return ItemStack containing the actual frame with adjusted damage, or Empty ItemStack if it has been broken.
 	 */
-	@Nullable
 	ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear);
 
 	IBeeModifier getBeeModifier();

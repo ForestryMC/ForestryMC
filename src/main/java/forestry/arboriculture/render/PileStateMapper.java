@@ -29,13 +29,13 @@ public class PileStateMapper extends ForestryStateMapper {
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		String location = Constants.MOD_ID + ":pile";
 
-		IBlockState woodPileState = PluginArboriculture.blocks.piles.get(EnumPileType.WOOD).getDefaultState();
+		IBlockState woodPileState = PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD).getDefaultState();
 		mapStateModelLocations.put(woodPileState, new ModelResourceLocation(location, "type=wood"));
 
-		IBlockState dirtPileState = PluginArboriculture.blocks.piles.get(EnumPileType.DIRT).getDefaultState();
+		IBlockState dirtPileState = PluginArboriculture.getBlocks().piles.get(EnumPileType.DIRT).getDefaultState();
 		mapStateModelLocations.put(dirtPileState, new ModelResourceLocation(location, "type=dirt"));
 
-		IBlockState ashPileState = PluginArboriculture.blocks.piles.get(EnumPileType.ASH).getDefaultState();
+		IBlockState ashPileState = PluginArboriculture.getBlocks().piles.get(EnumPileType.ASH).getDefaultState();
 		mapStateModelLocations.put(ashPileState, new ModelResourceLocation(location, "type=ash"));
 
 		return this.mapStateModelLocations;

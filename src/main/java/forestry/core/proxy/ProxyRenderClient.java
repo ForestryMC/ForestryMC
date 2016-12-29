@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
@@ -124,7 +125,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void setHabitatLocatorTexture(Entity player, BlockPos pos) {
+	public void setHabitatLocatorTexture(@Nullable Entity player, @Nullable BlockPos pos) {
 		TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
 	}
 

@@ -107,13 +107,13 @@ public abstract class RecipeUtil {
 		return crafting;
 	}
 
-	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
+	public static NonNullList<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		NonNullList<ItemStack> matchingRecipes = NonNullList.create();
 		ItemStack repairRecipe = findRepairRecipe(inventory);
 		if (!repairRecipe.isEmpty()) {
-			return Collections.singletonList(repairRecipe);
+			matchingRecipes.add(repairRecipe);
+			return matchingRecipes;
 		}
-
-		List<ItemStack> matchingRecipes = new ArrayList<>();
 
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;

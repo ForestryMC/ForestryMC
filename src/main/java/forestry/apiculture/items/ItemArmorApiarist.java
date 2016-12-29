@@ -41,7 +41,7 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if (stack != null && stack.getItem() == PluginApiculture.items.apiaristLegs) {
+		if (stack != null && stack.getItem() == PluginApiculture.getItems().apiaristLegs) {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;

@@ -54,15 +54,15 @@ public class PluginNatura extends BlankForestryPlugin {
 	@Nullable
 	private static Block saplingNaturaRare;
 
-	private static ItemStack berryBlight;
-	private static ItemStack berryDusk;
-	private static ItemStack berrySky;
-	private static ItemStack berrySting;
-	private static ItemStack berryRasp;
-	private static ItemStack berryBlue;
-	private static ItemStack berryBlack;
-	private static ItemStack berryMalo;
-	private static ItemStack itemBarley;
+	private static ItemStack berryBlight = ItemStack.EMPTY;
+	private static ItemStack berryDusk = ItemStack.EMPTY;
+	private static ItemStack berrySky = ItemStack.EMPTY;
+	private static ItemStack berrySting = ItemStack.EMPTY;
+	private static ItemStack berryRasp = ItemStack.EMPTY;
+	private static ItemStack berryBlue = ItemStack.EMPTY;
+	private static ItemStack berryBlack = ItemStack.EMPTY;
+	private static ItemStack berryMalo = ItemStack.EMPTY;
+	private static ItemStack itemBarley = ItemStack.EMPTY;
 
 	@Override
 	public boolean isAvailable() {
@@ -263,7 +263,7 @@ public class PluginNatura extends BlankForestryPlugin {
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 		ItemStack netherFood = getItemStack("Natura.netherfood", 0);
-		ItemStack mulch = PluginCore.items.mulch.getItemStack();
+		ItemStack mulch = PluginCore.getItems().mulch.getItemStack();
 		RecipeManagers.squeezerManager.addRecipe(10, netherFood, Fluids.JUICE.getFluid(amount), mulch, ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
@@ -277,10 +277,10 @@ public class PluginNatura extends BlankForestryPlugin {
 			RecipeUtil.addFermenterRecipes(itemBarley, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 			if (compostWheatAmount > 0) {
-				ItemStack compostWheat = PluginCore.items.fertilizerBio.getItemStack(compostWheatAmount);
+				ItemStack compostWheat = PluginCore.getItems().fertilizerBio.getItemStack(compostWheatAmount);
 				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', itemBarley);
 			}
-			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
+			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, PluginCore.getItems().mouldyWheat.getItemStack(), 0, 300));
 		}
 	}
 

@@ -14,6 +14,7 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable> {
 	@Override
@@ -28,13 +29,13 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 		InventoryCraftingForestry inventory = new InventoryCraftingForestry(container);
 
-		List<ItemStack> recipeOutputs = Collections.emptyList();
+		NonNullList<ItemStack> recipeOutputs = NonNullList.create();
 		for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : guiIngredients.entrySet()) {
 			int recipeSlot = entry.getKey();
 			List<ItemStack> allIngredients = entry.getValue().getAllIngredients();
 			if (!allIngredients.isEmpty()) {
 				if (recipeSlot == 0) {
-					recipeOutputs = allIngredients;
+					recipeOutputs.addAll(allIngredients);
 				} else {
 					ItemStack firstIngredient = allIngredients.get(0);
 					inventory.setInventorySlotContents(recipeSlot - 1, firstIngredient);

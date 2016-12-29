@@ -65,11 +65,11 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:leaves");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:leaves", "inventory");
-			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelLeaves(), PluginArboriculture.blocks.leaves);
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelLeaves(), PluginArboriculture.getBlocks().leaves);
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
 
-		for (BlockDecorativeLeaves leaves : PluginArboriculture.blocks.leavesDecorative) {
+		for (BlockDecorativeLeaves leaves : PluginArboriculture.getBlocks().leavesDecorative) {
 			String resourceName = "forestry:leaves.decorative." + leaves.getBlockNumber();
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
 			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
@@ -80,16 +80,16 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:pile", "type=wood");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:woodPile", "inventory");
-			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.blocks.piles.get(EnumPileType.WOOD));
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD));
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePile.class, new CharcoalPileRenderer());
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
-		for (BlockArbSlab slab : PluginArboriculture.blocks.slabsDouble) {
+		for (BlockArbSlab slab : PluginArboriculture.getBlocks().slabsDouble) {
 			registerWoodModel(slab, true);
 		}
-		for (BlockArbSlab slab : PluginArboriculture.blocks.slabsDoubleFireproof) {
+		for (BlockArbSlab slab : PluginArboriculture.getBlocks().slabsDoubleFireproof) {
 			registerWoodModel(slab, true);
 		}
 	}

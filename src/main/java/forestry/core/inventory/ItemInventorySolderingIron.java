@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableSet;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -49,13 +47,12 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		return 1;
 	}
 
-	@Nullable
 	public ICircuitLayout getLayout() {
 		return layouts.getCurrent();
 	}
 
-	public void setLayout(String uid) {
-		layouts.setCurrent(ChipsetManager.circuitRegistry.getLayout(uid));
+	public void setLayout(ICircuitLayout layout) {
+		layouts.setCurrent(layout);
 	}
 
 	public void advanceLayout() {

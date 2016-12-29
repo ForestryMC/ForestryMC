@@ -43,7 +43,7 @@ public abstract class HiveDecorator {
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
-		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
+		List<Hive> hives = PluginApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
 			decorateHivesDebug(world, rand, chunkX, chunkZ, hives);

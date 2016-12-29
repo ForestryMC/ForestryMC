@@ -164,7 +164,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		if (hiveName == null || hiveName.equals(HiveType.SWARM.getHiveUid())) {
 			return Collections.emptyList();
 		}
-		return PluginApiculture.hiveRegistry.getDrops(hiveName);
+		return PluginApiculture.getHiveRegistry().getDrops(hiveName);
 	}
 
 	@Nullable

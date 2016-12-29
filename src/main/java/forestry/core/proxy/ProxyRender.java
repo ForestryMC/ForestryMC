@@ -91,7 +91,7 @@ public class ProxyRender {
 	public void registerFluidStateMapper(Block block, Fluids fluid) {
 	}
 
-	public void setHabitatLocatorTexture(Entity player, BlockPos pos) {
+	public void setHabitatLocatorTexture(@Nullable Entity player, @Nullable BlockPos pos) {
 	}
 
 	public IResourceManager getSelectedTexturePack() {

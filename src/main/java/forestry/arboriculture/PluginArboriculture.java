@@ -124,11 +124,21 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	public static final List<Block> validFences = new ArrayList<>();
 
 	@Nullable
-	public static ItemRegistryArboriculture items;
+	private static ItemRegistryArboriculture items;
 	@Nullable
-	public static BlockRegistryArboriculture blocks;
+	private static BlockRegistryArboriculture blocks;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerArborist;
+
+	public static ItemRegistryArboriculture getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryArboriculture getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -169,9 +179,10 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-		Preconditions.checkState(blocks != null, "Blocks have not been created");
 
 		MinecraftForge.EVENT_BUS.register(this);
+
+		BlockRegistryArboriculture blocks = getBlocks();
 
 		WoodAccess.registerLogs(blocks.logs);
 		WoodAccess.registerPlanks(blocks.planks);
@@ -224,8 +235,9 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		GameRegistry.registerTileEntity(TilePile.class, "forestry.Piles");
 
-		Preconditions.checkState(blocks != null, "Blocks have not been created");
-		Preconditions.checkState(items != null, "Items have not been created");
+		ItemRegistryArboriculture items = getItems();
+		BlockRegistryArboriculture blocks = getBlocks();
+
 		blocks.treeChest.init();
 
 		if (Config.enableVillagers) {
@@ -267,10 +279,9 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null, "Core Items have not been created");
-		Preconditions.checkState(blocks != null, "Blocks have not been created");
-		Preconditions.checkState(items != null, "Items have not been created");
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		BlockRegistryArboriculture blocks = getBlocks();
+		ItemRegistryArboriculture items = getItems();
 
 		for (BlockArbLog log : blocks.logs) {
 			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
@@ -519,8 +530,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		Preconditions.checkState(items != null, "Items have not been created");
-		return new FuelHandler(items.sapling);
+		return new FuelHandler(getItems().sapling);
 	}
 
 	@Override
@@ -545,9 +555,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		Preconditions.checkState(blocks != null, "Blocks have not been created");
 		// sapling itemBlock is different from the normal item
-		hiddenItems.add(new ItemStack(blocks.saplingGE));
+		hiddenItems.add(new ItemStack(getBlocks().saplingGE));
 	}
 
 	private static class FuelHandler implements IFuelHandler {

@@ -104,13 +104,15 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 	protected final void addHintLedger(String hintsKey) {
 		if (Config.enableHints) {
 			List<String> hints = Config.hints.get(hintsKey);
-			ledgerManager.add(new HintLedger(ledgerManager, hints));
+			addHintLedger(hints);
 		}
 	}
 
 	protected final void addHintLedger(List<String> hints) {
 		if (Config.enableHints) {
-			ledgerManager.add(new HintLedger(ledgerManager, hints));
+			if (!hints.isEmpty()) {
+				ledgerManager.add(new HintLedger(ledgerManager, hints));
+			}
 		}
 	}
 

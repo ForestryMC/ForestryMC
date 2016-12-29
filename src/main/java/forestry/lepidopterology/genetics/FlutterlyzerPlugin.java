@@ -45,7 +45,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 	private FlutterlyzerPlugin() {
 		NonNullList<ItemStack> butterflyList = NonNullList.create();
-		PluginLepidopterology.items.butterflyGE.addCreativeItems(butterflyList, false);
+		PluginLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
 			iconStacks.put(species.getUID(), butterflyStack);
@@ -58,6 +58,9 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+			if (butterfly == null) {
+				return;
+			}
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
@@ -118,6 +121,9 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+			if (butterfly == null) {
+				return;
+			}
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
@@ -204,6 +210,9 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
+			if (butterfly == null) {
+				return;
+			}
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 

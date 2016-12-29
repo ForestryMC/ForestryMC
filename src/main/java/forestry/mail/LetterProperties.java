@@ -38,7 +38,7 @@ public class LetterProperties {
 	public static ItemStack createStampedLetterStack(ILetter letter) {
 		Size size = getSize(letter);
 		int meta = encodeMeta(State.STAMPED, size);
-		return new ItemStack(PluginMail.items.letters, 1, meta);
+		return new ItemStack(PluginMail.getItems().letters, 1, meta);
 	}
 
 	public static void closeLetter(ItemStack parent, ILetter letter) {

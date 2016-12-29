@@ -24,10 +24,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-	private static final ItemStack bogEarth = PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
+	private static final ItemStack bogEarth = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
 
 	public FarmLogicPeat() {
-		super(bogEarth, PluginCore.blocks.bogEarth.getDefaultState());
+		super(bogEarth, PluginCore.getBlocks().bogEarth.getDefaultState());
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		return blockState.getBlock() == PluginCore.blocks.bogEarth;
+		return blockState.getBlock() == PluginCore.getBlocks().bogEarth;
 	}
 
 	@Override
@@ -85,6 +85,6 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PluginCore.items.peat);
+		return new ItemStack(PluginCore.getItems().peat);
 	}
 }

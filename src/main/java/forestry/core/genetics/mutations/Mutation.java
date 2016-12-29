@@ -165,8 +165,10 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	public IAllele getPartner(IAllele allele) {
 		if (species0.getUID().equals(allele.getUID())) {
 			return species1;
-		} else {
+		} else if (species1.getUID().equals(allele.getUID())) {
 			return species0;
+		} else {
+			throw new IllegalArgumentException("Tried to get partner for allele that is not part of this mutation.");
 		}
 	}
 

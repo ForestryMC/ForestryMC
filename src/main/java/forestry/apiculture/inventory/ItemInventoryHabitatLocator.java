@@ -47,7 +47,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		Item item = itemstack.getItem();
-		return PluginApiculture.items.honeyDrop == item || PluginApiculture.items.honeydew == item;
+		return PluginApiculture.getItems().honeyDrop == item || PluginApiculture.getItems().honeydew == item;
 	}
 
 	@Override

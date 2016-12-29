@@ -11,7 +11,7 @@ import mezz.jei.api.JEIPlugin;
 public class StorageJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryStorage items = PluginStorage.items;
+		ItemRegistryStorage items = PluginStorage.getItems();
 
 		JeiUtil.addDescription(registry, "minerBag",
 				items.minerBackpack,

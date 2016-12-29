@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import java.io.IOException;
-import java.util.List;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -28,7 +27,7 @@ import net.minecraft.world.World;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
-	private final NonNullList<ItemStack> recipeOutputs = NonNullList.create();
+	private NonNullList<ItemStack> recipeOutputs = NonNullList.create();
 	private int selectedRecipe;
 	private long lastUsed;
 	private boolean locked;
@@ -37,9 +36,9 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		// required for IStreamable serialization
 	}
 
-	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, List<ItemStack> recipeOutputs) {
+	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, NonNullList<ItemStack> recipeOutputs) {
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
-		this.recipeOutputs.addAll(recipeOutputs);
+		this.recipeOutputs = recipeOutputs;
 	}
 
 	public InventoryCraftingForestry getCraftMatrix() {
@@ -47,9 +46,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	public void calculateRecipeOutput(World world) {
-		recipeOutputs.clear();
-		List<ItemStack> matching = RecipeUtil.findMatchingRecipes(craftMatrix, world);
-		recipeOutputs.addAll(matching);
+		recipeOutputs = RecipeUtil.findMatchingRecipes(craftMatrix, world);
 		if (selectedRecipe >= recipeOutputs.size()) {
 			selectedRecipe = 0;
 		}
@@ -145,7 +142,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public void readData(PacketBufferForestry data) throws IOException {
 		data.readInventory(craftMatrix);
 		locked = data.readBoolean();
-		data.readItemStacks(recipeOutputs);
+		recipeOutputs = data.readItemStacks();
 		selectedRecipe = data.readVarInt();
 	}
 }

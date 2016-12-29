@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -86,6 +87,7 @@ public class ModelButterflyItem extends BlankModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(stack);
+			Preconditions.checkNotNull(butterfly);
 			IAlleleButterflySpecies primary = butterfly.getGenome().getPrimary();
 			IBakedModel bakedModel = cache.getIfPresent(primary);
 			if (bakedModel == null) {

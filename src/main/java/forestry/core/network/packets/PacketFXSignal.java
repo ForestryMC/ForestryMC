@@ -33,7 +33,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	}
 
 	public enum SoundFXType {
-		NONE, BLOCK_BREAK, BLOCK_PLACE;
+		NONE, BLOCK_BREAK, BLOCK_PLACE
 	}
 
 	private final BlockPos pos;

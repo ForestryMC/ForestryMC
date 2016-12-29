@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -53,12 +54,9 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	@Override
 	public void registerTemplate(IAllele[] template) {
-		if (template == null) {
-			throw new IllegalArgumentException("Tried to register null template");
-		}
-		if (template.length == 0) {
-			throw new IllegalArgumentException("Tried to register empty template");
-		}
+		Preconditions.checkNotNull(template, "Tried to register null template");
+		Preconditions.checkArgument(template.length > 0, "Tried to register empty template");
+
 		registerTemplate(template[0].getUID(), template);
 	}
 
@@ -77,6 +75,15 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 			return null;
 		}
 		return Arrays.copyOf(template, template.length);
+	}
+
+	@Override
+	public IAllele[] getTemplate(IAlleleSpecies species) {
+		IAllele[] template = getTemplate(species.getUID());
+		if (template == null) {
+			throw new IllegalStateException("No template found for species " + species.getUID());
+		}
+		return template;
 	}
 
 	/* MUTATIONS */
@@ -100,7 +107,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		for (IMutation mutation : getMutations(shuffle)) {
 			if (mutation.isPartner(parentSpecies0)) {
 				IAllele partner = mutation.getPartner(parentSpecies0);
-				if (partner != null && partner.getUID().equals(parentSpecies1UID)) {
+				if (partner.getUID().equals(parentSpecies1UID)) {
 					combinations.add(mutation);
 				}
 			}

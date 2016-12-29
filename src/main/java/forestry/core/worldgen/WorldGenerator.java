@@ -61,7 +61,7 @@ public class WorldGenerator implements IWorldGenerator {
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
-			BlockResourceOre resourcesBlock = PluginCore.blocks.resources;
+			BlockResourceOre resourcesBlock = PluginCore.getBlocks().resources;
 
 			IBlockState apatiteBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.APATITE.getMeta());
 			IBlockState copperBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.COPPER.getMeta());

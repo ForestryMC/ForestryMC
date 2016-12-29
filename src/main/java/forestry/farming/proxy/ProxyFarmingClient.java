@@ -23,6 +23,6 @@ public class ProxyFarmingClient extends ProxyFarming {
 	public void initializeModels() {
 		Proxies.render.registerBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
 				new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-				PluginFarming.blocks.farm));
+				PluginFarming.getBlocks().farm));
 	}
 }

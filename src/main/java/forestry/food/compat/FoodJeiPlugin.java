@@ -11,7 +11,7 @@ import mezz.jei.api.JEIPlugin;
 public class FoodJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryFood items = PluginFood.items;
+		ItemRegistryFood items = PluginFood.getItems();
 		JeiUtil.addDescription(registry,
 				items.infuser
 		);

@@ -94,9 +94,19 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	private static float secondSerumChance = 0;
 
 	@Nullable
-	public static ItemRegistryLepidopterology items;
+	private static ItemRegistryLepidopterology items;
 	@Nullable
-	public static BlockRegistryLepidopterology blocks;
+	private static BlockRegistryLepidopterology blocks;
+
+	public static ItemRegistryLepidopterology getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryLepidopterology getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -133,7 +143,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryLepidopterology blocks = getBlocks();
 
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
@@ -273,8 +283,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(blocks != null);
-		Preconditions.checkState(items != null);
+		BlockRegistryLepidopterology blocks = getBlocks();
+		ItemRegistryLepidopterology items = getItems();
 
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
@@ -289,7 +299,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryLepidopterology blocks = getBlocks();
 
 		// cocoon itemBlock is different from the normal item
 		hiddenItems.add(new ItemStack(blocks.cocoon));

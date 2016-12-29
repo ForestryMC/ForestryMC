@@ -38,7 +38,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal() {
-		super(new ItemStack(Blocks.DIRT), PluginCore.blocks.humus.getDefaultState(), Farmables.farmables.get("farmArboreal"));
+		super(new ItemStack(Blocks.DIRT), PluginCore.getBlocks().humus.getDefaultState(), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override

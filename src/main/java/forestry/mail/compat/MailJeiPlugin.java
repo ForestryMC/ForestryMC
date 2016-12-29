@@ -11,7 +11,7 @@ import mezz.jei.api.JEIPlugin;
 public class MailJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		BlockRegistryMail blocks = PluginMail.blocks;
+		BlockRegistryMail blocks = PluginMail.getBlocks();
 		JeiUtil.addDescription(registry,
 				blocks.mailbox,
 				blocks.stampCollector,

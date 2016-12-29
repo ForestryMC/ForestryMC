@@ -89,6 +89,7 @@ public final class VectUtil {
 		}
 
 		@Override
+		@Nullable
 		protected BlockPos.MutableBlockPos computeNext() {
 			BlockPos.MutableBlockPos pos;
 
@@ -100,6 +101,7 @@ public final class VectUtil {
 			return pos;
 		}
 
+		@Nullable
 		protected BlockPos.MutableBlockPos nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());

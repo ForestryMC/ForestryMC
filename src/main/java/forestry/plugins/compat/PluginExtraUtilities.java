@@ -84,7 +84,7 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 		super.registerRecipes();
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && Circuits.farmEnderManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
+			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.getItems().tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 		}
 	}
 }

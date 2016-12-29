@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.core.network.ForestryPacket;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
  */
 public class PacketWorktableRecipeUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
+	@Nullable
 	private final MemorizedRecipe recipe;
 
 	public PacketWorktableRecipeUpdate(TileWorktable worktable) {

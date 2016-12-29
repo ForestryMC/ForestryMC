@@ -81,7 +81,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 
 				int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
 				if (amount > 0) {
-					drops.add(PluginCore.items.apatite.getItemStack(amount));
+					drops.add(PluginCore.getItems().apatite.getItemStack(amount));
 				}
 				break;
 			}

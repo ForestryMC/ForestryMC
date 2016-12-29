@@ -35,9 +35,6 @@ public class TreeModeHelper implements ICommandModeHelper {
 	@Override
 	public String getModeNameMatching(String desired) {
 		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(desired);
-		if (mode == null) {
-			return null;
-		}
 		return mode.getName();
 	}
 

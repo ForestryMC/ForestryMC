@@ -91,7 +91,7 @@ public class TextureMapForestry extends TextureMap {
 		Log.info("Created: {}x{} {}-atlas", stitcher.getCurrentWidth(), stitcher.getCurrentHeight(), this.basePath);
 		bar.step("Allocating GL texture");
 		TextureUtil.allocateTextureImpl(this.getGlTextureId(), 0, stitcher.getCurrentWidth(), stitcher.getCurrentHeight());
-		Map<String, TextureAtlasSprite> map = Maps.<String, TextureAtlasSprite>newHashMap(this.mapRegisteredSprites);
+		Map<String, TextureAtlasSprite> map = Maps.newHashMap(this.mapRegisteredSprites);
 
 		ProgressManager.pop(bar);
 		bar = ProgressManager.push("Texture mipmap and upload", stitcher.getStichSlots().size());

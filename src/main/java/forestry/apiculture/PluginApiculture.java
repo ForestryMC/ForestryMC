@@ -137,13 +137,28 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static final int ticksPerBeeWorkCycle = 550;
 
 	@Nullable
-	public static ItemRegistryApiculture items;
+	private static ItemRegistryApiculture items;
 	@Nullable
-	public static BlockRegistryApiculture blocks;
+	private static BlockRegistryApiculture blocks;
 	@Nullable
-	public static HiveRegistry hiveRegistry;
+	private static HiveRegistry hiveRegistry;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
+
+	public static ItemRegistryApiculture getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryApiculture getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
+
+	public static HiveRegistry getHiveRegistry() {
+		Preconditions.checkState(hiveRegistry != null);
+		return hiveRegistry;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -244,13 +259,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 		createHives();
 		registerBeehiveDrops();
 
-		if (items == null) {
-			throw new IllegalStateException("Items have not been created");
-		}
-
-		if (blocks == null) {
-			throw new IllegalArgumentException("Blocks have not been created");
-		}
+		ItemRegistryApiculture items = getItems();
+		BlockRegistryApiculture blocks = getBlocks();
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
@@ -375,10 +385,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	@Override
 	public void registerCrates() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		Preconditions.checkState(coreItems != null);
-		Preconditions.checkState(items != null);
-		Preconditions.checkState(blocks != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		ItemRegistryApiculture items = getItems();
 
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(coreItems.beeswax.getItemStack());
@@ -407,12 +415,10 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = PluginCore.items;
-		ItemRegistryFluids fluidItems = PluginFluids.items;
-		Preconditions.checkState(coreItems != null);
-		Preconditions.checkState(fluidItems != null);
-		Preconditions.checkState(items != null);
-		Preconditions.checkState(blocks != null);
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		ItemRegistryFluids fluidItems = PluginFluids.getItems();
+		ItemRegistryApiculture items = getItems();
+		BlockRegistryApiculture blocks = getBlocks();
 
 		// / APIARIST'S ARMOR
 
@@ -476,8 +482,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'C', Items.MINECART);
 
 		// FOOD STUFF
-		ItemRegistryFood foodItems = PluginFood.items;
-		if (foodItems != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FOOD)) {
+			ItemRegistryFood foodItems = PluginFood.getItems();
 			RecipeUtil.addRecipe(new ItemStack(foodItems.honeyedSlice, 4),
 					"###", "#X#", "###",
 					'#', items.honeyDrop,
@@ -754,13 +760,10 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	private static void registerBeehiveDrops() {
-		if (items == null) {
-			throw new IllegalStateException("items have not been created");
-		}
-		if (hiveRegistry == null) {
-			throw new IllegalStateException("hiveRegistry has not been created");
-		}
+		ItemRegistryApiculture items = getItems();
 		ItemStack honeyComb = items.beeComb.get(EnumHoneyComb.HONEY, 1);
+		HiveRegistry hiveRegistry = getHiveRegistry();
+
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
 				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
@@ -814,9 +817,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	private static void createHives() {
-		if (hiveRegistry == null) {
-			throw new IllegalStateException("hiveRegistry has not been created");
-		}
+		HiveRegistry hiveRegistry = getHiveRegistry();
 		hiveRegistry.registerHive(HiveType.FOREST.getHiveUid(), HiveDescription.FOREST);
 		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveUid(), HiveDescription.MEADOWS);
 		hiveRegistry.registerHive(HiveType.DESERT.getHiveUid(), HiveDescription.DESERT);

@@ -29,7 +29,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.isIdenticalItem(PluginCore.items.craftingMaterial.getWovenSilk(), itemStack);
+		return ItemStackUtil.isIdenticalItem(PluginCore.getItems().craftingMaterial.getWovenSilk(), itemStack);
 	}
 
 	public boolean canStorePollen() {
