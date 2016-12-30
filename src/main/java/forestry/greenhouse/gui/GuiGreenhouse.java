@@ -167,12 +167,14 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-		if (temperatureField.getVisible()) {
+		
+		if (fieldsEnabeled) {		
+			drawTexturedModalRect(guiLeft + 62, guiTop + 29, 204, 115, 52, 12);
+			drawTexturedModalRect(guiLeft + 62, guiTop + 59, 204, 127, 52, 12);
+		
 			textLayout.line = 20;
 			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.temperature"), 0, ColourProperties.INSTANCE.get("gui.greenhouse.temperature.text"));
 			temperatureField.drawTextBox();
-		}
-		if (humidityField.getVisible()) {
 			textLayout.line = 50;
 			textLayout.drawCenteredLine(Translator.translateToLocal("for.gui.humidity"), 0, ColourProperties.INSTANCE.get("gui.greenhouse.humidity.text"));
 

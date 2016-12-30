@@ -16,6 +16,7 @@ import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.core.PluginCore;
+import forestry.core.climate.ClimateInfo;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
@@ -24,6 +25,7 @@ import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.logics.GreenhouseLogicGreenhouseEffect;
+import forestry.greenhouse.logics.GreenhouseLogicTerrain;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
@@ -67,10 +69,45 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	public void setupAPI() {
 		GreenhouseManager.greenhouseHelper = new GreenhouseHelper();
 	}
-
+	
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryGreenhouse();
+	}
+
+	@Override
+	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
+
+		proxy.initializeModels();
+
+		GreenhouseManager.greenhouseHelper.registerGreenhouseLogic(GreenhouseLogicGreenhouseEffect.class);
+		GreenhouseManager.greenhouseHelper.registerGreenhouseLogic(GreenhouseLogicTerrain.class);
+		
+		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.DIRT, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
+		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.GRASS, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
+		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.FARMLAND, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
+	}
+	
+	@Override
+	public void doInit() {
+		super.doInit();
+
+		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.GreenhouseFan");
+		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.GreenhouseHeater");
+		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.GreenhouseDryer");
+		GameRegistry.registerTileEntity(TileGreenhouseHumidifier.class, "forestry.GreenhouseSprinkler");
+		GameRegistry.registerTileEntity(TileGreenhouseValve.class, "forestry.GreenhouseValve");
+		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
+		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
+		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
+		GameRegistry.registerTileEntity(TileGreenhouseDoor.class, "forestry.GreenhouseDoor");
+		GameRegistry.registerTileEntity(TileGreenhouseHatch.class, "forestry.GreenhouseHatch");
+		GameRegistry.registerTileEntity(TileGreenhouseClimateControl.class, "forestry.GreenhouseClimateControl");
+		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.GreenhouseWindow");
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+			GameRegistry.registerTileEntity(TileGreenhouseButterflyHatch.class, "forestry.GreenhouseButterflyHatch");
+		}
 	}
 
 	@Override
@@ -223,36 +260,6 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 					'B', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 					'S', coreItems.craftingMaterial.getSilkWisp());
 		}
-	}
-
-	@Override
-	public void doInit() {
-		super.doInit();
-
-		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.GreenhouseFan");
-		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.GreenhouseHeater");
-		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.GreenhouseDryer");
-		GameRegistry.registerTileEntity(TileGreenhouseHumidifier.class, "forestry.GreenhouseSprinkler");
-		GameRegistry.registerTileEntity(TileGreenhouseValve.class, "forestry.GreenhouseValve");
-		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
-		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
-		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
-		GameRegistry.registerTileEntity(TileGreenhouseDoor.class, "forestry.GreenhouseDoor");
-		GameRegistry.registerTileEntity(TileGreenhouseHatch.class, "forestry.GreenhouseHatch");
-		GameRegistry.registerTileEntity(TileGreenhouseClimateControl.class, "forestry.GreenhouseClimateControl");
-		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.GreenhouseWindow");
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			GameRegistry.registerTileEntity(TileGreenhouseButterflyHatch.class, "forestry.GreenhouseButterflyHatch");
-		}
-	}
-
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
-
-		proxy.initializeModels();
-
-		GreenhouseManager.greenhouseHelper.addGreenhouseLogic(GreenhouseLogicGreenhouseEffect.class);
 	}
 
 }

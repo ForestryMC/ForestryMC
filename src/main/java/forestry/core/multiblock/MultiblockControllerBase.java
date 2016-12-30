@@ -274,6 +274,14 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		}
 		return lastValidationException.getMessage();
 	}
+	
+	@Override
+	public BlockPos getLastValidationErrorPosition() {
+		if (lastValidationException == null) {
+			return null;
+		}
+		return lastValidationException.getPosition();
+	}
 
 	@Override
 	public void reassemble() {
@@ -484,7 +492,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()));
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()), pos);
 	}
 
 	/**
@@ -496,7 +504,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()));
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()), pos);
 	}
 
 	@Override

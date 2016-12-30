@@ -13,6 +13,7 @@ package forestry.core.utils;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -42,6 +43,22 @@ public class ClimateUtil implements IClimateHelper {
 	@Override
 	public boolean isWithinLimits(EnumHumidity humidity, EnumHumidity baseHumid, EnumTolerance tolHumid) {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+	}
+	
+	public static boolean isWithinLimits(IClimateInfo minInfo, IClimateInfo maxInfo, IClimateInfo info){
+		if(0.0F != minInfo.getTemperature() && info.getTemperature() < minInfo.getTemperature()){
+			return false;
+		}
+		if(0.0F != minInfo.getHumidity() && info.getHumidity() < minInfo.getHumidity()){
+			return false;
+		}
+		if(0.0F != maxInfo.getTemperature() && info.getTemperature() > maxInfo.getTemperature()){
+			return false;
+		}
+		if(0.0F != maxInfo.getHumidity() & info.getHumidity() > maxInfo.getHumidity()){
+			return false;
+		}
+		return true;
 	}
 
 	@Override

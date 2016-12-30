@@ -11,8 +11,6 @@
 package forestry.core.recipes;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import forestry.api.recipes.IDescriptiveRecipe;

@@ -182,7 +182,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 					if (flag != state.getValue(OPEN)) {
 						worldIn.setBlockState(pos, state.withProperty(OPEN, flag), 2);
 						worldIn.markBlockRangeForRenderUpdate(pos, pos);
-						worldIn.playEvent(null, flag ? 1003 : 1006, pos, 0);
+						worldIn.playEvent(null, flag ? 1006 : 1012, pos, 0);
 					}
 				}
 			}

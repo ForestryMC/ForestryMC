@@ -11,23 +11,32 @@
 package forestry.greenhouse;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.climate.IClimateInfo;
 import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.greenhouse.ITerrainRecipe;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
+import forestry.core.utils.ClimateUtil;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.multiblock.InternalBlockCheck;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
 	private final List<Class<? extends IGreenhouseLogic>> greenhouseLogics = new ArrayList<>();
+	private final List<ITerrainRecipe> terrainRecipes = new ArrayList<>();
 
 	@Override
 	@Nullable
@@ -48,7 +57,7 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 	}
 
 	@Override
-	public void addGreenhouseLogic(Class<? extends IGreenhouseLogic> logic) {
+	public void registerGreenhouseLogic(Class<? extends IGreenhouseLogic> logic) {
 		if (!greenhouseLogics.contains(logic)) {
 			greenhouseLogics.add(logic);
 		}
@@ -57,6 +66,36 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 	@Override
 	public List<Class<? extends IGreenhouseLogic>> getGreenhouseLogics() {
 		return greenhouseLogics;
+	}
+	
+	@Override
+	public void registerTerrainRecipe(IBlockState inputState, IBlockState outputState, IClimateInfo minClimate, IClimateInfo maxClimate, float chance) {
+		Preconditions.checkNotNull(inputState);
+		Preconditions.checkNotNull(outputState);
+		Preconditions.checkNotNull(minClimate);
+		Preconditions.checkNotNull(maxClimate);
+		terrainRecipes.add(new TerrainRecipeState(inputState, outputState, minClimate, maxClimate, chance));
+	}
+	
+	@Override
+	public void registerTerrainRecipe(Block inputBlock, IBlockState outputState, IClimateInfo minClimate, IClimateInfo maxClimate, float chance) {
+		Preconditions.checkNotNull(inputBlock);
+		Preconditions.checkNotNull(outputState);
+		Preconditions.checkNotNull(minClimate);
+		Preconditions.checkNotNull(maxClimate);
+		terrainRecipes.add(new TerrainRecipeBlock(inputBlock, outputState, minClimate, maxClimate, chance));
+	}
+	
+	@Override
+	public ITerrainRecipe getValidTerrainRecipe(IBlockState blockState, IClimateInfo climateInfo) {
+		for(ITerrainRecipe recipe : terrainRecipes){
+			if(recipe.matches(blockState)){
+				if(ClimateUtil.isWithinLimits(recipe.getMinClimate(), recipe.getMaxClimate(), climateInfo)){
+					return recipe;
+				}
+			}
+		}
+		return null;
 	}
 
 }

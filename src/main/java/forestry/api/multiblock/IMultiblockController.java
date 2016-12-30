@@ -6,6 +6,9 @@
 package forestry.api.multiblock;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.util.math.BlockPos;
+
 import java.util.Collection;
 
 /**
@@ -33,6 +36,9 @@ public interface IMultiblockController {
 	 */
 	@Nullable
 	String getLastValidationError();
+	
+	@Nullable
+	BlockPos getLastValidationErrorPosition();
 
 	/**
 	 * @return all the multiblock components attached to this controller

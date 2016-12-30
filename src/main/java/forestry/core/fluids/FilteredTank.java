@@ -61,7 +61,7 @@ public class FilteredTank extends StandardTank {
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != null &&
+		return resource != null && resource.getFluid() != null &&
 				filters.contains(resource.getFluid().getName());
 	}
 

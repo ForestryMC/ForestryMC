@@ -75,6 +75,8 @@ public class Config {
 
 	// Performance
 	public static boolean enableBackpackResupply = true;
+	public static int planterThrottle = 10;
+	public static int harvesterThrottle = 200;
 
 	// Customization
 	private static boolean craftingBronzeEnabled = true;
@@ -211,6 +213,12 @@ public class Config {
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
+		planterThrottle = configCommon.getIntLocalized("performance", "performance.planter", planterThrottle, 1, 2000);
+		//propThrottle.Comment = "higher numbers increase working speeds of planters but also increase cpu load.";
+
+		harvesterThrottle = configCommon.getIntLocalized("performance", "performance.harvester", harvesterThrottle, 1, 2000);
+		//propThrottle.Comment = "higher numbers increase working speeds of harvesters but also increase cpu load.";
+		
 		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
 		mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
 		mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());

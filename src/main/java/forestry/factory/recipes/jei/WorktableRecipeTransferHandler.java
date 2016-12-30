@@ -1,7 +1,6 @@
 package forestry.factory.recipes.jei;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

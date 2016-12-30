@@ -6,13 +6,8 @@
 package forestry.api.greenhouse;
 
 import forestry.api.climate.IClimateInfo;
-import net.minecraft.block.state.IBlockState;
 
-public interface ITerrainRecipe {
-	
-	boolean matches(IBlockState blockState);
-	
-	IBlockState getResult();
+public interface IOvergrowth {
 	
 	IClimateInfo getMinClimate();
 	

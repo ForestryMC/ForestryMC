@@ -423,7 +423,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineDisassembled();
 
 		internalBlocks.clear();
-		logics.clear();
 		
 		ForestryAPI.climateManager.removeRegion(region);
 
@@ -588,7 +587,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						if (part != null) {
 							// Ensure this part should actually be allowed within a cube of this controller's type
 							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())), part.getCoordinates());
 							}
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
@@ -600,7 +599,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 								isGoodForInterior(part);
 							} else {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())), part.getCoordinates());
 							}
 						} else {
 							isBlockGoodForInterior(this.world, pos);
@@ -691,14 +690,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos maxPos = getMaximumCoord();
 
 				if (minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()) {
-					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
+					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"), posRoot);
 				}
 
 				TileEntity tileFace = world.getTileEntity(posFacing);
 
 				if (tileFace instanceof IGreenhouseComponent) {
 					if (((IGreenhouseComponent) tileFace).getMultiblockLogic().getController() != this) {
-						throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.not.connected.part"));
+						throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.not.connected.part"), posRoot);
 					} else if (!(tileFace instanceof TileGreenhouseHumidifier)) {
 						faceToCheck.setTested(true);
 					}
