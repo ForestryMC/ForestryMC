@@ -49,7 +49,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 		IBlockState blockState = entity.world.getBlockState(pos);
-		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
+		if (blockState.getMaterial().isLiquid()) {
 			return false;
 		}
 		if (!entity.getButterfly().isAcceptedEnvironment(entity.world, x, pos.getY(), z)) {
@@ -115,7 +115,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return true;
 		} else if (block instanceof IGrowable) {
 			return true;
-		} else if (block.getMaterial(blockState) == Material.PLANTS) {
+		} else if (blockState.getMaterial() == Material.PLANTS) {
 			return true;
 		}
 		return false;

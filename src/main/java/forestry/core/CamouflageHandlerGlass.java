@@ -36,7 +36,7 @@ public class CamouflageHandlerGlass implements ICamouflageItemHandler {
 		Block block = Block.getBlockFromItem(stack.getItem());
 		IBlockState stateFromMeta = block.getStateFromMeta(stack.getItemDamage());
 
-		return !stateFromMeta.isOpaqueCube() && !block.hasTileEntity(stateFromMeta) && !block.isBlockNormalCube(stateFromMeta);
+		return !stateFromMeta.isOpaqueCube() && !block.hasTileEntity(stateFromMeta) && !stateFromMeta.isBlockNormalCube();
 	}
 
 	@Override

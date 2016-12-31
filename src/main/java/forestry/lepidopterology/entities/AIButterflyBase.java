@@ -62,7 +62,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		}
 		IBlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!allowFluids && block.getMaterial(blockState).isLiquid()) {
+		if (!allowFluids && blockState.getMaterial().isLiquid()) {
 			return false;
 		}
 		if (!block.isPassable(entity.world, pos)) {

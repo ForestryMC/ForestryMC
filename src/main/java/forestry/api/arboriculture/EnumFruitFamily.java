@@ -7,6 +7,7 @@ package forestry.api.arboriculture;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFruitFamily;
+import forestry.core.utils.Translator;
 import net.minecraft.util.text.translation.I18n;
 
 public enum EnumFruitFamily implements IFruitFamily {
@@ -37,12 +38,12 @@ public enum EnumFruitFamily implements IFruitFamily {
 
 	@Override
 	public String getName() {
-		return I18n.translateToLocal("for.family." + uid);
+		return Translator.translateToLocal("for.family." + uid);
 	}
 
 	@Override
 	public String getDescription() {
-		return I18n.translateToLocal("for.family." + uid + ".description");
+		return Translator.translateToLocal("for.family." + uid + ".description");
 	}
 
 }

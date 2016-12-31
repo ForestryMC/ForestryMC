@@ -17,6 +17,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -52,27 +53,24 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
 
-			BlockPos posBlock = randomPos.add(housing.getCoordinates());
-			posBlock = posBlock.add(offset);
-			if (!world.isBlockLoaded(posBlock)) {
-				continue;
-			}
+			BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
 
 			// Put snow on the ground
-			if (!world.isSideSolid(new BlockPos(posBlock.getX(), posBlock.getY() - 1, posBlock.getZ()), EnumFacing.UP, false)) {
-				continue;
-			}
+			if (world.isBlockLoaded(posBlock) && world.isSideSolid(posBlock.down(), EnumFacing.UP, false)) {
+				IBlockState state = world.getBlockState(posBlock);
+				Block block = state.getBlock();
 
-			IBlockState state = world.getBlockState(posBlock);
-			Block block = state.getBlock();
-
-			if (block == Blocks.SNOW_LAYER) {
-				int meta = block.getMetaFromState(state);
-				if (meta < 7) {
-					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1));
+				if (block == Blocks.SNOW_LAYER) {
+					Integer layers = state.getValue(BlockSnow.LAYERS);
+					if (layers < 7) {
+						IBlockState moreSnow = state.withProperty(BlockSnow.LAYERS, layers + 1);
+						world.setBlockState(posBlock, moreSnow);
+					} else {
+						world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+					}
+				} else if (block.isReplaceable(world, posBlock)) {
+					world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
 				}
-			} else if (block.isReplaceable(world, posBlock)) {
-				world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
 			}
 		}
 

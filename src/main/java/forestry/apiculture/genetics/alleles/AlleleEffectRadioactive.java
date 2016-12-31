@@ -99,7 +99,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (block.getBlockHardness(blockState, world, posBlock) < 0) {
+			if (blockState.getBlockHardness(world, posBlock) < 0) {
 				continue;
 			}
 

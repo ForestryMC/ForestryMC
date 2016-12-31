@@ -115,8 +115,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-		Block block = state.getBlock();
-		if (block.getBlockHardness(state, worldIn, pos) != 0) {
+		if (state.getBlockHardness(worldIn, pos) != 0) {
 			stack.damageItem(1, entityLiving);
 		}
 		return true;

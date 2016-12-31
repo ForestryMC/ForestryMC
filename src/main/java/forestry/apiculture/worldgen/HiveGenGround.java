@@ -27,7 +27,7 @@ public class HiveGenGround extends HiveGen {
 	public HiveGenGround(Block... groundBlocks) {
 		for (Block block : groundBlocks) {
 			IBlockState blockState = block.getDefaultState();
-			Material blockMaterial = block.getMaterial(blockState);
+			Material blockMaterial = blockState.getMaterial();
 			groundMaterials.add(blockMaterial);
 		}
 	}
@@ -35,8 +35,7 @@ public class HiveGenGround extends HiveGen {
 	@Override
 	public boolean isValidLocation(World world, BlockPos pos) {
 		IBlockState groundBlockState = world.getBlockState(pos.down());
-		Block groundBlock = groundBlockState.getBlock();
-		Material groundBlockMaterial = groundBlock.getMaterial(groundBlockState);
+		Material groundBlockMaterial = groundBlockState.getMaterial();
 		return groundMaterials.contains(groundBlockMaterial);
 	}
 
