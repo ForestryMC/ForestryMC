@@ -90,8 +90,6 @@ public interface IClassification {
 
 	/**
 	 * Used by the allele registry to populate internal collection of branch members on the fly.
-	 *
-	 * @param species
 	 */
 	void addMemberSpecies(IAlleleSpecies species);
 

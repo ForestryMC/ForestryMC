@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableMap;
 import forestry.api.recipes.ICentrifugeRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 
@@ -49,8 +47,8 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	}
 
 	@Override
-	public Collection<ItemStack> getProducts(Random random) {
-		List<ItemStack> products = new ArrayList<>();
+	public NonNullList<ItemStack> getProducts(Random random) {
+		NonNullList<ItemStack> products = NonNullList.create();
 
 		for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
 			float probability = entry.getValue();

@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageAccess;
 import forestry.api.core.ICamouflageItemHandler;
@@ -27,17 +26,14 @@ import net.minecraftforge.fml.common.Loader;
 
 public class CamouflageAccess implements ICamouflageAccess {
 
-	private static final Map<String, List<ICamouflageItemHandler>> camouflageItemHandlers = new HashMap<>();
-	private static final Map<String, List<ItemStack>> camouflageItemBlacklist = new HashMap<>();
-	private static final Map<String, List<String>> blacklistedMods = new HashMap<>();
+	private static final ListMultimap<String, ICamouflageItemHandler> camouflageItemHandlers = ArrayListMultimap.create();
+	private static final ListMultimap<String, ItemStack> camouflageItemBlacklist = ArrayListMultimap.create();
+	private static final ListMultimap<String, String> blacklistedMods = ArrayListMultimap.create();
 	public static final ICamouflageItemHandler NONE = new CamouflageHandlerNone();
 
 	@Override
 	public void registerCamouflageItemHandler(ICamouflageItemHandler itemHandler) {
 		String type = itemHandler.getType();
-		if (!camouflageItemHandlers.containsKey(type)) {
-			camouflageItemHandlers.put(type, new ArrayList<>());
-		}
 
 		List<ICamouflageItemHandler> handlers = camouflageItemHandlers.get(type);
 		if (!handlers.contains(itemHandler)) {
@@ -48,13 +44,10 @@ public class CamouflageAccess implements ICamouflageAccess {
 	}
 
 	@Override
-	@Nullable
 	public List<ICamouflageItemHandler> getCamouflageItemHandler(String type) {
 		if (type.equals(CamouflageManager.NONE)) {
 			List<ICamouflageItemHandler> handlers = new ArrayList<>();
-			for (List<ICamouflageItemHandler> handler : camouflageItemHandlers.values()) {
-				handlers.addAll(handler);
-			}
+			handlers.addAll(camouflageItemHandlers.values());
 			return handlers;
 		}
 
@@ -63,11 +56,8 @@ public class CamouflageAccess implements ICamouflageAccess {
 
 	@Override
 	public void addModIdToBlackList(String type, String modID) {
-		if (!blacklistedMods.containsKey(type)) {
-			blacklistedMods.put(type, new ArrayList<>());
-		}
 		if (!blacklistedMods.get(type).contains(modID)) {
-			blacklistedMods.get(type).add(modID);
+			blacklistedMods.put(type, modID);
 		}
 	}
 
@@ -84,15 +74,13 @@ public class CamouflageAccess implements ICamouflageAccess {
 				return;
 			}
 		}
-		if (!camouflageItemBlacklist.containsKey(type)) {
-			camouflageItemBlacklist.put(type, new ArrayList<>());
-		}
-		camouflageItemBlacklist.get(type).add(camouflageBlock);
+
+		camouflageItemBlacklist.put(type, camouflageBlock);
 	}
 
 	@Override
 	public boolean isItemBlackListed(String type, ItemStack camouflageBlock) {
-		if (camouflageBlock.isEmpty() || Block.getBlockFromItem(camouflageBlock.getItem()) == Blocks.AIR || type != null && !camouflageItemBlacklist.containsKey(type)) {
+		if (camouflageBlock.isEmpty() || Block.getBlockFromItem(camouflageBlock.getItem()) == Blocks.AIR || !type.equals(CamouflageManager.NONE) && !camouflageItemBlacklist.containsKey(type)) {
 			return false;
 		}
 		String modId = camouflageBlock.getItem().getRegistryName().getResourceDomain();
@@ -100,11 +88,9 @@ public class CamouflageAccess implements ICamouflageAccess {
 			return true;
 		}
 		List<ItemStack> camouflageItemBlacklisted;
-		if (type == null) {
+		if (type.equals(CamouflageManager.NONE)) {
 			camouflageItemBlacklisted = new ArrayList<>();
-			for (List<ItemStack> stacks : camouflageItemBlacklist.values()) {
-				camouflageItemBlacklisted.addAll(stacks);
-			}
+			camouflageItemBlacklisted.addAll(camouflageItemBlacklist.values());
 		} else {
 			camouflageItemBlacklisted = camouflageItemBlacklist.get(type);
 		}
@@ -116,7 +102,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 
 		return false;
 	}
-	
+
 	@Override
 	public ICamouflageItemHandler getNoneItemHandler() {
 		return NONE;
@@ -127,11 +113,9 @@ public class CamouflageAccess implements ICamouflageAccess {
 		if (stack.isEmpty()) {
 			return NONE;
 		}
-		for (List<ICamouflageItemHandler> handlers : camouflageItemHandlers.values()) {
-			for (ICamouflageItemHandler handler : handlers) {
-				if (handler.canHandle(stack)) {
-					return handler;
-				}
+		for (ICamouflageItemHandler handler : camouflageItemHandlers.values()) {
+			if (handler.canHandle(stack)) {
+				return handler;
 			}
 		}
 		return NONE;

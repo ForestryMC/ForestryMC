@@ -49,13 +49,11 @@ public interface IMutation {
 	Collection<String> getSpecialConditions();
 
 	/**
-	 * @param allele
 	 * @return true if the passed allele is one of the alleles participating in this mutation.
 	 */
 	boolean isPartner(IAllele allele);
 
 	/**
-	 * @param allele
 	 * @return the other allele which was not passed as argument.
 	 */
 	IAllele getPartner(IAllele allele);

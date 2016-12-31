@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +37,7 @@ import forestry.core.utils.ItemStackUtil;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -141,9 +140,9 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		ArrayList<ItemStack> bounty = new ArrayList<>();
-		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+		NonNullList<ItemStack> bounty = NonNullList.create();
+		bounty.addAll(super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if (bountyLevel > 10) {
 			for (ItemStack stack : specialtyChances.keySet()) {
@@ -153,7 +152,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		for (ItemStack stack : productChances.keySet()) {
 			bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 		}
-		return bounty.toArray(new ItemStack[bounty.size()]);
+		return bounty;
 	}
 
 	/* OTHER */

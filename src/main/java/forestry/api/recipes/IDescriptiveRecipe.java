@@ -27,7 +27,7 @@ public interface IDescriptiveRecipe {
 
 	/**
 	 * @return array of all the ingredients in the crafting table.
-	 * Ingredients may be null, ItemStack, ItemStack[], or a List of ItemStack
+	 * Each inner list represents one slot's accepted ItemStacks
 	 */
 	NonNullList<NonNullList<ItemStack>> getIngredients();
 

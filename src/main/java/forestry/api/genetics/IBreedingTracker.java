@@ -33,29 +33,21 @@ public interface IBreedingTracker {
 
 	/**
 	 * Register the birth of an individual. Will mark it as discovered.
-	 *
-	 * @param individual
 	 */
 	void registerBirth(IIndividual individual);
 
 	/**
 	 * Register the pickup of an individual.
-	 *
-	 * @param individual
 	 */
 	void registerPickup(IIndividual individual);
 
 	/**
 	 * Marks a species as discovered. Should only be called from registerIndividual normally.
-	 *
-	 * @param species
 	 */
 	void registerSpecies(IAlleleSpecies species);
 
 	/**
 	 * Register a successful mutation. Will mark it as discovered.
-	 *
-	 * @param mutation
 	 */
 	void registerMutation(IMutation mutation);
 

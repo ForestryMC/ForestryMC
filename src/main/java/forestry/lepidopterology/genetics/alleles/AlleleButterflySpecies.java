@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
@@ -149,8 +150,11 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM)};
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+		ItemStack serum = getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM);
+		NonNullList<ItemStack> bounty = NonNullList.create();
+		bounty.add(serum);
+		return bounty;
 	}
 
 	/* OTHER */

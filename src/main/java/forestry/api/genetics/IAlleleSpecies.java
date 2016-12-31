@@ -9,6 +9,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
@@ -57,19 +58,14 @@ public interface IAlleleSpecies extends IAllele {
 	int getComplexity();
 
 	/**
-	 * @param itemstack
 	 * @return A float signifying the chance for the passed itemstack to yield a research success.
 	 */
 	float getResearchSuitability(ItemStack itemstack);
 
 	/**
-	 * @param world
-	 * @param gameProfile
-	 * @param individual
-	 * @param bountyLevel
-	 * @return Array of itemstacks representing the bounty for this research success.
+	 * @return itemstacks representing the bounty for this research success.
 	 */
-	ItemStack[] getResearchBounty(World world, GameProfile gameProfile, IIndividual individual, int bountyLevel);
+	NonNullList<ItemStack> getResearchBounty(World world, GameProfile gameProfile, IIndividual individual, int bountyLevel);
 
 	/* CLIMATE */
 

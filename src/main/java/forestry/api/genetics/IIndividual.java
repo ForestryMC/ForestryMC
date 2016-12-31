@@ -40,7 +40,6 @@ public interface IIndividual extends INbtWritable {
 	/**
 	 * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations, irregular mating, etc..
 	 *
-	 * @param other
 	 * @return true if the given other IIndividual has the amount of chromosomes and their alleles are identical.
 	 */
 	boolean isGeneticEqual(IIndividual other);

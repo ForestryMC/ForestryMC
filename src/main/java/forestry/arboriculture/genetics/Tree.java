@@ -279,8 +279,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* REPRODUCTION */
 	@Override
-	public ITree[] getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
-		ArrayList<ITree> prod = new ArrayList<>();
+	public List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
+		List<ITree> prod = new ArrayList<>();
 
 		float chance = genome.getFertility() * modifier;
 
@@ -292,7 +292,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			}
 		}
 
-		return prod.toArray(new ITree[prod.size()]);
+		return prod;
 	}
 
 	private ITree createOffspring(World world, ITreeGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {

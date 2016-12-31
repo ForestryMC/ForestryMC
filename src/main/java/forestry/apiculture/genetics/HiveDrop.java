@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class HiveDrop implements IHiveDrop {
 
 	private final IBeeDefinition beeTemplate;
-	private final ArrayList<ItemStack> additional = new ArrayList<>();
+	private final NonNullList<ItemStack> additional = NonNullList.create();
 	private final double chance;
 	private double ignobleShare = 0.0;
 
@@ -45,8 +44,8 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public List<ItemStack> getExtraItems(IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = new ArrayList<>();
+	public NonNullList<ItemStack> getExtraItems(IBlockAccess world, BlockPos pos, int fortune) {
+		NonNullList<ItemStack> ret = NonNullList.create();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
 		}

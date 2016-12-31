@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 public interface ISqueezerRecipe extends IForestryRecipe {
 
 	/**
-	 * @return Array of item stacks representing the required resources for one process. Stack size will be taken into account.
+	 * @return item stacks representing the required resources for one process. Stack size will be taken into account.
 	 */
 	NonNullList<ItemStack> getResources();
 

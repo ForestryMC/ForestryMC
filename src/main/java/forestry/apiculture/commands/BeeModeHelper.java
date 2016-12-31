@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,23 +34,18 @@ public class BeeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	@Nullable
-	public String getModeNameMatching(String desired) {
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(desired);
-		if (mode == null) {
-			return null;
-		}
-		return mode.getName();
-	}
-
-	@Override
 	public String getModeName(World world) {
 		return BeeManager.beeRoot.getBeekeepingMode(world).getName();
 	}
 
 	@Override
-	public void setMode(World world, String modeName) {
-		BeeManager.beeRoot.setBeekeepingMode(world, modeName);
+	public boolean setMode(World world, String modeName) {
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
+		if (mode != null) {
+			BeeManager.beeRoot.setBeekeepingMode(world, mode);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

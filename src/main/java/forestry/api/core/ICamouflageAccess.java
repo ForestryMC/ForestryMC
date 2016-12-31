@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -22,7 +21,6 @@ public interface ICamouflageAccess {
 	/**
 	 * @return A list of all item camouflage handler's that are registered for that camouflage type.
 	 */
-	@Nullable
 	List<ICamouflageItemHandler> getCamouflageItemHandler(String type);
 
 	void addItemToBlackList(String type, ItemStack camouflageBlock);

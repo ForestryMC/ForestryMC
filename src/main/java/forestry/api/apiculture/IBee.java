@@ -49,8 +49,6 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Set the natural flag on this bee.
-	 *
-	 * @param flag
 	 */
 	void setIsNatural(boolean flag);
 

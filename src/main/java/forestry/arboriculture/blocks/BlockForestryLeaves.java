@@ -175,7 +175,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		}
 
 		// Add saplings
-		ITree[] saplings = tree.getSaplings((World) world, playerProfile, pos, saplingModifier);
+		List<ITree> saplings = tree.getSaplings((World) world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {

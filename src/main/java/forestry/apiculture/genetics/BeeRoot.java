@@ -293,7 +293,9 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 		// No beekeeping mode yet, get it.
 		IApiaristTracker tracker = getBreedingTracker(world, null);
-		String mode = tracker.getModeName();
+		String modeName = tracker.getModeName();
+		IBeekeepingMode mode = getBeekeepingMode(modeName);
+		Preconditions.checkNotNull(mode);
 
 		setBeekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set beekeeping mode for a world to " + mode);
@@ -307,9 +309,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public void setBeekeepingMode(World world, String name) {
-		activeBeekeepingMode = getBeekeepingMode(name);
-		getBreedingTracker(world, null).setModeName(name);
+	public void setBeekeepingMode(World world, IBeekeepingMode mode) {
+		Preconditions.checkNotNull(world);
+		Preconditions.checkNotNull(mode);
+		activeBeekeepingMode = mode;
+		getBreedingTracker(world, null).setModeName(mode.getName());
 	}
 
 	@Override

@@ -325,8 +325,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 		// No Treekeeping mode yet, item it.
 		IArboristTracker tracker = getBreedingTracker(world, null);
-		String mode = tracker.getModeName();
-
+		String modeName = tracker.getModeName();
+		ITreekeepingMode mode = getTreekeepingMode(modeName);
+		Preconditions.checkNotNull(mode);
 		setTreekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);
 
@@ -339,9 +340,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void setTreekeepingMode(World world, String name) {
-		activeTreekeepingMode = getTreekeepingMode(name);
-		getBreedingTracker(world, null).setModeName(name);
+	public void setTreekeepingMode(World world, ITreekeepingMode mode) {
+		activeTreekeepingMode = mode;
+		getBreedingTracker(world, null).setModeName(mode.getName());
 	}
 
 	@Override

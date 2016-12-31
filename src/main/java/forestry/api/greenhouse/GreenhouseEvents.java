@@ -14,10 +14,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class GreenhouseEvents extends Event {
 
-	@Nullable
 	public final IGreenhouseController controller;
 
-	public GreenhouseEvents(@Nullable IGreenhouseController state) {
+	public GreenhouseEvents(IGreenhouseController state) {
 		this.controller = state;
 	}
 

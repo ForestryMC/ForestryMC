@@ -10,19 +10,14 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.world.World;
 
 public interface ICommandModeHelper {
 	String[] getModeNames();
 
-	@Nullable
-	String getModeNameMatching(String desired);
-
 	String getModeName(World world);
 
-	void setMode(World world, String modeName);
+	boolean setMode(World world, String modeName);
 
 	Iterable<String> getDescription(String modeName);
 }

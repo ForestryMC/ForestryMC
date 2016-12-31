@@ -42,7 +42,7 @@ public class CommandModeInfo extends SubCommand {
 			return;
 		}
 
-		String modeName = modeHelper.getModeNameMatching(args[0]);
+		String modeName = args[0];
 
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.error", args[0]);

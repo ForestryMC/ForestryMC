@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 import com.mojang.authlib.GameProfile;
@@ -36,7 +37,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	/**
 	 * @since Forestry 4.0
 	 */
-	ITree[] getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
+	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
 	// Products, Chance
 	Map<ItemStack, Float> getProducts();

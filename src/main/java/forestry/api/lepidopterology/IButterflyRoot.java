@@ -48,7 +48,6 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	/**
 	 * Spawns the given butterfly in the world.
 	 *
-	 * @param butterfly
 	 * @return butterfly entity on success, null otherwise.
 	 */
 	EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);

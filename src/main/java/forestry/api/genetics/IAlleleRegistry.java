@@ -55,11 +55,11 @@ public interface IAlleleRegistry {
 	/**
 	 * Retrieve a matching {@link ISpeciesRoot} for the given {@link IIndividual}-class.
 	 *
-	 * @param clz Class extending {@link IIndividual}.
+	 * @param individualClass Class extending {@link IIndividual}.
 	 * @return {@link ISpeciesRoot} if found, null otherwise.
 	 */
 	@Nullable
-	ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz);
+	ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass);
 
 	/**
 	 * Retrieve a matching {@link ISpeciesRoot} for the given {@link IIndividual}
@@ -71,7 +71,6 @@ public interface IAlleleRegistry {
 	/**
 	 * Tests the itemstack for genetic information.
 	 *
-	 * @param stack
 	 * @return true if the itemstack is an individual.
 	 */
 	boolean isIndividual(ItemStack stack);
@@ -183,15 +182,12 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Registers a new fruit family.
-	 *
-	 * @param family
 	 */
 	void registerFruitFamily(IFruitFamily family);
 
 	/**
 	 * Retrieves a fruit family identified by uid.
 	 *
-	 * @param uid
 	 * @return {IFruitFamily} if found, false otherwise.
 	 */
 	IFruitFamily getFruitFamily(String uid);

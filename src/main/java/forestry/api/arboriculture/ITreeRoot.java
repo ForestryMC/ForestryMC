@@ -43,7 +43,6 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/**
-	 * @param world
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
@@ -87,11 +86,12 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 
 	ITreekeepingMode getTreekeepingMode(World world);
 
+	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(World world, String name);
+	void setTreekeepingMode(World world, ITreekeepingMode mode);
 
 	/* TEMPLATES */
 

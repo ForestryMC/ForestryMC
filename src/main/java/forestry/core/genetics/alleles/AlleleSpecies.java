@@ -34,6 +34,7 @@ import forestry.core.utils.Translator;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
@@ -115,7 +116,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
 			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
 			if (!allMutations.isEmpty()) {
@@ -135,11 +136,13 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 				}
 
 				ItemStack researchNote = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, chosenMutation);
-				return new ItemStack[]{researchNote};
+				NonNullList<ItemStack> bounty = NonNullList.create();
+				bounty.add(researchNote);
+				return bounty;
 			}
 		}
 
-		return ItemStackUtil.EMPTY_STACK_ARRAY;
+		return NonNullList.create();
 	}
 
 	@Override

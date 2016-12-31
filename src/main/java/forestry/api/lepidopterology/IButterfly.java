@@ -29,41 +29,27 @@ public interface IButterfly extends IIndividualLiving {
 	float getSize();
 
 	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
 	 * @return true if the butterfly can naturally spawn at the given location at this time. (Used to auto-spawn butterflies from tree leaves.)
 	 */
 	boolean canSpawn(World world, double x, double y, double z);
 
 	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
 	 * @return true if the butterfly can take flight at the given location at this time. (Used to auto-spawn butterflies from dropped items.)
 	 */
 	boolean canTakeFlight(World world, double x, double y, double z);
 
 	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
 	 * @return true if the environment (temperature, humidity) is valid for the butterfly at the given location.
 	 */
 	boolean isAcceptedEnvironment(World world, double x, double y, double z);
 
 	/**
-	 * @param world
 	 * @return create a caterpillar with the two genome's from the nursery.
 	 */
 	@Nullable
 	IButterfly spawnCaterpillar(World world, IButterflyNursery nursery);
 
 	/**
-	 * @param entity
 	 * @param playerKill Whether or not the butterfly was killed by a player.
 	 * @param lootLevel  Loot level according to the weapon used to kill the butterfly.
 	 * @return Array of itemstacks to drop on death of the given entity.
@@ -71,7 +57,6 @@ public interface IButterfly extends IIndividualLiving {
 	NonNullList<ItemStack> getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel);
 
 	/**
-	 * @param nursery
 	 * @param playerKill Whether or not the nursery was broken by a player.
 	 * @param lootLevel  Fortune level.
 	 * @return Array of itemstacks to drop on breaking of the nursery.
@@ -79,8 +64,7 @@ public interface IButterfly extends IIndividualLiving {
 	NonNullList<ItemStack> getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel);
 
 	/**
-	 * @param cocoon
-	 * @return Array of itemstacks to drop on breaking of the cocoon.
+	 * @return itemstacks to drop on breaking of the cocoon.
 	 */
 	NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon);
 

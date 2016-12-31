@@ -18,7 +18,6 @@ public interface IAlleleEffect extends IAllele {
 	/**
 	 * Returns the passed data storage if it is valid for this effect or a new one if the passed storage object was invalid for this effect.
 	 *
-	 * @param storedData
 	 * @return {@link IEffectData} for the next cycle.
 	 */
 	IEffectData validateStorage(IEffectData storedData);

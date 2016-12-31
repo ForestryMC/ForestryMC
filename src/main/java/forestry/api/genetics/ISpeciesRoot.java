@@ -96,15 +96,11 @@ public interface ISpeciesRoot {
 
 	/**
 	 * Registers a bee template using the UID of the first allele as identifier.
-	 *
-	 * @param template
 	 */
 	void registerTemplate(IAllele[] template);
 
 	/**
 	 * Registers a bee template using the passed identifier.
-	 *
-	 * @param template
 	 */
 	void registerTemplate(String identifier, IAllele[] template);
 
@@ -144,8 +140,6 @@ public interface ISpeciesRoot {
 
 	/**
 	 * Use to register mutations.
-	 *
-	 * @param mutation
 	 */
 	void registerMutation(IMutation mutation);
 

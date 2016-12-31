@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 
@@ -26,7 +26,7 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	/**
 	 * Returns the randomized products from processing one input item.
 	 **/
-	Collection<ItemStack> getProducts(Random random);
+	NonNullList<ItemStack> getProducts(Random random);
 
 	/**
 	 * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],

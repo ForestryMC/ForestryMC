@@ -11,6 +11,7 @@
 package forestry.arboriculture.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import forestry.api.arboriculture.ITreekeepingMode;
@@ -33,24 +34,26 @@ public class TreeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	public String getModeNameMatching(String desired) {
-		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(desired);
-		return mode.getName();
-	}
-
-	@Override
 	public String getModeName(World world) {
 		return TreeManager.treeRoot.getTreekeepingMode(world).getName();
 	}
 
 	@Override
-	public void setMode(World world, String modeName) {
-		TreeManager.treeRoot.setTreekeepingMode(world, modeName);
+	public boolean setMode(World world, String modeName) {
+		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
+		if (mode != null) {
+			TreeManager.treeRoot.setTreekeepingMode(world, mode);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public Iterable<String> getDescription(String modeName) {
 		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
+		if (mode == null) {
+			return Collections.emptyList();
+		}
 		return mode.getDescription();
 	}
 

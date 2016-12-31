@@ -17,8 +17,8 @@ public interface IButterflyNursery extends IHousing, IClimateProvider {
 
 	IIndividual getNanny();
 
-	void setCaterpillar(@Nullable IButterfly butterfly);
+	void setCaterpillar(@Nullable IButterfly caterpillar);
 
-	boolean canNurse(IButterfly butterfly);
+	boolean canNurse(IButterfly caterpillar);
 
 }

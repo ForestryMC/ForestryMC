@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public interface IBeeRoot extends ISpeciesRoot {
 
 	/**
-	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != EnumBeeType.NONE
+	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != null
 	 */
 	@Override
 	boolean isMember(ItemStack stack);
@@ -49,7 +49,6 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* BREEDING TRACKER */
 
 	/**
-	 * @param world
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
@@ -58,7 +57,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* BEE SPECIFIC */
 
 	/**
-	 * @return type of bee encoded on the itemstack. EnumBeeType.NONE if it isn't a bee.
+	 * @return type of bee encoded on the itemstack. null if it isn't a bee.
 	 */
 	@Nullable
 	@Override
@@ -110,7 +109,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(World world, String name);
+	void setBeekeepingMode(World world, IBeekeepingMode mode);
 
 	/* MISC */
 

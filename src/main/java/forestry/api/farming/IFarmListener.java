@@ -27,7 +27,7 @@ public interface IFarmListener {
 	 * @param harvested Collection of harvested stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
 	 * @param crop      Harvested {@link ICrop}
 	 */
-	void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop);
+	void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop);
 
 	/**
 	 * Called after the stack of collected items has been returned by the farm logic, but before it is added to the farm's pending queue.

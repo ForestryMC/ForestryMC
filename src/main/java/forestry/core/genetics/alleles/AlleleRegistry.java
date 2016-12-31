@@ -90,9 +90,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	@Nullable
-	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz) {
+	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
 		for (ISpeciesRoot root : rootMap.values()) {
-			if (root.getMemberClass().isAssignableFrom(clz)) {
+			if (root.getMemberClass().isAssignableFrom(individualClass)) {
 				return root;
 			}
 		}

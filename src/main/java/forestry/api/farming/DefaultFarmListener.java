@@ -23,7 +23,7 @@ public class DefaultFarmListener implements IFarmListener {
 	}
 
 	@Override
-	public void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop) {
+	public void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop) {
 
 	}
 

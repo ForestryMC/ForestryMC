@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -22,7 +21,7 @@ public interface IHiveDrop {
 
 	IBee getBeeType(IBlockAccess world, BlockPos pos);
 
-	Collection<ItemStack> getExtraItems(IBlockAccess world, BlockPos pos, int fortune);
+	NonNullList<ItemStack> getExtraItems(IBlockAccess world, BlockPos pos, int fortune);
 
 	/**
 	 * Chance to drop a bee or extra items. Default drops have 0.80 (= 80 %).

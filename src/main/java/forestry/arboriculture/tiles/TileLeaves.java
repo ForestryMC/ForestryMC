@@ -488,16 +488,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void setCaterpillar(@Nullable IButterfly butterfly) {
+	public void setCaterpillar(@Nullable IButterfly caterpillar) {
 		maturationTime = 0;
-		caterpillar = butterfly;
+		this.caterpillar = caterpillar;
 		sendNetworkUpdate();
 	}
 
 	@Override
-	public boolean canNurse(IButterfly butterfly) {
+	public boolean canNurse(IButterfly caterpillar) {
 		ITree tree = getTree();
-		return !isDestroyed(tree, damage) && caterpillar == null;
+		return !isDestroyed(tree, damage) && this.caterpillar == null;
 	}
 
 	@Override

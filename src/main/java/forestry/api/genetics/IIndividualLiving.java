@@ -34,9 +34,6 @@ public interface IIndividualLiving extends IIndividual {
 
 	/**
 	 * Age the individual.
-	 *
-	 * @param world
-	 * @param ageModifier
 	 */
 	void age(World world, float ageModifier);
 

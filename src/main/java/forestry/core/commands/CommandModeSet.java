@@ -41,17 +41,14 @@ public final class CommandModeSet extends SubCommand {
 
 		World world = sender.getEntityWorld();
 
-		String desired = args[args.length - 1];
+		String modeName = args[args.length - 1];
 
-		String modeName = modeSetter.getModeNameMatching(desired);
-		if (modeName == null) {
-			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", desired);
+		if (modeSetter.setMode(world, modeName)) {
+			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.success", modeName);
+		} else {
+			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", modeName);
 			printHelp(sender);
-			return;
 		}
-
-		modeSetter.setMode(world, modeName);
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.success", modeName);
 	}
 
 	@Override
