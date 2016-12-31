@@ -92,6 +92,12 @@ public interface IAlleleRegistry {
 	Map<String, IAllele> getRegisteredAlleles();
 
 	/**
+	 * @return unmodifiable collection of all the known allele variations for the given chromosome type.
+	 * @since Forestry 4.2
+	 */
+	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
+
+	/**
 	 * Registers an allele.
 	 * <p>
 	 * NOTE: Where possible, it is recommended to use IAlleleFactory instead
@@ -124,12 +130,6 @@ public interface IAlleleRegistry {
 	 */
 	@Nullable
 	IAllele getAllele(String uid);
-
-	/**
-	 * @return unmodifiable collection of all the known allele variations for the given chromosome type.
-	 * @since Forestry 4.2
-	 */
-	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
 
 	/**
 	 * @return unmodifiable collection of all the known chromosome types.
