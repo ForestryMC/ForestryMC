@@ -17,6 +17,7 @@ import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.MigrationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,6 +48,8 @@ public class CrateRegistry implements ICrateRegistry {
 		ItemCrated crate = new ItemCrated(stack, oreDictName);
 		crate.setUnlocalizedName(crateName);
 		crate.setRegistryName(crateName);
+
+		MigrationHelper.addItemName(crateName);
 
 		GameRegistry.register(crate);
 		Proxies.common.registerItem(crate);

@@ -26,6 +26,7 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -141,5 +143,10 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		PluginManager.processIMCMessages(event.getMessages());
+	}
+
+	@EventHandler
+	public void onMissingMappings(FMLMissingMappingsEvent event) {
+		MigrationHelper.onMissingMappings(event);
 	}
 }

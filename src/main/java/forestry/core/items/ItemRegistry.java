@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.MigrationHelper;
 import forestry.plugins.PluginManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +33,8 @@ public abstract class ItemRegistry {
 
 		item.setUnlocalizedName("for." + name);
 		item.setRegistryName(name);
+
+		MigrationHelper.addItemName(name);
 
 		GameRegistry.register(item);
 		Proxies.common.registerItem(item);

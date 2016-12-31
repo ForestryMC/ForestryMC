@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.MigrationHelper;
 import forestry.plugins.PluginManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -38,10 +39,13 @@ public abstract class BlockRegistry {
 		GameRegistry.register(block);
 		Proxies.common.registerBlock(block);
 
+		MigrationHelper.addBlockName(name);
+
 		if (itemBlock != null) {
 			itemBlock.setRegistryName(name);
 			GameRegistry.register(itemBlock);
 			Proxies.common.registerItem(itemBlock);
+			MigrationHelper.addItemName(name);
 		}
 	}
 
