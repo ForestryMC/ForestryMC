@@ -12,7 +12,6 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,19 +28,14 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.greenhouse.EnumGreenhouseEventType;
-import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseComponent.ClimateControl;
 import forestry.api.multiblock.IGreenhouseComponent.Climatiser;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.climate.ClimateInfo;
 import forestry.core.climate.ClimatePosition;
@@ -62,7 +56,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.inventory.InventoryGreenhouse;
@@ -84,7 +77,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
-	private final List<IGreenhouseLogic> logics = new ArrayList<>();
 	@Nullable
 	protected ClimateControl climateControl;
 	@Nullable
@@ -109,11 +101,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.energyManager = new EnergyManager(200, 100000);
 		this.inventory = new InventoryGreenhouse(this);
 
-		camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.BLOCK);
-		camouflageGlassBlock = getDefaultCamouflageBlock(CamouflageManager.GLASS);
-		camouflageDoorBlock = getDefaultCamouflageBlock(CamouflageManager.DOOR);
+		this.camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.BLOCK);
+		this.camouflageGlassBlock = getDefaultCamouflageBlock(CamouflageManager.GLASS);
+		this.camouflageDoorBlock = getDefaultCamouflageBlock(CamouflageManager.DOOR);
 		this.region = new ClimateRegion(this);
-		createLogics();
 	}
 
 	/* CLIMATE */
@@ -160,12 +151,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.DOOR);
 
-		for (IGreenhouseLogic logic : getLogics()) {
-			NBTTagCompound nbtTag = new NBTTagCompound();
-			logic.writeToNBT(nbtTag);
-			data.setTag("logic" + logic.getName(), nbtTag);
-		}
-
 		data.setTag("Region", region.writeToNBT(new NBTTagCompound()));
 
 		return data;
@@ -182,14 +167,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.DOOR);
-
-		if (logics.isEmpty()) {
-			createLogics();
-		}
-
-		for (IGreenhouseLogic logic : getLogics()) {
-			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
-		}
 
 		if (data.hasKey("Region")) {
 			NBTTagCompound nbtTag = data.getCompoundTag("Region");
@@ -285,7 +262,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				}
 				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
 			}
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, null, this, type));
 			return true;
 		}
 		return false;
@@ -319,43 +295,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 	}
 
-	/* GREENHOUSE */
-	@Override
-	public void onChange(EnumGreenhouseEventType type, Object event) {
-		for (IGreenhouseLogic logic : logics) {
-			logic.onEvent(type, event);
-		}
-	}
-
-	/* GREENHOUSE LOGICS */
-	private void createLogics() {
-		logics.clear();
-		for (Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseHelper.getGreenhouseLogics()) {
-			IGreenhouseLogic logic = createLogic(logicClass);
-			if (logic != null) {
-				logics.add(logic);
-			}
-		}
-	}
-
-	@Nullable
-	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) {
-		try {
-			return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			Log.error("Fail to create a greenhouse logic with the class: {}", logicClass, e);
-			return null;
-		}
-	}
-
-	@Override
-	public List<IGreenhouseLogic> getLogics() {
-		return logics;
-	}
-
 	/* MANAGERS */
-
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -413,9 +353,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
 		}
-		for(IGreenhouseLogic logic : logics){
-			logic.onMachineAssembled();
-		}
 	}
 
 	@Override
@@ -434,9 +371,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			if (comp instanceof ICamouflagedTile) {
 				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
-		}
-		for(IGreenhouseLogic logic : logics){
-			logic.onMachineDisassembled();
 		}
 	}
 
@@ -480,10 +414,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	protected boolean updateServer(int tickCount) {
 		if (updateOnInterval(20)) {
 			inventory.drainCan(tankManager);
-		}
-
-		for (IGreenhouseLogic logic : logics) {
-			logic.work();
 		}
 
 		for (IGreenhouseComponent.Active activeComponent : activeComponents) {

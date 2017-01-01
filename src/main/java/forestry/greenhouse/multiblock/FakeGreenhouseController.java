@@ -12,13 +12,10 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateRegion;
-import forestry.api.greenhouse.EnumGreenhouseEventType;
-import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
@@ -76,15 +73,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public BlockPos getCoordinates() {
 		return BlockPos.ORIGIN;
-	}
-
-	@Override
-	public List<IGreenhouseLogic> getLogics() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public void onChange(EnumGreenhouseEventType type, Object event) {
 	}
 
 	@Override

@@ -16,7 +16,6 @@ import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.core.PluginCore;
-import forestry.core.climate.ClimateInfo;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
@@ -24,8 +23,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
-import forestry.greenhouse.logics.GreenhouseLogicGreenhouseEffect;
-import forestry.greenhouse.logics.GreenhouseLogicTerrain;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
@@ -46,7 +43,6 @@ import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -77,16 +73,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
-
 		proxy.initializeModels();
-
-		GreenhouseManager.greenhouseHelper.registerGreenhouseLogic(GreenhouseLogicGreenhouseEffect.class);
-		GreenhouseManager.greenhouseHelper.registerGreenhouseLogic(GreenhouseLogicTerrain.class);
-		
-		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.DIRT, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
-		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.GRASS, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
-		GreenhouseManager.greenhouseHelper.registerTerrainRecipe(Blocks.FARMLAND, Blocks.SAND.getDefaultState(), new ClimateInfo(1.2F, -1.0F), new ClimateInfo(-1.0F, -1.0F), 0.5F);
 	}
 	
 	@Override

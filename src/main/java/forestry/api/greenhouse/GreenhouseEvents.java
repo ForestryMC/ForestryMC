@@ -5,10 +5,6 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import javax.annotation.Nullable;
-
-import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IGreenhouseController;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -18,24 +14,6 @@ public class GreenhouseEvents extends Event {
 
 	public GreenhouseEvents(IGreenhouseController state) {
 		this.controller = state;
-	}
-
-	public static class CamouflageChangeEvent extends GreenhouseEvents {
-
-		@Nullable
-		public final ICamouflagedTile camouflagedBlock;
-
-		public final ICamouflageHandler camouflageHandler;
-
-		public final String camouflageType;
-
-		public CamouflageChangeEvent(IGreenhouseController controller, @Nullable ICamouflagedTile camouflagedBlock, ICamouflageHandler camouflageHandler, String camouflageType) {
-			super(controller);
-
-			this.camouflagedBlock = camouflagedBlock;
-			this.camouflageHandler = camouflageHandler;
-			this.camouflageType = camouflageType;
-		}
 	}
 
 	public static class InternalBlockEvent extends GreenhouseEvents {
