@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
@@ -17,7 +19,9 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -51,6 +55,11 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 	@Override
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}
 
 	@Override
