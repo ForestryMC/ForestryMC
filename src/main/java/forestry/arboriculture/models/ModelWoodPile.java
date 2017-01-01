@@ -77,7 +77,7 @@ public class ModelWoodPile extends BlankModel {
 
 			if (modelWoodPileBlock == null) {
 				try {
-					modelWoodPileBlock = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:block/woodPile"));
+					modelWoodPileBlock = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:block/wood_pile"));
 				} catch (Exception e) {
 					return Collections.emptyList();
 				}
@@ -118,8 +118,8 @@ public class ModelWoodPile extends BlankModel {
 		Cache<String, IBakedModel> map = isItem ? itemCache : blockCache;
 		IBakedModel model = map.getIfPresent(treeUID);
 		if (model == null) {
-			textures.put("woodBark", treeSpecies.getWoodProvider().getSprite(false).getIconName());
-			textures.put("woodTop", treeSpecies.getWoodProvider().getSprite(true).getIconName());
+			textures.put("wood_bark", treeSpecies.getWoodProvider().getSprite(false).getIconName());
+			textures.put("wood_top", treeSpecies.getWoodProvider().getSprite(true).getIconName());
 			IModel retextureWoodPile = ModelProcessingHelper.retexture(isItem ? modelWoodPileItem : modelWoodPileBlock, textures.build());
 			model = retextureWoodPile.bake(ModelRotation.X0_Y0, isItem ? DefaultVertexFormats.ITEM : DefaultVertexFormats.BLOCK, textureGetter);
 			map.put(treeUID, model);
@@ -136,7 +136,7 @@ public class ModelWoodPile extends BlankModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			if (modelWoodPileItem == null) {
 				try {
-					modelWoodPileItem = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/woodPile"));
+					modelWoodPileItem = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/wood_pile"));
 				} catch (Exception e) {
 					return originalModel;
 				}

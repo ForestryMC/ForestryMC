@@ -79,7 +79,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:pile", "type=wood");
-			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:woodPile", "inventory");
+			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:wood_pile", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD));
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
