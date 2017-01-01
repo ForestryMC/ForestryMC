@@ -38,8 +38,9 @@ public class ItemBlockFarm extends ItemBlock {
 		if (itemstack.getTagCompound() == null) {
 			return;
 		}
+		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound());
 
-		info.add(TextFormatting.ITALIC + EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound()).getName());
+		info.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " "+ texture.getName());
 	}
 
 	@Override

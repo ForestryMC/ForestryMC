@@ -12,6 +12,7 @@ package forestry.greenhouse.blocks;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
@@ -74,6 +76,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -447,4 +450,11 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 
 	public abstract BlockGreenhouseType getGreenhouseType();
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+		tooltip.add(Translator.translateToLocal("tile.for.greenhouse.tooltip"));
+		tooltip.add(TextFormatting.GREEN.toString() + TextFormatting.ITALIC.toString() + Translator.translateToLocal("tile.for.greenhouse.camouflage.tooltip"));
+	}
 }

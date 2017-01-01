@@ -48,6 +48,10 @@ public class ProxyCommon {
 		MultiblockServerTickHandler multiblockServerTickHandler = new MultiblockServerTickHandler();
 		MinecraftForge.EVENT_BUS.register(multiblockServerTickHandler);
 	}
+	
+	public void registerEventHandlers(){
+		
+	}
 
 	public String getDisplayName(ItemStack itemstack) {
 		return null;

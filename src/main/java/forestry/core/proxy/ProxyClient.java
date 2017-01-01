@@ -15,6 +15,7 @@ import java.io.File;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
+import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManager;
 import forestry.core.worldgen.WorldGenerator;
 import net.minecraft.block.Block;
@@ -43,6 +44,11 @@ public class ProxyClient extends ProxyCommon {
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
 	}
 
+	@Override
+	public void registerEventHandlers() {
+		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
+	}
+	
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);
