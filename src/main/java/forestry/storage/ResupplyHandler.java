@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.storage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
@@ -22,13 +19,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ResupplyHandler implements IResupplyHandler {
 
-	private static List<ItemStack> backpacks(InventoryPlayer playerInventory) {
-		List<ItemStack> backpacks = new ArrayList<>();
+	private static NonNullList<ItemStack> getBackpacks(InventoryPlayer playerInventory) {
+		NonNullList<ItemStack> backpacks = NonNullList.create();
 		for (ItemStack itemStack : playerInventory.mainInventory) {
 			if (itemStack.getItem() instanceof ItemBackpack) {
 				backpacks.add(itemStack);
@@ -45,42 +43,21 @@ public class ResupplyHandler implements IResupplyHandler {
 			return;
 		}
 
-		for (ItemStack backpack : backpacks(player.inventory)) {
+		for (ItemStack backpack : getBackpacks(player.inventory)) {
+			if (ItemBackpack.getMode(backpack) == BackpackMode.RESUPPLY) {
+				// Load their inventory
+				ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
+				ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
 
-			// Only handle those in resupply mode
-			if (ItemBackpack.getMode(backpack) != BackpackMode.RESUPPLY) {
-				continue;
-			}
-
-			// Delay before resupplying
-			if (backpack.getItemDamage() < 40) {
-				backpack.setItemDamage(backpack.getItemDamage() + 1);
-				continue;
-			}
-
-			// Load their inventory
-			ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
-			ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
-
-			Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
-			MinecraftForge.EVENT_BUS.post(event);
-			if (event.isCanceled()) {
-				continue;
-			}
-
-			// Cycle through their contents
-			for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
-
-				ItemStack itemStack = backpackInventory.getStackInSlot(i);
-				if (itemStack.isEmpty()) {
-					continue;
-				}
-
-				// Try to add it to the player's inventory and note any change
-				boolean change = topOffPlayerInventory(player, itemStack);
-
-				if (change) {
-					backpackInventory.setInventorySlotContents(i, itemStack);
+				Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
+				if (!MinecraftForge.EVENT_BUS.post(event)) {
+					for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
+						ItemStack itemStack = backpackInventory.getStackInSlot(i);
+						if (topOffPlayerInventory(player, itemStack)) {
+							backpackInventory.setInventorySlotContents(i, itemStack);
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -88,31 +65,25 @@ public class ResupplyHandler implements IResupplyHandler {
 
 	/**
 	 * This tops off existing stacks in the player's inventory.
+	 * Adds to player inventory if there is an incomplete stack in there.
 	 */
 	private static boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
+		if (itemstack.isEmpty()) {
+			return false;
+		}
+		InventoryPlayer playerInventory = player.inventory;
+		NonNullList<ItemStack> mainInventory = playerInventory.mainInventory;
 
-		// Add to player inventory first, if there is an incomplete stack in
-		// there.
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
-			// We only add to existing stacks.
-			if (inventoryStack.isEmpty()) {
-				continue;
-			}
-
-			// Already full
-			if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
-				continue;
-			}
-
-			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
+		for (ItemStack inventoryStack : mainInventory) {
+			if (playerInventory.canMergeStacks(inventoryStack, itemstack)) {
 				inventoryStack.grow(1);
+				inventoryStack.setAnimationsToGo(5);
 				itemstack.shrink(1);
 				return true;
 			}
 		}
-		return false;
 
+		return false;
 	}
 
 }

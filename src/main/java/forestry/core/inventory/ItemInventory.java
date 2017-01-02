@@ -119,9 +119,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return false;
 		}
 
-		String baseUID = baseTagCompound.getString(KEY_UID);
-		String comparisonUID = comparisonTagCompound.getString(KEY_UID);
-		return baseUID.equals(comparisonUID);
+		int baseUID = baseTagCompound.getInteger(KEY_UID);
+		int comparisonUID = comparisonTagCompound.getInteger(KEY_UID);
+		return baseUID == comparisonUID;
 	}
 
 	private void writeToParentNBT() {
