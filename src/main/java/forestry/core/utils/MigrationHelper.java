@@ -22,6 +22,11 @@ public class MigrationHelper {
 
 		itemRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
 		blockRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
+		itemRemappings.put("pile_dirt", "loam");
+		blockRemappings.put("pile_dirt", "loam");
+		itemRemappings.put("pile_wood", "wood_pile");
+		blockRemappings.put("pile_wood", "wood_pile");
+		blockRemappings.put("pile_ash", "charcoal");
 	}
 
 	public static Pattern underscores = Pattern.compile("_");

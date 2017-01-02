@@ -15,6 +15,4 @@ public interface IMultiblockLogicFactory {
 	IMultiblockLogicFarm createFarmLogic();
 
 	IMultiblockLogicGreenhouse createGreenhouseLogic();
-
-	IMultiblockLogicCharcoalPile createCharcoalPileLogic();
 }

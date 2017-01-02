@@ -1,7 +1,0 @@
-{
-    "variants": {
-      "type=ash": { "model": "forestry:ash_pile" },
-      "type=dirt": { "model": "forestry:dirt_pile" },
-      "type=wood": { "model": "forestry:wood_pile" }
-    }
-}

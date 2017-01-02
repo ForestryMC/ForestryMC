@@ -11,12 +11,10 @@
 package forestry.core.multiblock;
 
 import forestry.api.multiblock.IMultiblockLogicAlveary;
-import forestry.api.multiblock.IMultiblockLogicCharcoalPile;
 import forestry.api.multiblock.IMultiblockLogicFactory;
 import forestry.api.multiblock.IMultiblockLogicFarm;
 import forestry.api.multiblock.IMultiblockLogicGreenhouse;
 import forestry.apiculture.multiblock.MultiblockLogicAlveary;
-import forestry.arboriculture.multiblock.MultiblockLogicCharcoalPile;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 
@@ -35,10 +33,5 @@ public class MultiblockLogicFactory implements IMultiblockLogicFactory {
 	@Override
 	public IMultiblockLogicGreenhouse createGreenhouseLogic() {
 		return new MultiblockLogicGreenhouse();
-	}
-
-	@Override
-	public IMultiblockLogicCharcoalPile createCharcoalPileLogic() {
-		return new MultiblockLogicCharcoalPile();
 	}
 }

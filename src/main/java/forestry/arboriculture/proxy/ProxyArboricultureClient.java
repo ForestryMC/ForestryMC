@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableMap;
-import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
@@ -26,11 +25,8 @@ import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
-import forestry.arboriculture.models.ModelWoodPile;
 import forestry.arboriculture.models.WoodModelLoader;
 import forestry.arboriculture.models.WoodTextures;
-import forestry.arboriculture.render.CharcoalPileRenderer;
-import forestry.arboriculture.tiles.TilePile;
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.SimpleRetexturedModel;
 import forestry.core.models.WoodModelEntry;
@@ -53,7 +49,6 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -77,14 +72,6 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			Proxies.render.registerBlockModel(blockModelIndex);
 		}
 
-		{
-			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:pile", "type=wood");
-			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:wood_pile", "inventory");
-			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelWoodPile(), PluginArboriculture.getBlocks().piles.get(EnumPileType.WOOD));
-			Proxies.render.registerBlockModel(blockModelIndex);
-		}
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TilePile.class, new CharcoalPileRenderer());
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
 		for (BlockArbSlab slab : PluginArboriculture.getBlocks().slabsDouble) {
 			registerWoodModel(slab, true);
@@ -151,7 +138,6 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 
 		loadingExceptions.putAll(WoodModelLoader.loadingExceptions);
-		ModelWoodPile.onModelBake(event);
 	}
 
 	@Override

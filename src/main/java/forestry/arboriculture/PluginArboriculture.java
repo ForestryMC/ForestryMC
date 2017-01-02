@@ -21,10 +21,8 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -41,9 +39,9 @@ import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.blocks.BlockPile;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
+import forestry.arboriculture.charcoal.CharcoalPileWall;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -63,7 +61,6 @@ import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.arboriculture.tiles.TilePile;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.PluginCore;
 import forestry.core.capabilities.NullStorage;
@@ -213,6 +210,12 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
 
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerArbDoor());
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
+		TreeManager.pileWalls.add(new CharcoalPileWall(PluginArboriculture.getBlocks().loam, 5));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 4));
 	}
 
 	@Override
@@ -233,7 +236,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
-		GameRegistry.registerTileEntity(TilePile.class, "forestry.Piles");
 
 		ItemRegistryArboriculture items = getItems();
 		BlockRegistryArboriculture blocks = getBlocks();
@@ -449,17 +451,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'X', "treeSapling",
 				'Y', "chestWood");
 
-		//Wood Piles
-		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
-			IAlleleTreeSpecies treeSpecies = tree.getGenome().getPrimary();
-			ItemStack log = treeSpecies.getWoodProvider().getWoodStack().copy();
-			log.setCount(1);
-			ItemStack woodPile = BlockPile.createWoodPile(treeSpecies);
-			RecipeUtil.addShapelessRecipe(woodPile, log, log, log, log);
-		}
+		//Wood Pile
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
 
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.piles.get(EnumPileType.DIRT), 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.loam), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
 	}
 
 	private static void registerAlleles() {
@@ -573,6 +569,13 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				return 100;
 			}
 
+			if(Item.getItemFromBlock(blocks.charcoal) == item){
+				return 16000;
+			}
+			if(Item.getItemFromBlock(blocks.woodPile) == item){
+				return 1200;
+			}
+			
 			Block block = Block.getBlockFromItem(item);
 
 			if (block instanceof IWoodTyped) {

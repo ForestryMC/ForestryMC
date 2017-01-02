@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.arboriculture.multiblock;
+package forestry.arboriculture.charcoal.jei;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
