@@ -98,13 +98,19 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return false;
 		}
 
-		if (!base.hasTagCompound() || !comparison.hasTagCompound()) {
+		NBTTagCompound baseTagCompound = base.getTagCompound();
+		NBTTagCompound comparisonTagCompound = comparison.getTagCompound();
+		if (baseTagCompound == null || comparisonTagCompound == null) {
 			return false;
 		}
 
-		String baseUID = base.getTagCompound().getString(KEY_UID);
-		String comparisonUID = comparison.getTagCompound().getString(KEY_UID);
-		return baseUID != null && comparisonUID != null && baseUID.equals(comparisonUID);
+		if (!baseTagCompound.hasKey(KEY_UID) || !comparisonTagCompound.hasKey(KEY_UID)) {
+			return false;
+		}
+
+		int baseUID = baseTagCompound.getInteger(KEY_UID);
+		int comparisonUID = comparisonTagCompound.getInteger(KEY_UID);
+		return baseUID == comparisonUID;
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
