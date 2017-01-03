@@ -263,7 +263,7 @@ public abstract class InventoryUtil {
 				stackToRemove.setCount(stackToRemove.getCount() * count);
 
 				// try to remove the exact stack first
-				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
+				ItemStack removedStack = removeStack(inventory, stackToRemove, null, player, stowContainer, false);
 				if (removedStack.isEmpty()) {
 					// remove crafting equivalents next
 					removedStack = removeStack(inventory, stackToRemove, oreDicts.get(i), player, stowContainer, craftingTools);

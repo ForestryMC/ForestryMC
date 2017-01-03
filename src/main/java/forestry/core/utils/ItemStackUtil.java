@@ -334,63 +334,9 @@ public abstract class ItemStackUtil {
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
-	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, String oreDict, boolean craftingTools) {
-		if (base.isEmpty() || comparison.isEmpty()) {
-			return false;
-		}
-
-		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
-			return true;
-		}
-
-		if (isCraftingEquivalent(base, comparison)) {
-			return true;
-		}
-
-		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
-			if (!ItemStack.areItemStacksEqual(base, comparison)) {
-				return false;
-			}
-		}
-
-		if (!oreDict.isEmpty()) {
-			int[] idsBase = OreDictionary.getOreIDs(base);
-			Arrays.sort(idsBase);
-			int idComp = OreDictionary.getOreID(oreDict);
-
-			int iBase = 0;
-			while (iBase < idsBase.length) {
-				if (idsBase[iBase] == idComp) {
-					iBase++;
-				} else {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Compare two item stacks for crafting equivalency.
-	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (base.isEmpty() || comparison.isEmpty()) {
+		if (!isCraftingEquivalent(base, comparison, craftingTools)) {
 			return false;
-		}
-
-		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
-			return true;
-		}
-
-		if (isCraftingEquivalent(base, comparison)) {
-			return true;
-		}
-
-		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
-			if (!ItemStack.areItemStacksEqual(base, comparison)) {
-				return false;
-			}
 		}
 
 		if (oreDictionary) {
@@ -410,6 +356,50 @@ public abstract class ItemStackUtil {
 				} else {
 					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Compare two item stacks for crafting equivalency.
+	 */
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, String oreDict, boolean craftingTools) {
+		if(!isCraftingEquivalent(base, comparison, craftingTools)){
+			return false;
+		}
+
+		if (!oreDict.isEmpty()) {
+			int[] baseIds = OreDictionary.getOreIDs(base);
+			int validID = OreDictionary.getOreID(oreDict);
+
+			for(int id : baseIds){
+				if (id == validID) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
+		if (base.isEmpty() || comparison.isEmpty()) {
+			return false;
+		}
+
+		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
+			return true;
+		}
+
+		if (isCraftingEquivalent(base, comparison)) {
+			return true;
+		}
+
+		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
+			if (!ItemStack.areItemStacksEqual(base, comparison)) {
+				return false;
 			}
 		}
 
