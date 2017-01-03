@@ -455,7 +455,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
 
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.loam), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
 	}
 
 	private static void registerAlleles() {

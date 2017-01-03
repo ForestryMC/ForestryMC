@@ -254,6 +254,38 @@ public abstract class ItemStackUtil {
 
 		return totalSets;
 	}
+	
+	/**
+	 * Counts how many full sets are contained in the passed stock
+	 */
+	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, NonNullList<String> oreDicts, boolean craftingTools) {
+		int totalSets = 0;
+
+		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(set);
+		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(stock);
+
+		for (ItemStack req : condensedRequired) {
+
+			int reqCount = 0;
+			for (int i = 0;i < condensedOffered.size();i++) {
+				ItemStack offer = condensedOffered.get(i);
+				if (isCraftingEquivalent(req, offer, oreDicts.get(i), craftingTools)) {
+					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
+					reqCount = Math.max(reqCount, stackCount);
+				}
+			}
+
+			if (reqCount == 0) {
+				return 0;
+			} else if (totalSets == 0) {
+				totalSets = reqCount;
+			} else if (totalSets > reqCount) {
+				totalSets = reqCount;
+			}
+		}
+
+		return totalSets;
+	}
 
 	public static boolean equalSets(NonNullList<ItemStack> set1, NonNullList<ItemStack> set2) {
 		if (set1 == set2) {
@@ -297,6 +329,46 @@ public abstract class ItemStackUtil {
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
 		}
+	}
+	
+	/**
+	 * Compare two item stacks for crafting equivalency.
+	 */
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, String oreDict, boolean craftingTools) {
+		if (base.isEmpty() || comparison.isEmpty()) {
+			return false;
+		}
+
+		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
+			return true;
+		}
+
+		if (isCraftingEquivalent(base, comparison)) {
+			return true;
+		}
+
+		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
+			if (!ItemStack.areItemStacksEqual(base, comparison)) {
+				return false;
+			}
+		}
+
+		if (!oreDict.isEmpty()) {
+			int[] idsBase = OreDictionary.getOreIDs(base);
+			Arrays.sort(idsBase);
+			int idComp = OreDictionary.getOreID(oreDict);
+
+			int iBase = 0;
+			while (iBase < idsBase.length) {
+				if (idsBase[iBase] == idComp) {
+					iBase++;
+				} else {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

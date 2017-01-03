@@ -207,6 +207,17 @@ public abstract class InventoryUtil {
 			return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
 		}
 	}
+	
+	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
+		NonNullList<ItemStack> stock = getStacks(inventory);
+
+		if (doRemove) {
+			NonNullList<ItemStack> removed = removeSets(inventory, count, set, oreDicts, player, stowContainer, craftingTools);
+			return removed != null && removed.size() >= count;
+		} else {
+			return ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) >= count;
+		}
+	}
 
 	@Nullable
 	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
@@ -235,6 +246,34 @@ public abstract class InventoryUtil {
 		}
 		return removed;
 	}
+	
+	@Nullable
+	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
+		NonNullList<ItemStack> stock = getStacks(inventory);
+
+		if (ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) < count) {
+			return null;
+		}
+
+		for (int i = 0; i < set.size(); i++) {
+			ItemStack itemStack = set.get(i);
+			if (!itemStack.isEmpty()) {
+				ItemStack stackToRemove = itemStack.copy();
+				stackToRemove.setCount(stackToRemove.getCount() * count);
+
+				// try to remove the exact stack first
+				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
+				if (removedStack.isEmpty()) {
+					// remove crafting equivalents next
+					removedStack = removeStack(inventory, stackToRemove, oreDicts.get(i), player, stowContainer, craftingTools);
+				}
+
+				removed.set(i, removedStack);
+			}
+		}
+		return removed;
+	}
 
 	/**
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
@@ -244,6 +283,27 @@ public abstract class InventoryUtil {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
 				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools)) {
+					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
+					stackToRemove.shrink(removed.getCount());
+
+					if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
+						stowContainerItem(removed, inventory, j, player);
+					}
+
+					if (stackToRemove.isEmpty()) {
+						return removed;
+					}
+				}
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+	
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+		for (int j = 0; j < inventory.getSizeInventory(); j++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(j);
+			if (!stackInSlot.isEmpty()) {
+				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictOfStack, craftingTools)) {
 					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 

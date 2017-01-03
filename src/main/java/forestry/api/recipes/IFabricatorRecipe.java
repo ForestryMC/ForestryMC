@@ -21,6 +21,8 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	 * Each inner list represents one slot's accepted ItemStacks
 	 */
 	NonNullList<NonNullList<ItemStack>> getIngredients();
+	
+	NonNullList<String> getOreDicts();
 
 	/**
 	 * @return the width of ingredients in the crafting grid to create this recipe.

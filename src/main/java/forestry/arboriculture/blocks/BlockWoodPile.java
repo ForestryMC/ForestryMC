@@ -7,8 +7,8 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.core.CreativeTabForestry;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -40,7 +40,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		super(Material.WOOD);
 		setHardness(1.5f);
 		setTickRandomly(true);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		setCreativeTab(Tabs.tabArboriculture);
 		setSoundType(SoundType.WOOD);
 	}
 	

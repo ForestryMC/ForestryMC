@@ -266,6 +266,9 @@ public abstract class RecipeUtil {
 			return resource.isEmpty();
 		}
 		for (ItemStack item : recipeIngredient) {
+			if(item.isEmpty() && resource.isEmpty()){
+				return true;
+			}
 			if (ItemStackUtil.isCraftingEquivalent(item, resource)) {
 				return true;
 			}

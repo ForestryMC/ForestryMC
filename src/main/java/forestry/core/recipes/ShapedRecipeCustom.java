@@ -30,6 +30,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	private static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
 	private NonNullList<NonNullList<ItemStack>> input;
+	private NonNullList<String> oreDicts;
 	private int width;
 	private int height;
 	private boolean mirrored = true;
@@ -78,6 +79,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 		}
 
 		HashMap<Character, NonNullList<ItemStack>> itemMap = new HashMap<>();
+		HashMap<Character, String> oreMap = new HashMap<>();
 
 		for (; idx < recipe.length; idx += 2) {
 			Character chr = (Character) recipe[idx];
@@ -100,6 +102,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 				itemMap.put(chr, ingredient);
 			} else if (in instanceof String) {
 				itemMap.put(chr, OreDictionary.getOres((String) in));
+				oreMap.put(chr, (String) in);
 			} else {
 				String ret = "Invalid shaped ore recipe: ";
 				for (Object tmp : recipe) {
@@ -111,11 +114,17 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 		}
 
 		input = NonNullList.withSize(9, NonNullList.create());
+		oreDicts = NonNullList.withSize(9, "");
 		int x = 0;
 		for (char chr : shape.toCharArray()) {
 			NonNullList<ItemStack> stacks = itemMap.get(chr);
 			if (stacks != null) {
 				input.set(x++, stacks);
+				if(oreMap.get(chr) != null){
+					oreDicts.set(x-1, oreMap.get(chr));
+				}
+			}else{
+				input.set(x++, NonNullList.withSize(1, ItemStack.EMPTY));
 			}
 		}
 	}
@@ -133,6 +142,11 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	@Override
 	public NonNullList<NonNullList<ItemStack>> getIngredients() {
 		return input;
+	}
+	
+	@Override
+	public NonNullList<String> getOreDicts() {
+		return oreDicts;
 	}
 
 	@Override

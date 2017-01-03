@@ -221,7 +221,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, null, true, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, getRecipe().getOreDicts(), null, true, false, doRemove);
 	}
 
 	@Override
@@ -237,7 +237,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			hasResources = removeFromInventory(crafting, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, false);
-			hasLiquidResources = drained.isFluidStackIdentical(toDrain);
+			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);
 		} else {
 			hasRecipe = false;
 		}

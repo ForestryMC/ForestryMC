@@ -30,6 +30,8 @@ public interface IDescriptiveRecipe {
 	 * Each inner list represents one slot's accepted ItemStacks
 	 */
 	NonNullList<NonNullList<ItemStack>> getIngredients();
+	
+	NonNullList<String> getOreDicts();
 
 	ItemStack getRecipeOutput();
 }

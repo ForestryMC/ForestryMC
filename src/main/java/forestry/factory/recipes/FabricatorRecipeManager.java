@@ -34,7 +34,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
 		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getIngredients();
 
-		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients);
+		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts());
 		addRecipe(recipe);
 	}
 
