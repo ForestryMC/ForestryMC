@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import forestry.api.recipes.ICarpenterRecipe;
@@ -19,7 +18,6 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -84,14 +82,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
-		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getIngredients();
-		List<List<ItemStack>> inputStacks = new ArrayList<>();
-		for (List<ItemStack> stacks : inputs) {
-			List<ItemStack> copy = new ArrayList<>();
-			copy.addAll(stacks);
-			inputStacks.add(copy);
-		}
-		craftingGridHelper.setInputs(guiItemStacks, inputStacks, craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
+		craftingGridHelper.setInputs(guiItemStacks, ingredients.getInputs(ItemStack.class), craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
 		if (!fluidInputs.isEmpty()) {

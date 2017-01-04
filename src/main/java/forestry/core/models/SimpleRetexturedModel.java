@@ -33,7 +33,7 @@ public class SimpleRetexturedModel extends BlankModel {
 
 	@Override
 	protected ItemOverrideList createOverrides() {
-		return new RetexturedOverrideList(model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, new DefaultTextureGetter()));
+		return new RetexturedOverrideList(model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class SimpleRetexturedModel extends BlankModel {
 
 	private IBakedModel getModel() {
 		if (bakedModel == null) {
-			return bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, new DefaultTextureGetter());
+			return bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, DefaultTextureGetter.INSTANCE);
 		}
 		return bakedModel;
 	}

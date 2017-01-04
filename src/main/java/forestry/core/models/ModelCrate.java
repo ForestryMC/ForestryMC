@@ -12,31 +12,23 @@ package forestry.core.models;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.ModelUtil;
 import forestry.storage.PluginStorage;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ModelBlock;
-import net.minecraft.client.resources.IResource;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -44,58 +36,42 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankModel {
-	@Nullable
-	private static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> itemTransforms;
 	private static final Map<String, IBakedModel> cache = new HashMap<>();
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
-
 
 	/**
 	 * Init the model with datas from the ModelBakeEvent.
 	 */
 	public static void onModelBake(ModelBakeEvent event) {
 		cache.clear();
-		itemTransforms = getMap(new ResourceLocation("minecraft:models/item/generated"));
-	}
-
-	public static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> getMap(ResourceLocation par1) {
-		return IPerspectiveAwareModel.MapWrapper.getTransforms(getTransformFromJson(par1));
-	}
-
-	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-		ResourceLocation file = new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + ".json");
-		IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(file);
-		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
-	}
-
-	private static ItemCameraTransforms getTransformFromJson(ResourceLocation par1) {
-		try {
-			return ModelBlock.deserialize(getReaderForResource(par1)).getAllTransforms();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ItemCameraTransforms.DEFAULT;
-	}
-
-
-	/**
-	 * @return The model from the item of the stack.
-	 */
-	private IBakedModel getModel(ItemStack stack) {
-		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
 	}
 
 	@Override
 	public ItemOverrideList createOverrides() {
 		return new CrateOverrideList();
+	}
+	
+	@Nullable
+	private static IBakedModel getCustomContentModel(ItemCrated crateItem){
+		ResourceLocation registryName = crateItem.getRegistryName();
+		String containedName = registryName.getResourcePath().replace("crated.", "");
+		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
+		IModel model;
+		try{
+			model = ModelLoaderRegistry.getModel(location);
+		}catch(Exception e){
+			return null;
+		}
+		return model.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 	}
 
 	/**
@@ -105,7 +81,10 @@ public class ModelCrate extends BlankModel {
 		List<IBakedModel> models = new ArrayList<>();
 		ItemStack contained = crateItem.getContained();
 		if (!contained.isEmpty()) {
-			IBakedModel containedModel = getModel(contained);
+			IBakedModel containedModel = getCustomContentModel(crateItem);
+			if(containedModel == null){
+				containedModel = ModelUtil.getModel(contained);
+			}
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, -0.0625F, 0.5F));
 		}
@@ -131,8 +110,12 @@ public class ModelCrate extends BlankModel {
 			if (model == null) {
 				//Fastest list with a unknown quad size
 				List<BakedQuad> list = new LinkedList<>();
-				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.getItems().crate, 1, 1));
-				for (BakedQuad quad : ForgeHooksClient.handleCameraTransforms(baseBaked, TransformType.GROUND, false).getQuads(null, null, 0L)) {
+				IBakedModel baseCrateModel = cache.get("base");
+				if(baseCrateModel == null){
+					baseCrateModel = ModelUtil.getModel(new ItemStack(PluginStorage.getItems().crate, 1, 1));
+					baseCrateModel = ForgeHooksClient.handleCameraTransforms(baseCrateModel, TransformType.GROUND, false);
+				}
+				for (BakedQuad quad : baseCrateModel.getQuads(null, null, 0L)) {
 					list.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
 				}
 				List<IBakedModel> textures = bakeModel(crated);
@@ -176,7 +159,7 @@ public class ModelCrate extends BlankModel {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-			Pair<? extends IBakedModel, Matrix4f> pair = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, itemTransforms, cameraTransformType);
+			Pair<? extends IBakedModel, Matrix4f> pair = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, ModelManager.getInstance().getDefaultItemState(), cameraTransformType);
 			if (cameraTransformType == TransformType.GUI && !gui && pair.getRight() == null) {
 				return Pair.of(other, null);
 			} else if (cameraTransformType != TransformType.GUI && gui) {

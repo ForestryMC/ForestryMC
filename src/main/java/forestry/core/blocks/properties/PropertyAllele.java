@@ -35,8 +35,7 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 		IAllele allele = AlleleManager.alleleRegistry.getAllele(value);
 		Class<A> valueClass = getValueClass();
 		if (valueClass.isInstance(allele)) {
-			A alleleValue = valueClass.cast(allele);
-			return Optional.of(alleleValue);
+			return Optional.of(valueClass.cast(allele));
 		}
 		return Optional.absent();
 	}

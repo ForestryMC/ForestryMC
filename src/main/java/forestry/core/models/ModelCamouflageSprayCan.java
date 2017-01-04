@@ -45,7 +45,7 @@ public class ModelCamouflageSprayCan extends BlankModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			IModel basicModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("forestry:item/camouflage_spray_can"));
-			IBakedModel model = basicModel.bake(basicModel.getDefaultState(), DefaultVertexFormats.ITEM, new DefaultTextureGetter());
+			IBakedModel model = basicModel.bake(basicModel.getDefaultState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 			IBakedModel filledModel = basicModel.bake(basicModel.getDefaultState(), DefaultVertexFormats.ITEM, new DefaultTextureGetter());
 			IBakedModel camouflageModel = null;
 
@@ -59,7 +59,7 @@ public class ModelCamouflageSprayCan extends BlankModel {
 					camouflageModel = new TRSRBakedModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(camouflage), -0.0625F * 3, 0.0625F * 3, 0.0625F, 0.5F);
 				}
 			}
-			return new SprayCanModel(model, filledModel, camouflageModel, ModelManager.getInstance().DEFAULT_ITEM);
+			return new SprayCanModel(model, filledModel, camouflageModel, ModelManager.getInstance().getDefaultItemState());
 		}
 
 	}

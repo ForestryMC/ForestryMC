@@ -9,9 +9,9 @@ import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
+import forestry.core.models.ModelManager;
 import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
@@ -84,7 +84,7 @@ public class WoodHelper {
 			IWoodType woodType = wood.getWoodType(meta);
 			WoodBlockKind blockKind = wood.getBlockKind();
 			if (woodType instanceof EnumForestryWoodType) {
-				return ForestryAPI.modelManager.getModelLocation(blockKind + "/" + woodType);
+				return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
 			} else if (woodType instanceof EnumVanillaWoodType) {
 				return new ModelResourceLocation("minecraft:" + woodType + "_" + blockKind, "inventory");
 			} else {

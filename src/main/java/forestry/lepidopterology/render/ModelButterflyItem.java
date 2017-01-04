@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
@@ -29,7 +28,6 @@ import forestry.core.models.TRSRBakedModel;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelRotation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -44,8 +42,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankModel {
-	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
-	@SideOnly(Side.CLIENT)
 	@Nullable
 	private static IModel modelButterfly;
 
@@ -76,7 +72,8 @@ public class ModelButterflyItem extends BlankModel {
 			}
 		}
 		IModel retexturedModel = ModelProcessingHelper.retexture(modelButterfly, textures.build());
-		return new TRSRBakedModel(retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
+		IBakedModel bakedModel = retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
+		return new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {

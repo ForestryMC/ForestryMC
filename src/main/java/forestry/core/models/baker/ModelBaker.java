@@ -50,7 +50,7 @@ public final class ModelBaker implements IModelBaker {
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 	private final List<Pair<IBlockState, IBakedModel>> bakedModels = new ArrayList<>();
 
-	protected final ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().DEFAULT_BLOCK);
+	protected final ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().getDefaultBlockState());
 
 	protected int colorIndex = -1;
 

@@ -25,10 +25,9 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ILeafTranslator;
+import forestry.api.genetics.IIndividualTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.ISaplingTranslator;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
@@ -138,13 +137,13 @@ public class GeneticsUtil {
 
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-
-		ILeafTranslator leafTranslator = AlleleManager.leafTranslators.get(block);
+		
+		IIndividualTranslator<IIndividual, IBlockState> leafTranslator = TreeManager.treeRoot.getTranslator(block);
 		if (leafTranslator == null) {
 			return null;
 		}
 
-		return leafTranslator.getTreeFromLeaf(blockState);
+		return leafTranslator.getIndividualFromObject(blockState);
 	}
 
 	@Nullable
@@ -154,11 +153,11 @@ public class GeneticsUtil {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
 
-		ISaplingTranslator saplingTranslator = AlleleManager.saplingTranslation.get(item);
+		IIndividualTranslator<IIndividual, ItemStack> saplingTranslator = TreeManager.treeRoot.getTranslator(item);
 		if (saplingTranslator == null) {
 			return null;
 		}
-		return saplingTranslator.getTreeFromSapling(itemStack);
+		return saplingTranslator.getIndividualFromObject(itemStack);
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {

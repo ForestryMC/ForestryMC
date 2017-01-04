@@ -31,8 +31,8 @@ import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.ILeafTranslator;
-import forestry.api.genetics.ISaplingTranslator;
+import forestry.api.genetics.IBlockTranslator;
+import forestry.api.genetics.IItemTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -464,14 +464,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	private static void registerErsatzGenomes() {
-		AlleleManager.leafTranslators.put(Blocks.LEAVES, new ILeafTranslator() {
+		TreeManager.treeRoot.registerTranslator(Blocks.LEAVES, new IBlockTranslator<ITree>() {
 			@Nullable
 			@Override
-			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
-				if (!leafBlockState.getValue(BlockLeaves.DECAYABLE)) {
+			public ITree getIndividualFromObject(IBlockState blockState) {
+				if (!blockState.getValue(BlockLeaves.DECAYABLE)) {
 					return null;
 				}
-				switch (leafBlockState.getValue(BlockOldLeaf.VARIANT)) {
+				switch (blockState.getValue(BlockOldLeaf.VARIANT)) {
 					case OAK:
 						return TreeDefinition.Oak.getIndividual();
 					case SPRUCE:
@@ -484,14 +484,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				return null;
 			}
 		});
-		AlleleManager.leafTranslators.put(Blocks.LEAVES2, new ILeafTranslator() {
+		TreeManager.treeRoot.registerTranslator(Blocks.LEAVES, new IBlockTranslator<ITree>() {
 			@Nullable
 			@Override
-			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
-				if (!leafBlockState.getValue(BlockLeaves.DECAYABLE)) {
+			public ITree getIndividualFromObject(IBlockState blockState) {
+				if (!blockState.getValue(BlockLeaves.DECAYABLE)) {
 					return null;
 				}
-				switch (leafBlockState.getValue(BlockNewLeaf.VARIANT)) {
+				switch (blockState.getValue(BlockNewLeaf.VARIANT)) {
 					case ACACIA:
 						return TreeDefinition.AcaciaVanilla.getIndividual();
 					case DARK_OAK:
@@ -501,11 +501,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			}
 		});
 
-		AlleleManager.saplingTranslation.put(Item.getItemFromBlock(Blocks.SAPLING), new ISaplingTranslator() {
+		TreeManager.treeRoot.registerTranslator(Item.getItemFromBlock(Blocks.SAPLING), new IItemTranslator<ITree>() {
 			@Nullable
 			@Override
-			public ITree getTreeFromSapling(ItemStack sapling) {
-				switch (sapling.getMetadata()) {
+			public ITree getIndividualFromObject(ItemStack itemStack) {
+				switch (itemStack.getMetadata()) {
 					case 0:
 						return TreeDefinition.Oak.getIndividual();
 					case 1:

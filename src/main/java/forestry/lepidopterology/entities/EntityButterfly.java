@@ -144,6 +144,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		if (pollen != null) {
 			NBTTagCompound pln = new NBTTagCompound();
+			pln.setString("Root", pollen.getGenome().getSpeciesRoot().getUID());
 			pollen.writeToNBT(pln);
 			nbttagcompound.setTag("PLN", pln);
 		}
@@ -167,7 +168,14 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setIndividual(butterfly);
 
 		if (nbttagcompound.hasKey("PLN")) {
-			pollen = TreeManager.treeRoot.getMember((NBTTagCompound) nbttagcompound.getTag("PLN"));
+			NBTTagCompound pollenNBT = nbttagcompound.getCompoundTag("PLN");
+			ISpeciesRoot root;
+			if(pollenNBT.hasKey("PLN")){
+				root = AlleleManager.alleleRegistry.getSpeciesRoot(pollenNBT.getString("PLN"));
+			}else{
+				root = TreeManager.treeRoot;
+			}
+			pollen = root.getMember(pollenNBT);
 		}
 
 		EnumButterflyState state = EnumButterflyState.VALUES[nbttagcompound.getByte("STATE")];

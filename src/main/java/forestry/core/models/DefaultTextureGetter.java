@@ -23,6 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DefaultTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
 
+	public static final Function<ResourceLocation, TextureAtlasSprite> INSTANCE = new DefaultTextureGetter();
+	
 	@Override
 	public TextureAtlasSprite apply(@Nullable ResourceLocation location) {
 		Preconditions.checkNotNull(location);

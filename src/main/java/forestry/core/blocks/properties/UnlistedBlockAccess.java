@@ -18,11 +18,11 @@ public final class UnlistedBlockAccess implements IUnlistedProperty<IBlockAccess
 
 	@Override
 	public String getName() {
-		return "ba";
+		return "blockaccess";
 	}
 
 	@Override
-	public boolean isValid(final IBlockAccess value) {
+	public boolean isValid(IBlockAccess value) {
 		return true;
 	}
 
@@ -32,7 +32,7 @@ public final class UnlistedBlockAccess implements IUnlistedProperty<IBlockAccess
 	}
 
 	@Override
-	public String valueToString(final IBlockAccess value) {
+	public String valueToString(IBlockAccess value) {
 		return value.toString();
 	}
 }

@@ -198,10 +198,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			if (removeFromInventory(crafting, false)) {
+			if (removeFromInventory(crafting, myRecipe, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, false);
 				if (drained.isFluidStackIdentical(liquid)) {
-					removeFromInventory(crafting, true);
+					removeFromInventory(crafting, myRecipe, true);
 					moltenTank.drain(liquid.amount, true);
 
 					// Damage plan
@@ -219,9 +219,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
+	private boolean removeFromInventory(NonNullList<ItemStack> set, IFabricatorRecipe recipe, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, getRecipe().getOreDicts(), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, recipe.getOreDicts(), null, true, false, doRemove);
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		IFabricatorRecipe recipe = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		if (recipe != null) {
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			hasResources = removeFromInventory(crafting, false);
+			hasResources = removeFromInventory(crafting, recipe, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, false);
 			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);
