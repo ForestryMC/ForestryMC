@@ -204,7 +204,7 @@ public abstract class SlotUtil {
 				int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
 				stackInSlot = stackToShift.copy();
 				stackInSlot.setCount(Math.min(stackToShift.getCount(), max));
-				stackInSlot.shrink(stackInSlot.getCount());
+				stackToShift.shrink(stackInSlot.getCount());
 				slot.putStack(stackInSlot);
 				slot.onSlotChanged();
 				changed = true;

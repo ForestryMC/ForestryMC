@@ -262,13 +262,10 @@ public abstract class RecipeUtil {
 	}
 
 	private static boolean checkIngredientMatch(@Nullable NonNullList<ItemStack> recipeIngredient, ItemStack resource) {
-		if (recipeIngredient == null) {
+		if (recipeIngredient == null || recipeIngredient.isEmpty()) {
 			return resource.isEmpty();
 		}
 		for (ItemStack item : recipeIngredient) {
-			if(item.isEmpty() && resource.isEmpty()){
-				return true;
-			}
 			if (ItemStackUtil.isCraftingEquivalent(item, resource)) {
 				return true;
 			}

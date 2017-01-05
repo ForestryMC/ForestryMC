@@ -299,7 +299,7 @@ public abstract class InventoryUtil {
 		return ItemStack.EMPTY;
 	}
 	
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove,  @Nullable String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {

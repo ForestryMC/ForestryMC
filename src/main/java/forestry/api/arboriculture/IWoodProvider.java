@@ -26,7 +26,7 @@ public interface IWoodProvider {
 	 * @return A stack of wood from the tree to craft wood pile's or other things.
 	 */
 	ItemStack getWoodStack();
-
+	
 	/**
 	 * The amount of charcoal dropped from a charcoal pile of this wood.
 	 */

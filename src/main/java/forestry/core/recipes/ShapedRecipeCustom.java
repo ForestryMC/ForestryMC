@@ -119,13 +119,12 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 		for (char chr : shape.toCharArray()) {
 			NonNullList<ItemStack> stacks = itemMap.get(chr);
 			if (stacks != null) {
-				input.set(x++, stacks);
+				input.set(x, stacks);
 				if(oreMap.get(chr) != null){
-					oreDicts.set(x-1, oreMap.get(chr));
+					oreDicts.set(x, oreMap.get(chr));
 				}
-			}else{
-				input.set(x++, NonNullList.withSize(1, ItemStack.EMPTY));
 			}
+			x++;
 		}
 	}
 
@@ -184,7 +183,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 
 				ItemStack stackInSlot = inv.getStackInRowAndColumn(x, y);
 
-				if (target != null) {
+				if (target != null && !target.isEmpty()) {
 					boolean matched = false;
 
 					Iterator<ItemStack> itr = target.iterator();

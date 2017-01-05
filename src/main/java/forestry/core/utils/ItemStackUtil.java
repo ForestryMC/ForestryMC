@@ -335,8 +335,8 @@ public abstract class ItemStackUtil {
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (!isCraftingEquivalent(base, comparison, craftingTools)) {
-			return false;
+		if (isCraftingEquivalent(base, comparison, craftingTools)) {
+			return true;
 		}
 
 		if (oreDictionary) {
@@ -357,6 +357,7 @@ public abstract class ItemStackUtil {
 					return true;
 				}
 			}
+			return false;
 		}
 
 		return false;
@@ -365,12 +366,12 @@ public abstract class ItemStackUtil {
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
-	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, String oreDict, boolean craftingTools) {
-		if(!isCraftingEquivalent(base, comparison, craftingTools)){
-			return false;
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, @Nullable String oreDict, boolean craftingTools) {
+		if(isCraftingEquivalent(base, comparison, craftingTools)){
+			return true;
 		}
 
-		if (!oreDict.isEmpty()) {
+		if (oreDict != null && !oreDict.isEmpty()) {
 			int[] baseIds = OreDictionary.getOreIDs(base);
 			int validID = OreDictionary.getOreID(oreDict);
 
