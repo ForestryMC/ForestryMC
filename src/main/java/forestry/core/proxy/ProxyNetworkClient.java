@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-
+import com.google.common.base.Preconditions;
 import forestry.core.network.IForestryPacketServer;
+import net.minecraft.client.network.NetHandlerPlayClient;
 
 public class ProxyNetworkClient extends ProxyNetwork {
 
 	@Override
 	public void sendToServer(IForestryPacketServer packet) {
 		NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getConnection();
-		if (netHandler != null) {
-			netHandler.sendPacket(packet.getPacket());
-		}
+		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
+		netHandler.sendPacket(packet.getPacket());
 	}
 }
