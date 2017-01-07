@@ -13,30 +13,35 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
+	private final List<List<ItemStack>> inputStacks;
 
 	public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {
 		super(recipe);
+
+		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
+		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getIngredients();
+
+		this.inputStacks = new ArrayList<>();
+		for (List<ItemStack> stacks : inputs) {
+			List<ItemStack> copy = new ArrayList<>();
+			copy.addAll(stacks);
+			this.inputStacks.add(copy);
+		}
 	}
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ICarpenterRecipe recipe = getRecipe();
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getIngredients();
 
 		List<List<ItemStack>> inputStacks = new ArrayList<>();
-		for (List<ItemStack> stacks : inputs) {
-			List<ItemStack> copy = new ArrayList<>();
-			copy.addAll(stacks);
-			if(!copy.isEmpty()){
-				inputStacks.add(copy);
-			}
-		}
-
 		ItemStack box = recipe.getBox();
 		if (!box.isEmpty()) {
 			inputStacks.add(Collections.singletonList(box));
 		}
+
+		inputStacks.addAll(getInputStacks());
+
 		ingredients.setInputLists(ItemStack.class, inputStacks);
 
 		FluidStack fluidResource = recipe.getFluidResource();
@@ -46,5 +51,9 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 
 		ItemStack recipeOutput = craftingGridRecipe.getRecipeOutput();
 		ingredients.setOutput(ItemStack.class, recipeOutput);
+	}
+
+	public List<List<ItemStack>> getInputStacks() {
+		return inputStacks;
 	}
 }

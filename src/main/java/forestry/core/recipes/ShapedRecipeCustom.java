@@ -113,8 +113,8 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 			}
 		}
 
-		input = NonNullList.withSize(9, NonNullList.create());
-		oreDicts = NonNullList.withSize(9, "");
+		input = NonNullList.withSize(shape.length(), NonNullList.create());
+		oreDicts = NonNullList.withSize(shape.length(), "");
 		int x = 0;
 		for (char chr : shape.toCharArray()) {
 			NonNullList<ItemStack> stacks = itemMap.get(chr);

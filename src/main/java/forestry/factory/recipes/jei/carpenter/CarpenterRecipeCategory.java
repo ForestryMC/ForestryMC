@@ -82,7 +82,8 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
-		craftingGridHelper.setInputs(guiItemStacks, ingredients.getInputs(ItemStack.class), craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
+		List<List<ItemStack>> craftingInputs = recipeWrapper.getInputStacks();
+		craftingGridHelper.setInputs(guiItemStacks, craftingInputs, craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
 		if (!fluidInputs.isEmpty()) {
