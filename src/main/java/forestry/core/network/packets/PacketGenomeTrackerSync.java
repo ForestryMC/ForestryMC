@@ -37,16 +37,16 @@ public class PacketGenomeTrackerSync extends PacketNBT implements IForestryPacke
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		IBreedingTracker tracker = null;
-		String type = getTagCompound().getString(BreedingTracker.TYPE_KEY);
+		NBTTagCompound nbt = getTagCompound();
+		if (nbt != null) {
+			String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
-		if (root != null && player != null) {
-			tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
-		}
-		if (tracker != null) {
-			tracker.decodeFromNBT(getTagCompound());
-			MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
+			ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
+			if (root != null) {
+				IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+				tracker.decodeFromNBT(nbt);
+				MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
+			}
 		}
 	}
 
