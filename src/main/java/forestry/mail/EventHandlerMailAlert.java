@@ -10,35 +10,31 @@
  ******************************************************************************/
 package forestry.mail;
 
-import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoRequest;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class EventHandlerMailAlert {
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase != Phase.END) {
-			return;
-		}
-
-		if (Minecraft.getMinecraft().world != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
+		if (event.phase == Phase.END &&
+				Minecraft.getMinecraft().world != null &&
+				GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render();
 		}
 	}
 
 	@SubscribeEvent
-	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		EntityPlayer player = event.player;
-		if (player != null) {
-			MailAddress address = new MailAddress(player.getGameProfile());
-			POBox pobox = PostRegistry.getOrCreatePOBox(player.world, address);
-			Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
+	public void handleWorldLoad(WorldEvent.Load event) {
+		World world = event.getWorld();
+		if (world.isRemote) {
+			PacketPOBoxInfoRequest packet = new PacketPOBoxInfoRequest();
+			world.sendPacketToServer(packet.getPacket());
 		}
 	}
 }

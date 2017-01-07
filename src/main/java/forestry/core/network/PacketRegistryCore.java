@@ -16,6 +16,7 @@ import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
 import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.network.packets.PacketGenomeTrackerRequest;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.network.packets.PacketGuiEnergy;
 import forestry.core.network.packets.PacketGuiLayoutSelect;
@@ -53,5 +54,6 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
 		PacketIdServer.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectServer.Handler());
 		PacketIdServer.CLIMATE_CONTROL_UPDATE.setPacketHandler(new PacketUpdateClimateControl.Handler());
+		PacketIdServer.GENOME_TRACKER_REQUEST.setPacketHandler(new PacketGenomeTrackerRequest.Handler());
 	}
 }

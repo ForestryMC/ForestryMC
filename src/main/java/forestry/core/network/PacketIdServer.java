@@ -34,6 +34,9 @@ public enum PacketIdServer implements IPacketId {
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
 
+	// Genetics
+	GENOME_TRACKER_REQUEST,
+
 	// Mail
 	LETTER_INFO_REQUEST,
 	TRADING_ADDRESS_REQUEST,

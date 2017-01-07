@@ -12,6 +12,7 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import com.google.common.base.Preconditions;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import net.minecraft.client.Minecraft;
@@ -49,22 +50,23 @@ public class PacketHandler {
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
 		PacketBufferForestry data = new PacketBufferForestry(event.getPacket().payload());
-		EntityPlayer player = Proxies.common.getPlayer();
 
 		byte packetIdOrdinal = data.readByte();
 		PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
 		IForestryPacketHandlerClient packetHandler = packetId.getPacketHandler();
-		checkThreadAndEnqueue(packetHandler, data, player, Minecraft.getMinecraft());
+		checkThreadAndEnqueue(packetHandler, data, Minecraft.getMinecraft());
 	}
 
 	public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
 		channel.sendTo(packet, player);
 	}
 
-	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, final EntityPlayer player, IThreadListener threadListener) {
+	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
 		if (!threadListener.isCallingFromMinecraftThread()) {
 			threadListener.addScheduledTask(() -> {
 				try {
+					EntityPlayer player = Proxies.common.getPlayer();
+					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
 					packet.onPacketData(data, player);
 				} catch (IOException e) {
 					Log.error("Network Error", e);
