@@ -49,7 +49,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 			ingredients.setInputs(FluidStack.class, Collections.singletonList(fluidResource));
 		}
 
-		ItemStack recipeOutput = craftingGridRecipe.getRecipeOutput();
+		ItemStack recipeOutput = craftingGridRecipe.getOutput();
 		ingredients.setOutput(ItemStack.class, recipeOutput);
 	}
 

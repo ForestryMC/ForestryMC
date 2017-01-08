@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 
 /**
@@ -33,5 +34,8 @@ public interface IDescriptiveRecipe {
 	
 	NonNullList<String> getOreDicts();
 
-	ItemStack getRecipeOutput();
+	/**
+	 * Must not be named the same as {@link IRecipe#getRecipeOutput()} to avoid obfuscation for recipes that implement both.
+	 */
+	ItemStack getOutput();
 }

@@ -149,6 +149,11 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	}
 
 	@Override
+	public ItemStack getOutput() {
+		return getRecipeOutput();
+	}
+
+	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
 		for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
 			for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {

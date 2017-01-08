@@ -756,7 +756,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
 		FluidStack drained = resourceTank.drainInternal(liquid, false);
-		return drained.isFluidStackIdentical(liquid);
+		return liquid.isFluidStackIdentical(drained);
 	}
 
 	@Override
