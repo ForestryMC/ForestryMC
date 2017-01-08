@@ -51,6 +51,9 @@ public abstract class ItemGE extends ItemForestry {
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
+		if (!stack.hasTagCompound()) { // villager trade wildcard bees
+			return false;
+		}
 		IAlleleSpecies species = getSpecies(stack);
 		return species.hasEffect();
 	}

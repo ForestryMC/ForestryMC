@@ -23,6 +23,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.genetics.BeeGenome;
+import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -144,6 +145,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	private class BeeMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			if (!stack.hasTagCompound()) { // villager trade wildcard bees
+				return DefaultBeeModelProvider.instance.getModel(type);
+			}
 			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
 			return species.getModel(type);
 		}
