@@ -200,7 +200,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			if (removeFromInventory(crafting, myRecipe, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, false);
-				if (drained.isFluidStackIdentical(liquid)) {
+				if (drained != null && drained.isFluidStackIdentical(liquid)) {
 					removeFromInventory(crafting, myRecipe, true);
 					moltenTank.drain(liquid.amount, true);
 
