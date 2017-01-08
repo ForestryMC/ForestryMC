@@ -515,7 +515,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest, BlockPos minFarmCoord, BlockPos maxFarmCoord) {
-
 		for (FarmDirection farmSide : FarmDirection.values()) {
 
 			final int farmWidth;
@@ -530,38 +529,37 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			FarmDirection layoutDirection = getLayoutDirection(farmSide);
 
+			List<FarmTarget> farmSideTargets = new ArrayList<>();
+			targets.put(farmSide, farmSideTargets);
+
 			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(targetStart, farmSide, layoutDirection, minFarmCoord, maxFarmCoord);
 			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
 			BlockPos firstGroundPosition = getGroundPosition(world, firstLocation);
-			if (firstGroundPosition == null) {
-				continue;
+			if (firstGroundPosition != null) {
+				int groundHeight = firstGroundPosition.getY();
+
+				for (int i = 0; i < allowedExtent; i++) {
+					targetLocation = targetLocation.offset(farmSide.getFacing());
+					BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
+
+					if (!world.isBlockLoaded(groundLocation)) {
+						break;
+					}
+
+					IBlockState blockState = world.getBlockState(groundLocation);
+					if (!FarmHelper.bricks.contains(blockState.getBlock())) {
+						break;
+					}
+
+					int targetLimit = targetMaxLimit;
+					if (!Config.squareFarms) {
+						targetLimit = targetMaxLimit - i - 1;
+					}
+
+					FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
+					farmSideTargets.add(target);
+				}
 			}
-			int groundHeight = firstGroundPosition.getY();
-
-			List<FarmTarget> farmSideTargets = new ArrayList<>();
-			for (int i = 0; i < allowedExtent; i++) {
-				targetLocation = targetLocation.offset(farmSide.getFacing());
-				BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
-
-				if (!world.isBlockLoaded(groundLocation)) {
-					break;
-				}
-
-				IBlockState blockState = world.getBlockState(groundLocation);
-				if (!FarmHelper.bricks.contains(blockState.getBlock())) {
-					break;
-				}
-
-				int targetLimit = targetMaxLimit;
-				if (!Config.squareFarms) {
-					targetLimit = targetMaxLimit - i - 1;
-				}
-
-				FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
-				farmSideTargets.add(target);
-			}
-
-			targets.put(farmSide, farmSideTargets);
 		}
 	}
 
