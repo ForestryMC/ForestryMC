@@ -52,10 +52,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
-	
-	public static TileSapling getSaplingTile(IBlockAccess world, BlockPos pos) {
-		return TileUtil.getTile(world, pos, TileSapling.class);
-	}
 
 	public BlockSapling() {
 		super(Material.PLANTS);
@@ -105,7 +101,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileSapling sapling = getSaplingTile(world, pos);
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if(sapling != null && sapling.getTree() != null){
 			state = state.withProperty(TREE, sapling.getTree().getGenome().getPrimary());
 		}else{
@@ -135,7 +131,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	/* PLANTING */
 	public static boolean canBlockStay(IBlockAccess world, BlockPos pos) {
-		TileSapling tile = getSaplingTile(world, pos);
+		TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (tile == null) {
 			return false;
 		}
@@ -165,7 +161,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		TileSapling sapling = getSaplingTile(world, pos);
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
 		}
@@ -188,7 +184,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 			return;
 		}
 
-		TileSapling sapling = getSaplingTile(world, pos);
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null && sapling.getTree() != null) {
 			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
 			ItemStackUtil.dropItemStackAsEntity(saplingStack, world, pos);
@@ -202,7 +198,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (world.rand.nextFloat() >= 0.45F) {
 			return false;
 		}
-		TileSapling saplingTile = getSaplingTile(world, pos);
+		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			return saplingTile.canAcceptBoneMeal(rand);
 		}
@@ -216,7 +212,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-		TileSapling saplingTile = getSaplingTile(world, pos);
+		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);
 		}

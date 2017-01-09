@@ -18,6 +18,7 @@ import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -62,7 +63,7 @@ public class CamouflageUtil {
 		if(pos == null || world == null){
 			return null;
 		}
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = TileUtil.getTile(world, pos, TileEntity.class);
 		if(tile instanceof ICamouflagedTile){
 			ICamouflagedTile block = (ICamouflagedTile) tile;
 			String type = block.getCamouflageType();
@@ -86,7 +87,7 @@ public class CamouflageUtil {
 		if(pos == null || world == null){
 			return null;
 		}
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = TileUtil.getTile(world, pos, TileEntity.class);
 		if(tile instanceof ICamouflagedTile){
 			ICamouflagedTile block = (ICamouflagedTile) tile;
 			String type = block.getCamouflageType();

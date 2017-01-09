@@ -13,15 +13,18 @@ package forestry.core.tiles;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -48,12 +51,26 @@ public abstract class TileUtil {
 
 	}
 
+	/**
+	 * Returns the tile of the specified class, returns null if it is the wrong type or does not exist.
+	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
+	 * see {@link BlockFlowerPot#getActualState(IBlockState, IBlockAccess, BlockPos)}
+	 */
 	@Nullable
 	public static <T extends TileEntity> T getTile(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull Class<T> tileClass) {
 		if(pos == null){
 			return null;
 		}
-		TileEntity tileEntity = world.getTileEntity(pos);
+
+		TileEntity tileEntity;
+
+		if (world instanceof ChunkCache) {
+			ChunkCache chunkCache = (ChunkCache) world;
+			tileEntity = chunkCache.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+		} else {
+			tileEntity = world.getTileEntity(pos);
+		}
+
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {

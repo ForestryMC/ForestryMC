@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -275,7 +276,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
 			return state.withProperty(Properties.StaticProperty, true);
 		} else {
-			TileEntity tile = worldIn.getTileEntity(pos);
+			TileEntity tile = TileUtil.getTile(worldIn, pos, TileEntity.class);
 			if(tile instanceof IActivatable){
 				state = state.withProperty(STATE, ((IActivatable) tile).isActive() ? State.ON : State.OFF);
 			}
