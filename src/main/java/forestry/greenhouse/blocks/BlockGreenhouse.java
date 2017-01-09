@@ -31,6 +31,7 @@ import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.tiles.IActivatable;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -242,7 +243,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntity tile = worldIn.getTileEntity(pos);
+		TileEntity tile = TileUtil.getTile(worldIn, pos, TileEntity.class);
 		if (tile instanceof IActivatable) {
 			state = state.withProperty(STATE, ((IActivatable) tile).isActive() ? State.ON : State.OFF);
 		}

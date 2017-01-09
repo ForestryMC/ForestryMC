@@ -20,6 +20,7 @@ import forestry.api.core.IModelBaker;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockDefault;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -27,6 +28,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -75,7 +77,7 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 
 		if (!camouflageStack.isEmpty()) {
 			ICamouflageHandler camouflageHandler = CamouflageUtil.getCamouflageHandler(world, pos);
-			ICamouflagedTile camouflageTile = (ICamouflagedTile) world.getTileEntity(pos);
+			ICamouflagedTile camouflageTile = (ICamouflagedTile) TileUtil.getTile(world, pos, TileEntity.class);
 			ICamouflageItemHandler itemHandler = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflageStack);
 			if (itemHandler != null && camouflageHandler != null && camouflageTile != null) {
 				Pair<IBlockState, IBakedModel> model = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
