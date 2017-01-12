@@ -226,16 +226,16 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			} else {
 				yShift = 0;
 			}
-			BlockPos posS = pos.add(0, -yShift, 0);
+			BlockPos posDown = pos.add(0, -yShift, 0);
 
-			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, posDown, player);
 			if (nursery != null) {
 				if (nursery.canNurse(flutter)) {
 					nursery.setCaterpillar(flutter);
 					if (ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age)) {
-						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
-								world.getBlockState(posS));
-						Proxies.net.sendNetworkPacket(packet, pos, world);
+						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, posDown,
+								world.getBlockState(posDown));
+						Proxies.net.sendNetworkPacket(packet, posDown, world);
 
 						if (!player.capabilities.isCreativeMode) {
 							stack.shrink(1);
@@ -250,7 +250,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			}
 			return EnumActionResult.PASS;
 		} else if (type == EnumFlutterType.CATERPILLAR) {
-
 			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
 			if (nursery != null) {
 				if (!nursery.canNurse(flutter)) {

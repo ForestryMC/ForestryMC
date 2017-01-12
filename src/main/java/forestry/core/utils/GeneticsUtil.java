@@ -119,6 +119,31 @@ public class GeneticsUtil {
 
 		return null;
 	}
+	
+	public static IButterflyNursery getOrCreateNursery(World world, BlockPos pos, EntityPlayer player) {
+		IButterflyNursery nursery = getNursery(world, pos);
+
+		if (nursery == null) {
+			IIndividual pollen = GeneticsUtil.getPollen(world, pos);
+
+			if (pollen != null && pollen instanceof ITree) {
+				ITree treeLeave = (ITree) pollen;
+				if (treeLeave.setLeaves(world, player.getGameProfile(), pos)) {
+					nursery = getNursery(world, pos);
+				}
+			}
+		}
+		return nursery;
+	}
+	
+	public static IButterflyNursery getNursery(World world, BlockPos pos) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+
+		if (tileEntity instanceof IButterflyNursery) {
+			return (IButterflyNursery) tileEntity;
+		}
+		return null;
+	}
 
 	/**
 	 * Gets pollen from a location. Does not affect the pollen source.
