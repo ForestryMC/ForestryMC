@@ -2,11 +2,10 @@
 /*
 
 # folders
+!/.github
 !/forestry_techne
 !/gradle/wrapper
 !/src
-!/api
-!/test
 
 # files
 !/.gitignore
@@ -21,4 +20,5 @@
 !/build.xml
 !/gradlew
 !/gradlew.bat
-.DS_Store
+!/cla-signatures.txt
+!/formatting-settings.jar
