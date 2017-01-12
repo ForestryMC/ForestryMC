@@ -181,9 +181,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
+	public BlockPos plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
 		if (nursery.getCaterpillar() == null) {
-			return false;
+			return BlockPos.ORIGIN;
 		}
 
 		BlockRegistryLepidopterology blocks = PluginLepidopterology.getBlocks();
@@ -192,18 +192,18 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		IBlockState state = blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
-			return false;
+			return BlockPos.ORIGIN;
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
 		if (blocks.cocoon != block) {
-			return false;
+			return BlockPos.ORIGIN;
 		}
 
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileCocoon)) {
 			world.setBlockToAir(pos);
-			return false;
+			return BlockPos.ORIGIN;
 		}
 
 		TileCocoon cocoon = (TileCocoon) tile;
@@ -212,7 +212,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		cocoon.setNursery(nursery);
 		cocoon.setAge(age);
 
-		return true;
+		return pos;
 	}
 
 	private BlockPos getNextPos(World world, BlockPos pos) {

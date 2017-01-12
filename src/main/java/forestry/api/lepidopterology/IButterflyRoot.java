@@ -14,6 +14,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IButterflyRoot extends ISpeciesRoot {
@@ -52,7 +53,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	 */
 	EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-	boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age);
+	BlockPos plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age);
 
 	/**
 	 * @return true if passed item is mated.

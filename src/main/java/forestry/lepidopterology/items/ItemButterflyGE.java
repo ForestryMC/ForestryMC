@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import com.google.common.base.Preconditions;
-import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
@@ -228,14 +227,16 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			}
 			BlockPos posDown = pos.add(0, -yShift, 0);
 
-			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, posDown, player);
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
 			if (nursery != null) {
 				if (nursery.canNurse(flutter)) {
 					nursery.setCaterpillar(flutter);
-					if (ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age)) {
-						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, posDown,
-								world.getBlockState(posDown));
-						Proxies.net.sendNetworkPacket(packet, posDown, world);
+					
+					pos = ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age);
+					if (pos != BlockPos.ORIGIN) {
+						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
+								world.getBlockState(pos));
+						Proxies.net.sendNetworkPacket(packet, pos, world);
 
 						if (!player.capabilities.isCreativeMode) {
 							stack.shrink(1);
