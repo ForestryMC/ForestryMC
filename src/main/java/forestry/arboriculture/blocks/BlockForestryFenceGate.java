@@ -24,7 +24,6 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.SoundType;

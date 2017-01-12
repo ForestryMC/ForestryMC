@@ -1,27 +1,17 @@
 package forestry.arboriculture.models;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModelUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
 import net.minecraft.client.renderer.block.model.ModelBlockDefinition.MissingVariantException;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.VariantList;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
-import org.apache.commons.io.IOUtils;
 
 public enum WoodModelLoader implements ICustomModelLoader {
 	INSTANCE;

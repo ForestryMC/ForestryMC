@@ -12,7 +12,6 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelBakery;

@@ -9,21 +9,15 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelProcessingHelper;
 
 public enum WoodBlockKind {
-	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR(false);
-
-	public final boolean retextureItem;
-
-	WoodBlockKind() {
-		this(true);
-	}
-
-	WoodBlockKind(boolean retextureItem) {
-		this.retextureItem = retextureItem;
+	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
+	
+	public String getName(){
+		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override
 	public String toString() {
-		return super.toString().toLowerCase(Locale.ENGLISH);
+		return getName();
 	}
 
 	public IModel retextureModel(IModel model, IWoodType type, ImmutableMap<String, String> customTextures) {

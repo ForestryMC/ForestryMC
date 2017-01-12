@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -26,12 +25,11 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.MultipartModel;
 import forestry.arboriculture.models.WoodModelLoader;
-import forestry.arboriculture.models.WoodTextures;
+import forestry.arboriculture.models.WoodTextureManager;
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.models.SimpleRetexturedModel;
@@ -39,24 +37,16 @@ import forestry.core.models.WoodModelEntry;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.multipart.Multipart;
-import net.minecraft.client.renderer.block.statemap.BlockStateMapper;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {
@@ -127,7 +117,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 					itemStack = new ItemStack(woodTyped);
 				}
 				IWoodItemMeshDefinition definition = shapers.get(itemStack.getItem());
-				ImmutableMap<String, String> textures = WoodTextures.getLocations(woodType, woodKind);
+				ImmutableMap<String, String> textures = WoodTextureManager.getTextures(woodType, woodKind);
 				if (definition != null) {
 					retextureItemModel(registry, textures, woodType, woodKind, itemStack, definition);
 				}
