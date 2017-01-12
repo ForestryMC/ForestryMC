@@ -84,7 +84,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	private static final String CONFIG_CATEGORY = "lepidopterology";
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
-	public static int maxDistance = 1600;
+	public static int maxDistance = 256;
 	private static boolean allowPollination = true;
 	public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
 	private static boolean spawnButterflysFromLeaves = true;
@@ -133,7 +133,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		proxy.preInitializeRendering();
 	}
 
-
 	@Override
 	public Set<String> getDependencyUids() {
 		Set<String> dependencyUids = super.getDependencyUids();
@@ -148,7 +147,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
 		ResourceLocation butterflyResourceLocation = new ResourceLocation(Constants.MOD_ID, "butterflyGE");
-		EntityUtil.registerEntity(butterflyResourceLocation, EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
+		EntityUtil.registerEntity(butterflyResourceLocation, EntityButterfly.class, "butterflyGE", 0, 0x000000,
+				0xffffff, 50, 1, true);
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
@@ -162,7 +162,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 			TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
 		}
 
-		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS,
+				"before:minecraft:shapeless");
 	}
 
 	@Override
@@ -172,7 +173,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	}
 
 	@Override
-	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
+			boolean hasVillageGenerated) {
 		if (generateCocoons) {
 			if (generateCocoonsAmount > 0.0) {
 				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
@@ -194,15 +196,18 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
 		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
-		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 1600);
+		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
 		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
-		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves", spawnButterflysFromLeaves);
+		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
+				spawnButterflysFromLeaves);
 
 		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
-		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount, 0.0f, 10.0f);
+		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
+				0.0f, 10.0f);
 
 		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
-		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f, 100.0f);
+		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
+				100.0f);
 
 		parseRarity(config);
 		parseCooconLoots(config);
@@ -277,8 +282,10 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 				}
 			}
 		}
-		cocoon.getCocoonLoot().clear();
-		cocoon.getCocoonLoot().putAll(cooconLoot);
+		cocoon.clearLoot();
+		for (Entry<ItemStack, Float> entry : cocoon.getCocoonLoot().entrySet()) {
+			cocoon.addLoot(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
@@ -288,13 +295,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeUtil.addRecipe(blocks.butterflyChest,
-				" # ",
-				"XYX",
-				"XXX",
-				'#', "blockGlass",
-				'X', new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
-				'Y', "chestWood");
+		RecipeUtil.addRecipe(blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
+				new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
 	}
 
 	@Override

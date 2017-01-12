@@ -11,6 +11,7 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.BlockStateContainer;
@@ -166,12 +167,12 @@ public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends Bl
 	@Override
 	public final void registerModel(Item item, IModelManager manager) {
 		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
+		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
 	}
 }

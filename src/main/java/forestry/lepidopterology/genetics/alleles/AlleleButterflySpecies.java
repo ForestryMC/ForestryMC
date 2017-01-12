@@ -39,7 +39,8 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
+public class AlleleButterflySpecies extends AlleleSpecies
+		implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
 	private final String modID;
 	private final Color serumColour;
@@ -52,7 +53,9 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
-	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
+			String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
+			Color serumColour) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
 
@@ -150,7 +153,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual,
+			int bountyLevel) {
 		ItemStack serum = getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM);
 		NonNullList<ItemStack> bounty = NonNullList.create();
 		bounty.add(serum);

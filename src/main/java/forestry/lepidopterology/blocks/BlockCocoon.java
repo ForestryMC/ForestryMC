@@ -49,11 +49,12 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockCocoon() {
-		super(new MaterialCocoon());
+		super(MaterialCocoon.INSTANCE);
 		setTickRandomly(true);
 		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
+		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
+				.withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -66,7 +67,8 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
-			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon()).withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+					.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 		return super.getActualState(state, world, pos);
 	}
@@ -80,7 +82,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		//To delete the error message
+		// To delete the error message
 		manager.registerItemModel(item, 0, "cocoon_late");
 	}
 
@@ -105,9 +107,9 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 			return;
 		}
 
-		if (world.rand.nextFloat() > 0.1) {
-			return;
-		}
+		// if (rand.nextFloat() > 0.25) {
+		// return;
+		// }
 		tileCocoon.onBlockTick();
 	}
 
@@ -135,7 +137,8 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+			EntityPlayer player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;

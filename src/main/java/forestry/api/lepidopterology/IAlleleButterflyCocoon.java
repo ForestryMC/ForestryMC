@@ -23,5 +23,8 @@ public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterfly
 	String getCocoonName();
 
 	Map<ItemStack, Float> getCocoonLoot();
+	
+	void clearLoot();
 
+	void addLoot(ItemStack loot, float chance);
 }

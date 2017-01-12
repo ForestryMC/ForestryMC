@@ -44,13 +44,14 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
-		super(new MaterialCocoon());
+		super(MaterialCocoon.INSTANCE);
 		setHarvestLevel("scoop", 0);
 		setHardness(0.5F);
 		setTickRandomly(true);
 		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
+		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
+				.withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -63,7 +64,8 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
-			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon()).withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+					.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 		return super.getActualState(state, world, pos);
 	}
@@ -77,7 +79,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		//To delete the error message
+		// To delete the error message
 		manager.registerItemModel(item, 0, "cocoon_late");
 	}
 
@@ -92,7 +94,8 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
+			boolean willHarvest) {
 		if (canHarvestBlock(world, pos, player)) {
 			TileEntity tile = world.getTileEntity(pos);
 

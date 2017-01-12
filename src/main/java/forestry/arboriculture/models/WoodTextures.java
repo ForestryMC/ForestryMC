@@ -28,7 +28,8 @@ public class WoodTextures {
 
 	public static void deserializeFile(IResourceManager resourceManager) {
 		try {
-			InputStream stream = resourceManager.getResource(new ResourceLocation("forestry:textures/woodTextures.json")).getInputStream();
+			InputStream stream = resourceManager
+					.getResource(new ResourceLocation("forestry:textures/woodTextures.json")).getInputStream();
 			JsonReader reader = null;
 			try {
 				reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
@@ -43,7 +44,8 @@ public class WoodTextures {
 							for (JsonElement eleEntry : ele.getAsJsonArray()) {
 								if (eleEntry.isJsonObject()) {
 									JsonObject obj = eleEntry.getAsJsonObject();
-									if (!obj.has("kind") || !obj.get("kind").isJsonPrimitive() || !obj.get("kind").getAsJsonPrimitive().isString()) {
+									if (!obj.has("kind") || !obj.get("kind").isJsonPrimitive()
+											|| !obj.get("kind").getAsJsonPrimitive().isString()) {
 										continue;
 									}
 									String kind = obj.get("kind").getAsString();
@@ -97,24 +99,25 @@ public class WoodTextures {
 		for (Entry<String, String> location : locations.entrySet()) {
 			String texture = location.getValue();
 			switch (texture) {
-				case "plank":
-					texture = woodType.getPlankTexture();
-					break;
-				case "bark":
-					texture = woodType.getBarkTexture();
-					break;
-				case "heart":
-					texture = woodType.getHeartTexture();
-					break;
-				case "doorUp":
-					texture = woodType.getDoorUpperTexture();
-					break;
-				case "doorLow":
-					texture = woodType.getDoorLowerTexture();
-					break;
-				default:
-					builder.put(location.getKey(), texture.replace("%woodType", woodType.getName().toLowerCase(Locale.ENGLISH)));
-					continue;
+			case "plank":
+				texture = woodType.getPlankTexture();
+				break;
+			case "bark":
+				texture = woodType.getBarkTexture();
+				break;
+			case "heart":
+				texture = woodType.getHeartTexture();
+				break;
+			case "doorUp":
+				texture = woodType.getDoorUpperTexture();
+				break;
+			case "doorLow":
+				texture = woodType.getDoorLowerTexture();
+				break;
+			default:
+				builder.put(location.getKey(),
+						texture.replace("%woodType", woodType.getName().toLowerCase(Locale.ENGLISH)));
+				continue;
 			}
 			builder.put(location.getKey(), texture);
 		}

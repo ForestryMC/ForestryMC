@@ -90,7 +90,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		isSolid = nbttagcompound.getBoolean("isSolid");
 	}
 
-
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -163,8 +162,12 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
+		int oldAge = age;
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
+		if (oldAge != age) {
+			world.markBlockRangeForRenderUpdate(pos, pos);
+		}
 	}
 
 	@Override
@@ -178,12 +181,15 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		maturationTime++;
 
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
-		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+		int caterpillarMatureTime = Math
+				.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
 			if (age < 2) {
 				age++;
 				maturationTime = 0;
+				IBlockState blockState = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, blockState, blockState, 0);
 			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
 				IGreenhouseComponent.ButterflyHatch hatch = getButterflyHatch(world, pos);
 				NonNullList<ItemStack> cocoonDrops;
@@ -203,7 +209,8 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	@Nullable
 	public ButterflyHatch getButterflyHatch(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper == null || GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
+		if (GreenhouseManager.greenhouseHelper == null
+				|| GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
 			return null;
 		}
 		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
@@ -222,8 +229,10 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
-		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
+				pos.getX(), pos.getY() + 0.1f, pos.getZ());
+		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
+				pos.getZ());
 	}
 
 	@Override

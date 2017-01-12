@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,12 +51,23 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public ModelResourceLocation getCocoonItemModel(int age) {
-		return new ModelResourceLocation(Constants.MOD_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
+		return new ModelResourceLocation(
+				Constants.MOD_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
+	}
+
+	@Override
+	public void clearLoot() {
+		this.loot.clear();
+	}
+
+	@Override
+	public void addLoot(ItemStack loot, float chance) {
+		this.loot.put(loot, chance);
 	}
 
 	@Override
 	public Map<ItemStack, Float> getCocoonLoot() {
-		return loot;
+		return Collections.unmodifiableMap(loot);
 	}
 
 	@Override

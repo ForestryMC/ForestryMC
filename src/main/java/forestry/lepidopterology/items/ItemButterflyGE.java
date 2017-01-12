@@ -145,7 +145,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
-		EntityUtil.spawnEntity(entityItem.world, new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX, entityItem.posY, entityItem.posZ);
+		EntityUtil.spawnEntity(entityItem.world,
+				new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX,
+				entityItem.posY, entityItem.posZ);
 		if (!entityItem.getEntityItem().isEmpty()) {
 			entityItem.getEntityItem().shrink(1);
 		} else {
@@ -159,24 +161,25 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
-			case CATERPILLAR:
-				manager.registerItemModel(item, 0, "caterpillar");
-				break;
-			case BUTTERFLY:
-				manager.registerItemModel(item, 0, "butterflyGE");
-				break;
-			case COCOON:
-				manager.registerItemModel(item, new CocoonMeshDefinition());
-				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-					if (allele instanceof IAlleleButterflyCocoon) {
-						for (int age = 0; age < 3; age++) {
-							ModelBakery.registerItemVariants(this, ((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
-						}
+		case CATERPILLAR:
+			manager.registerItemModel(item, 0, "caterpillar");
+			break;
+		case BUTTERFLY:
+			manager.registerItemModel(item, 0, "butterflyGE");
+			break;
+		case COCOON:
+			manager.registerItemModel(item, new CocoonMeshDefinition());
+			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+				if (allele instanceof IAlleleButterflyCocoon) {
+					for (int age = 0; age < 3; age++) {
+						ModelBakery.registerItemVariants(this,
+								((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
 					}
 				}
-				break;
-			default:
-				manager.registerItemModel(item, 0, "liquids/jar");
+			}
+			break;
+		default:
+			manager.registerItemModel(item, 0, "liquids/jar");
 		}
 	}
 
@@ -195,10 +198,10 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	}
 
-
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		if (world.isRemote) {
 			return EnumActionResult.PASS;
 		}
 
@@ -206,16 +209,17 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 		IButterfly flutter = ButterflyManager.butterflyRoot.getMember(stack);
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		IBlockState blockState = worldIn.getBlockState(pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		IBlockState blockState = world.getBlockState(pos);
 		if (type == EnumFlutterType.COCOON) {
 			NBTTagCompound tagCompound = stack.getTagCompound();
 			int age = tagCompound.getInteger(NBT_AGE);
 
-			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
+			// x, y, z are the coordinates of the block "hit", can thus either
+			// be the soil or tall grass, etc.
 			int yShift;
-			if (!BlockUtil.isReplaceableBlock(blockState, worldIn, pos)) {
-				if (!worldIn.isAirBlock(pos.down())) {
+			if (!BlockUtil.isReplaceableBlock(blockState, world, pos)) {
+				if (!world.isAirBlock(pos.down())) {
 					return EnumActionResult.PASS;
 				}
 				yShift = 1;
@@ -224,25 +228,14 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			}
 			BlockPos posS = pos.add(0, -yShift, 0);
 
-			IButterflyNursery nursery = null;
-
-			if (tileEntity instanceof IButterflyNursery) {
-				nursery = (IButterflyNursery) tileEntity;
-			} else {
-				IIndividual treeLeave = GeneticsUtil.getPollen(worldIn, pos);
-
-				if (treeLeave != null && treeLeave instanceof ITree) {
-					if (((ITree) treeLeave).setLeaves(worldIn, player.getGameProfile(), pos)) {
-						nursery = (IButterflyNursery) worldIn.getTileEntity(pos);
-					}
-				}
-			}
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
 			if (nursery != null) {
 				if (nursery.canNurse(flutter)) {
 					nursery.setCaterpillar(flutter);
-					if (ButterflyManager.butterflyRoot.plantCocoon(worldIn, nursery, player.getGameProfile(), age)) {
-						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, worldIn.getBlockState(posS));
-						Proxies.net.sendNetworkPacket(packet, pos, worldIn);
+					if (ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age)) {
+						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
+								world.getBlockState(posS));
+						Proxies.net.sendNetworkPacket(packet, pos, world);
 
 						if (!player.capabilities.isCreativeMode) {
 							stack.shrink(1);
@@ -258,25 +251,24 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return EnumActionResult.PASS;
 		} else if (type == EnumFlutterType.CATERPILLAR) {
 
-			if (!(tileEntity instanceof IButterflyNursery)) {
-				return EnumActionResult.PASS;
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
+			if (nursery != null) {
+				if (!nursery.canNurse(flutter)) {
+					return EnumActionResult.PASS;
+				}
+
+				nursery.setCaterpillar(flutter);
+
+				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
+						PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+				Proxies.net.sendNetworkPacket(packet, pos, world);
+
+				if (!player.capabilities.isCreativeMode) {
+					stack.shrink(1);
+				}
+				return EnumActionResult.SUCCESS;
 			}
-
-			IButterflyNursery pollinatable = (IButterflyNursery) tileEntity;
-			if (!pollinatable.canNurse(flutter)) {
-				return EnumActionResult.PASS;
-			}
-
-			pollinatable.setCaterpillar(flutter);
-
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-			Proxies.net.sendNetworkPacket(packet, pos, worldIn);
-
-			if (!player.capabilities.isCreativeMode) {
-				stack.shrink(1);
-			}
-			return EnumActionResult.SUCCESS;
-
+			return EnumActionResult.PASS;
 		} else {
 			return EnumActionResult.PASS;
 		}
@@ -295,7 +287,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 	}
 
-
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		if (itemstack.getTagCompound() == null) {
@@ -303,7 +294,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		IButterfly individual = ButterflyManager.butterflyRoot.getMember(itemstack);
-		String customKey = "for.butterflies.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
+		String customKey = "for.butterflies.custom." + type.getName() + "."
+				+ individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
 		if (Translator.canTranslateToLocal(customKey)) {
 			return Translator.translateToLocal(customKey);
 		}

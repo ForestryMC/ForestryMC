@@ -12,6 +12,7 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
@@ -126,7 +127,7 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
@@ -185,6 +186,6 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		String blockPath = isDouble() ? "double_slab" : getBlockKind().toString();
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, blockPath, getVariant()));
+		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, blockPath, getVariant()));
 	}
 }

@@ -12,12 +12,20 @@ package forestry.core.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
@@ -25,7 +33,9 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.SimpleModelState;
@@ -33,18 +43,20 @@ import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
 
 public class ModelUtil {
 
+	private static final Map<ResourceLocation, ModelBlockDefinition> blockDefinitions = Maps.newHashMap();
+
 	/**
 	 * @return The model from the item of the stack.
 	 */
 	@Nullable
 	public static IBakedModel getModel(ItemStack stack) {
 		RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
-		if(renderItem == null || renderItem.getItemModelMesher() == null){
+		if (renderItem == null || renderItem.getItemModelMesher() == null) {
 			return null;
 		}
 		return renderItem.getItemModelMesher().getItemModel(stack);
 	}
-	
+
 	public static SimpleModelState loadModelState(ResourceLocation location) {
 		return new SimpleModelState(MapWrapper.getTransforms(loadTransformFromJson(location)));
 	}
@@ -57,11 +69,61 @@ public class ModelUtil {
 		}
 		return ItemCameraTransforms.DEFAULT;
 	}
-	
+
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-		ResourceLocation file = new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + ".json");
+		ResourceLocation file = new ResourceLocation(location.getResourceDomain(),
+				location.getResourcePath() + ".json");
 		IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
 	}
-	
+
+	public static ModelBlockDefinition getModelBlockDefinition(ResourceLocation location) {
+		try {
+			ResourceLocation resourcelocation = getBlockstateLocation(location);
+			return blockDefinitions.computeIfAbsent(resourcelocation,
+					k -> loadMultipartMBD(location, resourcelocation));
+		} catch (Exception exception) {
+		}
+		return new ModelBlockDefinition(new ArrayList<>());
+	}
+
+	private static ResourceLocation getBlockstateLocation(ResourceLocation location) {
+		return new ResourceLocation(location.getResourceDomain(),
+				"blockstates/" + location.getResourcePath() + ".json");
+	}
+
+	private static ModelBlockDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
+		List<ModelBlockDefinition> list = Lists.newArrayList();
+		Minecraft mc = Proxies.common.getClientInstance();
+		IResourceManager manager = mc.getResourceManager();
+
+		try {
+			for (IResource resource : manager.getAllResources(fileIn)) {
+				list.add(loadModelBlockDefinition(location, resource));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Encountered an exception when loading model definition of model " + fileIn, e);
+		}
+
+		return new ModelBlockDefinition(list);
+	}
+
+	private static ModelBlockDefinition loadModelBlockDefinition(ResourceLocation location, IResource resource) {
+		InputStream inputStream = null;
+		ModelBlockDefinition definition;
+
+		try {
+			inputStream = resource.getInputStream();
+			definition = ModelBlockDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8));
+		} catch (Exception exception) {
+			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
+					+ "\' from: \'" + resource.getResourceLocation() + "\' in resourcepack: \'"
+					+ resource.getResourcePackName() + "\'", exception);
+		} finally {
+			IOUtils.closeQuietly(inputStream);
+		}
+
+		return definition;
+	}
+
 }

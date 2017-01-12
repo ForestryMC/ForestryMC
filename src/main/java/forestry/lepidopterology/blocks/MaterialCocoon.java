@@ -15,10 +15,13 @@ import net.minecraft.block.material.Material;
 
 public class MaterialCocoon extends Material {
 
-	public MaterialCocoon() {
+	public static final Material INSTANCE = new MaterialCocoon();
+
+	private MaterialCocoon() {
 		super(MapColor.CLOTH);
 
 		setRequiresTool();
+		setBurning();
 	}
 
 }
