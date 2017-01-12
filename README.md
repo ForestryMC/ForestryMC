@@ -9,7 +9,7 @@ Forestry is a modification for the game Minecraft and known primarily for its fa
 
 [Wiki](http://forestry.sengir.net/)
 
-[Latest Builds for 1.10 / 1.10.2](http://jenkins.ic2.player.to/job/Forestry_5/)
+[Latest Builds for 1.11 / 1.11.2](http://jenkins.ic2.player.to/job/Forestry_1.11/)
 
 [IRC #forestry on esper.net](http://webchat.esper.net/?nick=ForestryGithub...&channels=forestry&prompt=1)
 
@@ -17,7 +17,7 @@ For those interested in developement, you can also visit #forestry-dev.
 
 ### Building
 
-The API and localization files reside in their own repository. It is pulled in automatically.
+The localization files reside in their own repository. It is pulled in automatically.
 
 You may want to adjust the "./gradle.properties" file to set your mc account as needed.
 
