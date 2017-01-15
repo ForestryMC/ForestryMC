@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.multipart.Multipart;
 import net.minecraft.client.renderer.block.statemap.BlockStateMapper;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.item.Item;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
@@ -50,17 +52,22 @@ import forestry.arboriculture.blocks.slab.BlockArbSlab;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.ModelWoodPile;
+import forestry.arboriculture.models.MultipartModel;
 import forestry.arboriculture.models.WoodModelLoader;
+import forestry.arboriculture.models.WoodTextureManager;
 import forestry.arboriculture.models.WoodTextures;
 import forestry.arboriculture.render.CharcoalPileRenderer;
 import forestry.arboriculture.tiles.TilePile;
 import forestry.core.models.BlockModelEntry;
+import forestry.core.models.ModelManager;
 import forestry.core.models.SimpleRetexturedModel;
 import forestry.core.models.WoodModelEntry;
 import forestry.core.proxy.Proxies;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {
 	private static Set<WoodModelEntry> woodModelEntrys = new HashSet<>();
+	private static final Map<IWoodTyped, IWoodStateMapper> stateMappers = Maps.newIdentityHashMap();
+	private static final Map<Item, IWoodItemMeshDefinition> shapers = Maps.newHashMap();
 	
 	@Override
 	public void initializeModels() {
@@ -96,65 +103,81 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 	}
 	
+	public static void registerWoodMeshDefinition(Item item, IWoodItemMeshDefinition definition) {
+		ModelManager.getInstance().registerItemModel(item, definition);
+		shapers.put(item, definition);
+	}
+
+	public static void registerWoodStateMapper(Block block, IWoodStateMapper stateMapper) {
+		if (block instanceof IWoodTyped) {
+			IWoodTyped woodTyped = (IWoodTyped) block;
+			Proxies.render.registerStateMapper(block, stateMapper);
+			stateMappers.put(woodTyped, stateMapper);
+		}
+	}
+
 	@SubscribeEvent
-	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event){
-		WoodModelLoader.INSTANCE.isRegistered = true;
+	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
+		WoodModelLoader.INSTANCE.isEnabled = true;
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		Map<ResourceLocation, Exception> loadingExceptions = ObfuscationReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), 2);
-		
-		if(minecraft.getBlockRendererDispatcher() != null){
-			BlockStateMapper stateMapper = minecraft.getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper();
-			Map<Item, ItemMeshDefinition> definitions = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesher.class, minecraft.getRenderItem().getItemModelMesher(), 2);
-			Map<Block, IStateMapper> blockStateMap = ObfuscationReflectionHelper.getPrivateValue(BlockStateMapper.class, stateMapper, 0);
-			
-			for(WoodModelEntry<T> entry : woodModelEntrys){
-				T woodTyped = entry.woodTyped;
-				WoodBlockKind woodKind = woodTyped.getBlockKind();
-				
-				IStateMapper mapper = blockStateMap.get(woodTyped);
-				if(mapper instanceof IWoodStateMapper){
-					IWoodStateMapper woodMapper = (IWoodStateMapper) mapper;
-					try{
-						for(IBlockState state : woodTyped.getBlockState().getValidStates()) {
-							IWoodType woodType;
-							ItemStack itemStack;
-							if(entry.withVariants){
-								int meta = woodTyped.getMetaFromState(state);
-								woodType = woodTyped.getWoodType(meta);
-								itemStack = new ItemStack(woodTyped, 1, meta);
-							}else{
-								woodType = woodTyped.getWoodType(0);
-								itemStack = new ItemStack(woodTyped);
-							}
-							ImmutableMap<String, String> customTextures = WoodTextures.getLocations(woodType, woodKind);
-							if(woodKind.retextureItem){
-								ItemMeshDefinition definition = definitions.get(itemStack.getItem());
-								if(definition instanceof IWoodItemMeshDefinition){
-									IWoodItemMeshDefinition woodDefinition = (IWoodItemMeshDefinition) definition;
-									IModel basicItemModel = ModelLoaderRegistry.getModel(woodDefinition.getDefaultModelLocation(itemStack));
-									ModelResourceLocation basicItemLocation = definition.getModelLocation(itemStack);
-											
-									registry.putObject(basicItemLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType, customTextures)));
-								}
-							}
-							IModel basicModel = ModelLoaderRegistry.getModel(woodMapper.getDefaultModelResourceLocation(state));
-							ModelResourceLocation basicLocation = woodMapper.getModelLocation(state);
-							if(loadingExceptions.containsKey(basicLocation)){
-								loadingExceptions.remove(basicLocation);
-							}
-							registry.putObject(basicLocation, new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType, customTextures)));
-						}
-					}catch(Exception e){
-						e.printStackTrace();
-					}
+
+		for (WoodModelEntry<T> entry : woodModelEntrys) {
+			T woodTyped = entry.woodTyped;
+			WoodBlockKind woodKind = woodTyped.getBlockKind();
+			IWoodStateMapper woodMapper = stateMappers.get(woodTyped);
+
+			for (IBlockState blockState : woodTyped.getBlockState().getValidStates()) {
+				IWoodType woodType;
+				ItemStack itemStack;
+				if (entry.withVariants) {
+					int meta = woodTyped.getMetaFromState(blockState);
+					woodType = woodTyped.getWoodType(meta);
+					itemStack = new ItemStack(woodTyped, 1, meta);
+				} else {
+					woodType = woodTyped.getWoodType(0);
+					itemStack = new ItemStack(woodTyped);
+				}
+				IWoodItemMeshDefinition definition = shapers.get(itemStack.getItem());
+				ImmutableMap<String, String> textures = WoodTextureManager.getTextures(woodType, woodKind);
+				if (definition != null) {
+					retextureItemModel(registry, textures, woodType, woodKind, itemStack, definition);
+				}
+				if (woodMapper != null) {
+					retexturBlockModel(registry, textures, woodType, woodKind, blockState, woodMapper);
 				}
 			}
 		}
-		
-		loadingExceptions.putAll(WoodModelLoader.loadingExceptions);
-		ModelWoodPile.onModelBake(event);
 	}
+
+	private void retextureItemModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
+			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
+			IWoodItemMeshDefinition woodDefinition) {
+		if (woodKind != WoodBlockKind.DOOR) {
+			IModel basicItemModel = ModelLoaderRegistry
+					.getModelOrMissing(woodDefinition.getDefaultModelLocation(itemStack));
+			ModelResourceLocation basicItemLocation = woodDefinition.getModelLocation(itemStack);
+
+			registry.putObject(basicItemLocation,
+					new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType, textures)));
+		}
+	}
+
+	private void retexturBlockModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
+			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
+			IWoodStateMapper woodMapper) {
+		IModel basicModel = ModelLoaderRegistry
+				.getModelOrMissing(woodMapper.getDefaultModelResourceLocation(blockState));
+		if (basicModel instanceof MultipartModel) {
+			MultipartModel multipartModel = (MultipartModel) basicModel;
+			Multipart multipart = multipartModel.getMultipart();
+			multipart.setStateContainer(blockState.getBlock().getBlockState());
+		}
+		ModelResourceLocation basicLocation = woodMapper.getModelLocation(blockState);
+		registry.putObject(basicLocation,
+				new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType, textures)));
+
+	}
+
 	
 	@Override
 	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants){

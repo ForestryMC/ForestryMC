@@ -80,7 +80,7 @@ public class WoodHelper {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if(!WoodModelLoader.INSTANCE.isRegistered){
+			if(!WoodModelLoader.INSTANCE.isEnabled){
 				return new ModelResourceLocation(getDefaultModelLocation(stack), "inventory");
 			}
 			int meta = stack.getMetadata();

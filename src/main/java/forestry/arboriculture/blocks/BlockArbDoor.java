@@ -36,6 +36,7 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.proxy.Proxies;
 
 public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
@@ -53,13 +54,13 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		ModelBakery.registerItemVariants(item, WoodHelper.getResourceLocations(this));
-		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null).addPropertyToRemove(POWERED));
+		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, null).addPropertyToRemove(POWERED));
 	}
 
 	@Nonnull

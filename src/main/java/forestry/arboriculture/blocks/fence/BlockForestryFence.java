@@ -38,6 +38,7 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestryFence<T extends Enum<T> & IWoodType> extends BlockFence implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
@@ -104,7 +105,7 @@ public abstract class BlockForestryFence<T extends Enum<T> & IWoodType> extends 
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
@@ -183,6 +184,6 @@ public abstract class BlockForestryFence<T extends Enum<T> & IWoodType> extends 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
+		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
 	}
 }
