@@ -39,6 +39,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.CamouflageManager;
+import forestry.api.core.EnumContainerType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
@@ -55,11 +56,11 @@ import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.fluids.FluidContainerHeatPermission;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
-import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.functions.SetSpeciesNBT;
 import forestry.core.models.ModelCamouflageSprayCan;
@@ -137,6 +138,8 @@ public class PluginCore extends BlankForestryPlugin {
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDefault());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
 		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
+		
+		EnumContainerType.CAPSULE.add(new FluidContainerHeatPermission());
 	}
 
 	@Override

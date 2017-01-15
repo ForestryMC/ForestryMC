@@ -13,6 +13,8 @@ package forestry.core.items;
 import java.util.EnumMap;
 import java.util.Map;
 
+import forestry.api.core.EnumContainerType;
+import forestry.core.fluids.Fluids;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;

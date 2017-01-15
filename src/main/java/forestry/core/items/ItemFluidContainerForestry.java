@@ -13,6 +13,12 @@ package forestry.core.items;
 import java.util.List;
 import java.util.Locale;
 
+import forestry.api.core.EnumContainerType;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
