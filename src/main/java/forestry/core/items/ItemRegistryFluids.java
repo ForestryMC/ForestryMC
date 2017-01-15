@@ -22,8 +22,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import forestry.core.fluids.Fluids;
-
 public class ItemRegistryFluids extends ItemRegistry {
 	public final ItemFluidContainerForestry canEmpty;
 	public final ItemFluidContainerForestry waxCapsuleEmpty;

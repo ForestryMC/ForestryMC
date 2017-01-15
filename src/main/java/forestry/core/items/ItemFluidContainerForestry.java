@@ -46,12 +46,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.Translator;
-
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
