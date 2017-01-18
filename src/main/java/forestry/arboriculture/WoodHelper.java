@@ -86,12 +86,10 @@ public class WoodHelper {
 			int meta = stack.getMetadata();
 			IWoodType woodType = wood.getWoodType(meta);
 			WoodBlockKind blockKind = wood.getBlockKind();
-			if (woodType instanceof EnumForestryWoodType) {
-				return ForestryAPI.modelManager.getModelLocation(blockKind + "/" + woodType);
-			} else if (woodType instanceof EnumVanillaWoodType) {
+			if (woodType instanceof EnumVanillaWoodType) {
 				return new ModelResourceLocation("minecraft:" + woodType + "_" + blockKind, "inventory");
 			} else {
-				throw new IllegalArgumentException("Unknown wood type: " + woodType);
+				return ForestryAPI.modelManager.getModelLocation(blockKind + "/" + woodType);
 			}
 		}
 		

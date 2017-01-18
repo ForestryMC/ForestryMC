@@ -77,14 +77,14 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		Block block = state.getBlock();
 		int meta = block.getMetaFromState(state);
 		IWoodType woodType = woodTyped.getWoodType(meta);
-		if (woodType instanceof EnumForestryWoodType) {
+		if(woodType instanceof EnumVanillaWoodType){
+			return getVanillaModelResourceLocation(block, woodType, properties);
+		}else{
 			if(WoodModelLoader.INSTANCE.isEnabled){
 				return getForestryModelResourceLocation(woodType, properties);
 			}else{
 				return getDefaultModelResourceLocation(state);
 			}
-		} else {
-			return getVanillaModelResourceLocation(block, woodType, properties);
 		}
 	}
 	
