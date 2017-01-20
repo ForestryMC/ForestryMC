@@ -107,7 +107,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	
 	@Override
 	public ItemStack getDecorativeLeaves() {
-		return getPrimary().getDecorativeLeave();
+		return getPrimary().getDecorativeLeaves();
 	}
 
 	@Override

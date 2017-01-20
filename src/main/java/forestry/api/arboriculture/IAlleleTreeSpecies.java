@@ -52,7 +52,7 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	
 	IWoodProvider getWoodProvider();
 	
-	ItemStack getDecorativeLeave();
+	ItemStack getDecorativeLeaves();
 	
 	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)

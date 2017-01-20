@@ -168,7 +168,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public ItemStack getDecorativeLeave() {
+	public ItemStack getDecorativeLeaves() {
 		return PluginArboriculture.blocks.getDecorativeLeaves(getUID());
 	}
 
