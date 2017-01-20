@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,6 +51,8 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	String getModID();
 	
 	IWoodProvider getWoodProvider();
+	
+	ItemStack getDecorativeLeave();
 	
 	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)

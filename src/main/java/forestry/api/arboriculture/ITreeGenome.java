@@ -8,6 +8,7 @@ package forestry.api.arboriculture;
 import javax.annotation.Nonnull;
 
 import forestry.api.genetics.IGenome;
+import net.minecraft.item.ItemStack;
 
 public interface ITreeGenome extends IGenome {
 
@@ -42,4 +43,6 @@ public interface ITreeGenome extends IGenome {
 	int getGirth();
 
 	IAlleleLeafEffect getEffect();
+	
+	ItemStack getDecorativeLeaves();
 }

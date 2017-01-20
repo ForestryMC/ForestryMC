@@ -16,7 +16,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,6 +35,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
@@ -164,6 +165,11 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
 		return 0;
+	}
+
+	@Override
+	public ItemStack getDecorativeLeave() {
+		return PluginArboriculture.blocks.getDecorativeLeaves(getUID());
 	}
 
 }
