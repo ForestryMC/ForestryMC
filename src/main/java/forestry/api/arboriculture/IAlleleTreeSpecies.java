@@ -6,6 +6,8 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -52,6 +54,7 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	
 	IWoodProvider getWoodProvider();
 	
+	@Nullable
 	ItemStack getDecorativeLeaves();
 	
 	/* MODELS AND OVERRIDES */

@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

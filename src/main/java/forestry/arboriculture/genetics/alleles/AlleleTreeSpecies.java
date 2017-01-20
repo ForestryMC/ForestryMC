@@ -11,6 +11,8 @@
 package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +53,12 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 	@Nonnull
 	private final String modID;
+	@Nullable
+	private final ItemStack decorativeLeaves;
 	@Nonnull
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
+	@Deprecated
 	public AlleleTreeSpecies(
 			@Nonnull String uid,
 			@Nonnull String unlocalizedName,
@@ -67,12 +72,30 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator) {
+		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafIconProvider, germlingModelProvider, woodProvider, generator, null);
+	}
+	
+	public AlleleTreeSpecies(
+			@Nonnull String uid,
+			@Nonnull String unlocalizedName,
+			@Nonnull String authority,
+			@Nonnull String unlocalizedDescription,
+			boolean isDominant,
+			@Nonnull IClassification branch,
+			@Nonnull String binomial,
+			@Nonnull String modID,
+			@Nonnull ILeafSpriteProvider leafIconProvider,
+			@Nonnull IGermlingModelProvider germlingModelProvider,
+			@Nonnull IWoodProvider woodProvider,
+			@Nonnull ITreeGenerator generator,
+			@Nonnull ItemStack decorativeLeaves) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.woodProvider = woodProvider;
 		this.leafSpriteProvider = leafIconProvider;
+		this.decorativeLeaves = decorativeLeaves;
 		
 		this.modID = modID;
 	}
@@ -166,10 +189,10 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
 		return 0;
 	}
-
+	
 	@Override
-	public ItemStack getDecorativeLeaves() {
-		return PluginArboriculture.blocks.getDecorativeLeaves(getUID());
+	public ItemStack getDecorativeLeaves(){
+		return decorativeLeaves;
 	}
 
 }
