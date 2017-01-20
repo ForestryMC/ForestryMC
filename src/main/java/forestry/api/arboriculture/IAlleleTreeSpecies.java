@@ -6,13 +6,10 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,10 +49,11 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	@Nonnull
 	String getModID();
 	
+	@Nonnull
 	IWoodProvider getWoodProvider();
 	
-	@Nullable
-	ItemStack getDecorativeLeaves();
+	@Nonnull
+	ILeafProvider getLeafProvider();
 	
 	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -23,7 +23,6 @@ import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.genetics.IClassification;
 import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
 import forestry.arboriculture.models.SpriteProviderLeaves;
-import net.minecraft.item.ItemStack;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
@@ -32,8 +31,8 @@ public class TreeFactory implements ITreeFactory {
 	}
 	
 	@Override
-	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, IWoodProvider woodProvider, ITreeGenerator generator, ItemStack decorativeLeaves) {
-		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, decorativeLeaves);
+	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, IWoodProvider woodProvider, ITreeGenerator generator, ILeafProvider leafProvider) {
+		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, leafProvider);
 	}
 
 	@Override

@@ -25,7 +25,6 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.proxy.Proxies;
 
 public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockStairs implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	private final boolean fireproof;

@@ -32,7 +32,6 @@ import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.WoodTypeStateMapper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends BlockLog implements IWoodTyped, IStateMapperRegister, IItemModelRegister {
 	protected static final int VARIANTS_PER_BLOCK = 4;

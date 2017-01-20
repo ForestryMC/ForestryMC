@@ -37,7 +37,6 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.proxy.Proxies;
 
 public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	private final EnumForestryWoodType woodType;

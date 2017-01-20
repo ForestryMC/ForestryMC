@@ -24,7 +24,6 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.arboriculture.PluginArboriculture;
 import forestry.core.genetics.Genome;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -108,11 +107,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	
 	@Override
 	public ItemStack getDecorativeLeaves() {
-		ItemStack decorativeLeaves = getPrimary().getDecorativeLeaves();
-		if(decorativeLeaves == null){
-			decorativeLeaves = PluginArboriculture.blocks.getDecorativeLeaves(getPrimary().getUID());
-		}
-		return decorativeLeaves;
+		return getPrimary().getLeafProvider().getDecorativeLeaves();
 	}
 
 	@Override

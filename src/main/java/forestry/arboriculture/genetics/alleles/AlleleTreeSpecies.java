@@ -18,7 +18,6 @@ import java.util.List;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,6 +27,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
@@ -37,7 +37,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.genetics.LeafProvider;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
@@ -54,11 +54,10 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Nonnull
 	private final String modID;
 	@Nullable
-	private final ItemStack decorativeLeaves;
+	private final ILeafProvider leafProvider;
 	@Nonnull
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	@Deprecated
 	public AlleleTreeSpecies(
 			@Nonnull String uid,
 			@Nonnull String unlocalizedName,
@@ -72,7 +71,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator) {
-		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, null);
+		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, new LeafProvider());
 	}
 	
 	public AlleleTreeSpecies(
@@ -88,14 +87,14 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator,
-			@Nonnull ItemStack decorativeLeaves) {
+			@Nonnull ILeafProvider leafProvider) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.woodProvider = woodProvider;
 		this.leafSpriteProvider = leafSpriteProvider;
-		this.decorativeLeaves = decorativeLeaves;
+		this.leafProvider = leafProvider;
 		
 		this.modID = modID;
 	}
@@ -103,6 +102,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public IAlleleTreeSpecies build() {
 		AlleleManager.alleleRegistry.registerAllele(this, EnumTreeChromosome.SPECIES);
+		leafProvider.init(this);
 		return this;
 	}
 
@@ -178,6 +178,12 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	public IWoodProvider getWoodProvider() {
 		return woodProvider;
 	}
+	
+	@Nonnull
+	@Override
+	public ILeafProvider getLeafProvider() {
+		return leafProvider;
+	}
 
 	@Nonnull
 	@Override
@@ -188,11 +194,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
 		return 0;
-	}
-	
-	@Override
-	public ItemStack getDecorativeLeaves(){
-		return decorativeLeaves;
 	}
 
 }

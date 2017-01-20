@@ -11,8 +11,6 @@
 package forestry.arboriculture.genetics;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.util.Locale;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
