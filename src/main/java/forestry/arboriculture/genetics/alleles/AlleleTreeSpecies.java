@@ -68,11 +68,11 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IClassification branch,
 			@Nonnull String binomial,
 			@Nonnull String modID,
-			@Nonnull ILeafSpriteProvider leafIconProvider,
+			@Nonnull ILeafSpriteProvider leafSpriteProvider,
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator) {
-		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafIconProvider, germlingModelProvider, woodProvider, generator, null);
+		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, null);
 	}
 	
 	public AlleleTreeSpecies(
@@ -84,7 +84,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			@Nonnull IClassification branch,
 			@Nonnull String binomial,
 			@Nonnull String modID,
-			@Nonnull ILeafSpriteProvider leafIconProvider,
+			@Nonnull ILeafSpriteProvider leafSpriteProvider,
 			@Nonnull IGermlingModelProvider germlingModelProvider,
 			@Nonnull IWoodProvider woodProvider,
 			@Nonnull ITreeGenerator generator,
@@ -94,7 +94,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.woodProvider = woodProvider;
-		this.leafSpriteProvider = leafIconProvider;
+		this.leafSpriteProvider = leafSpriteProvider;
 		this.decorativeLeaves = decorativeLeaves;
 		
 		this.modID = modID;
