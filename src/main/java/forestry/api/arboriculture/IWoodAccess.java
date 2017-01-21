@@ -27,4 +27,5 @@ public interface IWoodAccess {
 	
 	List<IWoodType> getRegisteredWoodTypes();
 
+	void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, IBlockState blockState, ItemStack itemStack);
 }
