@@ -142,7 +142,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		TreeManager.treeFactory = new TreeFactory();
 		TreeManager.treeMutationFactory = new TreeMutationFactory();
 
-		TreeManager.woodAccess = new WoodAccess();
+		TreeManager.woodAccess = WoodAccess.getInstance();
 
 		// Init tree interface
 		TreeManager.treeRoot = new TreeRoot();
@@ -161,7 +161,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 	@Override
 	public void disabledSetupAPI() {
-		TreeManager.woodAccess = new WoodAccess();
+		TreeManager.woodAccess = WoodAccess.getInstance();
 
 		// Capabilities
 		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
@@ -181,27 +181,29 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		BlockRegistryArboriculture blocks = getBlocks();
 
-		WoodAccess.registerLogs(blocks.logs);
-		WoodAccess.registerPlanks(blocks.planks);
-		WoodAccess.registerSlabs(blocks.slabs);
-		WoodAccess.registerFences(blocks.fences);
-		WoodAccess.registerFenceGates(blocks.fenceGates);
-		WoodAccess.registerStairs(blocks.stairs);
-		WoodAccess.registerDoors(blocks.doors);
+		WoodAccess woodAccess = WoodAccess.getInstance();
 
-		WoodAccess.registerLogs(blocks.logsFireproof);
-		WoodAccess.registerPlanks(blocks.planksFireproof);
-		WoodAccess.registerSlabs(blocks.slabsFireproof);
-		WoodAccess.registerFences(blocks.fencesFireproof);
-		WoodAccess.registerFenceGates(blocks.fenceGatesFireproof);
-		WoodAccess.registerStairs(blocks.stairsFireproof);
+		woodAccess.registerLogs(blocks.logs);
+		woodAccess.registerPlanks(blocks.planks);
+		woodAccess.registerSlabs(blocks.slabs);
+		woodAccess.registerFences(blocks.fences);
+		woodAccess.registerFenceGates(blocks.fenceGates);
+		woodAccess.registerStairs(blocks.stairs);
+		woodAccess.registerDoors(blocks.doors);
 
-		WoodAccess.registerLogs(blocks.logsVanillaFireproof);
-		WoodAccess.registerPlanks(blocks.planksVanillaFireproof);
-		WoodAccess.registerSlabs(blocks.slabsVanillaFireproof);
-		WoodAccess.registerFences(blocks.fencesVanillaFireproof);
-		WoodAccess.registerFenceGates(blocks.fenceGatesVanillaFireproof);
-		WoodAccess.registerStairs(blocks.stairsVanillaFireproof);
+		woodAccess.registerLogs(blocks.logsFireproof);
+		woodAccess.registerPlanks(blocks.planksFireproof);
+		woodAccess.registerSlabs(blocks.slabsFireproof);
+		woodAccess.registerFences(blocks.fencesFireproof);
+		woodAccess.registerFenceGates(blocks.fenceGatesFireproof);
+		woodAccess.registerStairs(blocks.stairsFireproof);
+
+		woodAccess.registerLogs(blocks.logsVanillaFireproof);
+		woodAccess.registerPlanks(blocks.planksVanillaFireproof);
+		woodAccess.registerSlabs(blocks.slabsVanillaFireproof);
+		woodAccess.registerFences(blocks.fencesVanillaFireproof);
+		woodAccess.registerFenceGates(blocks.fenceGatesVanillaFireproof);
+		woodAccess.registerStairs(blocks.stairsVanillaFireproof);
 
 		// Init rendering
 		proxy.initializeModels();
