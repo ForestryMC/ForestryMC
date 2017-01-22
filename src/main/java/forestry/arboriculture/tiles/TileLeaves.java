@@ -326,6 +326,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		
 		byte leafState = 0;
 		boolean hasFruit = hasFruit();
 
