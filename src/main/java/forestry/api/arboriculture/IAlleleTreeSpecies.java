@@ -43,6 +43,8 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	String getModID();
 
 	IWoodProvider getWoodProvider();
+	
+	ILeafProvider getLeafProvider();
 
 	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)

@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import forestry.api.genetics.IGenome;
+import net.minecraft.item.ItemStack;
 
 public interface ITreeGenome extends IGenome {
 
@@ -37,4 +38,10 @@ public interface ITreeGenome extends IGenome {
 	int getGirth();
 
 	IAlleleLeafEffect getEffect();
+	
+	/**
+	 * 
+	 * @return A ItemStack that is used in getPickBlock of the leave block.
+	 */
+	ItemStack getDecorativeLeaves();
 }

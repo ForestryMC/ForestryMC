@@ -99,6 +99,11 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	public IAlleleLeafEffect getEffect() {
 		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
 	}
+	
+	@Override
+	public ItemStack getDecorativeLeaves() {
+		return getPrimary().getLeafProvider().getDecorativeLeaves();
+	}
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
