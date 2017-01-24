@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -41,87 +42,73 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class WoodAccess implements IWoodAccess {
-	private static final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
-	private static final List<IWoodType> registeredWoodTypes = new ArrayList<>();
+	@Nullable
+	private static WoodAccess INSTANCE;
 
-	static {
+	public static WoodAccess getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new WoodAccess();
+		}
+		return INSTANCE;
+	}
+
+	private final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
+	private final List<IWoodType> registeredWoodTypes = new ArrayList<>();
+
+	private WoodAccess() {
 		for (WoodBlockKind woodBlockKind : WoodBlockKind.values()) {
 			woodMaps.put(woodBlockKind, new WoodMap(woodBlockKind));
 		}
 		registerVanilla();
 	}
 
-	private static class WoodMap {
-		private final Map<IWoodType, ItemStack> normalItems = new HashMap<>();
-		private final Map<IWoodType, ItemStack> fireproofItems = new HashMap<>();
-		private final Map<IWoodType, IBlockState> normalBlocks = new HashMap<>();
-		private final Map<IWoodType, IBlockState> fireproofBlocks = new HashMap<>();
-		private final WoodBlockKind woodBlockKind;
-
-		public WoodMap(WoodBlockKind woodBlockKind) {
-			this.woodBlockKind = woodBlockKind;
-		}
-
-		public String getName() {
-			return woodBlockKind.name();
-		}
-
-		public Map<IWoodType, ItemStack> getItem(boolean fireproof) {
-			return fireproof ? this.fireproofItems : this.normalItems;
-		}
-
-		public Map<IWoodType, IBlockState> getBlock(boolean fireproof) {
-			return fireproof ? this.fireproofBlocks : this.normalBlocks;
-		}
-	}
-
-	public static void registerLogs(List<? extends BlockForestryLog> blocks) {
+	public void registerLogs(List<? extends BlockForestryLog> blocks) {
 		for (BlockForestryLog block : blocks) {
 			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.LOG, block.getVariant());
 		}
 	}
 
-	public static void registerPlanks(List<? extends BlockForestryPlanks> blocks) {
+	public void registerPlanks(List<? extends BlockForestryPlanks> blocks) {
 		for (BlockForestryPlanks block : blocks) {
 			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.PLANKS, block.getVariant());
 		}
 	}
 
-	public static void registerSlabs(List<? extends BlockForestrySlab> blocks) {
+	public void registerSlabs(List<? extends BlockForestrySlab> blocks) {
 		for (BlockForestrySlab block : blocks) {
 			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.SLAB, block.getVariant());
 		}
 	}
 
-	public static void registerFences(List<? extends BlockForestryFence> blocks) {
+	public void registerFences(List<? extends BlockForestryFence> blocks) {
 		for (BlockForestryFence block : blocks) {
 			//noinspection unchecked
 			registerWithVariants(block, WoodBlockKind.FENCE, block.getVariant());
 		}
 	}
 
-	public static void registerFenceGates(List<BlockForestryFenceGate> blocks) {
+	public void registerFenceGates(List<BlockForestryFenceGate> blocks) {
 		for (BlockForestryFenceGate block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.FENCE_GATE);
 		}
 	}
 
-	public static void registerStairs(List<? extends BlockForestryStairs> blocks) {
+	public void registerStairs(List<? extends BlockForestryStairs> blocks) {
 		for (BlockForestryStairs block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.STAIRS);
 		}
 	}
 
-	public static void registerDoors(List<BlockArbDoor> blocks) {
+	public void registerDoors(List<BlockArbDoor> blocks) {
 		for (BlockArbDoor block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.DOOR);
 		}
 	}
 
-	private static void registerVanilla() {
+	private void registerVanilla() {
 		IBlockState defaultLogState = Blocks.LOG.getDefaultState();
 		List<EnumVanillaWoodType> oldLogTypes = Arrays.asList(EnumVanillaWoodType.OAK, EnumVanillaWoodType.SPRUCE, EnumVanillaWoodType.BIRCH, EnumVanillaWoodType.JUNGLE);
 		for (EnumVanillaWoodType woodType : oldLogTypes) {
@@ -183,7 +170,7 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.DOOR, false, Blocks.DARK_OAK_DOOR.getDefaultState(), new ItemStack(Items.DARK_OAK_DOOR));
 	}
 
-	private static <T extends Block & IWoodTyped, V extends Enum<V> & IWoodType> void registerWithVariants(T woodTyped, WoodBlockKind woodBlockKind, PropertyWoodType<V> property) {
+	private <T extends Block & IWoodTyped, V extends Enum<V> & IWoodType> void registerWithVariants(T woodTyped, WoodBlockKind woodBlockKind, PropertyWoodType<V> property) {
 		boolean fireproof = woodTyped.isFireproof();
 
 		for (V value : property.getAllowedValues()) {
@@ -201,7 +188,7 @@ public class WoodAccess implements IWoodAccess {
 	/**
 	 * Register wood blocks that have no variant property
 	 */
-	private static <T extends Block & IWoodTyped> void registerWithoutVariants(T woodTyped, WoodBlockKind woodBlockKind) {
+	private <T extends Block & IWoodTyped> void registerWithoutVariants(T woodTyped, WoodBlockKind woodBlockKind) {
 		boolean fireproof = woodTyped.isFireproof();
 		IBlockState blockState = woodTyped.getDefaultState();
 		IWoodType woodType = woodTyped.getWoodType(0);
@@ -212,7 +199,8 @@ public class WoodAccess implements IWoodAccess {
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 	}
 
-	private static void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, IBlockState blockState, ItemStack itemStack) {
+	@Override
+	public void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, IBlockState blockState, ItemStack itemStack) {
 		if (woodBlockKind == WoodBlockKind.DOOR) {
 			fireproof = true;
 		}
@@ -256,5 +244,29 @@ public class WoodAccess implements IWoodAccess {
 	@Override
 	public List<IWoodType> getRegisteredWoodTypes() {
 		return registeredWoodTypes;
+	}
+
+	private static class WoodMap {
+		private final Map<IWoodType, ItemStack> normalItems = new HashMap<>();
+		private final Map<IWoodType, ItemStack> fireproofItems = new HashMap<>();
+		private final Map<IWoodType, IBlockState> normalBlocks = new HashMap<>();
+		private final Map<IWoodType, IBlockState> fireproofBlocks = new HashMap<>();
+		private final WoodBlockKind woodBlockKind;
+
+		public WoodMap(WoodBlockKind woodBlockKind) {
+			this.woodBlockKind = woodBlockKind;
+		}
+
+		public String getName() {
+			return woodBlockKind.name();
+		}
+
+		public Map<IWoodType, ItemStack> getItem(boolean fireproof) {
+			return fireproof ? this.fireproofItems : this.normalItems;
+		}
+
+		public Map<IWoodType, IBlockState> getBlock(boolean fireproof) {
+			return fireproof ? this.fireproofBlocks : this.normalBlocks;
+		}
 	}
 }

@@ -16,7 +16,6 @@ import forestry.core.network.PacketIdServer;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
-import forestry.mail.network.packets.PacketPOBoxInfoRequest;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
@@ -31,6 +30,5 @@ public class PacketRegistryMail implements IPacketRegistry {
 		PacketIdServer.LETTER_INFO_REQUEST.setPacketHandler(new PacketLetterInfoRequest.Handler());
 		PacketIdServer.TRADING_ADDRESS_REQUEST.setPacketHandler(new PacketTraderAddressRequest.Handler());
 		PacketIdServer.LETTER_TEXT_SET.setPacketHandler(new PacketLetterTextSet.Handler());
-		PacketIdServer.POBOX_INFO_REQUEST.setPacketHandler(new PacketPOBoxInfoRequest.Handler());
 	}
 }
