@@ -11,6 +11,9 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,19 +42,20 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 	}
 
 	@Nullable
-	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, IInventory resources) {
+	public static Pair<IFabricatorRecipe, String[][]> findMatchingRecipe(ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
 		for (IFabricatorRecipe recipe : recipes) {
 			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
 				continue;
 			}
-			if (RecipeUtil.matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), gridResources)) {
-				return recipe;
+			String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
+			if (oreDicts != null) {
+				return Pair.of(recipe, oreDicts);
 			}
 		}
 
-		return null;
+		return Pair.of(null, null);
 	}
 
 	public static boolean isPlan(ItemStack plan) {

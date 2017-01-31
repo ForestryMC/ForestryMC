@@ -377,6 +377,19 @@ public abstract class InventoryUtil {
 		}
 		return result;
 	}
+	
+	public static NonNullList<String> getOreDictAsList(String[][] oreDicts) {
+		NonNullList<String> result = NonNullList.withSize(9, "");
+		if(oreDicts == null || oreDicts.length == 0){
+			return result;
+		}
+		for (int i = 0; i < oreDicts.length; i++) {
+			for (int d = 0; d < oreDicts.length; d++) {
+				result.set(i, oreDicts[i][d]);
+			}
+		}
+		return result;
+	}
 
 	public static boolean tryAddStacksCopy(IInventory inventory, NonNullList<ItemStack> stacks, int startSlot, int slots, boolean all) {
 

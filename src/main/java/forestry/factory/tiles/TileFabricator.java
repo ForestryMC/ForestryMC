@@ -11,6 +11,9 @@
 package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
@@ -161,19 +164,20 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Nullable
-	private IFabricatorRecipe getRecipe() {
+	private Pair<IFabricatorRecipe, String[][]> getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		IFabricatorRecipe recipe = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		Pair<IFabricatorRecipe, String[][]> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		IFabricatorRecipe recipe = recipePair.getLeft();
 		if (liquid != null && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
 			return null;
 		}
-		return recipe;
+		return recipePair;
 	}
 
 	public ItemStack getResult() {
-		IFabricatorRecipe myRecipe = getRecipe();
+		IFabricatorRecipe myRecipe = getRecipe().getLeft();
 
 		if (myRecipe == null) {
 			return ItemStack.EMPTY;
@@ -191,17 +195,18 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	private void craftResult() {
-		IFabricatorRecipe myRecipe = getRecipe();
+		Pair<IFabricatorRecipe, String[][]> myRecipePair = getRecipe();
 		ItemStack craftResult = getResult();
+		IFabricatorRecipe myRecipe = myRecipePair.getLeft();
 		if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
 			FluidStack liquid = myRecipe.getLiquid();
 
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			if (removeFromInventory(crafting, myRecipe, false)) {
+			if (removeFromInventory(crafting, myRecipePair.getRight(), myRecipe, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, false);
 				if (drained != null && drained.isFluidStackIdentical(liquid)) {
-					removeFromInventory(crafting, myRecipe, true);
+					removeFromInventory(crafting, myRecipePair.getRight(), myRecipe, true);
 					moltenTank.drain(liquid.amount, true);
 
 					// Damage plan
@@ -219,9 +224,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(NonNullList<ItemStack> set, IFabricatorRecipe recipe, boolean doRemove) {
+	private boolean removeFromInventory(NonNullList<ItemStack> set, String[][] oreDicts, IFabricatorRecipe recipe, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, recipe.getOreDicts(), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, InventoryUtil.getOreDictAsList(oreDicts), null, true, false, doRemove);
 	}
 
 	@Override
@@ -231,10 +236,11 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasResources = true;
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		IFabricatorRecipe recipe = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		Pair<IFabricatorRecipe, String[][]> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		IFabricatorRecipe recipe = recipePair.getLeft();
 		if (recipe != null) {
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			hasResources = removeFromInventory(crafting, recipe, false);
+			hasResources = removeFromInventory(crafting, recipePair.getRight(), recipe, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, false);
 			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);

@@ -11,6 +11,9 @@
 package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
@@ -57,6 +60,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
+	@Nullable
+	private String[][] oreDicts;
 
 	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
@@ -109,8 +114,10 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		if (!CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
-			currentRecipe = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
+		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
+			Pair<ICarpenterRecipe, String[][]> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
+			currentRecipe = recipePair.getLeft();
+			oreDicts = recipePair.getRight();
 
 			if (currentRecipe != null) {
 				int recipeTime = currentRecipe.getPackagingTime();
@@ -186,7 +193,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, craftingSets, currentRecipe.getCraftingGridRecipe().getOreDicts(), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, craftingSets, InventoryUtil.getOreDictAsList(oreDicts), null, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */

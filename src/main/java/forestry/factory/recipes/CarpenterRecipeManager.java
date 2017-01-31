@@ -11,6 +11,9 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,30 +51,31 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Nullable
-	public static ICarpenterRecipe findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
+	public static Pair<ICarpenterRecipe, String[][]> findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
 		for (ICarpenterRecipe recipe : recipes) {
-			if (matches(recipe, liquid, item, inventorycrafting)) {
-				return recipe;
+			String[][] resourceDicts = matches(recipe, liquid, item, inventorycrafting);
+			if (resourceDicts != null) {
+				return Pair.of(recipe, resourceDicts);
 			}
 		}
-		return null;
+		return Pair.of(null, null);
 	}
 
-	public static boolean matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+	public static String[][] matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
 		if (recipe == null) {
-			return false;
+			return null;
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
 		if (liquid != null) {
 			if (resource == null || !resource.containsFluid(liquid)) {
-				return false;
+				return null;
 			}
 		}
 
 		ItemStack box = recipe.getBox();
 		if (!box.isEmpty() && !ItemStackUtil.isCraftingEquivalent(box, item)) {
-			return false;
+			return null;
 		}
 
 		IDescriptiveRecipe internal = recipe.getCraftingGridRecipe();

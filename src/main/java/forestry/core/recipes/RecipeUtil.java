@@ -196,16 +196,17 @@ public abstract class RecipeUtil {
 		GameRegistry.addSmelting(res, prod, xp);
 	}
 
-	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
+	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
 		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getIngredients();
+		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
-		return matches(recipeIngredients, width, height, inventoryCrafting);
+		return matches(recipeIngredients, oreDicts, width, height, inventoryCrafting);
 	}
 
-	public static boolean matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, int width, int height, IInventory inventoryCrafting) {
+	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory inventoryCrafting) {
 		ItemStack[][] resources = getResources(inventoryCrafting);
-		return matches(recipeIngredients, width, height, resources);
+		return matches(recipeIngredients, oreDicts, width, height, resources);
 	}
 
 	public static ItemStack[][] getResources(IInventory inventoryCrafting) {
@@ -219,23 +220,28 @@ public abstract class RecipeUtil {
 		return resources;
 	}
 
-	public static boolean matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, int width, int height, ItemStack[][] resources) {
+	@Nullable
+	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources) {
 		for (int i = 0; i <= 3 - width; i++) {
 			for (int j = 0; j <= 3 - height; j++) {
-				if (checkMatch(recipeIngredients, width, height, resources, i, j, true)) {
-					return true;
+				String[][] resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, true);
+				if (resourceDicts != null) {
+					return resourceDicts;
 				}
 
-				if (checkMatch(recipeIngredients, width, height, resources, i, j, false)) {
-					return true;
+				resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, false);
+				if (resourceDicts != null) {
+					return resourceDicts;
 				}
 			}
 		}
 
-		return false;
+		return null;
 	}
 
-	private static boolean checkMatch(NonNullList<NonNullList<ItemStack>> recipeIngredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+	@Nullable
+	private static String[][] checkMatch(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+		String[][] resourceDicts = new String[3][3];
 		for (int k = 0; k < 3; k++) {
 			for (int l = 0; l < 3; l++) {
 				ItemStack resource = resources[k][l];
@@ -243,22 +249,27 @@ public abstract class RecipeUtil {
 				int widthIt = k - xInGrid;
 				int heightIt = l - yInGrid;
 				NonNullList<ItemStack> recipeIngredient = null;
+				String oreDict = "";
 
 				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
+					int position;
 					if (mirror) {
-						recipeIngredient = recipeIngredients.get(width - widthIt - 1 + heightIt * width);
+						position = width - widthIt - 1 + heightIt * width;
 					} else {
-						recipeIngredient = recipeIngredients.get(widthIt + heightIt * width);
+						position = widthIt + heightIt * width;
 					}
+					recipeIngredient = recipeIngredients.get(position);
+					oreDict = oreDicts.get(position);
 				}
 
 				if (!checkIngredientMatch(recipeIngredient, resource)) {
-					return false;
+					return null;
 				}
+				resourceDicts[k][l] = oreDict;
 			}
 		}
 
-		return true;
+		return resourceDicts;
 	}
 
 	private static boolean checkIngredientMatch(@Nullable NonNullList<ItemStack> recipeIngredient, ItemStack resource) {
