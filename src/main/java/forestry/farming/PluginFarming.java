@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -143,7 +144,7 @@ public class PluginFarming extends BlankForestryPlugin {
 		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
 
 		//Foretsry fertilizer
-		Farmables.fertilizers.put(new ItemStack(PluginCore.items.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		Farmables.registerFertilizer(new ItemStack(PluginCore.items.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 		
 		proxy.initializeModels();
 
@@ -155,12 +156,12 @@ public class PluginFarming extends BlankForestryPlugin {
 	}
 	
 	private void loadConfig(LocalizedConfiguration config){
-		List<String> defaultFertilizers = new ArrayList<>(getItemStrings(Farmables.fertilizers));
+		List<String> defaultFertilizers = new ArrayList<>(getItemStrings(Farmables.getFertilizers()));
 		Collections.sort(defaultFertilizers);
 		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[defaultFertilizers.size()]);
 		Property fertilizerConf = config.get("fertilizers", "items", defaultSortedFertilizers, Translator.translateToLocal("for.config.farm.fertilizers.items"));
 
-		Farmables.fertilizers.clear();
+		Farmables.clearFertilizers();
 		String[] fertilizerList = fertilizerConf.getStringList();
 		for(int i = 0;i < fertilizerList.length;i++){
 			try{
@@ -168,7 +169,7 @@ public class PluginFarming extends BlankForestryPlugin {
 				String[] fertilizers = fertilizer.split(";");
 				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(fertilizers[0], OreDictionary.WILDCARD_VALUE);
 				int fertilizerValue = Integer.parseInt(fertilizers[1]);
-				Farmables.fertilizers.put(fertilizerItem, fertilizerValue);
+				Farmables.registerFertilizer(fertilizerItem, fertilizerValue);
 			}catch(Exception e){
 				Log.error("Forestry failed to parse a fertilizer entry at the farm config, at the position " + i + ".", e);
 			}
@@ -176,7 +177,7 @@ public class PluginFarming extends BlankForestryPlugin {
 	}
 
 	@Nonnull
-	private static Set<String> getItemStrings(LinkedHashMap<ItemStack, Integer> itemStacks) {
+	private static Set<String> getItemStrings(Map<ItemStack, Integer> itemStacks) {
 		Set<String> itemStrings = new HashSet<>(itemStacks.size());
 		for (Entry<ItemStack, Integer> itemStack : itemStacks.entrySet()) {
 			String itemString = ItemStackUtil.getStringForItemStack(itemStack.getKey());

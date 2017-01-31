@@ -139,8 +139,11 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return false;
 		}
 		
- 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
+ 		for(Entry<ItemStack, Integer> fertilizer : Farmables.getFertilizers().entrySet()){
  			ItemStack fertilizerItem = fertilizer.getKey();
+			if(fertilizerItem == null){
+ 				continue;
+ 			}
  			if(itemstack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == itemstack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
  				return true;
  			}
@@ -219,8 +222,11 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
  			return 0;
  		}
  		
- 		for(Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()){
+ 		for(Entry<ItemStack, Integer> fertilizer : Farmables.getFertilizers().entrySet()){
  			ItemStack fertilizerItem = fertilizer.getKey();
+ 			if(fertilizerItem == null){
+ 				continue;
+ 			}
  			if(fertilizerStack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == fertilizerStack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)){
  				return fertilizer.getValue() * FERTILIZER_MODIFIER;
  			}
