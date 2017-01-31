@@ -10,7 +10,9 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.item.ItemStack;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -24,6 +26,21 @@ public class Farmables {
 	public static final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	
 	@Nonnull
-	public static final LinkedHashMap<ItemStack, Integer> fertilizers = new LinkedHashMap();
+	private static final LinkedHashMap<ItemStack, Integer> fertilizers = new LinkedHashMap();
 
+	public static void registerFertilizer(ItemStack fertilizerItem, int fertilizerValue){
+		if(fertilizerItem == null || fertilizerItem.getItem() == null || fertilizerValue <= 0){
+			return;
+		}
+		fertilizers.put(fertilizerItem, fertilizerValue);
+	}
+	
+	public static void clearFertilizers(){
+		fertilizers.clear();
+	}
+	
+	public static Map<ItemStack, Integer> getFertilizers() {
+		return Collections.unmodifiableMap(fertilizers);
+	}
+	
 }

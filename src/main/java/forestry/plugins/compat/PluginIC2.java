@@ -114,7 +114,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin", CircuitSocketType.ELECTRIC_ENGINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
 		
-		Farmables.fertilizers.put(IC2Items.getItem("crop_res", "fertilizer"), 250);
+		Farmables.registerFertilizer(IC2Items.getItem("crop_res", "fertilizer"), 250);
 	}
 
 	@Override
