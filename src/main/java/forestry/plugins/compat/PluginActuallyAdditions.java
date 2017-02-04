@@ -40,17 +40,17 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Item canolaSeed = getItem("itemCanolaSeed");
-		Item flaxSeed = getItem("itemFlaxSeed");
-		Item riceSeed = getItem("itemRiceSeed");
-		Item coffeeSeed = getItem("itemCoffeeSeed");
+		Item canolaSeed = getItem("item_canola_seed");
+		Item flaxSeed = getItem("item_flax_seed");
+		Item riceSeed = getItem("item_rice_seed");
+		Item coffeeSeed = getItem("item_coffee_seed");
 
 		//add farm seed planting
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
-			registerSeedPlant(canolaSeed, "blockCanola");
-			registerSeedPlant(flaxSeed, "blockFlax");
-			registerSeedPlant(riceSeed, "blockRice");
-			registerSeedPlant(coffeeSeed, "blockCoffee");
+			registerSeedPlant(canolaSeed, "block_canola");
+			registerSeedPlant(flaxSeed, "block_flax");
+			registerSeedPlant(riceSeed, "block_rice");
+			registerSeedPlant(coffeeSeed, "block_coffee");
 		}
 
 		//add seed squeezing
@@ -65,7 +65,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 		Fluid canolaOil = getFluid("canolaoil");
 		if (canolaOil != null) {
 			//add canola squeezing to canola oil
-			Item misc = getItem("itemMisc");
+			Item misc = getItem("item_misc");
 			if (misc != null) {
 				ItemStack canola = new ItemStack(misc, 1, 13);
 				RecipeManagers.squeezerManager.addRecipe(15, canola, new FluidStack(canolaOil, 80));
