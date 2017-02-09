@@ -57,10 +57,10 @@ public class WoodHelper {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
 		WoodBlockKind blockKind = typed.getBlockKind();
 		for (IWoodType woodType : typed.getWoodTypes()) {
-			if (woodType instanceof EnumForestryWoodType) {
-				resourceLocations.add(new ResourceLocation(Constants.MOD_ID, blockKind + "/" + woodType));
-			} else if (woodType instanceof EnumVanillaWoodType) {
+			if (woodType instanceof EnumVanillaWoodType) {
 				resourceLocations.add(new ResourceLocation("minecraft", woodType + "_" + blockKind));
+			} else {
+				resourceLocations.add(new ResourceLocation(Constants.MOD_ID, blockKind + "/" + woodType));
 			}
 		}
 		return resourceLocations.toArray(new ResourceLocation[resourceLocations.size()]);
@@ -83,12 +83,10 @@ public class WoodHelper {
 			int meta = stack.getMetadata();
 			IWoodType woodType = wood.getWoodType(meta);
 			WoodBlockKind blockKind = wood.getBlockKind();
-			if (woodType instanceof EnumForestryWoodType) {
-				return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
-			} else if (woodType instanceof EnumVanillaWoodType) {
+			if (woodType instanceof EnumVanillaWoodType) {
 				return new ModelResourceLocation("minecraft:" + woodType + "_" + blockKind, "inventory");
 			} else {
-				throw new IllegalArgumentException("Unknown wood type: " + woodType);
+				return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
 			}
 		}
 
