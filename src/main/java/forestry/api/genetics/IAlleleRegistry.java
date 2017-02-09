@@ -110,6 +110,13 @@ public interface IAlleleRegistry {
 	void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes);
 
 	/**
+	 * Add more valid chromosome types for an allele.
+	 * Used by addons that create new chromosome types beyond bees, trees, and butterflies.
+	 * @since Forestry 5.3.1
+	 */
+	void addValidAlleleTypes(IAllele allele, IChromosomeType... chromosomeTypes);
+
+	/**
 	 * @return HashMap of all registered deprecated alleles and their corresponding replacements
 	 */
 	Map<String, IAllele> getDeprecatedAlleleReplacements();

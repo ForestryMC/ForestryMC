@@ -151,13 +151,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
-		for (IChromosomeType chromosomeType : chromosomeTypes) {
-			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
-				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
-			}
-			allelesByType.put(chromosomeType, allele);
-			typesByAllele.put(allele, chromosomeType);
-		}
+		addValidAlleleTypes(allele, chromosomeTypes);
 
 		alleleMap.put(allele.getUID(), allele);
 		if (allele instanceof IAlleleSpecies) {
@@ -167,6 +161,17 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 		for (IAlleleHandler handler : this.alleleHandlers) {
 			handler.onRegisterAllele(allele);
+		}
+	}
+
+	@Override
+	public void addValidAlleleTypes(IAllele allele, IChromosomeType... chromosomeTypes) {
+		for (IChromosomeType chromosomeType : chromosomeTypes) {
+			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
+				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
+			}
+			allelesByType.put(chromosomeType, allele);
+			typesByAllele.put(allele, chromosomeType);
 		}
 	}
 
