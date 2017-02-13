@@ -47,7 +47,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
-	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecart.class, GameProfileDataSerializer.INSTANCE);
+	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecartBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final Random random = new Random();
 	private static final int beeFXInterval = 4;
