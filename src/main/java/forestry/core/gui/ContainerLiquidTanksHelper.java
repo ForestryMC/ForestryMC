@@ -12,8 +12,8 @@ package forestry.core.gui;
 
 import forestry.api.core.IToolPipette;
 import forestry.core.network.packets.PacketPipetteClick;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -25,6 +25,8 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
@@ -35,10 +37,11 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handlePipetteClickClient(int slot, EntityPlayer player) {
 		ItemStack itemstack = player.inventory.getItemStack();
 		if (itemstack.getItem() instanceof IToolPipette) {
-			Proxies.net.sendToServer(new PacketPipetteClick(slot));
+			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
 		}
 	}
 

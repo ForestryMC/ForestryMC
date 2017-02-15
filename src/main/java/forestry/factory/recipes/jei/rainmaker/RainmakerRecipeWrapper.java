@@ -9,6 +9,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
 	private final RainSubstrate substrate;
@@ -23,6 +25,7 @@ public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
 

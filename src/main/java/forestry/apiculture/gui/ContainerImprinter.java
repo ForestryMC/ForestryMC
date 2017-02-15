@@ -16,7 +16,7 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -48,7 +48,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 		}
 
 		PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
-		Proxies.net.sendToPlayer(packetResponse, player);
+		NetworkUtil.sendToPlayer(packetResponse, player);
 	}
 
 	public void setSelection(int primary, int secondary) {

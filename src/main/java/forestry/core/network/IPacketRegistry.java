@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public interface IPacketRegistry {
-	void registerPackets();
+	void registerPacketsServer();
+
+	@SideOnly(Side.CLIENT)
+	void registerPacketsClient();
 }

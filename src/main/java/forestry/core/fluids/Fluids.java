@@ -20,7 +20,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import forestry.core.items.DrinkProperties;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -230,12 +229,12 @@ public enum Fluids {
 	}
 
 	public boolean flowTextureExists() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
 			return true;
 		}
 		try {
 			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
-			Minecraft minecraft = Proxies.common.getClientInstance();
+			Minecraft minecraft = Minecraft.getMinecraft();
 			if (minecraft != null) {
 				IResourceManager resourceManager = minecraft.getResourceManager();
 				return resourceManager.getResource(resourceLocation) != null;

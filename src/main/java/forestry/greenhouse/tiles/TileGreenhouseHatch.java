@@ -28,8 +28,8 @@ import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -42,6 +42,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IErrorLogicSource, IOwnedTile, ICamouflageHandler, ICamouflagedTile {
@@ -131,7 +133,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			this.camouflageBlock = camouflageBlock;
 
 			if (sendClientUpdate && world != null && world.isRemote) {
-				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
+				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
 			}
 			return true;
 		}
@@ -160,6 +162,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}

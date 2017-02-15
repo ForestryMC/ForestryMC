@@ -16,8 +16,8 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
@@ -32,6 +32,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);
@@ -112,12 +114,14 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	/* Gui Selection Handling */
+	@SideOnly(Side.CLIENT)
 	public static void clearRecipe() {
 		sendRecipeClick(-1, 0);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
 	}
 
 	@Override
@@ -154,7 +158,8 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void sendWorktableRecipeRequest(MemorizedRecipe recipe) {
-		Proxies.net.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
+		NetworkUtil.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
 	}
 }

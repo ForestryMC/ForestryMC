@@ -26,11 +26,15 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -308,12 +312,13 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEnginePeat(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEnginePeat(player.inventory, this);
 	}
 }

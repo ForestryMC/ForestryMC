@@ -22,6 +22,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiHandler implements IGuiHandler {
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerEntity guiHandler) {
@@ -69,6 +71,7 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	@Nullable
+	@SideOnly(Side.CLIENT)
 	public Object getClientGuiElement(int guiData, EntityPlayer player, World world, int x, int y, int z) {
 		GuiId guiId = decodeGuiID(guiData);
 		if (guiId == null) {

@@ -70,9 +70,8 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
@@ -85,6 +84,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -599,7 +599,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
-		WoodTextureManager.parseFile(Proxies.render.getSelectedTexturePack());
+		WoodTextureManager.parseFile(Minecraft.getMinecraft().getResourceManager());
 		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}
@@ -617,7 +617,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			}
 		}
 		for (ResourceLocation loc : textures) {
-			TextureManager.registerSprite(loc);
+			TextureManagerForestry.registerSprite(loc);
 		}
 	}
 

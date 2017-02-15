@@ -27,9 +27,9 @@ import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseDoor;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -37,11 +37,15 @@ import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled, ICamouflageHandler, ICamouflagedTile {
 	protected ItemStack camouflageBlock;
@@ -98,7 +102,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 			this.camouflageBlock = camouflageBlock;
 
 			if (sendClientUpdate && world != null && world.isRemote) {
-				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
+				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
 				world.markBlockRangeForRenderUpdate(pos, pos);
 			}
 			return true;
@@ -165,17 +169,19 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiGreenhouse(player, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerGreenhouse(player.inventory, this);
 	}
 

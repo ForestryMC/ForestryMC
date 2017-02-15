@@ -8,11 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.proxy;
+package forestry.core.utils;
 
+import com.google.common.base.Preconditions;
 import forestry.Forestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerChunkMap;
@@ -20,10 +23,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ProxyNetwork {
-
-	public <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
+public class NetworkUtil {
+	public static <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
 		if (!(world instanceof WorldServer)) {
 			return;
 		}
@@ -45,7 +49,7 @@ public class ProxyNetwork {
 		}
 	}
 
-	public void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
+	public static void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
 		if (!(entityplayer instanceof EntityPlayerMP) || entityplayer instanceof FakePlayer) {
 			return;
 		}
@@ -54,12 +58,16 @@ public class ProxyNetwork {
 		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
 	}
 
-	public void sendToServer(IForestryPacketServer packet) {
-	}
-
-	public void inventoryChangeNotify(EntityPlayer player) {
+	public static void inventoryChangeNotify(EntityPlayer player) {
 		if (player instanceof EntityPlayerMP) {
 			((EntityPlayerMP) player).sendContainerToPlayer(player.inventoryContainer);
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void sendToServer(IForestryPacketServer packet) {
+		NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getConnection();
+		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
+		netHandler.sendPacket(packet.getPacket());
 	}
 }

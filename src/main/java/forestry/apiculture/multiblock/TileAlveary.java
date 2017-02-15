@@ -34,11 +34,15 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
@@ -172,17 +176,19 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiAlveary(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerAlveary(player.inventory, this);
 	}
 }

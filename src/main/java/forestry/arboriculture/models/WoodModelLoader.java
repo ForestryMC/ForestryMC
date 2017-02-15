@@ -12,6 +12,7 @@ package forestry.arboriculture.models;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import forestry.core.config.Constants;
 import forestry.core.utils.ModelUtil;
 import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
@@ -22,7 +23,10 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public enum WoodModelLoader implements ICustomModelLoader {
 	INSTANCE;
 

@@ -16,12 +16,14 @@ import java.util.List;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
@@ -59,6 +61,7 @@ public abstract class ItemGE extends ItemForestry {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		if (itemstack.getTagCompound() == null) {
 			return;
@@ -67,7 +70,7 @@ public abstract class ItemGE extends ItemForestry {
 		IIndividual individual = getIndividual(itemstack);
 
 		if (individual != null && individual.isAnalyzed()) {
-			if (Proxies.common.isShiftDown()) {
+			if (GuiScreen.isShiftKeyDown()) {
 				individual.addTooltip(list);
 			} else {
 				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");

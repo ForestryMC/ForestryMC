@@ -40,8 +40,9 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -50,6 +51,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
@@ -457,9 +460,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (world != null && !world.isRemote) {
 			if (housing instanceof Entity) {
 				Entity housingEntity = (Entity) this.housing;
-				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.getPosition(), world);
+				NetworkUtil.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.getPosition(), world);
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
+				NetworkUtil.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
 			}
 		}
 	}
@@ -469,9 +472,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		World world = housing.getWorldObj();
 		if (world != null && !world.isRemote) {
 			if (housing instanceof TileEntity) {
-				Proxies.net.sendToPlayer(new PacketBeeLogicActive(housing), player);
+				NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
 			} else if (housing instanceof Entity) {
-				Proxies.net.sendToPlayer(new PacketBeeLogicActiveEntity(housing, (Entity) housing), player);
+				NetworkUtil.sendToPlayer(new PacketBeeLogicActiveEntity(housing, (Entity) housing), player);
 			}
 		}
 	}
@@ -486,11 +489,13 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean canDoBeeFX() {
-		return !Proxies.common.getClientInstance().isGamePaused() && active;
+		return !Minecraft.getMinecraft().isGamePaused() && active;
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void doBeeFX() {
 		if (queen != null) {
 			queen.doFX(effectData, housing);
@@ -498,7 +503,6 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-
 	public List<BlockPos> getFlowerPositions() {
 		return hasFlowersCache.getFlowerCoords();
 	}

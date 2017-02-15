@@ -20,6 +20,8 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketImprintSelectionResponse extends ForestryPacket implements IForestryPacketClient {
 	private final int primary;
@@ -41,6 +43,7 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 		data.writeVarInt(secondary);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

@@ -30,8 +30,8 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -168,7 +168,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 			IBlockState blockState = worldIn.getBlockState(pos);
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-			Proxies.net.sendNetworkPacket(packet, pos, worldIn);
+			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
 
 			if (!playerIn.capabilities.isCreativeMode) {
 				itemStackIn.shrink(1);

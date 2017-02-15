@@ -25,8 +25,8 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -40,6 +40,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
@@ -93,6 +95,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	protected void updateClientSide() {
 	}
 
@@ -132,6 +135,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
@@ -140,7 +144,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* INetworkedEntity */
 	protected final void sendNetworkUpdate() {
 		PacketTileStream packet = new PacketTileStream(this);
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 	}
 
 	/* IStreamable */
@@ -150,6 +154,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 
 	}

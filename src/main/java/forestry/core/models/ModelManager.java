@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -181,6 +182,10 @@ public class ModelManager implements IModelManager {
 	
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
+		if (index.addStateMapper) {
+			StateMapperBase ignoreState = new BlockModeStateMapper(index);
+			ModelLoader.setCustomStateMapper(index.block, ignoreState);
+		}
 	}
 
 	public void registerCustomModel(ModelEntry index) {
@@ -242,4 +247,16 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
+	private static class BlockModeStateMapper extends StateMapperBase {
+		private final BlockModelEntry index;
+
+		public BlockModeStateMapper(BlockModelEntry index) {
+			this.index = index;
+		}
+
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			return index.blockModelLocation;
+		}
+	}
 }

@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
@@ -26,6 +28,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 
 	IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
 
+	@SideOnly(Side.CLIENT)
 	IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
 
 	@Override

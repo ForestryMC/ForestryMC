@@ -9,7 +9,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -27,6 +26,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -215,7 +215,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMap.Builder().ignore(AGE, IS_ACTIVE).build());
+		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE, IS_ACTIVE).build());
 	}
 	
 }

@@ -25,6 +25,8 @@ import forestry.energy.EnergyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 	protected final T tile;
@@ -105,6 +107,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void onGuiEnergy(int energyStored) {
 		if (tile instanceof IPowerHandler) {
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();

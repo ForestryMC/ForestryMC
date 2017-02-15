@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PluginManager {
 
@@ -79,12 +80,16 @@ public class PluginManager {
 		return ImmutableSet.copyOf(loadedPlugins);
 	}
 
-	private static void registerHandlers(IForestryPlugin plugin) {
+	private static void registerHandlers(IForestryPlugin plugin, Side side) {
 		Log.debug("Registering Handlers for Plugin: {}", plugin);
 
 		IPacketRegistry packetRegistry = plugin.getPacketRegistry();
 		if (packetRegistry != null) {
-			packetRegistry.registerPackets();
+			if (side == Side.SERVER) {
+				packetRegistry.registerPacketsServer();
+			} else {
+				packetRegistry.registerPacketsClient();
+			}
 		}
 
 		IPickupHandler pickupHandler = plugin.getPickupHandler();
@@ -218,11 +223,11 @@ public class PluginManager {
 		}
 	}
 
-	public static void runPreInit() {
+	public static void runPreInit(Side side) {
 		stage = Stage.PRE_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
 			Log.debug("Pre-Init Start: {}", plugin);
-			registerHandlers(plugin);
+			registerHandlers(plugin, side);
 			plugin.preInit();
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_STATEMENTS)) {
 				plugin.registerTriggers();

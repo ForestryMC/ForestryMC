@@ -63,6 +63,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
 		if (tintIndex == 0) {
@@ -79,6 +80,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);

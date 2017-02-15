@@ -18,6 +18,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
@@ -70,6 +72,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		ResourceLocation itemNameFromRegistry = ItemStackUtil.getItemNameFromRegistry(item);
 		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
@@ -84,11 +87,6 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to instantiate tile entity of class " + teClass.getName(), e);
 		}
-	}
-
-	@Override
-	public String getTeIdent() {
-		return teIdent;
 	}
 
 	@Override

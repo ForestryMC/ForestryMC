@@ -24,12 +24,16 @@ import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketItemStackDisplay;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
@@ -124,6 +128,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
@@ -135,7 +140,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-			Proxies.net.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
 		}
 	}
 
@@ -144,17 +149,18 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		super.setInventorySlotContents(slotIndex, itemstack);
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-			Proxies.net.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
 		}
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEscritoire(player, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEscritoire(player, this);
 	}
 

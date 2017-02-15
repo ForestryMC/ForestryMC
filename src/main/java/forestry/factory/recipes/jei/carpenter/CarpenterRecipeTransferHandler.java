@@ -2,7 +2,7 @@ package forestry.factory.recipes.jei.carpenter;
 
 import java.util.Map.Entry;
 
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.network.packets.PacketRecipeTransferRequest;
 import mezz.jei.api.gui.IGuiIngredient;
@@ -13,7 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<ContainerCarpenter> {
 
 	@Override
@@ -37,7 +40,7 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 					}
 				}
 			}
-			Proxies.net.sendToServer(new PacketRecipeTransferRequest(container.getCarpenter(), items));
+			NetworkUtil.sendToServer(new PacketRecipeTransferRequest(container.getCarpenter(), items));
 		}
 		return null;
 	}

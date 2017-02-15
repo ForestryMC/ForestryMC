@@ -47,6 +47,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
@@ -69,6 +70,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		manager.registerItemModel(item, new PipetteMeshDefinition());
 	}
 
+	@SideOnly(Side.CLIENT)
 	public class PipetteMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {

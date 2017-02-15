@@ -35,8 +35,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
+@SideOnly(Side.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
 
 	protected final ImmutableList<BakedQuad> general;

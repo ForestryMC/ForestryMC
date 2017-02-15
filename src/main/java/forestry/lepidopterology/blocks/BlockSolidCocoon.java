@@ -17,7 +17,6 @@ import java.util.List;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
@@ -37,6 +36,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -73,7 +73,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new CocoonStateMapper());
+		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
 	}
 
 	@SideOnly(Side.CLIENT)

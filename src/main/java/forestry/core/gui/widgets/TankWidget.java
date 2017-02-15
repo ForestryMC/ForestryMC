@@ -16,7 +16,6 @@ import forestry.api.core.IToolPipette;
 import forestry.core.fluids.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
 import forestry.farming.gui.ContainerFarm;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import net.minecraft.client.Minecraft;
@@ -24,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,10 +34,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Slot for liquid tanks
  */
+@SideOnly(Side.CLIENT)
 public class TankWidget extends Widget {
 
 	private int overlayTexX = 176;
@@ -79,10 +82,12 @@ public class TankWidget extends Widget {
 		}
 
 		FluidStack contents = tank.getFluid();
+		Minecraft minecraft = Minecraft.getMinecraft();
+		TextureManager textureManager = minecraft.getTextureManager();
 		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
-				TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
+				TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
 				ResourceLocation fluidStill = fluid.getStill();
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
@@ -102,7 +107,7 @@ public class TankWidget extends Widget {
 					scaledAmount = height;
 				}
 
-				Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				setGLColorFromInt(fluidColor);
 
 				final int xTileCount = width / 16;
@@ -131,7 +136,7 @@ public class TankWidget extends Widget {
 
 		if (drawOverlay) {
 			GlStateManager.disableDepth();
-			Proxies.render.bindTexture(manager.gui.textureFile);
+			textureManager.bindTexture(manager.gui.textureFile);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			GlStateManager.enableDepth();
 		}
@@ -145,7 +150,8 @@ public class TankWidget extends Widget {
 		if (!(tank instanceof StandardTank)) {
 			return null;
 		}
-		return ((StandardTank) tank).getToolTip();
+		StandardTank standardTank = (StandardTank) tank;
+		return standardTank.getToolTip();
 	}
 
 	private static void setGLColorFromInt(int color) {
@@ -155,7 +161,6 @@ public class TankWidget extends Widget {
 
 		GlStateManager.color(red, green, blue, 1.0F);
 	}
-
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
 		double uMin = textureSprite.getMinU();

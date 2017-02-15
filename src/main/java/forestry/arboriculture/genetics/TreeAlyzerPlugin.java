@@ -34,8 +34,8 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -251,7 +251,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : tree.getSpecialties().keySet()) {
-				Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
+				Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
 				x += 18;
 				if (x > 148) {
 					x = GuiAlyzer.COLUMN_0;

@@ -12,12 +12,13 @@ package forestry.farming.gui;
 
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
@@ -31,6 +32,7 @@ public class FarmLedger extends Ledger {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void draw(int x, int y) {
 
 		// Draw background
@@ -42,7 +44,7 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
 		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite("minecraft:items/bucket_water");
 		drawSprite(TextureMap.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);

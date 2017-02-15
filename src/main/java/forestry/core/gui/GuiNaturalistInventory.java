@@ -26,8 +26,8 @@ import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
@@ -93,7 +93,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 	}
 
 	private static void flipPage(int page) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(page, 0));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(page, 0));
 	}
 
 	@Override
@@ -216,7 +216,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 			column = 196;
 		}
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 
 	}
@@ -247,7 +247,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 			column = 196;
 		}
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 	}
 

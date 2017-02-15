@@ -18,8 +18,12 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
 	private final ISpeciesRoot speciesRoot;
@@ -35,14 +39,15 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int page) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int page) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
 		ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
 		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int page) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int page) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
 		return new ContainerNaturalistBackpack(player, inventory, page);
 	}

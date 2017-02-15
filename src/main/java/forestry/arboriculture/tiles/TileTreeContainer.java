@@ -33,6 +33,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
@@ -135,6 +137,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		NBTTagCompound nbt = pkt.getNbtCompound();
@@ -148,6 +151,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);

@@ -15,9 +15,10 @@ import forestry.api.farming.IFarmLogic;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmControllerInternal;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
 public class FarmLogicSlot extends Widget {
@@ -42,8 +43,10 @@ public class FarmLogicSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (!getStackIndex().isEmpty()) {
-			Proxies.render.bindTexture(getLogic().getTextureMap());
-			RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
+			Minecraft minecraft = Minecraft.getMinecraft();
+			TextureManager textureManager = minecraft.getTextureManager();
+			textureManager.bindTexture(getLogic().getTextureMap());
+			RenderItem renderItem = minecraft.getRenderItem();
 			renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
 		}
 	}

@@ -26,9 +26,11 @@ import forestry.core.items.ItemWithGui;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -66,6 +68,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
@@ -81,12 +84,13 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
 	}
 }

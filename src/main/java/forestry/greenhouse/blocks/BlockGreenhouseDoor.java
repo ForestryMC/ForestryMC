@@ -16,7 +16,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.models.GreenhouseDoorStateMapper;
@@ -293,7 +292,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new GreenhouseDoorStateMapper());
+		ModelLoader.setCustomStateMapper(this, new GreenhouseDoorStateMapper());
 	}
 
 	protected static int removeHalfBit(int meta) {

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -143,7 +142,7 @@ public class ParticleHelper {
 
 		@SideOnly(Side.CLIENT)
 		protected void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-			Minecraft minecraft = Proxies.common.getClientInstance();
+			Minecraft minecraft = Minecraft.getMinecraft();
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
 			TextureAtlasSprite texture = blockModelShapes.getTexture(state);

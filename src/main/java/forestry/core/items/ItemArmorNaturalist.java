@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
+import java.util.List;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
@@ -58,6 +57,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
 	}

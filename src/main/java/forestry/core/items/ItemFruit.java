@@ -41,6 +41,7 @@ public class ItemFruit extends ItemForestryFood {
 			this.oreDict = oreDict;
 		}
 
+		@SideOnly(Side.CLIENT)
 		public static void registerModel(Item item, IModelManager manager) {
 			for (int i = 0; i < VALUES.length; i++) {
 				EnumFruit fruit = VALUES[i];

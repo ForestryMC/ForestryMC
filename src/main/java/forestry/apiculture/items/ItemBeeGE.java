@@ -80,6 +80,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		if (itemstack.getTagCompound() == null) {
 			return;
@@ -142,6 +143,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		manager.registerItemModel(item, new BeeMeshDefinition());
 	}
 
+	@SideOnly(Side.CLIENT)
 	private class BeeMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {

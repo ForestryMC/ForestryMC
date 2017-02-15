@@ -15,11 +15,12 @@ import javax.annotation.Nullable;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.models.ModelEscritoire;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileEscritoire;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -56,6 +57,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
 		float factor = (float) (1.0 / 16.0);
 
+		Minecraft minecraft = Minecraft.getMinecraft();
 		GlStateManager.pushMatrix();
 		{
 			GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
@@ -77,7 +79,8 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 					break;
 			}
 
-			Proxies.render.bindTexture(texture);
+			TextureManager textureManager = minecraft.getTextureManager();
+			textureManager.bindTexture(texture);
 			modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
 		}
 		GlStateManager.popMatrix();
@@ -98,7 +101,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 					dummyEntityItem.onUpdate();
 				}
 
-				RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
+				RenderManager rendermanager = minecraft.getRenderManager();
 				rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 			}
 			GlStateManager.popMatrix();

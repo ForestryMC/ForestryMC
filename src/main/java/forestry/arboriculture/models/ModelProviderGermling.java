@@ -26,8 +26,9 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 
 	private final String name;
 	private final ILeafSpriteProvider leafSpriteProvider;
-
+	@SideOnly(Side.CLIENT)
 	private ModelResourceLocation germlingModel;
+	@SideOnly(Side.CLIENT)
 	private ModelResourceLocation pollenModel;
 
 	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {
@@ -49,6 +50,7 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if (type == EnumGermlingType.POLLEN) {
 			return pollenModel;

@@ -20,7 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
@@ -29,6 +29,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
@@ -175,7 +177,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		this.active = active;
 
 		if (!world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
 	}
 
@@ -267,6 +269,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();

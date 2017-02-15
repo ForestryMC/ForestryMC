@@ -17,6 +17,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTile> extends ContainerTile<T> implements IContainerLiquidTanks {
 
@@ -28,6 +30,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handlePipetteClickClient(int slot, EntityPlayer player) {
 		helper.handlePipetteClickClient(slot, player);
 	}
@@ -40,7 +43,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		tile.getTankManager().updateGuiData(this, listeners);
+		tile.getTankManager().sendTankUpdate(this, listeners);
 	}
 
 	@Override

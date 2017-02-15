@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Stores beekeeping logic for bee housings.
@@ -62,12 +64,14 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 * Whether bee fx should be active.
 	 * Internally, this is automatically synced to the client.
 	 */
+	@SideOnly(Side.CLIENT)
 	boolean canDoBeeFX();
 
 	/**
 	 * Display bee fx. Calls IBee.doFX(IEffectData[] storedData, IBeeHousing housing) on the queen.
 	 * Internally, the queen is automatically synced to the client for the fx.
 	 */
+	@SideOnly(Side.CLIENT)
 	void doBeeFX();
 
 	/**

@@ -21,13 +21,16 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
@@ -93,7 +96,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 		if (this.text.isFocused()) {
 			if (eventKey == Keyboard.KEY_RETURN) {
-				if (Proxies.common.isShiftDown()) {
+				if (GuiScreen.isShiftKeyDown()) {
 					text.setText(text.getText() + "\n");
 				} else {
 					this.text.setFocused(false);
@@ -235,9 +238,10 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 
 		PacketLetterInfoRequest packet = new PacketLetterInfoRequest(recipientName, type);
-		Proxies.net.sendToServer(packet);
+		NetworkUtil.sendToServer(packet);
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void setText() {
 		if (this.isProcessedLetter) {
 			return;

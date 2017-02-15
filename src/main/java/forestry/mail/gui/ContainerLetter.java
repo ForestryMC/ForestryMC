@@ -23,8 +23,8 @@ import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.Letter;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
@@ -32,6 +32,8 @@ import forestry.mail.network.packets.PacketLetterTextSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
@@ -133,7 +135,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		}
 
 		// Update info on client
-		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
+		NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
 	}
 
 	@Nullable
@@ -163,10 +165,11 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		return getLetter().getText();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setText(String text) {
 		getLetter().setText(text);
 
-		Proxies.net.sendToServer(new PacketLetterTextSet(text));
+		NetworkUtil.sendToServer(new PacketLetterTextSet(text));
 	}
 
 	public void handleSetText(String text) {

@@ -24,10 +24,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
-	String getTeIdent();
-
 	Class<T> getTeClass();
 
 	/**
@@ -35,6 +35,7 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	 */
 	void registerTileEntity();
 
+	@SideOnly(Side.CLIENT)
 	void registerModel(Item item, IModelManager manager);
 
 	TileEntity createTileEntity();

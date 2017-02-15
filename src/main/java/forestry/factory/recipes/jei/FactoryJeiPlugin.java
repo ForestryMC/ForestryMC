@@ -58,8 +58,11 @@ import mezz.jei.api.gui.BlankAdvancedGuiHandler;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @JEIPlugin
+@SideOnly(Side.CLIENT)
 public class FactoryJeiPlugin extends BlankModPlugin {
 	@Nullable
 	public static IJeiHelpers jeiHelpers;

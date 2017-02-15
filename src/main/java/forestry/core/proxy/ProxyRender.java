@@ -10,30 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import com.google.common.collect.ImmutableMap;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
+import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.fluids.Fluids;
-import forestry.core.models.BlockModelEntry;
-import forestry.core.models.ModelEntry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.animation.ITimeValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 public class ProxyRender {
 
@@ -41,64 +25,25 @@ public class ProxyRender {
 		return false;
 	}
 
-	public boolean hasRendering() {
-		return false;
-	}
-
 	public void initRendering() {
-
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileBase> getRenderDefaultMachine(String gfxBase) {
-		return null;
+	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String gfxBase) {
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase) {
-		return null;
+	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase) {
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase, byte charges) {
-		return null;
+	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase, byte charges) {
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileEscritoire> getRenderEscritoire() {
-		return null;
+	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileAnalyzer> getRendererAnalyzer() {
-		return null;
+	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
 	}
 
-	@Nullable
-	public TileEntitySpecialRenderer<TileNaturalistChest> getRenderChest(String textureName) {
-		return null;
-	}
-
-	public void registerBlockModel(BlockModelEntry index) {
-	}
-
-	public void registerModel(ModelEntry index) {
-	}
-
-	public void registerStateMapper(Block block, IStateMapper mapper) {
-	}
-
-	public void registerFluidStateMapper(Block block, Fluids fluid) {
-	}
-
-	public void setHabitatLocatorTexture(@Nullable Entity player, @Nullable BlockPos pos) {
-	}
-
-	public IResourceManager getSelectedTexturePack() {
-		return null;
-	}
-
-	public void bindTexture(ResourceLocation location) {
+	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
 	}
 
 	public void registerModels() {
@@ -107,30 +52,7 @@ public class ProxyRender {
 	public void registerItemAndBlockColors() {
 	}
 
-	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
-		return null;
+	public void registerFluidStateMapper(Block block, Fluids fluid) {
 	}
 
-	/* FX */
-
-	public void addBeeHiveFX(IBeeHousing housing, IBeeGenome genome, List<BlockPos> flowerPositions) {
-	}
-
-	public void addEntityHoneyDustFX(World world, double x, double y, double z) {
-	}
-
-	public void addEntityExplodeFX(World world, double x, double y, double z) {
-	}
-
-	public void addEntitySnowFX(World world, double x, double y, double z) {
-	}
-
-	public void addEntityIgnitionFX(World world, double x, double y, double z) {
-	}
-
-	public void addEntitySmokeFX(World world, double x, double y, double z) {
-	}
-
-	public void addEntityPotionFX(World world, double x, double y, double z, int color) {
-	}
 }

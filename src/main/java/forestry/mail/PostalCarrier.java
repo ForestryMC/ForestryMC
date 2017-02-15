@@ -17,8 +17,8 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
@@ -53,7 +53,7 @@ public class PostalCarrier implements IPostalCarrier {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getSprite() {
-		return TextureManager.getInstance().getDefault(iconID);
+		return TextureManagerForestry.getInstance().getDefault(iconID);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class PostalCarrier implements IPostalCarrier {
 		} else {
 			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
+				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 

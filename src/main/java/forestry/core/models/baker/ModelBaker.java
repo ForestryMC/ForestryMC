@@ -17,7 +17,6 @@ import java.util.List;
 import forestry.api.core.IModelBaker;
 import forestry.api.core.IModelBakerModel;
 import forestry.core.models.ModelManager;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -78,7 +77,7 @@ public final class ModelBaker implements IModelBaker {
 		setColorIndex(colorIndex);
 
 		if (pos != null) {
-			World world = Proxies.common.getRenderWorld();
+			World world = Minecraft.getMinecraft().world;
 			IBlockState state = world.getBlockState(pos);
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				if (state.shouldSideBeRendered(world, pos, facing)) {

@@ -32,6 +32,8 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -92,6 +94,7 @@ public abstract class NBTUtilForestry {
 		return nbt;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void readStreamableFromNbt(IStreamable streamable, NBTTagCompound nbt) {
 		if (nbt.hasKey("dataBytes")) {
 			byte[] bytes = nbt.getByteArray("dataBytes");

@@ -65,6 +65,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -182,6 +184,7 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing) {
 		IAlleleBeeEffect effect = genome.getEffect();
 
@@ -202,6 +205,7 @@ public class Bee extends IndividualLiving implements IBee {
 		return storedData;
 	}
 
+	@SideOnly(Side.CLIENT)
 	private IEffectData doFX(IAlleleBeeEffect effect, IEffectData storedData, IBeeHousing housing) {
 		return effect.doFX(genome, storedData, housing);
 	}

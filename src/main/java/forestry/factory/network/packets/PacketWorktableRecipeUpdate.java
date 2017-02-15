@@ -23,6 +23,8 @@ import forestry.factory.tiles.TileWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Used to sync the worktable crafting result from Server to Client.
@@ -48,6 +50,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 		data.writeStreamable(recipe);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

@@ -29,11 +29,13 @@ import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketItemStackDisplay;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -126,7 +130,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		return true;
 	}
@@ -152,6 +156,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
@@ -229,7 +234,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 	}
 
 	public ItemStack getIndividualOnDisplay() {
@@ -262,12 +267,13 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiAnalyzer(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerAnalyzer(player.inventory, this);
 	}
 }

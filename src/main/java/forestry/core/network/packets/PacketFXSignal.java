@@ -17,14 +17,16 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketFXSignal extends ForestryPacket implements IForestryPacketClient {
 
@@ -71,6 +73,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		return PacketIdClient.FX_SIGNAL;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
@@ -83,7 +86,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			World world = player.world;
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
-				Proxies.common.addBlockDestroyEffects(world, pos, blockState);
+				Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);
 			}
 
 			if (soundFX != SoundFXType.NONE) {

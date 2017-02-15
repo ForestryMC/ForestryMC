@@ -29,13 +29,17 @@ import forestry.factory.gui.ContainerStill;
 import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.recipes.StillRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
@@ -92,6 +96,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -200,12 +205,13 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiStill(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerStill(player.inventory, this);
 	}
 }

@@ -11,7 +11,10 @@
 package forestry.core.tiles;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IItemStackDisplay {
+	@SideOnly(Side.CLIENT)
 	void handleItemStackForDisplay(ItemStack itemStack);
 }

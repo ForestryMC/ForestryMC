@@ -12,8 +12,12 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public interface IStreamableGui {
 	void writeGuiData(PacketBufferForestry data);
 
+	@SideOnly(Side.CLIENT)
 	void readGuiData(PacketBufferForestry data) throws IOException;
 }

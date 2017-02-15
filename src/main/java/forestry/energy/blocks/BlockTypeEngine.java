@@ -21,7 +21,6 @@ import forestry.energy.PluginEnergy;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
 import forestry.energy.tiles.TileEnginePeat;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
 	PEAT(createEngineProperties(TileEnginePeat.class, "peat", "/engine_copper")),
@@ -39,13 +38,15 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 	}
 
 	protected static IMachinePropertiesTesr<?> createEngineProperties(Class<? extends TileEngine> teClass, String name, String textureName) {
-		TileEntitySpecialRenderer<TileEngine> renderer = PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesEngine<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		PluginEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
+		return machinePropertiesEngine;
 	}
 
 	protected static IMachinePropertiesTesr<?> createMachineProperties(Class<? extends TileBase> teClass, String name, String textureName) {
-		TileEntitySpecialRenderer<TileBase> renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
+		return machinePropertiesTesr;
 	}
 
 	@Override

@@ -17,7 +17,8 @@ import java.util.Set;
 
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
-import forestry.core.proxy.Proxies;
+import forestry.apiculture.render.TextureHabitatLocator;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -72,7 +73,9 @@ public class HabitatLocatorLogic {
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
-		Proxies.render.setHabitatLocatorTexture(null, null);
+		if (player.world.isRemote) {
+			TextureHabitatLocator.getInstance().setTargetCoordinates(null);
+		}
 	}
 
 	public void onUpdate(World world, Entity player) {
@@ -93,7 +96,7 @@ public class HabitatLocatorLogic {
 
 		// send an update if we find the biome
 		if (target != null && player instanceof EntityPlayerMP) {
-			Proxies.net.sendToPlayer(new PacketHabitatBiomePointer(target), (EntityPlayerMP) player);
+			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (EntityPlayerMP) player);
 			biomeFound = true;
 		}
 	}

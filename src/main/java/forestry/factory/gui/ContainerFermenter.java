@@ -19,6 +19,8 @@ import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.tiles.TileFermenter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
@@ -33,6 +35,7 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 

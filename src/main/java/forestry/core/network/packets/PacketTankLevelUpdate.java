@@ -24,6 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -49,6 +51,7 @@ public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPa
 		data.writeFluidStack(contents);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override

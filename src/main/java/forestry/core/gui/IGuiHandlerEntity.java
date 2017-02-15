@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IGuiHandlerEntity extends IGuiHandlerForestry {
-	Object getGui(EntityPlayer player, int data);
+	@SideOnly(Side.CLIENT)
+	GuiContainer getGui(EntityPlayer player, int data);
 
-	Object getContainer(EntityPlayer player, int data);
+	Container getContainer(EntityPlayer player, int data);
 
 	// can't be named getEntityId() for obfuscation reasons
 	int getIdOfEntity();

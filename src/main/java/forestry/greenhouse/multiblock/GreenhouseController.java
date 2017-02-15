@@ -52,10 +52,10 @@ import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.inventory.InventoryGreenhouse;
@@ -260,7 +260,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						}
 					}
 				}
-				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
+				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
 			}
 			return true;
 		}

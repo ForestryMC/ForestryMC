@@ -15,6 +15,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerSocketed<T extends TileEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
 
@@ -26,6 +28,7 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleChipsetClick(int slot) {
 		helper.handleChipsetClick(slot);
 	}
@@ -36,6 +39,7 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleSolderingIronClick(int slot) {
 		helper.handleSolderingIronClick(slot);
 	}

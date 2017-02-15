@@ -37,9 +37,9 @@ import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -307,7 +307,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		int columnWidth = 50;
 		int x = 0;
 
-		EntityPlayer player = Proxies.common.getPlayer();
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		for (IMutation mutation : speciesRoot.getCombinations(species)) {
@@ -356,7 +356,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	private void drawQuestionMark(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(x, y, 78, 240, 16, 16);
 	}
 
@@ -387,7 +387,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		// Probability arrow
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(x, y, column, line, 15, 9);
 
 		boolean researched = breedingTracker.isResearched(combination);
@@ -438,22 +438,22 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	private void drawDownSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 45, 247, 15, 9);
 	}
 
@@ -465,7 +465,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		int stringWidth = fontRendererObj.getStringWidth(fertilityString);
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + textLayout.getLineY() - 1, 60, 240 + texOffset, 12, 8);
 
 		textLayout.drawLine(fertilityString, x, textColor);

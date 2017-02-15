@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import forestry.core.gui.GuiForestry;
-import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class WidgetManager {
 
 	public final GuiForestry gui;
@@ -26,7 +28,7 @@ public class WidgetManager {
 
 	public WidgetManager(GuiForestry gui) {
 		this.gui = gui;
-		this.minecraft = Proxies.common.getClientInstance();
+		this.minecraft = Minecraft.getMinecraft();
 	}
 
 	public void add(Widget slot) {

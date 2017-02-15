@@ -13,6 +13,8 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import forestry.core.network.PacketBufferForestry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileMill extends TileBase {
 
@@ -44,6 +46,7 @@ public abstract class TileMill extends TileBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		charge = data.readInt();

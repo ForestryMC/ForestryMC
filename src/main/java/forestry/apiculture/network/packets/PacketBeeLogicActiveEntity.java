@@ -22,6 +22,8 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBeeLogicActiveEntity extends ForestryPacket implements IForestryPacketClient {
 	private final Entity entity;
@@ -43,6 +45,7 @@ public class PacketBeeLogicActiveEntity extends ForestryPacket implements IFores
 		beekeepingLogic.writeData(data);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

@@ -32,6 +32,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: split this into two different packets
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
@@ -90,6 +92,7 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileMill;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -159,23 +160,24 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
 		pedestal.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
+		textureManager.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
 		column.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		textureManager.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		extension.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.BLADE_1.ordinal()]);
+		textureManager.bindTexture(textures[Textures.BLADE_1.ordinal()]);
 		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
 		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
-		Proxies.render.bindTexture(textures[Textures.BLADE_2.ordinal()]);
+		textureManager.bindTexture(textures[Textures.BLADE_2.ordinal()]);
 		GlStateManager.translate(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 

@@ -45,8 +45,8 @@ import forestry.greenhouse.tiles.TileGreenhouseFan;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
-import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
+import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
@@ -334,6 +334,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (pos == null || worldIn == null) {
 			return 0xffffff;

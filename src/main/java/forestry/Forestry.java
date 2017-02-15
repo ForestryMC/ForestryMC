@@ -54,7 +54,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.11]",
-		dependencies = "required-after:forge@[13.19.1.2189,);"
+		dependencies = "required-after:forge@[13.20.0.2230,);"
 				+ "after:JEI@[4.1.1,);")
 //				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
@@ -101,7 +101,7 @@ public class Forestry {
 		Preconditions.checkState(gameMode != null);
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
-		PluginManager.runPreInit();
+		PluginManager.runPreInit(event.getSide());
 
 		Proxies.render.registerModels();
 	}

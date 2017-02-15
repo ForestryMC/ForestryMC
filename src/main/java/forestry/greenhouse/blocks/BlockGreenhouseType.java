@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import java.util.Locale;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import net.minecraft.block.material.Material;
@@ -103,7 +102,7 @@ public enum BlockGreenhouseType {
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
 		sprites = new EnumMap<>(BlockGreenhouseSprites.class);
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		for (BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES) {
 			ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "blocks/greenhouse/" + sprite.spriteName);
@@ -121,7 +120,7 @@ public enum BlockGreenhouseType {
 		if (world != null && pos != null) {
 			tile = world.getTileEntity(pos);
 		}
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		switch (type) {
 			case PLAIN:
 				return map.getAtlasSprite("minecraft:blocks/brick");
@@ -187,6 +186,7 @@ public enum BlockGreenhouseType {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> getSprites() {
 		return sprites;
 	}

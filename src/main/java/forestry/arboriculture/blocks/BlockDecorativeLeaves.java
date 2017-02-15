@@ -114,6 +114,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}

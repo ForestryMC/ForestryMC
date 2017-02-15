@@ -25,6 +25,8 @@ import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
 	private final NBTTagCompound nbt;
@@ -43,6 +45,7 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 		data.writeCompoundTag(nbt);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

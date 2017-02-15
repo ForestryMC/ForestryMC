@@ -27,15 +27,16 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.owner.IOwnedTile;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -232,7 +233,8 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 	protected void bindTexture(ResourceLocation texturePath) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		Proxies.render.bindTexture(texturePath);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(texturePath);
 	}
 
 	public void setZLevel(float level) {

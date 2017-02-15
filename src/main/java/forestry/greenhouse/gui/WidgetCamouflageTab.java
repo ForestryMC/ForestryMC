@@ -9,8 +9,9 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -52,14 +53,16 @@ public class WidgetCamouflageTab extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		Proxies.render.bindTexture(manager.gui.textureFile);
+		Minecraft minecraft = Minecraft.getMinecraft();
+		TextureManager textureManager = minecraft.getTextureManager();
+		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 192, 0, 48, 25);
 		if (handlerSlot != null) {
 			manager.gui.drawTexturedModalRect(startX + xPos + 44, startY + yPos, 192, 25, 24, 25);
 		}
 		if (!typeStack.isEmpty()) {
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
+			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			RenderItem renderItem = minecraft.getRenderItem();
 			renderItem.renderItemIntoGUI(typeStack, startX + xPos + 6, startY + yPos + 6);
 		}
 		greenhouseSlot.draw(startX, startY);

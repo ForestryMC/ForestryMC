@@ -19,7 +19,7 @@ import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
@@ -95,7 +95,7 @@ public abstract class ContainerForestry extends Container {
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
 		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayer) {
-				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
+				NetworkUtil.sendToPlayer(packet, (EntityPlayer) listener);
 			}
 		}
 	}

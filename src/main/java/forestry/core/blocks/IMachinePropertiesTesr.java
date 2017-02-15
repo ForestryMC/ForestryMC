@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
 import forestry.core.tiles.TileForestry;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachineProperties<T> {
-
-	/**
-	 * @return The renderer from the machine
-	 */
-	@Nullable
-	TileEntitySpecialRenderer<? super T> getRenderer();
-
 	String getParticleTextureLocation();
 }

@@ -32,7 +32,7 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<IContainerListener> crafters) {
+	public void sendTankUpdate(Container container, List<IContainerListener> crafters) {
 
 	}
 

@@ -23,7 +23,10 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class LedgerManager {
 	private final List<Ledger> ledgers = new ArrayList<>();
 	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
@@ -49,7 +52,7 @@ public class LedgerManager {
 			errorLedgers.add(new ErrorLedger(this));
 		}
 	}
-	
+
 	public void clear(){
 		this.ledgers.clear();
 	}

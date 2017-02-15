@@ -21,8 +21,10 @@ import forestry.mail.LetterProperties;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.GuiLetter;
 import forestry.mail.inventory.ItemInventoryLetter;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,6 +66,7 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
@@ -87,12 +90,13 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiLetter(player, new ItemInventoryLetter(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerLetter(player, new ItemInventoryLetter(player, heldItem));
 	}
 }

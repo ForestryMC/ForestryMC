@@ -6,6 +6,7 @@
 package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +19,7 @@ public interface ITextureManager {
 
 	/**
 	 * Location of the Forestry Gui Texture Map.
-	 * Used for binding with {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture(ResourceLocation)}
+	 * Used for binding with {@link TextureManager#bindTexture(ResourceLocation)}
 	 */
 	ResourceLocation getGuiTextureMap();
 

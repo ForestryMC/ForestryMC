@@ -15,13 +15,16 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.core.proxy.Proxies;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -66,14 +69,16 @@ public class FilteredTank extends StandardTank {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	protected void refreshTooltip() {
 		if (hasFluid()) {
 			super.refreshTooltip();
 			return;
 		}
 
+		ToolTip toolTip = getToolTip();
 		toolTip.clear();
-		if (Proxies.common.isShiftDown() || filters.size() < 5) {
+		if (GuiScreen.isShiftKeyDown() || filters.size() < 5) {
 			for (String filterName : filters) {
 				Fluid fluidFilter = FluidRegistry.getFluid(filterName);
 				EnumRarity rarity = fluidFilter.getRarity();

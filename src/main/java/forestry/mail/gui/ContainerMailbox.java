@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
@@ -57,7 +57,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (!player.world.isRemote && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
+				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
 			}
 		}
 

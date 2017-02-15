@@ -183,6 +183,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
 		return beeModelProvider.getModel(type);
 	}

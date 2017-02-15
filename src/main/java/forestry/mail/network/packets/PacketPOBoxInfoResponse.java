@@ -20,6 +20,8 @@ import forestry.core.network.PacketIdClient;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gui.GuiMailboxInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestryPacketClient {
 	public final POBoxInfo poboxInfo;
@@ -39,12 +41,13 @@ public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestry
 		data.writeInt(poboxInfo.tradeLetters);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			POBoxInfo poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
-			GuiMailboxInfo.instance.setPOBoxInfo(poboxInfo);
+			GuiMailboxInfo.instance.setPOBoxInfo(player, poboxInfo);
 		}
 	}
 }

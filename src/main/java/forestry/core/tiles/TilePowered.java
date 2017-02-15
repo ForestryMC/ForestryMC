@@ -25,6 +25,8 @@ import forestry.energy.EnergyTransferMode;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 //@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui {
@@ -166,6 +168,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		energyManager.readData(data);
 		workCounter = data.readVarInt();

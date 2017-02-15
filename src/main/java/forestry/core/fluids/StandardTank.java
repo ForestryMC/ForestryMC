@@ -21,6 +21,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,6 +32,10 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
+
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	protected ToolTip toolTip;
 
 	public StandardTank(int capacity, boolean canFill, boolean canDrain) {
 		super(capacity);
@@ -102,16 +108,32 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return String.format("Tank: %s, %d/%d", fluid != null && fluid.getFluid() != null ? fluid.getFluid().getName() : "Empty", getFluidAmount(), getCapacity());
 	}
 
-	public ToolTip getToolTip() {
-		return toolTip;
-	}
-
 	protected boolean hasFluid() {
 		FluidStack fluid = getFluid();
 		return fluid != null && fluid.amount > 0 && fluid.getFluid() != null;
 	}
 
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		data.writeFluidStack(fluid);
+	}
+
+	@Override
+	public void readData(PacketBufferForestry data) throws IOException {
+		fluid = data.readFluidStack();
+	}
+
+	@SideOnly(Side.CLIENT)
+	public ToolTip getToolTip() {
+		if (toolTip == null) {
+			toolTip = new TankToolTip(this);
+		}
+		return toolTip;
+	}
+
+	@SideOnly(Side.CLIENT)
 	protected void refreshTooltip() {
+		ToolTip toolTip = getToolTip();
 		toolTip.clear();
 		int amount = 0;
 		FluidStack fluidStack = getFluid();
@@ -128,20 +150,17 @@ public class StandardTank extends FluidTank implements IStreamable {
 		toolTip.add(liquidAmount);
 	}
 
-	protected final ToolTip toolTip = new ToolTip() {
+	@SideOnly(Side.CLIENT)
+	private static class TankToolTip extends ToolTip {
+		private final StandardTank standardTank;
+
+		public TankToolTip(StandardTank standardTank) {
+			this.standardTank = standardTank;
+		}
+
 		@Override
 		public void refresh() {
-			refreshTooltip();
+			standardTank.refreshTooltip();
 		}
-	};
-
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		data.writeFluidStack(fluid);
-	}
-
-	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
-		fluid = data.readFluidStack();
 	}
 }

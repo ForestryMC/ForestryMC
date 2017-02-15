@@ -10,6 +10,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Base logic class for Multiblock-connected tile entities.
@@ -86,6 +88,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
 		super.onDataPacket(network, packet);
 		NBTTagCompound nbtData = packet.getNbtCompound();

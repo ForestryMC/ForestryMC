@@ -33,10 +33,10 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
@@ -236,7 +236,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 					if (pos != BlockPos.ORIGIN) {
 						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
 								world.getBlockState(pos));
-						Proxies.net.sendNetworkPacket(packet, pos, world);
+						NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 						if (!player.capabilities.isCreativeMode) {
 							stack.shrink(1);
@@ -261,7 +261,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
 						PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-				Proxies.net.sendNetworkPacket(packet, pos, world);
+				NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 				if (!player.capabilities.isCreativeMode) {
 					stack.shrink(1);

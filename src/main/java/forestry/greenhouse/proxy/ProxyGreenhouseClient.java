@@ -13,7 +13,7 @@ package forestry.greenhouse.proxy;
 import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.core.models.BlockModelEntry;
-import forestry.core.proxy.Proxies;
+import forestry.core.models.ModelManager;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
@@ -21,7 +21,11 @@ import forestry.greenhouse.models.ModelGreenhouse;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
 	@Override
@@ -33,7 +37,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 			Block greenhouseBlock = blocks.getGreenhouseBlock(greenhouseType);
 
 			if (greenhouseType == BlockGreenhouseType.DOOR) {
-				Proxies.render.registerBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
+				ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:greenhouse." + greenhouseType, "camouflage"),
 						null, new ModelGreenhouse(),
 						greenhouseBlock, false));
 				continue;
@@ -49,7 +53,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 				ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse." + greenhouseType);
 				ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse", "inventory");
 				BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouse(), greenhouseBlock);
-				Proxies.render.registerBlockModel(blockModelIndex);
+				ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 			}
 		}
 	}

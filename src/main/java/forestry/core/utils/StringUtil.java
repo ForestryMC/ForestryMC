@@ -13,9 +13,10 @@ package forestry.core.utils;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class StringUtil {
 
@@ -58,8 +59,9 @@ public class StringUtil {
 		return line.toString();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static int getLineHeight(int maxWidth, String... strings) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		FontRenderer fontRenderer = minecraft.fontRendererObj;
 
 		int lineCount = 0;

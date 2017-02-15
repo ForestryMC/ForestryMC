@@ -6,7 +6,7 @@ import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IHiveTile;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +77,10 @@ public class ItemSmoker extends ItemForestry {
 		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
 		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
 
-		Proxies.render.addEntitySmokeFX(world, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
+		if (world.isRemote) {
+			ParticleRender.addEntitySmokeFX(world, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
+		}
+
 		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		TileEntity tileEntity = world.getTileEntity(blockPos);
 		if (tileEntity instanceof IHiveTile) {

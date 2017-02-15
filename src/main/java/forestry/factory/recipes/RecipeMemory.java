@@ -26,6 +26,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 
@@ -200,6 +202,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		data.readStreamables(memorizedRecipes, MemorizedRecipe::new);
 	}

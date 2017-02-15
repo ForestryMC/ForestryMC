@@ -16,7 +16,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
 	public static class Key {
 		public final EnumFarmBlockTexture texture;

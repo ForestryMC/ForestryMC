@@ -24,9 +24,9 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.network.packets.PacketUpdateClimateControl;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouse;
@@ -128,7 +128,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 				float hum = parseField(humidityField);
 				setClimate(provider, temp, hum);
 			}
-			Proxies.net.sendToServer(new PacketUpdateClimateControl(provider));
+			NetworkUtil.sendToServer(new PacketUpdateClimateControl(provider));
 		}
 	}
 	
@@ -207,7 +207,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 			drawBackground(x, y);
 
 			// Draw icon
-			drawSprite(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+			drawSprite(TextureManagerForestry.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
 			if (!isFullyOpened()) {
 				return;

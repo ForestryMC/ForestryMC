@@ -17,8 +17,8 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -62,7 +62,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 					index++;
 				}
 
-				Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
 			} else if (tile instanceof TileFabricator) {
 				TileFabricator fabricator = (TileFabricator) tile;
 				int index = 0;
@@ -71,7 +71,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 					index++;
 				}
 
-				Proxies.net.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
 			}
 		}
 	}

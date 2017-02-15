@@ -26,7 +26,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -106,7 +106,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			encodeToNBT(nbttagcompound);
 			PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbttagcompound);
-			Proxies.net.sendToPlayer(packet, player);
+			NetworkUtil.sendToPlayer(packet, player);
 		}
 	}
 
@@ -121,7 +121,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				writeToNBT(nbtTagCompound, discoveredSpecies, discoveredMutations, researchedMutations);
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
-				Proxies.net.sendToPlayer(packet, player);
+				NetworkUtil.sendToPlayer(packet, player);
 			}
 		}
 	}

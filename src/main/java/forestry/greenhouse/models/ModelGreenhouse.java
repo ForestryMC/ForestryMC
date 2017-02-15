@@ -33,9 +33,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
 // DO NOT CACHE THIS. PLEASE. I BEG YOU. NOT IN THE CURRENT STATE.
+@SideOnly(Side.CLIENT)
 public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGreenhouse.Key> {
 	public static class Key {
 		@Nullable

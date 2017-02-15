@@ -14,7 +14,6 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleDigging;
@@ -23,6 +22,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 
@@ -34,10 +35,11 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	protected void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			Minecraft minecraft = Proxies.common.getClientInstance();
+			Minecraft minecraft = Minecraft.getMinecraft();
 			TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
 			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
 			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();

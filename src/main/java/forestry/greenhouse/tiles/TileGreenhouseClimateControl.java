@@ -7,6 +7,8 @@ import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.climate.ClimateInfo;
 import forestry.core.network.PacketBufferForestry;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileGreenhouseClimateControl extends TileGreenhouse implements IGreenhouseComponent.ClimateControl {
 
@@ -46,15 +48,16 @@ public class TileGreenhouseClimateControl extends TileGreenhouse implements IGre
 
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
 		data.writeFloat(climateControl.getTemperature());
 		data.writeFloat(climateControl.getHumidity());
-		super.writeGuiData(data);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
-		climateControl = new ClimateInfo(data);
 		super.readGuiData(data);
+		climateControl = new ClimateInfo(data);
 	}
 
 	@Override

@@ -18,10 +18,11 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketAlvearyChange extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos controllerPos;
@@ -40,11 +41,12 @@ public class PacketAlvearyChange extends ForestryPacket implements IForestryPack
 		data.writeBlockPos(controllerPos);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(pos);
+			TileEntity tile = player.world.getTileEntity(pos);
 			if (tile instanceof IMultiblockComponent) {
 				((IMultiblockComponent) tile).getMultiblockLogic().getController().reassemble();
 			}

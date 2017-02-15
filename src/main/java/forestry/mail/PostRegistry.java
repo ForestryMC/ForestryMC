@@ -25,8 +25,8 @@ import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +77,7 @@ public class PostRegistry implements IPostRegistry {
 
 			EntityPlayer player = PlayerUtil.getPlayer(world, address.getPlayerProfile());
 			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
+				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 

@@ -14,10 +14,13 @@ import javax.annotation.Nullable;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Basic non-ItemStack slot
  */
+@SideOnly(Side.CLIENT)
 public abstract class Widget implements IToolTipProvider {
 	protected final WidgetManager manager;
 	protected final int xPos;

@@ -26,12 +26,12 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTankLevelUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NBTUtilForestry.NBTList;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -137,7 +137,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		List<IContainerListener> crafters = Collections.singletonList(player);
 
 		for (StandardTank tank : tanks) {
-			sendTankUpdate(container, tank, crafters);
+			sendTankUpdate(container, crafters, tank);
 		}
 	}
 
@@ -149,13 +149,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<IContainerListener> crafters) {
+	public void sendTankUpdate(Container container, List<IContainerListener> crafters) {
 		for (StandardTank tank : tanks) {
-			updateGuiData(container, crafters, tank.getTankIndex());
+			sendTankUpdate(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	private void updateGuiData(Container container, List<IContainerListener> crafters, int tankIndex) {
+	private void sendTankUpdate(Container container, List<IContainerListener> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		if (tank == null) {
 			return;
@@ -167,17 +167,17 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			return;
 		}
 
-		sendTankUpdate(container, tank, crafters);
+		sendTankUpdate(container, crafters, tank);
 	}
 
-	private void sendTankUpdate(Container container, StandardTank tank, Iterable<IContainerListener> crafters) {
+	private void sendTankUpdate(Container container, Iterable<IContainerListener> crafters, StandardTank tank) {
 		if (tile != null) {
 			int tankIndex = tank.getTankIndex();
 			FluidStack fluid = tank.getFluid();
 			IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
 			for (IContainerListener crafter : crafters) {
 				if (crafter instanceof EntityPlayerMP) {
-					Proxies.net.sendToPlayer(packet, (EntityPlayerMP) crafter);
+					NetworkUtil.sendToPlayer(packet, (EntityPlayerMP) crafter);
 				}
 			}
 
@@ -243,7 +243,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			tankLevels.set(tankIndex, tankLevel);
 			if (sendUpdate) {
 				PacketTankLevelUpdate tankLevelUpdate = new PacketTankLevelUpdate(tile, tankIndex, tank.getFluid());
-				Proxies.net.sendNetworkPacket(tankLevelUpdate, tile.getCoordinates(), tile.getWorldObj());
+				NetworkUtil.sendNetworkPacket(tankLevelUpdate, tile.getCoordinates(), tile.getWorldObj());
 			}
 		}
 	}

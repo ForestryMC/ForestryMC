@@ -14,14 +14,15 @@ import javax.annotation.Nullable;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -153,10 +154,11 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textures[Textures.BASE.ordinal()]);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textures[Textures.BASE.ordinal()]);
 		boiler.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.PISTON.ordinal()]);
+		textureManager.bindTexture(textures[Textures.PISTON.ordinal()]);
 		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		piston.render(factor);
 		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
@@ -182,10 +184,10 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 				break;
 
 		}
-		Proxies.render.bindTexture(texture);
+		textureManager.bindTexture(texture);
 		trunk.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		textureManager.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		float chamberf = 2F / 16F;
 
 		if (step > 0) {

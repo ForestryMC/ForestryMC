@@ -19,8 +19,8 @@ import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.climate.ClimateSource;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.GreenhouseClimateSource;
@@ -130,7 +130,7 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 			if (world.isRemote) {
 				world.markBlockRangeForRenderUpdate(getCoordinates(), getCoordinates());
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), getCoordinates(), world);
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), getCoordinates(), world);
 			}
 		}
 	}

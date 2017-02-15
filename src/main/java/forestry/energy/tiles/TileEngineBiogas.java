@@ -28,7 +28,9 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +39,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank fuelTank;
@@ -262,6 +266,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
@@ -284,12 +289,13 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEngineBiogas(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEngineBiogas(player.inventory, this);
 	}
 }

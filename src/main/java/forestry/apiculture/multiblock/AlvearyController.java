@@ -36,7 +36,7 @@ import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
@@ -47,6 +47,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 	private final InventoryBeeHousing inventory;
@@ -256,6 +258,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	protected void updateClient(int tickCount) {
 		for (IAlvearyComponent.Active activeComponent : activeComponents) {
 			activeComponent.updateClient(tickCount);
@@ -276,10 +279,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				fxY += upSpread;
 
 				// display fx on all 4 sides
-				Proxies.render.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				Proxies.render.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
-				Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 			}
 		}
 	}

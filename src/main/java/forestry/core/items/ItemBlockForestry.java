@@ -25,6 +25,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
@@ -57,6 +59,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);

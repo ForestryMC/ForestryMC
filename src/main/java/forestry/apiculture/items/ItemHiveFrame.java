@@ -23,6 +23,8 @@ import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
@@ -52,6 +54,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		beeModifier.addInformation(stack, playerIn, tooltip, advanced);
@@ -78,6 +81,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 			return this.geneticDecay;
 		}
 
+		@SideOnly(Side.CLIENT)
 		public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.production", production));
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.genetic.decay", geneticDecay));

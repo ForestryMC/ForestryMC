@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
+import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.render.RenderEngine;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ProxyEnergyClient extends ProxyEnergy {
-
 	@Override
-	public TileEntitySpecialRenderer<TileEngine> getRenderDefaultEngine(String gfxBase) {
-		return new RenderEngine(gfxBase);
+	public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String gfxBase) {
+		machineProperties.setRenderer(new RenderEngine(gfxBase));
 	}
-
 }

@@ -10,69 +10,37 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import com.google.common.collect.ImmutableMap;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IHiveTile;
-import forestry.apiculture.entities.ParticleBeeExplore;
-import forestry.apiculture.entities.ParticleBeeRoundTrip;
-import forestry.apiculture.entities.ParticleBeeTargetEntity;
-import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.config.Config;
+import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
-import forestry.core.entities.ParticleHoneydust;
-import forestry.core.entities.ParticleIgnition;
-import forestry.core.entities.ParticleSmoke;
-import forestry.core.entities.ParticleSnow;
 import forestry.core.fluids.Fluids;
-import forestry.core.models.BlockModelEntry;
-import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.render.TextureMapForestry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
-import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.animation.ITimeValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ProxyRenderClient extends ProxyRender {
 
 	@Override
@@ -81,91 +49,39 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public boolean hasRendering() {
-		return true;
-	}
-
-	@Override
 	public void initRendering() {
-		TextureManager textureManager = TextureManager.getInstance();
-		TextureMapForestry textureMap = textureManager.getTextureMap();
+		TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
+		TextureMapForestry textureMap = textureManagerForestry.getTextureMap();
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		minecraft.renderEngine.loadTickableTexture(TextureManager.getInstance().getGuiTextureMap(), textureMap);
+		minecraft.renderEngine.loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
 	}
 
 	@Override
-	public TileEntitySpecialRenderer<TileBase> getRenderDefaultMachine(String gfxBase) {
-		return new RenderMachine(gfxBase);
+	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String gfxBase) {
+		machineProperties.setRenderer(new RenderMachine(gfxBase));
+	}
+
+	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase) {
+		machineProperties.setRenderer(new RenderMill(gfxBase));
+	}
+
+	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase, byte charges) {
+		machineProperties.setRenderer(new RenderMill(gfxBase, charges));
+	}
+
+	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
+		machineProperties.setRenderer(new RenderEscritoire());
+	}
+
+	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
+		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
+		machineProperties.setRenderer(renderAnalyzer);
 	}
 
 	@Override
-	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase) {
-		return new RenderMill(gfxBase);
-	}
-
-	@Override
-	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase, byte charges) {
-		return new RenderMill(gfxBase, charges);
-	}
-
-	@Override
-	public TileEntitySpecialRenderer<TileEscritoire> getRenderEscritoire() {
-		return new RenderEscritoire();
-	}
-
-	@Override
-	public TileEntitySpecialRenderer<TileAnalyzer> getRendererAnalyzer() {
-		return new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
-	}
-
-	@Override
-	public TileEntitySpecialRenderer<TileNaturalistChest> getRenderChest(String textureName) {
-		return new RenderNaturalistChest(textureName);
-	}
-
-	@Override
-	public void setHabitatLocatorTexture(@Nullable Entity player, @Nullable BlockPos pos) {
-		TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
-	}
-
-	@Override
-	public IResourceManager getSelectedTexturePack() {
-		return Minecraft.getMinecraft().getResourceManager();
-	}
-
-	@Override
-	public void bindTexture(ResourceLocation location) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-	}
-
-	@Override
-	public void registerBlockModel(final BlockModelEntry index) {
-		ModelManager.getInstance().registerCustomBlockModel(index);
-		if (index.addStateMapper) {
-			StateMapperBase ignoreState = new BlockModeStateMapper(index);
-			registerStateMapper(index.block, ignoreState);
-		}
-	}
-
-	@Override
-	public void registerModel(ModelEntry index) {
-		ModelManager.getInstance().registerCustomModel(index);
-	}
-
-	@Override
-	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
-		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid",
-				forestryFluid.getTag());
-		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
-		registerStateMapper(block, ignoreState);
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
-	}
-
-	@Override
-	public void registerStateMapper(Block block, IStateMapper mapper) {
-		ModelLoader.setCustomStateMapper(block, mapper);
+	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
+		machineProperties.setRenderer(new RenderNaturalistChest(textureName));
 	}
 
 	@Override
@@ -178,163 +94,12 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelManager.getInstance().registerItemAndBlockColors();
 	}
 
-	@Override
-	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
-		return ModelLoaderRegistry.loadASM(location, parameters);
-	}
-
-	private static boolean shouldSpawnParticle(World world) {
-		if (!Config.enableParticleFX) {
-			return false;
-		}
-
-		Minecraft mc = Minecraft.getMinecraft();
-		int particleSetting = mc.gameSettings.particleSetting;
-
-		// minimal
-		if (particleSetting == 2) {
-			return world.rand.nextInt(10) == 0;
-		}
-
-		// decreased
-		if (particleSetting == 1) {
-			return world.rand.nextInt(3) != 0;
-		}
-
-		// all
-		return true;
-	}
-
-	@Override
-	public void addBeeHiveFX(IBeeHousing housing, IBeeGenome genome, List<BlockPos> flowerPositions) {
-		World world = housing.getWorldObj();
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-
-		Vec3d particleStart = housing.getBeeFXCoordinates();
-
-		// Avoid rendering bee particles that are too far away, they're very small.
-		// At 32+ distance, have no bee particles. Make more particles up close.
-		BlockPos playerPosition = Proxies.common.getPlayer().getPosition();
-		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.xCoord, particleStart.yCoord, particleStart.zCoord);
-		if (world.rand.nextInt(1024) < playerDistanceSq) {
-			return;
-		}
-
-		int color = genome.getPrimary().getSpriteColour(0);
-
-		if (!flowerPositions.isEmpty()) {
-			int randomInt = world.rand.nextInt(100);
-
-			if (housing instanceof IHiveTile) {
-				if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
-					List<EntityLivingBase> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, EntityLivingBase.class);
-					if (!entitiesInRange.isEmpty()) {
-						EntityLivingBase entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
-						Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
-						effectRenderer.addEffect(particle);
-						return;
-					}
-				}
-			}
-
-			if (randomInt < 75) {
-				BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
-				Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
-				effectRenderer.addEffect(particle);
-			} else {
-				Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
-				Vec3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-				BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
-				Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
-				effectRenderer.addEffect(particle);
-			}
-		}
-	}
-
-	@Override
-	public void addEntityHoneyDustFX(World world, double x, double y, double z) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
-	}
-
-	@Override
-	public void addEntityExplodeFX(World world, double x, double y, double z) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		Particle Particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), x, y, z, 0, 0, 0);
-		effectRenderer.addEffect(Particle);
-	}
-
-	@Override
-	public void addEntitySnowFX(World world, double x, double y, double z) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new ParticleSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
-	}
-
-	@Override
-	public void addEntityIgnitionFX(World world, double x, double y, double z) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new ParticleIgnition(world, x, y, z));
-	}
-
-	@Override
-	public void addEntitySmokeFX(World world, double x, double y, double z) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new ParticleSmoke(world, x, y, z));
-	}
-
-	@Override
-	public void addEntityPotionFX(World world, double x, double y, double z, int color) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		float red = (color >> 16 & 255) / 255.0F;
-		float green = (color >> 8 & 255) / 255.0F;
-		float blue = (color & 255) / 255.0F;
-
-		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
-		if (particle != null) {
-			particle.setRBGColorF(red, green, blue);
-			effectRenderer.addEffect(particle);
-		}
-	}
-
-	private static class BlockModeStateMapper extends StateMapperBase {
-		private final BlockModelEntry index;
-
-		public BlockModeStateMapper(BlockModelEntry index) {
-			this.index = index;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-			return index.blockModelLocation;
-		}
+	public void registerFluidStateMapper(Block block, Fluids fluid) {
+		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
+		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
+		ModelLoader.setCustomStateMapper(block, ignoreState);
+		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
 	}
 
 	private static class FluidStateMapper extends StateMapperBase {

@@ -12,14 +12,16 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketHabitatBiomePointer extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -38,11 +40,12 @@ public class PacketHabitatBiomePointer extends ForestryPacket implements IForest
 		return PacketIdClient.HABITAT_BIOME_POINTER;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			Proxies.render.setHabitatLocatorTexture(player, pos);
+			TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
 		}
 	}
 }

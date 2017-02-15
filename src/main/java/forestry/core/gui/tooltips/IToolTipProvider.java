@@ -12,14 +12,20 @@ package forestry.core.gui.tooltips;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IToolTipProvider {
 	@Nullable
+	@SideOnly(Side.CLIENT)
 	ToolTip getToolTip(int mouseX, int mouseY);
 
+	@SideOnly(Side.CLIENT)
 	boolean isToolTipVisible();
 
+	@SideOnly(Side.CLIENT)
 	boolean isMouseOver(int mouseX, int mouseY);
 }

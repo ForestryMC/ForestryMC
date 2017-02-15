@@ -20,7 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.loot.LootTableLoader;
 import forestry.core.models.ModelBlockCached;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.plugins.PluginManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -96,7 +96,7 @@ public class EventHandlerCore {
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		ErrorStateRegistry.initSprites();
-		TextureManager.initDefaultSprites();
+		TextureManagerForestry.initDefaultSprites();
 		ModelBlockCached.clear();
 	}
 

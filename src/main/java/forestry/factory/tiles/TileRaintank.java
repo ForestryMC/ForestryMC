@@ -27,6 +27,7 @@ import forestry.core.tiles.TileBase;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -43,6 +44,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
@@ -89,6 +92,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -195,12 +199,13 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiRaintank(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerRaintank(player.inventory, this);
 	}
 }

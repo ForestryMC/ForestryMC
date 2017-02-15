@@ -20,9 +20,11 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.packets.PacketGuiLayoutSelect;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
@@ -46,17 +48,20 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 		return inventory.getLayout();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void advanceSelection(int index) {
 		sendSelectionChange(index, 0);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void regressSelection(int index) {
 		sendSelectionChange(index, 1);
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static void sendSelectionChange(int index, int advance) {
 		IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
-		Proxies.net.sendToServer(packet);
+		NetworkUtil.sendToServer(packet);
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 		}
 
 		IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
-		Proxies.net.sendToPlayer(packetResponse, player);
+		NetworkUtil.sendToPlayer(packetResponse, player);
 	}
 
 	public void setLayout(ICircuitLayout layout) {

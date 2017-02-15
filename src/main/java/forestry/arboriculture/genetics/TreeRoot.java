@@ -52,10 +52,10 @@ import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Config;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -233,7 +233,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		sapling.getOwnerHandler().setOwner(owner);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		return true;
 	}

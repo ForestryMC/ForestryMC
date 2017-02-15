@@ -12,7 +12,7 @@ package forestry.farming.models;
 
 import javax.annotation.Nullable;
 
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
@@ -52,7 +52,7 @@ public enum EnumFarmBlockTexture {
 	 */
 	@SideOnly(Side.CLIENT)
 	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		switch (texture) {
 			case BRICK:
 				return map.getAtlasSprite("minecraft:blocks/brick");

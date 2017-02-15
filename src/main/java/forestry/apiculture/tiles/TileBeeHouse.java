@@ -20,7 +20,11 @@ import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileBeeHouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -53,13 +57,14 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, false);
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerBeeHousing(player.inventory, this, false);
 	}
 }

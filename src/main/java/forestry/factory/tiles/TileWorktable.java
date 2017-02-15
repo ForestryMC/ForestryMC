@@ -28,7 +28,9 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
@@ -36,6 +38,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private RecipeMemory recipeMemory;
@@ -79,6 +83,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 
@@ -252,12 +257,13 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiWorktable(player, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerWorktable(player, this);
 	}
 }

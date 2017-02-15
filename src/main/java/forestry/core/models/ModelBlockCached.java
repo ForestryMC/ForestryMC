@@ -11,7 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDefault<B, K> {
 	private static final Set<ModelBlockCached> CACHE_PROVIDERS = new HashSet<>();
 

@@ -22,7 +22,7 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -90,7 +90,7 @@ public class PacketCamouflageSelectServer extends ForestryPacket implements IFor
 
 			if (handler != null) {
 				if (handler.setCamouflageBlock(camouflageType, camouflageStack, true) && selectionType != CamouflageSelectionType.ITEM) {
-					Proxies.net.sendNetworkPacket(new PacketCamouflageSelectClient(handler, camouflageType, selectionType), pos, player.world);
+					NetworkUtil.sendNetworkPacket(new PacketCamouflageSelectClient(handler, camouflageType, selectionType), pos, player.world);
 				}
 			}
 		}

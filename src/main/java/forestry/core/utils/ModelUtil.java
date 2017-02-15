@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,15 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
-import org.apache.commons.io.IOUtils;
-
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import forestry.core.proxy.Proxies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -38,9 +33,13 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
+import net.minecraftforge.client.model.SimpleModelState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
 
+@SideOnly(Side.CLIENT)
 public class ModelUtil {
 
 	private static final Map<ResourceLocation, ModelBlockDefinition> blockDefinitions = Maps.newHashMap();
@@ -50,7 +49,7 @@ public class ModelUtil {
 	 */
 	@Nullable
 	public static IBakedModel getModel(ItemStack stack) {
-		RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		if (renderItem == null || renderItem.getItemModelMesher() == null) {
 			return null;
 		}
@@ -83,6 +82,7 @@ public class ModelUtil {
 			return blockDefinitions.computeIfAbsent(resourcelocation,
 					k -> loadMultipartMBD(location, resourcelocation));
 		} catch (Exception exception) {
+			Log.error("Failed to getModelBlockDefinition", exception);
 		}
 		return new ModelBlockDefinition(new ArrayList<>());
 	}
@@ -94,7 +94,7 @@ public class ModelUtil {
 
 	private static ModelBlockDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
 		List<ModelBlockDefinition> list = Lists.newArrayList();
-		Minecraft mc = Proxies.common.getClientInstance();
+		Minecraft mc = Minecraft.getMinecraft();
 		IResourceManager manager = mc.getResourceManager();
 
 		try {
@@ -125,5 +125,4 @@ public class ModelUtil {
 
 		return definition;
 	}
-
 }

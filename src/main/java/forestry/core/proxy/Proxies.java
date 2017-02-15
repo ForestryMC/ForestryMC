@@ -18,10 +18,6 @@ public class Proxies {
 	public static ProxyCommon common;
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.core.proxy.ProxyNetworkClient", serverSide = "forestry.core.proxy.ProxyNetwork")
-	public static ProxyNetwork net;
-
-	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
 	public static ProxyRender render;
 }

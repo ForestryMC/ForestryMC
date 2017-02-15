@@ -33,9 +33,9 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.ClimateUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -191,7 +191,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 		} else {
 			if (needsActiveUpdate) {
 				IForestryPacketServer packet = new PacketBeeLogicEntityRequest(this);
-				Proxies.net.sendToServer(packet);
+				NetworkUtil.sendToServer(packet);
 				needsActiveUpdate = false;
 			}
 

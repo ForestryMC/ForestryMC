@@ -13,40 +13,39 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
 	@Nullable
-	private final TileEntitySpecialRenderer<? super T> renderer;
+	@SideOnly(Side.CLIENT)
+	private TileEntitySpecialRenderer<? super T> renderer;
 
 	private final String particleTextureLocation;
 	private final boolean isFullCube;
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, String particleTextureLocation) {
-		this(teClass, name, renderer, particleTextureLocation, true);
+	public MachinePropertiesTesr(Class<T> teClass, String name, String particleTextureLocation) {
+		this(teClass, name, particleTextureLocation, true);
 	}
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, AxisAlignedBB boundingBox, String particleTextureLocation) {
-		this(teClass, name, renderer, boundingBox, particleTextureLocation, true);
+	public MachinePropertiesTesr(Class<T> teClass, String name, AxisAlignedBB boundingBox, String particleTextureLocation) {
+		this(teClass, name, boundingBox, particleTextureLocation, true);
 	}
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, String particleTextureLocation, boolean isFullCube) {
+	public MachinePropertiesTesr(Class<T> teClass, String name, String particleTextureLocation, boolean isFullCube) {
 		super(teClass, name);
-		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
 		this.isFullCube = isFullCube;
 	}
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, AxisAlignedBB boundingBox, String particleTextureLocation, boolean isFullCube) {
+	public MachinePropertiesTesr(Class<T> teClass, String name, AxisAlignedBB boundingBox, String particleTextureLocation, boolean isFullCube) {
 		super(teClass, name, boundingBox);
-		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
 		this.isFullCube = isFullCube;
 	}
 
-	@Nullable
-	@Override
-	public TileEntitySpecialRenderer<? super T> getRenderer() {
-		return renderer;
+	@SideOnly(Side.CLIENT)
+	public void setRenderer(TileEntitySpecialRenderer<? super T> renderer) {
+		this.renderer = renderer;
 	}
 
 	@Override

@@ -17,9 +17,13 @@ import forestry.core.utils.InventoryUtil;
 import forestry.greenhouse.gui.ContainerGreenhouseButterflyHatch;
 import forestry.greenhouse.gui.GuiGreenhouseButterflyHatch;
 import forestry.greenhouse.inventory.InventoryGreenhouseButterflyHatch;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileGreenhouseButterflyHatch extends TileGreenhouse implements IGreenhouseComponent.ButterflyHatch {
 
@@ -46,12 +50,13 @@ public class TileGreenhouseButterflyHatch extends TileGreenhouse implements IGre
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiGreenhouseButterflyHatch(player, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerGreenhouseButterflyHatch(player.inventory, this);
 	}
 

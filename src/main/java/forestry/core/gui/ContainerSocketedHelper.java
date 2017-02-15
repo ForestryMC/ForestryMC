@@ -16,11 +16,13 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSocketedHelper<T extends TileEntity & ISocketable> implements IContainerSocketed {
 
@@ -31,8 +33,9 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleChipsetClick(int slot) {
-		Proxies.net.sendToServer(new PacketChipsetClick(slot));
+		NetworkUtil.sendToServer(new PacketChipsetClick(slot));
 	}
 
 	@Override
@@ -63,12 +66,13 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 		player.updateHeldItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		NetworkUtil.sendToPlayer(packet, player);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleSolderingIronClick(int slot) {
-		Proxies.net.sendToServer(new PacketSolderingIronClick(slot));
+		NetworkUtil.sendToServer(new PacketSolderingIronClick(slot));
 	}
 
 	@Override
@@ -89,6 +93,6 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 		player.updateHeldItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		NetworkUtil.sendToPlayer(packet, player);
 	}
 }

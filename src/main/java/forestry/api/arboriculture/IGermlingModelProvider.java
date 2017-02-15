@@ -20,6 +20,7 @@ public interface IGermlingModelProvider {
 	@SideOnly(Side.CLIENT)
 	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
 
+	@SideOnly(Side.CLIENT)
 	ModelResourceLocation getModel(EnumGermlingType type);
 
 	/**

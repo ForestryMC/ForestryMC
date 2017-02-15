@@ -19,6 +19,8 @@ import forestry.factory.tiles.TileMoistener;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
@@ -52,6 +54,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 

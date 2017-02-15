@@ -53,7 +53,7 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
@@ -500,13 +500,14 @@ public class PluginCore extends BlankForestryPlugin {
 	public void onBakeModels(ModelBakeEvent event) {
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflage_spray_can", "inventory");
 		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
-		Proxies.render.registerModel(blockModelIndex);
-		ModelManager.getInstance().onBakeModels(event);
+		ModelManager modelManager = ModelManager.getInstance();
+		modelManager.registerCustomModel(blockModelIndex);
+		modelManager.onBakeModels(event);
 	}
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		TextureManager.getInstance().registerSprites();
+		TextureManagerForestry.getInstance().registerSprites();
 	}
 }

@@ -27,8 +27,7 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -105,45 +104,22 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public void nextPage() {
-		if (player.world.isRemote) {
-			sendSelection(true);
-			return;
+		if (!stations.isEmpty()) {
+			stationIndex = (stationIndex + 1) % stations.size();
+			updateTradeInfo();
 		}
-
-		if (stations.isEmpty()) {
-			return;
-		}
-		stationIndex = (stationIndex + 1) % stations.size();
-		updateTradeInfo();
 	}
 
 	public void previousPage() {
-		if (player.world.isRemote) {
-			sendSelection(false);
-			return;
+		if (!stations.isEmpty()) {
+			stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
+			updateTradeInfo();
 		}
-
-		if (stations.isEmpty()) {
-			return;
-		}
-		stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
-		updateTradeInfo();
 	}
 
 	public void cycleFilter() {
-		if (player.world.isRemote) {
-			Proxies.net.sendToServer(new PacketGuiSelectRequest(2, 0));
-			return;
-		}
-
 		currentFilter = (currentFilter + 1) % FILTERS.size();
-
 		rebuildStationsList();
-	}
-
-	private static void sendSelection(boolean advance) {
-		int value = advance ? 0 : 1;
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(value, 0));
 	}
 
 	/* Managing Trade info */
@@ -187,7 +163,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
-			Proxies.net.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
+			NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
 			needsSync = false;
 		}
 	}

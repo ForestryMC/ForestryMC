@@ -44,10 +44,10 @@ import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -58,6 +58,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -199,6 +201,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return tree != null && !isDestroyed(tree, damage) && tree.getMate() != null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public int getFoliageColour(EntityPlayer player) {
 		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
 		final int baseColor = getLeafSpriteProvider().getColor(showPollinated);
@@ -230,13 +233,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return fruit.getColour(genome, world, getPos(), getRipeningTime());
 	}
 
-
+	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLeaveSprite(boolean fancy) {
 		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider();
 		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
 	}
 
-
+	@SideOnly(Side.CLIENT)
 	private ILeafSpriteProvider getLeafSpriteProvider() {
 		if (species != null) {
 			return species.getLeafSpriteProvider();
@@ -307,7 +310,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	/* NETWORK */
 	private void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this), pos, world);
+		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
 	}
 
 	private void sendNetworkUpdateRipening() {
@@ -318,7 +321,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		colourFruits = newColourFruits;
 
 		PacketRipeningUpdate ripeningUpdate = new PacketRipeningUpdate(this);
-		Proxies.net.sendNetworkPacket(ripeningUpdate, pos, world);
+		NetworkUtil.sendNetworkPacket(ripeningUpdate, pos, world);
 	}
 
 	private static final short hasFruitFlag = 1;

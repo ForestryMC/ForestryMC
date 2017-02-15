@@ -26,7 +26,11 @@ import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -79,13 +83,14 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true);
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerBeeHousing(player.inventory, this, true);
 	}
 }

@@ -17,8 +17,7 @@ import java.util.Locale;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.common.BiomeDictionary;
@@ -47,7 +46,7 @@ public class HabitatSlot extends Widget {
 
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getIcon() {
-		return TextureManager.getInstance().getDefault(iconIndex);
+		return TextureManagerForestry.getInstance().getDefault(iconIndex);
 	}
 
 	public void setActive(Collection<BiomeDictionary.Type> biomes) {
@@ -62,7 +61,7 @@ public class HabitatSlot extends Widget {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
-		Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
+		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, getIcon(), 16, 16);
 	}
 }

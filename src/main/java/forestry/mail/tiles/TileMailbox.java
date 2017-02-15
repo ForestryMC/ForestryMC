@@ -22,11 +22,15 @@ import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileMailbox extends TileBase {
 
@@ -78,12 +82,13 @@ public class TileMailbox extends TileBase {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiMailbox(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerMailbox(player.inventory, this);
 	}
 }

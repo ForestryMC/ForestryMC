@@ -16,9 +16,11 @@ import java.util.Map;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TextureLeaves {
 	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);
@@ -33,6 +35,7 @@ public class TextureLeaves {
 		return leafTextures.get(leafType);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void registerAllSprites() {
 		for (TextureLeaves leafTexture : leafTextures.values()) {
 			leafTexture.registerSprites();
@@ -52,8 +55,9 @@ public class TextureLeaves {
 		this.pollinatedFancy = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".changed");
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void registerSprites() {
-		TextureMap textureMapBlocks = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
 		textureMapBlocks.registerSprite(plain);
 		textureMapBlocks.registerSprite(fancy);
 		textureMapBlocks.registerSprite(pollinatedPlain);

@@ -24,9 +24,9 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.mail.gui.ContainerTradeName;
@@ -35,11 +35,15 @@ import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -102,6 +106,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		ownerHandler.readData(data);
@@ -256,10 +261,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		String newAddressName = newAddress.getName();
 		if (newAddressName.equals(addressName)) {
 			PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
-			Proxies.net.sendNetworkPacket(packetResponse, pos, world);
+			NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void handleSetAddressResponse(String addressName) {
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		setAddress(address);
@@ -317,7 +323,8 @@ public class TileTrader extends TileBase implements IOwnedTile {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		if (data == 0) {
 			return new GuiTrader(player.inventory, this);
 		} else {
@@ -326,7 +333,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		if (data == 0) {
 			return new ContainerTrader(player.inventory, this);
 		} else {

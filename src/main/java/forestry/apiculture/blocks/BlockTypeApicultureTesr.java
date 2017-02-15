@@ -10,28 +10,26 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nullable;
-
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
-	APIARIST_CHEST(TileApiaristChest.class, "api_chest", Proxies.render.getRenderChest("apiaristchest"), TileNaturalistChest.chestBoundingBox);
+	APIARIST_CHEST(TileApiaristChest.class, "api_chest", "apiaristchest", TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeApicultureTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeApicultureTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, AxisAlignedBB boundingBox) {
-		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+	<T extends TileApiaristChest> BlockTypeApicultureTesr(Class<T> teClass, String name, String textureName, AxisAlignedBB boundingBox) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+		Proxies.render.setRenderChest(machineProperties, textureName);
+		this.machineProperties = machineProperties;
 	}
 
 	@Override

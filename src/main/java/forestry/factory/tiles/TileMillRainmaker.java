@@ -14,11 +14,13 @@ import javax.annotation.Nullable;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileMill;
 import forestry.factory.inventory.InventoryRainmaker;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
@@ -81,7 +83,7 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	public void activate() {
-		if (Proxies.render.hasRendering()) {
+		if (world.isRemote) {
 			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 
 			float f = getPos().getX() + 0.5F;
@@ -90,13 +92,11 @@ public class TileMillRainmaker extends TileMill {
 			float f3 = 0.52F;
 			float f4 = world.rand.nextFloat() * 0.6F - 0.3F;
 
-			Proxies.render.addEntityExplodeFX(world, f - f3, f1, f2 + f4);
-			Proxies.render.addEntityExplodeFX(world, f + f3, f1, f2 + f4);
-			Proxies.render.addEntityExplodeFX(world, f + f4, f1, f2 - f3);
-			Proxies.render.addEntityExplodeFX(world, f + f4, f1, f2 + f3);
-		}
-
-		if (!world.isRemote) {
+			ParticleRender.addEntityExplodeFX(world, f - f3, f1, f2 + f4);
+			ParticleRender.addEntityExplodeFX(world, f + f3, f1, f2 + f4);
+			ParticleRender.addEntityExplodeFX(world, f + f4, f1, f2 - f3);
+			ParticleRender.addEntityExplodeFX(world, f + f4, f1, f2 + f3);
+		} else {
 			if (reverse) {
 				world.getWorldInfo().setRaining(false);
 			} else {
@@ -112,13 +112,13 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	@Nullable
-	public Object getGui(EntityPlayer player, int data) {
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return null;
 	}
 
 	@Override
 	@Nullable
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return null;
 	}
 }

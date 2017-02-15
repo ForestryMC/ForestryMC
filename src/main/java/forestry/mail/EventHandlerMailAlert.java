@@ -12,7 +12,7 @@ package forestry.mail;
 
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.client.Minecraft;
@@ -21,9 +21,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EventHandlerMailAlert {
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (event.phase == Phase.END &&
 				Minecraft.getMinecraft().world != null &&
@@ -39,6 +42,6 @@ public class EventHandlerMailAlert {
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
 		POBox pobox = PostRegistry.getOrCreatePOBox(player.world, address);
 		PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
-		Proxies.net.sendToPlayer(packet, player);
+		NetworkUtil.sendToPlayer(packet, player);
 	}
 }

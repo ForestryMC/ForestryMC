@@ -18,9 +18,13 @@ import forestry.core.utils.InventoryUtil;
 import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
@@ -54,12 +58,13 @@ public class TileStampCollector extends TileBase implements IInventory {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiStampCollector(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerStampCollector(player.inventory, this);
 	}
 }

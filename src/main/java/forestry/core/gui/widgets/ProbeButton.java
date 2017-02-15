@@ -13,9 +13,12 @@ package forestry.core.gui.widgets;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 
 public class ProbeButton extends Widget {
 
@@ -32,7 +35,8 @@ public class ProbeButton extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-		Proxies.render.bindTexture(manager.gui.textureFile);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
 	}
 
@@ -46,8 +50,8 @@ public class ProbeButton extends Widget {
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		pressed = true;
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(-1, 0));
-		Proxies.common.playButtonClick();
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(-1, 0));
+		SoundUtil.playButtonClick();
 	}
 
 	@Override

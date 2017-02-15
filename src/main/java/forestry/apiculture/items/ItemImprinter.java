@@ -15,8 +15,12 @@ import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
@@ -24,12 +28,13 @@ public class ItemImprinter extends ItemWithGui {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 }

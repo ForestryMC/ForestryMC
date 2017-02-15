@@ -11,9 +11,6 @@
 package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
@@ -36,7 +33,9 @@ import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.CarpenterRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCraftResult;
@@ -47,6 +46,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -104,6 +106,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -267,12 +270,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiCarpenter(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerCarpenter(player.inventory, this);
 	}
 }

@@ -14,7 +14,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -24,6 +24,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
@@ -78,6 +80,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorldObj().rand.nextInt(3) == 0) {
 			Vec3i area = getModifiedArea(genome, housing);
@@ -87,7 +90,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			World world = housing.getWorldObj();
 
 			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-			Proxies.render.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
+			ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
 			return storedData;
 		} else {
 			return super.doFX(genome, storedData, housing);

@@ -17,7 +17,7 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
@@ -65,7 +65,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 					containerWorktable.updateCraftMatrix();
 				}
 
-				Proxies.net.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.world);
 			}
 		}
 	}

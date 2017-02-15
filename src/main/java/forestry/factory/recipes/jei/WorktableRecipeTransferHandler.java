@@ -14,7 +14,10 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable> {
 	@Override
 	public Class<ContainerWorktable> getContainerClass() {

@@ -31,10 +31,10 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
@@ -49,6 +49,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -161,6 +163,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleUpdateTag(NBTTagCompound tag) {
 		int oldAge = age;
 		super.handleUpdateTag(tag);
@@ -171,6 +174,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		NBTTagCompound nbt = pkt.getNbtCompound();
@@ -270,7 +274,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	private void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this), pos, world);
+		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
 	}
 
 	public int getAge() {

@@ -7,6 +7,8 @@ package forestry.api.apiculture;
 
 import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IAlleleBeeEffect extends IAlleleEffect {
 
@@ -28,6 +30,7 @@ public interface IAlleleBeeEffect extends IAlleleEffect {
 	 * @param housing    {@link IBeeHousing} the bee currently resides in.
 	 * @return storedData, may have been manipulated.
 	 */
+	@SideOnly(Side.CLIENT)
 	IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing);
 
 }

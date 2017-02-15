@@ -16,6 +16,8 @@ import forestry.api.genetics.IIndividualLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -54,6 +56,7 @@ public interface IBee extends IIndividualLiving {
 
 	IEffectData[] doEffect(IEffectData[] storedData, IBeeHousing housing);
 
+	@SideOnly(Side.CLIENT)
 	IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing);
 
 	/**

@@ -17,9 +17,10 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -27,9 +28,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TextureManager implements ITextureManager {
+public class TextureManagerForestry implements ITextureManager {
 	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/atlas/gui");
-	private static final TextureManager INSTANCE = new TextureManager();
+	private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 	private final TextureMapForestry textureMap;
 
@@ -37,11 +38,11 @@ public class TextureManager implements ITextureManager {
 		ForestryAPI.textureManager = INSTANCE;
 	}
 
-	public static TextureManager getInstance() {
+	public static TextureManagerForestry getInstance() {
 		return INSTANCE;
 	}
 
-	private TextureManager() {
+	private TextureManagerForestry() {
 		this.textureMap = new TextureMapForestry("textures");
 	}
 
@@ -70,7 +71,7 @@ public class TextureManager implements ITextureManager {
 	}
 
 	public static TextureAtlasSprite registerSprite(ResourceLocation location) {
-		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
 		return textureMap.registerSprite(location);
 	}
 
@@ -83,6 +84,12 @@ public class TextureManager implements ITextureManager {
 	@Override
 	public ResourceLocation getGuiTextureMap() {
 		return LOCATION_FORESTRY_TEXTURE;
+	}
+
+	public void bindGuiTextureMap() {
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		ResourceLocation guiTextureMap = getGuiTextureMap();
+		textureManager.bindTexture(guiTextureMap);
 	}
 
 	@Override

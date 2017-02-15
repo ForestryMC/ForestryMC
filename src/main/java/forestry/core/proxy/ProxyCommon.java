@@ -16,23 +16,11 @@ import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.worldgen.WorldGenerator;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.Loader;
 
 public class ProxyCommon {
-
-	public String getMinecraftVersion() {
-		return Loader.instance().getMinecraftModContainer().getVersion();
-	}
-
 	public void registerItem(Item item) {
 
 	}
@@ -53,40 +41,12 @@ public class ProxyCommon {
 		
 	}
 
-	public String getDisplayName(ItemStack itemstack) {
-		return null;
-	}
-
 	public File getForestryRoot() {
 		return new File(".");
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		return 4f;
-	}
-
-	public boolean isShiftDown() {
-		return false;
-	}
-
-	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState blockState) {
-
-	}
-
-	public World getRenderWorld() {
-		throw new IllegalStateException("Cannot get render world on server");
-	}
-
-	public Minecraft getClientInstance() {
-		return FMLClientHandler.instance().getClient();
-	}
-
-	public EntityPlayer getPlayer() {
-		throw new IllegalStateException("Can't call getPlayer on the server");
-	}
-
-	public void playButtonClick() {
-
 	}
 
 }

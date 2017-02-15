@@ -13,9 +13,9 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 
 import forestry.api.core.IModelManager;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -71,7 +71,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 		if (contained.isEmpty()) {
 			return Translator.translateToLocal("item.for.crate.name");
 		} else {
-			String containedName = Proxies.common.getDisplayName(contained);
+			String containedName = contained.getDisplayName();
 			return Translator.translateToLocalFormatted("for.item.crated.grammar", containedName);
 		}
 	}
@@ -90,8 +90,9 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack stack, int renderPass) {
-		ItemColors colors = Proxies.common.getClientInstance().getItemColors();
+		ItemColors colors = Minecraft.getMinecraft().getItemColors();
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}

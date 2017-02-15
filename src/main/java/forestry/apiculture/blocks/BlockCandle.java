@@ -297,6 +297,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle != null && tileCandle.isLit()) {

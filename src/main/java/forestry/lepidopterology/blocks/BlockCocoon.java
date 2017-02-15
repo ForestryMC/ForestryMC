@@ -21,7 +21,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
@@ -41,6 +40,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,7 +76,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new CocoonStateMapper());
+		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
 	}
 
 	@SideOnly(Side.CLIENT)

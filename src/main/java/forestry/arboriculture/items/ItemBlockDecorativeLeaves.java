@@ -8,6 +8,8 @@ import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(Block block) {
@@ -25,6 +27,7 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
 		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();

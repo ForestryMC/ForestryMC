@@ -13,9 +13,12 @@ package forestry.core.network.packets;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {
-	public static final PacketHandlerDummyClient instance = new PacketHandlerDummyClient();
+	public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
 
 	private PacketHandlerDummyClient() {
 

@@ -29,10 +29,23 @@ import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.network.packets.PacketUpdateClimateControl;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRegistryCore implements IPacketRegistry {
 	@Override
-	public void registerPackets() {
+	public void registerPacketsServer() {
+		PacketIdServer.GUI_SELECTION_REQUEST.setPacketHandler(new PacketGuiSelectRequest.Handler());
+		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
+		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
+		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
+		PacketIdServer.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectServer.Handler());
+		PacketIdServer.CLIMATE_CONTROL_UPDATE.setPacketHandler(new PacketUpdateClimateControl.Handler());
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerPacketsClient() {
 		PacketIdClient.ERROR_UPDATE.setPacketHandler(new PacketErrorUpdate.Handler());
 		PacketIdClient.ERROR_UPDATE_ENTITY.setPacketHandler(new PacketErrorUpdateEntity.Handler());
 		PacketIdClient.GUI_UPDATE.setPacketHandler(new PacketGuiUpdate.Handler());
@@ -46,12 +59,5 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdClient.TANK_LEVEL_UPDATE.setPacketHandler(new PacketTankLevelUpdate.Handler());
 		PacketIdClient.GENOME_TRACKER_UPDATE.setPacketHandler(new PacketGenomeTrackerSync.Handler());
 		PacketIdClient.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectClient.Handler());
-
-		PacketIdServer.GUI_SELECTION_REQUEST.setPacketHandler(new PacketGuiSelectRequest.Handler());
-		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
-		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
-		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
-		PacketIdServer.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectServer.Handler());
-		PacketIdServer.CLIMATE_CONTROL_UPDATE.setPacketHandler(new PacketUpdateClimateControl.Handler());
 	}
 }

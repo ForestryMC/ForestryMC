@@ -46,6 +46,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -345,12 +346,13 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 			if (leaves != null) {
 				if (tintIndex == 0) {
-					EntityPlayer thePlayer = Proxies.common.getPlayer();
+					EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 					return leaves.getFoliageColour(thePlayer);
 				} else {
 					return leaves.getFruitColour();

@@ -26,7 +26,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ClimateUtil;
@@ -34,6 +34,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingDelegate, IStreamableGui {
 	private final String hintKey;
@@ -83,6 +85,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		beeLogic.readFromNBT(tag);
@@ -117,6 +120,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	/* UPDATING */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateClientSide() {
 		if (beeLogic.canDoBeeFX() && updateOnInterval(4)) {
 			beeLogic.doBeeFX();
@@ -127,6 +131,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void doPollenFX(World world, double xCoord, double yCoord, double zCoord) {
 		double fxX = xCoord + 0.5F;
 		double fxY = yCoord + 0.25F;
@@ -136,10 +141,10 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		float upSpread = world.rand.nextFloat() * 6F / 16F;
 		fxY += upSpread;
 
-		Proxies.render.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-		Proxies.render.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-		Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
-		Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
+		ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+		ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+		ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+		ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 	}
 
 	@Override

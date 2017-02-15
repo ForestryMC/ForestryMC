@@ -16,13 +16,14 @@ import java.util.Locale;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -148,7 +149,8 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textureBase);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textureBase);
 
 		basefront.render(factor);
 		baseback.render(factor);
@@ -161,7 +163,8 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	}
 
 	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
-		Proxies.render.bindTexture(textureBase);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textureBase);
 		tankModel.render(factor);
 
 		ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());
@@ -176,7 +179,7 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		primaryTankColor.getRGBColorComponents(colors);
 		GlStateManager.color(colors[0], colors[1], colors[2], 1.0f);
 
-		Proxies.render.bindTexture(textureResourceTankLevel);
+		textureManager.bindTexture(textureResourceTankLevel);
 		tankModel.render(factor);
 
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);

@@ -2,7 +2,7 @@ package forestry.factory.recipes.jei.fabricator;
 
 import java.util.Map.Entry;
 
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.network.packets.PacketRecipeTransferRequest;
 import mezz.jei.api.gui.IGuiIngredient;
@@ -13,7 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<ContainerFabricator> {
 
 	@Override
@@ -35,7 +38,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<C
 					items.set(index - 3, ingredient);
 				}
 			}
-			Proxies.net.sendToServer(new PacketRecipeTransferRequest(container.getFabricator(), items));
+			NetworkUtil.sendToServer(new PacketRecipeTransferRequest(container.getFabricator(), items));
 		}
 		return null;
 	}

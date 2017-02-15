@@ -34,13 +34,17 @@ import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -109,6 +113,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		sockets.readData(data);
@@ -257,12 +262,13 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiCentrifuge(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerCentrifuge(player.inventory, this);
 	}
 

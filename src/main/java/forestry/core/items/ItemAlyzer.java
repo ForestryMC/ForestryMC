@@ -14,8 +14,12 @@ import forestry.api.core.Tabs;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
@@ -28,12 +32,13 @@ public class ItemAlyzer extends ItemWithGui {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
 	}
 }

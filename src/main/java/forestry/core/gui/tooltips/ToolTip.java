@@ -16,10 +16,13 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@SideOnly(Side.CLIENT)
 public class ToolTip {
 
 	private final List<String> lines = new ArrayList<>();

@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
@@ -310,7 +309,7 @@ public abstract class BlockUtil {
 	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, IBlockState blockState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-			Proxies.net.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;
@@ -319,7 +318,7 @@ public abstract class BlockUtil {
 	public static boolean setBlockWithBreakSound(World world, BlockPos pos, IBlockState blockState, IBlockState oldState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
-			Proxies.net.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;
@@ -328,7 +327,7 @@ public abstract class BlockUtil {
 	public static boolean setBlockToAirWithSound(World world, BlockPos pos, IBlockState oldState) {
 		if (world.setBlockToAir(pos)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
-			Proxies.net.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
 		return false;

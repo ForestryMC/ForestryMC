@@ -8,10 +8,11 @@ import forestry.api.genetics.AlleleManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,7 +50,8 @@ public class WidgetClimatePillar extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		Proxies.render.bindTexture(manager.gui.textureFile);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 216, 25, width, height);
 		for(ClimateButton button : buttons){
 			button.draw(startX, startY);
@@ -126,7 +128,7 @@ public class WidgetClimatePillar extends Widget {
 	
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-		Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
+		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 	}
 }

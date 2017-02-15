@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,7 @@ public class CropDestroy extends Crop {
 		harvested.addAll(block.getDrops(world, pos, blockState, 0));
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		if (replantState != null) {
 			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);

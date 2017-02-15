@@ -24,7 +24,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
@@ -43,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -116,7 +116,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
+		ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
 	}
 
 	/* MODELS */

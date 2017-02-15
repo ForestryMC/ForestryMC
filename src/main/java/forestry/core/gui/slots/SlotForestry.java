@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -33,8 +33,8 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			setBackgroundLocation(TextureManager.getInstance().getGuiTextureMap());
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			setBackgroundLocation(TextureManagerForestry.getInstance().getGuiTextureMap());
 		}
 		this.stackLimit = -1;
 	}

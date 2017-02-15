@@ -6,8 +6,10 @@ import forestry.api.core.IModelManager;
 import forestry.core.gui.ContainerCamouflageSprayCan;
 import forestry.core.gui.GuiCamouflageSprayCan;
 import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -18,20 +20,24 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCamouflageSprayCan extends ItemWithGui {
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiCamouflageSprayCan(player, new ItemInventoryCamouflageSprayCan(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerCamouflageSprayCan(new ItemInventoryCamouflageSprayCan(player, heldItem), player.inventory);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		super.registerModel(item, manager);
 		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:camouflage_spray_can_filled"));

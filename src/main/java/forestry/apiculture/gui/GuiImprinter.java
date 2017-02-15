@@ -22,8 +22,8 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -127,7 +127,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	private static void sendSelectionChange(int index, int advance) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, advance));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
 	}
 
 	@Override

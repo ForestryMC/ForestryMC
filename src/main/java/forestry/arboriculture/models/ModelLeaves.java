@@ -25,6 +25,7 @@ import forestry.core.models.ModelBlockCached;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
 	public static class Key {
 		public final TextureAtlasSprite leafSprite;
@@ -66,7 +70,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 	@Override
 	protected Key getInventoryKey(ItemStack itemStack) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		TileLeaves leaves = new TileLeaves();
 		if (itemStack.getTagCompound() != null) {
@@ -93,7 +97,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
 
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		if (tile == null) {
 			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();

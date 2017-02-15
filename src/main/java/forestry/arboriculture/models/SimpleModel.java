@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -22,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.Variant;
@@ -38,7 +36,11 @@ import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.client.model.MultiModelState;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 
+@SideOnly(Side.CLIENT)
 public class SimpleModel implements IRetexturableModel {
 
 	private static final ModelResourceLocation MISSING = new ModelResourceLocation("builtin/missing", "missing");
@@ -50,7 +52,7 @@ public class SimpleModel implements IRetexturableModel {
 	private final IModelState defaultState;
 
 	public SimpleModel(List<ResourceLocation> locations, List<IModel> models, List<Variant> variants,
-			IModelState defaultState) {
+					   IModelState defaultState) {
 		this.locations.addAll(locations);
 		this.models.addAll(models);
 		this.variants = variants;
@@ -105,7 +107,7 @@ public class SimpleModel implements IRetexturableModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format,
-			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+							Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		if (variants.size() == 1) {
 			IModel model = models.get(0);
 			return model.bake(MultiModelState.getPartState(state, model, 0), format, bakedTextureGetter);

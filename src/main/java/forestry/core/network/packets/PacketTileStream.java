@@ -21,6 +21,8 @@ import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketTileStream extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -42,6 +44,7 @@ public class PacketTileStream extends ForestryPacket implements IForestryPacketC
 		streamable.writeData(data);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

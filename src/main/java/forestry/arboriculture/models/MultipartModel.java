@@ -15,7 +15,6 @@ import java.util.Collection;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.MultipartBakedModel;
 import net.minecraft.client.renderer.block.model.multipart.Multipart;
@@ -28,7 +27,10 @@ import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class MultipartModel implements IRetexturableModel {
 
 	private final ResourceLocation location;
@@ -64,7 +66,7 @@ public class MultipartModel implements IRetexturableModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format,
-			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+							Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		MultipartBakedModel.Builder builder = new MultipartBakedModel.Builder();
 
 		for (Selector selector : multipart.getSelectors()) {

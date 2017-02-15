@@ -20,8 +20,8 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -29,6 +29,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -144,9 +146,10 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 		if (overlay != null) {
-			TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+			TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 			map.registerSprite(overlay.sprite);
 		}
 	}

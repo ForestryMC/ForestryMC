@@ -2,11 +2,11 @@ package forestry.arboriculture.blocks;
 
 import java.util.Collections;
 import java.util.List;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,7 +68,7 @@ public class BlockCharcoal extends Block implements IStateMapperRegister, IItemM
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMap.Builder().ignore(AMOUNT).build());
+		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AMOUNT).build());
 	}
 
 }

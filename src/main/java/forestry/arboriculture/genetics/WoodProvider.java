@@ -18,18 +18,22 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WoodProvider implements IWoodProvider {
 
 	private final String name;
 	private final EnumForestryWoodType woodType;
+	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite woodTop;
+	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite woodBark;
 
 	public WoodProvider(EnumForestryWoodType woodType) {
@@ -38,13 +42,15 @@ public class WoodProvider implements IWoodProvider {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerSprites(Item item, ITextureManager manager) {
-		TextureMap textureMap = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
 		woodTop = textureMap.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/wood/heart." + name));
 		woodBark = textureMap.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/wood/bark." + name));
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getSprite(boolean isTop) {
 		if (isTop) {
 			return woodTop;

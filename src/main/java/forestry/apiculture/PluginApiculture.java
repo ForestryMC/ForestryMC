@@ -65,8 +65,6 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
-import forestry.apiculture.proxy.ProxyApiculture;
-import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -99,6 +97,7 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -117,7 +116,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -127,21 +125,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends BlankForestryPlugin {
-
-	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.apiculture.proxy.ProxyApicultureClient", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
-	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
-	public static String beekeepingMode = "NORMAL";
 	private static float secondPrincessChance = 0;
-	public static final int ticksPerBeeWorkCycle = 550;
 
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	private static TextureAtlasSprite beeSprite;
 	@Nullable
 	private static ItemRegistryApiculture items;
 	@Nullable
 	private static BlockRegistryApiculture blocks;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
+
+	public static String beekeepingMode = "NORMAL";
+	public static final int ticksPerBeeWorkCycle = 550;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
 
@@ -158,6 +156,12 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkState(hiveRegistry != null);
 		return hiveRegistry;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static TextureAtlasSprite getBeeSprite() {
+		Preconditions.checkState(beeSprite != null, "Bee sprite has not been registered");
+		return beeSprite;
 	}
 
 	@Override
@@ -901,7 +905,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
 			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		ProxyApicultureClient.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

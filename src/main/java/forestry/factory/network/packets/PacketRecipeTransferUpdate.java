@@ -25,6 +25,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRecipeTransferUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -46,6 +48,7 @@ public class PacketRecipeTransferUpdate extends ForestryPacket implements IFores
 		return PacketIdClient.RECIPE_TRANSFER_UPDATE;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {

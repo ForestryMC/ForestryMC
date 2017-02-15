@@ -24,7 +24,7 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +37,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -276,6 +278,7 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
@@ -293,7 +296,7 @@ public class ItemResearchNote extends ItemForestry {
 		if (note.registerResults(worldIn, playerIn)) {
 			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
 			// Notify player that his inventory has changed.
-			Proxies.net.inventoryChangeNotify(playerIn);
+			NetworkUtil.inventoryChangeNotify(playerIn);
 		}
 
 		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);

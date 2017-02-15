@@ -12,8 +12,8 @@ package forestry.factory.gui.widgets;
 
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.SoundUtil;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.RecipeMemory;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,7 +21,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 
 public class MemorizedRecipeSlot extends ItemStackWidgetBase {
-	private static final TextureAtlasSprite lockIcon = TextureManager.getInstance().getDefault("slots/locked");
+	private static final TextureAtlasSprite lockIcon = TextureManagerForestry.getInstance().getDefault("slots/locked");
 	private final RecipeMemory recipeMemory;
 	private final int slotNumber;
 
@@ -43,7 +43,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 		GlStateManager.disableDepth();
 
 		if (recipeMemory.isLocked(slotNumber)) {
-			Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
+			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
 		}
 
@@ -54,7 +54,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		if (!getItemStack().isEmpty()) {
 			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
-			Proxies.common.playButtonClick();
+			SoundUtil.playButtonClick();
 		}
 	}
 }

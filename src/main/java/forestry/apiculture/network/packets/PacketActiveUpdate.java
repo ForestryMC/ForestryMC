@@ -18,11 +18,13 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketActiveUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -44,13 +46,14 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 		data.writeBoolean(active);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			boolean active = data.readBoolean();
 
-			TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(pos);
+			TileEntity tile = Minecraft.getMinecraft().world.getTileEntity(pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);
 			} else {

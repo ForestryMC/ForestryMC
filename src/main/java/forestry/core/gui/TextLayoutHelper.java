@@ -12,7 +12,10 @@ package forestry.core.gui;
 
 import forestry.core.render.ColourProperties;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class TextLayoutHelper {
 	private static final int LINE_HEIGHT = 12;
 

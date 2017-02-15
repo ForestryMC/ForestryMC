@@ -15,8 +15,8 @@ import javax.annotation.Nullable;
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
@@ -116,7 +116,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 			if (world.isRemote) {
 				world.markBlockRangeForRenderUpdate(getPos(), getPos());
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 			}
 		}
 	}

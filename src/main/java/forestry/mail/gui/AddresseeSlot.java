@@ -15,8 +15,8 @@ import forestry.api.mail.PostManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -36,7 +36,7 @@ public class AddresseeSlot extends Widget {
 		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
 		if (carrier != null) {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(TextureManager.getInstance().getGuiTextureMap());
+			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);
 		}
 	}
@@ -53,7 +53,7 @@ public class AddresseeSlot extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		if (!containerLetter.getLetter().isProcessed()) {
 			containerLetter.advanceCarrierType();
-			Proxies.common.playButtonClick();
+			SoundUtil.playButtonClick();
 		}
 	}
 }

@@ -12,7 +12,7 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
@@ -57,9 +57,9 @@ public class SlotFiltered extends SlotWatched {
 	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
-			return TextureManager.getInstance().getDefault(blockedTexture);
+			return TextureManagerForestry.getInstance().getDefault(blockedTexture);
 		} else if (backgroundTexture != null) {
-			return TextureManager.getInstance().getDefault(backgroundTexture);
+			return TextureManagerForestry.getInstance().getDefault(backgroundTexture);
 		} else {
 			return null;
 		}

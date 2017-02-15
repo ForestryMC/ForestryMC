@@ -12,7 +12,7 @@ package forestry.farming.logic;
 
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -52,7 +52,7 @@ public class CropFruit extends Crop {
 
 		IBlockState blockState = world.getBlockState(pos);
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 		return ((IFruitBearer) tile).pickFruit(ItemStack.EMPTY);
 	}
 

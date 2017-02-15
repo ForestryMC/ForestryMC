@@ -21,12 +21,14 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AlleleEffect extends AlleleCategorized implements IAlleleBeeEffect {
 	protected AlleleEffect(String valueName, boolean isDominant) {
@@ -49,11 +51,12 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
 		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
 
-		Proxies.render.addBeeHiveFX(housing, genome, flowerPositions);
+		ParticleRender.addBeeHiveFX(housing, genome, flowerPositions);
 		return storedData;
 	}
 

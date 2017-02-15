@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 
 import forestry.apiculture.render.ModelAnalyzer;
 import forestry.core.blocks.BlockBase;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -74,7 +74,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 			lastTick = world.getTotalWorldTime();
 			dummyEntityItem.onUpdate();
 		}
-		RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
+		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
 
 		rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();

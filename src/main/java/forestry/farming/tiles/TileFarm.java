@@ -31,11 +31,15 @@ import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
@@ -140,6 +144,7 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
@@ -162,12 +167,13 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiFarm(player, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerFarm(player.inventory, this);
 	}
 }

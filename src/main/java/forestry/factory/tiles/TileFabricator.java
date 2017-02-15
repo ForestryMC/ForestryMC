@@ -11,9 +11,6 @@
 package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
@@ -39,6 +36,7 @@ import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -53,6 +51,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
 	private static final int MAX_HEAT = 5000;
@@ -102,6 +103,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -324,12 +326,13 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiFabricator(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerFabricator(player.inventory, this);
 	}
 }

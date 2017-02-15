@@ -15,15 +15,17 @@ import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IColoredItem {
 
@@ -58,6 +60,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
 		if (itemStack.getTagCompound() == null) {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
@@ -67,7 +70,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> impl
 		tileLeaves.readFromNBT(itemStack.getTagCompound());
 
 		if (renderPass == 0) {
-			EntityPlayer player = Proxies.common.getPlayer();
+			EntityPlayer player = Minecraft.getMinecraft().player;
 			return tileLeaves.getFoliageColour(player);
 		} else {
 			return tileLeaves.getFruitColour();

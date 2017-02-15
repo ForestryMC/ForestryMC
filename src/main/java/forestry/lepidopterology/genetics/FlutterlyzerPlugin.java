@@ -28,10 +28,10 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -223,7 +223,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 			int x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
-				Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
+				Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
 				x += 18;
 				if (x > 148) {
 					x = GuiAlyzer.COLUMN_0;
@@ -239,7 +239,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 			x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
-				Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
+				Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
 				x += 18;
 				if (x > 148) {
 					x = GuiAlyzer.COLUMN_0;

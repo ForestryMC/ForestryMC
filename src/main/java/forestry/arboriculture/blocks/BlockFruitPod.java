@@ -20,7 +20,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.render.FruitPodStateMapper;
 import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -35,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -123,7 +123,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new FruitPodStateMapper());
+		ModelLoader.setCustomStateMapper(this, new FruitPodStateMapper());
 	}
 
 	/* IGrowable */

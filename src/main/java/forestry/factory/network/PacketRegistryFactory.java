@@ -18,15 +18,21 @@ import forestry.factory.network.packets.PacketRecipeTransferUpdate;
 import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
 import forestry.factory.network.packets.PacketWorktableRecipeRequest;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRegistryFactory implements IPacketRegistry {
 	@Override
-	public void registerPackets() {
+	public void registerPacketsServer() {
+		PacketIdServer.WORKTABLE_RECIPE_REQUEST.setPacketHandler(new PacketWorktableRecipeRequest.Handler());
+		PacketIdServer.RECIPE_TRANSFER_REQUEST.setPacketHandler(new PacketRecipeTransferRequest.Handler());
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerPacketsClient() {
 		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate.Handler());
 		PacketIdClient.WORKTABLE_CRAFTING_UPDATE.setPacketHandler(new PacketWorktableRecipeUpdate.Handler());
 		PacketIdClient.RECIPE_TRANSFER_UPDATE.setPacketHandler(new PacketRecipeTransferUpdate.Handler());
-
-		PacketIdServer.WORKTABLE_RECIPE_REQUEST.setPacketHandler(new PacketWorktableRecipeRequest.Handler());
-		PacketIdServer.RECIPE_TRANSFER_REQUEST.setPacketHandler(new PacketRecipeTransferRequest.Handler());
 	}
 }

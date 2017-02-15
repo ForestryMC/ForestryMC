@@ -25,6 +25,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public ItemGrafter(int maxDamage) {
@@ -37,6 +39,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		if (!stack.isItemDamaged()) {

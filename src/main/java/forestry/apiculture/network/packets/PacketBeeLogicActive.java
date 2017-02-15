@@ -20,10 +20,11 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBeeLogicActive extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos tilePos;
@@ -45,12 +46,13 @@ public class PacketBeeLogicActive extends ForestryPacket implements IForestryPac
 		beekeepingLogic.writeData(data);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos tilePos = data.readBlockPos();
 
-			TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(tilePos);
+			TileEntity tile = player.world.getTileEntity(tilePos);
 			if (tile instanceof IBeeHousing) {
 				IBeeHousing beeHousing = (IBeeHousing) tile;
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();

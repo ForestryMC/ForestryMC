@@ -19,7 +19,9 @@ import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -134,14 +136,14 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 			case 0:
 				mc.player.closeScreen();
 				break;
-			case 2:
-				container.nextPage();
+			case 2: // next page
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
 				break;
-			case 3:
-				container.previousPage();
+			case 3: // previous page
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(1, 0));
 				break;
-			case 4:
-				container.cycleFilter();
+			case 4: // cycle filter
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(2, 0));
 				break;
 			case 5:
 				ITradeStationInfo info = container.getTradeInfo();

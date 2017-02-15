@@ -12,7 +12,7 @@ package forestry.farming.logic;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -48,7 +48,7 @@ public class CropBasicGrowthCraft extends Crop {
 		}
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		if (isGrape) {
 			world.setBlockToAir(pos);

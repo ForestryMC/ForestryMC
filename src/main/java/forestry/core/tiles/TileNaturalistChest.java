@@ -19,11 +19,15 @@ import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
@@ -103,19 +107,21 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		numPlayersUsing = data.readInt();
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int page) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int page) {
 		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
 		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int page) {
+	public Container getContainer(EntityPlayer player, int page) {
 		return new ContainerNaturalistInventory(player.inventory, this, page);
 	}
 }

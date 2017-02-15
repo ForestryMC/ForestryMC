@@ -31,10 +31,10 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -52,6 +52,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -224,7 +225,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
+		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -255,7 +256,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
 			alveary.reassemble();
 			BlockPos referenceCoord = alveary.getReferenceCoord();
-			Proxies.net.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
+			NetworkUtil.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
 		}
 	}
 	

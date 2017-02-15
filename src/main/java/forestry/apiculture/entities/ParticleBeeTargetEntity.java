@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import forestry.apiculture.proxy.ProxyApicultureClient;
+import forestry.apiculture.PluginApiculture;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -23,7 +23,7 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
 		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(ProxyApicultureClient.beeSprite);
+		setParticleTexture(PluginApiculture.getBeeSprite());
 
 		this.origin = origin;
 		this.entity = entity;

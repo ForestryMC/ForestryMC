@@ -14,19 +14,20 @@ import javax.annotation.Nullable;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
+import forestry.core.utils.SoundUtil;
 import forestry.mail.POBoxInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiMailboxInfo extends Gui {
 
@@ -49,7 +50,7 @@ public class GuiMailboxInfo extends Gui {
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
-		fontRendererObj = Proxies.common.getClientInstance().fontRendererObj;
+		fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
 	}
 
 	public void render() {
@@ -71,7 +72,8 @@ public class GuiMailboxInfo extends Gui {
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.disableLighting();
-		Proxies.render.bindTexture(textureAlert);
+		TextureManager textureManager = minecraft.getTextureManager();
+		textureManager.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
 
@@ -87,7 +89,8 @@ public class GuiMailboxInfo extends Gui {
 		return poInfo != null;
 	}
 
-	public void setPOBoxInfo(POBoxInfo info) {
+	@SideOnly(Side.CLIENT)
+	public void setPOBoxInfo(EntityPlayer player, POBoxInfo info) {
 		boolean playJingle = false;
 
 		if (info.hasMail()) {
@@ -99,9 +102,7 @@ public class GuiMailboxInfo extends Gui {
 		}
 
 		if (playJingle) {
-			EntityPlayerSP thePlayer = Proxies.common.getClientInstance().player;
-			World world = Proxies.common.getRenderWorld();
-			world.playSound(null, thePlayer.posX, thePlayer.posY, thePlayer.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0F);
+			SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
 		}
 
 		this.poInfo = info;

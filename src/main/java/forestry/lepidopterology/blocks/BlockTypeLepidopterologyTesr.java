@@ -10,32 +10,26 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import javax.annotation.Nullable;
-
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
+	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", "lepichest", TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
-		if (boundingBox != null) {
-			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
-		} else {
-			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0", false);
-		}
+	<T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, String renderName, AxisAlignedBB boundingBox) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
+		Proxies.render.setRenderChest(machineProperties, renderName);
+		this.machineProperties = machineProperties;
 	}
 
 	@Override

@@ -15,14 +15,17 @@ import java.util.List;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
 		FontRenderer font = null;
@@ -33,7 +36,7 @@ public class GuiUtil {
 			font = gui.getFontRenderer();
 		}
 
-		RenderItem itemRender = Proxies.common.getClientInstance().getRenderItem();
+		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}

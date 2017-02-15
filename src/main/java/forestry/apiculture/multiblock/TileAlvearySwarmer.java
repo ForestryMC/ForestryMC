@@ -27,14 +27,18 @@ import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
@@ -199,17 +203,18 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		this.active = active;
 
 		if (world != null && !world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiAlvearySwarmer(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerAlvearySwarmer(player.inventory, this);
 	}
 }

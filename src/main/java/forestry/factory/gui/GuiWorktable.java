@@ -15,7 +15,8 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SoundUtil;
 import forestry.factory.gui.widgets.ClearWorktable;
 import forestry.factory.gui.widgets.MemorizedRecipeSlot;
 import forestry.factory.recipes.RecipeMemory;
@@ -72,8 +73,8 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		int id = 100 + button.id;
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(id, 0));
-		Proxies.common.playButtonClick();
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(id, 0));
+		SoundUtil.playButtonClick();
 	}
 
 	@Override

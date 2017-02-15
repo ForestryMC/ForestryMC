@@ -16,7 +16,6 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
@@ -34,7 +33,6 @@ import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.models.SimpleRetexturedModel;
 import forestry.core.models.WoodModelEntry;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -46,9 +44,13 @@ import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ProxyArboricultureClient extends ProxyArboriculture {
 	private static final Set<WoodModelEntry> woodModelEntrys = new HashSet<>();
 	private static final Map<IWoodTyped, IWoodStateMapper> stateMappers = Maps.newIdentityHashMap();
@@ -61,7 +63,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:leaves", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
 					new ModelLeaves(), PluginArboriculture.getBlocks().leaves);
-			Proxies.render.registerBlockModel(blockModelIndex);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 		}
 
 		for (BlockDecorativeLeaves leaves : PluginArboriculture.getBlocks().leavesDecorative) {
@@ -70,7 +72,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
 					new ModelDecorativeLeaves(), leaves);
-			Proxies.render.registerBlockModel(blockModelIndex);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 		}
 
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
@@ -90,7 +92,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	public static void registerWoodStateMapper(Block block, IWoodStateMapper stateMapper) {
 		if (block instanceof IWoodTyped) {
 			IWoodTyped woodTyped = (IWoodTyped) block;
-			Proxies.render.registerStateMapper(block, stateMapper);
+			ModelLoader.setCustomStateMapper(block, stateMapper);
 			stateMappers.put(woodTyped, stateMapper);
 		}
 	}
@@ -129,8 +131,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 
 	private void retextureItemModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
-			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
-			IWoodItemMeshDefinition woodDefinition) {
+									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
+									IWoodItemMeshDefinition woodDefinition) {
 		if (woodKind != WoodBlockKind.DOOR) {
 			IModel basicItemModel = ModelLoaderRegistry
 					.getModelOrMissing(woodDefinition.getDefaultModelLocation(itemStack));
@@ -142,8 +144,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 
 	private void retexturBlockModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
-			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
-			IWoodStateMapper woodMapper) {
+									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
+									IWoodStateMapper woodMapper) {
 		IModel basicModel = ModelLoaderRegistry
 				.getModelOrMissing(woodMapper.getDefaultModelResourceLocation(blockState));
 		if (basicModel instanceof MultipartModel) {

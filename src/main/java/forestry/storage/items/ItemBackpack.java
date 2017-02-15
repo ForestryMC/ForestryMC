@@ -34,10 +34,12 @@ import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -192,6 +194,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
@@ -293,10 +296,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		return oldItem != newItem || getMode(oldStack) != getMode(newStack);
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	@Nullable
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
 			return null;
 		}
@@ -306,14 +309,14 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 				return new GuiBackpack(new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem));
 			case WOVEN:
 				return new GuiBackpackT2(new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem));
+			default:
+				return null;
 		}
-		return null;
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	@Nullable
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
 			return null;
 		}
@@ -323,7 +326,8 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 				return new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem);
 			case WOVEN:
 				return new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem);
+			default:
+				return null;
 		}
-		return null;
 	}
 }

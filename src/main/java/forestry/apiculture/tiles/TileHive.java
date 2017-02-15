@@ -38,12 +38,12 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -65,6 +65,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileHive extends TileEntity implements ITickable, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
@@ -252,7 +254,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		this.active = active;
 
 		if (!world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
 	}
 
@@ -279,6 +281,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		NBTTagCompound nbt = pkt.getNbtCompound();

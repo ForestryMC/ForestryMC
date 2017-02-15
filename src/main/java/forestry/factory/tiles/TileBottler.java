@@ -31,7 +31,9 @@ import forestry.factory.gui.ContainerBottler;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,6 +99,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -266,6 +269,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		isFillRecipe = data.readBoolean();
@@ -363,12 +367,13 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiBottler(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerBottler(player.inventory, this);
 	}
 }

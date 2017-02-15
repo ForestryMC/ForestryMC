@@ -23,8 +23,12 @@ import forestry.apiculture.gui.GuiAlvearySieve;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener {
 
@@ -52,12 +56,13 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiAlvearySieve(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerAlvearySieve(player.inventory, this);
 	}
 

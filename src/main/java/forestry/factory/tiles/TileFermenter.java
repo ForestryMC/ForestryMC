@@ -31,6 +31,7 @@ import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -42,6 +43,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
@@ -105,6 +108,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -311,12 +315,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiFermenter(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerFermenter(player.inventory, this);
 	}
 

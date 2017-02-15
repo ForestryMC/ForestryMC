@@ -17,6 +17,8 @@ import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.core.IModelManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
@@ -32,6 +34,7 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
 		if (type == EnumGermlingType.SAPLING) {
 			switch (woodType) {

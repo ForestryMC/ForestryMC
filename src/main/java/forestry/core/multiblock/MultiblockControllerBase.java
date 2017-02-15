@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are
@@ -476,6 +478,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * Client-side update loop. Generally, this shouldn't do anything, but if you want
 	 * to do some interpolation or something, do it here.
 	 */
+	@SideOnly(Side.CLIENT)
 	protected abstract void updateClient(int tickCount);
 
 	protected final boolean updateOnInterval(int tickInterval) {

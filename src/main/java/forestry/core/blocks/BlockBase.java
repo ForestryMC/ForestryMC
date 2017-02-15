@@ -18,7 +18,6 @@ import forestry.api.core.ISpriteRegister;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.circuits.ISocketable;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.MachineParticleCallback;
 import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleHelper;
@@ -31,6 +30,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,6 +52,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -232,7 +233,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(blockType));
+		ModelLoader.setCustomStateMapper(this, new MachineStateMapper<>(blockType));
 	}
 
 	@Override
@@ -302,7 +303,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public void registerSprites(ITextureManager manager) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			TextureMap textureMapBlocks = Proxies.common.getClientInstance().getTextureMapBlocks();
+			TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
 			String particleTextureLocation = ((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation();
 			textureMapBlocks.registerSprite(new ResourceLocation(particleTextureLocation));
 		}

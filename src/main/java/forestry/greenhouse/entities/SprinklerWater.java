@@ -3,6 +3,7 @@ package forestry.greenhouse.entities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -39,7 +40,8 @@ public abstract class SprinklerWater extends Particle {
 		float f11 = (float) (this.prevPosX + (this.posX - this.prevPosX) * f0 - interpPosX);
 		float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * f0 - interpPosY);
 		float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * f0 - interpPosZ);
-		Minecraft.getMinecraft().renderEngine.bindTexture(FluidRegistry.WATER.getStill());
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(FluidRegistry.WATER.getStill());
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;

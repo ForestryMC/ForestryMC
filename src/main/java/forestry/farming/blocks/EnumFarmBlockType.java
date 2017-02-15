@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
@@ -37,7 +37,7 @@ public enum EnumFarmBlockType implements IStringSerializable {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		sprites = Arrays.asList(
 				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
 				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
