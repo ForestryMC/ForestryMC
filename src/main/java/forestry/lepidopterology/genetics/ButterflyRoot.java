@@ -176,7 +176,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	
 	@Override
 	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
-		BlockPos pos = getNextPos(world, nursery.getCoordinates());
+		BlockPos pos = getNextValidPos(world, nursery.getCoordinates());
 		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
@@ -203,12 +203,25 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return true;
 	}
 	
-	private BlockPos getNextPos(World world, BlockPos pos){
-		IBlockState blockState;
-		do {
-			pos = pos.down();
-			blockState = world.getBlockState(pos);
-		} while (!BlockUtil.canReplace(blockState, world, pos));
+	private BlockPos getNextValidPos(World world, BlockPos pos){
+		for(int x = -2;x < 2;x++){
+			for(int z = -2;z < 2;z++){
+				for(int y = 0;y < 7;y++){
+					BlockPos coordinate = pos.add(x, -y, z);
+					TileEntity tile = world.getTileEntity(coordinate);
+					IBlockState blockState = world.getBlockState(coordinate);
+					if(tile instanceof IButterflyNursery){
+						IButterflyNursery nursery = (IButterflyNursery) tile;
+						if(nursery.getCaterpillar() != null){
+							break;
+						}
+					}
+					if(BlockUtil.canReplace(blockState, world, coordinate)){
+						return coordinate;
+					}
+				}
+			}
+		}
 
 		return pos;
 	}
