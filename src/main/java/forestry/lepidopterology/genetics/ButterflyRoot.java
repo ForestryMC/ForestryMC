@@ -206,7 +206,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	private BlockPos getNextValidPos(World world, BlockPos pos){
 		for(int x = -2;x < 2;x++){
 			for(int z = -2;z < 2;z++){
-				for(int y = 0;y < 7;y++){
+				for(int y = 1;y < 7;y++){
 					BlockPos coordinate = pos.add(x, -y, z);
 					TileEntity tile = world.getTileEntity(coordinate);
 					IBlockState blockState = world.getBlockState(coordinate);
