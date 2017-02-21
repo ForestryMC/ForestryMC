@@ -45,13 +45,13 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		ModelBase model = new RenderModelBase();
 
 		basefront = new ModelRenderer(model, 0, 0);
-		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
+		basefront.addBox(-8F, -7.9F, -8F, 16, 4, 16);
 		basefront.rotationPointX = 8;
 		basefront.rotationPointY = 8;
 		basefront.rotationPointZ = 8;
 
 		baseback = new ModelRenderer(model, 0, 0);
-		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
+		baseback.addBox(-8F, 3.9F, -8F, 16, 4, 16);
 		baseback.rotationPointX = 8;
 		baseback.rotationPointY = 8;
 		baseback.rotationPointZ = 8;
