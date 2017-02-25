@@ -95,7 +95,7 @@ public class Letter implements ILetter {
 	public int countAttachments() {
 		int count = 0;
 		for (ItemStack stack : getAttachments()) {
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				count++;
 			}
 		}
@@ -145,7 +145,7 @@ public class Letter implements ILetter {
 		int posted = 0;
 
 		for (ItemStack stamp : getPostage()) {
-			if (stamp == null) {
+			if (stamp.isEmpty()) {
 				continue;
 			}
 			if (!(stamp.getItem() instanceof IStamps)) {
@@ -163,7 +163,7 @@ public class Letter implements ILetter {
 
 		int required = 1;
 		for (ItemStack attach : getAttachments()) {
-			if (attach != null) {
+			if (!attach.isEmpty()) {
 				required++;
 			}
 		}
