@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
@@ -103,6 +104,15 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			return color;
 		}
 		return -1;
+	}
+	
+	@Nullable
+	public String getUID(){
+		ResourceLocation registryName = getRegistryName();
+		if(registryName != null){
+			return registryName.getResourcePath();
+		}
+		return null;
 	}
 
 }

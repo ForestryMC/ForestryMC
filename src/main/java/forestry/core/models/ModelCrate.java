@@ -57,8 +57,6 @@ public class ModelCrate extends BlankModel {
 
 	private static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> itemTransforms;
 	private static Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
-	private static final String CUSTOM_CRATES = "forestry:item/crates/";
-
 
 	/**
 	 * Init the model with datas from the ModelBakeEvent.
@@ -68,26 +66,20 @@ public class ModelCrate extends BlankModel {
 		itemTransforms = getMap(new ResourceLocation("minecraft:models/item/generated"));
 	}
 	
-	public static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> getMap(ResourceLocation par1)
-	{
+	public static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> getMap(ResourceLocation par1){
 		return IPerspectiveAwareModel.MapWrapper.getTransforms(getTransformFromJson(par1));
 	}
 	
-	private static Reader getReaderForResource(ResourceLocation location) throws IOException
-	{
+	private static Reader getReaderForResource(ResourceLocation location) throws IOException{
 		ResourceLocation file = new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + ".json");
 		IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
 	}
 	
-	private static ItemCameraTransforms getTransformFromJson(ResourceLocation par1)
-	{
-		try
-		{
+	private static ItemCameraTransforms getTransformFromJson(ResourceLocation par1){
+		try{
 			return ModelBlock.deserialize(getReaderForResource(par1)).getAllTransforms();
-		}
-		catch(Exception e)
-		{
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return ItemCameraTransforms.DEFAULT;
@@ -132,73 +124,63 @@ public class ModelCrate extends BlankModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
-			String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
-			IBakedModel model = cache.get(crateUID);
-			if(model == null)
-			{
-				//Fastest list with a unknown quad size
-				List<BakedQuad> list = new LinkedList<BakedQuad>();
-				IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
-				for(BakedQuad quad : ForgeHooksClient.handleCameraTransforms(baseBaked, TransformType.GROUND, false).getQuads(null, null, 0L))
-				{
-					list.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+			String crateUID = crated.getUID();
+			if(crateUID != null){
+				IBakedModel model = cache.get(crateUID);
+				if(model == null){
+					//Fastest list with a unknown quad size
+					List<BakedQuad> list = new LinkedList<BakedQuad>();
+					IBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
+					for(BakedQuad quad : ForgeHooksClient.handleCameraTransforms(baseBaked, TransformType.GROUND, false).getQuads(null, null, 0L)){
+						list.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+					}
+					List<IBakedModel> textures = bakeModel(crated);
+					for(IBakedModel bakybake : textures){
+						list.addAll(ForgeHooksClient.handleCameraTransforms(bakybake, TransformType.GROUND, false).getQuads(null, null, 0L));
+					}
+					model = new BakedCrateModel(list);
+					cache.put(crateUID, model);
 				}
-				List<IBakedModel> textures = bakeModel(crated);
-				for(IBakedModel bakybake : textures)
-				{
-					list.addAll(ForgeHooksClient.handleCameraTransforms(bakybake, TransformType.GROUND, false).getQuads(null, null, 0L));
-				}
-				model = new BakedCrateModel(list);
-				cache.put(crateUID, model);
+				return model;
 			}
-			return model;
+			return originalModel;
 		}
 		
 	}
 	
-	public static class BakedCrateModel extends BlankModel implements IPerspectiveAwareModel
-	{
+	public static class BakedCrateModel extends BlankModel implements IPerspectiveAwareModel{
 		BakedCrateModel other;
 		boolean gui;
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		private List<BakedQuad> emptyList = new ArrayList<BakedQuad>();
 		
-		public BakedCrateModel(BakedCrateModel noneGui)
-		{
+		public BakedCrateModel(BakedCrateModel noneGui){
 			gui = true;
 			other = noneGui;
-			for(BakedQuad quad : other.quads)
-			{
-				if(quad.getFace() == EnumFacing.SOUTH)
-				{
+			for(BakedQuad quad : other.quads){
+				if(quad.getFace() == EnumFacing.SOUTH){
 					quads.add(quad);
 				}
 			}
 		}
 		
-		public BakedCrateModel(List<BakedQuad> data)
-		{
+		public BakedCrateModel(List<BakedQuad> data){
 			quads.addAll(data);
 			gui = false;
 			other = new BakedCrateModel(this);
 		}
 		
 		@Override
-		public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand)
-		{
+		public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
 			return side == null ? quads : emptyList;
 		}
 		
 		@Override
-		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
-		{
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType){
 			Pair<? extends IBakedModel, Matrix4f> pair = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, itemTransforms, cameraTransformType);
-			if(cameraTransformType == TransformType.GUI && !gui && pair.getRight() == null)
-			{
+			if(cameraTransformType == TransformType.GUI && !gui && pair.getRight() == null){
 				return Pair.of(other, null);
-			}
-			else if(cameraTransformType != TransformType.GUI && gui)
-			{
+			}else if(cameraTransformType != TransformType.GUI && gui){
 				return Pair.of(other, pair.getRight());
 			}
 			return pair;
