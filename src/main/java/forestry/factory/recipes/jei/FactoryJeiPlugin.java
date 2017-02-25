@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
+
+import forestry.api.core.ForestryAPI;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
@@ -49,6 +51,8 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeWrapper;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeHandler;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
+import forestry.plugins.ForestryPluginUids;
+import forestry.plugins.PluginManager;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
@@ -66,9 +70,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FactoryJeiPlugin extends BlankModPlugin {
 	@Nullable
 	public static IJeiHelpers jeiHelpers;
-
+	
 	@Override
 	public void register(IModRegistry registry) {
+		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
+		
+		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
+			return;
+		}
+		
 		jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
@@ -137,8 +147,6 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
 		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler(), ForestryRecipeCategoryUid.CARPENTER);
 		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), ForestryRecipeCategoryUid.FABRICATOR);
-
-		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 
 		JeiUtil.addDescription(registry,
 				blocks.raintank,
