@@ -85,9 +85,8 @@ public class PluginManager {
 
 		IPacketRegistry packetRegistry = plugin.getPacketRegistry();
 		if (packetRegistry != null) {
-			if (side == Side.SERVER) {
-				packetRegistry.registerPacketsServer();
-			} else {
+			packetRegistry.registerPacketsServer();
+			if (side == Side.CLIENT) {
 				packetRegistry.registerPacketsClient();
 			}
 		}
