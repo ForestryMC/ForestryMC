@@ -303,7 +303,7 @@ public abstract class InventoryUtil {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
-				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictOfStack, craftingTools)) {
+				if (ItemStackUtil.isCraftingEquivalent(stackInSlot, stackToRemove, oreDictOfStack, craftingTools)) {
 					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 

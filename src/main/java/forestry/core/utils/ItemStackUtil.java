@@ -372,10 +372,10 @@ public abstract class ItemStackUtil {
 		}
 
 		if (oreDict != null && !oreDict.isEmpty()) {
-			int[] baseIds = OreDictionary.getOreIDs(base);
+			int[] validIds = OreDictionary.getOreIDs(comparison);
 			int validID = OreDictionary.getOreID(oreDict);
 
-			for(int id : baseIds){
+			for(int id : validIds){
 				if (id == validID) {
 					return true;
 				}
