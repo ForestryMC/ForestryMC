@@ -22,19 +22,25 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	private final NonNullList<NonNullList<ItemStack>> ingredients;
 	private final NonNullList<String> oreDicts;
 	private final ItemStack result;
+	private final int width;
+	private final int height;
 
-	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients, NonNullList<String> oreDicts) {
+	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients, NonNullList<String> oreDicts, int width, int height) {
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
 		Preconditions.checkNotNull(result);
 		Preconditions.checkArgument(!result.isEmpty());
 		Preconditions.checkNotNull(ingredients);
 		Preconditions.checkNotNull(oreDicts);
+		Preconditions.checkArgument(width > 0);
+		Preconditions.checkArgument(height > 0);
 		this.plan = plan;
 		this.molten = molten;
 		this.result = result;
 		this.ingredients = ingredients;
 		this.oreDicts = oreDicts;
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -49,12 +55,12 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	
 	@Override
 	public int getWidth() {
-		return 3;
+		return width;
 	}
 
 	@Override
 	public int getHeight() {
-		return 3;
+		return height;
 	}
 
 	@Override
