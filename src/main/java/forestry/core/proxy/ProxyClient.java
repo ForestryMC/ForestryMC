@@ -33,6 +33,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
+		super.registerTickHandlers(worldGenerator);
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
 	}
