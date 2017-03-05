@@ -21,6 +21,7 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 
 	public FarmLogicMushroom() {
 		super(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState(), Farmables.farmables.get("farmShroom"));
+		addSoil(new ItemStack(Blocks.DIRT, 1, 2), Blocks.DIRT.getStateFromMeta(2), true);
 	}
 
 	@Override
