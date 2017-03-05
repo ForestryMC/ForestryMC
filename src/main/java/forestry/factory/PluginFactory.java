@@ -61,6 +61,10 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.PluginStorage;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockDirt.DirtType;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -375,6 +379,7 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Blocks.MYCELIUM), 5000);
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.MOSSY_COBBLESTONE), 20000);
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.STONEBRICK), new ItemStack(Blocks.STONEBRICK, 1, 1), 20000);
+		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.LEAVES, 1, EnumType.SPRUCE.ordinal()), new ItemStack(Blocks.DIRT, 1, DirtType.PODZOL.ordinal()), 5000);
 
 		// FERMENTER
 		for (int i = 0; i < 6; i++) {
