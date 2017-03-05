@@ -64,7 +64,6 @@ public final class FluidHelper {
 	}
 
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, ItemStack emptyStack, boolean doFill) {
-
 		ItemStack input = inv.getStackInSlot(inputSlot);
 		if (input.isEmpty()) {
 			return FillStatus.INVALID_INPUT;
@@ -74,6 +73,10 @@ public final class FluidHelper {
 		ItemStack filled = input.copy();
 		filled.setCount(1);
 
+		if(emptyStack.isEmpty()){
+			emptyStack = filled;
+		}
+		
 		IFluidHandlerItem fluidFilledHandler = FluidUtil.getFluidHandler(filled);
 		IFluidHandlerItem fluidEmptyHandler = FluidUtil.getFluidHandler(emptyStack);
 		if (fluidFilledHandler == null || fluidEmptyHandler == null) {
