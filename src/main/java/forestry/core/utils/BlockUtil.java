@@ -243,26 +243,39 @@ public abstract class BlockUtil {
 				!block.isWood(world, downPos);
 	}
 
+	// get to the ground
+	//final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
+	//if (topPos.getY() == 0) {
+		//return null;
+	//}
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
-		IBlockState blockState;
+		BlockPos topPos = world.getHeight(pos);
+		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
+		IBlockState blockState = world.getBlockState(newPos);
 
-		do {
-			pos = pos.up();
-			blockState = world.getBlockState(pos);
-		} while (!BlockUtil.canReplace(blockState, world, pos));
+		while (!BlockUtil.canReplace(blockState, world, newPos)){
+			newPos.move(EnumFacing.UP);
+			if(newPos.getY() > topPos.getY()){
+				return null;
+			}
+			blockState = world.getBlockState(newPos);
+		}
 
-		return pos;
+		return newPos.down();
 	}
 
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
-		IBlockState blockState;
+		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 
-		do {
-			pos = pos.down();
-			blockState = world.getBlockState(pos);
-		} while (BlockUtil.canReplace(blockState, world, pos));
-
-		return pos;
+		IBlockState blockState = world.getBlockState(newPos);
+		while (canReplace(blockState, world, newPos)) {
+			newPos.move(EnumFacing.DOWN);
+			if (newPos.getY() <= 0) {
+				return null;
+			}
+			blockState = world.getBlockState(newPos);
+		}
+		return newPos.up();
 	}
 
 	/**

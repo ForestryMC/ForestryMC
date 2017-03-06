@@ -18,6 +18,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -28,6 +29,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -45,6 +47,8 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final String modID;
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 	private final ILeafProvider leafProvider;
+	private IGrowthProvider growthProvider = new ClimateGrowthProvider();
+	private float rarity = 0.0F;
 
 	public AlleleTreeSpecies(
 			String uid,
@@ -109,6 +113,28 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	public AlleleTreeSpecies addFruitFamily(IFruitFamily family) {
 		fruits.add(family);
 		return this;
+	}
+	
+	@Override
+	public IAlleleTreeSpeciesBuilder setRarity(float rarity) {
+		this.rarity = rarity;
+		return this;
+	}
+	
+	@Override
+	public float getRarity() {
+		return rarity;
+	}
+	
+	@Override
+	public IAlleleTreeSpeciesBuilder setGrowthProvider(IGrowthProvider growthProvider) {
+		this.growthProvider = growthProvider;
+		return this;
+	}
+	
+	@Override
+	public IGrowthProvider getGrowthProvider() {
+		return growthProvider;
 	}
 
 	/* OTHER */

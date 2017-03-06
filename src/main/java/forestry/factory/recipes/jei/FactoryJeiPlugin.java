@@ -52,7 +52,6 @@ import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeHandler;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginManager;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;

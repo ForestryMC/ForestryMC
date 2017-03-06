@@ -34,23 +34,39 @@ public final class TreeGenHelper {
 		return tree.getTreeGenerator(player.world, pos, true);
 	}
 
-	public static void generateTree(WorldGenerator gen, EntityPlayer player, BlockPos pos) {
-		World world = player.world;
-
-		if (world.isAirBlock(pos.down())) {
+	public static boolean generateTree(WorldGenerator gen, World world, BlockPos pos) {
+		if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
 		} else {
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
+		}
+		if(pos == null){
+			return false;
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof WorldGenBase) {
-				((WorldGenBase) gen).generate(world, world.rand, pos, true);
+				return ((WorldGenBase) gen).generate(world, world.rand, pos, true);
 			} else {
-				gen.generate(world, world.rand, pos);
+				return gen.generate(world, world.rand, pos);
 			}
 		}
+		return false;
+	}
+	
+	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
+		WorldGenerator gen = tree.getTreeGenerator(world, pos, true);
+
+		IBlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
+			if (gen instanceof WorldGenBase) {
+				return ((WorldGenBase) gen).generate(world, world.rand, pos, true);
+			} else {
+				return gen.generate(world, world.rand, pos);
+			}
+		}
+		return false;
 	}
 
 	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {

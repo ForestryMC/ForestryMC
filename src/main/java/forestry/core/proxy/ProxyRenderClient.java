@@ -62,18 +62,22 @@ public class ProxyRenderClient extends ProxyRender {
 		machineProperties.setRenderer(new RenderMachine(gfxBase));
 	}
 
+	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase) {
 		machineProperties.setRenderer(new RenderMill(gfxBase));
 	}
 
+	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase, byte charges) {
 		machineProperties.setRenderer(new RenderMill(gfxBase, charges));
 	}
 
+	@Override
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
 		machineProperties.setRenderer(new RenderEscritoire());
 	}
 
+	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
 		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
 		machineProperties.setRenderer(renderAnalyzer);
@@ -94,6 +98,7 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelManager.getInstance().registerItemAndBlockColors();
 	}
 
+	@Override
 	public void registerFluidStateMapper(Block block, Fluids fluid) {
 		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
 		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);

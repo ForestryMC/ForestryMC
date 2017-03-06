@@ -30,7 +30,7 @@ public class TreeSpawner implements ITreeSpawner {
 		BlockPos pos = new BlockPos(x, y, z);
 
 		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, pos);
-		TreeGenHelper.generateTree(gen, player, pos);
+		TreeGenHelper.generateTree(gen, player.world, pos);
 		return true;
 	}
 

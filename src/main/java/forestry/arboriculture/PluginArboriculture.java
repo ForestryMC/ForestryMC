@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -62,6 +63,7 @@ import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.arboriculture.worldgen.TreeDecorator;
 import forestry.core.PluginCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
@@ -178,6 +180,10 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		super.preInit();
 
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		if (Config.generateTrees) {
+			MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
+		}
 
 		BlockRegistryArboriculture blocks = getBlocks();
 
@@ -625,6 +631,13 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void onModelBake(ModelBakeEvent event) {
 		((ProxyArboricultureClient) proxy).onModelBake(event);
+	}
+
+	@Override
+	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+		if (Config.generateTrees) {
+			TreeDecorator.decorateTrees(world, rand, chunkX, chunkZ);
+		}
 	}
 
 	@SubscribeEvent
