@@ -11,6 +11,9 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -207,6 +210,35 @@ public abstract class ItemStackUtil {
 
 		return condensed;
 	}
+	
+	public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(NonNullList<ItemStack> stacks, NonNullList<String> dicts) {
+		NonNullList<ItemStack> condensed = NonNullList.create();
+		NonNullList<String> condensedDicts = NonNullList.create();
+
+		for (int i = 0;i < stacks.size();i++) {
+			ItemStack stack = stacks.get(i);
+			if (stack.isEmpty()) {
+				continue;
+			}
+
+			boolean matched = false;
+			for (ItemStack cached : condensed) {
+				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
+					cached.grow(stack.getCount());
+					matched = true;
+				}
+			}
+
+			if (!matched) {
+				ItemStack cached = stack.copy();
+				condensed.add(cached);
+				condensedDicts.add(dicts.get(i));
+			}
+
+		}
+
+		return Pair.of(condensed, condensedDicts);
+	}
 
 	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
 		for (ItemStack listStack : list) {
@@ -261,15 +293,18 @@ public abstract class ItemStackUtil {
 	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, NonNullList<String> oreDicts, boolean craftingTools) {
 		int totalSets = 0;
 
-		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(set);
-		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(stock);
+		Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(set, oreDicts);
+		NonNullList<String> condensedRequiredDicts= condensedRequired.getRight();
+		NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
+		NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
 
-		for (ItemStack req : condensedRequired) {
-
+		for (int y = 0;y < condensedRequiredStacks.size();y++) {
+			ItemStack req = condensedRequiredStacks.get(y);
+			String offerDict = condensedRequiredDicts.get(y);
 			int reqCount = 0;
-			for (int i = 0;i < condensedOffered.size();i++) {
-				ItemStack offer = condensedOffered.get(i);
-				if (isCraftingEquivalent(req, offer, oreDicts.get(i), craftingTools)) {
+			for (int i = 0;i < condensedOfferedStacks.size();i++) {
+				ItemStack offer = condensedOfferedStacks.get(i);
+				if (isCraftingEquivalent(req, offer, offerDict, craftingTools)) {
 					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
 					reqCount = Math.max(reqCount, stackCount);
 				}

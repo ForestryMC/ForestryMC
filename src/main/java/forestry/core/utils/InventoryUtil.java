@@ -384,8 +384,8 @@ public abstract class InventoryUtil {
 			return result;
 		}
 		for (int i = 0; i < oreDicts.length; i++) {
-			for (int d = 0; d < oreDicts.length; d++) {
-				result.set(i, oreDicts[i][d]);
+			for (int d = 0; d < oreDicts[i].length; d++) {
+				result.set(i * 3 + d, oreDicts[d][i]);
 			}
 		}
 		return result;
