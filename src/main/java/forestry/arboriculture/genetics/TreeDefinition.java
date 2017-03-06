@@ -199,7 +199,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0025F);
+					.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
@@ -227,7 +227,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0025F);
+					.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
