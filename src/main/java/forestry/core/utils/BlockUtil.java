@@ -243,11 +243,6 @@ public abstract class BlockUtil {
 				!block.isWood(world, downPos);
 	}
 
-	// get to the ground
-	//final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
-	//if (topPos.getY() == 0) {
-		//return null;
-	//}
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
 		BlockPos topPos = world.getHeight(pos);
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);

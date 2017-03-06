@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nullable;
-
 import forestry.api.genetics.IHousing;
 
 public interface IButterflyCocoon extends IHousing {
@@ -19,11 +17,6 @@ public interface IButterflyCocoon extends IHousing {
 	IButterfly getCaterpillar();
 
 	void setCaterpillar(IButterfly butterfly);
-
-	@Nullable
-	IButterflyNursery getNursery();
-
-	void setNursery(IButterflyNursery nursery);
 
 	boolean isSolid();
 

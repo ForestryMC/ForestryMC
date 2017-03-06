@@ -38,6 +38,7 @@ import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
@@ -181,14 +182,17 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public BlockPos plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
-		if (nursery.getCaterpillar() == null) {
+	public BlockPos plantCocoon(World world, BlockPos coordinates, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
+		if (caterpillar == null) {
 			return BlockPos.ORIGIN;
 		}
 
 		BlockRegistryLepidopterology blocks = PluginLepidopterology.getBlocks();
 
-		BlockPos pos = getNextValidPos(world, nursery.getCoordinates());
+		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner);
+		if(pos == BlockPos.ORIGIN){
+			return pos;
+		}
 		IBlockState state = blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
@@ -207,35 +211,52 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		}
 
 		TileCocoon cocoon = (TileCocoon) tile;
-		cocoon.setCaterpillar(nursery.getCaterpillar());
+		cocoon.setCaterpillar(caterpillar);
 		cocoon.getOwnerHandler().setOwner(owner);
-		cocoon.setNursery(nursery);
 		cocoon.setAge(age);
 
 		return pos;
 	}
 
-	private BlockPos getNextValidPos(World world, BlockPos pos) {
-		for(int x = -2;x < 2;x++){
-			for(int z = -2;z < 2;z++){
-				for(int y = 1;y < 7;y++){
-					BlockPos coordinate = pos.add(x, -y, z);
-					TileEntity tile = world.getTileEntity(coordinate);
-					IBlockState blockState = world.getBlockState(coordinate);
-					if(tile instanceof IButterflyNursery){
-						IButterflyNursery nursery = (IButterflyNursery) tile;
-						if(nursery.getCaterpillar() != null){
-							break;
-						}
-					}
-					if(BlockUtil.canReplace(blockState, world, coordinate)){
-						return coordinate;
-					}
+	private BlockPos getValidCocoonPos(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile) {
+		if(isPositionValid(world, pos.down(), caterpillar, gameProfile)){
+			return pos.down();
+		}
+		for(int tries = 0;tries < 3;tries++){
+			for(int y = 1;y < world.rand.nextInt(5);y++){
+				BlockPos coordinate = pos.add(world.rand.nextInt(6)-3, -y, world.rand.nextInt(6)-3);
+				if(isPositionValid(world, coordinate, caterpillar, gameProfile)){
+					return coordinate;
 				}
 			}
 		}
 
-		return pos;
+		return BlockPos.ORIGIN;
+	}
+	
+	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile){
+		IBlockState blockState = world.getBlockState(pos);
+		if(BlockUtil.canReplace(blockState, world, pos)){
+			BlockPos nurseryPos = pos.up();
+			IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
+			if(isNurseryValid(nursery, caterpillar, gameProfile)){
+				return true;
+			}else if(GeneticsUtil.canCreateNursery(world, nurseryPos)){
+				nursery = GeneticsUtil.getOrCreateNursery(world, nurseryPos, gameProfile);
+				return isNurseryValid(nursery, caterpillar, gameProfile);
+			}
+		}
+		return false;
+	}
+	
+	private boolean isNurseryValid(IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile){
+		if(nursery != null){
+			if(!nursery.canNurse(caterpillar)){
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override

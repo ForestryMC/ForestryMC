@@ -20,7 +20,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.api.multiblock.IGreenhouseController;
@@ -57,8 +56,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	private int age;
 	private int maturationTime;
 	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.getIndividual();
-	@Nullable
-	private BlockPos nursery;
 	private boolean isSolid;
 
 	public TileCocoon() {
@@ -80,13 +77,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 			caterpillar = new Butterfly(nbttagcompound.getCompoundTag("Caterpillar"));
 		}
 		ownerHandler.readFromNBT(nbttagcompound);
-		if (nbttagcompound.hasKey("nursery")) {
-			NBTTagCompound nbt = nbttagcompound.getCompoundTag("nursery");
-			int x = nbt.getInteger("x");
-			int y = nbt.getInteger("y");
-			int z = nbt.getInteger("z");
-			nursery = new BlockPos(x, y, z);
-		}
 		age = nbttagcompound.getInteger("Age");
 		maturationTime = nbttagcompound.getInteger("CATMAT");
 		isSolid = nbttagcompound.getBoolean("isSolid");
@@ -101,15 +91,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		nbttagcompound.setTag("Caterpillar", subcompound);
 
 		ownerHandler.writeToNBT(nbttagcompound);
-
-		if (nursery != null) {
-			BlockPos pos = nursery;
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("x", pos.getX());
-			nbt.setInteger("y", pos.getY());
-			nbt.setInteger("z", pos.getZ());
-			nbttagcompound.setTag("nursery", nbt);
-		}
 
 		nbttagcompound.setInteger("Age", age);
 		nbttagcompound.setInteger("CATMAT", maturationTime);
@@ -247,24 +228,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	@Override
 	public IButterfly getCaterpillar() {
 		return caterpillar;
-	}
-
-	@Override
-	@Nullable
-	public IButterflyNursery getNursery() {
-		if (this.nursery == null) {
-			return null;
-		}
-		TileEntity nursery = world.getTileEntity(this.nursery);
-		if (nursery instanceof IButterflyNursery) {
-			return (IButterflyNursery) nursery;
-		}
-		return null;
-	}
-
-	@Override
-	public void setNursery(IButterflyNursery nursery) {
-		this.nursery = nursery.getCoordinates();
 	}
 
 	@Override

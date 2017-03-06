@@ -227,31 +227,21 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			}
 			BlockPos posDown = pos.add(0, -yShift, 0);
 
-			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
-			if (nursery != null) {
-				if (nursery.canNurse(flutter)) {
-					nursery.setCaterpillar(flutter);
-					
-					pos = ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age);
-					if (pos != BlockPos.ORIGIN) {
-						PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
-								world.getBlockState(pos));
-						NetworkUtil.sendNetworkPacket(packet, pos, world);
+			pos = ButterflyManager.butterflyRoot.plantCocoon(world, pos, flutter, player.getGameProfile(), age, true);
+			if (pos != BlockPos.ORIGIN) {
+				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
+						world.getBlockState(pos));
+				NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-						if (!player.capabilities.isCreativeMode) {
-							stack.shrink(1);
-						}
-						nursery.setCaterpillar(null);
-						return EnumActionResult.SUCCESS;
-					} else {
-						nursery.setCaterpillar(null);
-						return EnumActionResult.PASS;
-					}
+				if (!player.capabilities.isCreativeMode) {
+					stack.shrink(1);
 				}
+				return EnumActionResult.SUCCESS;
+			} else {
+				return EnumActionResult.PASS;
 			}
-			return EnumActionResult.PASS;
 		} else if (type == EnumFlutterType.CATERPILLAR) {
-			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player);
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player.getGameProfile());
 			if (nursery != null) {
 				if (!nursery.canNurse(flutter)) {
 					return EnumActionResult.PASS;

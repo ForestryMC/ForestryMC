@@ -53,7 +53,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	 */
 	EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-	BlockPos plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age);
+	BlockPos plantCocoon(World world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
 
 	/**
 	 * @return true if passed item is mated.

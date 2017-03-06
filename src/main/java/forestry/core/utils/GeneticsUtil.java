@@ -120,7 +120,7 @@ public class GeneticsUtil {
 		return null;
 	}
 	
-	public static IButterflyNursery getOrCreateNursery(World world, BlockPos pos, EntityPlayer player) {
+	public static IButterflyNursery getOrCreateNursery(World world, BlockPos pos, GameProfile gameProfile) {
 		IButterflyNursery nursery = getNursery(world, pos);
 
 		if (nursery == null) {
@@ -128,12 +128,17 @@ public class GeneticsUtil {
 
 			if (pollen != null && pollen instanceof ITree) {
 				ITree treeLeave = (ITree) pollen;
-				if (treeLeave.setLeaves(world, player.getGameProfile(), pos)) {
+				if (treeLeave.setLeaves(world, gameProfile, pos)) {
 					nursery = getNursery(world, pos);
 				}
 			}
 		}
 		return nursery;
+	}
+	
+	public static boolean canCreateNursery(World world, BlockPos pos){
+		IIndividual pollen = GeneticsUtil.getPollen(world, pos);
+		return pollen != null && pollen instanceof ITree;
 	}
 	
 	public static IButterflyNursery getNursery(World world, BlockPos pos) {
