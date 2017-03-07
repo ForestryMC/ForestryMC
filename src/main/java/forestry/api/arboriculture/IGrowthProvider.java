@@ -7,9 +7,12 @@ package forestry.api.arboriculture;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public interface IGrowthProvider {
 
-	boolean canSpawn(ITreeGenome genome, World world, BlockPos pos);
+	boolean canSpawn(ITree tree, World world, BlockPos pos);
+	
+	boolean isBiomeValid(ITree tree, Biome biome);
 	
 }

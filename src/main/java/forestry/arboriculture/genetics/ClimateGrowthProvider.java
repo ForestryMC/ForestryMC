@@ -1,14 +1,15 @@
 package forestry.arboriculture.genetics;
 
 import forestry.api.arboriculture.IGrowthProvider;
+import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
-import forestry.core.utils.ClimateUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class ClimateGrowthProvider implements IGrowthProvider {
 
@@ -32,9 +33,15 @@ public class ClimateGrowthProvider implements IGrowthProvider {
 	}
 	
 	@Override
-	public boolean canSpawn(ITreeGenome genome, World world, BlockPos pos) {
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
+	public boolean canSpawn(ITree tree, World world, BlockPos pos) {
+		return true;
+	}
+	
+	@Override
+	public boolean isBiomeValid(ITree tree, Biome biome) {
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getRainfall());
+		ITreeGenome genome = tree.getGenome();
 		if(temperature == null){
 			temperature = genome.getPrimary().getTemperature();
 		}
