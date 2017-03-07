@@ -189,7 +189,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 		BlockRegistryLepidopterology blocks = PluginLepidopterology.getBlocks();
 
-		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner);
+		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
 		if(pos == BlockPos.ORIGIN){
 			return pos;
 		}
@@ -218,14 +218,14 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return pos;
 	}
 
-	private BlockPos getValidCocoonPos(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile) {
-		if(isPositionValid(world, pos.down(), caterpillar, gameProfile)){
+	private BlockPos getValidCocoonPos(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+		if(isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)){
 			return pos.down();
 		}
 		for(int tries = 0;tries < 3;tries++){
 			for(int y = 1;y < world.rand.nextInt(5);y++){
 				BlockPos coordinate = pos.add(world.rand.nextInt(6)-3, -y, world.rand.nextInt(6)-3);
-				if(isPositionValid(world, coordinate, caterpillar, gameProfile)){
+				if(isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)){
 					return coordinate;
 				}
 			}
@@ -234,14 +234,14 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return BlockPos.ORIGIN;
 	}
 	
-	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile){
+	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery){
 		IBlockState blockState = world.getBlockState(pos);
 		if(BlockUtil.canReplace(blockState, world, pos)){
 			BlockPos nurseryPos = pos.up();
 			IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
 			if(isNurseryValid(nursery, caterpillar, gameProfile)){
 				return true;
-			}else if(GeneticsUtil.canCreateNursery(world, nurseryPos)){
+			}else if(createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)){
 				nursery = GeneticsUtil.getOrCreateNursery(world, nurseryPos, gameProfile);
 				return isNurseryValid(nursery, caterpillar, gameProfile);
 			}
