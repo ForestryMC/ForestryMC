@@ -46,7 +46,7 @@ public abstract class TileUtil {
 	 * see {@link BlockFlowerPot#getActualState(IBlockState, IBlockAccess, BlockPos)}
 	 */
 	@Nullable
-	public static <T extends TileEntity> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+	public static <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity;
 
 		if (world instanceof ChunkCache) {

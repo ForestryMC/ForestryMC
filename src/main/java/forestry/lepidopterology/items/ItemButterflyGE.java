@@ -241,7 +241,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				return EnumActionResult.PASS;
 			}
 		} else if (type == EnumFlutterType.CATERPILLAR) {
-			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(world, pos, player.getGameProfile());
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(player.getGameProfile(), world, pos, true);
 			if (nursery != null) {
 				if (!nursery.canNurse(flutter)) {
 					return EnumActionResult.PASS;

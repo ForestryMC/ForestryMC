@@ -33,6 +33,7 @@ import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.genetics.ItemGE;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,31 +103,27 @@ public class GeneticsUtil {
 	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
 	 */
 	@Nullable
-	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IPollinatable) {
-			return (IPollinatable) tile;
-		}
-
-		final IIndividual pollen = getPollen(world, pos);
-		if (pollen != null) {
-			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
-			if (root instanceof ISpeciesRootPollinatable) {
-				return ((ISpeciesRootPollinatable) root).tryConvertToPollinatable(owner, world, pos, pollen);
+	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
+		IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
+		if (pollinatable == null && convertVanilla) {
+			final IIndividual pollen = getPollen(world, pos);
+			if (pollen != null) {
+				ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+				if (root instanceof ISpeciesRootPollinatable) {
+					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
+					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
+				}
 			}
 		}
-
-		return null;
+		return pollinatable;
 	}
-	
-	public static IButterflyNursery getOrCreateNursery(World world, BlockPos pos, GameProfile gameProfile) {
+
+	@Nullable
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, World world, BlockPos pos, boolean convertVanilla) {
 		IButterflyNursery nursery = getNursery(world, pos);
-
-		if (nursery == null) {
+		if (nursery == null && convertVanilla) {
 			IIndividual pollen = GeneticsUtil.getPollen(world, pos);
-
-			if (pollen != null && pollen instanceof ITree) {
+			if (pollen instanceof ITree) {
 				ITree treeLeave = (ITree) pollen;
 				if (treeLeave.setLeaves(world, gameProfile, pos)) {
 					nursery = getNursery(world, pos);
@@ -140,14 +137,10 @@ public class GeneticsUtil {
 		IIndividual pollen = GeneticsUtil.getPollen(world, pos);
 		return pollen != null && pollen instanceof ITree;
 	}
-	
-	public static IButterflyNursery getNursery(World world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
 
-		if (tileEntity instanceof IButterflyNursery) {
-			return (IButterflyNursery) tileEntity;
-		}
-		return null;
+	@Nullable
+	public static IButterflyNursery getNursery(World world, BlockPos pos) {
+		return TileUtil.getTile(world, pos, IButterflyNursery.class);
 	}
 
 	/**
@@ -159,10 +152,9 @@ public class GeneticsUtil {
 			return null;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof ICheckPollinatable) {
-			return ((ICheckPollinatable) tile).getPollen();
+		ICheckPollinatable checkPollinatable = TileUtil.getTile(world, pos, ICheckPollinatable.class);
+		if (checkPollinatable != null) {
+			return checkPollinatable.getPollen();
 		}
 
 		IBlockState blockState = world.getBlockState(pos);

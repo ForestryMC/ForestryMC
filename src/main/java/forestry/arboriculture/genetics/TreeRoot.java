@@ -436,13 +436,15 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual pollen) {
-		Preconditions.checkArgument(pollen instanceof ITree, "pollen must be an instance of ITree");
-		if (Config.pollinateVanillaTrees) {
-			((ITree) pollen).setLeaves(world, owner, pos);
-			return (IPollinatable) world.getTileEntity(pos);
+	@Nullable
+	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
+		Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
+		ITree pollen = (ITree) individual;
+		if (pollen.setLeaves(world, owner, pos)) {
+			return TileUtil.getTile(world, pos, IPollinatable.class);
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 }

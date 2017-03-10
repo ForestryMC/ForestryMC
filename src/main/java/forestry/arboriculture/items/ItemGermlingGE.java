@@ -156,7 +156,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 		}
 
-		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos);
+		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos, true);
 		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
 			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 		}

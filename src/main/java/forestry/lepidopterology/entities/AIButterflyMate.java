@@ -56,9 +56,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 					entity.cooldownMate = EntityButterfly.COOLDOWNS;
 				}
 			} else if (rest != null) {
-				IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.world, rest);
-				if (tile instanceof IButterflyNursery) {
-					IButterflyNursery nursery = (IButterflyNursery) tile;
+				IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(null, entity.world, rest, false);
+				if (nursery != null) {
 					if (nursery.canNurse(entity.getButterfly())) {
 						nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.world, nursery));
 						//Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);

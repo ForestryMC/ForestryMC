@@ -242,21 +242,15 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			if(isNurseryValid(nursery, caterpillar, gameProfile)){
 				return true;
 			}else if(createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)){
-				nursery = GeneticsUtil.getOrCreateNursery(world, nurseryPos, gameProfile);
+				nursery = GeneticsUtil.getOrCreateNursery(gameProfile, world, nurseryPos, false);
 				return isNurseryValid(nursery, caterpillar, gameProfile);
 			}
 		}
 		return false;
 	}
 	
-	private boolean isNurseryValid(IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile){
-		if(nursery != null){
-			if(!nursery.canNurse(caterpillar)){
-				return false;
-			}
-			return true;
-		}
-		return false;
+	private boolean isNurseryValid(@Nullable IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile) {
+		return nursery != null && nursery.canNurse(caterpillar);
 	}
 
 	@Override

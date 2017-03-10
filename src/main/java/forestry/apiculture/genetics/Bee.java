@@ -721,7 +721,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 
-			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock);
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock, Config.pollinateVanillaTrees);
 
 			if (realPollinatable != null) {
 				realPollinatable.mateWith(pollen);
