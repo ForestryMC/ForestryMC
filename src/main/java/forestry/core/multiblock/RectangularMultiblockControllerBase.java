@@ -1,6 +1,7 @@
 package forestry.core.multiblock;
 
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -67,7 +68,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
 					BlockPos pos = new BlockPos(x, y, z);
-					te = this.world.getTileEntity(pos);
+					te = TileUtil.getTile(world, pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
 

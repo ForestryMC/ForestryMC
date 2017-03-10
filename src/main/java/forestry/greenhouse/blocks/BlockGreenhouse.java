@@ -160,16 +160,15 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			return false;
 		}
 
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof MultiblockTileEntityForestry)) {
+		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
+		if (part == null) {
 			return false;
 		}
 
-		MultiblockTileEntityForestry part = (MultiblockTileEntityForestry) tile;
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 		if (playerIn.getHeldItemMainhand().isEmpty()) {
-			if (tile instanceof TileGreenhouseWindow) {
-				TileGreenhouseWindow window = (TileGreenhouseWindow) tile;
+			if (part instanceof TileGreenhouseWindow) {
+				TileGreenhouseWindow window = (TileGreenhouseWindow) part;
 				if (window.getMode() != WindowMode.CONTROL) {
 					if (!worldIn.isRemote) {
 						if (window.isBlocked() == WindowMode.OPEN) {
@@ -288,10 +287,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Deprecated
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		try {
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if (tile instanceof TileGreenhouseWindow) {
-				((TileGreenhouseWindow) tile).onNeighborBlockChange();
-			}
+			TileUtil.actOnTile(worldIn, pos, TileGreenhouseWindow.class, TileGreenhouseWindow::onNeighborBlockChange);
 		} catch (StackOverflowError error) {
 			Log.error("Stack Overflow Error in BlockMachine.onNeighborBlockChange()", error);
 			throw error;
@@ -339,8 +335,9 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		if (pos == null || worldIn == null) {
 			return 0xffffff;
 		}
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (tile instanceof ICamouflagedTile) {
+
+		ICamouflagedTile tile = TileUtil.getTile(worldIn, pos, ICamouflagedTile.class);
+		if (tile != null) {
 			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(worldIn, pos);
 
 			if (tintIndex < 100 && !camouflageStack.isEmpty()) {
@@ -387,13 +384,11 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileGreenhouseWindow) {
-			TileGreenhouseWindow window = (TileGreenhouseWindow) tile;
+		TileUtil.actOnTile(world, pos, TileGreenhouseWindow.class, window -> {
 			if (!window.getWorld().isRemote) {
 				window.setMode(window.isBlocked());
 			}
-		}
+		});
 	}
 
 	@Override
@@ -407,8 +402,8 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			if (blockAccess.getBlockState(posSide) != iblockstate) {
 				return true;
 			}
-			TileEntity tile = blockAccess.getTileEntity(pos);
-			TileEntity tileSide = blockAccess.getTileEntity(posSide);
+			TileEntity tile = TileUtil.getTile(blockAccess, pos);
+			TileEntity tileSide = TileUtil.getTile(blockAccess, posSide);
 			if (tile instanceof TileGreenhousePlain && tileSide instanceof TileGreenhousePlain) {
 				if (((TileGreenhousePlain) tile).getCamouflageType().equals(((TileGreenhousePlain) tileSide).getCamouflageType())) {
 					ItemStack camouflage = CamouflageUtil.getCamouflageBlock(blockAccess, pos);

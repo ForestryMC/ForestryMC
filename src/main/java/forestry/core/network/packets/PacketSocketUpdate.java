@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -57,13 +58,11 @@ public class PacketSocketUpdate extends ForestryPacket implements IForestryPacke
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> itemStacks = data.readItemStacks();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof ISocketable) {
-				ISocketable socketable = (ISocketable) tile;
+			TileUtil.actOnTile(player.world, pos, ISocketable.class, socketable -> {
 				for (int i = 0; i < itemStacks.size(); i++) {
 					socketable.setSocket(i, itemStacks.get(i));
 				}
-			}
+			});
 		}
 	}
 }

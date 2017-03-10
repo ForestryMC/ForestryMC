@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -28,32 +29,21 @@ public class CropFruit extends Crop {
 
 	@Override
 	protected boolean isCrop(World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof IFruitBearer)) {
-			return false;
-		}
-		IFruitBearer bearer = (IFruitBearer) tile;
-		if (!bearer.hasFruit()) {
-			return false;
-		}
-		if (bearer.getRipeness() < 0.9f) {
-			return false;
-		}
-
-		return true;
+		IFruitBearer bearer = TileUtil.getTile(world, pos, IFruitBearer.class);
+		return bearer != null && bearer.hasFruit() && bearer.getRipeness() >= 0.9f;
 	}
 
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof IFruitBearer)) {
+		IFruitBearer tile = TileUtil.getTile(world, pos, IFruitBearer.class);
+		if (tile == null) {
 			return NonNullList.create();
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
-		return ((IFruitBearer) tile).pickFruit(ItemStack.EMPTY);
+		return tile.pickFruit(ItemStack.EMPTY);
 	}
 
 }

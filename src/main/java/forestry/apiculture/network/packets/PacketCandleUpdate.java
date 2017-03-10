@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -55,10 +56,7 @@ public class PacketCandleUpdate extends ForestryPacket implements IForestryPacke
 			int colour = data.readInt();
 			boolean lit = data.readBoolean();
 
-			TileEntity tileEntity = player.world.getTileEntity(pos);
-			if (tileEntity instanceof TileCandle) {
-				((TileCandle) tileEntity).onPacketUpdate(colour, lit);
-			}
+			TileUtil.actOnTile(player.world, pos, TileCandle.class, tile -> tile.onPacketUpdate(colour, lit));
 		}
 	}
 }

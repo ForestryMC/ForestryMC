@@ -53,6 +53,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
@@ -476,7 +477,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
 					BlockPos pos = new BlockPos(x, y, z);
-					te = this.world.getTileEntity(pos);
+					te = TileUtil.getTile(world, pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
 					} else {
@@ -537,7 +538,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					}
 
 					BlockPos posUp = pos.up(2);
-					TileEntity tileUp = world.getTileEntity(posUp);
+					TileEntity tileUp = TileUtil.getTile(world, posUp);
 					if (sides >= 1 && !(tileUp instanceof IGreenhouseComponent)) {
 						int delta = y - minimumCoord.getY();
 						if (delta + 2 >= minY) {
@@ -623,7 +624,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"), posRoot);
 				}
 
-				TileEntity tileFace = world.getTileEntity(posFacing);
+				TileEntity tileFace = TileUtil.getTile(world, posFacing);
 
 				if (tileFace instanceof IGreenhouseComponent) {
 					if (((IGreenhouseComponent) tileFace).getMultiblockLogic().getController() != this) {

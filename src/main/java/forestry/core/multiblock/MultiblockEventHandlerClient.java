@@ -4,6 +4,7 @@ import java.util.Set;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
 import net.minecraft.block.Block;
@@ -38,16 +39,14 @@ public class MultiblockEventHandlerClient {
 	            ScaledResolution resolution = event.getResolution();
 	
 	            if(posHit != null && posHit.getBlockPos() != null){
-	                TileEntity tile = minecraft.world.getTileEntity(posHit.getBlockPos());
-	                if(tile instanceof IMultiblockComponent){
-	                	IMultiblockComponent component = (IMultiblockComponent) tile;
-	                	IMultiblockController controller = component.getMultiblockLogic().getController();
-	                	String lastValidationError = controller.getLastValidationError();
-	                	if(lastValidationError != null){
-	                		lastValidationError = TextFormatting.DARK_RED.toString() + TextFormatting.ITALIC.toString() + lastValidationError;
-	                		minecraft.fontRendererObj.drawSplitString(lastValidationError, resolution.getScaledWidth() / 2 + 35, resolution.getScaledHeight() / 2 - 25, 128, 16777215);
-	                	}
-	                }
+					TileUtil.actOnTile(minecraft.world, posHit.getBlockPos(), IMultiblockComponent.class, component -> {
+						IMultiblockController controller = component.getMultiblockLogic().getController();
+						String lastValidationError = controller.getLastValidationError();
+						if(lastValidationError != null){
+							lastValidationError = TextFormatting.DARK_RED.toString() + TextFormatting.ITALIC.toString() + lastValidationError;
+							minecraft.fontRendererObj.drawSplitString(lastValidationError, resolution.getScaledWidth() / 2 + 35, resolution.getScaledHeight() / 2 - 25, 128, 16777215);
+						}
+					});
 	            }
 			}
 		}

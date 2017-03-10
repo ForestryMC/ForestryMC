@@ -10,6 +10,7 @@ import java.util.Set;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -123,7 +124,7 @@ public class MultiblockWorldRegistry {
 						continue;
 					}
 
-					if (world.getTileEntity(coord) != orphan) {
+					if (TileUtil.getTile(world, coord) != orphan) {
 						// This block has been replaced by another.
 						continue;
 					}

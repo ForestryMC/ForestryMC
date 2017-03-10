@@ -17,6 +17,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,9 +52,9 @@ public class PacketWorktableMemoryUpdate extends ForestryPacket implements IFore
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof TileWorktable) {
-				((TileWorktable) tile).getMemory().readData(data);
+			TileWorktable tile = TileUtil.getTile(player.world, pos, TileWorktable.class);
+			if (tile != null) {
+				tile.getMemory().readData(data);
 			}
 		}
 	}

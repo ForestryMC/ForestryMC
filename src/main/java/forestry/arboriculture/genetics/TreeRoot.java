@@ -49,7 +49,6 @@ import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.config.Config;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
@@ -63,7 +62,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -150,12 +148,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ITree getTree(World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TileSapling)) {
-			return null;
-		}
-
-		return ((TileSapling) tile).getTree();
+		return TileUtil.getResultFromTile(world, pos, TileSapling.class, TileSapling::getTree);
 	}
 
 	@Override

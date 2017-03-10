@@ -97,17 +97,12 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
 			boolean willHarvest) {
 		if (canHarvestBlock(world, pos, player)) {
-			TileEntity tile = world.getTileEntity(pos);
-
-			if (tile instanceof TileCocoon) {
-				TileCocoon cocoon = (TileCocoon) tile;
+			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
 				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
 				for (ItemStack stack : drops) {
-					if (stack != null) {
-						ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
-					}
+					ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
 				}
-			}
+			});
 		}
 
 		return world.setBlockToAir(pos);

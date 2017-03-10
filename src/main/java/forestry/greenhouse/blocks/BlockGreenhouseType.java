@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Locale;
 
 import forestry.core.config.Constants;
+import forestry.core.tiles.TileUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import net.minecraft.block.material.Material;
@@ -118,7 +119,7 @@ public enum BlockGreenhouseType {
 	public static TextureAtlasSprite getSprite(BlockGreenhouseType type, @Nullable EnumFacing facing, @Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
 		TileEntity tile = null;
 		if (world != null && pos != null) {
-			tile = world.getTileEntity(pos);
+			tile = TileUtil.getTile(world, pos);
 		}
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		switch (type) {

@@ -18,6 +18,7 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 		TileEntity tile;
 		do {
 			pos = pos.down();
-			tile = world.getTileEntity(pos);
+			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing && pos.getY() > 0);
 
 		IBlockState blockState = world.getBlockState(pos);

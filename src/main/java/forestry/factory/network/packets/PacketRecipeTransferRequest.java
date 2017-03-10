@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
@@ -53,7 +54,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = player.world.getTileEntity(pos);
+			TileEntity tile = TileUtil.getTile(player.world, pos);
 			if (tile instanceof TileCarpenter) {
 				TileCarpenter carpenter = (TileCarpenter) tile;
 				int index = 0;

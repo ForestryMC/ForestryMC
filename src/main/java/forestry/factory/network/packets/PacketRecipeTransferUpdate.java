@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileUtil;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +56,7 @@ public class PacketRecipeTransferUpdate extends ForestryPacket implements IFores
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = player.world.getTileEntity(pos);
+			TileEntity tile = TileUtil.getTile(player.world, pos);
 			if (tile instanceof TileCarpenter) {
 				TileCarpenter carpenter = (TileCarpenter) tile;
 				int index = 0;

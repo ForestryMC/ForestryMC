@@ -13,9 +13,11 @@ package forestry.core.blocks;
 import com.mojang.authlib.GameProfile;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.circuits.ISocketable;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.multiblock.MultiblockUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -51,12 +53,10 @@ public abstract class BlockStructure extends BlockForestry {
 			return false;
 		}
 
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof MultiblockTileEntityForestry)) {
+		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
+		if (part == null) {
 			return false;
 		}
-
-		MultiblockTileEntityForestry part = (MultiblockTileEntityForestry) tile;
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
 		ItemStack heldItem = playerIn.getHeldItem(hand);
@@ -99,13 +99,11 @@ public abstract class BlockStructure extends BlockForestry {
 		}
 
 		if (placer instanceof EntityPlayer) {
-			TileEntity tile = world.getTileEntity(pos);
-
-			if (tile instanceof MultiblockTileEntityForestry) {
+			TileUtil.actOnTile(world, pos, MultiblockTileEntityForestry.class, tile -> {
 				EntityPlayer player = (EntityPlayer) placer;
 				GameProfile gameProfile = player.getGameProfile();
-				((MultiblockTileEntityForestry) tile).setOwner(gameProfile);
-			}
+				tile.setOwner(gameProfile);
+			});
 		}
 	}
 
@@ -115,12 +113,9 @@ public abstract class BlockStructure extends BlockForestry {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IMultiblockComponent) {
-			IMultiblockComponent part = (IMultiblockComponent) tile;
-
+		TileUtil.actOnTile(world, pos, IMultiblockComponent.class, tile -> {
 			// drop inventory if we're the last part remaining
-			if (MultiblockUtil.getNeighboringParts(world, part).isEmpty()) {
+			if (MultiblockUtil.getNeighboringParts(world, tile).isEmpty()) {
 				if (tile instanceof IInventory) {
 					InventoryUtil.dropInventory((IInventory) tile, world, pos);
 				}
@@ -128,7 +123,8 @@ public abstract class BlockStructure extends BlockForestry {
 					InventoryUtil.dropSockets((ISocketable) tile, world, pos);
 				}
 			}
-		}
+		});
+
 		super.breakBlock(world, pos, state);
 	}
 

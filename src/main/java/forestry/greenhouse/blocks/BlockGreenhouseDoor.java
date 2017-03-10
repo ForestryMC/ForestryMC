@@ -16,6 +16,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.models.GreenhouseDoorStateMapper;
@@ -110,12 +111,11 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof TileGreenhouse)) {
+		TileGreenhouse door = TileUtil.getTile(worldIn, pos, TileGreenhouse.class);
+		if (door == null) {
 			return false;
 		}
 
-		TileGreenhouse door = (TileGreenhouse) tile;
 		if (playerIn.isSneaking() && playerIn.getHeldItem(hand).isEmpty()) {
 			if (!worldIn.isRemote) {
 				door.openGui(playerIn);

@@ -19,6 +19,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -53,10 +54,7 @@ public class PacketItemStackDisplay extends ForestryPacket implements IForestryP
 			BlockPos pos = data.readBlockPos();
 			ItemStack itemStack = data.readItemStack();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof IItemStackDisplay) {
-				((IItemStackDisplay) tile).handleItemStackForDisplay(itemStack);
-			}
+			TileUtil.actOnTile(player.world, pos, IItemStackDisplay.class, tile -> tile.handleItemStackForDisplay(itemStack));
 		}
 	}
 }

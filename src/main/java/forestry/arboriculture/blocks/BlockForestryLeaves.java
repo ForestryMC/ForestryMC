@@ -311,14 +311,16 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntity tile = worldIn.getTileEntity(pos);
-		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
-		ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
-			ItemStackUtil.dropItemStackAsEntity(butterfly, worldIn, pos);
-			((TileLeaves) tile).setCaterpillar(null);
-			return true;
+		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
+		if (leaves != null) {
+			IButterfly caterpillar = leaves.getCaterpillar();
+			ItemStack heldItem = playerIn.getHeldItem(hand);
+			if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStackUtil.dropItemStackAsEntity(butterfly, worldIn, pos);
+				leaves.setCaterpillar(null);
+				return true;
+			}
 		}
 
 		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);

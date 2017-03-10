@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -111,7 +112,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {
-		TileEntity tile = world.getTileEntity(pos.offset(orientation));
+		BlockPos offsetPos = pos.offset(orientation);
+		TileEntity tile = TileUtil.getTile(world, offsetPos);
 		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 

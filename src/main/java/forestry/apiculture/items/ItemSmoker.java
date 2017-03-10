@@ -7,6 +7,7 @@ import forestry.api.apiculture.IHiveTile;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,11 +83,7 @@ public class ItemSmoker extends ItemForestry {
 		}
 
 		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
-		TileEntity tileEntity = world.getTileEntity(blockPos);
-		if (tileEntity instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tileEntity;
-			hive.calmBees();
-		}
+		TileUtil.actOnTile(world, blockPos, IHiveTile.class, IHiveTile::calmBees);
 	}
 
 	@Override
@@ -98,11 +95,7 @@ public class ItemSmoker extends ItemForestry {
 
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tileEntity;
-			hive.calmBees();
-		}
+		TileUtil.actOnTile(world, pos, IHiveTile.class, IHiveTile::calmBees);
 		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
 	}
 

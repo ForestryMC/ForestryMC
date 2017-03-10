@@ -76,10 +76,9 @@ public class GeneticsUtil {
 	 */
 	@Nullable
 	public static ICheckPollinatable getCheckPollinatable(World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IPollinatable) {
-			return (IPollinatable) tile;
+		IPollinatable tile = TileUtil.getTile(world, pos, IPollinatable.class);
+		if (tile != null) {
+			return tile;
 		}
 
 		IIndividual pollen = getPollen(world, pos);

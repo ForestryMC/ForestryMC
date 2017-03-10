@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -46,10 +47,7 @@ public class PacketAlvearyChange extends ForestryPacket implements IForestryPack
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof IMultiblockComponent) {
-				((IMultiblockComponent) tile).getMultiblockLogic().getController().reassemble();
-			}
+			TileUtil.actOnTile(player.world, pos, IMultiblockComponent.class, tile -> tile.getMultiblockLogic().getController().reassemble());
 		}
 	}
 }

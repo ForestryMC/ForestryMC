@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -48,10 +49,7 @@ public class MultiblockUtil {
 				continue;
 			}
 
-			TileEntity te = world.getTileEntity(neighbor);
-			if (te instanceof IMultiblockComponent) {
-				neighborParts.add((IMultiblockComponent) te);
-			}
+			TileUtil.actOnTile(world, neighbor, IMultiblockComponent.class, neighborParts::add);
 		}
 		return neighborParts;
 	}

@@ -140,8 +140,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
+		TileCandle candle = TileUtil.getTile(world, pos, TileCandle.class);
+		if (candle != null && candle.isLit()) {
 			return 14;
 		}
 		return 0;
@@ -154,12 +154,10 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if (!(tileEntity instanceof TileCandle)) {
+		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
+		if (tileCandle == null) {
 			return false;
 		}
-
-		TileCandle tileCandle = (TileCandle) tileEntity;
 		final boolean isLit = tileCandle.isLit();
 
 		boolean flag = false;

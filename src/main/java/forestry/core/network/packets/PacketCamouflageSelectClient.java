@@ -21,6 +21,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -64,7 +65,7 @@ public class PacketCamouflageSelectClient extends ForestryPacket implements IFor
 			String camouflageType = data.readString();
 			ItemStack camouflageStack = data.readItemStack();
 
-			TileEntity tile = player.world.getTileEntity(pos);
+			TileEntity tile = TileUtil.getTile(player.world, pos);
 			ICamouflageHandler handler;
 			if (selectionType == CamouflageSelectionType.MULTIBLOCK) {
 				if (tile instanceof IMultiblockComponent) {

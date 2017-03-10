@@ -52,6 +52,7 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 import forestry.core.utils.VectUtil;
@@ -666,10 +667,8 @@ public class Bee extends IndividualLiving implements IBee {
 		for (int i = 0; i < 20; i++) {
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
 			BlockPos blockPos = VectUtil.add(housingPos, randomPos, offset);
-			TileEntity tile = world.getTileEntity(blockPos);
-
-			if (tile instanceof ICheckPollinatable) {
-				ICheckPollinatable pitcher = (ICheckPollinatable) tile;
+			ICheckPollinatable pitcher = TileUtil.getTile(world, blockPos, ICheckPollinatable.class);
+			if (pitcher != null) {
 				if (genome.getFlowerProvider().isAcceptedPollinatable(world, pitcher)) {
 					pollen = pitcher.getPollen();
 				}

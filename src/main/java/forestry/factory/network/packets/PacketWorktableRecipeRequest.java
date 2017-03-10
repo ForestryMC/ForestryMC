@@ -17,6 +17,7 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
@@ -55,9 +56,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = new MemorizedRecipe(data);
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof TileWorktable) {
-				TileWorktable worktable = (TileWorktable) tile;
+			TileUtil.actOnTile(player.world, pos, TileWorktable.class, worktable -> {
 				worktable.setCurrentRecipe(recipe);
 
 				if (player.openContainer instanceof ContainerWorktable) {
@@ -66,7 +65,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 				}
 
 				NetworkUtil.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.world);
-			}
+			});
 		}
 	}
 }

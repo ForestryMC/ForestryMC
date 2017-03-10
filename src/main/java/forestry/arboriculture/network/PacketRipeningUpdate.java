@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -51,10 +52,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 			BlockPos pos = data.readBlockPos();
 			int value = data.readVarInt();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof IRipeningPacketReceiver) {
-				((IRipeningPacketReceiver) tile).fromRipeningPacket(value);
-			}
+			TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
 		}
 	}
 }

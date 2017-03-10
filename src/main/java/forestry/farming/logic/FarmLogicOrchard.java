@@ -27,6 +27,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.PluginCore;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -202,9 +203,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	private boolean isFruitBearer(World world, BlockPos position) {
-
-		TileEntity tile = world.getTileEntity(position);
-		if (tile instanceof IFruitBearer) {
+		IFruitBearer tile = TileUtil.getTile(world, position, IFruitBearer.class);
+		if (tile != null) {
 			return true;
 		}
 
@@ -230,10 +230,9 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Nullable
 	private ICrop getCrop(World world, BlockPos position) {
 
-		TileEntity tile = world.getTileEntity(position);
+		IFruitBearer fruitBearer = TileUtil.getTile(world, position, IFruitBearer.class);
 
-		if (tile instanceof IFruitBearer) {
-			IFruitBearer fruitBearer = (IFruitBearer) tile;
+		if (fruitBearer != null) {
 			if (fruitBearer.hasFruit() && fruitBearer.getRipeness() >= 0.9f) {
 				return new CropFruit(world, position);
 			}

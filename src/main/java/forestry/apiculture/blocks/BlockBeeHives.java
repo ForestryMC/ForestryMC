@@ -29,6 +29,7 @@ import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -85,21 +86,13 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		super.onBlockClicked(world, pos, player);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tile;
-			hive.onAttack(world, pos, player);
-		}
+		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		boolean canHarvest = canHarvestBlock(world, pos, player);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tile;
-			hive.onBroken(world, pos, player, canHarvest);
-		}
+		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
 
 	@Override

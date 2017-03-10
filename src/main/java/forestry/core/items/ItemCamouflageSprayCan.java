@@ -6,6 +6,7 @@ import forestry.api.core.IModelManager;
 import forestry.core.gui.ContainerCamouflageSprayCan;
 import forestry.core.gui.GuiCamouflageSprayCan;
 import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,9 +50,8 @@ public class ItemCamouflageSprayCan extends ItemWithGui {
 		ItemStack heldItem = player.getHeldItem(hand);
 		ItemInventoryCamouflageSprayCan inventory = new ItemInventoryCamouflageSprayCan(player, heldItem);
 		ItemStack camouflage = inventory.getStackInSlot(0);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof ICamouflageHandler) {
-			ICamouflageHandler handler = (ICamouflageHandler) tile;
+		ICamouflageHandler handler = TileUtil.getTile(world, pos, ICamouflageHandler.class);
+		if (handler != null) {
 			String type = CamouflageManager.camouflageAccess.getHandlerFromItem(camouflage).getType();
 			if (handler.canHandleType(type)) {
 				if(world.isRemote){

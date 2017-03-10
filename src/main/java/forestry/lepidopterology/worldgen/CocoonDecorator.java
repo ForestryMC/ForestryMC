@@ -18,6 +18,7 @@ import java.util.Set;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Constants;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
@@ -119,9 +120,8 @@ public abstract class CocoonDecorator {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileCocoon) {
-			TileCocoon cocoon = (TileCocoon) tile;
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (cocoon != null) {
 			cocoon.setCaterpillar(butterfly);
 		} else {
 			return false;

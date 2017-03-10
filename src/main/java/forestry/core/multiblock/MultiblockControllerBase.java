@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
@@ -133,12 +134,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			referenceCoord = coord;
 			logic.becomeMultiblockSaveDelegate();
 		} else if (coord.compareTo(referenceCoord) < 0) {
-			TileEntity te = this.world.getTileEntity(referenceCoord);
-			if (te instanceof IMultiblockComponent) {
-				IMultiblockComponent tePart = (IMultiblockComponent) te;
-				MultiblockLogic teLogic = (MultiblockLogic) tePart.getMultiblockLogic();
+			TileUtil.actOnTile(world, referenceCoord, IMultiblockComponent.class, tile -> {
+				MultiblockLogic teLogic = (MultiblockLogic) tile.getMultiblockLogic();
 				teLogic.forfeitMultiblockSaveDelegate();
-			}
+			});
 
 			referenceCoord = coord;
 			logic.becomeMultiblockSaveDelegate();
@@ -392,12 +391,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	public void _onAssimilated(IMultiblockControllerInternal otherController) {
 		if (referenceCoord != null) {
 			if (world.getChunkProvider().getLoadedChunk(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4) != null) {
-				TileEntity te = this.world.getTileEntity(referenceCoord);
-				if (te instanceof IMultiblockComponent) {
-					IMultiblockComponent part = (IMultiblockComponent) te;
+				TileUtil.actOnTile(world, referenceCoord, IMultiblockComponent.class, part -> {
 					MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
 					logic.forfeitMultiblockSaveDelegate();
-				}
+				});
 			}
 			this.referenceCoord = null;
 		}
@@ -685,7 +682,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		HashSet<IMultiblockComponent> deadParts = new HashSet<>();
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
-			if (isInvalid(part) || world.getTileEntity(partCoord) != part) {
+			if (isInvalid(part) || TileUtil.getTile(world, partCoord) != part) {
 				onDetachBlock(part);
 				deadParts.add(part);
 			}
@@ -728,7 +725,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 				continue;
 			}
 
-			if (world.getTileEntity(partCoord) != part) {
+			if (TileUtil.getTile(world, partCoord) != part) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;

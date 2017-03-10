@@ -28,6 +28,7 @@ import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
@@ -210,7 +211,8 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		if (outwards == null || world == null || pos == null) {
 			return null;
 		}
-		return world.getTileEntity(getPos().offset(outwards));
+		BlockPos offset = getPos().offset(outwards);
+		return TileUtil.getTile(world, offset);
 	}
 
 	public void recalculateOutwardsDirection(BlockPos minCoord, BlockPos maxCoord) {

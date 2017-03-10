@@ -21,6 +21,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileHive;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -69,9 +70,6 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public void postGen(World world, Random rand, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileHive) {
-			((TileHive) tile).setContained(bees);
-		}
+		TileUtil.actOnTile(world, pos, TileHive.class, tile -> tile.setContained(bees));
 	}
 }

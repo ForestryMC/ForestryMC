@@ -19,7 +19,9 @@ import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.IActivatable;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -53,15 +55,14 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 			BlockPos pos = data.readBlockPos();
 			boolean active = data.readBoolean();
 
-			TileEntity tile = Minecraft.getMinecraft().world.getTileEntity(pos);
+			WorldClient world = Minecraft.getMinecraft().world;
+			TileEntity tile = TileUtil.getTile(world, pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);
-			} else {
-				if (tile instanceof IMultiblockComponent) {
-					IMultiblockComponent component = (IMultiblockComponent) tile;
-					if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
-						((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
-					}
+			} else if (tile instanceof IMultiblockComponent) {
+				IMultiblockComponent component = (IMultiblockComponent) tile;
+				if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
+					((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
 				}
 			}
 		}

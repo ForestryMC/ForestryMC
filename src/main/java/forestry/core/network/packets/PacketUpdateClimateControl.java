@@ -12,6 +12,7 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +46,7 @@ public class PacketUpdateClimateControl extends ForestryPacket implements IFores
 			float tmperature = data.readFloat();
 			float humidity = data.readFloat();
 
-			TileEntity tile = player.world.getTileEntity(pos);
+			TileEntity tile = TileUtil.getTile(player.world, pos);
 			IClimateControlProvider control = null;
 			if (tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;

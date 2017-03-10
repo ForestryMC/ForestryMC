@@ -59,7 +59,7 @@ public final class AdjacentTileCache {
 		World world = source.getWorld();
 		BlockPos pos = source.getPos().offset(side);
 		if (world.isBlockLoaded(pos) && !world.isAirBlock(pos)) {
-			return world.getTileEntity(pos);
+			return TileUtil.getTile(world, pos);
 		}
 		return null;
 	}

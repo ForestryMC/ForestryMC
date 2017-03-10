@@ -145,16 +145,13 @@ public class BlockFarm extends BlockStructure {
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
 		int meta = getMetaFromState(state);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileFarm) {
-			TileFarm farm = (TileFarm) tile;
-
+		TileUtil.actOnTile(world, pos, TileFarm.class, farm -> {
 			ItemStack stack = new ItemStack(this, 1, meta != 1 ? meta : 0);
 			NBTTagCompound compound = new NBTTagCompound();
 			farm.getFarmBlockTexture().saveToCompound(compound);
 			stack.setTagCompound(compound);
 			drops.add(stack);
-		}
+		});
 		return drops;
 	}
 

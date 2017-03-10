@@ -17,6 +17,7 @@ import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
 import forestry.mail.tiles.TileTrader;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -49,10 +50,7 @@ public class PacketTraderAddressRequest extends ForestryPacket implements IFores
 			BlockPos pos = data.readBlockPos();
 			String addressName = data.readString();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof TileTrader) {
-				((TileTrader) tile).handleSetAddressRequest(addressName);
-			}
+			TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressRequest(addressName));
 		}
 	}
 }

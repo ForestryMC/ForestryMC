@@ -18,6 +18,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.VectUtil;
@@ -94,7 +95,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			TileEntity tile = world.getTileEntity(posBlock);
+			TileEntity tile = TileUtil.getTile(world, posBlock);
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}

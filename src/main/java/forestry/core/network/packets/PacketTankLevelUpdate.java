@@ -20,6 +20,7 @@ import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -60,11 +61,10 @@ public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPa
 			int tankIndex = data.readVarInt();
 			FluidStack contents = data.readFluidStack();
 
-			TileEntity tileEntity = player.world.getTileEntity(pos);
-			if (tileEntity instanceof ILiquidTankTile) {
-				ITankManager tankManager = ((ILiquidTankTile) tileEntity).getTankManager();
+			TileUtil.actOnTile(player.world, pos, ILiquidTankTile.class, tile -> {
+				ITankManager tankManager = tile.getTankManager();
 				tankManager.processTankUpdate(tankIndex, contents);
-			}
+			});
 		}
 	}
 }

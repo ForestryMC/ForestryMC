@@ -144,7 +144,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Nullable
 	private static IItemHandler getInventoryHit(World world, BlockPos pos, EnumFacing side) {
-		TileEntity targeted = world.getTileEntity(pos);
+		TileEntity targeted = TileUtil.getTile(world, pos);
 		return TileUtil.getInventoryFromTile(targeted, side);
 	}
 

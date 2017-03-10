@@ -19,6 +19,7 @@ import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -51,9 +52,9 @@ public class PacketGuiUpdate extends ForestryPacket implements IForestryPacketCl
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof IStreamableGui) {
-				((IStreamableGui) tile).readGuiData(data);
+			IStreamableGui tile = TileUtil.getTile(player.world, pos, IStreamableGui.class);
+			if (tile != null) {
+				tile.readGuiData(data);
 			}
 		}
 	}

@@ -208,7 +208,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 		IButterfly flutter = ButterflyManager.butterflyRoot.getMember(stack);
 
-		TileEntity tileEntity = world.getTileEntity(pos);
 		IBlockState blockState = world.getBlockState(pos);
 		if (type == EnumFlutterType.COCOON) {
 			NBTTagCompound tagCompound = stack.getTagCompound();
@@ -225,7 +224,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			} else {
 				yShift = 0;
 			}
-			BlockPos posDown = pos.add(0, -yShift, 0);
 
 			pos = ButterflyManager.butterflyRoot.plantCocoon(world, pos, flutter, player.getGameProfile(), age, true);
 			if (pos != BlockPos.ORIGIN) {

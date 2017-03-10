@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,10 +58,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof TileWorktable) {
-				((TileWorktable) tile).setCurrentRecipe(recipe);
-			}
+			TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
 		}
 	}
 }

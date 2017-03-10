@@ -13,6 +13,7 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 
 import forestry.api.core.ForestryAPI;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -94,7 +95,7 @@ public class GuiHandler implements IGuiHandler {
 				break;
 			}
 			case Tile: {
-				TileEntity tileEntity = world.getTileEntity(pos);
+				TileEntity tileEntity = TileUtil.getTile(world, pos);
 				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
 					return ((IGuiHandlerTile) tileEntity).getGui(player, data);
 				}
@@ -135,7 +136,7 @@ public class GuiHandler implements IGuiHandler {
 				break;
 			}
 			case Tile: {
-				TileEntity tileEntity = world.getTileEntity(pos);
+				TileEntity tileEntity = TileUtil.getTile(world, pos);
 				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
 					return ((IGuiHandlerTile) tileEntity).getContainer(player, data);
 				}

@@ -36,8 +36,23 @@ public abstract class TileUtil {
 		World world = tile.getWorld();
 
 		return !tile.isInvalid() &&
-				world.getTileEntity(pos) == tile &&
+				getTile(world, pos) == tile &&
 				player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+	}
+
+	/**
+	 * Returns the tile at the specified position, returns null if it is the wrong type or does not exist.
+	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
+	 * see {@link BlockFlowerPot#getActualState(IBlockState, IBlockAccess, BlockPos)}
+	 */
+	@Nullable
+	public static TileEntity getTile(IBlockAccess world, BlockPos pos) {
+		if (world instanceof ChunkCache) {
+			ChunkCache chunkCache = (ChunkCache) world;
+			return chunkCache.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+		} else {
+			return world.getTileEntity(pos);
+		}
 	}
 
 	/**
@@ -47,19 +62,42 @@ public abstract class TileUtil {
 	 */
 	@Nullable
 	public static <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
-		TileEntity tileEntity;
-
-		if (world instanceof ChunkCache) {
-			ChunkCache chunkCache = (ChunkCache) world;
-			tileEntity = chunkCache.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
-		} else {
-			tileEntity = world.getTileEntity(pos);
-		}
-
+		TileEntity tileEntity = getTile(world, pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
 			return null;
+		}
+	}
+
+	public interface ITileGetResult<T, R>  {
+		@Nullable
+		R getResult(T tile);
+	}
+
+	/**
+	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
+	 */
+	@Nullable
+	public static <T, R> R getResultFromTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+		T tile = getTile(world, pos, tileClass);
+		if (tile != null) {
+			return tileGetResult.getResult(tile);
+		}
+		return null;
+	}
+
+	public interface ITileAction<T>  {
+		void actOnTile(T tile);
+	}
+
+	/**
+	 * Performs an {@link ITileAction} on a tile if the tile exists.
+	 */
+	public static <T> void actOnTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, ITileAction<T> tileAction) {
+		T tile = getTile(world, pos, tileClass);
+		if (tile != null) {
+			tileAction.actOnTile(tile);
 		}
 	}
 

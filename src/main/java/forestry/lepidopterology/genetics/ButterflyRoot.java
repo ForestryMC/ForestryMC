@@ -36,6 +36,7 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
@@ -204,13 +205,12 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return BlockPos.ORIGIN;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TileCocoon)) {
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (cocoon == null) {
 			world.setBlockToAir(pos);
 			return BlockPos.ORIGIN;
 		}
 
-		TileCocoon cocoon = (TileCocoon) tile;
 		cocoon.setCaterpillar(caterpillar);
 		cocoon.getOwnerHandler().setOwner(owner);
 		cocoon.setAge(age);

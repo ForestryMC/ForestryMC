@@ -19,6 +19,7 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -51,12 +52,10 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 
-			TileEntity tile = player.world.getTileEntity(pos);
-			if (tile instanceof IErrorLogicSource) {
-				IErrorLogicSource errorSourceTile = (IErrorLogicSource) tile;
+			TileUtil.actOnTile(player.world, pos, IErrorLogicSource.class, errorSourceTile -> {
 				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
 				errorLogic.readData(data);
-			}
+			});
 		}
 	}
 }

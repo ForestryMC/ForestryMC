@@ -204,16 +204,16 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = TileUtil.getTile(world, pos);
 		if (tile instanceof IInventory) {
 			IInventory inventory = (IInventory) tile;
 			InventoryUtil.dropInventory(inventory, world, pos);
-			if (tile instanceof TileForestry) {
-				((TileForestry) tile).onRemoval();
-			}
-			if (tile instanceof ISocketable) {
-				InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
-			}
+		}
+		if (tile instanceof TileForestry) {
+			((TileForestry) tile).onRemoval();
+		}
+		if (tile instanceof ISocketable) {
+			InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
 		}
 		super.breakBlock(world, pos, state);
 	}

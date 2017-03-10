@@ -248,16 +248,13 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if (tileEntity instanceof TileAlveary) {
-			TileAlveary tileAlveary = (TileAlveary) tileEntity;
-
+		TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
 			// We must check that the slabs on top were not removed
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
 			alveary.reassemble();
 			BlockPos referenceCoord = alveary.getReferenceCoord();
 			NetworkUtil.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
-		}
+		});
 	}
 	
 	@SideOnly(Side.CLIENT)

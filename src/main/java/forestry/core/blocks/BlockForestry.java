@@ -16,6 +16,7 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -44,14 +45,12 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 		}
 
 		if (placer instanceof EntityPlayer) {
-			TileEntity tile = world.getTileEntity(pos);
-
-			if (tile instanceof IOwnedTile) {
-				IOwnerHandler ownerHandler = ((IOwnedTile) tile).getOwnerHandler();
+			TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
+				IOwnerHandler ownerHandler = tile.getOwnerHandler();
 				EntityPlayer player = (EntityPlayer) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				ownerHandler.setOwner(gameProfile);
-			}
+			});
 		}
 	}
 
@@ -61,10 +60,7 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 
 		if (world instanceof World) {
 			try {
-				TileEntity tile = world.getTileEntity(pos);
-				if (tile instanceof TileForestry) {
-					((TileForestry) tile).onNeighborTileChange((World) world, pos, neighbor);
-				}
+				TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((World) world, pos, neighbor));
 			} catch (StackOverflowError error) {
 				Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
 				throw error;

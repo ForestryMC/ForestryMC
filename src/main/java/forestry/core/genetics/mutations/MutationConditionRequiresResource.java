@@ -19,6 +19,7 @@ import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -58,7 +59,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 		TileEntity tile;
 		do {
 			pos = pos.down();
-			tile = world.getTileEntity(pos);
+			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing);
 
 		IBlockState blockState = world.getBlockState(pos);
