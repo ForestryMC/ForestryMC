@@ -66,14 +66,8 @@ public class GeneticsUtil {
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IButterflyNursery) {
-			return ((IButterflyNursery) tile).canNurse(butterfly);
-		}
-
-		// vanilla leaves can always be converted and then nurse
-		return getPollen(world, pos) != null;
+		IButterflyNursery tile = TileUtil.getTile(world, pos, IButterflyNursery.class);
+		return tile != null && tile.canNurse(butterfly);
 	}
 
 	/**
