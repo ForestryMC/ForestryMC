@@ -33,7 +33,6 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
@@ -51,7 +50,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -100,9 +98,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 					ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(individual, type);
 
-					if (butterfly.getTagCompound() != null) {
-						butterfly.getTagCompound().setInteger(NBT_AGE, age);
-					}
+					ItemButterflyGE.setAge(butterfly, age);
 
 					subItems.add(butterfly);
 				}
@@ -210,22 +206,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 		IBlockState blockState = world.getBlockState(pos);
 		if (type == EnumFlutterType.COCOON) {
-			NBTTagCompound tagCompound = stack.getTagCompound();
-			int age = tagCompound.getInteger(NBT_AGE);
-
-			// x, y, z are the coordinates of the block "hit", can thus either
-			// be the soil or tall grass, etc.
-			int yShift;
-			if (!BlockUtil.isReplaceableBlock(blockState, world, pos)) {
-				if (!world.isAirBlock(pos.down())) {
-					return EnumActionResult.PASS;
-				}
-				yShift = 1;
-			} else {
-				yShift = 0;
-			}
-
-			pos = ButterflyManager.butterflyRoot.plantCocoon(world, pos, flutter, player.getGameProfile(), age, true);
+			pos = ButterflyManager.butterflyRoot.plantCocoon(world, pos, flutter, player.getGameProfile(), getAge(stack), true);
 			if (pos != BlockPos.ORIGIN) {
 				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos,
 						world.getBlockState(pos));
@@ -260,6 +241,34 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		} else {
 			return EnumActionResult.PASS;
 		}
+	}
+	
+	public static void setAge(ItemStack cocoon, int age){
+		if(cocoon.isEmpty()){
+			return;
+		}
+		if (ButterflyManager.butterflyRoot.getType(cocoon) != EnumFlutterType.COCOON) {
+			return;
+		}
+		NBTTagCompound tagCompound = cocoon.getTagCompound();
+		if(tagCompound == null){
+			cocoon.setTagCompound(tagCompound = new NBTTagCompound());
+		}
+		tagCompound.setInteger(NBT_AGE, age);
+	}
+	
+	public static int getAge(ItemStack cocoon){
+		if(cocoon.isEmpty()){
+			return 0;
+		}
+		if (ButterflyManager.butterflyRoot.getType(cocoon) != EnumFlutterType.COCOON) {
+			return 0;
+		}
+		NBTTagCompound tagCompound = cocoon.getTagCompound();
+		if(tagCompound == null){
+			return 0;
+		}
+		return tagCompound.getInteger(NBT_AGE);
 	}
 
 	/**

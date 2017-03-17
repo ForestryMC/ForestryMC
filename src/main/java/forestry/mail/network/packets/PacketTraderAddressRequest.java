@@ -20,7 +20,6 @@ import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.TileUtil;
 import forestry.mail.tiles.TileTrader;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class PacketTraderAddressRequest extends ForestryPacket implements IForestryPacketServer {

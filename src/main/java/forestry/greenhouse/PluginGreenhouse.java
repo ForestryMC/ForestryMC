@@ -24,7 +24,7 @@ import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
-import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
+import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -93,7 +93,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileGreenhouseClimateControl.class, "forestry.GreenhouseClimateControl");
 		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.GreenhouseWindow");
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			GameRegistry.registerTileEntity(TileGreenhouseButterflyHatch.class, "forestry.GreenhouseButterflyHatch");
+			GameRegistry.registerTileEntity(TileGreenhouseNursery.class, "forestry.GreenhouseButterflyHatch");
 		}
 	}
 
@@ -235,7 +235,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'E', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			Block greenhouseButterflyHatchBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.BUTTERFLY_HATCH);
+			Block greenhouseButterflyHatchBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.NURSERY);
 			RecipeUtil.addRecipe(greenhouseButterflyHatchBlock,
 					true,
 					"IRG",

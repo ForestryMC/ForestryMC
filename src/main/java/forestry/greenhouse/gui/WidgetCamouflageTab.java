@@ -10,6 +10,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetCamouflageSlot;
 import forestry.core.gui.widgets.WidgetManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -53,6 +54,7 @@ public class WidgetCamouflageTab extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft minecraft = Minecraft.getMinecraft();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);

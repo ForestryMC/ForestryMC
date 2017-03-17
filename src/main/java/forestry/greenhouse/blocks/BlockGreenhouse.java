@@ -36,7 +36,7 @@ import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
+import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -105,7 +105,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	public static Map<BlockGreenhouseType, BlockGreenhouse> create() {
 		Map<BlockGreenhouseType, BlockGreenhouse> blockMap = new EnumMap<>(BlockGreenhouseType.class);
 		for (final BlockGreenhouseType type : BlockGreenhouseType.VALUES) {
-			if (type == BlockGreenhouseType.BUTTERFLY_HATCH) {
+			if (type == BlockGreenhouseType.NURSERY) {
 				if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 					continue;
 				}
@@ -322,8 +322,8 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 			case HATCH_INPUT:
 			case HATCH_OUTPUT:
 				return new TileGreenhouseHatch();
-			case BUTTERFLY_HATCH:
-				return new TileGreenhouseButterflyHatch();
+			case NURSERY:
+				return new TileGreenhouseNursery();
 			default:
 				return new TileGreenhousePlain();
 		}

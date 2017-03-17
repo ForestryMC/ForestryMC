@@ -23,7 +23,6 @@ import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 /**

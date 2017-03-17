@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
 import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.core.climate.ClimateInfo;
 import forestry.core.fluids.FakeTankManager;
@@ -94,6 +94,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public Set<Listener> getListenerComponents() {
 		return Collections.emptySet();
 	}
+	
+	@Override
+	public Set<Nursery> getButterflyNurserys() {
+		return Collections.emptySet();
+	}
 
 	@Override
 	public boolean canWork() {
@@ -111,8 +116,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	@Nullable
-	public ButterflyHatch getButterflyHatch() {
-		return null;
+	public boolean spawnButterfly(IButterfly butterfly) {
+		return false;
 	}
 }

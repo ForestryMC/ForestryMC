@@ -165,6 +165,7 @@ public class LedgerManager {
 			errorLedger.draw(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}
+		GlStateManager.color(1, 1, 1, 1);
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {

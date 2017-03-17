@@ -492,7 +492,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				return null;
 			}
 		});
-		TreeManager.treeRoot.registerTranslator(Blocks.LEAVES, new IBlockTranslator<ITree>() {
+		TreeManager.treeRoot.registerTranslator(Blocks.LEAVES2, new IBlockTranslator<ITree>() {
 			@Nullable
 			@Override
 			public ITree getIndividualFromObject(IBlockState blockState) {

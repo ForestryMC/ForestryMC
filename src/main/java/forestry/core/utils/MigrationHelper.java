@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +23,8 @@ public class MigrationHelper {
 
 		itemRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
 		blockRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
+		itemRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
+		blockRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");

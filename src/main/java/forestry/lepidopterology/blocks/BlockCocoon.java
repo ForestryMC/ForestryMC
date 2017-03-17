@@ -107,9 +107,6 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 			return;
 		}
 
-		// if (rand.nextFloat() > 0.25) {
-		// return;
-		// }
 		tileCocoon.onBlockTick();
 	}
 

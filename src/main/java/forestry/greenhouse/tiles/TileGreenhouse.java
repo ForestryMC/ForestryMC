@@ -96,6 +96,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		return data;
 	}
 
+	/* ICamouflageHandler */
 	@Override
 	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)) {
@@ -151,6 +152,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		return getMultiblockLogic().getController().getErrorLogic();
 	}
 
+	/* IOwnedTile */
 	@Override
 	public IOwnerHandler getOwnerHandler() {
 		return getMultiblockLogic().getController().getOwnerHandler();
@@ -174,6 +176,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 
+	/* IGuiHandlerTile */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public GuiContainer getGui(EntityPlayer player, int data) {
@@ -184,7 +187,8 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerGreenhouse(player.inventory, this);
 	}
-
+	
+	/* ICamouflagedTile */
 	@Override
 	public String getCamouflageType() {
 		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {

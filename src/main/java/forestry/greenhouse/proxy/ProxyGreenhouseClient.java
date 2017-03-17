@@ -41,7 +41,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 						null, new ModelGreenhouse(),
 						greenhouseBlock, false));
 				continue;
-			} else if (greenhouseType == BlockGreenhouseType.BUTTERFLY_HATCH) {
+			} else if (greenhouseType == BlockGreenhouseType.NURSERY) {
 				if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 					continue;
 				}

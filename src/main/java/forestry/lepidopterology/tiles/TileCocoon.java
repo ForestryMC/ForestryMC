@@ -12,6 +12,9 @@ package forestry.lepidopterology.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import forestry.api.genetics.IAllele;
@@ -21,7 +24,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.IStreamable;
@@ -176,12 +179,12 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 				IBlockState blockState = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, blockState, blockState, 0);
 			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
-				IGreenhouseComponent.ButterflyHatch hatch = getButterflyHatch(world, pos);
-				NonNullList<ItemStack> cocoonDrops;
-				if (hatch != null) {
-					cocoonDrops = hatch.addCocoonLoot(this);
-				} else {
-					cocoonDrops = caterpillar.getCocoonDrop(this);
+				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
+				for(IGreenhouseComponent.Nursery nursery : getNursery(world, pos)){
+					nursery.addCocoonLoot(this, cocoonDrops);
+					if(isListEmpty(cocoonDrops)){
+						break;
+					}
 				}
 				for (ItemStack drop : cocoonDrops) {
 					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
@@ -192,25 +195,38 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		}
 	}
 
-	@Nullable
-	public ButterflyHatch getButterflyHatch(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper == null
-				|| GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
-			return null;
+	private Set<Nursery> getNursery(World world, BlockPos pos) {
+		if (GreenhouseManager.greenhouseHelper == null) {
+			return Collections.emptySet();
 		}
 		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
 		if (controller != null) {
+			Set<Nursery> nurserys;
 			if (controller instanceof IGreenhouseControllerInternal) {
-				return ((IGreenhouseControllerInternal) controller).getButterflyHatch();
-			}
-
-			for (IMultiblockComponent greenhouse : controller.getComponents()) {
-				if (greenhouse instanceof ButterflyHatch) {
-					return (ButterflyHatch) greenhouse;
+				nurserys = ((IGreenhouseControllerInternal) controller).getButterflyNurserys();
+			}else{
+				nurserys = new HashSet<>();
+				for (IMultiblockComponent greenhouseComponent : controller.getComponents()) {
+					if (greenhouseComponent instanceof Nursery) {
+						nurserys.add((Nursery) greenhouseComponent);
+					}
 				}
 			}
+			return nurserys;
 		}
-		return null;
+		return Collections.emptySet();
+	}
+	
+	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops){
+		if(cocoonDrops.isEmpty()){
+			return true;
+		}
+		for(ItemStack stack : cocoonDrops){
+			if(!stack.isEmpty()){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {

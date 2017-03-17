@@ -32,8 +32,8 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 		IClimatiserDefinition getDefinition();
 	}
 
-	interface ButterflyHatch extends IGreenhouseComponent {
-		NonNullList<ItemStack> addCocoonLoot(IButterflyCocoon cocoon);
+	interface Nursery extends IGreenhouseComponent {
+		void addCocoonLoot(IButterflyCocoon cocoon, NonNullList<ItemStack> loot);
 	}
 
 	interface Active extends IGreenhouseComponent {

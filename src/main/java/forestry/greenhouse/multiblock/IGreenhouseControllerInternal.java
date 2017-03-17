@@ -50,8 +50,8 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	Set<IGreenhouseComponent.Listener> getListenerComponents();
 
 	/**
-	 * @return A butterfly hatch, if one exists.
+	 * @return A Set of butterfly nurserys.
 	 */
 	@Nullable
-	IGreenhouseComponent.ButterflyHatch getButterflyHatch();
+	Set<IGreenhouseComponent.Nursery> getButterflyNurserys();
 }

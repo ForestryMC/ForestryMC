@@ -84,7 +84,7 @@ public class WidgetClimatePillar extends Widget {
 		mouseY-=manager.gui.getGuiTop();
 		for(ClimateButton button : buttons){
 			if(button.isMouseOver(mouseX, mouseY)){
-				((GuiGreenhouse)manager.gui).setClimate(button.value);
+				((GuiGreenhouse)manager.gui).getFields().setClimate(button.value);
 			}
 		}
 	}

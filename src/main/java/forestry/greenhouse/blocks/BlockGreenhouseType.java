@@ -42,7 +42,7 @@ public enum BlockGreenhouseType {
 	CONTROL(true),
 	DOOR,
 	CLIMATE_CONTROL(true),
-	BUTTERFLY_HATCH(true);
+	NURSERY(true);
 
 	public static final BlockGreenhouseType[] VALUES = values();
 
@@ -177,7 +177,7 @@ public enum BlockGreenhouseType {
 					return Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 				}
 				return sprites.get(BlockGreenhouseSprites.CLIMATE_CONTROL);
-			case BUTTERFLY_HATCH:
+			case NURSERY:
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
 					return Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
 				}

@@ -13,7 +13,6 @@ package forestry.lepidopterology.entities;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.PluginLepidopterology;

@@ -12,6 +12,7 @@ import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.lepidopterology.IButterfly;
 
 public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateControlProvider {
 	
@@ -20,6 +21,8 @@ public interface IGreenhouseController extends IMultiblockController, IGreenhous
 	 */
 	Set<IInternalBlock> getInternalBlocks();
 
+	boolean spawnButterfly(IButterfly butterfly);
+	
 	IClimateRegion getRegion();
 
 }

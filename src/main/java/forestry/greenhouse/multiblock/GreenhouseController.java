@@ -30,10 +30,11 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
+import forestry.api.lepidopterology.IButterfly;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseComponent.ClimateControl;
 import forestry.api.multiblock.IGreenhouseComponent.Climatiser;
 import forestry.api.multiblock.IMultiblockComponent;
@@ -61,6 +62,7 @@ import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.inventory.InventoryGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
+import forestry.lepidopterology.ButterflyUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -78,10 +80,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
+	private final Set<IGreenhouseComponent.Nursery> butterflyNurserys = new HashSet<>();
 	@Nullable
 	protected ClimateControl climateControl;
-	@Nullable
-	protected ButterflyHatch butterflyHatch;
 
 	private final TankManager tankManager;
 	private final EnergyManager energyManager;
@@ -383,6 +384,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			climatiserComponents.add((Climatiser) newPart);
 		} else if (newPart instanceof IGreenhouseComponent.Active) {
 			activeComponents.add((IGreenhouseComponent.Active) newPart);
+		} else if (newPart instanceof IGreenhouseComponent.Nursery) {
+			butterflyNurserys.add((IGreenhouseComponent.Nursery) newPart);
 		}
 	}
 
@@ -395,6 +398,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			ForestryAPI.climateManager.removeSource((IClimateSourceProvider) oldPart);
 		} else if (oldPart instanceof IGreenhouseComponent.Active) {
 			activeComponents.remove(oldPart);
+		} else if (oldPart instanceof IGreenhouseComponent.Nursery) {
+			butterflyNurserys.remove(oldPart);
 		}
 	}
 
@@ -558,23 +563,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.space.closed"));
 		}
 
-		Set<ButterflyHatch> hatches = new HashSet<>();
 		Set<ClimateControl> controls = new HashSet<>();
 		for (IMultiblockComponent comp : connectedParts) {
-			if (comp instanceof ButterflyHatch) {
-				hatches.add((ButterflyHatch) comp);
-			} else if (comp instanceof ClimateControl) {
+			if (comp instanceof ClimateControl) {
 				controls.add((ClimateControl) comp);
 			}
 		}
-		if (hatches.size() > 1) {
-			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.butterflyhatch.toomany"));
-		}
 		if (controls.size() > 1) {
 			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.climatecontrol.toomany"));
-		}
-		if (hatches.iterator().hasNext()) {
-			butterflyHatch = hatches.iterator().next();
 		}
 		if (controls.iterator().hasNext()) {
 			climateControl = controls.iterator().next();
@@ -675,11 +671,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			this.climateControl.setControlClimate(climateControl);
 		}
 	}
-
+	
 	@Override
-	@Nullable
-	public ButterflyHatch getButterflyHatch() {
-		return butterflyHatch;
+	public Set<Nursery> getButterflyNurserys() {
+		return butterflyNurserys;
 	}
 
 	@Override
@@ -713,6 +708,19 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
 		}
 		return canWork;
+	}
+	
+	@Override
+	public boolean spawnButterfly(IButterfly butterfly) {
+		for(IInternalBlock block : internalBlocks){
+			BlockPos pos = block.getPos();
+			if(world.isAirBlock(pos)){
+				if(ButterflyUtils.spawnButterfly(butterfly, world, pos)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
