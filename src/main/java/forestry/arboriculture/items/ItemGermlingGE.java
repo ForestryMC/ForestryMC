@@ -25,6 +25,7 @@ import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -123,7 +124,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	private class GermlingMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			IAlleleTreeSpecies treeSpecies = getSpecies(stack);
+			IAlleleTreeSpecies treeSpecies;
+			if(!stack.hasTagCompound()){
+				treeSpecies = TreeDefinition.Oak.getGenome().getPrimary();
+			}else{
+				treeSpecies = getSpecies(stack);
+			}
 			return treeSpecies.getGermlingModel(type);
 		}
 	}
