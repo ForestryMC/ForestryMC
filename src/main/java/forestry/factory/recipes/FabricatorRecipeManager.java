@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
 
+	public static final Pair EMPTY_RECIPE = Pair.of(null, null);
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override
@@ -55,7 +56,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 			}
 		}
 
-		return Pair.of(null, null);
+		return EMPTY_RECIPE;
 	}
 
 	public static boolean isPlan(ItemStack plan) {

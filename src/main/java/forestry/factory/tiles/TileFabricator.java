@@ -178,9 +178,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		return recipePair;
 	}
 
-	public ItemStack getResult() {
-		IFabricatorRecipe myRecipe = getRecipe().getLeft();
-
+	public ItemStack getResult(Pair<IFabricatorRecipe, String[][]> myRecipePair) {
+		IFabricatorRecipe myRecipe = myRecipePair.getLeft();
 		if (myRecipe == null) {
 			return ItemStack.EMPTY;
 		}
@@ -198,7 +197,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private void craftResult() {
 		Pair<IFabricatorRecipe, String[][]> myRecipePair = getRecipe();
-		ItemStack craftResult = getResult();
+		ItemStack craftResult = getResult(myRecipePair);
 		IFabricatorRecipe myRecipe = myRecipePair.getLeft();
 		if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
 			FluidStack liquid = myRecipe.getLiquid();
