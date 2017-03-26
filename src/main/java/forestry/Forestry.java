@@ -93,7 +93,7 @@ public class Forestry {
 		Proxies.common.registerEventHandlers();
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
-		Config.load();
+		Config.load(event.getSide());
 
 		PluginManager.runSetup(event);
 
