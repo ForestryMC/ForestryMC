@@ -173,7 +173,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		Pair<IFabricatorRecipe, String[][]> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		IFabricatorRecipe recipe = recipePair.getLeft();
 		if (liquid != null && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
-			return null;
+			return FabricatorRecipeManager.EMPTY_RECIPE;
 		}
 		return recipePair;
 	}
