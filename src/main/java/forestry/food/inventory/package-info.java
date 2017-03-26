@@ -1,9 +1,0 @@
-@ParametersAreNonnullByDefault
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-package forestry.food.inventory;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import forestry.core.utils.FieldsAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;

@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
-import forestry.api.food.BeverageManager;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -37,41 +36,8 @@ public class PluginFood extends BlankForestryPlugin {
 	}
 
 	@Override
-	public void setupAPI() {
-		super.setupAPI();
-
-		// Init seasoner
-		BeverageManager.infuserManager = new InfuserMixtureManager();
-		BeverageManager.ingredientManager = new InfuserIngredientManager();
-	}
-
-	@Override
 	public void registerItemsAndBlocks() {
 		items = new ItemRegistryFood();
 	}
 
-	@Override
-	public void preInit() {
-//		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.GLASS_BOTTLE));
-
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
-			ItemStack normalPollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
-			ItemStack crystallinePollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
-
-			BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
-			BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
-			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffects.strongAntidote);
-			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffects.weakAntidote);
-		}
-	}
-
-	@Override
-	public void registerRecipes() {
-		// INFUSER
-		RecipeUtil.addRecipe(getItems().infuser.getItemStack(),
-				"X", "#", "X",
-				'#', "ingotIron",
-				'X', "ingotBronze");
-	}
 }

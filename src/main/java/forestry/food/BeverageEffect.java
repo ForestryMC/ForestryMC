@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.utils.Translator;
 import net.minecraft.item.ItemStack;
@@ -30,11 +29,13 @@ public abstract class BeverageEffect implements IBeverageEffect {
 		this.id = id;
 		this.unlocalizedDescription = unlocalizedDescription;
 
+		/*
 		if (BeverageManager.effectList[id] != null) {
 			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id] + " when trying to add " + this);
 		} else {
 			BeverageManager.effectList[id] = this;
 		}
+		*/
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 				byte byte0 = nbttagcompound1.getByte("S");
 				if (byte0 >= 0 && byte0 < effects.length) {
-					effects[byte0] = BeverageManager.effectList[nbttagcompound1.getInteger("ID")];
+					//effects[byte0] = BeverageManager.effectList[nbttagcompound1.getInteger("ID")];
 				}
 			}
 			effectsList = Arrays.asList(effects);

@@ -101,7 +101,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -112,6 +115,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -503,6 +507,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 					'#', items.honeydew,
 					'X', items.royalJelly,
 					'Y', fluidItems.waxCapsuleEmpty);
+
 		}
 
 		// / CAPSULES
@@ -761,6 +766,17 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', OreDictUtil.SLAB_WOOD,
 				'#', OreDictUtil.PLANK_WOOD,
 				'C', OreDictUtil.BEE_COMB);
+
+		// BREWING RECIPES
+		BrewingRecipeRegistry.addRecipe(
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.AWKWARD),
+				items.pollenCluster.get(EnumPollenCluster.NORMAL, 1),
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.HEALING));
+		BrewingRecipeRegistry.addRecipe(
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.AWKWARD),
+				items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1),
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.REGENERATION));
+
 	}
 
 	private static void registerBeehiveDrops() {

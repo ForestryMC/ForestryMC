@@ -23,7 +23,6 @@ public class ItemRegistryFood extends ItemRegistry {
 	public final ItemBeverage beverage;
 	public final ItemForestryFood ambrosia;
 	public final ItemForestryFood honeyPot;
-	public final ItemInfuser infuser;
 
 	public ItemRegistryFood() {
 		// / FOOD ITEMS
@@ -31,10 +30,6 @@ public class ItemRegistryFood extends ItemRegistry {
 		beverage = registerItem(new ItemBeverage(), "beverage");
 		ambrosia = registerItem(new ItemAmbrosia().setIsDrink(), "ambrosia");
 		honeyPot = registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honey_pot");
-
-		// / SEASONER
-		infuser = new ItemInfuser();
-		registerItem(infuser, "infuser");
 
 		// Mead
 		BeverageEffect.saveEffects(new ItemStack(beverage), Collections.singletonList(BeverageEffects.weakAlcoholic));
