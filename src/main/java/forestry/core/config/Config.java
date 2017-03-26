@@ -30,6 +30,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.mail.gui.GuiMailboxInfo;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class Config {
 
@@ -49,8 +50,6 @@ public class Config {
 	private static final Set<String> disabledBlocks = new HashSet<>();
 
 	public static boolean isDebug = false;
-
-	public static boolean enablePermissions = true;
 
 	// Graphics
 	public static boolean enableParticleFX = true;
@@ -131,9 +130,9 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	public static void load() {
+	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		loadConfigCommon(configCommonFile);
+		loadConfigCommon(side, configCommonFile);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
 		loadConfigFluids(configFluidsFile);
@@ -141,7 +140,7 @@ public class Config {
 		loadHints();
 	}
 
-	private static void loadConfigCommon(File configFileCommon) {
+	private static void loadConfigCommon(Side side, File configFileCommon) {
 
 		configCommon = new LocalizedConfiguration(configFileCommon, "1.2.0");
 
@@ -166,8 +165,6 @@ public class Config {
 			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
 			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
 		}
-
-		enableParticleFX = configCommon.getBooleanLocalized("performance", "particleFX", enableParticleFX);
 
 		// RetroGen
 
@@ -221,16 +218,18 @@ public class Config {
 
 		//harvesterThrottle = configCommon.getIntLocalized("performance", "performance.harvester", harvesterThrottle, 1, 2000);
 		//propThrottle.Comment = "higher numbers increase working speeds of harvesters but also increase cpu load.";
-		
-		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
-		mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
-		mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
 
-		guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
-		enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
-		enableEnergyStat = configCommon.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
+		if (side == Side.CLIENT) {
+			mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
+			mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
+			mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
 
-		enablePermissions = configCommon.getBooleanLocalized("tweaks", "permissions", enablePermissions);
+			guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
+			enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
+			enableEnergyStat = configCommon.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
+
+			enableParticleFX = configCommon.getBooleanLocalized("performance", "particleFX", enableParticleFX);
+		}
 
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
 		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
