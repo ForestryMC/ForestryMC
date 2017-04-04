@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
-
 import forestry.api.core.ForestryAPI;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
@@ -21,35 +20,24 @@ import forestry.factory.gui.GuiMoistener;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.gui.GuiStill;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
-import forestry.factory.recipes.jei.bottler.BottlerRecipeHandler;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeCategory;
-import forestry.factory.recipes.jei.carpenter.CarpenterRecipeHandler;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeMaker;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeTransferHandler;
 import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeCategory;
-import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeHandler;
 import forestry.factory.recipes.jei.centrifuge.CentrifugeRecipeMaker;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeCategory;
-import forestry.factory.recipes.jei.fabricator.FabricatorRecipeHandler;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeMaker;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeTransferHandler;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeCategory;
-import forestry.factory.recipes.jei.fermenter.FermenterRecipeHandler;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeMaker;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeCategory;
-import forestry.factory.recipes.jei.moistener.MoistenerRecipeHandler;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeMaker;
 import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeCategory;
-import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeHandler;
 import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeMaker;
-import forestry.factory.recipes.jei.squeezer.SqueezerContainerRecipeWrapper;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeCategory;
-import forestry.factory.recipes.jei.squeezer.SqueezerRecipeHandler;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
-import forestry.factory.recipes.jei.squeezer.SqueezerRecipeWrapper;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
-import forestry.factory.recipes.jei.still.StillRecipeHandler;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.plugins.ForestryPluginUids;
 import mezz.jei.api.BlankModPlugin;
@@ -93,29 +81,16 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new StillRecipeCategory(guiHelper)
 		);
 
-		registry.addRecipeHandlers(
-				new BottlerRecipeHandler(),
-				new CarpenterRecipeHandler(),
-				new CentrifugeRecipeHandler(),
-				new FabricatorRecipeHandler(),
-				new FermenterRecipeHandler(),
-				new MoistenerRecipeHandler(),
-				new RainmakerRecipeHandler(),
-				new SqueezerRecipeHandler<>(SqueezerRecipeWrapper.class),
-				new SqueezerRecipeHandler<>(SqueezerContainerRecipeWrapper.class),
-				new StillRecipeHandler()
-		);
-
-		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()));
-		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes());
-		registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe());
-		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes());
-		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()));
-		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes());
-		registry.addRecipes(RainmakerRecipeMaker.getRecipes());
-		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes());
-		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientRegistry()));
-		registry.addRecipes(StillRecipeMaker.getStillRecipes());
+		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes(), ForestryRecipeCategoryUid.CARPENTER);
+		registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe(), ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes(), ForestryRecipeCategoryUid.FABRICATOR);
+		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()), ForestryRecipeCategoryUid.FERMENTER);
+		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes(), ForestryRecipeCategoryUid.MOISTENER);
+		registry.addRecipes(RainmakerRecipeMaker.getRecipes(), ForestryRecipeCategoryUid.RAINMAKER);
+		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes(), ForestryRecipeCategoryUid.SQUEEZER);
+		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.SQUEEZER);
+		registry.addRecipes(StillRecipeMaker.getStillRecipes(), ForestryRecipeCategoryUid.STILL);
 
 		registry.addRecipeClickArea(GuiBottler.class, 107, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
 		registry.addRecipeClickArea(GuiBottler.class, 45, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);

@@ -8,10 +8,10 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.utils.JeiUtil;
 import forestry.plugins.PluginManager;
 import mezz.jei.api.BlankModPlugin;
-import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.ingredients.IIngredientBlacklist;
 import net.minecraft.item.ItemStack;
 
 @JEIPlugin
@@ -19,10 +19,10 @@ public class ForestryJeiPlugin extends BlankModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
-		IItemBlacklist itemBlacklist = jeiHelpers.getItemBlacklist();
+		IIngredientBlacklist ingredientBlacklist = jeiHelpers.getIngredientBlacklist();
 		List<ItemStack> hiddenItems = PluginManager.getHiddenItems();
 		for (ItemStack hiddenItem : hiddenItems) {
-			itemBlacklist.addItemToBlacklist(hiddenItem);
+			ingredientBlacklist.addIngredientToBlacklist(hiddenItem);
 		}
 
 		ItemRegistryCore items = PluginCore.getItems();
