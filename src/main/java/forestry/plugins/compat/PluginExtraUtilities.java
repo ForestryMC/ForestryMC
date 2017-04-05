@@ -24,6 +24,7 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableAgingCrop;
@@ -72,7 +73,7 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 				} else {
 					int harvestAge = Collections.max(growthProperty.getAllowedValues());
 					int replantAge = enderLillyBlock.getDefaultState().getValue(growthProperty);
-					Farmables.farmables.put("farmEnder", new FarmableAgingCrop(new ItemStack(enderLillyItem), enderLillyBlock, growthProperty, harvestAge, replantAge));
+					FarmRegistry.getInstance().registerFarmables("farmEnder", new FarmableAgingCrop(new ItemStack(enderLillyItem), enderLillyBlock, growthProperty, harvestAge, replantAge));
 					Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", new FarmLogicEnder());
 				}
 			}

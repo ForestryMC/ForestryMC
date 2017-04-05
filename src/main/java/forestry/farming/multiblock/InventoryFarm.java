@@ -26,6 +26,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.farming.FarmRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -138,14 +139,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (itemstack.isEmpty()) {
 			return false;
 		}
-
-		for (Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()) {
-			ItemStack fertilizerItem = fertilizer.getKey();
-			if (itemstack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == itemstack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
-				return true;
-			}
-		}
-		return false;
+		
+		return FarmRegistry.getInstance().getFertilizeValue(itemstack) > 0;
 	}
 
 	@Override
@@ -221,11 +216,9 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return 0;
 		}
 
-		for (Entry<ItemStack, Integer> fertilizer : Farmables.fertilizers.entrySet()) {
-			ItemStack fertilizerItem = fertilizer.getKey();
-			if (fertilizerStack.getItem() == fertilizerItem.getItem() && (fertilizerItem.getItemDamage() == fertilizerStack.getItemDamage() || fertilizerItem.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
-				return fertilizer.getValue() * FERTILIZER_MODIFIER;
-			}
+		int fertilizerValue = FarmRegistry.getInstance().getFertilizeValue(fertilizerStack);
+		if(fertilizerValue > 0){
+			return fertilizerValue * FERTILIZER_MODIFIER;
 		}
 		return 0;
 	}

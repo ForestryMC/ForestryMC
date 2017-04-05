@@ -9,6 +9,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -84,9 +85,9 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 			Block plantBlock = getBlock(blockName);
 			if (plantBlock != null) {
 				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7);
-				Farmables.farmables.get("farmWheat").add(crop);
+				FarmRegistry.getInstance().registerFarmables("farmWheat", crop);
 				FarmableAgingCrop cropOrchard = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
-				Farmables.farmables.get("farmOrchard").add(cropOrchard);
+				FarmRegistry.getInstance().registerFarmables("farmOrchard", cropOrchard);
 			}
 		}
 	}

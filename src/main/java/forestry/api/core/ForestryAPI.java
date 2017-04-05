@@ -8,6 +8,8 @@ package forestry.api.core;
 import java.util.Set;
 
 import forestry.api.climate.IClimateManager;
+import forestry.api.farming.IFarmRegistry;
+import forestry.api.farming.ISimpleFarmLogic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,6 +49,11 @@ public class ForestryAPI {
 
 	public static IClimateManager climateManager;
 
+	/**
+	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s
+	 */
+	public static IFarmRegistry farmRegistry;
+	
 	/**
 	 * The currently active {@link IGameMode}.
 	 */

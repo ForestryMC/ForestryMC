@@ -29,6 +29,7 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
+import forestry.api.farming.IFarmRegistry;
 import forestry.core.PluginCore;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
@@ -118,42 +119,42 @@ public class PluginFarming extends BlankForestryPlugin {
 		BlockRegistryFarming blocks = getBlocks();
 
 		MinecraftForge.EVENT_BUS.register(this);
-
-		Farmables.farmables.put("farmArboreal", new FarmableVanillaSapling());
+		IFarmRegistry registry = FarmRegistry.getInstance();
+		
+		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-			Farmables.farmables.put("farmArboreal", new FarmableGE());
+			registry.registerFarmables("farmArboreal", new FarmableGE());
 		}
 
-		Farmables.farmables.putAll("farmOrchard", Arrays.asList(
+		registry.registerFarmables("farmOrchard",
 				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3, 0)
-		));
+				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3, 0));
 
 		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
-		Farmables.farmables.put("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
+		registry.registerFarmables("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
 		IBlockState plantedRedMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
-		Farmables.farmables.put("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
+		registry.registerFarmables("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
-		Farmables.farmables.put("farmWheat", new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7));
+		registry.registerFarmables("farmWheat", new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7));
 
-		Farmables.farmables.put("farmGourd", new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-		Farmables.farmables.put("farmGourd", new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
+		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
+		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
 
-		Farmables.farmables.put("farmInfernal", new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
+		registry.registerFarmables("farmInfernal", new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
 
-		Farmables.farmables.put("farmPoales", new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
+		registry.registerFarmables("farmPoales", new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
 
-		Farmables.farmables.put("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
+		registry.registerFarmables("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
-		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7));
-		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
-		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
+		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7));
+		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
+		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
 
 		//Forestry fertilizer
-		Farmables.fertilizers.put(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 
 		proxy.initializeModels();
 
@@ -162,37 +163,6 @@ public class PluginFarming extends BlankForestryPlugin {
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
 		ICircuitLayout layoutManual = new CircuitLayout("farms.manual", CircuitSocketType.FARM);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
-	}
-
-	private void loadConfig(LocalizedConfiguration config) {
-		List<String> defaultFertilizers = new ArrayList<>(getItemStrings(Farmables.fertilizers));
-		Collections.sort(defaultFertilizers);
-		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[defaultFertilizers.size()]);
-		Property fertilizerConf = config.get("fertilizers", "items", defaultSortedFertilizers, Translator.translateToLocal("for.config.farm.fertilizers.items"));
-
-		Farmables.fertilizers.clear();
-		String[] fertilizerList = fertilizerConf.getStringList();
-		for (int i = 0; i < fertilizerList.length; i++) {
-			try {
-				String fertilizer = fertilizerList[i];
-				String[] fertilizers = fertilizer.split(";");
-				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(fertilizers[0], OreDictionary.WILDCARD_VALUE);
-				int fertilizerValue = Integer.parseInt(fertilizers[1]);
-				Farmables.fertilizers.put(fertilizerItem, fertilizerValue);
-			} catch (Exception e) {
-				Log.error("Forestry failed to parse a fertilizer entry at the farm config, at the position " + i + ".", e);
-			}
-		}
-	}
-
-	private static Set<String> getItemStrings(Map<ItemStack, Integer> itemStacks) {
-		Set<String> itemStrings = new HashSet<>(itemStacks.size());
-		for (Entry<ItemStack, Integer> itemStack : itemStacks.entrySet()) {
-			String itemString = ItemStackUtil.getStringForItemStack(itemStack.getKey());
-			itemString += ";" + itemStack.getValue();
-			itemStrings.add(itemString);
-		}
-		return itemStrings;
 	}
 
 	@Override
@@ -207,7 +177,7 @@ public class PluginFarming extends BlankForestryPlugin {
 		//Load config
 		File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-		loadConfig(config);
+		FarmRegistry.getInstance().loadConfig(config);
 		config.save();
 
 		GameRegistry.registerTileEntity(TileFarmPlain.class, "forestry.Farm");
