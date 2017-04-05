@@ -65,11 +65,6 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	@Override
-	public boolean canDrain(World world, BlockPos pos) {
-		return true;
-	}
-
-	@Override
 	public Fluid getFluid() {
 		return FluidRegistry.getFluid(fluidName);
 	}
