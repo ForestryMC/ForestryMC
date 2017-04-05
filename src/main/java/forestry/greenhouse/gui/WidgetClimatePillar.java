@@ -52,7 +52,7 @@ public class WidgetClimatePillar extends Widget {
 	public void draw(int startX, int startY) {
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 216, 25, width, height);
+		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 220, 25, width, height);
 		for(ClimateButton button : buttons){
 			button.draw(startX, startY);
 		}

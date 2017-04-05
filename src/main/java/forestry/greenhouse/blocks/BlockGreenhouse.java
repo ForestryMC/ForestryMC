@@ -69,6 +69,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Plane;
 import net.minecraft.util.EnumHand;
@@ -359,11 +360,11 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		if (hasGlass()) {
-			return BlockRenderLayer.TRANSLUCENT;
+			return layer == BlockRenderLayer.TRANSLUCENT;
 		}
-		return BlockRenderLayer.CUTOUT;
+		return layer != BlockRenderLayer.TRANSLUCENT && layer != BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	@Override

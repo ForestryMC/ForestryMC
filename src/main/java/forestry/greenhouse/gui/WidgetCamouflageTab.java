@@ -58,9 +58,9 @@ public class WidgetCamouflageTab extends Widget {
 		Minecraft minecraft = Minecraft.getMinecraft();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 192, 0, 48, 25);
+		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 196, 0, 48, 25);
 		if (handlerSlot != null) {
-			manager.gui.drawTexturedModalRect(startX + xPos + 44, startY + yPos, 192, 25, 24, 25);
+			manager.gui.drawTexturedModalRect(startX + xPos + 44, startY + yPos, 196, 25, 24, 25);
 		}
 		if (!typeStack.isEmpty()) {
 			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
