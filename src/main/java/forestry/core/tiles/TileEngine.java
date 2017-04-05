@@ -280,6 +280,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		data.writeInt(currentOutput);
 		data.writeInt(heat);
+		data.writeBoolean(forceCooldown);
 		energyManager.writeData(data);
 	}
 	
@@ -287,6 +288,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnectionDe
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		currentOutput = data.readInt();
 		heat = data.readInt();
+		forceCooldown = data.readBoolean();
 		energyManager.readData(data);
 	}
 
