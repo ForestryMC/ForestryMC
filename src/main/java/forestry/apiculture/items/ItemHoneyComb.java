@@ -48,31 +48,31 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.VALUES[i].name);
+			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.get(i).name);
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[stack.getItemDamage()];
+		EnumHoneyComb honeyComb = EnumHoneyComb.get(stack.getItemDamage());
 		return super.getUnlocalizedName(stack) + "." + honeyComb.name;
 	}
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[i];
+			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
 			if (!honeyComb.isSecret() || Config.isDebug) {
 				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}
-
+	
 	@Nullable
 	private static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[i];
+			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
 			if (!honeyComb.isSecret() || includeSecret) {
 				validCombs.add(honeyComb);
 			}
@@ -99,7 +99,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 
 	@Override
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[itemstack.getItemDamage()];
+		EnumHoneyComb honeyComb = EnumHoneyComb.get(itemstack.getItemDamage());
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {
