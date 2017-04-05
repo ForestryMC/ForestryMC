@@ -291,6 +291,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.writeGuiData(data);
 		data.writeInt(burnTime);
 		data.writeInt(totalBurnTime);
+		data.writeBoolean(forceCooldown);
 	}
 
 	@Override
@@ -298,6 +299,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.readGuiData(data);
 		burnTime = data.readInt();
 		totalBurnTime = data.readInt();
+		forceCooldown = data.readBoolean();
 	}
 
 	/* ITriggerProvider */
