@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;

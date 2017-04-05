@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import java.util.Map.Entry;
 import java.util.Stack;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
@@ -35,7 +33,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;

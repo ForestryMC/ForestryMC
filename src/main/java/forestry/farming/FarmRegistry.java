@@ -14,15 +14,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.render.TextureManagerForestry;
-import forestry.core.render.TextureMapForestry;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;

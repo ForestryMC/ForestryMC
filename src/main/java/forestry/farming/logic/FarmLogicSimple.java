@@ -1,6 +1,5 @@
 package forestry.farming.logic;
 
-import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
 import net.minecraft.item.ItemStack;
 

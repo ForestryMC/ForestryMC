@@ -12,7 +12,6 @@ package forestry.greenhouse.gui;
 
 import forestry.api.core.CamouflageManager;
 import forestry.core.config.Constants;
-import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;

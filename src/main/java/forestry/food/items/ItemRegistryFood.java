@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import java.util.Collections;
-
 import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemRegistry;
-import net.minecraft.item.ItemStack;
 
 public class ItemRegistryFood extends ItemRegistry {
 	public final ItemForestryFood honeyedSlice;

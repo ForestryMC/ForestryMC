@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.greenhouse.models;
 
-import java.time.chrono.MinguoEra;
-
 import javax.annotation.Nullable;
 
 import forestry.api.core.CamouflageManager;

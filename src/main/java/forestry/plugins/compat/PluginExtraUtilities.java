@@ -15,7 +15,6 @@ import java.util.Collections;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.core.PluginCore;
 import forestry.core.circuits.Circuits;
 import forestry.core.config.Config;

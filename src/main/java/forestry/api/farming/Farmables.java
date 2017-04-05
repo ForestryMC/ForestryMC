@@ -11,7 +11,6 @@ import java.util.Map;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import forestry.api.core.ForestryAPI;
 import net.minecraft.item.ItemStack;
 
 public class Farmables {
