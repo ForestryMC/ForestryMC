@@ -282,6 +282,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	public void writeGuiData(PacketBufferForestry data) {
 		data.writeInt(currentOutput);
 		data.writeInt(heat);
+		data.writeBoolean(forceCooldown);
 		energyManager.writeData(data);
 	}
 
@@ -289,6 +290,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		currentOutput = data.readInt();
 		heat = data.readInt();
+		forceCooldown = data.readBoolean();
 		energyManager.readData(data);
 	}
 
