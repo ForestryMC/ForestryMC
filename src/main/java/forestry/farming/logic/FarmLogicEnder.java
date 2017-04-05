@@ -14,11 +14,11 @@ import java.util.Collection;
 import java.util.Stack;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
+import forestry.farming.FarmRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	public FarmLogicEnder() {
-		super(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState(), Farmables.farmables.get("farmEnder"));
+		super(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmEnder"));
 	}
 
 	@Override

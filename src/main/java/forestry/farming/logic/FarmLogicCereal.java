@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.Farmables;
+import forestry.farming.FarmRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 
 	public FarmLogicCereal() {
-		super(Farmables.farmables.get("farmWheat"));
+		super(FarmRegistry.getInstance().getFarmables("farmWheat"));
 	}
 
 	@Override

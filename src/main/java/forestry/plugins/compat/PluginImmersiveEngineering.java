@@ -10,6 +10,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.farming.FarmRegistry;
 import forestry.farming.logic.CropDestroy;
 import forestry.farming.logic.FarmableBase;
 import forestry.plugins.BlankForestryPlugin;
@@ -54,7 +55,7 @@ public class PluginImmersiveEngineering extends BlankForestryPlugin {
 					IBlockState defaultState = hempCrop.getDefaultState();
 					IBlockState planted = defaultState.withProperty(age, (Comparable) bottom0.get());
 					IBlockState mature = defaultState.withProperty(age, (Comparable) top0.get());
-					Farmables.farmables.get("farmWheat").add(new FarmableBase(hempSeed, planted, mature, false) {
+					FarmRegistry.getInstance().registerFarmables("farmWheat", new FarmableBase(hempSeed, planted, mature, false) {
 						@Override
 						public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
 							IBlockState stateUp = world.getBlockState(pos.up());

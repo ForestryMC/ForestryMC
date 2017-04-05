@@ -21,13 +21,13 @@ import java.util.Stack;
 
 import com.google.common.collect.ImmutableList;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.PluginCore;
 import forestry.core.tiles.TileUtil;
+import forestry.farming.FarmRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -42,7 +42,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard() {
-		this.farmables = Farmables.farmables.get("farmOrchard");
+		this.farmables = FarmRegistry.getInstance().getFarmables("farmOrchard");
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {

@@ -14,10 +14,10 @@ import java.util.Collection;
 import java.util.Stack;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.farming.FarmRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -30,7 +30,7 @@ public class FarmLogicGourd extends FarmLogic {
 	private final IFarmable[] seeds;
 
 	public FarmLogicGourd() {
-		Collection<IFarmable> farmables = Farmables.farmables.get("farmGourd");
+		Collection<IFarmable> farmables = FarmRegistry.getInstance().getFarmables("farmGourd");
 		seeds = farmables.toArray(new IFarmable[farmables.size()]);
 	}
 

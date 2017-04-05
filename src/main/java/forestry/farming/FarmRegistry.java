@@ -1,6 +1,7 @@
 package forestry.farming;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,7 +27,6 @@ import forestry.farming.logic.FarmLogicSimple;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
-import scala.actors.threadpool.Arrays;
 
 public final class FarmRegistry implements IFarmRegistry {
 
