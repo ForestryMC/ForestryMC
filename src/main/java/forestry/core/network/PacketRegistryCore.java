@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketCamouflageSelectClient;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
 import forestry.core.network.packets.PacketChipsetClick;
@@ -22,6 +23,7 @@ import forestry.core.network.packets.PacketGuiLayoutSelect;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.network.packets.PacketGuiUpdateEntity;
+import forestry.core.network.packets.PacketGuiUpdateModule;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.network.packets.PacketSocketUpdate;
@@ -29,6 +31,7 @@ import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.network.packets.PacketUpdateClimateControl;
+import forestry.core.utils.ModUtil;
 
 public class PacketRegistryCore extends PacketRegistry {
 	@Override
@@ -53,5 +56,8 @@ public class PacketRegistryCore extends PacketRegistry {
 		registerServerPacket(new PacketSolderingIronClick());
 		registerServerPacket(new PacketCamouflageSelectServer());
 		registerServerPacket(new PacketUpdateClimateControl());
+		if(ModUtil.isModLoaded(Constants.MM_MOD_ID)){
+			registerClientPacket(new PacketGuiUpdateModule());
+		}
 	}
 }
