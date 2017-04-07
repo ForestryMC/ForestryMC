@@ -58,7 +58,7 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 		super.doInit();
 
 		if (Config.isExUtilEnderLilyEnabled()) {
-			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("extrautils2", "EnderLilly"));
+			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("extrautils2", "enderlilly"));
 			Item enderLillyItem = Item.getItemFromBlock(enderLillyBlock);
 			if (enderLillyBlock == Blocks.AIR) {
 				Log.error("Could not find ender lilly block.");
