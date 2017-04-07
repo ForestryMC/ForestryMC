@@ -103,19 +103,21 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		BlockRegistryGreenhouse blocks = getBlocks();
 
 		Block greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
-		RecipeUtil.addRecipe(new ItemStack(greenhousePlainBlock, 4),
-				"###",
+		RecipeUtil.addRecipe(new ItemStack(greenhousePlainBlock, 2),
 				"#X#",
-				"###",
+				"SIS",
+				'I', OreDictUtil.INGOT_IRON,
+				'S', OreDictUtil.SLAB_WOOD,
 				'X', Blocks.BRICK_BLOCK,
 				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
-		RecipeUtil.addRecipe(new ItemStack(greenhouseGlassBlock, 4),
-				"###",
+		RecipeUtil.addRecipe(new ItemStack(greenhouseGlassBlock, 2),
 				"#X#",
-				"###",
-				'X', "blockGlass",
+				"PIP",
+				'I', OreDictUtil.INGOT_IRON,
+				'X', OreDictUtil.BLOCK_GLASS,
+				'P', OreDictUtil.PANE_GLASS,
 				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseHatchInputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_INPUT);
@@ -124,7 +126,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"#H#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'H', OreDictUtil.TRAPDOOR_WOOD,
-				'#', "gearTin",
+				'#', OreDictUtil.GEAR_TIN,
 				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseHatchOutputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_OUTPUT);
@@ -133,7 +135,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"TXT",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'H', OreDictUtil.TRAPDOOR_WOOD,
-				'#', "gearTin",
+				'#', OreDictUtil.GEAR_TIN,
 				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CONTROL);

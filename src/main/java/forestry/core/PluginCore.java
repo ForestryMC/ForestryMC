@@ -311,10 +311,9 @@ public class PluginCore extends BlankForestryPlugin {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), ItemStack.EMPTY, items.craftingMaterial.getCamouflagedPaneling(4),
-					"YAR", "B#B", "RPY",
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), ItemStack.EMPTY, items.craftingMaterial.getCamouflagedPaneling(8),
+					"Y#R", "BPB", "R#Y",
 					'#', OreDictUtil.PLANK_WOOD,
-					'A', OreDictUtil.DUST_ASH,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'P', OreDictUtil.PULP_WOOD,
 					'R', OreDictUtil.DYE_RED,
@@ -331,7 +330,7 @@ public class PluginCore extends BlankForestryPlugin {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeUtil.addRecipe(items.craftingMaterial.getCamouflagedPaneling(4),
+			RecipeUtil.addRecipe(items.craftingMaterial.getCamouflagedPaneling(8),
 					"WWW",
 					"YBR",
 					"WWW",
