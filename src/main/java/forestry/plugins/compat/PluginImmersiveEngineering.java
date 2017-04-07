@@ -3,6 +3,8 @@ package forestry.plugins.compat;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -19,6 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -60,6 +65,11 @@ public class PluginImmersiveEngineering extends BlankForestryPlugin {
 			});
 
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hempSeed}, Fluids.SEED_OIL.getFluid(seedAmount));
+		}
+		Fluid ethanol = FluidRegistry.getFluid("ethanol");
+		if(ethanol != null){
+			GeneratorFuel ethanolFuel = new GeneratorFuel(new FluidStack(ethanol, 1), (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+			FuelManager.generatorFuel.put(ethanol, ethanolFuel);
 		}
 	}
 
