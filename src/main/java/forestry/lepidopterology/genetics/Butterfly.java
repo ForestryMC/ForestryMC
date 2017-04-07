@@ -11,6 +11,8 @@
 package forestry.lepidopterology.genetics;
 
 import javax.annotation.Nullable;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,7 +21,9 @@ import java.util.Set;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
@@ -35,6 +39,7 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
@@ -122,6 +127,53 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	@Override
 	public IButterflyGenome getMate() {
 		return mate;
+	}
+	
+	@Override
+	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+		World world = nursery.getWorldObj();
+
+		Set<IErrorState> errorStates = new HashSet<>();
+		// / Night or darkness requires nocturnal species
+		boolean isDaytime = world.isDaytime();
+		if(!isActiveThisTime(isDaytime)){
+			if(isDaytime){
+				errorStates.add(EnumErrorCode.NOT_NIGHT);
+			}else{
+				errorStates.add(EnumErrorCode.NOT_DAY);
+			}
+		}
+
+		// / And finally climate check
+		IAlleleButterflySpecies species = genome.getPrimary();
+		EnumTemperature actualTemperature = nursery.getTemperature();
+		EnumTemperature baseTemperature = species.getTemperature();
+		EnumTolerance toleranceTemperature = genome.getToleranceTemp();
+		EnumHumidity actualHumidity = nursery.getHumidity();
+		EnumHumidity baseHumidity = species.getHumidity();
+		EnumTolerance toleranceHumidity = genome.getToleranceHumid();
+		ClimateUtil.addClimateErrorStates(actualTemperature, actualHumidity, baseTemperature, toleranceTemperature, baseHumidity, toleranceHumidity, errorStates);
+
+		return errorStates;
+	}
+	
+	@Override
+	public Set<IErrorState> getCanGrow(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+		World world = nursery.getWorldObj();
+
+		Set<IErrorState> errorStates = new HashSet<>();
+
+		// / And finally climate check
+		IAlleleButterflySpecies species = genome.getPrimary();
+		EnumTemperature actualTemperature = nursery.getTemperature();
+		EnumTemperature baseTemperature = species.getTemperature();
+		EnumTolerance toleranceTemperature = genome.getToleranceTemp();
+		EnumHumidity actualHumidity = nursery.getHumidity();
+		EnumHumidity baseHumidity = species.getHumidity();
+		EnumTolerance toleranceHumidity = genome.getToleranceHumid();
+		ClimateUtil.addClimateErrorStates(actualTemperature, actualHumidity, baseTemperature, toleranceTemperature, baseHumidity, toleranceHumidity, errorStates);
+
+		return errorStates;
 	}
 
 	@Override

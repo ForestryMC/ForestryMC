@@ -13,7 +13,9 @@ package forestry.apiculture.items;
 import java.awt.Color;
 import java.util.Locale;
 
-public enum EnumHoneyComb {
+import net.minecraft.util.IStringSerializable;
+
+public enum EnumHoneyComb implements IStringSerializable {
 	HONEY(new Color(0xe8d56a), new Color(0xffa12b)),
 	COCOA(new Color(0x674016), new Color(0xffb62b), true),
 	SIMMERING(new Color(0x981919), new Color(0xffb62b)),
@@ -49,6 +51,11 @@ public enum EnumHoneyComb {
 		this.primaryColor = primary.getRGB();
 		this.secondaryColor = secondary.getRGB();
 		this.secret = secret;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	public boolean isSecret() {

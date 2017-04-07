@@ -2,6 +2,7 @@ package forestry.lepidopterology;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.entity.EntityLiving;
@@ -22,6 +23,18 @@ public class ButterflyUtils {
 		}
 
 		if (!butterfly.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
+			return false;
+		}
+
+		if (world.isAirBlock(pos)) {
+			return attemptButterflySpawn(world, butterfly, pos);
+		}
+		return false;
+	}
+	
+	public static boolean spawnButterfly(IButterflyCocoon cocoon, World world, BlockPos pos){
+		IButterfly butterfly = cocoon.getCaterpillar();
+		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
 			return false;
 		}
 

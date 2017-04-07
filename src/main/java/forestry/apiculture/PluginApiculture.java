@@ -38,6 +38,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockCandle;
+import forestry.apiculture.blocks.BlockHoneyComb;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
@@ -487,6 +488,15 @@ public class PluginApiculture extends BlankForestryPlugin {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
+		for(int i = 0;i < blocks.beeCombs.length;i++){
+			BlockHoneyComb block = blocks.beeCombs[i];
+			for(int m = 0;m < EnumHoneyComb.VALUES.length - i * 16;m++){
+				RecipeUtil.addRecipe(new ItemStack(block, 1, m), 
+						"###", 
+						"###", 
+						"###", '#', items.beeComb.get(EnumHoneyComb.get(i * 16 + m), 1));
+			}
+		}
 
 		// FOOD STUFF
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FOOD)) {

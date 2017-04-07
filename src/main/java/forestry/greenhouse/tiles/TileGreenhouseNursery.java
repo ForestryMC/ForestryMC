@@ -12,10 +12,15 @@ package forestry.greenhouse.tiles;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
@@ -26,6 +31,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
@@ -38,8 +44,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,6 +62,7 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	private int energyPerWorkCycle;
 	@Nullable
 	private IButterfly butterfly; 
+	private IButterflyCocoon cocoon;
 
 	private int tickCount = rand.nextInt(256);
 	
@@ -101,7 +110,7 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		if(!hasWork()){
+		if(!canWork()){
 			return;
 		}
 		
@@ -137,27 +146,51 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 		return tickCount % tickInterval == 0;
 	}
 	
-	protected boolean hasWork(){
+	protected boolean canWork(){
 		IErrorLogic errorLogic = getErrorLogic();
 		Integer inputSlotIndex = getInputSlotIndex();
 		boolean hasCocoon = inputSlotIndex != null || !getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK).isEmpty();
 		
-		getErrorLogic().setCondition(!hasCocoon, EnumErrorCode.NO_RESOURCE_INVENTORY);
-		return hasCocoon;
+		errorLogic.setCondition(!hasCocoon, EnumErrorCode.NO_RESOURCE_INVENTORY);
+		if(butterfly == null && hasCocoon){
+			ItemStack stack = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
+			butterfly = ButterflyManager.butterflyRoot.getMember(stack);
+			if(butterfly == null){
+				setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
+				errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_INVENTORY);
+				return false;
+			}
+		}
+		if(canSpawnButterfly()){
+			Set<IErrorState> queenErrors = butterfly.getCanSpawn(this, null);
+			for (IErrorState errorState : queenErrors) {
+				errorLogic.setCondition(true, errorState);
+			}
+		}else{
+			Set<IErrorState> queenErrors = butterfly.getCanGrow(this, null);
+			for (IErrorState errorState : queenErrors) {
+				errorLogic.setCondition(true, errorState);
+			}
+		}
+		return !errorLogic.hasErrors();
 	}
 
 	protected boolean workCycle(){
 		moveCocoonToWorkSlot();
-		ItemStack stack = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
-		if(butterfly == null){
-			butterfly = ButterflyManager.butterflyRoot.getMember(stack);
-			if(butterfly == null){
-				setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
-			}
-		}
 		if(butterfly != null){
-			int age = getAge();
-			if(age >= 0 && age < 2){
+			if(canSpawnButterfly()){
+				IGreenhouseControllerInternal controller = getMultiblockLogic().getController();
+				if(controller.spawnButterfly(this)){
+					setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
+					setTicksPerWorkCycle(1);
+					setEnergyPerWorkCycle(0);
+					butterfly = null;
+					cocoon = null;
+				}
+				return false;
+			} else {
+				ItemStack stack = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
+				int age = getAge();
 				IButterflyGenome genome = butterfly.getGenome();
 				float matureTime = genome.getLifespan() / (genome.getFertility() * 2);
 				matureTime*=MATURE_TIME_MULTIPLIER;
@@ -168,21 +201,15 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 				}
 				setTicksPerWorkCycle(caterpillarMatureTime);
 				setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-			}else{
-				IGreenhouseControllerInternal controller = getMultiblockLogic().getController();
-				if(controller.spawnButterfly(butterfly)){
-					setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
-					setTicksPerWorkCycle(1);
-					setEnergyPerWorkCycle(0);
-					butterfly = null;
-				}
-				return false;
 			}
 		}
 		return true;
 	}
 	
-	
+	private boolean canSpawnButterfly(){
+		int age = getAge();
+		return age > 2 && butterfly != null;
+	}
 	
 	private void moveCocoonToWorkSlot() {
 		if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
@@ -250,6 +277,23 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 		workCounter = data.readVarInt();
 		ticksPerWorkCycle = data.readVarInt();
 	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+		super.writeToNBT(data);
+		data.setInteger("workCounter", workCounter);
+		data.setInteger("ticksPerWorkCycle", ticksPerWorkCycle);
+		data.setInteger("energyPerWorkCycle", energyPerWorkCycle);
+		return data;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound data) {
+		super.readFromNBT(data);
+		workCounter = data.getInteger("workCounter");
+		ticksPerWorkCycle = data.getInteger("ticksPerWorkCycle");
+		energyPerWorkCycle = data.getInteger("energyPerWorkCycle");
+	}
 
 	@Override
 	public void addCocoonLoot(IButterflyCocoon cocoon, NonNullList<ItemStack> cocoonDrops) {
@@ -279,6 +323,40 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return inventory;
+	}
+
+	@Override
+	public IButterfly getCaterpillar() {
+		return butterfly;
+	}
+
+	@Override
+	public IIndividual getNanny() {
+		return null;
+	}
+
+	@Override
+	public void setCaterpillar(IButterfly caterpillar) {
+	}
+
+	@Override
+	public boolean canNurse(IButterfly caterpillar) {
+		return false;
+	}
+
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(pos);
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), world, pos);
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
 	}
 	
 }

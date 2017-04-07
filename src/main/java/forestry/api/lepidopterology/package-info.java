@@ -5,7 +5,7 @@
  ******************************************************************************/
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@API(apiVersion = "1.3.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
+@API(apiVersion = "1.4.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
 package forestry.api.lepidopterology;
 
 import javax.annotation.ParametersAreNonnullByDefault;

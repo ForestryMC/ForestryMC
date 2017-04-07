@@ -31,6 +31,7 @@ import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -711,6 +712,23 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
+	public boolean spawnButterfly(IButterflyCocoon cocoon) {
+		for(IInternalBlock block : internalBlocks){
+			BlockPos pos = block.getPos();
+			if(world.isAirBlock(pos)){
+				if(ButterflyUtils.spawnButterfly(cocoon, world, pos)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * TODO: remove in 5.4 or 5.3.4
+	 */
+	@Override
+	@Deprecated
 	public boolean spawnButterfly(IButterfly butterfly) {
 		for(IInternalBlock block : internalBlocks){
 			BlockPos pos = block.getPos();

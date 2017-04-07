@@ -1,0 +1,32 @@
+{
+    "parent": "block/block",
+	"textures": {
+		"particle": "forestry:blocks/bee_combs.0",
+		"texture": "forestry:blocks/bee_combs.0",
+		"overlay": "forestry:blocks/bee_combs.1"
+	},
+    "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "texture": "#texture", "cullface": "down", "tintindex": 0 },
+                "up":    { "texture": "#texture", "cullface": "up", "tintindex": 0 },
+                "north": { "texture": "#texture", "cullface": "north", "tintindex": 0 },
+                "south": { "texture": "#texture", "cullface": "south", "tintindex": 0 },
+                "west":  { "texture": "#texture", "cullface": "west", "tintindex": 0 },
+                "east":  { "texture": "#texture", "cullface": "east", "tintindex": 0 }
+            }
+        },
+		{   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "texture": "#overlay", "cullface": "down", "tintindex": 1 },
+                "up":    { "texture": "#overlay", "cullface": "up", "tintindex": 1 },
+                "north": { "texture": "#overlay", "cullface": "north", "tintindex": 1 },
+                "south": { "texture": "#overlay", "cullface": "south", "tintindex": 1 },
+                "west":  { "texture": "#overlay", "cullface": "west", "tintindex": 1 },
+                "east":  { "texture": "#overlay", "cullface": "east", "tintindex": 1 }
+            }
+        }
+    ]
+}

@@ -332,6 +332,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		return new ItemStack(this, amount, 1);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {

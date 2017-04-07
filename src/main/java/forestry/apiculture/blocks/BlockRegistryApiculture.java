@@ -13,6 +13,7 @@ package forestry.apiculture.blocks;
 import java.util.Map;
 
 import forestry.api.core.Tabs;
+import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.BlockRegistry;
@@ -27,6 +28,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockBeeHives beehives;
 	public final BlockCandle candle;
 	public final BlockStump stump;
+	public final BlockHoneyComb[] beeCombs;
 	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap;
 
 	public BlockRegistryApiculture() {
@@ -48,6 +50,12 @@ public class BlockRegistryApiculture extends BlockRegistry {
 		registerBlock(candle, new ItemBlockCandle(candle), "candle");
 		stump = new BlockStump();
 		registerBlock(stump, new ItemBlockForestry(stump), "stump");
+		
+		beeCombs = BlockHoneyComb.create();
+		for(int i = 0;i < beeCombs.length;i++){
+			BlockHoneyComb block = beeCombs[i];
+			registerBlock(block, new ItemBlockHoneyComb(block), "bee_combs_" + i);
+		}
 
 		alvearyBlockMap = BlockAlveary.create();
 		for (BlockAlveary block : alvearyBlockMap.values()) {

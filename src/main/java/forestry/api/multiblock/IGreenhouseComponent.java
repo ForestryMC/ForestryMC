@@ -10,6 +10,7 @@ import forestry.api.climate.IClimateSourceProvider;
 import forestry.api.climate.IClimatiserDefinition;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.lepidopterology.IButterflyCocoon;
+import forestry.api.lepidopterology.IButterflyNursery;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -32,7 +33,7 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 		IClimatiserDefinition getDefinition();
 	}
 
-	interface Nursery extends IGreenhouseComponent {
+	interface Nursery extends IGreenhouseComponent, IButterflyNursery {
 		void addCocoonLoot(IButterflyCocoon cocoon, NonNullList<ItemStack> loot);
 	}
 

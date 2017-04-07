@@ -12,15 +12,19 @@ package forestry.core.utils;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
 import forestry.core.climate.ClimateRegion;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.PacketBufferForestry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -222,6 +226,27 @@ public class ClimateUtil implements IClimateHelper {
 	@Override
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	}
+	
+	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,
+			   EnumTemperature baseTemp, EnumTolerance tolTemp,
+			   EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates){
+
+		if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
+			if (baseTemp.ordinal() > temperature.ordinal()) {
+				errorStates.add(EnumErrorCode.TOO_COLD);
+			} else {
+				errorStates.add(EnumErrorCode.TOO_HOT);
+			}
+		}
+
+		if (!AlleleManager.climateHelper.isWithinLimits(humidity, baseHumid, tolHumid)) {
+			if (baseHumid.ordinal() > humidity.ordinal()) {
+				errorStates.add(EnumErrorCode.TOO_ARID);
+			} else {
+				errorStates.add(EnumErrorCode.TOO_HUMID);
+			}
+		}
 	}
 	
 	public static float getTemperature(World world, BlockPos pos){
