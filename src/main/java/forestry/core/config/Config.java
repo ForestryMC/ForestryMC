@@ -52,6 +52,9 @@ public class Config {
 	// Graphics
 	public static boolean enableParticleFX = true;
 
+	//Humus
+	public static int humusDegradeDelimiter = 3;
+	
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
@@ -208,6 +211,8 @@ public class Config {
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
+		humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
+		
 		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
 		mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
 		mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());

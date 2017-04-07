@@ -30,10 +30,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 
 public class BlockHumus extends Block implements IItemModelRegister {
-	private static final int degradeDelimiter = 3;
+	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
 	public static final PropertyInteger DEGRADE = PropertyInteger.create("degrade", 0, degradeDelimiter); // degradation level of humus
 
 	public BlockHumus() {
