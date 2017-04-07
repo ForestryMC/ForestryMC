@@ -519,4 +519,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public EnumHumidity getHumidity() {
 		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
 	}
+
+
+	@Override
+	public World getWorldObj() {
+		return world;
+	}
 }

@@ -114,6 +114,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public void setControlClimate(IClimateInfo climateControl) {
 		
 	}
+	
+	@Override
+	public boolean spawnButterfly(Nursery nursery) {
+		return false;
+	}
 
 	@Override
 	public boolean spawnButterfly(IButterfly butterfly) {

@@ -712,11 +712,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
-	public boolean spawnButterfly(IButterflyCocoon cocoon) {
+	public boolean spawnButterfly(IGreenhouseComponent.Nursery nursery) {
 		for(IInternalBlock block : internalBlocks){
 			BlockPos pos = block.getPos();
 			if(world.isAirBlock(pos)){
-				if(ButterflyUtils.spawnButterfly(cocoon, world, pos)){
+				if(ButterflyUtils.spawnButterfly(nursery.getCaterpillar(), world, pos)){
 					return true;
 				}
 			}
