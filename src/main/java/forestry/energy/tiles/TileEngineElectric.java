@@ -61,7 +61,7 @@
 //		setInternalInventory(new InventoryEngineElectric(this));
 //
 //		if (PluginIC2.instance.isAvailable()) {
-//			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+//			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 //		}
 //	}
 //

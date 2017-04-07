@@ -170,7 +170,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (nbttagcompound.hasKey("PLN")) {
 			NBTTagCompound pollenNBT = nbttagcompound.getCompoundTag("PLN");
 			ISpeciesRoot root;
-			if(pollenNBT.hasKey("PLN")){
+			if(pollenNBT.hasKey("Root")){
 				root = AlleleManager.alleleRegistry.getSpeciesRoot(pollenNBT.getString("Root"));
 			}else{
 				root = TreeManager.treeRoot;
