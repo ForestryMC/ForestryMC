@@ -42,7 +42,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @ForestryPlugin(pluginID = ForestryPluginUids.EXTRA_UTILITIES, name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends BlankForestryPlugin {
 
-	private static final String ExU = "ExtraUtils2";
+	private static final String ExU = "extrautils2";
 
 	@Override
 	public boolean isAvailable() {
@@ -59,7 +59,7 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 		super.doInit();
 
 		if (Config.isExUtilEnderLilyEnabled()) {
-			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("extrautils2", "EnderLilly"));
+			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ExU, "enderlilly"));
 			Item enderLillyItem = Item.getItemFromBlock(enderLillyBlock);
 			if (enderLillyBlock == Blocks.AIR) {
 				Log.error("Could not find ender lilly block.");
