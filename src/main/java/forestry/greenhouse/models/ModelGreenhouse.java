@@ -106,6 +106,16 @@ public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse, ModelGre
 				baker.addBlockModel(pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 				baker.setParticleSprite(plainSprite);
 			}
+			//Only item model
+			if(key.pos == null || key.state == null || key.world == null){
+				if (block.getGreenhouseType().hasOverlaySprite) {
+					TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
+					for (EnumFacing facing : EnumFacing.VALUES) {
+						sprite[facing.ordinal()] = BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, key.state, world, pos);
+					}
+					baker.addBlockModel(pos, sprite, 101);
+				}
+			}
 		} else {
 			if (block.getGreenhouseType().hasOverlaySprite) {
 				TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];

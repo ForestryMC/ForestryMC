@@ -297,6 +297,9 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / CAMOUFLAGE SPRAY CAN
 		RecipeUtil.addRecipe(items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
+		
+		// / WEB
+		RecipeUtil.addRecipe(new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CARPENTER
