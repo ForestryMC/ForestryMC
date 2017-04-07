@@ -54,6 +54,9 @@ public class Config {
 	// Graphics
 	public static boolean enableParticleFX = true;
 
+	//Humus
+	public static int humusDegradeDelimiter = 3;
+	
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
@@ -213,6 +216,8 @@ public class Config {
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
+		humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
+		
 		//planterThrottle = configCommon.getIntLocalized("performance", "performance.planter", planterThrottle, 1, 2000);
 		//propThrottle.Comment = "higher numbers increase working speeds of planters but also increase cpu load.";
 
