@@ -17,7 +17,7 @@ import forestry.lepidopterology.PluginLepidopterology;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-public class InventoryGreenhouseNursery extends InventoryAdapterTile<TileGreenhouseNursery> {
+public class InventoryNursery extends InventoryAdapterTile<TileGreenhouseNursery> {
 
 	public static final short SLOT_WORK = 0;
 	public static final short SLOT_OUTPUT_1 = 1;
@@ -26,7 +26,7 @@ public class InventoryGreenhouseNursery extends InventoryAdapterTile<TileGreenho
 	public static final short SLOT_INPUT_COUNT = 6;
 	public static final short SLOTS = 13;
 
-	public InventoryGreenhouseNursery(TileGreenhouseNursery tile) {
+	public InventoryNursery(TileGreenhouseNursery tile) {
 		super(tile, SLOTS, "Items", 64);
 	}
 	

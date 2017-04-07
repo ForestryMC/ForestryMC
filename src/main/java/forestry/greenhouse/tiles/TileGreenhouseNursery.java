@@ -11,6 +11,7 @@
 package forestry.greenhouse.tiles;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
@@ -27,17 +28,18 @@ import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.errors.ErrorLogic;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.IClimatised;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.gui.ContainerGreenhouseNursery;
 import forestry.greenhouse.gui.GuiGreenhouseNursery;
-import forestry.greenhouse.inventory.InventoryGreenhouseNursery;
+import forestry.greenhouse.inventory.InventoryNursery;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -51,29 +53,29 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouseComponent.Nursery, IStreamableGui, ITickable {
+public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouseComponent.Nursery, IStreamableGui, ITickable, IClimatised {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 	private static final Random rand = new Random();
 	private static final int ENERGY_PER_WORK_CYCLE = 3200;
 	private static final int MATURE_TIME_MULTIPLIER = 250;
+	private final ButterflyCanSpawnCache butterflyCanSpawnCache = new ButterflyCanSpawnCache();
+	private final ErrorLogic errorHandler = new ErrorLogic();
 
 	private int workCounter;
 	private int ticksPerWorkCycle;
 	private int energyPerWorkCycle;
 	@Nullable
-	private IButterfly butterfly; 
-	private IButterflyCocoon cocoon;
+	private IButterfly butterfly;
 
 	private int tickCount = rand.nextInt(256);
 	
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	private final InventoryGreenhouseNursery inventory;
+	private final InventoryNursery inventory;
 
 	public TileGreenhouseNursery() {
-		this.inventory = new InventoryGreenhouseNursery(this);
-		this.ticksPerWorkCycle = 4;
+		this.inventory = new InventoryNursery(this);
 	}
 
 	public int getWorkCounter() {
@@ -96,6 +98,11 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	public int getEnergyPerWorkCycle() {
 		return energyPerWorkCycle;
 	}
+	
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return errorHandler;
+	}
 
 	@Override
 	public void update() {
@@ -108,33 +115,11 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 			return;
 		}
 
-		IErrorLogic errorLogic = getErrorLogic();
-
 		if(!canWork()){
 			return;
 		}
 		
-		EnergyManager energyManager = getMultiblockLogic().getController().getEnergyManager();
-		if(energyManager == null){
-			return;
-		}
 		int ticksPerWorkCycle = getTicksPerWorkCycle();
-
-		if (workCounter < ticksPerWorkCycle) {
-			int energyPerWorkCycle = getEnergyPerWorkCycle();
-			boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(energyManager, ticksPerWorkCycle, energyPerWorkCycle);
-			if (consumedEnergy) {
-				errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
-				workCounter++;
-				noPowerTime = 0;
-			} else {
-				noPowerTime++;
-				if (noPowerTime > 4) {
-					errorLogic.setCondition(true, EnumErrorCode.NO_POWER);
-				}
-			}
-		}
-
 		if (workCounter >= ticksPerWorkCycle) {
 			if (workCycle()) {
 				workCounter = 0;
@@ -147,58 +132,74 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	}
 	
 	protected boolean canWork(){
-		IErrorLogic errorLogic = getErrorLogic();
-		Integer inputSlotIndex = getInputSlotIndex();
-		boolean hasCocoon = inputSlotIndex != null || !getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK).isEmpty();
+		moveCocoonToWorkSlot();
+		ItemStack butterflyItem = getButterflyItem();
+		boolean hasCocoon = !butterflyItem.isEmpty();
 		
-		errorLogic.setCondition(!hasCocoon, EnumErrorCode.NO_RESOURCE_INVENTORY);
-		if(butterfly == null && hasCocoon){
-			ItemStack stack = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
-			butterfly = ButterflyManager.butterflyRoot.getMember(stack);
-			if(butterfly == null){
-				setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
-				errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_INVENTORY);
+		errorHandler.setCondition(!hasCocoon, EnumErrorCode.NO_RESOURCE_INVENTORY);
+		if(butterfly == null){
+			butterfly = ButterflyManager.butterflyRoot.getMember(butterflyItem);
+			if(!butterflyItem.isEmpty() && butterfly == null){
+				setInventorySlotContents(InventoryNursery.SLOT_WORK, ItemStack.EMPTY);
+				errorHandler.setCondition(true, EnumErrorCode.NO_RESOURCE_INVENTORY);
 				return false;
 			}
 		}
-		if(canSpawnButterfly()){
-			Set<IErrorState> queenErrors = butterfly.getCanSpawn(this, null);
-			for (IErrorState errorState : queenErrors) {
-				errorLogic.setCondition(true, errorState);
+		
+		int ticksPerWorkCycle = getTicksPerWorkCycle();
+
+		if (workCounter < ticksPerWorkCycle) {
+			EnergyManager energyManager = getMultiblockLogic().getController().getEnergyManager();
+			if(energyManager == null){
+				return false;
 			}
-		}else{
-			Set<IErrorState> queenErrors = butterfly.getCanGrow(this, null);
-			for (IErrorState errorState : queenErrors) {
-				errorLogic.setCondition(true, errorState);
+			
+			int energyPerWorkCycle = getEnergyPerWorkCycle();
+			
+			boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(energyManager, ticksPerWorkCycle, energyPerWorkCycle);
+			if (consumedEnergy) {
+				errorHandler.setCondition(false, EnumErrorCode.NO_POWER);
+				workCounter++;
+				noPowerTime = 0;
+				if(workCounter >= ticksPerWorkCycle){
+					butterflyCanSpawnCache.clear();
+				}
+			} else {
+				noPowerTime++;
+				if (noPowerTime > 4) {
+					errorHandler.setCondition(true, EnumErrorCode.NO_POWER);
+				}
 			}
 		}
-		return !errorLogic.hasErrors();
+		
+		if(butterfly == null){
+			return hasCocoon;
+		}
+		Set<IErrorState> butterflyErrors = butterflyCanSpawnCache.butterflyCanSpawn(butterfly, this);
+		for (IErrorState errorState : butterflyErrors) {
+			errorHandler.setCondition(true, errorState);
+		}
+		return !errorHandler.hasErrors();
 	}
 
 	protected boolean workCycle(){
-		moveCocoonToWorkSlot();
 		if(butterfly != null){
 			if(canSpawnButterfly()){
 				IGreenhouseControllerInternal controller = getMultiblockLogic().getController();
 				if(controller.spawnButterfly(this)){
-					setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, ItemStack.EMPTY);
+					setInventorySlotContents(InventoryNursery.SLOT_WORK, ItemStack.EMPTY);
 					setTicksPerWorkCycle(1);
 					setEnergyPerWorkCycle(0);
 					butterfly = null;
-					cocoon = null;
+					butterflyCanSpawnCache.clear();
 				}
 				return false;
 			} else {
-				ItemStack stack = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
+				ItemStack stack = getButterflyItem();
 				int age = getAge();
-				IButterflyGenome genome = butterfly.getGenome();
-				float matureTime = genome.getLifespan() / (genome.getFertility() * 2);
-				matureTime*=MATURE_TIME_MULTIPLIER;
-				int caterpillarMatureTime = Math.round(matureTime);
-				if(workCounter > 4){
-					age++;
-					ItemButterflyGE.setAge(stack, age);
-				}
+				int caterpillarMatureTime = getCaterpillarMatureTime();
+				age++;
+				ItemButterflyGE.setAge(stack, age);
 				setTicksPerWorkCycle(caterpillarMatureTime);
 				setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 			}
@@ -206,13 +207,20 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 		return true;
 	}
 	
-	private boolean canSpawnButterfly(){
+	public boolean canSpawnButterfly(){
 		int age = getAge();
 		return age > 2 && butterfly != null;
 	}
 	
+	private int getCaterpillarMatureTime(){
+		IButterflyGenome genome = butterfly.getGenome();
+		float matureTime = genome.getLifespan() / (genome.getFertility() * 2);
+		matureTime*=MATURE_TIME_MULTIPLIER;
+		return Math.round(matureTime);
+	}
+	
 	private void moveCocoonToWorkSlot() {
-		if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
+		if (!getStackInSlot(InventoryNursery.SLOT_WORK).isEmpty()) {
 			return;
 		}
 
@@ -229,25 +237,33 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 		ItemStack stack = inputStack.copy();
 		stack.setCount(1);
 		inputStack.shrink(1);
-		setInventorySlotContents(InventoryGreenhouseNursery.SLOT_WORK, stack);
+		setInventorySlotContents(InventoryNursery.SLOT_WORK, stack);
 		if(inputStack.isEmpty()){
 			inventory.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
 		}
+		butterfly = ButterflyManager.butterflyRoot.getMember(stack);
+		int caterpillarMatureTime = getCaterpillarMatureTime();
+		setTicksPerWorkCycle(caterpillarMatureTime);
+		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 	}
 	
 	@Nullable
 	private Integer getInputSlotIndex() {
-		for (int slotIndex = 0; slotIndex < InventoryGreenhouseNursery.SLOT_INPUT_COUNT; slotIndex++) {
-			ItemStack inputStack = inventory.getStackInSlot(InventoryGreenhouseNursery.SLOT_INPUT_1 + slotIndex);
+		for (int slotIndex = 0; slotIndex < InventoryNursery.SLOT_INPUT_COUNT; slotIndex++) {
+			ItemStack inputStack = inventory.getStackInSlot(InventoryNursery.SLOT_INPUT_1 + slotIndex);
 			if (!inputStack.isEmpty()) {
-				return InventoryGreenhouseNursery.SLOT_INPUT_1 + slotIndex;
+				return InventoryNursery.SLOT_INPUT_1 + slotIndex;
 			}
 		}
 		return null;
 	}
 	
+	private ItemStack getButterflyItem(){
+		return getStackInSlot(InventoryNursery.SLOT_WORK);
+	}
+	
 	public int getAge(){
-		ItemStack cocoon = getStackInSlot(InventoryGreenhouseNursery.SLOT_WORK);
+		ItemStack cocoon = getButterflyItem();
 		if(cocoon.isEmpty() || !cocoon.hasTagCompound()){
 			return -1;
 		}
@@ -298,7 +314,7 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	@Override
 	public void addCocoonLoot(IButterflyCocoon cocoon, NonNullList<ItemStack> cocoonDrops) {
 		for (ItemStack drop : cocoonDrops) {
-			InventoryUtil.tryAddStack(this, drop, InventoryGreenhouseNursery.SLOT_OUTPUT_1, InventoryGreenhouseNursery.SLOT_OUTPUT_COUNT, true);
+			InventoryUtil.tryAddStack(this, drop, InventoryNursery.SLOT_OUTPUT_1, InventoryNursery.SLOT_OUTPUT_COUNT, true);
 		}
 	}
 
@@ -330,6 +346,7 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 		return butterfly;
 	}
 
+	@Nullable
 	@Override
 	public IIndividual getNanny() {
 		return null;
@@ -357,6 +374,43 @@ public class TileGreenhouseNursery extends TileGreenhouse implements IGreenhouse
 	@Override
 	public EnumHumidity getHumidity() {
 		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
+	}
+	
+	@Override
+	public float getExactHumidity() {
+		return ClimateUtil.getHumidity(world, pos);
+	}
+	
+	@Override
+	public float getExactTemperature() {
+		return ClimateUtil.getTemperature(world, pos);
+	}
+	
+	private static class ButterflyCanSpawnCache {
+		private static final int ticksPerCheckButterflyCanSpawn = 10;
+
+		private Set<IErrorState> butterflyCanSpawnCached = Collections.emptySet();
+		private int butterflzCanSpawnCooldown = 0;
+
+		public Set<IErrorState> butterflyCanSpawn(IButterfly butterfly, TileGreenhouseNursery nursery) {
+			if (butterflzCanSpawnCooldown <= 0) {
+				if(nursery.canSpawnButterfly()){
+					butterflyCanSpawnCached = butterfly.getCanSpawn(nursery, null);
+				}else{
+					butterflyCanSpawnCached = butterfly.getCanGrow(nursery, null);
+				}
+				butterflzCanSpawnCooldown = ticksPerCheckButterflyCanSpawn;
+			} else {
+				butterflzCanSpawnCooldown--;
+			}
+
+			return butterflyCanSpawnCached;
+		}
+
+		public void clear() {
+			butterflyCanSpawnCached.clear();
+			butterflzCanSpawnCooldown = 0;
+		}
 	}
 	
 }

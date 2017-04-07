@@ -53,8 +53,8 @@ public class GuiGreenhouseNursery extends GuiForestryTitled<ContainerGreenhouseN
 	protected void addLedgers() {
 		IGreenhouseControllerInternal controller = tile.getMultiblockLogic().getController();
 
-		addErrorLedger(controller);
-		addClimateLedger(controller);
+		addErrorLedger(tile);
+		addClimateLedger(tile);
 		ledgerManager.add(new GreenhouseEnergyLedger(ledgerManager, controller));
 		addHintLedger("greenhouse");
 		addOwnerLedger(tile);

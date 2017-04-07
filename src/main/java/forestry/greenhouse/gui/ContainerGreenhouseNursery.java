@@ -15,7 +15,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.network.packets.PacketGuiUpdate;
-import forestry.greenhouse.inventory.InventoryGreenhouseNursery;
+import forestry.greenhouse.inventory.InventoryNursery;
 import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -27,17 +27,17 @@ public class ContainerGreenhouseNursery extends ContainerTile<TileGreenhouseNurs
 		// Input buffer
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 2; k++) {
-				addSlotToContainer(new SlotFiltered(tile, InventoryGreenhouseNursery.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
+				addSlotToContainer(new SlotFiltered(tile, InventoryNursery.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18).setBackgroundTexture("slots/cocoon"));
 			}
 		}
 
-		// Analyze slot
-		addSlotToContainer(new SlotWorking(tile, InventoryGreenhouseNursery.SLOT_WORK, 84, 45));
+		// Cocoon slot
+		addSlotToContainer(new SlotWorking(tile, InventoryNursery.SLOT_WORK, 84, 45));
 
 		// Output buffer
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 2; k++) {
-				addSlotToContainer(new SlotOutput(tile, InventoryGreenhouseNursery.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 28 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, InventoryNursery.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 28 + i * 18));
 			}
 		}
 	}

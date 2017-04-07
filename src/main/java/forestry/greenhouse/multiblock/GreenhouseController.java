@@ -31,7 +31,6 @@ import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
