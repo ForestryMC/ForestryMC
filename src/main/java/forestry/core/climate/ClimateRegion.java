@@ -29,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ClimateRegion implements IClimateRegion, IStreamable {
+	public static final float CLIMATE_CHANGE = 0.01F;
+	
 	protected final World world;
 	protected final IGreenhouseControllerInternal controller;
 	protected final Set<IClimatePosition> positions;
@@ -99,26 +101,7 @@ public class ClimateRegion implements IClimateRegion, IStreamable {
 				if (world.isBlockLoaded(pos)) {
 					hasChange |= updateSides(position);
 					if (!controller.isAssembled()) {
-						IClimateInfo climateInfo = getControl(pos);
-
-						if (position.getTemperature() != climateInfo.getTemperature()) {
-							if (position.getTemperature() > climateInfo.getTemperature()) {
-								position.addTemperature(-Math.min(0.01F, position.getTemperature() - climateInfo.getTemperature()));
-								hasChange = true;
-							} else {
-								position.addTemperature(Math.min(0.01F, climateInfo.getTemperature() - position.getTemperature()));
-								hasChange = true;
-							}
-						}
-						if (position.getHumidity() != climateInfo.getHumidity()) {
-							if (position.getHumidity() > climateInfo.getHumidity()) {
-								position.addHumidity(-Math.min(0.01F, position.getHumidity() - climateInfo.getHumidity()));
-								hasChange = true;
-							} else {
-								position.addHumidity(Math.min(0.01F, climateInfo.getHumidity() - position.getHumidity()));
-								hasChange = true;
-							}
-						}
+						hasChange |= returnClimateToDefault(position);
 					}
 				}
 			}
@@ -128,27 +111,61 @@ public class ClimateRegion implements IClimateRegion, IStreamable {
 		}
 	}
 
-	protected boolean updateSides(IClimatePosition positon) {
-		BlockPos pos = positon.getPos();
+	protected boolean updateSides(IClimatePosition position) {
+		BlockPos pos = position.getPos();
 		IClimateInfo climateInfo = getControl(pos);
 		boolean hasChange = false;
 		if (climateInfo.getTemperature() != temperature || climateInfo.getHumidity() != humidity) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
-				IClimatePosition climatedInfoFace = getPosition(pos.offset(facing));
-				if (climatedInfoFace != null) {
-					if (positon.getTemperature() > climatedInfoFace.getTemperature() + 0.01F) {
-						float change = Math.min(0.01F, positon.getTemperature() - climatedInfoFace.getTemperature());
-						positon.addTemperature(-change);
-						climatedInfoFace.addTemperature(change);
+				IClimatePosition infoFace = getPosition(pos.offset(facing));
+				if (infoFace != null) {
+					float infoTemp = infoFace.getTemperature();
+					float infoHumid = infoFace.getHumidity();
+					float posTemp = position.getTemperature();
+					float posHumid = position.getHumidity();
+					if (posTemp > infoTemp + CLIMATE_CHANGE) {
+						float change = Math.min(CLIMATE_CHANGE, posTemp - infoTemp);
+						position.addTemperature(-change);
+						infoFace.addTemperature(change);
 						hasChange = true;
 					}
-					if (positon.getHumidity() > climatedInfoFace.getHumidity() + 0.01F) {
-						float change = Math.min(0.01F, positon.getHumidity() - climatedInfoFace.getHumidity());
-						positon.addHumidity(-change);
-						climatedInfoFace.addHumidity(change);
+					if (posHumid > infoHumid + CLIMATE_CHANGE) {
+						float change = Math.min(CLIMATE_CHANGE, posHumid - infoHumid);
+						position.addHumidity(-change);
+						infoFace.addHumidity(change);
 						hasChange = true;
 					}
 				}
+			}
+		}
+		return hasChange;
+	}
+	
+	protected boolean returnClimateToDefault(IClimatePosition position){
+		BlockPos pos = position.getPos();
+		IClimateInfo climateInfo = getControl(pos);
+		boolean hasChange = false;
+
+		float infoTemp = climateInfo.getTemperature();
+		float infoHumid = climateInfo.getHumidity();
+		float posTemp = position.getTemperature();
+		float posHumid = position.getHumidity();
+		if (posTemp != infoTemp) {
+			if (posTemp > infoTemp) {
+				position.addTemperature(-Math.min(CLIMATE_CHANGE, posTemp - infoTemp));
+				hasChange = true;
+			} else {
+				position.addTemperature(Math.min(CLIMATE_CHANGE, infoTemp - posTemp));
+				hasChange = true;
+			}
+		}
+		if (posHumid != infoHumid) {
+			if (posHumid > infoHumid) {
+				position.addHumidity(-Math.min(CLIMATE_CHANGE, posHumid - infoHumid));
+				hasChange = true;
+			} else {
+				position.addHumidity(Math.min(CLIMATE_CHANGE, infoHumid - posHumid));
+				hasChange = true;
 			}
 		}
 		return hasChange;
