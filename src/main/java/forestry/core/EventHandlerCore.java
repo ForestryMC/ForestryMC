@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.net.URL;
 import java.util.Collection;
 
 import forestry.api.genetics.AlleleManager;
@@ -18,7 +19,6 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
-import forestry.core.loot.LootTableLoader;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.render.TextureManagerForestry;
 import forestry.plugins.PluginManager;
@@ -107,12 +107,15 @@ public class EventHandlerCore {
 		}
 
 		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath());
-		LootTable forestryChestAdditions = LootTableLoader.loadBuiltinLootTable(resourceLocation);
-		if (forestryChestAdditions != null) {
-			for (String poolName : PluginManager.getLootPoolNames()) {
-				LootPool pool = forestryChestAdditions.getPool(poolName);
-				if (pool != null) {
-					event.getTable().addPool(pool);
+		URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
+		if (url != null) {
+			LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
+			if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
+				for (String poolName : PluginManager.getLootPoolNames()) {
+					LootPool pool = forestryChestAdditions.getPool(poolName);
+					if (pool != null) {
+						event.getTable().addPool(pool);
+					}
 				}
 			}
 		}
