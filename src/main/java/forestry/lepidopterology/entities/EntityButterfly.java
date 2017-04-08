@@ -125,7 +125,6 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		tasks.addTask(11, new AIButterflyRest(this));
 		tasks.addTask(12, new AIButterflyRise(this));
 		tasks.addTask(12, new AIButterflyWander(this));
-		tasks.addTask(13, new AIButterflyGoHome(this));
 	}
 
 	@Override
@@ -229,6 +228,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		}
 
 		float weight = 0.0f;
+		double distanceToHome = getHomePosition().distanceSq(pos);
+		
+		if(!isWithinHomeDistanceFromPosition(distanceToHome)){
+			
+			weight -= 7.5f + 0.005 * (distanceToHome / 4);
+		}
 
 		if (!getButterfly().isAcceptedEnvironment(world, pos.getX(), pos.getY(), pos.getZ())) {
 			weight -= 15.0f;
@@ -269,6 +274,10 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		weight += world.getLightBrightness(pos);
 		return weight;
 	}
+	
+    private boolean isWithinHomeDistanceFromPosition(double distanceToHome) {
+        return distanceToHome < this.getMaximumHomeDistance() * this.getMaximumHomeDistance();
+    }
 
 	private int getFluidDepth(BlockPos pos) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);

@@ -715,7 +715,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		for(IInternalBlock block : internalBlocks){
 			BlockPos pos = block.getPos();
 			if(world.isAirBlock(pos)){
-				if(ButterflyUtils.spawnButterfly(nursery.getCaterpillar(), world, pos)){
+				if(ButterflyUtils.spawnButterflyWithoutCheck(nursery.getCaterpillar(), world, pos)){
 					return true;
 				}
 			}
@@ -732,7 +732,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		for(IInternalBlock block : internalBlocks){
 			BlockPos pos = block.getPos();
 			if(world.isAirBlock(pos)){
-				if(ButterflyUtils.spawnButterfly(butterfly, world, pos)){
+				if(ButterflyUtils.spawnButterflyWithoutCheck(butterfly, world, pos)){
 					return true;
 				}
 			}

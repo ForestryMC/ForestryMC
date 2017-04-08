@@ -2,7 +2,6 @@ package forestry.lepidopterology;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.entity.EntityLiving;
@@ -11,7 +10,7 @@ import net.minecraft.world.World;
 
 public class ButterflyUtils {
 	
-	private static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
+	static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
 		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
 		Log.trace("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		return entityLiving != null;
@@ -32,8 +31,7 @@ public class ButterflyUtils {
 		return false;
 	}
 	
-	public static boolean spawnButterfly(IButterflyCocoon cocoon, World world, BlockPos pos){
-		IButterfly butterfly = cocoon.getCaterpillar();
+	public static boolean spawnButterflyWithoutCheck(IButterfly butterfly, World world, BlockPos pos){
 		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
 			return false;
 		}

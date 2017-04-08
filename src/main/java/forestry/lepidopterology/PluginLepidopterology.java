@@ -84,7 +84,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	private static final String CONFIG_CATEGORY = "lepidopterology";
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
-	public static int maxDistance = 256;
+	public static int maxDistance = 64;
 	private static boolean allowPollination = true;
 	public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
 	private static boolean spawnButterflysFromLeaves = true;

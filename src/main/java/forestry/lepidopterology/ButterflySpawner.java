@@ -16,9 +16,7 @@ import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -52,21 +50,16 @@ public class ButterflySpawner implements ILeafTickHandler {
 		}
 
 		if (world.isAirBlock(pos.north())) {
-			attemptButterflySpawn(world, spawn, pos.north());
+			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.north());
 		} else if (world.isAirBlock(pos.south())) {
-			attemptButterflySpawn(world, spawn, pos.south());
+			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.south());
 		} else if (world.isAirBlock(pos.west())) {
-			attemptButterflySpawn(world, spawn, pos.west());
+			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.west());
 		} else if (world.isAirBlock(pos.east())) {
-			attemptButterflySpawn(world, spawn, pos.east());
+			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.east());
 		}
 
 		return false;
-	}
-
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
-		Log.trace("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 }
