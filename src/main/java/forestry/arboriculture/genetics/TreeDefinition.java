@@ -1071,7 +1071,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	}
 
 	public static void preInit() {
-		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(TreeManager.treeRoot));
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(TreeManager.treeRoot, IAlleleTreeSpecies.class));
 	}
 
 	@Override

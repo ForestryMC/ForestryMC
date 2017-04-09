@@ -18,6 +18,7 @@ import java.util.Map;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.genetics.AlleleRegisterEvent;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
@@ -31,6 +32,7 @@ import forestry.core.utils.OreDictUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
@@ -259,6 +261,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 		// Pods
 		AlleleFruits.registerAlleles();
+		MinecraftForge.EVENT_BUS.post(new AlleleRegisterEvent(IAlleleFruit.class));
 		podsMap = new HashMap<>();
 		for (BlockFruitPod pod : BlockFruitPod.create()) {
 			IAlleleFruit fruit = pod.getFruit();

@@ -1021,7 +1021,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		for (BeeDefinition bee : values()) {
 			bee.registerMutations();
 		}
-		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot));
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot, IAlleleBeeSpecies.class));
 	}
 
 	public static void preInit() {
