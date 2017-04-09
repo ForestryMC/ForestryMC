@@ -21,13 +21,14 @@ public class FruitPodStateMapper extends ForestryStateMapper {
 			BlockFruitPod blockFruitPod = (BlockFruitPod) block;
 			IAlleleFruit fruit = blockFruitPod.getFruit();
 			String modID = fruit.getModID();
-			if (Constants.MOD_ID.equals(modID)) {
-				String modelName = fruit.getModelName();
-				String resourcePath = Constants.MOD_ID + ":pods/" + modelName;
-				for (IBlockState state : block.getBlockState().getValidStates()) {
-					String propertyString = getPropertyString(state.getProperties());
-					mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));
-				}
+			if(modID == null){
+				modID = Constants.MOD_ID;
+			}
+			String modelName = fruit.getModelName();
+			String resourcePath = modID + ":pods/" + modelName;
+			for (IBlockState state : block.getBlockState().getValidStates()) {
+				String propertyString = getPropertyString(state.getProperties());
+				mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));
 			}
 		}
 		return mapStateModelLocations;
