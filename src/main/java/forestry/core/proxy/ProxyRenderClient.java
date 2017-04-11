@@ -319,10 +319,12 @@ public class ProxyRenderClient extends ProxyRender {
 		float blue = (color & 255) / 255.0F;
 		
 		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		Particle Particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
-		Particle.setRBGColorF(red, green, blue);
-
-		effectRenderer.addEffect(Particle);
+		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
+		if(particle != null){
+			particle.setRBGColorF(red, green, blue);
+	
+			effectRenderer.addEffect(particle);
+		}
 	}
 
 	private static class BlockModeStateMapper extends StateMapperBase {
