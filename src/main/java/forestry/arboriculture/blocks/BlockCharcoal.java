@@ -44,7 +44,9 @@ public class BlockCharcoal extends Block implements IStateMapperRegister, IItemM
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
+		for(int i = 0;i < 16;i++){
+			manager.registerItemModel(item, i);
+		}
 	}
 	
 	@Override
