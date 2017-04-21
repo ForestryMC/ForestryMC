@@ -152,6 +152,10 @@ public class GeneticsUtil {
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		
+		if(TreeManager.treeRoot == null){
+			return null;
+		}
+		
 		IIndividualTranslator<IIndividual, IBlockState> leafTranslator = TreeManager.treeRoot.getTranslator(block);
 		if (leafTranslator == null) {
 			return null;
@@ -165,6 +169,10 @@ public class GeneticsUtil {
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
+		}
+		
+		if(TreeManager.treeRoot == null){
+			return null;
 		}
 
 		IIndividualTranslator<IIndividual, ItemStack> saplingTranslator = TreeManager.treeRoot.getTranslator(item);
