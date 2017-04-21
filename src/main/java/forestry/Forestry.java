@@ -29,6 +29,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
+import forestry.plugins.compat.PluginIC2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -55,8 +56,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.11]",
 		dependencies = "required-after:forge@[13.20.0.2270,);"
-				+ "after:JEI@[4.3.0,);")
-//				+ "after:" + PluginIC2.modId + ";")
+				+ "after:JEI@[4.3.0,);"
+				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")

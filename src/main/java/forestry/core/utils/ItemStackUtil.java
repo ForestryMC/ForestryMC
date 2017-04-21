@@ -74,6 +74,32 @@ public abstract class ItemStackUtil {
 			return null;
 		}
 	}
+	
+	/**
+	 * @return The registry name of the block as {@link ResourceLocation}
+	 */
+	@Nullable
+	public static String getBlockNameFromRegistryAsString(Block block) {
+		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
+		if (itemRegistry.containsValue(block)) {
+			return itemRegistry.getKey(block).toString();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * @return The registry name of the block as {@link ResourceLocation}
+	 */
+	@Nullable
+	public static ResourceLocation getBlockNameFromRegistry(Block block) {
+		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
+		if (itemRegistry.containsValue(block)) {
+			return itemRegistry.getKey(block);
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * @return The registry name of the item as {@link String}

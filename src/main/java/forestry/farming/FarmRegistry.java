@@ -59,6 +59,9 @@ public final class FarmRegistry implements IFarmRegistry {
 
 	@Override
 	public void registerFertilizer(ItemStack itemStack, int value) {
+		if(itemStack == null || itemStack.isEmpty()){
+			return;
+		}
 		fertilizers.put(itemStack, value);
 	}
 
