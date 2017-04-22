@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,24 +32,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -65,16 +65,17 @@ public class ItemFluidContainerForestry extends ItemForestry {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		// empty
-		subItems.add(new ItemStack(itemIn));
+		subItems.add(new ItemStack(item));
 
 		// filled
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-			ItemStack itemStack = new ItemStack(itemIn);
-			IFluidHandler fluidHandler = new FluidHandlerItemForestry(itemStack, type);
+			ItemStack itemStack = new ItemStack(item);
+			IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 			if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
-				subItems.add(itemStack);
+				ItemStack filled = fluidHandler.getContainer();
+				subItems.add(filled);
 			}
 		}
 	}
@@ -83,10 +84,11 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		return type;
 	}
 
+	@Nullable
 	protected FluidStack getContained(ItemStack itemStack) {
-		if (itemStack.stackSize != 1) {
+		if (itemStack.getCount() != 1) {
 			itemStack = itemStack.copy();
-			itemStack.stackSize = 1;
+			itemStack.setCount(1);
 		}
 		IFluidHandler fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 		return fluidHandler.drain(Integer.MAX_VALUE, false);
@@ -113,7 +115,9 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		return super.getItemStackDisplayName(stack);
 	}
 
-	/** DRINKS */
+	/**
+	 * DRINKS
+	 */
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		DrinkProperties drinkProperties = getDrinkProperties(stack);
@@ -121,7 +125,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			if (entityLiving instanceof EntityPlayer && !((EntityPlayer) entityLiving).capabilities.isCreativeMode) {
 				EntityPlayer player = (EntityPlayer) entityLiving;
 				if (!player.capabilities.isCreativeMode) {
-					--stack.stackSize;
+					stack.shrink(1);
 				}
 
 				if (!worldIn.isRemote) {
@@ -136,6 +140,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		return stack;
 	}
 
+	@Nullable
 	protected DrinkProperties getDrinkProperties(ItemStack itemStack) {
 		FluidStack contained = getContained(itemStack);
 		if (contained != null) {
@@ -168,23 +173,23 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		DrinkProperties drinkProperties = getDrinkProperties(itemStackIn);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
+		DrinkProperties drinkProperties = getDrinkProperties(heldItem);
 		if (drinkProperties != null) {
 			if (playerIn.canEat(false)) {
-				playerIn.setActiveHand(hand);
-				return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+				playerIn.setActiveHand(handIn);
+				return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 			} else {
-				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 		} else {
-			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+			return super.onItemRightClick(worldIn, playerIn, handIn);
 		}
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt)
-	{
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new FluidHandlerItemForestry(stack, type);
 	}
 }

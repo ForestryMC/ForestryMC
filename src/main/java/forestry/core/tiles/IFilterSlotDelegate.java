@@ -17,7 +17,7 @@ public interface IFilterSlotDelegate {
 	/**
 	 * Non-automation version of IInventory's isItemValidForSlot.
 	 * Used to determine if a player can place a stack in a slot.
-	 *
+	 * <p>
 	 * Combine this with Forestry's access permissions to implement isItemValidForSlot.
 	 */
 	boolean canSlotAccept(int slotIndex, ItemStack itemStack);

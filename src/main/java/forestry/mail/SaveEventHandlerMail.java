@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.world.World;
-
 import forestry.core.ISaveEventHandler;
+import net.minecraft.world.World;
 
 public class SaveEventHandlerMail implements ISaveEventHandler {
 

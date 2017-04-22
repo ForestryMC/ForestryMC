@@ -10,44 +10,53 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
 
+	public static final Pair EMPTY_RECIPE = Pair.of(null, null);
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, pattern));
+		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
+		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getIngredients();
+
+		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
 		addRecipe(recipe);
 	}
 
-	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, IInventory resources) {
+	@Nullable
+	public static Pair<IFabricatorRecipe, String[][]> findMatchingRecipe(ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
 		for (IFabricatorRecipe recipe : recipes) {
-			if (recipe.getPlan() != null && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
+			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
 				continue;
 			}
-			if (RecipeUtil.matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), gridResources)) {
-				return recipe;
+			String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
+			if (oreDicts != null) {
+				return Pair.of(recipe, oreDicts);
 			}
 		}
 
-		return null;
+		return EMPTY_RECIPE;
 	}
 
 	public static boolean isPlan(ItemStack plan) {

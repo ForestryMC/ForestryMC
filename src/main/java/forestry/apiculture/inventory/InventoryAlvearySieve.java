@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.PluginCore;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve> implements ISlotPickupWatcher {
 	public static final int SLOT_POLLEN_1 = 0;
@@ -30,16 +29,16 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.isIdenticalItem(PluginCore.items.craftingMaterial.getWovenSilk(), itemStack);
+		return ItemStackUtil.isIdenticalItem(PluginCore.getItems().craftingMaterial.getWovenSilk(), itemStack);
 	}
 
 	public boolean canStorePollen() {
-		if (getStackInSlot(SLOT_SIEVE) == null) {
+		if (getStackInSlot(SLOT_SIEVE).isEmpty()) {
 			return false;
 		}
 
 		for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-			if (getStackInSlot(i) == null) {
+			if (getStackInSlot(i).isEmpty()) {
 				return true;
 			}
 		}
@@ -49,7 +48,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	public void storePollenStack(ItemStack itemstack) {
 		for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-			if (getStackInSlot(i) == null) {
+			if (getStackInSlot(i).isEmpty()) {
 				setInventorySlotContents(i, itemstack);
 				return;
 			}
@@ -58,13 +57,13 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, EntityPlayer player) {
 		if (slotIndex == SLOT_SIEVE) {
 			for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-				setInventorySlotContents(i, null);
+				setInventorySlotContents(i, ItemStack.EMPTY);
 			}
 		} else {
-			setInventorySlotContents(SLOT_SIEVE, null);
+			setInventorySlotContents(SLOT_SIEVE, ItemStack.EMPTY);
 		}
 	}
 }

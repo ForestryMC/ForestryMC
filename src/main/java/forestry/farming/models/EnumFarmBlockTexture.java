@@ -10,34 +10,41 @@
  ******************************************************************************/
 package forestry.farming.models;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.proxy.Proxies;
-
 public enum EnumFarmBlockTexture {
-	BRICK_STONE(new ItemStack(Blocks.STONEBRICK, 1, 0)),
-	BRICK_MOSSY(new ItemStack(Blocks.STONEBRICK, 1, 1)),
-	BRICK_CRACKED(new ItemStack(Blocks.STONEBRICK, 1, 2)),
-	BRICK(new ItemStack(Blocks.BRICK_BLOCK)),
-	SANDSTONE_SMOOTH(new ItemStack(Blocks.SANDSTONE, 1, 2)),
-	SANDSTONE_CHISELED(new ItemStack(Blocks.SANDSTONE, 1, 1)),
-	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICK)),
-	BRICK_CHISELED(new ItemStack(Blocks.STONEBRICK, 1, 3)),
-	QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0)),
-	QUARTZ_CHISELED(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1)),
-	QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2));
+	BRICK_STONE(new ItemStack(Blocks.STONEBRICK, 1, 0), TextFormatting.DARK_GRAY),
+	BRICK_MOSSY(new ItemStack(Blocks.STONEBRICK, 1, 1), TextFormatting.DARK_GRAY),
+	BRICK_CRACKED(new ItemStack(Blocks.STONEBRICK, 1, 2), TextFormatting.DARK_GRAY),
+	BRICK(new ItemStack(Blocks.BRICK_BLOCK), TextFormatting.GOLD),
+	SANDSTONE_SMOOTH(new ItemStack(Blocks.SANDSTONE, 1, 2), TextFormatting.YELLOW),
+	SANDSTONE_CHISELED(new ItemStack(Blocks.SANDSTONE, 1, 1), TextFormatting.YELLOW),
+	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICK), TextFormatting.DARK_RED),
+	BRICK_CHISELED(new ItemStack(Blocks.STONEBRICK, 1, 3), TextFormatting.GOLD),
+	QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0), TextFormatting.WHITE),
+	QUARTZ_CHISELED(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), TextFormatting.WHITE),
+	QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2), TextFormatting.WHITE);
 
 	private final ItemStack base;
+	private final TextFormatting formatting;
 
-	EnumFarmBlockTexture(ItemStack base) {
+	EnumFarmBlockTexture(ItemStack base, TextFormatting formatting) {
 		this.base = base;
+		this.formatting = formatting;
+	}
+	
+	public TextFormatting getFormatting() {
+		return formatting;
 	}
 	
 	/**
@@ -45,7 +52,7 @@ public enum EnumFarmBlockTexture {
 	 */
 	@SideOnly(Side.CLIENT)
 	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		switch (texture) {
 			case BRICK:
 				return map.getAtlasSprite("minecraft:blocks/brick");
@@ -107,7 +114,7 @@ public enum EnumFarmBlockTexture {
 		return base;
 	}
 
-	public static EnumFarmBlockTexture getFromCompound(NBTTagCompound compound) {
+	public static EnumFarmBlockTexture getFromCompound(@Nullable NBTTagCompound compound) {
 		if (compound != null) {
 			int farmBlockOrdinal = compound.getInteger("FarmBlock");
 			if (farmBlockOrdinal < EnumFarmBlockTexture.values().length) {

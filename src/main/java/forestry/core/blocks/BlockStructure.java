@@ -10,28 +10,26 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.circuits.ISocketable;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.multiblock.MultiblockUtil;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.circuits.ISocketable;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.multiblock.MultiblockUtil;
-import forestry.core.utils.InventoryUtil;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -48,36 +46,35 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (playerIn.isSneaking()) {
 			return false;
 		}
 
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof MultiblockTileEntityForestry)) {
+		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
+		if (part == null) {
 			return false;
 		}
-
-		MultiblockTileEntityForestry part = (MultiblockTileEntityForestry) tile;
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
+		ItemStack heldItem = playerIn.getHeldItem(hand);
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
-		if (heldItem == null) {
+		if (heldItem.isEmpty()) {
 			if (controller != null) {
 				if (!controller.isAssembled()) {
 					String validationError = controller.getLastValidationError();
 					if (validationError != null) {
 						long tick = worldIn.getTotalWorldTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.addChatMessage(new TextComponentString(validationError));
+							playerIn.sendMessage(new TextComponentString(validationError));
 							previousMessageTick = tick;
 						}
 						return true;
 					}
 				}
 			} else {
-				playerIn.addChatMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
+				playerIn.sendMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
 				return true;
 			}
 		}
@@ -100,13 +97,11 @@ public abstract class BlockStructure extends BlockForestry {
 		}
 
 		if (placer instanceof EntityPlayer) {
-			TileEntity tile = world.getTileEntity(pos);
-
-			if (tile instanceof MultiblockTileEntityForestry) {
+			TileUtil.actOnTile(world, pos, MultiblockTileEntityForestry.class, tile -> {
 				EntityPlayer player = (EntityPlayer) placer;
 				GameProfile gameProfile = player.getGameProfile();
-				((MultiblockTileEntityForestry) tile).setOwner(gameProfile);
-			}
+				tile.setOwner(gameProfile);
+			});
 		}
 	}
 
@@ -116,12 +111,9 @@ public abstract class BlockStructure extends BlockForestry {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IMultiblockComponent) {
-			IMultiblockComponent part = (IMultiblockComponent) tile;
-
+		TileUtil.actOnTile(world, pos, IMultiblockComponent.class, tile -> {
 			// drop inventory if we're the last part remaining
-			if (MultiblockUtil.getNeighboringParts(world, part).isEmpty()) {
+			if (MultiblockUtil.getNeighboringParts(world, tile).isEmpty()) {
 				if (tile instanceof IInventory) {
 					InventoryUtil.dropInventory((IInventory) tile, world, pos);
 				}
@@ -129,7 +121,8 @@ public abstract class BlockStructure extends BlockForestry {
 					InventoryUtil.dropSockets((ISocketable) tile, world, pos);
 				}
 			}
-		}
+		});
+
 		super.breakBlock(world, pos, state);
 	}
 

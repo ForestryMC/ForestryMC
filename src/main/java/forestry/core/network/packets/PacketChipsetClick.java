@@ -12,40 +12,44 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
-import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 
-public class PacketChipsetClick extends PacketSlotClick implements IForestryPacketServer {
+public class PacketChipsetClick extends ForestryPacket implements IForestryPacketServer {
+	private final int slot;
 
-	public PacketChipsetClick() {
-	}
-
-	public PacketChipsetClick(TileEntity tile, int slot) {
-		super(tile, slot);
+	public PacketChipsetClick(int slot) {
+		this.slot = slot;
 	}
 
 	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (!(player.openContainer instanceof IContainerSocketed)) {
-			return;
-		}
-		ItemStack itemstack = player.inventory.getItemStack();
-		if (!(itemstack.getItem() instanceof ItemCircuitBoard)) {
-			return;
-		}
-
-		((IContainerSocketed) player.openContainer).handleChipsetClickServer(getSlot(), player, itemstack);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeVarInt(slot);
 	}
 
 	@Override
 	public PacketIdServer getPacketId() {
 		return PacketIdServer.CHIPSET_CLICK;
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			int slot = data.readVarInt();
+
+			if (player.openContainer instanceof IContainerSocketed) {
+				ItemStack itemstack = player.inventory.getItemStack();
+				if (itemstack.getItem() instanceof ItemCircuitBoard) {
+					((IContainerSocketed) player.openContainer).handleChipsetClickServer(slot, player, itemstack);
+				}
+			}
+		}
 	}
 }

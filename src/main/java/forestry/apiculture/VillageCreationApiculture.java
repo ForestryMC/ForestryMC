@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import forestry.apiculture.worldgen.VillageApiaristHouse;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
-import forestry.apiculture.worldgen.VillageApiaristHouse;
 
 public class VillageCreationApiculture implements VillagerRegistry.IVillageCreationHandler {
 
@@ -31,7 +30,7 @@ public class VillageCreationApiculture implements VillagerRegistry.IVillageCreat
 
 	@Override
 	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int size) {
-		return new StructureVillagePieces.PieceWeight(VillageApiaristHouse.class, 15, MathHelper.getRandomIntegerInRange(random, size, 1 + size));
+		return new StructureVillagePieces.PieceWeight(VillageApiaristHouse.class, 15, MathHelper.getInt(random, size, 1 + size));
 	}
 
 	@Override
@@ -40,6 +39,7 @@ public class VillageCreationApiculture implements VillagerRegistry.IVillageCreat
 	}
 
 	@Override
+	@Nullable
 	public StructureVillagePieces.Village buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List<StructureComponent> pieces, Random random, int p1, int p2, int p3, EnumFacing facing, int p5) {
 		return VillageApiaristHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, facing, p5);
 	}

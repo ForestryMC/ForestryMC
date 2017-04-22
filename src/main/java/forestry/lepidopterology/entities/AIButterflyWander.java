@@ -19,7 +19,6 @@ public class AIButterflyWander extends AIButterflyMovement {
 
 	@Override
 	public boolean shouldExecute() {
-
 		if (entity.getDestination() != null) {
 			return false;
 		}

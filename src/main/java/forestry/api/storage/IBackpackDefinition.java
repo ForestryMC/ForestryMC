@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ public interface IBackpackDefinition {
 	/**
 	 * @return Human-readable name of the backpack.
 	 */
-	@Nonnull
 	String getName(ItemStack backpack);
 
 	/**
@@ -33,7 +31,7 @@ public interface IBackpackDefinition {
 
 	/**
 	 * Filters items that can be put into a backpack.
-	 *
+	 * <p>
 	 * For Backpack Implementers: you can create a new filter with
 	 * {@link IBackpackInterface#createBackpackFilter()} or
 	 * {@link IBackpackInterface#createNaturalistBackpackFilter(String)}
@@ -41,6 +39,5 @@ public interface IBackpackDefinition {
 	 *
 	 * @return the backpack's item filter.
 	 */
-	@Nonnull
 	Predicate<ItemStack> getFilter();
 }

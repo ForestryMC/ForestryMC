@@ -11,22 +11,12 @@
 package forestry.lepidopterology.genetics.alleles;
 
 import java.awt.Color;
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import java.util.Set;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -38,9 +28,19 @@ import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.lepidopterology.render.TextureAtlasButterfly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
+public class AlleleButterflySpecies extends AlleleSpecies
+		implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
 	private final String modID;
 	private final Color serumColour;
@@ -48,15 +48,17 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private float flightDistance = 5.0f;
 	private boolean isActualNocturnal = false;
 
-	private final EnumSet<BiomeDictionary.Type> spawnBiomes = EnumSet.noneOf(BiomeDictionary.Type.class);
+	private final Set<BiomeDictionary.Type> spawnBiomes = new HashSet<>();
 
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
-	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
+			String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
+			Color serumColour) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
-		
+
 		this.modID = modID;
 		this.texture = texturePath;
 	}
@@ -90,7 +92,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return this;
 	}
 
-	public AlleleButterflySpecies addSpawnBiomes(EnumSet<BiomeDictionary.Type> biomeTags) {
+	public AlleleButterflySpecies addSpawnBiomes(Set<BiomeDictionary.Type> biomeTags) {
 		spawnBiomes.addAll(biomeTags);
 		return this;
 	}
@@ -104,14 +106,14 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public String getEntityTexture() {
 		return getModID() + ":" + Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png";
 	}
-	
+
 	@Override
 	public String getItemTexture() {
 		return getModID() + ":items/" + texture;
 	}
-	
+
 	@Override
-	public EnumSet<BiomeDictionary.Type> getSpawnBiomes() {
+	public Set<BiomeDictionary.Type> getSpawnBiomes() {
 		return spawnBiomes;
 	}
 
@@ -128,7 +130,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return 0f;
 		}
 
@@ -151,8 +153,12 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM)};
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual,
+			int bountyLevel) {
+		ItemStack serum = getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM);
+		NonNullList<ItemStack> bounty = NonNullList.create();
+		bounty.add(serum);
+		return bounty;
 	}
 
 	/* OTHER */
@@ -193,15 +199,15 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		}
 		return 0xffffff;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 		String spriteName = getItemTexture();
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		textureMap.setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
+		textureMap.registerSprite(new ResourceLocation(spriteName));
 	}
-	
+
 	@Override
 	public String getModID() {
 		return modID;

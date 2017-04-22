@@ -27,7 +27,7 @@ public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 	public IFlowerProvider getProvider() {
 		return provider;
 	}
-	
+
 	@Override
 	public String getName() {
 		return getProvider().getDescription();

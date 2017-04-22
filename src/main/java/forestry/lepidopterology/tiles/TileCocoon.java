@@ -10,22 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.owner.OwnerHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.google.common.base.Preconditions;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.greenhouse.GreenhouseManager;
@@ -33,34 +24,47 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.proxy.Proxies;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private int age;
 	private int maturationTime;
 	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.getIndividual();
-	private BlockPos nursery;
 	private boolean isSolid;
 
 	public TileCocoon() {
 	}
-	
+
 	public TileCocoon(boolean isSolid) {
 		this.isSolid = isSolid;
 		if (isSolid) {
@@ -77,37 +81,21 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 			caterpillar = new Butterfly(nbttagcompound.getCompoundTag("Caterpillar"));
 		}
 		ownerHandler.readFromNBT(nbttagcompound);
-		if (nbttagcompound.hasKey("nursery")) {
-			NBTTagCompound nbt = nbttagcompound.getCompoundTag("nursery");
-			int x = nbt.getInteger("x");
-			int y = nbt.getInteger("y");
-			int z = nbt.getInteger("z");
-			nursery = new BlockPos(x, y, z);
-		}
 		age = nbttagcompound.getInteger("Age");
 		maturationTime = nbttagcompound.getInteger("CATMAT");
 		isSolid = nbttagcompound.getBoolean("isSolid");
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 
-		if (caterpillar != null) {
-			NBTTagCompound subcompound = new NBTTagCompound();
-			caterpillar.writeToNBT(subcompound);
-			nbttagcompound.setTag("Caterpillar", subcompound);
-		}
+		NBTTagCompound subcompound = new NBTTagCompound();
+		caterpillar.writeToNBT(subcompound);
+		nbttagcompound.setTag("Caterpillar", subcompound);
+
 		ownerHandler.writeToNBT(nbttagcompound);
-		if (nursery != null) {
-			BlockPos pos = nursery;
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("x", pos.getX());
-			nbt.setInteger("y", pos.getY());
-			nbt.setInteger("z", pos.getZ());
-			nbttagcompound.setTag("nursery", nbt);
-		}
+
 		nbttagcompound.setInteger("Age", age);
 		nbttagcompound.setInteger("CATMAT", maturationTime);
 		nbttagcompound.setBoolean("isSolid", isSolid);
@@ -115,19 +103,16 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		String speciesUID = "";
+	public void writeData(PacketBufferForestry data) {
 		IButterfly caterpillar = getCaterpillar();
-		if (caterpillar != null) {
-			speciesUID = caterpillar.getIdent();
-		}
-		data.writeUTF(speciesUID);
+		String speciesUID = caterpillar.getIdent();
+		data.writeString(speciesUID);
 		data.writeInt(age);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		String speciesUID = data.readUTF();
+	public void readData(PacketBufferForestry data) throws IOException {
+		String speciesUID = data.readString();
 		IButterfly caterpillar = getButterfly(speciesUID);
 		setCaterpillar(caterpillar);
 		age = data.readInt();
@@ -135,9 +120,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	private static IButterfly getButterfly(String speciesUID) {
 		IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplate(speciesUID);
-		if (butterflyTemplate == null) {
-			return null;
-		}
+		Preconditions.checkNotNull(butterflyTemplate, "Could not find butterfly template for species: %s", speciesUID);
 		return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
 	}
 
@@ -158,7 +141,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
@@ -166,12 +148,18 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	@SideOnly(Side.CLIENT)
+	public void handleUpdateTag(NBTTagCompound tag) {
+		int oldAge = age;
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
+		if (oldAge != age) {
+			world.markBlockRangeForRenderUpdate(pos, pos);
+		}
 	}
-	
+
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		NBTTagCompound nbt = pkt.getNbtCompound();
@@ -179,57 +167,74 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	public void onBlockTick() {
-		if (caterpillar == null) {
-			worldObj.setBlockToAir(getPos());
-			return;
-		}
-
 		maturationTime++;
 
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
-		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+		int caterpillarMatureTime = Math
+				.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
 			if (age < 2) {
 				age++;
 				maturationTime = 0;
-			} else if (caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())) {
-				IGreenhouseComponent.ButterflyHatch hatch = getButterflyHatch(worldObj, pos);
-				ItemStack[] cocoonDrops;
-				if (hatch != null) {
-					cocoonDrops = hatch.addCocoonLoot(this);
-				} else {
-					cocoonDrops = caterpillar.getCocoonDrop(this);
+				IBlockState blockState = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, blockState, blockState, 0);
+			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
+				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
+				for(IGreenhouseComponent.Nursery nursery : getNursery(world, pos)){
+					nursery.addCocoonLoot(this, cocoonDrops);
+					if(isListEmpty(cocoonDrops)){
+						break;
+					}
 				}
 				for (ItemStack drop : cocoonDrops) {
-					ItemStackUtil.dropItemStackAsEntity(drop, worldObj, pos);
+					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
 				}
-				worldObj.setBlockToAir(getPos());
-				attemptButterflySpawn(worldObj, caterpillar, getPos());
+				world.setBlockToAir(getPos());
+				attemptButterflySpawn(world, caterpillar, getPos());
 			}
 		}
 	}
-	
-	public ButterflyHatch getButterflyHatch(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper == null || GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos) == null) {
-			return null;
+
+	private Set<Nursery> getNursery(World world, BlockPos pos) {
+		if (GreenhouseManager.greenhouseHelper == null) {
+			return Collections.emptySet();
 		}
 		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
-		if(controller instanceof IGreenhouseControllerInternal){
-			return ((IGreenhouseControllerInternal) controller).getButterflyHatch();
-		}
-		for (IMultiblockComponent greenhouse : controller.getComponents()) {
-			if (greenhouse instanceof ButterflyHatch) {
-				return (ButterflyHatch) greenhouse;
+		if (controller != null) {
+			Set<Nursery> nurserys;
+			if (controller instanceof IGreenhouseControllerInternal) {
+				nurserys = ((IGreenhouseControllerInternal) controller).getButterflyNurserys();
+			}else{
+				nurserys = new HashSet<>();
+				for (IMultiblockComponent greenhouseComponent : controller.getComponents()) {
+					if (greenhouseComponent instanceof Nursery) {
+						nurserys.add((Nursery) greenhouseComponent);
+					}
+				}
 			}
+			return nurserys;
 		}
-		return null;
+		return Collections.emptySet();
 	}
 	
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
-			Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops){
+		if(cocoonDrops.isEmpty()){
+			return true;
 		}
+		for(ItemStack stack : cocoonDrops){
+			if(!stack.isEmpty()){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
+		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
+				pos.getX(), pos.getY() + 0.1f, pos.getZ());
+		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
+				pos.getZ());
 	}
 
 	@Override
@@ -243,38 +248,24 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
-	public IButterflyNursery getNursery() {
-		TileEntity nursery = worldObj.getTileEntity(this.nursery);
-		if (nursery instanceof IButterflyNursery) {
-			return (IButterflyNursery) nursery;
-		}
-		return null;
-	}
-	
-	@Override
-	public void setNursery(IButterflyNursery nursery) {
-		this.nursery = nursery.getCoordinates();
-	}
-
-	@Override
 	public void setCaterpillar(IButterfly butterfly) {
 		this.caterpillar = butterfly;
 		sendNetworkUpdate();
 	}
 
 	private void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this), worldObj);
+		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
 	}
-	
+
 	public int getAge() {
 		return age;
 	}
-	
+
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
-	public ItemStack[] getCocoonDrops() {
+
+	public NonNullList<ItemStack> getCocoonDrops() {
 		return caterpillar.getCocoonDrop(this);
 	}
 

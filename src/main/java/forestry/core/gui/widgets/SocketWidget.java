@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import forestry.core.circuits.ISocketable;
+import forestry.core.circuits.ISolderingIron;
+import forestry.core.circuits.ItemCircuitBoard;
+import forestry.core.gui.IContainerSocketed;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.circuits.ISocketable;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.IContainerSocketed;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Translator;
 
 public class SocketWidget extends Widget {
 
@@ -42,8 +39,8 @@ public class SocketWidget extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
-		if (socketStack != null) {
-			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
+		if (!socketStack.isEmpty()) {
+			Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 
@@ -59,9 +56,9 @@ public class SocketWidget extends Widget {
 		public void refresh() {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
-			if (stack != null) {
-				Minecraft minecraft = Proxies.common.getClientInstance();
-				EntityPlayer player = minecraft.thePlayer;
+			if (!stack.isEmpty()) {
+				Minecraft minecraft = Minecraft.getMinecraft();
+				EntityPlayer player = minecraft.player;
 				toolTip.add(stack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
 				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
@@ -73,8 +70,8 @@ public class SocketWidget extends Widget {
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 
-		ItemStack itemstack = manager.minecraft.thePlayer.inventory.getItemStack();
-		if (itemstack == null) {
+		ItemStack itemstack = manager.minecraft.player.inventory.getItemStack();
+		if (itemstack.isEmpty()) {
 			return;
 		}
 

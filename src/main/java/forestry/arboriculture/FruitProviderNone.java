@@ -10,27 +10,27 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -59,6 +59,7 @@ public class FruitProviderNone implements IFruitProvider {
 
 	protected int ripeningPeriod = 10;
 
+	@Nullable
 	private OverlayType overlay = null;
 
 	public FruitProviderNone(String unlocalizedDescription, IFruitFamily family) {
@@ -76,10 +77,9 @@ public class FruitProviderNone implements IFruitProvider {
 		return family;
 	}
 
-	@Nonnull
 	@Override
-	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
-		return Collections.emptyList();
+	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+		return NonNullList.create();
 	}
 
 	@Override
@@ -112,13 +112,11 @@ public class FruitProviderNone implements IFruitProvider {
 		return ripeningPeriod;
 	}
 
-	@Nonnull
 	@Override
 	public Map<ItemStack, Float> getProducts() {
 		return Collections.emptyMap();
 	}
 
-	@Nonnull
 	@Override
 	public Map<ItemStack, Float> getSpecialty() {
 		return Collections.emptyMap();
@@ -148,9 +146,10 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 		if (overlay != null) {
-			TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+			TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 			map.registerSprite(overlay.sprite);
 		}
 	}
@@ -161,7 +160,6 @@ public class FruitProviderNone implements IFruitProvider {
 		return null;
 	}
 
-	@Nonnull
 	@Override
 	public String getModID() {
 		return Constants.MOD_ID;

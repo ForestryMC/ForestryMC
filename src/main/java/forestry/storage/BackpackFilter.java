@@ -55,15 +55,11 @@ public class BackpackFilter implements IBackpackFilterConfigurable {
 
 	@Override
 	public boolean test(ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return false;
 		}
 
 		Item item = itemStack.getItem();
-		if (item == null) {
-			return false;
-		}
-
 		String itemStackStringWild = ItemStackUtil.getItemNameFromRegistryAsString(item);
 		if (rejectedItemStacks.contains(itemStackStringWild)) {
 			return false;

@@ -18,8 +18,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	/**
 	 * Register the birth of a queen. Will mark species as discovered.
 	 *
-	 * @param queen
-	 *            Created queen.
+	 * @param queen Created queen.
 	 */
 	void registerQueen(IIndividual queen);
 
@@ -31,8 +30,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	/**
 	 * Register the birth of a princess. Will mark species as discovered.
 	 *
-	 * @param princess
-	 *            Created princess.
+	 * @param princess Created princess.
 	 */
 	void registerPrincess(IIndividual princess);
 
@@ -44,8 +42,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	/**
 	 * Register the birth of a drone. Will mark species as discovered.
 	 *
-	 * @param drone
-	 *            Created drone.
+	 * @param drone Created drone.
 	 */
 	void registerDrone(IIndividual drone);
 

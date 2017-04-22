@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.circuits;
 
+import javax.annotation.Nullable;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
@@ -35,6 +37,7 @@ public class CircuitFarmLogic extends Circuit {
 		return tile instanceof IFarmHousing;
 	}
 
+	@Nullable
 	private IFarmHousing getCircuitable(Object tile) {
 		if (!isCircuitable(tile)) {
 			return null;

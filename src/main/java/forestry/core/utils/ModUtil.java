@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fml.common.API;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -23,7 +25,7 @@ public abstract class ModUtil {
 		return Loader.isModLoaded(modname);
 	}
 
-	public static boolean isModLoaded(String modname, String versionRangeString) {
+	public static boolean isModLoaded(String modname, @Nullable String versionRangeString) {
 		if (!isModLoaded(modname)) {
 			return false;
 		}
@@ -55,10 +57,10 @@ public abstract class ModUtil {
 	/**
 	 * Checks to see if an API within a specific version range is loaded.
 	 *
-	 * @param apiName the package name of the package-info.java file to check. (for example "cofh.api.energy")
+	 * @param apiName            the package name of the package-info.java file to check. (for example "cofh.api.energy")
 	 * @param versionRangeString the version range, as defined in {@link VersionParser}.
 	 */
-	public static boolean isAPILoaded(String apiName, String versionRangeString) {
+	public static boolean isAPILoaded(String apiName, @Nullable String versionRangeString) {
 		Package apiPackage = Package.getPackage(apiName);
 		if (apiPackage == null) {
 			return false;

@@ -8,6 +8,7 @@ package forestry.api.farming;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -22,12 +23,12 @@ public class DefaultFarmListener implements IFarmListener {
 	}
 
 	@Override
-	public void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop) {
+	public void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop) {
 
 	}
 
 	@Override
-	public void hasCollected(Collection<ItemStack> collected, IFarmLogic logic) {
+	public void hasCollected(NonNullList<ItemStack> collected, IFarmLogic logic) {
 
 	}
 

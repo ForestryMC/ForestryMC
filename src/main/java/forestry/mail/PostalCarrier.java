@@ -10,15 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
@@ -26,11 +17,18 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -55,7 +53,7 @@ public class PostalCarrier implements IPostalCarrier {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getSprite() {
-		return TextureManager.getInstance().getDefault(iconID);
+		return TextureManagerForestry.getInstance().getDefault(iconID);
 	}
 
 	@Override
@@ -88,7 +86,7 @@ public class PostalCarrier implements IPostalCarrier {
 		} else {
 			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
+				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 

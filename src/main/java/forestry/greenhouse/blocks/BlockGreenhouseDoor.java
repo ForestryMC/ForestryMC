@@ -10,9 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.blocks;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
 
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.CamouflageUtil;
+import forestry.core.utils.Translator;
+import forestry.greenhouse.models.GreenhouseDoorStateMapper;
+import forestry.greenhouse.tiles.TileGreenhouse;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
@@ -26,8 +34,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -35,21 +41,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.CamouflageUtil;
-import forestry.core.utils.Translator;
-import forestry.greenhouse.models.GreenhouseDoorStateMapper;
-import forestry.greenhouse.tiles.TileGreenhouse;
 
 public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapperRegister {
 
@@ -67,6 +63,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.1875D, 1.0D, 1.0D);
 
 	public BlockGreenhouseDoor() {
+		super(BlockGreenhouseType.DOOR);
 		setSoundType(SoundType.GLASS);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, false).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, false).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(CAMOUFLAGED, false));
 	}
@@ -98,8 +95,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 		boolean flag = !state.getValue(OPEN);
 		boolean flag1 = state.getValue(HINGE) == BlockDoor.EnumHingePosition.RIGHT;
 
-		switch (enumfacing)
-		{
+		switch (enumfacing) {
 			case EAST:
 			default:
 				return flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
@@ -113,14 +109,13 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (!(tile instanceof TileGreenhouse)) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileGreenhouse door = TileUtil.getTile(worldIn, pos, TileGreenhouse.class);
+		if (door == null) {
 			return false;
 		}
-		
-		TileGreenhouse door = (TileGreenhouse) tile;
-		if(playerIn.isSneaking() && playerIn.getHeldItem(hand) == null){
+
+		if (playerIn.isSneaking() && playerIn.getHeldItem(hand).isEmpty()) {
 			if (!worldIn.isRemote) {
 				door.openGui(playerIn);
 			}
@@ -142,7 +137,8 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	@Deprecated
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER) {
 			BlockPos blockpos = pos.down();
 			IBlockState iblockstate = worldIn.getBlockState(blockpos);
@@ -150,7 +146,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 			if (iblockstate.getBlock() != this) {
 				worldIn.setBlockToAir(pos);
 			} else if (blockIn != this) {
-				iblockstate.neighborChanged(worldIn, blockpos, blockIn);
+				iblockstate.neighborChanged(worldIn, blockpos, blockIn, fromPos);
 			}
 		} else {
 			boolean flag1 = false;
@@ -162,7 +158,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				flag1 = true;
 			}
 
-			if (!worldIn.getBlockState(pos.down()).isFullyOpaque()) {
+			if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)) {
 				worldIn.setBlockToAir(pos);
 				flag1 = true;
 
@@ -184,7 +180,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 					if (flag != state.getValue(OPEN)) {
 						worldIn.setBlockState(pos, state.withProperty(OPEN, flag), 2);
 						worldIn.markBlockRangeForRenderUpdate(pos, pos);
-						worldIn.playEvent(null, flag ? 1003 : 1006, pos, 0);
+						worldIn.playEvent(null, flag ? 1006 : 1012, pos, 0);
 					}
 				}
 			}
@@ -202,8 +198,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state)
-	{
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
 		return EnumPushReaction.DESTROY;
 	}
 
@@ -246,7 +241,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				state = state.withProperty(FACING, iblockstate1.getValue(FACING)).withProperty(OPEN, iblockstate1.getValue(OPEN));
 			}
 		}
-		state = state.withProperty(CAMOUFLAGED, CamouflageUtil.getCamouflageBlock(worldIn, pos) != null);
+		state = state.withProperty(CAMOUFLAGED, !CamouflageUtil.getCamouflageBlock(worldIn, pos).isEmpty());
 
 		return state;
 	}
@@ -254,6 +249,12 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return (meta & 8) > 0 ? this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(HINGE, (meta & 1) > 0 ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, (meta & 2) > 0) : this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(FACING, EnumFacing.getHorizontal(meta & 3).rotateYCCW()).withProperty(OPEN, (meta & 4) > 0);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
@@ -292,11 +293,11 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	public void registerModel(Item item, IModelManager manager) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.door", "inventory"));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new GreenhouseDoorStateMapper());
+		ModelLoader.setCustomStateMapper(this, new GreenhouseDoorStateMapper());
 	}
 
 	protected static int removeHalfBit(int meta) {
@@ -332,7 +333,6 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 		return new ExtendedBlockState(this, new IProperty[]{HALF, FACING, OPEN, HINGE, POWERED, CAMOUFLAGED}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
-	@Nonnull
 	@Override
 	public BlockGreenhouseType getGreenhouseType() {
 		return BlockGreenhouseType.DOOR;

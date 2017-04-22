@@ -25,7 +25,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 	public boolean onItemPickup(EntityPlayer player, EntityItem entityitem) {
 
 		ItemStack itemstack = entityitem.getEntityItem();
-		if (itemstack == null || itemstack.stackSize <= 0) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
@@ -38,12 +38,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 		topOffPlayerInventory(player, itemstack);
 
 		for (ItemStack pack : player.inventory.mainInventory) {
-
-			if (pack == null || pack.stackSize <= 0) {
-				continue;
-			}
-
-			if (itemstack.stackSize <= 0) {
+			if (pack.isEmpty() || itemstack.isEmpty()) {
 				break;
 			}
 
@@ -58,7 +53,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 			}
 		}
 
-		return itemstack.stackSize == 0;
+		return itemstack.isEmpty();
 	}
 
 	/**
@@ -72,27 +67,26 @@ public class PickupHandlerStorage implements IPickupHandler {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
 			// We only add to existing stacks.
-			if (inventoryStack == null) {
+			if (inventoryStack.isEmpty()) {
 				continue;
 			}
 
 			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
+			if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
 				continue;
 			}
 
 			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-				int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
+				int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
 
-				// Enough space to add all
-				if (space > itemstack.stackSize) {
-					inventoryStack.stackSize += itemstack.stackSize;
-					itemstack.stackSize = 0;
-					break;
-					// Only part can be added
+				if (space > itemstack.getCount()) {
+					// Enough space to add all
+					inventoryStack.grow(itemstack.getCount());
+					itemstack.setCount(0);
 				} else {
-					inventoryStack.stackSize = inventoryStack.getMaxStackSize();
-					itemstack.stackSize -= space;
+					// Only part can be added
+					inventoryStack.setCount(inventoryStack.getMaxStackSize());
+					itemstack.shrink(space);
 				}
 			}
 		}

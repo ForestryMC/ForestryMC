@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import forestry.api.genetics.ISpeciesRoot;
@@ -39,53 +39,36 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public void addItemToForestryBackpack(@Nullable String backpackUid, @Nullable ItemStack itemStack) {
-		if (backpackUid == null) {
-			throw new NullPointerException("backpackUid must not be null");
-		}
-		if (itemStack == null) {
-			throw new NullPointerException("itemStack must not be null");
-		}
-		if (itemStack.getItem() == null) {
-			throw new NullPointerException("itemStack.getItem() must not be null");
-		}
+	public void addItemToForestryBackpack(String backpackUid, ItemStack itemStack) {
+		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
+		Preconditions.checkNotNull(itemStack, "itemStack must not be null");
+		Preconditions.checkArgument(!itemStack.isEmpty(), "itemStack must not be empty");
 
 		String stringForItemStack = ItemStackUtil.getStringForItemStack(itemStack);
 		backpackAcceptedItems.put(backpackUid, stringForItemStack);
 	}
 
 	@Override
-	public void registerBackpackDefinition(@Nullable String backpackUid, @Nullable IBackpackDefinition definition) {
-		if (backpackUid == null) {
-			throw new NullPointerException("backpackUid must not be null");
-		}
-		if (definition == null) {
-			throw new NullPointerException("definition must not be null");
-		}
+	public void registerBackpackDefinition(String backpackUid, IBackpackDefinition definition) {
+		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
+		Preconditions.checkNotNull(definition, "definition must not be null");
+
 		definitions.put(backpackUid, definition);
 	}
 
 	@Nullable
 	@Override
-	public IBackpackDefinition getBackpackDefinition(@Nullable String backpackUid) {
-		if (backpackUid == null) {
-			throw new NullPointerException("backpackUid must not be null");
-		}
+	public IBackpackDefinition getBackpackDefinition(String backpackUid) {
+		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
+
 		return definitions.get(backpackUid);
 	}
 
-	@Nonnull
 	@Override
-	public Item createBackpack(@Nullable String backpackUid, @Nullable EnumBackpackType type) {
-		if (backpackUid == null) {
-			throw new NullPointerException("backpackUid must not be null");
-		}
-		if (type == null) {
-			throw new NullPointerException("type must not be null");
-		}
-		if (type == EnumBackpackType.NATURALIST) {
-			throw new IllegalArgumentException("type must not be NATURALIST. Use createNaturalistBackpack instead.");
-		}
+	public Item createBackpack(String backpackUid, EnumBackpackType type) {
+		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
+		Preconditions.checkNotNull(type, "type must not be null");
+		Preconditions.checkArgument(type != EnumBackpackType.NATURALIST, "type must not be NATURALIST. Use createNaturalistBackpack instead.");
 
 		IBackpackDefinition definition = definitions.get(backpackUid);
 		if (definition == null) {
@@ -95,13 +78,9 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public Item createNaturalistBackpack(@Nullable String backpackUid, @Nullable ISpeciesRoot speciesRoot) {
-		if (backpackUid == null) {
-			throw new NullPointerException("backpackUid must not be null");
-		}
-		if (speciesRoot == null) {
-			throw new NullPointerException("speciesRoot must not be null");
-		}
+	public Item createNaturalistBackpack(String backpackUid, ISpeciesRoot speciesRoot) {
+		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
+		Preconditions.checkNotNull(speciesRoot, "speciesRoot must not be null");
 
 		IBackpackDefinition definition = definitions.get(backpackUid);
 		if (definition == null) {

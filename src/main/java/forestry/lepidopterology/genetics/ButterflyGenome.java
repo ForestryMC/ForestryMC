@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+
+import com.google.common.base.Preconditions;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -43,9 +45,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
-			return null;
-		}
+		Preconditions.checkArgument(ButterflyManager.butterflyRoot.isMember(itemStack), "Must be a butterfly");
 
 		IAlleleSpecies species = getSpeciesDirectly(ButterflyManager.butterflyRoot, itemStack);
 		if (species instanceof IAlleleButterflySpecies) {
@@ -70,12 +70,12 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public float getSize() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
 	}
-	
+
 	@Override
 	public int getLifespan() {
 		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
 	}
-	
+
 	@Override
 	public float getSpeed() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
@@ -125,7 +125,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public IAlleleButterflyEffect getEffect() {
 		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
 	}
-	
+
 	@Override
 	public IAlleleButterflyCocoon getCocoon() {
 		return (IAlleleButterflyCocoon) getActiveAllele(EnumButterflyChromosome.COCOON);

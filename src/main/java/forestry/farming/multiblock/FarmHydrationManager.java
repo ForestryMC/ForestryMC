@@ -10,32 +10,28 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.IClimatised;
 import forestry.farming.gui.IFarmLedgerDelegate;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, INbtReadable, IStreamable {
 	private static final int DELAY_HYDRATION = 100;
 	private static final float RAINFALL_MODIFIER_MAX = 15f;
 	private static final float RAINFALL_MODIFIER_MIN = 0.5f;
 
-	@Nonnull
 	private final IClimatised climatised;
 	private int hydrationDelay = 0;
 	private int ticksSinceRainfall = 0;
 
-	public FarmHydrationManager(@Nonnull IClimatised climatised) {
+	public FarmHydrationManager(IClimatised climatised) {
 		this.climatised = climatised;
 	}
 
@@ -96,13 +92,13 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeVarInt(hydrationDelay);
 		data.writeVarInt(ticksSinceRainfall);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		hydrationDelay = data.readVarInt();
 		ticksSinceRainfall = data.readVarInt();
 	}

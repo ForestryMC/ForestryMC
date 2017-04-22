@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -19,16 +18,16 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.ContainerFiller;
 import forestry.core.fluids.DrainOnlyFluidHandlerWrapper;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileBase;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -36,7 +35,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -45,18 +44,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
 	private static final FluidStack WATER_PER_UPDATE = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
-	@Nonnull
 	private final FilteredTank resourceTank;
-	@Nonnull
 	private final TankManager tankManager;
-	@Nonnull
 	private final ContainerFiller containerFiller;
 
+	@Nullable
 	private Boolean canDumpBelow = null;
 	private boolean dumpingFluid = false;
 
@@ -64,7 +63,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	private int fillingProgress;
 
 	public TileRaintank() {
-		super("raintank");
 		setInternalInventory(new InventoryRaintank(this));
 
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
@@ -74,7 +72,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		containerFiller = new ContainerFiller(resourceTank, Constants.RAINTANK_FILLING_TIME, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -89,13 +86,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -106,14 +104,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			IErrorLogic errorLogic = getErrorLogic();
 
 			BlockPos pos = getPos();
-			Biome biome = worldObj.getBiome(pos);
+			Biome biome = world.getBiome(pos);
 			errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
 
 			BlockPos posAbove = pos.up();
-			boolean hasSky = worldObj.canBlockSeeSky(posAbove);
+			boolean hasSky = world.canBlockSeeSky(posAbove);
 			errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-			errorLogic.setCondition(!worldObj.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
+			errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 			if (!errorLogic.hasErrors()) {
 				resourceTank.fillInternal(WATER_PER_UPDATE, true);
@@ -123,7 +121,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 
 		if (canDumpBelow == null) {
-			canDumpBelow = FluidHelper.canAcceptFluid(worldObj, getPos().down(), EnumFacing.UP, STACK_WATER);
+			canDumpBelow = FluidHelper.canAcceptFluid(world, getPos().down(), EnumFacing.UP, STACK_WATER);
 		}
 
 		if (canDumpBelow) {
@@ -135,7 +133,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	private boolean dumpFluidBelow() {
 		if (!resourceTank.isEmpty()) {
-			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(worldObj, pos.down(), EnumFacing.UP);
+			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.down(), EnumFacing.UP);
 			if (fluidDestination != null) {
 				if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
 					return true;
@@ -166,29 +164,28 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		iCrafting.sendProgressBarUpdate(container, 0, containerFiller.getFillingProgress());
 	}
 
-	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
 	@Override
-	public void onNeighborTileChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborTileChange(world, pos, neighbor);
 
 		if (neighbor.equals(pos.down())) {
-			canDumpBelow = FluidHelper.canAcceptFluid(worldObj, neighbor, EnumFacing.UP, STACK_WATER);
+			canDumpBelow = FluidHelper.canAcceptFluid(world, neighbor, EnumFacing.UP, STACK_WATER);
 		}
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			final IFluidHandler fluidHandler;
 			if (facing == EnumFacing.DOWN) {
@@ -202,12 +199,13 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiRaintank(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerRaintank(player.inventory, this);
 	}
 }

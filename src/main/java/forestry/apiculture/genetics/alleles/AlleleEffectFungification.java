@@ -22,7 +22,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private static final int MAX_BLOCK_FIND_TRIES = 10;
 	private static final int ENTITY_THROTTLE = 6;
-	
+
 	public AlleleEffectFungification() {
 		super("mycophilic", true, 20, false, false);
 	}
@@ -40,7 +40,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		doBlockEffect(genome, housing);
-		
+
 		int entityThrottle = storedData.getInteger(1);
 		if (entityThrottle >= ENTITY_THROTTLE) {
 			doEntityEffect(genome, housing);
@@ -49,7 +49,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			++entityThrottle;
 		}
 		storedData.setInteger(1, entityThrottle);
-		
+
 		return storedData;
 	}
 
@@ -61,12 +61,14 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area).subtract(halfArea).add(housingCoordinates);
-			IBlockState blockState = world.getBlockState(pos);
+			if (world.isBlockLoaded(pos)) {
+				IBlockState blockState = world.getBlockState(pos);
 
-			if (convertToMycelium(world, blockState, pos)) {
-				return;
-			} else if (growGiantMushroom(world, blockState, pos)) {
-				return;
+				if (convertToMycelium(world, blockState, pos)) {
+					return;
+				} else if (growGiantMushroom(world, blockState, pos)) {
+					return;
+				}
 			}
 		}
 	}
@@ -103,14 +105,14 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		if (cow instanceof EntityMooshroom) {
 			return false;
 		}
-		World worldObj = cow.worldObj;
+		World world = cow.world;
 		cow.setDead();
-		EntityMooshroom mooshroom = new EntityMooshroom(worldObj);
+		EntityMooshroom mooshroom = new EntityMooshroom(world);
 		mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
-		worldObj.spawnEntityInWorld(mooshroom);
-		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
+		world.spawnEntity(mooshroom);
+		world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

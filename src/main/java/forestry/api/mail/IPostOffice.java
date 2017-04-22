@@ -8,11 +8,12 @@ package forestry.api.mail;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public interface IPostOffice {
 
-	void collectPostage(ItemStack[] stamps);
+	void collectPostage(NonNullList<ItemStack> stamps);
 
 	IPostalState lodgeLetter(World world, ItemStack itemstack, boolean doLodge);
 

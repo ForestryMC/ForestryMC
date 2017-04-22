@@ -10,23 +10,31 @@
  ******************************************************************************/
 package forestry.mail.network;
 
-import forestry.core.network.PacketRegistry;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketRegistryMail extends PacketRegistry {
+public class PacketRegistryMail implements IPacketRegistry {
 	@Override
-	public void registerPackets() {
-		registerServerPacket(new PacketLetterInfoRequest());
-		registerServerPacket(new PacketTraderAddressRequest());
-		registerServerPacket(new PacketLetterTextSet());
-		
-		registerClientPacket(new PacketLetterInfoResponse());
-		registerClientPacket(new PacketTraderAddressResponse());
-		registerClientPacket(new PacketPOBoxInfoUpdate());
+	public void registerPacketsServer() {
+		PacketIdServer.LETTER_INFO_REQUEST.setPacketHandler(new PacketLetterInfoRequest.Handler());
+		PacketIdServer.TRADING_ADDRESS_REQUEST.setPacketHandler(new PacketTraderAddressRequest.Handler());
+		PacketIdServer.LETTER_TEXT_SET.setPacketHandler(new PacketLetterTextSet.Handler());
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerPacketsClient() {
+		PacketIdClient.LETTER_INFO_RESPONSE.setPacketHandler(new PacketLetterInfoResponse.Handler());
+		PacketIdClient.TRADING_ADDRESS_RESPONSE.setPacketHandler(new PacketTraderAddressResponse.Handler());
+		PacketIdClient.POBOX_INFO_RESPONSE.setPacketHandler(new PacketPOBoxInfoResponse.Handler());
 	}
 }

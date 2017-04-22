@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-import forestry.energy.compat.rf.IEnergyReceiverDelegated;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileFarmGearbox extends TileFarm implements IEnergyReceiverDelegated, IFarmComponent.Active {
+public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 	private static final int WORK_CYCLES = 4;
 	private static final int ENERGY_PER_OPERATION = WORK_CYCLES * 50;
@@ -47,7 +45,7 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiverDelegate
 		previousDelays = nbttagcompound.getInteger("PrevDelays");
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -92,19 +90,18 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiverDelegate
 
 	}
 
-	@Override
 	public EnergyManager getEnergyManager() {
 		return energyManager;
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
+	@Nullable
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

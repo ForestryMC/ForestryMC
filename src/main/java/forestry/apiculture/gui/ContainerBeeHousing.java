@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerBeeHousing extends ContainerTile<TileBeeHousingBase> implements IContainerBeeHousing {
 

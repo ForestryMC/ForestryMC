@@ -5,13 +5,11 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import forestry.api.core.IErrorLogicSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.core.IErrorLogicSource;
 
 public interface IFarmHousing extends IErrorLogicSource {
 

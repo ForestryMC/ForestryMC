@@ -14,17 +14,22 @@ import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
 	}
 }

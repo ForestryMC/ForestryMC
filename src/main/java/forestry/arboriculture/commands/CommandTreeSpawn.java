@@ -10,16 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
@@ -28,6 +22,12 @@ import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
 import forestry.core.commands.TemplateNotFoundException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.StringUtils;
 
 public final class CommandTreeSpawn extends SubCommand {
 
@@ -58,13 +58,13 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (args.length == 1) {
 			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
 			tabCompletion.add("help");
 			return tabCompletion;
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	private static String[] getSpecies() {

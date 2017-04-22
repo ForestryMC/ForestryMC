@@ -13,22 +13,21 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.core.PluginCore;
+import forestry.core.blocks.BlockBogEarth;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.core.PluginCore;
-import forestry.core.blocks.BlockBogEarth;
-
 public class FarmLogicPeat extends FarmLogicWatered {
-	private static final ItemStack bogEarth = PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
+	private static final ItemStack bogEarth = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
 
 	public FarmLogicPeat() {
-		super(bogEarth, PluginCore.blocks.bogEarth.getDefaultState());
+		super(bogEarth, PluginCore.getBlocks().bogEarth.getDefaultState());
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		return blockState.getBlock() == PluginCore.blocks.bogEarth;
+		return blockState.getBlock() == PluginCore.getBlocks().bogEarth;
 	}
 
 	@Override
@@ -86,6 +85,6 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PluginCore.items.peat);
+		return new ItemStack(PluginCore.getItems().peat);
 	}
 }

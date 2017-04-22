@@ -10,25 +10,23 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import javax.annotation.Nullable;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileGreenhouseValve extends TileGreenhouse implements ILiquidTankTile {
-	@Nonnull
+
 	@Override
 	public ITankManager getTankManager() {
 		return getMultiblockLogic().getController().getTankManager();
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return true;
 		}
@@ -36,7 +34,8 @@ public class TileGreenhouseValve extends TileGreenhouse implements ILiquidTankTi
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return super.getCapability(capability, facing);
 		}

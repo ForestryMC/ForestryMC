@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.commands.TemplateNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.commands.TemplateNotFoundException;
 
 public class TreeSpawner implements ITreeSpawner {
 
@@ -31,11 +30,7 @@ public class TreeSpawner implements ITreeSpawner {
 		BlockPos pos = new BlockPos(x, y, z);
 
 		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, pos);
-		if (gen == null) {
-			return false;
-		}
-
-		TreeGenHelper.generateTree(gen, player, pos);
+		TreeGenHelper.generateTree(gen, player.world, pos);
 		return true;
 	}
 

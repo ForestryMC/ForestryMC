@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.mail.blocks;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
@@ -27,14 +25,12 @@ public enum BlockTypeMail implements IBlockType {
 
 	public static final BlockTypeMail[] VALUES = values();
 
-	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeMail(@Nonnull Class<T> teClass, @Nonnull String name) {
+	<T extends TileForestry> BlockTypeMail(Class<T> teClass, String name) {
 		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
-	@Nonnull
 	@Override
 	public IMachineProperties getMachineProperties() {
 		return machineProperties;

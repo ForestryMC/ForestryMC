@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -26,23 +26,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 public abstract class Genome implements IGenome {
-
 	private static final String SLOT_TAG = "Slot";
 
-	@Nonnull
 	private final IChromosome[] chromosomes;
 
-	protected Genome(@Nonnull NBTTagCompound nbttagcompound) {
+	protected Genome(NBTTagCompound nbttagcompound) {
 		this.chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
 	}
 
-	protected Genome(@Nonnull IChromosome[] chromosomes) {
+	protected Genome(IChromosome[] chromosomes) {
 		checkChromosomes(chromosomes);
 		this.chromosomes = chromosomes;
 	}
 
 	private void checkChromosomes(IChromosome[] chromosomes) {
-		if (chromosomes == null || chromosomes.length != getDefaultTemplate().length) {
+		if (chromosomes.length != getDefaultTemplate().length) {
 			String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template.\n%s", getSpeciesRoot().getUID(), chromosomesToString(chromosomes));
 			throw new IllegalArgumentException(message);
 		}
@@ -87,10 +85,6 @@ public abstract class Genome implements IGenome {
 	}
 
 	private String chromosomesToString(IChromosome[] chromosomes) {
-		if (chromosomes == null) {
-			return "null";
-		}
-
 		StringBuilder stringBuilder = new StringBuilder();
 		IChromosomeType[] karyotype = getSpeciesRoot().getKaryotype();
 		for (int i = 0; i < chromosomes.length; i++) {
@@ -113,19 +107,19 @@ public abstract class Genome implements IGenome {
 	 * We need this because the client uses the species for rendering.
 	 */
 	@Nullable
-	public static IAlleleSpecies getSpeciesDirectly(@Nonnull ISpeciesRoot speciesRoot, @Nonnull ItemStack itemStack) {
+	public static IAlleleSpecies getSpeciesDirectly(ISpeciesRoot speciesRoot, ItemStack itemStack) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT == null) {
+		if (genomeNBT.hasNoTags()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT == null) {
+		if (chromosomesNBT.hasNoTags()) {
 			return null;
 		}
 
@@ -142,24 +136,18 @@ public abstract class Genome implements IGenome {
 
 	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		if (nbtTagCompound == null) {
-			return null;
-		}
+		Preconditions.checkArgument(nbtTagCompound != null, "itemStack must have nbt");
 
 		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
-		if (genome == null) {
-			return null;
-		}
+		Preconditions.checkArgument(!genome.hasNoTags(), "itemStack nbt must have a genome tag");
 
 		IChromosome[] chromosomes = getChromosomes(genome, speciesRoot);
-		if (chromosomes == null) {
-			return null;
-		}
 
 		return chromosomes[chromosomeType.ordinal()];
 	}
 
-	private static IChromosome[] getChromosomes(@Nonnull NBTTagCompound genomeNBT, @Nonnull ISpeciesRoot speciesRoot) {
+
+	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
 		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
@@ -188,9 +176,6 @@ public abstract class Genome implements IGenome {
 
 	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
-		if (chromosome == null) {
-			return null;
-		}
 		return chromosome.getActiveAllele();
 	}
 
@@ -212,16 +197,19 @@ public abstract class Genome implements IGenome {
 
 	// / INFORMATION RETRIEVAL
 	@Override
+
 	public IChromosome[] getChromosomes() {
 		return Arrays.copyOf(chromosomes, chromosomes.length);
 	}
 
 	@Override
+
 	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
 	}
 
 	@Override
+
 	public IAllele getInactiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getInactiveAllele();
 	}

@@ -10,18 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
-
-import forestry.api.genetics.IGenome;
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -29,40 +23,50 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.StringUtils;
 
-public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
-	
+public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
+
 	public static final int COLUMN_0 = 12;
 	public static final int COLUMN_1 = 90;
 	public static final int COLUMN_2 = 155;
 
-	public GuiAlyzer(EntityPlayer player, ItemInventoryAlyzer inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(inventory, player), inventory);
+	private final ItemInventoryAlyzer itemInventory;
 
+	public GuiAlyzer(EntityPlayer player, ItemInventoryAlyzer itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(itemInventory, player));
+
+		this.itemInventory = itemInventory;
 		this.xSize = 246;
 		this.ySize = 238;
 	}
 
 	public final int getColorCoding(boolean dominant) {
 		if (dominant) {
-			return fontColor.get("gui.beealyzer.dominant");
+			return ColourProperties.INSTANCE.get("gui.beealyzer.dominant");
 		} else {
-			return fontColor.get("gui.beealyzer.recessive");
+			return ColourProperties.INSTANCE.get("gui.beealyzer.recessive");
 		}
 	}
 
@@ -83,7 +87,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	}
 
 	public final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
-		textLayout.drawRow(text0, text1, text2, fontColor.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
+		textLayout.drawRow(text0, text1, text2, ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
 				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
@@ -91,11 +95,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
 		textLayout.drawRow(chromosomeName, active.getName(), inactive.getName(),
-				fontColor.get("gui.screen"), getColorCoding(active.isDominant()),
+				ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
 				getColorCoding(inactive.isDominant()));
 	}
 
-	public final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, String customPrimaryName, String customSecondaryName) {
+	public final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, @Nullable String customPrimaryName, @Nullable String customSecondaryName) {
 		IAlleleSpecies primary = individual.getGenome().getPrimary();
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 
@@ -116,6 +120,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		textLayout.newLine();
 	}
 
+	@Nullable
 	public static String checkCustomName(String key) {
 		if (Translator.canTranslateToLocal(key)) {
 			return Translator.translateToLocal(key);
@@ -123,7 +128,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
@@ -135,8 +140,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			return;
 		}
 
-		ItemStack stackInSlot = inventory.getStackInSlot(specimenSlot);
+		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stackInSlot);
+		if (speciesRoot == null) {
+			return;
+		}
 
 		switch (specimenSlot) {
 			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
@@ -169,8 +177,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	private int getSpecimenSlot() {
 		for (int k = ItemInventoryAlyzer.SLOT_SPECIMEN; k <= ItemInventoryAlyzer.SLOT_ANALYZE_5; k++) {
-			ItemStack stackInSlot = inventory.getStackInSlot(k);
-			if (stackInSlot == null) {
+			ItemStack stackInSlot = itemInventory.getStackInSlot(k);
+			if (stackInSlot.isEmpty()) {
 				continue;
 			}
 
@@ -180,7 +188,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 			}
 
 			IIndividual individual = speciesRoot.getMember(stackInSlot);
-			if (individual == null || !individual.isAnalyzed()) {
+			if (!individual.isAnalyzed()) {
 				continue;
 			}
 
@@ -195,10 +203,10 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		textLayout.newLine();
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
-		textLayout.drawCenteredLine(title, 8, 208, fontColor.get("gui.screen"));
+		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 
-		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, fontColor.get("gui.screen"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
@@ -228,7 +236,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		IClassification classification = individual.getGenome().getPrimary().getBranch();
 		while (classification != null) {
 
-			if (classification.getScientific() != null && !classification.getScientific().isEmpty()) {
+			if (!classification.getScientific().isEmpty()) {
 				hierarchy.push(classification);
 			}
 			classification = classification.getParent();
@@ -265,7 +273,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
 			fontRendererObj.drawStringWithShadow(extinct, guiLeft + 200 - fontRendererObj.getStringWidth(extinct),
-					guiTop + textLayout.getLineY(), fontColor.get("gui.beealyzer.dominant"));
+					guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}
 
 		textLayout.newLine();
@@ -299,8 +307,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		int columnWidth = 50;
 		int x = 0;
 
-		EntityPlayer player = Proxies.common.getPlayer();
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		for (IMutation mutation : speciesRoot.getCombinations(species)) {
 			if (breedingTracker.isDiscovered(mutation)) {
@@ -327,7 +335,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	public void drawMutationInfo(IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
 
 		Map<String, ItemStack> iconStacks = combination.getRoot().getAlyzerPlugin().getIconStacks();
-		
+
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 
@@ -348,7 +356,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	}
 
 	private void drawQuestionMark(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(x, y, 78, 240, 16, 16);
 	}
 
@@ -379,7 +387,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		}
 
 		// Probability arrow
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(x, y, column, line, 15, 9);
 
 		boolean researched = breedingTracker.isResearched(combination);
@@ -430,22 +438,22 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 	}
 
 	private void drawDownSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 45, 247, 15, 9);
 	}
 
@@ -457,7 +465,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 		int stringWidth = fontRendererObj.getStringWidth(fertilityString);
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + textLayout.getLineY() - 1, 60, 240 + texOffset, 12, 8);
 
 		textLayout.drawLine(fertilityString, x, textColor);
@@ -471,8 +479,21 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 		return widgetManager;
 	}
 
-	public LedgerManager getLedgerManager() {
-		return ledgerManager;
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger(getHints());
 	}
 
+	public List<String> getHints() {
+		ItemStack specimen = itemInventory.getSpecimen();
+		if (!specimen.isEmpty()) {
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
+			if (speciesRoot != null) {
+				IAlyzerPlugin alyzerPlugin = speciesRoot.getAlyzerPlugin();
+				return alyzerPlugin.getHints();
+			}
+		}
+		return Collections.emptyList();
+	}
 }

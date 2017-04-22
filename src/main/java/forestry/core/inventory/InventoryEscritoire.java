@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public static final short SLOT_ANALYZE = 0;
@@ -34,18 +33,16 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT)) {
 			ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
-			if (specimen == null) {
+			if (specimen.isEmpty()) {
 				return false;
 			}
 			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
 			return individual != null && individual.getGenome().getPrimary().getResearchSuitability(itemStack) > 0;
 		}
 
-		if (slotIndex == SLOT_ANALYZE) {
-			return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
-		}
+		return slotIndex == SLOT_ANALYZE &&
+				(AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null);
 
-		return false;
 	}
 
 	@Override
@@ -54,7 +51,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 			return false;
 		}
 
-		if (getStackInSlot(SLOT_ANALYZE) == null) {
+		if (getStackInSlot(SLOT_ANALYZE).isEmpty()) {
 			return true;
 		}
 
@@ -76,13 +73,13 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		super.setInventorySlotContents(slotIndex, itemstack);
 		if (slotIndex == SLOT_ANALYZE) {
-			if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
+			if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
 				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
-				if (ersatz != null) {
+				if (AlleleManager.alleleRegistry.isIndividual(ersatz)) {
 					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}
 			}
-			if (tile.getWorld() != null && !tile.getWorld().isRemote) {
+			if (!tile.getWorld().isRemote) {
 				tile.getGame().initialize(getStackInSlot(SLOT_ANALYZE));
 			}
 		}

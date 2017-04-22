@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileMill;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileCentrifuge;
@@ -38,23 +34,24 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	MOISTENER(TileMoistener.class, "moistener"),
 	SQUEEZER(TileSqueezer.class, "squeezer"),
 	STILL(TileStill.class, "still"),
-	RAINMAKER(TileMillRainmaker.class, "rainmaker", Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_"));
+	RAINMAKER(TileMillRainmaker.class, "rainmaker", Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_");
 
 	public static final BlockTypeFactoryTesr[] VALUES = values();
 
-	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileBase> BlockTypeFactoryTesr(@Nonnull Class<T> teClass, @Nonnull String name) {
-		TileEntitySpecialRenderer<TileBase> renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
-		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0");
+	<T extends TileBase> BlockTypeFactoryTesr(Class<T> teClass, String name) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
+		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
+		this.machineProperties = machineProperties;
 	}
 
-	<T extends TileBase> BlockTypeFactoryTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer) {
-		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0");
+	<T extends TileMill> BlockTypeFactoryTesr(Class<T> teClass, String name, String renderMillTexture) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
+		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
+		this.machineProperties = machineProperties;
 	}
 
-	@Nonnull
 	@Override
 	public IMachinePropertiesTesr<?> getMachineProperties() {
 		return machineProperties;

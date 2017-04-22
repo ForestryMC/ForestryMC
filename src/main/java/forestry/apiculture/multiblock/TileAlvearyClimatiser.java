@@ -10,23 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import forestry.energy.compat.rf.IEnergyReceiverDelegated;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiverDelegated, IActivatable, IAlvearyComponent.Climatiser {
+public abstract class TileAlvearyClimatiser extends TileAlveary implements IActivatable, IAlvearyComponent.Climatiser {
 
 	private static final int WORK_CYCLES = 1;
 	private static final int ENERGY_PER_OPERATION = 50;
@@ -79,7 +77,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		setActive(workingTime > 0);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -115,28 +112,22 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 
 		this.active = active;
 
-		if (worldObj != null) {
-			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world != null) {
+			if (world.isRemote) {
+				world.markBlockRangeForRenderUpdate(getPos(), getPos());
 			} else {
-				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 			}
 		}
 	}
 
 	@Override
-	public EnergyManager getEnergyManager() {
-		return energyManager;
-	}
-
-	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

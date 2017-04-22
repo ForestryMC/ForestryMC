@@ -12,36 +12,43 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.gui.IContainerSocketed;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gui.IContainerSocketed;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketIdServer;
+public class PacketSolderingIronClick extends ForestryPacket implements IForestryPacketServer {
+	private final int slot;
 
-public class PacketSolderingIronClick extends PacketSlotClick implements IForestryPacketServer {
-
-	public PacketSolderingIronClick() {
-	}
-
-	public PacketSolderingIronClick(TileEntity tile, int slot) {
-		super(tile, slot);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (!(player.openContainer instanceof IContainerSocketed)) {
-			return;
-		}
-		ItemStack itemstack = player.inventory.getItemStack();
-
-		((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(getSlot(), player, itemstack);
+	public PacketSolderingIronClick(int slot) {
+		this.slot = slot;
 	}
 
 	@Override
 	public PacketIdServer getPacketId() {
 		return PacketIdServer.SOLDERING_IRON_CLICK;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeVarInt(slot);
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			int slot = data.readVarInt();
+
+			if (!(player.openContainer instanceof IContainerSocketed)) {
+				return;
+			}
+			ItemStack itemstack = player.inventory.getItemStack();
+
+			((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(slot, player, itemstack);
+		}
 	}
 }

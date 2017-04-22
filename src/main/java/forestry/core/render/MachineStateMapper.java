@@ -1,10 +1,12 @@
 package forestry.core.render;
 
-import com.google.common.collect.Maps;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachinePropertiesTesr;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -12,13 +14,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachinePropertiesTesr;
 
 @SideOnly(Side.CLIENT)
 public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializable> extends ForestryStateMapper {

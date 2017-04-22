@@ -12,7 +12,6 @@ package forestry.core.utils.datastructures;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
@@ -47,7 +46,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 		if (key instanceof ItemStack) {
 			return (ItemStack) key;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 }

@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements IColoredItem {
 
@@ -31,7 +29,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack stack, int pass) {
 		int value = 0xffffff;
-		if (pass == 1 && stack.hasTagCompound()) {
+		if (pass == 1 && stack.getTagCompound() != null) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey(BlockCandle.colourTagName)) {
 				value = tag.getInteger(BlockCandle.colourTagName);
@@ -43,7 +41,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		String value = getBlock().getUnlocalizedName();
-		if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
+		if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}
 

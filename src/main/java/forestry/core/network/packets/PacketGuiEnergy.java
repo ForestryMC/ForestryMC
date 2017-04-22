@@ -12,22 +12,19 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.gui.ContainerTile;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketClient {
-
-	private int windowId;
-	private int value;
-
-	public PacketGuiEnergy() {
-	}
+	private final int windowId;
+	private final int value;
 
 	public PacketGuiEnergy(int windowId, int value) {
 		this.windowId = windowId;
@@ -35,26 +32,25 @@ public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketCl
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.GUI_ENERGY;
+	}
+
+	@Override
+	public void writeData(PacketBufferForestry data) throws IOException {
 		data.writeVarInt(windowId);
 		data.writeVarInt(value);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		windowId = data.readVarInt();
-		value = data.readVarInt();
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {
-			((ContainerTile) player.openContainer).onGuiEnergy(value);
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			int windowId = data.readVarInt();
+			int value = data.readVarInt();
+			if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {
+				((ContainerTile) player.openContainer).onGuiEnergy(value);
+			}
 		}
-	}
-
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_ENERGY;
 	}
 }

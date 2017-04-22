@@ -3,7 +3,7 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * http:www.gnu.org/licenses/lgpl-3.0.txt
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
@@ -24,6 +24,7 @@ import forestry.plugins.compat.PluginIC2;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -74,8 +75,8 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return null;
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		return NonNullList.create();
 	}
 
 	@Override
@@ -119,7 +120,7 @@ public class FarmLogicRubber extends FarmLogic {
 			if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
 				break;
 			}
-			
+
 			if (CropRubber.hasRubberToHarvest(blockState)) {
 				crops.push(new CropRubber(world, blockState, candidate));
 				break;

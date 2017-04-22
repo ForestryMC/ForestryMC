@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -23,6 +17,10 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	public static final short SLOT_ANALYZE = 0;
@@ -42,7 +40,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 			return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
 		} else if (slotIndex == SLOT_CAN) {
 			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return tile.getTankManager().canFillFluidType(fluid);
+			return fluid != null && tile.getTankManager().canFillFluidType(fluid);
 		}
 
 		return false;
@@ -56,10 +54,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	@Override
 	public void setInventorySlotContents(int slotId, ItemStack itemStack) {
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(itemStack)) {
-			ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-			if (ersatz != null) {
-				itemStack = ersatz;
-			}
+			itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 		}
 
 		super.setInventorySlotContents(slotId, itemStack);

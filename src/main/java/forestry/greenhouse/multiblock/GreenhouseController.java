@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.annotation.Nonnull;
-
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimateSourceProvider;
@@ -31,47 +28,41 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.greenhouse.EnumGreenhouseEventType;
-import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.lepidopterology.IButterfly;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseComponent.ClimateControl;
 import forestry.api.multiblock.IGreenhouseComponent.Climatiser;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.climate.ClimateInfo;
 import forestry.core.climate.ClimatePosition;
-import forestry.core.climate.ClimateRoom;
+import forestry.core.climate.ClimateRegion;
 import forestry.core.config.Constants;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
-import forestry.greenhouse.blocks.BlockGreenhouse;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.inventory.InventoryGreenhouse;
-import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
-
+import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
+import forestry.lepidopterology.ButterflyUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -80,7 +71,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -90,12 +80,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
-	private final List<IGreenhouseLogic> logics = new ArrayList<>();
+	private final Set<IGreenhouseComponent.Nursery> butterflyNurserys = new HashSet<>();
+	@Nullable
 	protected ClimateControl climateControl;
-	protected ButterflyHatch butterflyHatch;
-	
+
 	private final TankManager tankManager;
-	private final StandardTank resourceTank;
 	private final EnergyManager energyManager;
 	private final InventoryGreenhouse inventory;
 	private final boolean needRenderUpdate = false;
@@ -104,25 +93,25 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private ItemStack camouflagePlainBlock;
 	private ItemStack camouflageGlassBlock;
 	private ItemStack camouflageDoorBlock;
-	private ClimateRoom region;
+	private ClimateRegion region;
 
 	public GreenhouseController(World world) {
 		super(world, GreenhouseMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		StandardTank resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
 		this.energyManager = new EnergyManager(200, 100000);
 		this.inventory = new InventoryGreenhouse(this);
 
-		camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.DEFAULT);
-		camouflageGlassBlock = getDefaultCamouflageBlock(CamouflageManager.GLASS);
-		camouflageDoorBlock = getDefaultCamouflageBlock(CamouflageManager.DOOR);
+		this.camouflagePlainBlock = getDefaultCamouflageBlock(CamouflageManager.BLOCK);
+		this.camouflageGlassBlock = getDefaultCamouflageBlock(CamouflageManager.GLASS);
+		this.camouflageDoorBlock = getDefaultCamouflageBlock(CamouflageManager.DOOR);
+		this.region = new ClimateRegion(this);
 	}
 
 	/* CLIMATE */
 	@Override
 	public EnumTemperature getTemperature() {
-		BlockPos coords = getReferenceCoord();
 		return EnumTemperature.getFromValue(getExactTemperature());
 	}
 
@@ -133,18 +122,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public float getExactTemperature() {
-		if(region == null){
-			return 0;
-		}
-		return region.getTemperature();
+		return region.getAverageTemperature();
 	}
 
 	@Override
 	public float getExactHumidity() {
-		if(region == null){
-			return 0;
-		}
-		return region.getHumidity();
+		return region.getAverageHumidity();
 	}
 
 	@Override
@@ -154,8 +137,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public BlockPos getCoordinates() {
-		BlockPos coord = getReferenceCoord();
-		return new BlockPos(coord);
+		return getReferenceCoord();
 	}
 
 	/* SAVING & LOADING */
@@ -167,19 +149,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		energyManager.writeToNBT(data);
 		inventory.writeToNBT(data);
 
-		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, CamouflageManager.DOOR);
 
-		for (IGreenhouseLogic logic : getLogics()) {
-			NBTTagCompound nbtTag = new NBTTagCompound();
-			logic.writeToNBT(nbtTag);
-			data.setTag("logic" + logic.getName(), nbtTag);
-		}
-
-		if(region != null){
-			data.setTag("Region", region.writeToNBT(new NBTTagCompound()));
-		}
+		data.setTag("Region", region.writeToNBT(new NBTTagCompound()));
 
 		return data;
 	}
@@ -192,24 +166,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		energyManager.readFromNBT(data);
 		inventory.readFromNBT(data);
 
-		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, CamouflageManager.DOOR);
 
-		if (logics.isEmpty()) {
-			createLogics();
-		}
-
-		for (IGreenhouseLogic logic : getLogics()) {
-			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
-		}
-
-		if(data.hasKey("Region")){
+		if (data.hasKey("Region")) {
 			NBTTagCompound nbtTag = data.getCompoundTag("Region");
-			if(region != null){
+			if (region != null) {
 				region.readFromNBT(nbtTag);
-			}else{
-				region = new ClimateRoom(this, getWallPositions(), nbtTag);
 			}
 		}
 	}
@@ -231,60 +195,53 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	/* GUI DATA */
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		tankManager.writeData(data);
 		energyManager.writeData(data);
 		inventory.writeData(data);
-		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.DEFAULT);
+		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.BLOCK);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.GLASS);
 		CamouflageUtil.writeCamouflageBlockToData(data, this, CamouflageManager.DOOR);
-		if(region != null){
-			data.writeBoolean(true);
-			region.writeData(data);
-		}else{
-			data.writeBoolean(false);
-		}
+		region.writeData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		tankManager.readData(data);
 		energyManager.readData(data);
 		inventory.readData(data);
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
-		if(data.readBoolean()){
-			region.readData(data);
-		}
+		region.readData(data);
 	}
 
 	@Override
 	public boolean canHandleType(String type) {
-		return type.equals(CamouflageManager.DEFAULT) || type.equals(CamouflageManager.GLASS) || type.equals(CamouflageManager.DOOR);
+		return type.equals(CamouflageManager.BLOCK) || type.equals(CamouflageManager.GLASS) || type.equals(CamouflageManager.DOOR);
 	}
 
 	/* CAMOUFLAGE */
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
 		ItemStack oldCamouflageBlock;
 		switch (type) {
-		case CamouflageManager.DEFAULT:
-			oldCamouflageBlock = camouflagePlainBlock;
-			break;
-		case CamouflageManager.GLASS:
-			oldCamouflageBlock = camouflageGlassBlock;
-			break;
-		case CamouflageManager.DOOR:
-			oldCamouflageBlock = camouflageDoorBlock;
-			break;
-		default:
-			return;
+			case CamouflageManager.BLOCK:
+				oldCamouflageBlock = camouflagePlainBlock;
+				break;
+			case CamouflageManager.GLASS:
+				oldCamouflageBlock = camouflageGlassBlock;
+				break;
+			case CamouflageManager.DOOR:
+				oldCamouflageBlock = camouflageDoorBlock;
+				break;
+			default:
+				return false;
 		}
 
-		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)){
+		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, oldCamouflageBlock)) {
 			switch (type) {
-				case CamouflageManager.DEFAULT:
+				case CamouflageManager.BLOCK:
 					camouflagePlainBlock = camouflageBlock;
 					break;
 				case CamouflageManager.GLASS:
@@ -294,80 +251,53 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					camouflageDoorBlock = camouflageBlock;
 					break;
 				default:
-					return;
+					return false;
 			}
-			
-			if (worldObj != null && worldObj.isRemote) {
-				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
+			if (sendClientUpdate && world.isRemote) {
+				for (IMultiblockComponent comp : connectedParts) {
+					if (comp instanceof ICamouflagedTile) {
+						ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+						if (camBlock.getCamouflageType().equals(type)) {
+							world.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+						}
+					}
+				}
+				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.MULTIBLOCK));
 			}
-			MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, null, this, type));
+			return true;
 		}
+		return false;
 	}
 
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
 		switch (type) {
-			case CamouflageManager.DEFAULT:
+			case CamouflageManager.BLOCK:
 				return camouflagePlainBlock;
 			case CamouflageManager.GLASS:
 				return camouflageGlassBlock;
 			case CamouflageManager.DOOR:
 				return camouflageDoorBlock;
 			default:
-				return null;
+				return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
 		switch (type) {
-			case CamouflageManager.DEFAULT:
+			case CamouflageManager.BLOCK:
 				return new ItemStack(Blocks.BRICK_BLOCK);
 			case CamouflageManager.GLASS:
 				return new ItemStack(Blocks.STAINED_GLASS, 1, 13);
 			case CamouflageManager.DOOR:
-				return null;
+				return ItemStack.EMPTY;
 			default:
-				return null;
+				return ItemStack.EMPTY;
 		}
-	}
-
-	/* GREENHOUSE */
-	@Override
-	public void onChange(EnumGreenhouseEventType type, Object event) {
-		for (IGreenhouseLogic logic : logics) {
-			logic.onEvent(type, event);
-		}
-	}
-
-	/* GREENHOUSE LOGICS */
-	private void createLogics() {
-		logics.clear();
-		for (Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseHelper.getGreenhouseLogics()) {
-			IGreenhouseLogic logic = createLogic(logicClass);
-			if (logic != null) {
-				logics.add(logic);
-			}
-		}
-	}
-
-	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) {
-		try {
-			return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			Log.error("Fail to create a greenhouse logic with the class: {}", logicClass, e);
-			return null;
-		}
-	}
-
-	@Override
-	public List<IGreenhouseLogic> getLogics() {
-		return logics;
 	}
 
 	/* MANAGERS */
-	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -378,7 +308,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		return energyManager;
 	}
 
-	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		if (isAssembled()) {
@@ -387,47 +316,43 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			return FakeInventoryAdapter.instance();
 		}
 	}
+	
+	private void addNewPositions(Collection<IClimatePosition> newPositions){
+		for (IClimatePosition position : newPositions) {
+			BlockPos pos = position.getPos();
+			IClimatePosition oldPosition = region.getPosition(pos);
+			float temperature = position.getTemperature();
+			float humidity = position.getHumidity();
+			if (oldPosition != null) {
+				temperature = oldPosition.getTemperature();
+				humidity = oldPosition.getHumidity();
+			}
+			region.setPosition(pos, temperature, humidity);
+		}
+		region.calculateAverageClimate();
+	}
 
 	/* CONTROLLER */
 	@Override
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
 
-		createLogics();
-		if(region != null){
-			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
-			List<BlockPos> wallPositions = new ArrayList<>();
-			for(IMultiblockComponent comp : connectedParts){
-				if(comp != null){
-					wallPositions.add(comp.getCoordinates());
-				}
+		Set<IClimatePosition> internalPositions = new HashSet<>();
+		for (IInternalBlock block : internalBlocks) {
+			if (block != null) {
+				internalPositions.add(new ClimatePosition(region, block.getPos()));
 			}
-			for(IInternalBlock block : internalBlocks){
-				if(block != null){
-					internalPositions.put(block.getPos(), new ClimatePosition(region, block.getPos()));
-				}
-			}
-			ForestryAPI.climateManager.removeRegion(region);
-			region = new ClimateRoom(region, internalPositions, getWallPositions());
-			ForestryAPI.climateManager.addRegion(region);
-		}else{
-			Map<BlockPos, IClimatePosition> internalPositions = new HashMap<>();
-			region = new ClimateRoom(this, internalPositions, getWallPositions());
-			for(IInternalBlock block : internalBlocks){
-				if(block != null){
-					internalPositions.put(block.getPos(), new ClimatePosition(region, block.getPos()));
-				}
-			}
-			ForestryAPI.climateManager.addRegion(region);
 		}
-		
-		for(IClimateSourceProvider source : climatiserComponents){
-			ForestryAPI.climateManager.addSource(source);
+		addNewPositions(internalPositions);
+		ForestryAPI.climateManager.addRegion(region);
+
+		for (IClimateSourceProvider source : climatiserComponents) {
+			region.addSource(source.getClimateSource());
 		}
-		
+
 		for (IMultiblockComponent comp : connectedParts) {
 			if (comp instanceof ICamouflagedTile) {
-				worldObj.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
+				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
 		}
 	}
@@ -437,15 +362,16 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineDisassembled();
 
 		internalBlocks.clear();
-		logics.clear();
 		
-		for(IClimateSourceProvider source : climatiserComponents){
-			ForestryAPI.climateManager.removeSource(source);
+		ForestryAPI.climateManager.removeRegion(region);
+
+		for (IClimateSourceProvider source : climatiserComponents) {
+			region.removeSource(source.getClimateSource());
 		}
-		
+
 		for (IMultiblockComponent comp : connectedParts) {
 			if (comp instanceof ICamouflagedTile) {
-				worldObj.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
+				world.markBlockRangeForRenderUpdate(comp.getCoordinates(), comp.getCoordinates());
 			}
 		}
 	}
@@ -458,6 +384,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			climatiserComponents.add((Climatiser) newPart);
 		} else if (newPart instanceof IGreenhouseComponent.Active) {
 			activeComponents.add((IGreenhouseComponent.Active) newPart);
+		} else if (newPart instanceof IGreenhouseComponent.Nursery) {
+			butterflyNurserys.add((IGreenhouseComponent.Nursery) newPart);
 		}
 	}
 
@@ -470,24 +398,20 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			ForestryAPI.climateManager.removeSource((IClimateSourceProvider) oldPart);
 		} else if (oldPart instanceof IGreenhouseComponent.Active) {
 			activeComponents.remove(oldPart);
+		} else if (oldPart instanceof IGreenhouseComponent.Nursery) {
+			butterflyNurserys.remove(oldPart);
 		}
 	}
 
 	@Override
 	protected void onAssimilate(IMultiblockControllerInternal assimilated) {
-		if(assimilated != null && ((IGreenhouseControllerInternal)assimilated).getRegion() != null){
-			IGreenhouseControllerInternal internal = (IGreenhouseControllerInternal) assimilated;
-			if(region != null){
-				ForestryAPI.climateManager.removeRegion(region);
-				region = new ClimateRoom(region, internal.getRegion().getPositions(), getWallPositions());
-				ForestryAPI.climateManager.addRegion(region);
-			}
-		}
+		IGreenhouseControllerInternal internal = (IGreenhouseControllerInternal) assimilated;
+		addNewPositions(internal.getRegion().getPositions());
 	}
 
 	@Override
 	public void onAssimilated(IMultiblockControllerInternal assimilator) {
-		if(region != null){
+		if(isAssembled()){
 			ForestryAPI.climateManager.removeRegion(region);
 		}
 	}
@@ -496,10 +420,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	protected boolean updateServer(int tickCount) {
 		if (updateOnInterval(20)) {
 			inventory.drainCan(tankManager);
-		}
-
-		for (IGreenhouseLogic logic : logics) {
-			logic.work();
 		}
 
 		for (IGreenhouseComponent.Active activeComponent : activeComponents) {
@@ -562,7 +482,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
 					BlockPos pos = new BlockPos(x, y, z);
-					te = this.worldObj.getTileEntity(pos);
+					te = TileUtil.getTile(world, pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
 					} else {
@@ -603,27 +523,27 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						if (part != null) {
 							// Ensure this part should actually be allowed within a cube of this controller's type
 							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())), part.getCoordinates());
 							}
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
-							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, pos);
+							isBlockGoodForExteriorLevel(exteriorLevel, this.world, pos);
 						}
 					} else {
 						if (part != null) {
-							IBlockState state = worldObj.getBlockState(part.getCoordinates());
-							if (state.getBlock() instanceof BlockGreenhouse && ((BlockGreenhouse) state.getBlock()).getGreenhouseType() == BlockGreenhouseType.SPRINKLER || !myClass.equals(part.getMultiblockLogic().getController().getClass())) {
+							IBlockState state = world.getBlockState(part.getCoordinates());
+							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 								isGoodForInterior(part);
 							} else {
-								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())), part.getCoordinates());
 							}
 						} else {
-							isBlockGoodForInterior(this.worldObj, pos);
+							isBlockGoodForInterior(this.world, pos);
 						}
 					}
 
 					BlockPos posUp = pos.up(2);
-					TileEntity tileUp = worldObj.getTileEntity(posUp);
+					TileEntity tileUp = TileUtil.getTile(world, posUp);
 					if (sides >= 1 && !(tileUp instanceof IGreenhouseComponent)) {
 						int delta = y - minimumCoord.getY();
 						if (delta + 2 >= minY) {
@@ -643,25 +563,16 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.space.closed"));
 		}
 
-		Set<ButterflyHatch> hatches = new HashSet<>();
 		Set<ClimateControl> controls = new HashSet<>();
 		for (IMultiblockComponent comp : connectedParts) {
-			if (comp instanceof ButterflyHatch) {
-				hatches.add((ButterflyHatch) comp);
-			}else if(comp instanceof ClimateControl){
+			if (comp instanceof ClimateControl) {
 				controls.add((ClimateControl) comp);
 			}
-		}
-		if (hatches.size() > 1) {
-			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.butterflyhatch.toomany"));
 		}
 		if (controls.size() > 1) {
 			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.greenhouse.error.climatecontrol.toomany"));
 		}
-		if(hatches.iterator().hasNext()){
-			butterflyHatch = hatches.iterator().next();
-		}
-		if(controls.iterator().hasNext()){
+		if (controls.iterator().hasNext()) {
 			climateControl = controls.iterator().next();
 		}
 	}
@@ -669,12 +580,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	protected void updateClient(int tickCount) {
 	}
-	
+
 	/**
 	 * Check all internal blocks.
-	 * @throws MultiblockValidationException
 	 */
-	private void checkInternalBlocks() throws MultiblockValidationException{
+	private void checkInternalBlocks() throws MultiblockValidationException {
 		Stack<IInternalBlock> blocksToCheck = new Stack<>();
 		IInternalBlock internalBlock = createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)));
 		blocksToCheck.add(internalBlock);
@@ -684,11 +594,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			blocksToCheck.addAll(newBlocksToCheck);
 		}
 	}
-	
 
 	/**
 	 * Returns a list of more internal blocks to check.
-	 * @throws MultiblockValidationException
 	 */
 	private List<IInternalBlock> checkInternalBlock(IInternalBlock blockToCheck) throws MultiblockValidationException {
 		List<IInternalBlock> newBlocksToCheck = new ArrayList<>();
@@ -696,7 +604,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		internalBlocks.add(blockToCheck);
 		BlockPos posRoot = blockToCheck.getPos();
 
-		isBlockGoodForInterior(worldObj, posRoot);
+		isBlockGoodForInterior(world, posRoot);
 		for (IInternalBlockFace faceToCheck : blockToCheck.getFaces()) {
 			CheckInternalBlockFaceEvent checkEvent = new CheckInternalBlockFaceEvent(this, blockToCheck, faceToCheck);
 			MinecraftForge.EVENT_BUS.post(checkEvent);
@@ -709,15 +617,15 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos maxPos = getMaximumCoord();
 
 				if (minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()) {
-					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"));
+					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.closed"), posRoot);
 				}
 
-				TileEntity tileFace = worldObj.getTileEntity(posFacing);
+				TileEntity tileFace = TileUtil.getTile(world, posFacing);
 
 				if (tileFace instanceof IGreenhouseComponent) {
 					if (((IGreenhouseComponent) tileFace).getMultiblockLogic().getController() != this) {
-						throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.not.connected.part"));
-					} else if (!(tileFace instanceof TileGreenhouseSprinkler)) {
+						throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.not.connected.part"), posRoot);
+					} else if (!(tileFace instanceof TileGreenhouseHumidifier)) {
 						faceToCheck.setTested(true);
 					}
 				} else {
@@ -748,18 +656,25 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public Set<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
 	}
-	
+
 	@Override
-	public IClimateControl getClimateControl() {
-		if(climateControl == null){
-			return DefaultClimateControl.instance;
+	public IClimateInfo getControlClimate() {
+		if (climateControl == null) {
+			return ClimateInfo.MAX;
 		}
-		return climateControl.getClimateControl();
+		return climateControl.getControlClimate();
 	}
 	
 	@Override
-	public ButterflyHatch getButterflyHatch() {
-		return butterflyHatch;
+	public void setControlClimate(IClimateInfo climateControl) {
+		if (this.climateControl != null) {
+			this.climateControl.setControlClimate(climateControl);
+		}
+	}
+	
+	@Override
+	public Set<Nursery> getButterflyNurserys() {
+		return butterflyNurserys;
 	}
 
 	@Override
@@ -782,34 +697,47 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 
 	@Override
-	public void clearRegion() {
-		region = null;
-	}
-
-	@Override
 	public Set<IGreenhouseComponent.Listener> getListenerComponents() {
 		return listenerComponents;
 	}
-	
+
 	@Override
 	public boolean canWork() {
 		boolean canWork = true;
 		for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
-			if(canWork){
-				canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
-			}
+			canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
 		}
 		return canWork;
 	}
 	
-	protected List<BlockPos> getWallPositions(){
-		List<BlockPos> wallPositions = new ArrayList<>();
-		for(IMultiblockComponent comp : connectedParts){
-			if(comp != null){
-				wallPositions.add(comp.getCoordinates());
+	@Override
+	public boolean spawnButterfly(IGreenhouseComponent.Nursery nursery) {
+		for(IInternalBlock block : internalBlocks){
+			BlockPos pos = block.getPos();
+			if(world.isAirBlock(pos)){
+				if(ButterflyUtils.spawnButterflyWithoutCheck(nursery.getCaterpillar(), world, pos)){
+					return true;
+				}
 			}
 		}
-		return wallPositions;
+		return false;
+	}
+	
+	/**
+	 * TODO: remove in 5.4 or 5.3.4
+	 */
+	@Override
+	@Deprecated
+	public boolean spawnButterfly(IButterfly butterfly) {
+		for(IInternalBlock block : internalBlocks){
+			BlockPos pos = block.getPos();
+			if(world.isAirBlock(pos)){
+				if(ButterflyUtils.spawnButterflyWithoutCheck(butterfly, world, pos)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
@@ -31,8 +31,9 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 		addRecipe(recipe);
 	}
 
+	@Nullable
 	public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return null;
 		}
 

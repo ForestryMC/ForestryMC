@@ -1,8 +1,6 @@
 package forestry.apiculture.compat;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.PluginApiculture;
@@ -13,13 +11,28 @@ import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
-import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class ApicultureJeiPlugin extends BlankModPlugin {
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
-		ItemRegistryApiculture items = PluginApiculture.items;
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+		ItemRegistryApiculture items = PluginApiculture.getItems();
+		Preconditions.checkNotNull(items);
+
+		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
+			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
+			return species == null ? null : species.getUID();
+		};
+
+		subtypeRegistry.registerSubtypeInterpreter(items.beeDroneGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(items.beePrincessGE, beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(items.beeQueenGE, beeSubtypeInterpreter);
+	}
+
+	@Override
+	public void register(IModRegistry registry) {
+		ItemRegistryApiculture items = PluginApiculture.getItems();
+		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry, "frames",
 				items.frameImpregnated,
@@ -39,21 +52,5 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 				items.scoop,
 				items.imprinter
 		);
-
-		ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
-		subtypeRegistry.registerNbtInterpreter(items.beeDroneGE, BeeSubtypeInterpreter.INSTANCE);
-		subtypeRegistry.registerNbtInterpreter(items.beePrincessGE, BeeSubtypeInterpreter.INSTANCE);
-		subtypeRegistry.registerNbtInterpreter(items.beeQueenGE, BeeSubtypeInterpreter.INSTANCE);
-	}
-
-	private static class BeeSubtypeInterpreter implements ISubtypeRegistry.ISubtypeInterpreter {
-		public static BeeSubtypeInterpreter INSTANCE = new BeeSubtypeInterpreter();
-
-		@Nullable
-		@Override
-		public String getSubtypeInfo(@Nonnull ItemStack itemStack) {
-			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
-			return species == null ? null : species.getUID();
-		}
 	}
 }

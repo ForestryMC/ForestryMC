@@ -10,16 +10,24 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.tiles.TileStampCollector;
+import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiStampCollector extends GuiForestry<ContainerStampCollector, TileStampCollector> {
+public class GuiStampCollector extends GuiForestry<ContainerStampCollector> {
+	private final TileStampCollector tile;
+
 	public GuiStampCollector(InventoryPlayer player, TileStampCollector tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerStampCollector(player, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerStampCollector(player, tile));
+		this.tile = tile;
 		this.xSize = 176;
 		this.ySize = 193;
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("philatelist");
 	}
 }

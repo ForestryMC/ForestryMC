@@ -2,16 +2,15 @@ package forestry.greenhouse.blocks;
 
 import java.util.Map;
 
-import net.minecraft.item.ItemBlock;
-
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.greenhouse.items.ItemBlockGreenhouseDoor;
+import net.minecraft.item.ItemBlock;
 
 public class BlockRegistryGreenhouse extends BlockRegistry {
-	
+
 	private final Map<BlockGreenhouseType, BlockGreenhouse> greenhouseBlockMap;
-	
+
 	public BlockRegistryGreenhouse() {
 		greenhouseBlockMap = BlockGreenhouse.create();
 		for (BlockGreenhouse block : greenhouseBlockMap.values()) {
@@ -26,5 +25,5 @@ public class BlockRegistryGreenhouse extends BlockRegistry {
 	public BlockGreenhouse getGreenhouseBlock(BlockGreenhouseType type) {
 		return greenhouseBlockMap.get(type);
 	}
-	
+
 }

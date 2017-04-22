@@ -7,29 +7,30 @@ package forestry.api.core;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
 
 public interface ICamouflageAccess {
-	
+
 	/**
 	 * Register a item camouflage handler for a type.
-	 * 
-	 * @param type The camouflage type for of handler.
+	 *
 	 * @param itemHandler The handler that is to register.
 	 */
-	void registerCamouflageItemHandler(@Nonnull ICamouflageItemHandler itemHandler);
-	
+	void registerCamouflageItemHandler(ICamouflageItemHandler itemHandler);
+
 	/**
 	 * @return A list of all item camouflage handler's that are registered for that camouflage type.
 	 */
-	List<ICamouflageItemHandler> getCamouflageItemHandler(@Nonnull String type);
-	
-	void addItemToBlackList(@Nonnull String type, @Nonnull ItemStack camouflageBlock);
-	
-	boolean isItemBlackListed(@Nonnull String type, @Nonnull ItemStack camouflageBlock);
+	List<ICamouflageItemHandler> getCamouflageItemHandler(String type);
+
+	void addItemToBlackList(String type, ItemStack camouflageBlock);
+
+	void addModIdToBlackList(String type, String modID);
+
+	boolean isItemBlackListed(String type, ItemStack camouflageBlock);
+
+	ICamouflageItemHandler getNoneItemHandler();
 	
 	ICamouflageItemHandler getHandlerFromItem(ItemStack stack);
-	
+
 }

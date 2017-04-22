@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -22,17 +21,13 @@ import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class Chromosome implements IChromosome {
-
 	private static final String UID0_TAG = "UID0";
 	private static final String UID1_TAG = "UID1";
 
-	@Nonnull
 	private final IAllele primary;
-	@Nonnull
 	private final IAllele secondary;
 
-	@Nonnull
-	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, @Nonnull IChromosomeType chromosomeType, @Nonnull NBTTagCompound nbt) {
+	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, IChromosomeType chromosomeType, NBTTagCompound nbt) {
 		IAllele primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
 		IAllele secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
 
@@ -42,8 +37,7 @@ public class Chromosome implements IChromosome {
 		return new Chromosome(primary, secondary);
 	}
 
-	@Nonnull
-	private static IAllele validateAllele(@Nullable String speciesUid, @Nonnull IChromosomeType chromosomeType, @Nullable IAllele allele) {
+	private static IAllele validateAllele(@Nullable String speciesUid, IChromosomeType chromosomeType, @Nullable IAllele allele) {
 		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
 			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
 
@@ -62,11 +56,11 @@ public class Chromosome implements IChromosome {
 		return allele;
 	}
 
-	public Chromosome(@Nonnull IAllele allele) {
+	public Chromosome(IAllele allele) {
 		primary = secondary = allele;
 	}
 
-	public Chromosome(@Nonnull IAllele primary, @Nonnull IAllele secondary) {
+	public Chromosome(IAllele primary, IAllele secondary) {
 		this.primary = primary;
 		this.secondary = secondary;
 	}

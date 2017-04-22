@@ -10,25 +10,28 @@
  ******************************************************************************/
 package forestry.core.climate;
 
+import javax.annotation.Nullable;
+
 import forestry.api.climate.IClimateRegion;
 import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimateSourceProvider;
 
 public abstract class ClimateSource<P extends IClimateSourceProvider> implements IClimateSource {
-	
+	@Nullable
 	protected P provider;
 	protected final int ticksForChange;
-	
+
 	public ClimateSource(int ticksForChange) {
 		this.ticksForChange = ticksForChange;
 	}
-	
+
 	public void setProvider(P provider) {
 		this.provider = provider;
 	}
 
 	@Override
-	public void changeClimate(int tickCount, IClimateRegion region) {
+	public boolean changeClimate(int tickCount, IClimateRegion region) {
+		return false;
 	}
 
 	@Override
@@ -37,6 +40,7 @@ public abstract class ClimateSource<P extends IClimateSourceProvider> implements
 	}
 
 	@Override
+	@Nullable
 	public IClimateSourceProvider getProvider() {
 		return provider;
 	}

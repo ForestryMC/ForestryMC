@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -38,7 +40,6 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	@Nonnull
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
@@ -54,10 +55,15 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
 	}
-
-	@Nonnull
+	
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
+	}
+
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {

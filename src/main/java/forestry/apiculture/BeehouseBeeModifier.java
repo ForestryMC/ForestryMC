@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nullable;
+
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeGenome;
 
@@ -25,7 +27,7 @@ public class BeehouseBeeModifier extends DefaultBeeModifier {
 	}
 
 	@Override
-	public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+	public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier) {
 		return 3.0f;
 	}
 

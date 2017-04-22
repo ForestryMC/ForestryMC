@@ -10,7 +10,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 
 public interface IButterflyGenome extends IGenome {
-	
+
 	@Override
 	IAlleleButterflySpecies getPrimary();
 
@@ -22,7 +22,7 @@ public interface IButterflyGenome extends IGenome {
 	int getLifespan();
 
 	int getMetabolism();
-	
+
 	int getFertility();
 
 	float getSpeed();
@@ -40,7 +40,7 @@ public interface IButterflyGenome extends IGenome {
 	IFlowerProvider getFlowerProvider();
 
 	IAlleleButterflyEffect getEffect();
-	
+
 	IAlleleButterflyCocoon getCocoon();
 
 }

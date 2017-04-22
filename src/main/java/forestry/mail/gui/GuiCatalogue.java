@@ -13,24 +13,24 @@ package forestry.mail.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.network.packets.PacketGuiSelectRequest;
+import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.input.Keyboard;
 
-public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
+public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 	private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
 
@@ -40,9 +40,12 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
 	public GuiCatalogue(EntityPlayer player) {
-		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player), null);
+		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
 		this.xSize = 192;
 		this.ySize = 192;
+
+		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"));
+		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"));
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
 
 		clearTradeInfoWidgets();
 
@@ -90,28 +93,28 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	}
 
 	private void drawNoTrade(int x, int y) {
-		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
 	}
 
 	private void drawTradePreview(ITradeStationInfo tradeInfo, int x, int y) {
 
-		fontRendererObj.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
 
-		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
 
-		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
 
-		for (int i = 0; i < tradeInfo.getRequired().length; i++) {
-			ItemStack itemStack = tradeInfo.getRequired()[i];
+		for (int i = 0; i < tradeInfo.getRequired().size(); i++) {
+			ItemStack itemStack = tradeInfo.getRequired().get(i);
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft + i * 18, y - guiTop + 56, itemStack));
 		}
 
 		if (tradeInfo.getState().isOk()) {
-			fontRendererObj.drawSplitString(TextFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		} else {
-			fontRendererObj.drawSplitString(TextFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		}
 	}
 
@@ -131,16 +134,16 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
 			case 0:
-				mc.thePlayer.closeScreen();
+				mc.player.closeScreen();
 				break;
-			case 2:
-				container.nextPage();
+			case 2: // next page
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
 				break;
-			case 3:
-				container.previousPage();
+			case 3: // previous page
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(1, 0));
 				break;
-			case 4:
-				container.cycleFilter();
+			case 4: // cycle filter
+				NetworkUtil.sendToServer(new PacketGuiSelectRequest(2, 0));
 				break;
 			case 5:
 				ITradeStationInfo info = container.getTradeInfo();
@@ -148,8 +151,13 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
-				mc.thePlayer.closeScreen();
+				mc.player.closeScreen();
 				break;
 		}
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

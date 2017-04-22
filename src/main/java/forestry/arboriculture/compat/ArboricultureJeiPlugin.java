@@ -1,7 +1,6 @@
 package forestry.arboriculture.compat;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.base.Preconditions;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.core.utils.JeiUtil;
@@ -12,8 +11,9 @@ import mezz.jei.api.JEIPlugin;
 @JEIPlugin
 public class ArboricultureJeiPlugin extends BlankModPlugin {
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
-		ItemRegistryArboriculture items = PluginArboriculture.items;
+	public void register(IModRegistry registry) {
+		ItemRegistryArboriculture items = PluginArboriculture.getItems();
+		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry,
 				items.grafter,

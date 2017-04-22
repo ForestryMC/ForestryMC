@@ -10,13 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import javax.annotation.Nullable;
+
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.render.TextureManagerForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
@@ -24,12 +28,13 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	private boolean canAdjustPhantom = true;
 	private boolean canShift = true;
 	private int stackLimit;
+	@Nullable
 	private ToolTip toolTips;
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
-		if (inventory == null) {
-			throw new IllegalArgumentException("Inventory must not be null");
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			setBackgroundLocation(TextureManagerForestry.getInstance().getGuiTextureMap());
 		}
 		this.stackLimit = -1;
 	}
@@ -87,18 +92,10 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 		}
 	}
 
-	/**
-	 * @param toolTips the tooltips to set
-	 */
 	public void setToolTips(ToolTip toolTips) {
 		this.toolTips = toolTips;
 	}
 
-	/**
-	 * @return the toolTips
-	 * @param mouseX
-	 * @param mouseY
-	 */
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTips;
@@ -106,11 +103,11 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	@Override
 	public boolean isToolTipVisible() {
-		return getStack() == null;
+		return getStack().isEmpty();
 	}
 
 	@Override
 	public boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= xDisplayPosition && mouseX <= xDisplayPosition + 16 && mouseY >= yDisplayPosition && mouseY <= yDisplayPosition + 16;
+		return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
 	}
 }

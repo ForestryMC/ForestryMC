@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
@@ -40,21 +41,18 @@ public final class CommandModeSet extends SubCommand {
 
 		World world = sender.getEntityWorld();
 
-		String desired = args[args.length - 1];
+		String modeName = args[args.length - 1];
 
-		String modeName = modeSetter.getModeNameMatching(desired);
-		if (modeName == null) {
-			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", desired);
+		if (modeSetter.setMode(world, modeName)) {
+			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.success", modeName);
+		} else {
+			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", modeName);
 			printHelp(sender);
-			return;
 		}
-
-		modeSetter.setMode(world, modeName);
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.success", modeName);
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(args, modeStringArr);
 	}
 }

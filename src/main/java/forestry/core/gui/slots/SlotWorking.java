@@ -27,7 +27,8 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -37,6 +38,6 @@ public class SlotWorking extends SlotForestry {
 
 	@Override
 	public ItemStack decrStackSize(int i) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

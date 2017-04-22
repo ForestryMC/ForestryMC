@@ -25,6 +25,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
@@ -48,7 +50,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		Block block = getBlock();
-		if(block instanceof IBlockWithMeta){
+		if (block instanceof IBlockWithMeta) {
 			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
 			int meta = itemstack.getMetadata();
 			return block.getUnlocalizedName() + "." + blockMeta.getNameFromMeta(meta);
@@ -57,6 +59,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
@@ -68,7 +71,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
 		if (placed) {
 			if (block.hasTileEntity(newState)) {
-				if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
+				if (stack.getItem() instanceof ItemBlockNBT && stack.getTagCompound() != null) {
 					TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 					if (tile != null) {
 						tile.readFromNBT(stack.getTagCompound());

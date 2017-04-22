@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,18 +19,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
+import forestry.farming.FarmRegistry;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	public FarmLogicArboreal(ItemStack resource, IBlockState ground, Collection<IFarmable> germlings) {
@@ -37,7 +38,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal() {
-		super(new ItemStack(Blocks.DIRT), PluginCore.blocks.humus.getDefaultState(), Farmables.farmables.get("farmArboreal"));
+		super(new ItemStack(Blocks.DIRT), PluginCore.getBlocks().humus.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmArboreal"));
 	}
 
 	@Override
@@ -61,8 +62,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		Collection<ItemStack> products = produce;
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		NonNullList<ItemStack> products = produce;
 		produce = collectEntityItems(world, farmHousing, true);
 		return products;
 	}
@@ -122,6 +123,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return crops;
 	}
 
+	@Nullable
 	private static IFarmable getFarmableForBlock(World world, BlockPos position, Collection<IFarmable> farmables) {
 		IBlockState blockState = world.getBlockState(position);
 		for (IFarmable farmable : farmables) {

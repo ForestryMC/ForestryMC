@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
@@ -27,14 +25,12 @@ public enum BlockTypeFactoryPlain implements IBlockType {
 
 	public static final BlockTypeFactoryPlain[] VALUES = values();
 
-	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeFactoryPlain(@Nonnull Class<T> teClass, @Nonnull String name) {
+	<T extends TileForestry> BlockTypeFactoryPlain(Class<T> teClass, String name) {
 		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
-	@Nonnull
 	@Override
 	public IMachineProperties getMachineProperties() {
 		return machineProperties;

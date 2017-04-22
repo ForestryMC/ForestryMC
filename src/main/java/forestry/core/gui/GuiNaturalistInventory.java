@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -33,18 +26,24 @@ import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
-	@Nonnull
+public class GuiNaturalistInventory extends GuiForestry<Container> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(@Nonnull ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
-		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
+	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, int page, int maxPages) {
+		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container);
 
 		this.speciesRoot = speciesRoot;
 
@@ -58,14 +57,14 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, speciesRoot.getIconType()));
 		}
 
-		breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		super.drawGuiContainerBackgroundLayer(f, i, j);
 		String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
-		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, fontColor.get("gui.title"));
+		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));
 
 		IIndividual individual = getIndividualAtPosition(i, j);
 		if (individual == null) {
@@ -94,7 +93,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	}
 
 	private static void flipPage(int page) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(page, 0));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(page, 0));
 	}
 
 	@Override
@@ -108,6 +107,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 	}
 
+	@Nullable
 	private IIndividual getIndividualAtPosition(int x, int y) {
 		Slot slot = getSlotAtPosition(x, y);
 		if (slot == null) {
@@ -216,7 +216,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			column = 196;
 		}
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 
 	}
@@ -247,7 +247,12 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			column = 196;
 		}
 
-		Proxies.render.bindTexture(textureFile);
+		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
+	}
+
+	@Override
+	protected void addLedgers() {
+		addHintLedger("naturalist.chest");
 	}
 }

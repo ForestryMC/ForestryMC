@@ -10,24 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.BreedingTracker;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
-	/** Required for creation from map storage */
+	/**
+	 * Required for creation from map storage
+	 */
 	public ApiaristTracker(String s) {
-		super(s);
+		super(s, PluginApiculture.beekeepingMode);
 	}
 
 	private int queensTotal = 0;
@@ -35,7 +35,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		queensTotal = nbttagcompound.getInteger("QueensTotal");
 		princessesTotal = nbttagcompound.getInteger("PrincessesTotal");
@@ -45,9 +45,8 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	}
 
-	@Nonnull
 	@Override
-	public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setInteger("QueensTotal", queensTotal);
 		nbttagcompound.setInteger("PrincessesTotal", princessesTotal);
@@ -87,7 +86,6 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPrincess(IIndividual bee) {
-
 		princessesTotal++;
 		registerBirth(bee);
 	}
@@ -110,7 +108,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
 	}
 
 	@Override

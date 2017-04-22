@@ -31,7 +31,7 @@
                 {
                     "type": "item",
                     "entryName": "bee_steadfast_drone",
-                    "name": "forestry:beeDroneGE",
+                    "name": "forestry:bee_drone_ge",
                     "functions": [
                         {
                             "function": "set_species_nbt",
@@ -50,7 +50,7 @@
                 {
                     "type": "item",
                     "entryName": "bee_steadfast_princess",
-                    "name": "forestry:beePrincessGE",
+                    "name": "forestry:bee_princess_ge",
                     "functions": [
                         {
                             "function": "set_species_nbt",
@@ -62,7 +62,7 @@
                 {
                     "type": "item",
                     "entryName": "bee_ended_drone",
-                    "name": "forestry:beeDroneGE",
+                    "name": "forestry:bee_drone_ge",
                     "functions": [
                         {
                             "function": "set_species_nbt",
@@ -90,7 +90,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "forestry:grafterProven",
+                    "name": "forestry:grafter_proven",
                     "weight": 1
                 },
                 {

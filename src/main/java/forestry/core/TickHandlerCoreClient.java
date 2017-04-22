@@ -10,44 +10,39 @@
  ******************************************************************************/
 package forestry.core;
 
+import forestry.core.utils.GeneticsUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.utils.GeneticsUtil;
-
+@SideOnly(Side.CLIENT)
 public class TickHandlerCoreClient {
 
 	private boolean hasNaturalistEye;
 
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase != Phase.END) {
-			return;
-		}
-
-		Minecraft minecraft = Minecraft.getMinecraft();
-		if (minecraft == null) {
-			return;
-		}
-
-		EntityPlayer player = minecraft.thePlayer;
-		if (player == null) {
-			return;
-		}
-
-		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-		if (this.hasNaturalistEye != hasNaturalistEye) {
-			this.hasNaturalistEye = hasNaturalistEye;
-			RenderGlobal renderGlobal = minecraft.renderGlobal;
-			if (renderGlobal != null) {
-				renderGlobal.markBlockRangeForRenderUpdate(
-						(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
-						(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
+		if (event.phase == Phase.END) {
+			Minecraft minecraft = Minecraft.getMinecraft();
+			if (minecraft != null) {
+				EntityPlayer player = minecraft.player;
+				if (player != null) {
+					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
+					if (this.hasNaturalistEye != hasNaturalistEye) {
+						this.hasNaturalistEye = hasNaturalistEye;
+						RenderGlobal renderGlobal = minecraft.renderGlobal;
+						if (renderGlobal != null) {
+							renderGlobal.markBlockRangeForRenderUpdate(
+									(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
+									(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
+						}
+					}
+				}
 			}
 		}
 	}

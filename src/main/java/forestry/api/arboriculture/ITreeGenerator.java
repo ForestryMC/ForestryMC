@@ -5,14 +5,14 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
+
+import com.mojang.authlib.GameProfile;
+import forestry.api.world.ITreeGenData;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.world.ITreeGenData;
 
 /**
  * Implements the tree generation for a tree species.
@@ -22,5 +22,5 @@ public interface ITreeGenerator {
 
 	boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
 
-	boolean setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos);
+	boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos);
 }

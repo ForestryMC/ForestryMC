@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextFormatting;
-
 import forestry.core.utils.Translator;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

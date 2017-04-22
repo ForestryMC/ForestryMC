@@ -5,18 +5,16 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface ISqueezerRecipe extends IForestryRecipe {
 
 	/**
-	 * @return Array of item stacks representing the required resources for one process. Stack size will be taken into account.
+	 * @return item stacks representing the required resources for one process. Stack size will be taken into account.
 	 */
-	ItemStack[] getResources();
+	NonNullList<ItemStack> getResources();
 
 	/**
 	 * @return Number of work cycles required to squeeze one set of resources.
@@ -26,7 +24,6 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	/**
 	 * @return Item stack representing the possible remnants from this recipe. (i.e. tin left over from tin cans)
 	 */
-	@Nullable
 	ItemStack getRemnants();
 
 	/**

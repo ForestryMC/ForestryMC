@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import forestry.core.render.ForestryResource;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
-
+@SideOnly(Side.CLIENT)
 public class ModelAnalyzer extends ModelBase {
 
 	private final ModelRenderer pedestal;
@@ -61,9 +64,6 @@ public class ModelAnalyzer extends ModelBase {
 		GlStateManager.translate(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
 
-		if (orientation == null) {
-			orientation = EnumFacing.WEST;
-		}
 		switch (orientation) {
 			case EAST:
 				angle[1] = (float) Math.PI / 2;
@@ -81,7 +81,8 @@ public class ModelAnalyzer extends ModelBase {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textures[0]);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textures[0]);
 
 		pedestal.rotateAngleX = angle[0];
 		pedestal.rotateAngleY = angle[1];
@@ -96,13 +97,13 @@ public class ModelAnalyzer extends ModelBase {
 		tower1.rotateAngleX = angle[0];
 		tower1.rotateAngleY = angle[1];
 		tower1.rotateAngleZ = angle[2];
-		Proxies.render.bindTexture(textures[1]);
+		textureManager.bindTexture(textures[1]);
 		tower1.render(factor);
 
 		tower2.rotateAngleX = angle[0];
 		tower2.rotateAngleY = angle[1];
 		tower2.rotateAngleZ = angle[2];
-		Proxies.render.bindTexture(textures[2]);
+		textureManager.bindTexture(textures[2]);
 		tower2.render(factor);
 
 		GlStateManager.popMatrix();

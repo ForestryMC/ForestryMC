@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nullable;
+
+import forestry.api.genetics.IIndividual;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.passive.IAnimals;
-
-import forestry.api.arboriculture.ITree;
 
 public interface IEntityButterfly extends IAnimals {
 
@@ -23,11 +24,12 @@ public interface IEntityButterfly extends IAnimals {
 	 */
 	EntityCreature getEntity();
 
-	ITree getPollen();
+	@Nullable
+	IIndividual getPollen();
 
-	void setPollen(ITree pollen);
-	
+	void setPollen(@Nullable IIndividual pollen);
+
 	boolean canMateWith(IEntityButterfly butterfly);
-	
+
 	boolean canMate();
 }

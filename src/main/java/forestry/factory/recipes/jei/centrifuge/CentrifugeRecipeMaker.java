@@ -10,7 +10,7 @@ public class CentrifugeRecipeMaker {
 
 	private CentrifugeRecipeMaker() {
 	}
-	
+
 	public static List<CentrifugeRecipeWrapper> getCentrifugeRecipe() {
 		List<CentrifugeRecipeWrapper> recipes = new ArrayList<>();
 		for (ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes()) {
@@ -18,5 +18,5 @@ public class CentrifugeRecipeMaker {
 		}
 		return recipes;
 	}
-	
+
 }

@@ -21,14 +21,17 @@ import forestry.mail.LetterProperties;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.GuiLetter;
 import forestry.mail.inventory.ItemInventoryLetter;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,12 +43,13 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (itemStackIn.stackSize == 1) {
-			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
+		if (heldItem.getCount() == 1) {
+			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
-			playerIn.addChatMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
-			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
+			playerIn.sendMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
+			return ActionResult.newResult(EnumActionResult.FAIL, heldItem);
 		}
 	}
 
@@ -62,6 +66,7 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 
@@ -74,10 +79,10 @@ public class ItemLetter extends ItemWithGui {
 		ILetter letter = new Letter(nbttagcompound);
 		letter.addTooltip(list);
 	}
-	
+
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		LetterProperties.getSubItems(item, tab, list);
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		LetterProperties.getSubItems(item, tab, subItems);
 	}
 
 	public List<ItemStack> getEmptiedLetters() {
@@ -85,12 +90,13 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiLetter(player, new ItemInventoryLetter(player, heldItem));
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerLetter(player, new ItemInventoryLetter(player, heldItem));
 	}
 }

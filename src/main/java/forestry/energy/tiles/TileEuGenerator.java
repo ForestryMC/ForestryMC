@@ -3,7 +3,7 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * http:www.gnu.org/licenses/lgpl-3.0.txt
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
@@ -14,14 +14,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -30,10 +33,9 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
@@ -56,7 +58,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	private BasicSource ic2EnergySource;
 
 	public TileEuGenerator() {
-		super("generator");
+		super();//"generator"
 
 		setInternalInventory(new InventoryGenerator(this));
 
@@ -95,13 +97,13 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -182,28 +184,29 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	public TankRenderInfo getProductTankInfo() {
 		return TankRenderInfo.EMPTY;
 	}
-	
+
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		if (ic2EnergySource != null) {
 			data.writeDouble(ic2EnergySource.getEnergyStored());
 		}
 	}
-	
+
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		if (ic2EnergySource != null) {
 			ic2EnergySource.setEnergyStored(data.readDouble());
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiGenerator(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerGenerator(player.inventory, this);
 	}
 

@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.genetics.IGenome;
+import net.minecraft.item.ItemStack;
 
 public interface ITreeGenome extends IGenome {
 
@@ -17,7 +16,6 @@ public interface ITreeGenome extends IGenome {
 	@Override
 	IAlleleTreeSpecies getSecondary();
 
-	@Nonnull
 	IFruitProvider getFruitProvider();
 
 	float getHeight();
@@ -26,7 +24,7 @@ public interface ITreeGenome extends IGenome {
 
 	/**
 	 * @return Determines either a) how many fruit leaves there are or b) the chance for any fruit leave to drop a sapling. Exact usage determined by the
-	 *         IFruitProvider
+	 * IFruitProvider
 	 */
 	float getYield();
 
@@ -40,4 +38,10 @@ public interface ITreeGenome extends IGenome {
 	int getGirth();
 
 	IAlleleLeafEffect getEffect();
+	
+	/**
+	 * 
+	 * @return A ItemStack that is used in getPickBlock of the leave block.
+	 */
+	ItemStack getDecorativeLeaves();
 }

@@ -13,5 +13,5 @@ package forestry.core.blocks;
 public interface IBlockWithMeta {
 
 	String getNameFromMeta(int meta);
-	
+
 }

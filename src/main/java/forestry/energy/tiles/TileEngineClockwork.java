@@ -10,37 +10,39 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.FakePlayer;
+import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.DamageSourceForestry;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEngineClockwork extends TileEngine {
 
 	private final static float WIND_EXHAUSTION = 0.05f;
 	private final static float WIND_TENSION_BASE = 0.5f;
 	private final static int WIND_DELAY = 10;
-	
+
 	private static final int ENGINE_CLOCKWORK_HEAT_MAX = 300000;
 	private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 2;
 	private static final float ENGINE_CLOCKWORK_WIND_MAX = 8f;
 
 	private static final DamageSourceForestry damageSourceEngineClockwork = new DamageSourceForestry("engine.clockwork");
-	
+
 	private float tension = 0.0f;
 	private short delay = 0;
-	
+
 	public TileEngineClockwork() {
-		super(null, ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super("", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class TileEngineClockwork extends TileEngine {
 		if (player instanceof FakePlayer) {
 			return;
 		}
-		
+
 		if (tension <= 0) {
 			tension = WIND_TENSION_BASE;
 		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
@@ -60,7 +62,7 @@ public class TileEngineClockwork extends TileEngine {
 		} else {
 			return;
 		}
-		
+
 		player.addExhaustion(WIND_EXHAUSTION);
 		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
 			player.attackEntityFrom(damageSourceEngineClockwork, 6);
@@ -76,15 +78,15 @@ public class TileEngineClockwork extends TileEngine {
 		super.readFromNBT(nbttagcompound);
 		tension = nbttagcompound.getFloat("Wound");
 	}
-	
-	@Nonnull
+
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 		nbttagcompound.setFloat("Wound", tension);
 		return nbttagcompound;
 	}
-	
+
 	@Override
 	public boolean isRedstoneActivated() {
 		return true;
@@ -107,18 +109,18 @@ public class TileEngineClockwork extends TileEngine {
 
 	@Override
 	public void burn() {
-		
+
 		heat = (int) (tension * 10000);
-		
+
 		if (delay > 0) {
 			delay--;
 			return;
 		}
-		
+
 		if (!isBurning()) {
 			return;
 		}
-		
+
 		if (tension > 0.01f) {
 			tension *= 0.9995f;
 		} else {
@@ -146,7 +148,7 @@ public class TileEngineClockwork extends TileEngine {
 		if (delay > 0) {
 			return 0;
 		}
-		
+
 		float fromClockwork = tension / ENGINE_CLOCKWORK_WIND_MAX * Constants.ENGINE_PISTON_SPEED_MAX;
 
 		fromClockwork = Math.round(fromClockwork * 100f) / 100f;
@@ -155,12 +157,15 @@ public class TileEngineClockwork extends TileEngine {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return null;
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	@Nullable
+	public Container getContainer(EntityPlayer player, int data) {
 		return null;
 	}
 }

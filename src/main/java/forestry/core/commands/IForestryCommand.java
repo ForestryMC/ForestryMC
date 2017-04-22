@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import java.util.List;
 import java.util.SortedSet;
 
 import net.minecraft.command.ICommand;
@@ -22,9 +21,6 @@ import net.minecraft.command.ICommandSender;
 public interface IForestryCommand extends ICommand {
 
 	String getFullCommandString();
-
-	@Override
-	List<String> getCommandAliases();
 
 	int getPermissionLevel();
 

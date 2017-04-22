@@ -10,6 +10,7 @@ import java.util.Collection;
 public interface ICraftingProvider<T extends IForestryRecipe> {
 	/**
 	 * Add a new recipe to the crafting provider.
+	 *
 	 * @return <tt>true</tt> if this collection changed as a result of the call
 	 * @since Forestry 4.1.0
 	 */
@@ -17,6 +18,7 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 
 	/**
 	 * Remove a specific recipe from the crafting provider.
+	 *
 	 * @return <tt>true</tt> if an element was removed as a result of this call
 	 * @since Forestry 4.1.0
 	 */

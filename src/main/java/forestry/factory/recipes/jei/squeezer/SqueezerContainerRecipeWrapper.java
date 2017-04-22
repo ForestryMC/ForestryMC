@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 
 import forestry.factory.recipes.ISqueezerContainerRecipe;
@@ -10,21 +9,19 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 public class SqueezerContainerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerContainerRecipe> {
-	
-	@Nonnull
 	private final ItemStack filledContainer;
-	
-	public SqueezerContainerRecipeWrapper(@Nonnull ISqueezerContainerRecipe recipe, @Nonnull ItemStack filledContainer) {
+
+	public SqueezerContainerRecipeWrapper(ISqueezerContainerRecipe recipe, ItemStack filledContainer) {
 		super(recipe);
 		this.filledContainer = filledContainer;
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, Collections.singletonList(filledContainer));
 
 		ItemStack remnants = getRecipe().getRemnants();
-		if (remnants != null) {
+		if (!remnants.isEmpty()) {
 			ingredients.setOutput(ItemStack.class, remnants);
 		}
 

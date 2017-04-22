@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import java.util.List;
 import java.util.Random;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
@@ -23,18 +28,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.config.Constants;
 
 public class BlockStump extends BlockTorch implements IItemModelRegister {
 
@@ -51,16 +49,17 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, 0));
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && BlockCandle.lightingItems.contains(heldItem.getItem())) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			IBlockState blockState = worldIn.getBlockState(pos);
 			Block block = blockState.getBlock();
-			IBlockState activatedState = PluginApiculture.blocks.candle.getStateFromMeta(block.getMetaFromState(blockState));
+			IBlockState activatedState = PluginApiculture.getBlocks().candle.getStateFromMeta(block.getMetaFromState(blockState));
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
 			tc.setColour(16777215); // default to white

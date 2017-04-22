@@ -10,27 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
+import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlveary> {
+public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
+	private final TileAlveary tile;
 
 	public GuiAlveary(InventoryPlayer inventory, TileAlveary tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
-
-		ySize = 190;
+		this.tile = tile;
+		this.ySize = 190;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		IAlvearyControllerInternal alvearyController = inventory.getMultiblockLogic().getController();
+		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
 		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
@@ -39,5 +39,13 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlveary>
 		int k = 0;
 
 		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addClimateLedger(tile);
+		addHintLedger("apiary");
+		addOwnerLedger(tile);
 	}
 }

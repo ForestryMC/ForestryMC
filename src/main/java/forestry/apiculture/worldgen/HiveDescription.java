@@ -15,15 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -37,6 +28,13 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public enum HiveDescription implements IHiveDescription {
 
@@ -65,7 +63,7 @@ public enum HiveDescription implements IHiveDescription {
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
-			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
+			return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
@@ -106,7 +104,7 @@ public enum HiveDescription implements IHiveDescription {
 	private final IHiveGen hiveGen;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = PluginApiculture.blocks.beehives.getStateForType(hiveType);
+		this.blockState = PluginApiculture.getBlocks().beehives.getStateForType(hiveType);
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;

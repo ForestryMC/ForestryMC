@@ -10,17 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -30,10 +24,13 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.VectUtil;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable {
 	private static final String nbtKey = "hasFlowerCache";
@@ -44,7 +41,6 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 	private static final int flowerCheckInterval = 128;
 
 	private final int flowerCheckTime = random.nextInt(flowerCheckInterval);
-	@Nonnull
 	private List<BlockPos> flowerCoords = new ArrayList<>();
 	private int cooldown = 0;
 
@@ -102,7 +98,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 		cooldown = 0;
 	}
 
-	@Nonnull
+
 	public List<BlockPos> getFlowerCoords() {
 		return Collections.unmodifiableList(flowerCoords);
 	}
@@ -128,7 +124,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 
 		if (hasFlowerCacheNBT.hasKey(nbtKeyFlowers)) {
 			int[] flowersList = hasFlowerCacheNBT.getIntArray(nbtKeyFlowers);
-			if (flowersList != null && flowersList.length % 3 == 0) {
+			if (flowersList.length % 3 == 0) {
 				int flowerCount = flowersList.length / 3;
 				for (int i = 0; i < flowerCount; i++) {
 					BlockPos flowerPos = new BlockPos(flowersList[i], flowersList[i + 1], flowersList[i + 2]);
@@ -165,7 +161,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		int size = flowerCoords.size();
 		data.writeVarInt(size);
 		if (size > 0) {
@@ -178,7 +174,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		flowerCoords.clear();
 
 		int size = data.readVarInt();

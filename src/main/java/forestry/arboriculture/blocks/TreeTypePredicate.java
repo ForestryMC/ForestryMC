@@ -1,9 +1,8 @@
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Predicate;
-
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
 import forestry.arboriculture.genetics.TreeDefinition;
 
 public class TreeTypePredicate implements Predicate<TreeDefinition> {
@@ -17,6 +16,6 @@ public class TreeTypePredicate implements Predicate<TreeDefinition> {
 
 	@Override
 	public boolean apply(@Nullable TreeDefinition treeDefinition) {
-		return treeDefinition.getMetadata() >= minMeta && treeDefinition.getMetadata() <= maxMeta;
+		return treeDefinition != null && treeDefinition.getMetadata() >= minMeta && treeDefinition.getMetadata() <= maxMeta;
 	}
 }

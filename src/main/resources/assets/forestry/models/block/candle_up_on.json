@@ -1,7 +1,7 @@
 {
     "parent": "forestry:block/candle_up",
     "textures": {
-      "candleStump": "forestry:blocks/candleStumpLit",
-      "candleTip":  "forestry:blocks/candleTipLit"
+      "candle_stump": "forestry:blocks/candle_stump_lit",
+      "candle_tip":  "forestry:blocks/candle_tip_lit"
     }
 }

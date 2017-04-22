@@ -33,11 +33,11 @@ public enum EnumButterflyState {
 			return entity.ticksExisted + partialTicktime;
 		}
 	}
-	
+
 	public static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1024;
 		float wingYaw;
-		
+
 		if (irregular % 11 == 0) {
 			wingYaw = 0.75f;
 		} else {
@@ -50,10 +50,10 @@ public enum EnumButterflyState {
 			}
 			wingYaw = getRegularWingYaw(flap);
 		}
-		
+
 		return wingYaw;
 	}
-	
+
 	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}

@@ -10,40 +10,29 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumPileType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.arboriculture.blocks.fence.BlockArbFence;
-import forestry.arboriculture.blocks.fence.BlockFireproofVanillaFence;
-import forestry.arboriculture.blocks.log.BlockArbLog;
-import forestry.arboriculture.blocks.log.BlockFireproofVanillaLog;
-import forestry.arboriculture.blocks.planks.BlockArbPlanks;
-import forestry.arboriculture.blocks.planks.BlockFireproofVanillaPlanks;
-import forestry.arboriculture.blocks.slab.BlockArbSlab;
-import forestry.arboriculture.blocks.slab.BlockFireproofVanillaSlab;
-import forestry.arboriculture.blocks.slab.BlockForestrySlab;
+import forestry.api.genetics.AlleleRegisterEvent;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
-import forestry.arboriculture.items.ItemBlockPile;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
@@ -74,7 +63,10 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
-	public final Map<EnumPileType, BlockPile> piles;
+	
+	public final BlockCharcoal charcoal;
+	public final BlockWoodPile woodPile;
+	public final Block loam;
 
 	public final BlockArboriculture treeChest;
 
@@ -163,7 +155,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerBlock(block, new ItemBlockWood(block), "fences.vanilla.fireproof." + block.getBlockNumber());
 			registerOreDictWildcard(OreDictUtil.FENCE_WOOD, block);
 		}
-		
+
 		fenceGates = new ArrayList<>();
 		fenceGatesFireproof = new ArrayList<>();
 		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
@@ -232,13 +224,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);
 			doors.add(door);
 		}
-		
+
 		// Saplings
 		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
-		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "saplingGE");
+		registerBlock(saplingGE, new ItemBlockForestry(saplingGE), "sapling_ge");
 		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
-		
+
 		// Leaves
 		leaves = new BlockForestryLeaves();
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
@@ -258,13 +250,18 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			}
 		}
 		
-		piles = BlockPile.create();
-		for(Entry<EnumPileType, BlockPile> pile : piles.entrySet()){
-			registerBlock(pile.getValue(), new ItemBlockPile(pile.getValue()), "pile_" + pile.getKey().name().toLowerCase(Locale.ENGLISH));
-		}
+		charcoal = new BlockCharcoal();
+		registerBlock(charcoal, new ItemBlockForestry(charcoal), "charcoal");
 		
+		woodPile = new BlockWoodPile();
+		registerBlock(woodPile, new ItemBlockForestry(woodPile), "wood_pile");
+		
+		loam = new BlockLoam();
+		registerBlock(loam, new ItemBlockForestry(loam), "loam");
+
 		// Pods
-		AlleleFruit.createAlleles();
+		AlleleFruits.registerAlleles();
+		MinecraftForge.EVENT_BUS.post(new AlleleRegisterEvent(IAlleleFruit.class));
 		podsMap = new HashMap<>();
 		for (BlockFruitPod pod : BlockFruitPod.create()) {
 			IAlleleFruit fruit = pod.getFruit();
@@ -280,11 +277,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public ItemStack getDecorativeLeaves(String speciesUid) {
 		ItemStack itemStack = speciesToLeavesDecorative.get(speciesUid);
 		if (itemStack == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return itemStack.copy();
 	}
 
+	@Nullable
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
 		return podsMap.get(fruit.getUID());
 	}

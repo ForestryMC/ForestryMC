@@ -10,9 +10,9 @@ import forestry.api.core.EnumTemperature;
 import net.minecraft.world.biome.Biome;
 
 public interface IClimateProvider {
-    Biome getBiome();
+	Biome getBiome();
 
-    EnumTemperature getTemperature();
+	EnumTemperature getTemperature();
 
-    EnumHumidity getHumidity();
+	EnumHumidity getHumidity();
 }

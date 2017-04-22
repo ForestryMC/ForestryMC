@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import com.google.common.collect.ImmutableSet;
-
-import java.util.List;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
-
+import com.google.common.collect.ImmutableSet;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.IErrorSource;
@@ -27,12 +20,14 @@ import forestry.api.core.IErrorState;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
-public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
 	private static final short SLOT_ENERGY = 2;
 	private static final short SLOT_SPECIMEN = 0;
@@ -47,22 +42,21 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	}
 
 	private static boolean isEnergy(ItemStack itemstack) {
-		if (itemstack == null || itemstack.stackSize <= 0) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
 		Item item = itemstack.getItem();
-		return PluginApiculture.items.honeyDrop == item || PluginApiculture.items.honeydew == item;
+		return PluginApiculture.getItems().honeyDrop == item || PluginApiculture.getItems().honeydew == item;
 	}
 
 	@Override
 	public void onSlotClick(int slotIndex, EntityPlayer player) {
-
-		if (getStackInSlot(SLOT_ANALYZED) != null) {
+		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
 			if (locatorLogic.isBiomeFound()) {
 				return;
 			}
-		} else if (getStackInSlot(SLOT_SPECIMEN) != null) {
+		} else if (!getStackInSlot(SLOT_SPECIMEN).isEmpty()) {
 			// Requires energy
 			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return;
@@ -72,33 +66,24 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 			decrStackSize(SLOT_ENERGY, 1);
 
 			setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, null);
+			setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
 		}
 
-		IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
-
-		// No bee, abort
-		if (bee == null) {
-			return;
+		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
+		IBee bee = BeeManager.beeRoot.getMember(analyzed);
+		if (bee != null) {
+			locatorLogic.startBiomeSearch(bee, player);
 		}
-
-		locatorLogic.startBiomeSearch(bee, player);
 	}
 
 	public Set<Biome> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
 	}
 
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("habitat.locator");
-	}
-
 	/* IErrorSource */
 	@Override
 	public ImmutableSet<IErrorState> getErrorStates() {
-		if (getStackInSlot(SLOT_ANALYZED) != null) {
+		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
 			return ImmutableSet.of();
 		}
 

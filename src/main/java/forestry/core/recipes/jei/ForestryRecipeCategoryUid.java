@@ -4,7 +4,7 @@ public class ForestryRecipeCategoryUid {
 
 	private ForestryRecipeCategoryUid() {
 	}
-	
+
 	public static final String BOTTLER = "forestry.bottler";
 	public static final String CARPENTER = "forestry.carpenter";
 	public static final String CENTRIFUGE = "forestry.centrifuge";
@@ -14,5 +14,5 @@ public class ForestryRecipeCategoryUid {
 	public static final String RAINMAKER = "forestry.rainmaker";
 	public static final String SQUEEZER = "forestry.squeezer";
 	public static final String STILL = "forestry.still";
-	
+
 }

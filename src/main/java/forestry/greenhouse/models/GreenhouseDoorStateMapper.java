@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-
 import forestry.core.render.ForestryStateMapper;
 import forestry.greenhouse.blocks.BlockGreenhouseDoor;
 import net.minecraft.block.Block;
@@ -17,10 +16,10 @@ public class GreenhouseDoorStateMapper extends ForestryStateMapper {
 
 	@Override
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
-		for(IBlockState state : block.getBlockState().getValidStates()){
-			if(state.getValue(BlockGreenhouseDoor.CAMOUFLAGED)){
+		for (IBlockState state : block.getBlockState().getValidStates()) {
+			if (state.getValue(BlockGreenhouseDoor.CAMOUFLAGED)) {
 				mapStateModelLocations.put(state, new ModelResourceLocation(block.getRegistryName(), "camouflage"));
-			}else{
+			} else {
 				LinkedHashMap<IProperty<?>, Comparable<?>> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				linkedhashmap.remove(BlockGreenhouseDoor.CAMOUFLAGED);
 				linkedhashmap.remove(BlockDoor.POWERED);

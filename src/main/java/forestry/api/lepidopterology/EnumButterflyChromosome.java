@@ -69,18 +69,18 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	 * Extra effect to surroundings. (?)
 	 */
 	EFFECT(IAlleleButterflyEffect.class),
-	
+
 	COCOON(IAlleleButterflyCocoon.class);
-	
-	Class<? extends IAllele> clss;
-	
-	EnumButterflyChromosome(Class<? extends IAllele> clss) {
-		this.clss = clss;
+
+	private final Class<? extends IAllele> alleleClass;
+
+	EnumButterflyChromosome(Class<? extends IAllele> alleleClass) {
+		this.alleleClass = alleleClass;
 	}
 
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return clss;
+		return alleleClass;
 	}
 
 	@Override

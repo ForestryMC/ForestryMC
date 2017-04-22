@@ -17,8 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class ParticleSnow extends Particle {
-
-	public static TextureAtlasSprite sprites[];
+	public static final TextureAtlasSprite sprites[] = new TextureAtlasSprite[3];
 
 	public ParticleSnow(World world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);

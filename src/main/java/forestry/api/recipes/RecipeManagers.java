@@ -11,7 +11,7 @@ package forestry.api.recipes;
  * @author SirSengir
  */
 public class RecipeManagers {
-	
+
 	/**
 	 * Allows you to add recipes to the carpenter. See {@link ICarpenterManager} for details.
 	 */

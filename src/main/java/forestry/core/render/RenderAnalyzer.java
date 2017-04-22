@@ -10,7 +10,13 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import javax.annotation.Nullable;
+
+import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileAnalyzer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -18,11 +24,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.blocks.BlockBase;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 
@@ -33,29 +34,32 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	public RenderAnalyzer(String baseTexture) {
 		this.model = new ModelAnalyzer(baseTexture);
 	}
-	
+
 	/**
 	 * @param analyzer If it null its render the item else it render the tile entity.
 	 */
 	@Override
 	public void renderTileEntityAt(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (analyzer != null) {
-			IBlockState blockState = analyzer.getWorldObj().getBlockState(analyzer.getPos());
-			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
-				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
-				return;
+			World worldObj = analyzer.getWorldObj();
+			if (worldObj.isBlockLoaded(analyzer.getPos())) {
+				IBlockState blockState = worldObj.getBlockState(analyzer.getPos());
+				if (blockState.getBlock() instanceof BlockBase) {
+					EnumFacing facing = blockState.getValue(BlockBase.FACING);
+					render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
+					return;
+				}
 			}
 		}
-		render(null, null, EnumFacing.WEST, x, y, z);
+		render(ItemStack.EMPTY, null, EnumFacing.WEST, x, y, z);
 	}
 
-	private void render(ItemStack itemstack, World world, EnumFacing orientation, double x, double y, double z) {
+	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
 
-		dummyEntityItem.worldObj = world;
+		dummyEntityItem.world = world;
 
 		model.render(orientation, (float) x, (float) y, (float) z);
-		if (itemstack == null) {
+		if (itemstack.isEmpty() || world == null) {
 			return;
 		}
 		float renderScale = 1.0f;
@@ -70,8 +74,8 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 			lastTick = world.getTotalWorldTime();
 			dummyEntityItem.onUpdate();
 		}
-		RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
-		
+		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+
 		rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();
 

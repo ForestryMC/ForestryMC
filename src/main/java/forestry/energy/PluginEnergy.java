@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.energy;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.common.SidedProxy;
-
+import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
@@ -24,13 +21,19 @@ import forestry.energy.proxy.ProxyEnergy;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.SidedProxy;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends BlankForestryPlugin {
 
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
 
+	@Nullable
 	public static BlockRegistryEnergy blocks;
 
 	@Override
@@ -40,6 +43,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
+		Preconditions.checkState(blocks != null);
 		blocks.peatEngine.init();
 		blocks.biogasEngine.init();
 
@@ -51,6 +55,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 	@Override
 	public void registerRecipes() {
 		super.registerRecipes();
+		Preconditions.checkState(blocks != null);
 
 		RecipeUtil.addRecipe(new ItemStack(blocks.peatEngine),
 				"###",

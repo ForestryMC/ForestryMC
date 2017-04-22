@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
+import forestry.api.core.IModelManager;
+import forestry.core.config.Config;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.core.config.Config;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
@@ -55,14 +52,14 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < overlays.length; i++) {
 			if (Config.isDebug || !overlays[i].isSecret()) {
-				itemList.add(new ItemStack(this, 1, i));
+				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}
-	
+
 	/* Models */
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -75,7 +72,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-			return null;
+			return super.getUnlocalizedName(stack);
 		}
 
 		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getUid();

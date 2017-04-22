@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
+import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -27,17 +20,26 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
-
-	public static ItemRegistryFluids items;
+	@Nullable
+	private static ItemRegistryFluids items;
 
 	private static void createFluid(Fluids fluidDefinition) {
 		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
@@ -56,6 +58,7 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	private static void createBlock(Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
+		Preconditions.checkState(fluid != null);
 		Block fluidBlock = fluid.getBlock();
 
 		if (Config.isBlockEnabled(forestryFluid.getTag())) {
@@ -85,6 +88,11 @@ public class PluginFluids extends BlankForestryPlugin {
 		}
 	}
 
+	public static ItemRegistryFluids getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
 	@Override
 	public boolean canBeDisabled() {
 		return false;
@@ -102,9 +110,10 @@ public class PluginFluids extends BlankForestryPlugin {
 	@Override
 	public void doInit() {
 		if (RecipeManagers.squeezerManager != null) {
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), PluginCore.items.ingotTin.copy(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), PluginCore.items.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), PluginCore.items.refractoryWax.getItemStack(), 0.10f);
+			ItemRegistryCore itemRegistryCore = PluginCore.getItems();
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);

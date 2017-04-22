@@ -12,5 +12,5 @@ public interface IStateMapperRegister {
 
 	@SideOnly(Side.CLIENT)
 	void registerStateMapper();
-	
+
 }

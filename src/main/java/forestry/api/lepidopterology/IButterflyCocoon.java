@@ -12,16 +12,12 @@ package forestry.api.lepidopterology;
 
 import forestry.api.genetics.IHousing;
 
-public interface IButterflyCocoon extends IHousing{
+public interface IButterflyCocoon extends IHousing {
 	
 	IButterfly getCaterpillar();
-	
+
 	void setCaterpillar(IButterfly butterfly);
-	
-	IButterflyNursery getNursery();
-	
-	void setNursery(IButterflyNursery nursery);
-	
+
 	boolean isSolid();
-	
+
 }

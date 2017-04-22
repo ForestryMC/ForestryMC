@@ -10,18 +10,11 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -33,8 +26,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
@@ -42,6 +34,17 @@ import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -50,19 +53,19 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final InventoryCraftResult craftPreviewInventory;
-
+	@Nullable
 	private ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super("centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
+		super(800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
 		craftPreviewInventory = new InventoryCraftResult();
 	}
 
 	/* LOADING & SAVING */
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -90,12 +93,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingProducts.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
+			pendingProducts.add(new ItemStack(nbttagcompound1));
 		}
 		sockets.readFromNBT(nbttagcompound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
-		if (chip != null) {
+		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
@@ -104,13 +107,14 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		super.writeGuiData(data);
 		sockets.writeData(data);
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		sockets.readData(data);
 	}
@@ -118,12 +122,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean workCycle() {
 		if (tryAddPending()) {
-			setCurrentPreviewItem();
 			return true;
 		}
 
 		if (!pendingProducts.isEmpty()) {
-			setCurrentPreviewItem();
+			craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			return false;
 		}
 
@@ -132,12 +135,15 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 
 		// We are done, add products to queue
-		Collection<ItemStack> products = currentRecipe.getProducts(worldObj.rand);
+		Collection<ItemStack> products = currentRecipe.getProducts(world.rand);
 		pendingProducts.addAll(products);
 
+		//Add Item to preview slot.
+		ItemStack previewStack = getInternalInventory().getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).copy();
+		previewStack.setCount(1);
+		craftPreviewInventory.setInventorySlotContents(0, previewStack);
+
 		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
-		
-		setCurrentPreviewItem();
 		return true;
 	}
 
@@ -166,6 +172,9 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		if (added) {
 			pendingProducts.pop();
+			if (pendingProducts.isEmpty()) {
+				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
+			}
 		}
 
 		getErrorLogic().setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
@@ -175,21 +184,21 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) == null) {
+		if (inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).isEmpty()) {
 			return false;
 		}
 
-		return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	@Override
 	public boolean hasWork() {
-		if(!pendingProducts.isEmpty()){
+		if (!pendingProducts.isEmpty()) {
 			return true;
 		}
 		checkRecipe();
 
-		boolean hasResource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) != null;
+		boolean hasResource = !getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).isEmpty();
 
 		IErrorLogic errorLogic = getErrorLogic();
 		errorLogic.setCondition(!hasResource, EnumErrorCode.NO_RESOURCE);
@@ -222,12 +231,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 
-		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack)) {
+		if (!stack.isEmpty() && !ChipsetManager.circuitRegistry.isChipset(stack)) {
 			return;
 		}
 
 		// Dispose correctly of old chipsets
-		if (sockets.getStackInSlot(slot) != null) {
+		if (!sockets.getStackInSlot(slot).isEmpty()) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
 				if (chipset != null) {
@@ -237,7 +246,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 
 		sockets.setInventorySlotContents(slot, stack);
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return;
 		}
 
@@ -253,25 +262,18 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiCentrifuge(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerCentrifuge(player.inventory, this);
 	}
-	
+
 	public IInventory getCraftPreviewInventory() {
 		return craftPreviewInventory;
-	}
-	
-	private void setCurrentPreviewItem(){
-		if(!pendingProducts.isEmpty()){
-			craftPreviewInventory.setInventorySlotContents(0, pendingProducts.peek());
-		}else{
-			craftPreviewInventory.setInventorySlotContents(0, null);
-		}
 	}
 
 	@Override

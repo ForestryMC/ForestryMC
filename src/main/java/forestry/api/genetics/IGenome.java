@@ -9,7 +9,7 @@ import forestry.api.core.INbtWritable;
 
 /**
  * Holds the {@link IChromosome}s which comprise the traits of a given individual.
- *
+ * <p>
  * Only the default implementation is supported.
  */
 public interface IGenome extends INbtWritable {
@@ -25,6 +25,6 @@ public interface IGenome extends INbtWritable {
 	IAllele getInactiveAllele(IChromosomeType chromosomeType);
 
 	boolean isGeneticEqual(IGenome other);
-	
+
 	ISpeciesRoot getSpeciesRoot();
 }

@@ -12,23 +12,31 @@ package forestry.core.utils;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
+import forestry.api.climate.IClimateInfo;
+import forestry.api.climate.IClimatePosition;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
+import forestry.core.climate.ClimateRegion;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-			EnumTemperature baseTemp, EnumTolerance tolTemp,
-			EnumHumidity baseHumid, EnumTolerance tolHumid) {
-		if (!getToleratedTemperature(baseTemp, tolTemp).contains(temperature)) {
-			return false;
-		}
-		
-		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+								  EnumTemperature baseTemp, EnumTolerance tolTemp,
+								  EnumHumidity baseHumid, EnumTolerance tolHumid) {
+		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
+				getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 
 	@Override
@@ -41,6 +49,22 @@ public class ClimateUtil implements IClimateHelper {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 	
+	public static boolean isWithinLimits(IClimateInfo minInfo, IClimateInfo maxInfo, IClimateInfo info){
+		if(0.0F != minInfo.getTemperature() && info.getTemperature() < minInfo.getTemperature()){
+			return false;
+		}
+		if(0.0F != minInfo.getHumidity() && info.getHumidity() < minInfo.getHumidity()){
+			return false;
+		}
+		if(0.0F != maxInfo.getTemperature() && info.getTemperature() > maxInfo.getTemperature()){
+			return false;
+		}
+		if(0.0F != maxInfo.getHumidity() & info.getHumidity() > maxInfo.getHumidity()){
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
 
@@ -202,5 +226,53 @@ public class ClimateUtil implements IClimateHelper {
 	@Override
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	}
+	
+	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,
+			   EnumTemperature baseTemp, EnumTolerance tolTemp,
+			   EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates){
+
+		if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
+			if (baseTemp.ordinal() > temperature.ordinal()) {
+				errorStates.add(EnumErrorCode.TOO_COLD);
+			} else {
+				errorStates.add(EnumErrorCode.TOO_HOT);
+			}
+		}
+
+		if (!AlleleManager.climateHelper.isWithinLimits(humidity, baseHumid, tolHumid)) {
+			if (baseHumid.ordinal() > humidity.ordinal()) {
+				errorStates.add(EnumErrorCode.TOO_ARID);
+			} else {
+				errorStates.add(EnumErrorCode.TOO_HUMID);
+			}
+		}
+	}
+	
+	public static float getTemperature(World world, BlockPos pos){
+		return ForestryAPI.climateManager.getInfo(world, pos).getTemperature();
+	}
+	
+	public static float getHumidity(World world, BlockPos pos){
+		return ForestryAPI.climateManager.getInfo(world, pos).getHumidity();
+	}
+
+	public static void writeRoomPositionData(IClimatePosition position, PacketBufferForestry data) {
+		data.writeBlockPos(position.getPos());
+		writePositionData(position, data);
+	}
+
+	public static void writePositionData(IClimatePosition position, PacketBufferForestry data) {
+		data.writeFloat(position.getTemperature());
+		data.writeFloat(position.getHumidity());
+	}
+
+	public static void readRoomPositionData(ClimateRegion room, PacketBufferForestry data) {
+		room.setPosition(data.readBlockPos(), data.readFloat(), data.readFloat());
+	}
+
+	public static void readPositionData(IClimatePosition position, PacketBufferForestry data) {
+		position.setTemperature(data.readFloat());
+		position.setHumidity(data.readFloat());
 	}
 }

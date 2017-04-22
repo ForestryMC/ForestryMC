@@ -2,10 +2,8 @@ package forestry.core.multiblock;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -15,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * process any blocks that are in chunks which are still loading.
  */
 public class MultiblockEventHandler {
-	@SubscribeEvent(priority = EventPriority.NORMAL)
+	@SubscribeEvent
 	public void onChunkLoad(ChunkEvent.Load loadEvent) {
 		Chunk chunk = loadEvent.getChunk();
 		World world = loadEvent.getWorld();
@@ -23,7 +21,7 @@ public class MultiblockEventHandler {
 	}
 
 	// Cleanup, for nice memory usageness
-	@SubscribeEvent(priority = EventPriority.NORMAL)
+	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload unloadWorldEvent) {
 		MultiblockRegistry.onWorldUnloaded(unloadWorldEvent.getWorld());
 	}

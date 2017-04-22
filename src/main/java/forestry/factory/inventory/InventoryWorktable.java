@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.tiles.TileWorktable;
+import net.minecraft.item.ItemStack;
 
 public class InventoryWorktable extends InventoryAdapterTile<TileWorktable> {
 	public final static short SLOT_INVENTORY_1 = 0;

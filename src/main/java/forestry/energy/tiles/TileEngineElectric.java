@@ -3,15 +3,16 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * http:www.gnu.org/licenses/lgpl-3.0.txt
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
+
+import javax.annotation.Nonnull;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -22,9 +23,8 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
@@ -32,10 +32,14 @@ import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.plugins.compat.PluginIC2;
 import ic2.api.energy.prefab.BasicSink;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory, IStreamableGui {
 	protected static class EuConfig {
@@ -62,7 +66,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		setInternalInventory(new InventoryEngineElectric(this));
 
 		if (PluginIC2.instance.isAvailable()) {
-			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 		}
 	}
 
@@ -157,7 +161,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	public void updateServerSide() {
 		IErrorLogic errorLogic = getErrorLogic();
 
-		// No work to be done if IC2 is unavailable.
+		 //No work to be done if IC2 is unavailable.
 		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NO_ENERGY_NET)) {
 			return;
 		}
@@ -174,7 +178,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			replenishFromBattery(InventoryEngineElectric.SLOT_BATTERY);
 		}
 
-		// Updating of gui delayed to prevent it from going crazy
+		//Updating of gui delayed to prevent it from going crazy
 		if (!updateOnInterval(80)) {
 			return;
 		}
@@ -207,7 +211,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		ic2EnergySink.discharge(getStackInSlot(slot), euConfig.euForCycle * 3);
 	}
 
-	// / STATE INFORMATION
+	// STATE INFORMATION
 	@Override
 	protected boolean isBurning() {
 		return mayBurn() && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
@@ -218,12 +222,12 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return 0;
 		}
 
-		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
+		return Math.min(i, (int) ((ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity()));
 	}
 
-	// / SMP GUI
+	// SMP GUI
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		super.writeGuiData(data);
 		sockets.writeData(data);
 		final boolean hasIc2EnergySink = (ic2EnergySink != null);
@@ -234,7 +238,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		sockets.readData(data);
 		final boolean hasIc2EnergySink = data.readBoolean();
@@ -244,7 +248,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 	}
 
-	// / ENERGY CONFIG CHANGE
+	// ENERGY CONFIG CHANGE
 	public void changeEnergyConfig(int euChange, int rfChange, int storageChange) {
 		euConfig.euForCycle += euChange;
 		euConfig.rfPerCycle += rfChange;
@@ -273,7 +277,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		// Dispose correctly of old chipsets
+		//Dispose correctly of old chipsets
 		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
@@ -299,13 +303,14 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		return CircuitSocketType.ELECTRIC_ENGINE;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEngineElectric(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEngineElectric(player.inventory, this);
 	}
 }

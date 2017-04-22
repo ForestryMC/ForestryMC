@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,6 +29,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		return instance;
 	}
 
+	@Nullable
 	private BlockPos targetBiome;
 	private boolean targetBiomeFound;
 
@@ -39,7 +41,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		instance = this;
 	}
 
-	public void setTargetCoordinates(BlockPos coordinates) {
+	public void setTargetCoordinates(@Nullable BlockPos coordinates) {
 		this.targetBiome = coordinates;
 		this.targetBiomeFound = false;
 	}
@@ -48,14 +50,14 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	public void updateAnimation() {
 		Minecraft minecraft = Minecraft.getMinecraft();
 
-		if (minecraft.theWorld != null && minecraft.thePlayer != null) {
-			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw);
+		if (minecraft.world != null && minecraft.player != null) {
+			updateCompass(minecraft.world, minecraft.player.posX, minecraft.player.posZ, minecraft.player.rotationYaw);
 		} else {
 			updateCompass(null, 0.0d, 0.0d, 0.0d);
 		}
 	}
 
-	private void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
+	private void updateCompass(@Nullable World world, double playerX, double playerZ, double playerYaw) {
 
 		double targetAngle;
 

@@ -5,10 +5,8 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
@@ -20,8 +18,11 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 
 	/**
 	 * @return the list of ingredients in the crafting grid to create this recipe.
+	 * Each inner list represents one slot's accepted ItemStacks
 	 */
-	Object[] getIngredients();
+	NonNullList<NonNullList<ItemStack>> getIngredients();
+	
+	NonNullList<String> getOreDicts();
 
 	/**
 	 * @return the width of ingredients in the crafting grid to create this recipe.
@@ -34,9 +35,8 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	int getHeight();
 
 	/**
-	 * @return the plan for this recipe (the item in the top right slot).
+	 * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
 	 */
-	@Nullable
 	ItemStack getPlan();
 
 	/**

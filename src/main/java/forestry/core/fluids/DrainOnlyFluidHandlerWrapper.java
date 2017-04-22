@@ -1,6 +1,5 @@
 package forestry.core.fluids;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -8,10 +7,9 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
-	@Nonnull
 	private final IFluidHandler internalFluidHandler;
 
-	public DrainOnlyFluidHandlerWrapper(@Nonnull IFluidHandler internalFluidHandler) {
+	public DrainOnlyFluidHandlerWrapper(IFluidHandler internalFluidHandler) {
 		this.internalFluidHandler = internalFluidHandler;
 	}
 
@@ -44,10 +42,10 @@ public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
 	}
 
 	private static class DrainOnlyFluidPropertiesWrapper implements IFluidTankProperties {
-		@Nonnull
+
 		private final IFluidTankProperties internalTankProperties;
 
-		public DrainOnlyFluidPropertiesWrapper(@Nonnull IFluidTankProperties internalTankProperties) {
+		public DrainOnlyFluidPropertiesWrapper(IFluidTankProperties internalTankProperties) {
 			this.internalTankProperties = internalTankProperties;
 		}
 

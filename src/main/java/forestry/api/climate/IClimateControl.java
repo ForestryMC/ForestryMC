@@ -7,12 +7,16 @@ package forestry.api.climate;
 
 public interface IClimateControl {
 
-    float getControlTemperature();
-
-    float getControlHumidity();
-    
-    void setControlTemperature(float temperature);
-
-    void setControlHumidity(float humidity);
+	IClimateInfo getControlClimate();
 	
+	void setControlClimate(IClimateInfo climateInfo);
+	
+	float getControlTemperature();
+
+	float getControlHumidity();
+
+	void setControlTemperature(float temperature);
+
+	void setControlHumidity(float humidity);
+
 }

@@ -11,13 +11,8 @@
 package forestry.apiculture.gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.PluginApiculture;
@@ -27,24 +22,29 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
-public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
-
+public class GuiImprinter extends GuiForestry<ContainerImprinter> {
+	private final ItemInventoryImprinter itemInventory;
 	private int startX;
 	private int startY;
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(InventoryPlayer inventoryplayer, ItemInventoryImprinter inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
+	public GuiImprinter(InventoryPlayer inventoryplayer, ItemInventoryImprinter itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, itemInventory));
 
-		xSize = 176;
-		ySize = 185;
+		this.itemInventory = itemInventory;
+		this.xSize = 176;
+		this.ySize = 185;
 
-		List<ItemStack> beeList = new ArrayList<>();
-		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
+		NonNullList<ItemStack> beeList = NonNullList.create();
+		PluginApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
 			if (species != null) {
@@ -58,19 +58,19 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		int offset = (138 - fontRendererObj.getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
-		fontRendererObj.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies primary = inventory.getPrimary();
+		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		fontRendererObj.drawString(primary.getName(), startX + 32, startY + 36, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(primary.getName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies secondary = inventory.getSecondary();
+		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - fontRendererObj.getStringWidth(youCheater)) / 2;
-		fontRendererObj.drawString(youCheater, startX + 8 + offset, startY + 76, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
 	}
 
@@ -127,6 +127,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 	}
 
 	private static void sendSelectionChange(int index, int advance) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, advance));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
+	}
+
+	@Override
+	protected void addLedgers() {
+
 	}
 }

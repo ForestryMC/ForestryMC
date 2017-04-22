@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.List;
 
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -22,20 +25,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 
@@ -43,7 +38,7 @@ public abstract class RecipeUtil {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
-		
+
 		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
 
 		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
@@ -55,47 +50,8 @@ public abstract class RecipeUtil {
 		}
 	}
 
-	/**
-	 * Returns a list of the ore dictionary names if they exist.
-	 * Returns a list containing itemStack if there are no ore dictionary names.
-	 * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
-	 */
-	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
-		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
-		List<String> oreDictNames = new ArrayList<>(oreDictIds.length);
-		for (int oreId : oreDictIds) {
-			String oreDictName = OreDictionary.getOreName(oreId);
-			oreDictNames.add(oreDictName);
-		}
-		if (oreDictNames.isEmpty()) {
-			return Collections.singletonList(itemStack);
-		}
-		return oreDictNames;
-	}
-
-	public static Object[] getCraftingRecipeAsArray(IDescriptiveRecipe recipe) {
-
-		try {
-			return getShapedRecipeAsArray(recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
-		} catch (RuntimeException ex) {
-			Log.warning("Exception while trying to parse an ItemStack[10] from an IRecipe:", ex);
-		}
-
-		return null;
-	}
-
-	private static Object[] getShapedRecipeAsArray(int width, int height, Object[] ingredients, ItemStack output) {
-		Object[] result = new Object[10];
-
-		for (int y = 0; y < height; y++) {
-			System.arraycopy(ingredients, y * width, result, y * 3, width);
-		}
-
-		result[9] = output;
-		return result;
-	}
-
-	public static InventoryCraftingForestry getCraftRecipe(ItemStack[] recipeItems, ItemStack[] availableItems, World world, ItemStack recipeOutput) {
+	@Nullable
+	public static InventoryCraftingForestry getCraftRecipe(NonNullList<ItemStack> recipeItems, NonNullList<ItemStack> availableItems, World world, ItemStack recipeOutput) {
 		// Need at least one matched set
 		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
 			return null;
@@ -111,30 +67,30 @@ public abstract class RecipeUtil {
 		// in place of the ones in the saved crafting inventory.
 		// Check that the recipe it makes is the same as the currentRecipe.
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
-		ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
+		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
-		for (int slot = 0; slot < recipeItems.length; slot++) {
-			ItemStack recipeStack = recipeItems[slot];
-			if (recipeStack == null) {
+		for (int slot = 0; slot < recipeItems.size(); slot++) {
+			ItemStack recipeStack = recipeItems.get(slot);
+			if (recipeStack.isEmpty()) {
 				continue;
 			}
 
 			// Use crafting equivalent (not oredict) items first
 			for (ItemStack stockStack : stockCopy) {
-				if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
-					stockStack.stackSize--;
+				if (stockStack.getCount() > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
+					ItemStack stack = ItemStackUtil.createCopyWithCount(stockStack, 1);
+					stockStack.shrink(1);
 					crafting.setInventorySlotContents(slot, stack);
 					break;
 				}
 			}
 
 			// Use oredict items if crafting equivalent items aren't available
-			if (crafting.getStackInSlot(slot) == null) {
+			if (crafting.getStackInSlot(slot).isEmpty()) {
 				for (ItemStack stockStack : stockCopy) {
-					if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
-						stockStack.stackSize--;
+					if (stockStack.getCount() > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
+						ItemStack stack = ItemStackUtil.createCopyWithCount(stockStack, 1);
+						stockStack.shrink(1);
 						crafting.setInventorySlotContents(slot, stack);
 						break;
 					}
@@ -149,14 +105,13 @@ public abstract class RecipeUtil {
 		return crafting;
 	}
 
-	@Nonnull
-	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
+	public static NonNullList<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		NonNullList<ItemStack> matchingRecipes = NonNullList.create();
 		ItemStack repairRecipe = findRepairRecipe(inventory);
-		if (repairRecipe != null) {
-			return Collections.singletonList(repairRecipe);
+		if (!repairRecipe.isEmpty()) {
+			matchingRecipes.add(repairRecipe);
+			return matchingRecipes;
 		}
-
-		List<ItemStack> matchingRecipes = new ArrayList<>();
 
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;
@@ -174,13 +129,13 @@ public abstract class RecipeUtil {
 
 	private static ItemStack findRepairRecipe(InventoryCrafting inventory) {
 		int craftIngredientCount = 0;
-		ItemStack itemstack0 = null;
-		ItemStack itemstack1 = null;
+		ItemStack itemstack0 = ItemStack.EMPTY;
+		ItemStack itemstack1 = ItemStack.EMPTY;
 
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack itemstack = inventory.getStackInSlot(j);
 
-			if (itemstack != null) {
+			if (!itemstack.isEmpty()) {
 				if (craftIngredientCount == 0) {
 					itemstack0 = itemstack;
 				}
@@ -193,12 +148,11 @@ public abstract class RecipeUtil {
 			}
 		}
 
-		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.stackSize == 1 && itemstack1.stackSize == 1 && itemstack0.getItem().isRepairable()) {
-			Item item = itemstack0.getItem();
-			int damage0 = item.getMaxDamage() - itemstack0.getItemDamage();
-			int damage1 = item.getMaxDamage() - itemstack1.getItemDamage();
-			int repairAmount = damage0 + damage1 + item.getMaxDamage() * 5 / 100;
-			int repairedDamage = item.getMaxDamage() - repairAmount;
+		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.getCount() == 1 && itemstack1.getCount() == 1 && itemstack0.getItem().isRepairable()) {
+			int damage0 = itemstack0.getMaxDamage() - itemstack0.getItemDamage();
+			int damage1 = itemstack0.getMaxDamage() - itemstack1.getItemDamage();
+			int repairAmount = damage0 + damage1 + itemstack0.getMaxDamage() * 5 / 100;
+			int repairedDamage = itemstack0.getMaxDamage() - repairAmount;
 
 			if (repairedDamage < 0) {
 				repairedDamage = 0;
@@ -207,7 +161,7 @@ public abstract class RecipeUtil {
 			return new ItemStack(itemstack0.getItem(), 1, repairedDamage);
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	public static void addRecipe(Block block, Object... obj) {
@@ -239,25 +193,20 @@ public abstract class RecipeUtil {
 	}
 
 	public static void addSmelting(ItemStack res, ItemStack prod, float xp) {
-		if (res == null || res.getItem() == null) {
-			throw new IllegalArgumentException("Tried to register smelting recipe with null input");
-		}
-		if (prod == null || prod.getItem() == null) {
-			throw new IllegalArgumentException("Tried to register smelting recipe with null output");
-		}
 		GameRegistry.addSmelting(res, prod, xp);
 	}
 
-	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		Object[] recipeIngredients = recipe.getIngredients();
+	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
+		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getIngredients();
+		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
-		return matches(recipeIngredients, width, height, inventoryCrafting);
+		return matches(recipeIngredients, oreDicts, width, height, inventoryCrafting);
 	}
 
-	public static boolean matches(Object[] recipeIngredients, int width, int height, IInventory inventoryCrafting) {
+	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory inventoryCrafting) {
 		ItemStack[][] resources = getResources(inventoryCrafting);
-		return matches(recipeIngredients, width, height, resources);
+		return matches(recipeIngredients, oreDicts, width, height, resources);
 	}
 
 	public static ItemStack[][] getResources(IInventory inventoryCrafting) {
@@ -271,62 +220,67 @@ public abstract class RecipeUtil {
 		return resources;
 	}
 
-	public static boolean matches(Object[] recipeIngredients, int width, int height, ItemStack[][] resources) {
+	@Nullable
+	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources) {
 		for (int i = 0; i <= 3 - width; i++) {
 			for (int j = 0; j <= 3 - height; j++) {
-				if (checkMatch(recipeIngredients, width, height, resources, i, j, true)) {
-					return true;
+				String[][] resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, true);
+				if (resourceDicts != null) {
+					return resourceDicts;
 				}
 
-				if (checkMatch(recipeIngredients, width, height, resources, i, j, false)) {
-					return true;
+				resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, false);
+				if (resourceDicts != null) {
+					return resourceDicts;
 				}
 			}
 		}
 
-		return false;
+		return null;
 	}
 
-	private static boolean checkMatch(Object[] recipeIngredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+	@Nullable
+	private static String[][] checkMatch(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+		String[][] resourceDicts = new String[3][3];
 		for (int k = 0; k < 3; k++) {
 			for (int l = 0; l < 3; l++) {
 				ItemStack resource = resources[k][l];
 
 				int widthIt = k - xInGrid;
 				int heightIt = l - yInGrid;
-				Object recipeIngredient = null;
+				NonNullList<ItemStack> recipeIngredient = null;
+				String oreDict = "";
 
 				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
+					int position;
 					if (mirror) {
-						recipeIngredient = recipeIngredients[width - widthIt - 1 + heightIt * width];
+						position = width - widthIt - 1 + heightIt * width;
 					} else {
-						recipeIngredient = recipeIngredients[widthIt + heightIt * width];
+						position = widthIt + heightIt * width;
 					}
+					recipeIngredient = recipeIngredients.get(position);
+					oreDict = oreDicts.get(position);
 				}
 
 				if (!checkIngredientMatch(recipeIngredient, resource)) {
-					return false;
+					return null;
 				}
+				resourceDicts[k][l] = oreDict;
 			}
 		}
 
-		return true;
+		return resourceDicts;
 	}
 
-	private static boolean checkIngredientMatch(Object recipeIngredient, ItemStack resource) {
-		if (recipeIngredient == null && resource == null) {
-			return true;
-		} else if (recipeIngredient instanceof ItemStack) {
-			return ItemStackUtil.isCraftingEquivalent((ItemStack) recipeIngredient, resource);
-		} else if (recipeIngredient instanceof Iterable) {
-			for (Object item : (Iterable) recipeIngredient) {
-				if (checkIngredientMatch(item, resource)) {
-					return true;
-				}
-			}
-			return false;
-		} else {
-			return false;
+	private static boolean checkIngredientMatch(@Nullable NonNullList<ItemStack> recipeIngredient, ItemStack resource) {
+		if (recipeIngredient == null || recipeIngredient.isEmpty()) {
+			return resource.isEmpty();
 		}
+		for (ItemStack item : recipeIngredient) {
+			if (ItemStackUtil.isCraftingEquivalent(item, resource)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

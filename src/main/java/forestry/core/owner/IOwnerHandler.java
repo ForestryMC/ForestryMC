@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.owner;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
@@ -18,6 +17,6 @@ import com.mojang.authlib.GameProfile;
 public interface IOwnerHandler {
 	@Nullable
 	GameProfile getOwner();
-	
-	void setOwner(@Nonnull GameProfile owner);
+
+	void setOwner(GameProfile owner);
 }

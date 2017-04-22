@@ -1,62 +1,92 @@
 package forestry.farming.models;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-
-import net.minecraftforge.common.property.IExtendedBlockState;
+import java.util.Objects;
 
 import forestry.api.core.IModelBaker;
-import forestry.core.models.ModelBlockDefault;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.models.ModelBlockCached;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.tiles.TileFarm;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelFarmBlock extends ModelBlockDefault<BlockFarm> {
+@SideOnly(Side.CLIENT)
+public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
+	public static class Key {
+		public final EnumFarmBlockTexture texture;
+		public final EnumFarmBlockType type;
+		private final int hashCode;
+
+		public Key(EnumFarmBlockTexture texture, EnumFarmBlockType type) {
+			this.texture = texture;
+			this.type = type;
+			this.hashCode = Objects.hash(texture, type);
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (other == null || !(other instanceof Key)) {
+				return false;
+			} else {
+				Key otherKey = (Key) other;
+				return otherKey.texture == texture && otherKey.type == type;
+			}
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+	}
 
 	public ModelFarmBlock() {
 		super(BlockFarm.class);
 	}
 
 	@Override
-	public void bakeInventoryBlock(@Nonnull BlockFarm blockFarm, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
-		if (blockFarm == null) {
-			return;
-		}
+	protected Key getInventoryKey(ItemStack stack) {
+		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
+		EnumFarmBlockType type = EnumFarmBlockType.VALUES[stack.getItemDamage()];
 
-		EnumFarmBlockTexture type = EnumFarmBlockTexture.getFromCompound(item.getTagCompound());
-
-		// Add the plain block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, getSprites(type), 0);
-		// Add the overlay block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, getOverlaySprites(EnumFarmBlockType.VALUES[item.getItemDamage()]), 0);
+		return new Key(texture, type);
 	}
 
 	@Override
-	public void bakeWorldBlock(@Nonnull BlockFarm blockFarm, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
+	protected Key getWorldKey(IBlockState state) {
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
 
 		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
-
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
-		TextureAtlasSprite[] overlayTextures = getOverlaySprites(EnumFarmBlockType.PLAIN);
-		
-		if(farm != null){
+		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;
+
+		if (farm != null) {
 			texture = farm.getFarmBlockTexture();
-			overlayTextures = getOverlaySprites(farm.getFarmBlockType());
+			type = farm.getFarmBlockType();
 		}
-		
-		TextureAtlasSprite[] textures = getSprites(texture);
+
+		return new Key(texture, type);
+	}
+
+	@Override
+	protected void bakeBlock(BlockFarm blockFarm, Key key, IModelBaker baker, boolean inventory) {
+		TextureAtlasSprite[] textures = getSprites(key.texture);
 
 		// Add the plain block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, textures, 0);
+		baker.addBlockModel(null, textures, 0);
 		// Add the overlay block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, overlayTextures, 0);
-		
+		baker.addBlockModel(null, getOverlaySprites(key.type), 0);
+
 		// Set the particle sprite
 		baker.setParticleSprite(textures[0]);
 	}

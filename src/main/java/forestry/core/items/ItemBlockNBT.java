@@ -15,6 +15,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
@@ -23,10 +25,11 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean advanced) {
 		super.addInformation(itemstack, player, info, advanced);
 
-		if (itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() != null) {
 			info.add("There are still some scribbles on this.");
 		}
 	}

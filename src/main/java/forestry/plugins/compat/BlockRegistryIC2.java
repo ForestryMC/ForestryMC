@@ -11,7 +11,7 @@ public class BlockRegistryIC2 extends BlockRegistry {
 	public final BlockEngine generator;
 
 	public BlockRegistryIC2() {
-		electricalEngine = new BlockBase<>(BlockTypeEngine.ELECTRICAL);
+		electricalEngine = new BlockEngine(BlockTypeEngine.ELECTRICAL);
 		registerBlock(electricalEngine, new ItemBlockForestry<>(electricalEngine), "engine_electrical");
 
 		generator = new BlockEngine(BlockTypeEngine.GENERATOR);

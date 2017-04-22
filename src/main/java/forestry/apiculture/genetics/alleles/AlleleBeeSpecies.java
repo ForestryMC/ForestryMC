@@ -10,21 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -45,6 +34,13 @@ import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
@@ -76,8 +72,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance) {
-		if (product == null || product.getItem() == null) {
-			throw new IllegalArgumentException("Tried to add null product");
+		if (product.isEmpty()) {
+			throw new IllegalArgumentException("Tried to add empty product");
 		}
 		if (chance <= 0.0f || chance > 1.0f) {
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");
@@ -88,8 +84,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance) {
-		if (specialty == null || specialty.getItem() == null) {
-			throw new IllegalArgumentException("Tried to add null specialty");
+		if (specialty.isEmpty()) {
+			throw new IllegalArgumentException("Tried to add empty specialty");
 		}
 		if (chance <= 0.0f || chance > 1.0f) {
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");
@@ -109,7 +105,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		nocturnal = true;
 		return this;
 	}
-	
+
 	@Override
 	public IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
 		this.beeModelProvider = beeIconProvider;
@@ -125,7 +121,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	/* RESEARCH */
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return 0f;
 		}
 
@@ -144,9 +140,9 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		ArrayList<ItemStack> bounty = new ArrayList<>();
-		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+		NonNullList<ItemStack> bounty = NonNullList.create();
+		bounty.addAll(super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if (bountyLevel > 10) {
 			for (ItemStack stack : specialtyChances.keySet()) {
@@ -156,7 +152,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		for (ItemStack stack : productChances.keySet()) {
 			bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 		}
-		return bounty.toArray(new ItemStack[bounty.size()]);
+		return bounty;
 	}
 
 	/* OTHER */
@@ -179,14 +175,15 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public boolean isJubilant(IBeeGenome genome, IBeeHousing housing) {
 		return jubilanceProvider.isJubilant(this, genome, housing);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerModels(Item item, IModelManager manager){
+	public void registerModels(Item item, IModelManager manager) {
 		beeModelProvider.registerModels(item, manager);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
 		return beeModelProvider.getModel(type);
 	}

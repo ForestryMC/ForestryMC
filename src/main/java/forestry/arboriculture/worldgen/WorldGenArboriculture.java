@@ -10,27 +10,22 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import forestry.arboriculture.blocks.BlockSapling;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.event.terraingen.TerrainGen;
-
 import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.TopDownBlockPosComparator;
 import forestry.core.worldgen.WorldGenBase;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
@@ -64,7 +59,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		if (genPos != null) {
 			clearSaplings(world, genPos);
 			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
-			Collections.sort(branchEnds, TopDownBlockPosComparator.INSTANCE);
+			branchEnds.sort(TopDownBlockPosComparator.INSTANCE);
 			generateLeaves(world, rand, leaf, branchEnds, genPos);
 			generateExtras(world, rand, genPos);
 			return true;
@@ -73,6 +68,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		return false;
 	}
 
+	@Nullable
 	private static GameProfile getOwner(World world, BlockPos pos) {
 		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
 		if (tile == null) {
@@ -88,7 +84,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	/**
 	 * Generate the tree's trunk. Returns a list of positions of branch ends for leaves to generate at.
 	 */
-	@Nonnull
+
 	protected abstract Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
 
 	protected abstract void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos);

@@ -8,15 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
 
 /**
  * This class manages all the multiblock controllers that exist in a given world,
@@ -26,9 +26,8 @@ import forestry.core.utils.Log;
  * @author Erogenous Beef
  */
 public class MultiblockWorldRegistry {
+	private final World world;
 
-	private World worldObj;
-	
 	private final Set<IMultiblockControllerInternal> controllers;        // Active controllers
 	private final Set<IMultiblockControllerInternal> dirtyControllers;    // Controllers whose parts lists have changed
 	private final Set<IMultiblockControllerInternal> deadControllers;    // Controllers which are empty
@@ -40,39 +39,39 @@ public class MultiblockWorldRegistry {
 
 	// A list of parts which have been detached during internal operations
 	private final Set<IMultiblockComponent> detachedParts;
-	
+
 	// A list of parts whose chunks have not yet finished loading
 	// They will be added to the orphan list when they are finished loading.
 	// Indexed by the hashed chunk coordinate
 	// This can be added-to asynchronously via chunk loads!
 	private final HashMap<Long, Set<IMultiblockComponent>> partsAwaitingChunkLoad;
-	
+
 	// Mutexes to protect lists which may be changed due to asynchronous events, such as chunk loads
 	private final Object partsAwaitingChunkLoadMutex;
 	private final Object orphanedPartsMutex;
-	
-	public MultiblockWorldRegistry(World world) {
-		worldObj = world;
-		
-		controllers = new HashSet<>();
-		deadControllers = new HashSet<>();
-		dirtyControllers = new HashSet<>();
-		
-		detachedParts = new HashSet<>();
-		orphanedParts = new HashSet<>();
 
-		partsAwaitingChunkLoad = new HashMap<>();
-		partsAwaitingChunkLoadMutex = new Object();
-		orphanedPartsMutex = new Object();
+	public MultiblockWorldRegistry(World world) {
+		this.world = world;
+
+		this.controllers = new HashSet<>();
+		this.deadControllers = new HashSet<>();
+		this.dirtyControllers = new HashSet<>();
+
+		this.detachedParts = new HashSet<>();
+		this.orphanedParts = new HashSet<>();
+
+		this.partsAwaitingChunkLoad = new HashMap<>();
+		this.partsAwaitingChunkLoadMutex = new Object();
+		this.orphanedPartsMutex = new Object();
 	}
-	
+
 	/**
 	 * Called before Tile Entities are ticked in the world. Run game logic.
 	 */
 	public void tickStart() {
 		if (!controllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : controllers) {
-				if (controller.getWorldObj() == worldObj && controller.getWorldObj().isRemote == worldObj.isRemote) {
+				if (controller.getWorldObj() == world && controller.getWorldObj().isRemote == world.isRemote) {
 					if (controller.isEmpty()) {
 						// This happens on the server when the user breaks the last block. It's fine.
 						// Mark 'er dead and move on.
@@ -85,19 +84,19 @@ public class MultiblockWorldRegistry {
 			}
 		}
 	}
-	
+
 	/**
 	 * Called prior to processing multiblock controllers. Do bookkeeping.
 	 */
 	public void processMultiblockChanges() {
-		IChunkProvider chunkProvider = worldObj.getChunkProvider();
+		IChunkProvider chunkProvider = world.getChunkProvider();
 		BlockPos coord;
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
 		List<Set<IMultiblockControllerInternal>> mergePools = null;
 		if (!orphanedParts.isEmpty()) {
 			Set<IMultiblockComponent> orphansToProcess = null;
-			
+
 			// Keep the synchronized block small. We can't iterate over orphanedParts directly
 			// because the client does not know which chunks are actually loaded, so attachToNeighbors()
 			// is not chunk-safe on the client, because Minecraft is stupid.
@@ -108,10 +107,10 @@ public class MultiblockWorldRegistry {
 					orphanedParts = new HashSet<>();
 				}
 			}
-			
+
 			if (orphansToProcess != null && !orphansToProcess.isEmpty()) {
 				Set<IMultiblockControllerInternal> compatibleControllers;
-				
+
 				// Process orphaned blocks
 				// These are blocks that exist in a valid chunk and require a controller
 				for (IMultiblockComponent orphan : orphansToProcess) {
@@ -125,11 +124,11 @@ public class MultiblockWorldRegistry {
 						continue;
 					}
 
-					if (worldObj.getTileEntity(coord) != orphan) {
+					if (TileUtil.getTile(world, coord) != orphan) {
 						// This block has been replaced by another.
 						continue;
 					}
-					
+
 					// THIS IS THE ONLY PLACE WHERE PARTS ATTACH TO MACHINES
 					// Try to attach to a neighbor's master controller
 					compatibleControllers = attachToNeighbors(orphan);
@@ -137,7 +136,7 @@ public class MultiblockWorldRegistry {
 						// FOREVER ALONE! Create and register a new controller.
 						// THIS IS THE ONLY PLACE WHERE NEW CONTROLLERS ARE CREATED.
 						MultiblockLogic logic = (MultiblockLogic) orphan.getMultiblockLogic();
-						IMultiblockControllerInternal newController = logic.createNewController(worldObj);
+						IMultiblockControllerInternal newController = logic.createNewController(world);
 						newController.attachBlock(orphan);
 						this.controllers.add(newController);
 					} else if (compatibleControllers.size() > 1) {
@@ -155,7 +154,7 @@ public class MultiblockWorldRegistry {
 								candidatePools.add(candidatePool);
 							}
 						}
-						
+
 						if (candidatePools.size() <= 0) {
 							// No pools nearby, create a new merge pool
 							mergePools.add(compatibleControllers);
@@ -191,7 +190,7 @@ public class MultiblockWorldRegistry {
 						newMaster = controller;
 					}
 				}
-				
+
 				if (newMaster == null) {
 					Log.error("Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.", mergePool.size());
 				} else {
@@ -221,23 +220,23 @@ public class MultiblockWorldRegistry {
 				// POSTCONDITION: The controller must have informed those parts that
 				// they are no longer connected to this machine.
 				Set<IMultiblockComponent> newlyDetachedParts = controller.checkForDisconnections();
-				
+
 				if (!controller.isEmpty()) {
 					controller.recalculateMinMaxCoords();
 					controller.checkIfMachineIsWhole();
 				} else {
 					addDeadController(controller);
 				}
-				
+
 				if (!newlyDetachedParts.isEmpty()) {
 					// Controller has shed some parts - add them to the detached list for delayed processing
 					detachedParts.addAll(newlyDetachedParts);
 				}
 			}
-			
+
 			dirtyControllers.clear();
 		}
-		
+
 		// Unregister dead controllers
 		if (!deadControllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : deadControllers) {
@@ -251,10 +250,10 @@ public class MultiblockWorldRegistry {
 				// THIS IS THE ONLY PLACE WHERE CONTROLLERS ARE UNREGISTERED.
 				this.controllers.remove(controller);
 			}
-			
+
 			deadControllers.clear();
 		}
-		
+
 		// Process detached blocks
 		// Any blocks which have been detached this tick should be moved to the orphaned
 		// list, and will be checked next tick to see if their chunk is still loaded.
@@ -263,7 +262,7 @@ public class MultiblockWorldRegistry {
 			MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
 			logic.assertDetached(part);
 		}
-		
+
 		addAllOrphanedPartsThreadsafe(detachedParts);
 		detachedParts.clear();
 	}
@@ -276,7 +275,7 @@ public class MultiblockWorldRegistry {
 		MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
 		Class<?> controllerClass = logic.getControllerClass();
 		// Look for a compatible controller in our neighboring parts.
-		List<IMultiblockComponent> partsToCheck = MultiblockUtil.getNeighboringParts(worldObj, part);
+		List<IMultiblockComponent> partsToCheck = MultiblockUtil.getNeighboringParts(world, part);
 		for (IMultiblockComponent neighborPart : partsToCheck) {
 			IMultiblockLogic neighborLogic = neighborPart.getMultiblockLogic();
 			if (neighborLogic.isConnected()) {
@@ -307,15 +306,16 @@ public class MultiblockWorldRegistry {
 	 * Called when a multiblock part is added to the world, either via chunk-load or user action.
 	 * If its chunk is loaded, it will be processed during the next tick.
 	 * If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
+	 *
 	 * @param part The part which is being added to this world.
 	 */
 	public void onPartAdded(IMultiblockComponent part) {
 		BlockPos worldLocation = part.getCoordinates();
-		
-		if (worldObj.getChunkProvider().getLoadedChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4) == null) {
+
+		if (world.getChunkProvider().getLoadedChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4) == null) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
-			long chunkHash = ChunkPos.chunkXZ2Int(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);
+			long chunkHash = ChunkPos.asLong(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (!partsAwaitingChunkLoad.containsKey(chunkHash)) {
 					partSet = new HashSet<>();
@@ -323,7 +323,7 @@ public class MultiblockWorldRegistry {
 				} else {
 					partSet = partsAwaitingChunkLoad.get(chunkHash);
 				}
-				
+
 				partSet.add(part);
 			}
 		} else {
@@ -331,24 +331,23 @@ public class MultiblockWorldRegistry {
 			addOrphanedPartThreadsafe(part);
 		}
 	}
-	
+
 	/**
 	 * Called when a part is removed from the world, via user action or via chunk unloads.
 	 * This part is removed from any lists in which it may be, and its machine is marked for recalculation.
+	 *
 	 * @param part The part which is being removed.
 	 */
 	public void onPartRemovedFromWorld(IMultiblockComponent part) {
 		BlockPos coord = part.getCoordinates();
-		if (coord != null) {
-			long hash = ChunkPos.chunkXZ2Int(coord.getX() >> 4, coord.getZ() >> 4);
-			
-			if (partsAwaitingChunkLoad.containsKey(hash)) {
-				synchronized (partsAwaitingChunkLoadMutex) {
-					if (partsAwaitingChunkLoad.containsKey(hash)) {
-						partsAwaitingChunkLoad.get(hash).remove(part);
-						if (partsAwaitingChunkLoad.get(hash).size() <= 0) {
-							partsAwaitingChunkLoad.remove(hash);
-						}
+		long hash = ChunkPos.asLong(coord.getX() >> 4, coord.getZ() >> 4);
+
+		if (partsAwaitingChunkLoad.containsKey(hash)) {
+			synchronized (partsAwaitingChunkLoadMutex) {
+				if (partsAwaitingChunkLoad.containsKey(hash)) {
+					partsAwaitingChunkLoad.get(hash).remove(part);
+					if (partsAwaitingChunkLoad.get(hash).size() <= 0) {
+						partsAwaitingChunkLoad.remove(hash);
 					}
 				}
 			}
@@ -373,18 +372,16 @@ public class MultiblockWorldRegistry {
 		controllers.clear();
 		deadControllers.clear();
 		dirtyControllers.clear();
-		
+
 		detachedParts.clear();
-		
+
 		synchronized (partsAwaitingChunkLoadMutex) {
 			partsAwaitingChunkLoad.clear();
 		}
-		
+
 		synchronized (orphanedPartsMutex) {
 			orphanedParts.clear();
 		}
-		
-		worldObj = null;
 	}
 
 	/**
@@ -396,7 +393,7 @@ public class MultiblockWorldRegistry {
 	 * @param chunkZ Chunk Z coordinate (world coordate >> 4) of the chunk that was loaded
 	 */
 	public void onChunkLoaded(int chunkX, int chunkZ) {
-		long chunkHash = ChunkPos.chunkXZ2Int(chunkX, chunkZ);
+		long chunkHash = ChunkPos.asLong(chunkX, chunkZ);
 		if (partsAwaitingChunkLoad.containsKey(chunkHash)) {
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (partsAwaitingChunkLoad.containsKey(chunkHash)) {
@@ -427,7 +424,7 @@ public class MultiblockWorldRegistry {
 	public void addDirtyController(IMultiblockControllerInternal dirtyController) {
 		this.dirtyControllers.add(dirtyController);
 	}
-	
+
 	/**
 	 * Use this only if you know what you're doing. You should rarely need to iterate
 	 * over all controllers in a world!
@@ -439,13 +436,13 @@ public class MultiblockWorldRegistry {
 	}
 
 	/* *** PRIVATE HELPERS *** */
-	
+
 	private void addOrphanedPartThreadsafe(IMultiblockComponent part) {
 		synchronized (orphanedPartsMutex) {
 			orphanedParts.add(part);
 		}
 	}
-	
+
 	private void addAllOrphanedPartsThreadsafe(Collection<? extends IMultiblockComponent> parts) {
 		synchronized (orphanedPartsMutex) {
 			orphanedParts.addAll(parts);

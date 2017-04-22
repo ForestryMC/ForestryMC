@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
@@ -18,7 +18,6 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -37,12 +36,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 
 	public TileFarmHatch() {
 		this.tileCache = new AdjacentTileCache(this);
-		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, new AdjacentInventoryCache.ITileFilter() {
-			@Override
-			public boolean matches(TileEntity tile) {
-				return !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY();
-			}
-		});
+		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
 	}
 
 	@Override
@@ -68,12 +62,13 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(this, facing);
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);

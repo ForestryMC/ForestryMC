@@ -1,11 +1,9 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 public abstract class AbstractSqueezerRecipeWrapper<R> extends ForestryRecipeWrapper<R> {
-	public AbstractSqueezerRecipeWrapper(@Nonnull R recipe) {
+	public AbstractSqueezerRecipeWrapper(R recipe) {
 		super(recipe);
 	}
 

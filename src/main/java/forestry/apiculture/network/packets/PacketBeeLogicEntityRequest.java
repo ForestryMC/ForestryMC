@@ -12,23 +12,21 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketIdServer;
-import forestry.core.network.packets.PacketEntityUpdate;
-
-public class PacketBeeLogicEntityRequest extends PacketEntityUpdate implements IForestryPacketServer {
-
-	public PacketBeeLogicEntityRequest() {
-	}
+public class PacketBeeLogicEntityRequest extends ForestryPacket implements IForestryPacketServer {
+	private final Entity entity;
 
 	public PacketBeeLogicEntityRequest(Entity entity) {
-		super(entity);
+		this.entity = entity;
 	}
 
 	@Override
@@ -37,15 +35,19 @@ public class PacketBeeLogicEntityRequest extends PacketEntityUpdate implements I
 	}
 
 	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		Entity entity = getTarget(player.worldObj);
-		if (entity instanceof IBeeHousing) {
-			IBeeHousing beeHousing = (IBeeHousing) entity;
-			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-			if (beekeepingLogic != null) {
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeEntityById(entity);
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			Entity entity = data.readEntityById(player.world);
+			if (entity instanceof IBeeHousing) {
+				IBeeHousing beeHousing = (IBeeHousing) entity;
+				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				beekeepingLogic.syncToClient(player);
 			}
 		}
 	}
-
 }

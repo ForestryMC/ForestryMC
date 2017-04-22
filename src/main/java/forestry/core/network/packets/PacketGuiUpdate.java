@@ -13,45 +13,48 @@ package forestry.core.network.packets;
 import java.io.IOException;
 
 import forestry.api.core.ILocatable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private IStreamableGui guiDataTile;
-
-	public PacketGuiUpdate() {
-	}
+public class PacketGuiUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final IStreamableGui guiDataTile;
 
 	public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
-		super(guiDataTile.getCoordinates());
+		this.pos = guiDataTile.getCoordinates();
 		this.guiDataTile = guiDataTile;
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		guiDataTile.writeGuiData(data);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IStreamableGui) {
-			((IStreamableGui) tile).readGuiData(data);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.GUI_UPDATE;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+
+			IStreamableGui tile = TileUtil.getTile(player.world, pos, IStreamableGui.class);
+			if (tile != null) {
+				tile.readGuiData(data);
+			}
+		}
 	}
 }

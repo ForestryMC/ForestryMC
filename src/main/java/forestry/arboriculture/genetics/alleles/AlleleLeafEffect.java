@@ -10,25 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import forestry.api.arboriculture.IAlleleLeafEffect;
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.IEffectData;
+import forestry.core.config.Constants;
+import forestry.core.genetics.alleles.AlleleCategorized;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleLeafEffect;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IEffectData;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.Allele;
-import forestry.core.genetics.alleles.AlleleCategorized;
-
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
-	public static Allele leavesNone;
-
-	public static void createAlleles() {
-		leavesNone = new AlleleLeafEffectNone();
-		AlleleManager.alleleRegistry.registerAllele(leavesNone, EnumTreeChromosome.EFFECT);
-	}
 
 	protected AlleleLeafEffect(String valueName, boolean isDominant) {
 		super(Constants.MOD_ID, "leaves", valueName, isDominant);

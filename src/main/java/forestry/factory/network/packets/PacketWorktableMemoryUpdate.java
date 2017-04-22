@@ -12,46 +12,49 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketWorktableMemoryUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private RecipeMemory recipeMemory;
-
-	public PacketWorktableMemoryUpdate() {
-	}
+public class PacketWorktableMemoryUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final RecipeMemory recipeMemory;
 
 	public PacketWorktableMemoryUpdate(TileWorktable worktable) {
-		super(worktable);
+		this.pos = worktable.getPos();
 		this.recipeMemory = worktable.getMemory();
-	}
-
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		recipeMemory.writeData(data);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileWorktable) {
-			((TileWorktable) tile).getMemory().readData(data);
-		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.WORKTABLE_MEMORY_UPDATE;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
+		recipeMemory.writeData(data);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+
+			TileWorktable tile = TileUtil.getTile(player.world, pos, TileWorktable.class);
+			if (tile != null) {
+				tile.getMemory().readData(data);
+			}
+		}
 	}
 }

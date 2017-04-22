@@ -75,12 +75,7 @@ public class TreeGrowthHelper {
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
 				BlockPos checkPos = startPos.add(x, 0, z);
-				Boolean knownSapling = knownSaplings.get(checkPos);
-				if (knownSapling == null) {
-					knownSapling = isSapling(genome, world, checkPos);
-					knownSaplings.put(checkPos, knownSapling);
-				}
-
+				Boolean knownSapling = knownSaplings.computeIfAbsent(checkPos, k -> isSapling(genome, world, checkPos));
 				if (!knownSapling) {
 					return false;
 				}

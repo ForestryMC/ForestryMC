@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipeManager implements IStillManager {
 
@@ -32,7 +32,8 @@ public class StillRecipeManager implements IStillManager {
 		addRecipe(recipe);
 	}
 
-	public static IStillRecipe findMatchingRecipe(FluidStack item) {
+	@Nullable
+	public static IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
 		if (item == null) {
 			return null;
 		}
@@ -44,7 +45,7 @@ public class StillRecipeManager implements IStillManager {
 		return null;
 	}
 
-	public static boolean matches(IStillRecipe recipe, FluidStack item) {
+	public static boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
 		if (recipe == null || item == null) {
 			return false;
 		}

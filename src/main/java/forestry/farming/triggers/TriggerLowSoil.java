@@ -56,7 +56,7 @@ public class TriggerLowSoil extends Trigger {
 //			return InventoryUtil.containsPercent(resourcesInventory, threshold);
 //		} else {
 //			ItemStack filter = parameter.getItemStack().copy();
-//			filter.stackSize = threshold;
+//			filter.setCount(threshold);
 //			return farmInventory.hasResources(new ItemStack[]{filter});
 //		}
 //	}

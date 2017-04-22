@@ -10,33 +10,31 @@
  ******************************************************************************/
 package forestry.greenhouse.inventory;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.greenhouse.multiblock.GreenhouseController;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryGreenhouse extends InventoryAdapterRestricted {
 
 	private final GreenhouseController greenhouseController;
-	
+
 	public InventoryGreenhouse(GreenhouseController greenhouseController) {
 		super(1, "Items");
 		this.greenhouseController = greenhouseController;
 	}
-	
+
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-		return greenhouseController.getTankManager().canFillFluidType(fluid);
+		return fluid != null && greenhouseController.getTankManager().canFillFluidType(fluid);
 	}
 
 	public void drainCan(TankManager tankManager) {
 		FluidHelper.drainContainers(tankManager, this, 0);
 	}
-	
+
 }

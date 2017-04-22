@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.arboriculture.ITree;
-
 /**
  * Can be implemented by tile entities, if they wish to be pollinatable.
  *
@@ -17,8 +15,7 @@ public interface IPollinatable extends ICheckPollinatable {
 	/**
 	 * Pollinates this entity.
 	 *
-	 * @param pollen
-	 *            IIndividual representing the pollen.
+	 * @param pollen IIndividual representing the pollen.
 	 */
-	void mateWith(ITree pollen);
+	void mateWith(IIndividual pollen);
 }

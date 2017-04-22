@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 public interface IFlowerGrowthHelper {
 	/**
 	 * Plants a random flower from flowerType at the specified position.
+	 *
 	 * @return true if successful, false if it could not be planted.
 	 */
 	boolean plantRandomFlower(String flowerType, World world, BlockPos pos);

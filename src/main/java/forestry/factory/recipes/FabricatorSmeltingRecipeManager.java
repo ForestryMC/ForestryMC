@@ -10,24 +10,24 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
 	public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
 
+	@Nullable
 	public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return null;
 		}
 
@@ -42,9 +42,6 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 
 	@Override
 	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		if (resource == null || molten == null) {
-			return;
-		}
 		addRecipe(new FabricatorSmeltingRecipe(resource, molten, meltingPoint));
 	}
 

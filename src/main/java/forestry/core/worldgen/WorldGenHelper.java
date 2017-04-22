@@ -1,12 +1,15 @@
 package forestry.core.worldgen;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.worldgen.ITreeBlockType;
+import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.core.utils.VectUtil;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -14,11 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.worldgen.ITreeBlockType;
-import forestry.arboriculture.worldgen.TreeBlockType;
-import forestry.core.utils.VectUtil;
 
 public class WorldGenHelper {
 
@@ -106,12 +104,14 @@ public class WorldGenHelper {
 		}
 	}
 
-	/** Returns a list of trunk top coordinates */
+	/**
+	 * Returns a list of trunk top coordinates
+	 */
 	public static Set<BlockPos> generateTreeTrunk(
-			@Nonnull World world,
+			World world,
 			Random rand,
-			@Nonnull ITreeBlockType wood,
-			@Nonnull BlockPos startPos,
+			ITreeBlockType wood,
+			BlockPos startPos,
 			int height,
 			int girth,
 			int yStart,
@@ -149,7 +149,9 @@ public class WorldGenHelper {
 						prevXOffset = xOffset;
 						prevZOffset = zOffset;
 						if (y > 0) {
-							wood.setDirection(leanDirection);
+							if (leanDirection != null) {
+								wood.setDirection(leanDirection);
+							}
 							addBlock(world, startPos.add(x + xOffset, y - 1, z + zOffset), wood, EnumReplaceMode.ALL);
 							wood.setDirection(EnumFacing.UP);
 						}

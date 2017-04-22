@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.owner.IOwnerHandler;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.utils.NBTUtilForestry;
 import net.minecraft.block.Block;
@@ -34,6 +33,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
@@ -57,7 +58,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		ownerHandler.readFromNBT(nbttagcompound);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -73,27 +73,25 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		String speciesUID = "";
 		ITree tree = getTree();
 		if (tree != null) {
 			speciesUID = tree.getIdent();
 		}
-		data.writeUTF(speciesUID);
+		data.writeString(speciesUID);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		String speciesUID = data.readUTF();
+	public void readData(PacketBufferForestry data) throws IOException {
+		String speciesUID = data.readString();
 		ITree tree = getTree(speciesUID);
 		setTree(tree);
 	}
 
 	private static ITree getTree(String speciesUID) {
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-		if (treeTemplate == null) {
-			return null;
-		}
+		Preconditions.checkArgument(treeTemplate != null, "There is no tree template for speciesUID %s", speciesUID);
 		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 	}
 
@@ -102,8 +100,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (worldObj != null && worldObj.isRemote) {
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (world != null && world.isRemote) {
+			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -133,20 +131,19 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
 	}
 
-	@Nonnull
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		NBTTagCompound nbt = pkt.getNbtCompound();
 		handleUpdateTag(nbt);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
@@ -154,7 +151,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+	@SideOnly(Side.CLIENT)
+	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}

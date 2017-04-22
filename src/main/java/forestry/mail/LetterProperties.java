@@ -13,6 +13,9 @@ package forestry.mail;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.mail.ILetter;
+import forestry.mail.items.ItemLetter;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,13 +23,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.mail.ILetter;
-import forestry.mail.items.ItemLetter;
 
 public class LetterProperties {
 	private enum State {
@@ -40,7 +38,7 @@ public class LetterProperties {
 	public static ItemStack createStampedLetterStack(ILetter letter) {
 		Size size = getSize(letter);
 		int meta = encodeMeta(State.STAMPED, size);
-		return new ItemStack(PluginMail.items.letters, 1, meta);
+		return new ItemStack(PluginMail.getItems().letters, 1, meta);
 	}
 
 	public static void closeLetter(ItemStack parent, ILetter letter) {

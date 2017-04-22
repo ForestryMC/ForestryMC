@@ -1,30 +1,50 @@
 {
-	"forge_marker": 1,
-	"defaults": {
-		"model": "forestry:arboriculture/fence_post",
-        "textures": {
-			"particle": "forestry:blocks/wood/planks.acacia",
+    "multipart": [
+      { 
+        "apply": {
+          "model": "forestry:arboriculture/fence_post",
+          "textures": {
+            "particle": "forestry:blocks/wood/planks.acacia",
             "texture": "forestry:blocks/wood/planks.acacia"
+          },
+          "uvlock": true
+        }
+      },
+      {
+        "apply": {
+          "model": "forestry:arboriculture/fence_side",
+          "uvlock": true,
+          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }
         },
-		"uvlock": true,
-		"transform": "forge:default-block"
-	},
-	"variants": {
-		"north": {
-			"true": {"submodel": "forestry:arboriculture/fence_side", "uvlock": true, "textures": { "texture": "forestry:blocks/wood/planks.acacia"}},
-			"false": {}
-		},
-		"south": {
-			"true": {"submodel": "forestry:arboriculture/fence_side", "y": 180, "uvlock": true, "textures": { "texture": "forestry:blocks/wood/planks.acacia"}},
-			"false": {}
-		},
-		"east": {
-			"true": {"submodel": "forestry:arboriculture/fence_side", "y": 90, "uvlock": true, "textures": { "texture": "forestry:blocks/wood/planks.acacia"}},
-			"false": {}
-		},
-		"west": {
-			"true": {"submodel": "forestry:arboriculture/fence_side", "y": 270, "uvlock": true, "textures": { "texture": "forestry:blocks/wood/planks.acacia"}},
-			"false": {}
-		}
-	}
+        "when": { "north": "true" }
+      },
+      {
+        "apply": {
+          "model": "forestry:arboriculture/fence_side",
+          "uvlock": true,
+          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+		  "y": 90
+		  
+        },
+        "when": { "east": "true" }
+      },
+      {
+        "apply": {
+          "model": "forestry:arboriculture/fence_side",
+          "uvlock": true,
+          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+		  "y": 180
+        },
+        "when": { "south": "true" }
+      },
+      {
+        "apply": {
+          "model": "forestry:arboriculture/fence_side",
+          "uvlock": true,
+          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+		  "y": 270
+        },
+        "when": { "west": "true" }
+      }
+    ]
 }

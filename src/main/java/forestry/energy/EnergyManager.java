@@ -1,19 +1,20 @@
 package forestry.energy;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.energy.compat.EnergyStorageWrapper;
 import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.compat.tesla.TeslaHolderWrapper;
 import forestry.energy.compat.tesla.TeslaProducerWrapper;
+import net.darkhax.tesla.api.ITeslaConsumer;
+import net.darkhax.tesla.api.ITeslaHolder;
+import net.darkhax.tesla.api.ITeslaProducer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -21,18 +22,16 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
-	@Nonnull
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
 
 	public EnergyManager(int maxTransfer, int capacity) {
 		super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
 	}
 
-	public void setExternalMode(@Nonnull EnergyTransferMode externalMode) {
+	public void setExternalMode(EnergyTransferMode externalMode) {
 		this.externalMode = externalMode;
 	}
 
-	@Nonnull
 	public EnergyTransferMode getExternalMode() {
 		return externalMode;
 	}
@@ -58,12 +57,12 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeVarInt(this.energy);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		int energyStored = data.readVarInt();
 		setEnergyStored(energyStored);
 	}
@@ -96,40 +95,31 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	public boolean hasCapability(Capability<?> capability) {
-		if (capability == null) {
-			return false;
-		}
-
-		if (capability == CapabilityEnergy.ENERGY) {
-			return true;
-		} else if (capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract()) {
-			return true;
-		} else if (capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive()) {
-			return true;
-		} else if (capability == TeslaHelper.TESLA_HOLDER) {
-			return true;
-		} else {
-			return false;
-		}
+		return capability == CapabilityEnergy.ENERGY ||
+				capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract() ||
+				capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive() ||
+				capability == TeslaHelper.TESLA_HOLDER;
 	}
 
 	@Nullable
 	public <T> T getCapability(Capability<T> capability) {
-		if (capability == null) {
-			return null;
-		}
-
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
-		} else if (capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract()) {
-			return TeslaHelper.TESLA_PRODUCER.cast(new TeslaProducerWrapper(this));
-		} else if (capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive()) {
-			return TeslaHelper.TESLA_CONSUMER.cast(new TeslaConsumerWrapper(this));
-		} else if (capability == TeslaHelper.TESLA_HOLDER) {
-			return TeslaHelper.TESLA_HOLDER.cast(new TeslaHolderWrapper(this));
 		} else {
-			return null;
+			Capability<ITeslaProducer> teslaProducer = TeslaHelper.TESLA_PRODUCER;
+			Capability<ITeslaConsumer> teslaConsumer = TeslaHelper.TESLA_CONSUMER;
+			Capability<ITeslaHolder> teslaHolder = TeslaHelper.TESLA_HOLDER;
+
+			if (capability == teslaProducer && externalMode.canExtract()) {
+				return teslaProducer.cast(new TeslaProducerWrapper(this));
+			} else if (capability == teslaConsumer && externalMode.canReceive()) {
+				return teslaConsumer.cast(new TeslaConsumerWrapper(this));
+			} else if (capability == teslaHolder) {
+				return teslaHolder.cast(new TeslaHolderWrapper(this));
+			} else {
+				return null;
+			}
 		}
 	}
 

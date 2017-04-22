@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.mail.IPostalState;
 import forestry.core.utils.Translator;
 
@@ -25,7 +23,7 @@ public enum EnumDeliveryState implements IPostalState {
 
 	private final String unlocalizedDescription;
 
-	EnumDeliveryState(@Nonnull String unlocalizedDescription) {
+	EnumDeliveryState(String unlocalizedDescription) {
 		this.unlocalizedDescription = unlocalizedDescription;
 	}
 

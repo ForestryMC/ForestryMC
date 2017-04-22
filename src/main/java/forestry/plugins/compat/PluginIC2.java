@@ -3,15 +3,16 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * http:www.gnu.org/licenses/lgpl-3.0.txt
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableMap;
 import forestry.api.circuits.ChipsetManager;
@@ -32,6 +33,7 @@ import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
+import forestry.core.circuits.Circuits;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
@@ -40,11 +42,13 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.energy.PluginEnergy;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
+import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
 import forestry.farming.logic.FarmableBasicIC2Crop;
@@ -52,7 +56,6 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import ic2.api.item.IC2Items;
-import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -63,13 +66,14 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends BlankForestryPlugin {
-	public static final String modId = "IC2";
+	public static final String modId = "ic2";
 	public static PluginIC2 instance;
 
 	private static ItemStack rubberSapling;
 	private static ItemStack rubber;
 	public static ItemStack rubberWood;
 	public static ItemStack resin;
+	public static ItemStack fertilizer;
 
 	public BlockRegistryIC2 blocks;
 
@@ -108,11 +112,16 @@ public class PluginIC2 extends BlankForestryPlugin {
 		resin = IC2Items.getItem("misc_resource", "resin");
 		rubberSapling = IC2Items.getItem("sapling");
 		rubber = IC2Items.getItem("crafting", "rubber");
+		fertilizer = IC2Items.getItem("crop_res","fertilizer");
 
-		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", new FarmLogicRubber());
+		Circuits.farmRubberManual = new CircuitFarmLogic("manualRubber", new FarmLogicRubber());
 
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin", CircuitSocketType.ELECTRIC_ENGINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
+
+		if(fertilizer != null){
+			FarmRegistry.getInstance().registerFertilizer(fertilizer, 250);
+		}
 	}
 
 	@Override
@@ -122,19 +131,19 @@ public class PluginIC2 extends BlankForestryPlugin {
 
 		// Remove some items from the recycler
 		if (Recipes.recyclerBlacklist != null) {
-			ItemRegistryApiculture beeItems = PluginApiculture.items;
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 			if (beeItems != null) {
-				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(new ItemStack(beeItems.beeQueenGE)));
-				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(new ItemStack(beeItems.beePrincessGE)));
+				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beeQueenGE)));
+				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beePrincessGE)));
 			}
 		} else {
 			Log.error("IC2 Recipes.recyclerBlacklist not found.");
 		}
 
-		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
-		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
-		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 7, 20);
-		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 15, 40);
+		Circuits.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
+		Circuits.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
+		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 7, 20);
+		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 15, 40);
 
 		blocks.electricalEngine.init();
 		blocks.generator.init();
@@ -205,10 +214,8 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ItemRegistryCore coreItems = PluginCore.items;
 
 		if (rubber != null) {
-			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
-						new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', rubberOreDict});
-			}
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
+					new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 		}
 
 		ItemStack plantBall = IC2Items.getItem("crafting", "plant_ball");
@@ -221,7 +228,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 			RecipeUtil.addFermenterRecipes(bioChaff, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 		if (beeItems != null) {
 			if (resin != null) {
 				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
@@ -237,13 +244,15 @@ public class PluginIC2 extends BlankForestryPlugin {
 		}
 
 		if (rubberSapling != null && resin != null) {
-			String saplingName = ItemStackUtil.getBlockNameFromRegistryAsSting(ItemStackUtil.getBlock(rubberSapling));
-			String resinName = ItemStackUtil.getItemNameFromRegistryAsString(resin.getItem());
-			String imc = String.format("farmArboreal@%s.%s.%s.%s",
-					saplingName, rubberSapling.getItemDamage(),
-					resinName, resin.getItemDamage());
-			Log.trace("Sending IMC '%s'.", imc);
-			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", imc);
+			String saplingName = ItemStackUtil.getBlockNameFromRegistryAsString(ItemStackUtil.getBlock(rubberSapling));
+			if(saplingName != null){
+				String resinName = ItemStackUtil.getItemNameFromRegistryAsString(resin.getItem());
+				String imc = String.format("farmArboreal@%s.%s.%s.%s",
+						saplingName, rubberSapling.getItemDamage(),
+						resinName, resin.getItemDamage());
+				Log.trace("Sending IMC '%s'.", imc);
+				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", imc);
+			}
 		}
 
 
@@ -260,7 +269,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 		if (waterCell != null) {
 			int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 			if (bogEarthOutputCan > 0) {
-					ItemStack bogEarthCan = PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
+					ItemStack bogEarthCan = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
 				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 			}
 		}
@@ -268,18 +277,18 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
 
 		// / Solder Manager
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuit.energyElectricChoke1);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuit.energyElectricBoost1);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuit.energyElectricBoost2);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.IRON, 1), Circuit.energyElectricEfficiency1);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.energyElectricChoke1);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.energyElectricBoost1);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.energyElectricBoost2);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.IRON, 1), Circuits.energyElectricEfficiency1);
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
 			if (resin != null && rubberWood != null) {
 				ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
-				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
+				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			}
 
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicIC2Crop());
+			FarmRegistry.getInstance().registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
 		}
 
 

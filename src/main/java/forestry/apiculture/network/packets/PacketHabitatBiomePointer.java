@@ -12,22 +12,27 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.apiculture.render.TextureHabitatLocator;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
-import forestry.core.proxy.Proxies;
-
-public class PacketHabitatBiomePointer extends PacketCoordinates implements IForestryPacketClient {
-
-	public PacketHabitatBiomePointer() {
-	}
+public class PacketHabitatBiomePointer extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
 
 	public PacketHabitatBiomePointer(BlockPos coordinates) {
-		super(coordinates);
+		this.pos = coordinates;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 	}
 
 	@Override
@@ -35,8 +40,12 @@ public class PacketHabitatBiomePointer extends PacketCoordinates implements IFor
 		return PacketIdClient.HABITAT_BIOME_POINTER;
 	}
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Proxies.render.setHabitatLocatorTexture(player, getPos());
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
+		}
 	}
 }

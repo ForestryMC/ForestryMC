@@ -12,25 +12,24 @@ package forestry.mail.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
+import forestry.core.tiles.TileUtil;
 import forestry.mail.tiles.TileTrader;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketTraderAddressResponse extends PacketCoordinates implements IForestryPacketClient {
-
-	private String addressName;
-
-	public PacketTraderAddressResponse() {
-	}
+public class PacketTraderAddressResponse extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final String addressName;
 
 	public PacketTraderAddressResponse(TileTrader tile, String addressName) {
-		super(tile);
+		this.pos = tile.getPos();
 		this.addressName = addressName;
 	}
 
@@ -40,23 +39,20 @@ public class PacketTraderAddressResponse extends PacketCoordinates implements IF
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeUTF(addressName);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
+		data.writeString(addressName);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		addressName = data.readUTF();
-	}
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
-		if (tile instanceof TileTrader) {
-			((TileTrader) tile).handleSetAddressResponse(addressName);
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			String addressName = data.readString();
+
+			TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressResponse(addressName));
 		}
 	}
-
 }

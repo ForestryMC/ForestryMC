@@ -13,29 +13,25 @@ package forestry.core.gui.ledgers;
 import java.util.List;
 import java.util.Random;
 
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-
-import forestry.core.gui.IHintSource;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 
 	private final String hintString;
 	private final String hintTooltip;
 
-	public HintLedger(LedgerManager manager, IHintSource tile) {
+	public HintLedger(LedgerManager manager, List<String> hints) {
 		super(manager, "hint");
-		List<String> hints = tile.getHints();
 		int position = new Random().nextInt(hints.size());
 		String hint = hints.get(position);
 
 		hintString = Translator.translateToLocal("for.hints." + hint + ".desc");
 		hintTooltip = Translator.translateToLocal("for.hints." + hint + ".tag");
 
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		FontRenderer fontRenderer = minecraft.fontRendererObj;
 		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
@@ -48,7 +44,7 @@ public class HintLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		drawSprite(TextureManager.getInstance().getDefault("misc/hint"), x + 3, y + 4);
+		drawSprite(TextureManagerForestry.getInstance().getDefault("misc/hint"), x + 3, y + 4);
 
 		if (!isFullyOpened()) {
 			return;

@@ -11,13 +11,6 @@
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
-
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -28,12 +21,13 @@ import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.circuits.SolderManager;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.IHintSource;
 import forestry.core.utils.datastructures.RevolvingList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource, IHintSource {
+public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
 	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
@@ -57,8 +51,8 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		return layouts.getCurrent();
 	}
 
-	public void setLayout(String uid) {
-		layouts.setCurrent(ChipsetManager.circuitRegistry.getLayout(uid));
+	public void setLayout(ICircuitLayout layout) {
+		layouts.setCurrent(layout);
 	}
 
 	public void advanceLayout() {
@@ -75,19 +69,15 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
-			if (ingredient == null) {
-				continue;
+			if (!ingredient.isEmpty()) {
+				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
+				if (recipe != null) {
+					if (doConsume) {
+						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
+					}
+					circuits[i] = recipe.getCircuit();
+				}
 			}
-
-			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
-			if (recipe == null) {
-				continue;
-			}
-
-			if (doConsume) {
-				decrStackSize(ingredientSlot1 + i, recipe.getResource().stackSize);
-			}
-			circuits[i] = recipe.getCircuit();
 		}
 
 		return circuits;
@@ -101,10 +91,10 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-		if (inputCircuitBoard == null || inputCircuitBoard.stackSize > 1) {
+		if (inputCircuitBoard.isEmpty() || inputCircuitBoard.getCount() > 1) {
 			return;
 		}
-		if (getStackInSlot(finishedCircuitBoardSlot) != null) {
+		if (!getStackInSlot(finishedCircuitBoardSlot).isEmpty()) {
 			return;
 		}
 
@@ -128,7 +118,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
 		setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
-		setInventorySlotContents(inputCircuitBoardSlot, null);
+		setInventorySlotContents(inputCircuitBoardSlot, ItemStack.EMPTY);
 	}
 
 	private int getCircuitCount() {
@@ -152,14 +142,14 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-		if (blankCircuitBoard == null) {
+		if (blankCircuitBoard.isEmpty()) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blankCircuitBoard.getItemDamage()];
 
 			int circuitCount = 0;
 			for (short i = 0; i < type.getSockets(); i++) {
-				if (getStackInSlot(ingredientSlot1 + i) != null) {
+				if (!getStackInSlot(ingredientSlot1 + i).isEmpty()) {
 					circuitCount++;
 				}
 			}
@@ -179,7 +169,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack.isEmpty()) {
 			return false;
 		}
 
@@ -191,10 +181,5 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			return recipe != null;
 		}
 		return false;
-	}
-
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("soldering.iron");
 	}
 }

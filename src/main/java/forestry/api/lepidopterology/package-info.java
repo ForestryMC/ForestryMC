@@ -3,7 +3,12 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-@API(apiVersion = "1.3.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@API(apiVersion = "1.4.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
 package forestry.api.lepidopterology;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fml.common.API;

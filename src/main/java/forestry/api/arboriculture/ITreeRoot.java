@@ -6,25 +6,25 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.mojang.authlib.GameProfile;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesRootPollinatable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface ITreeRoot extends ISpeciesRoot {
+public interface ITreeRoot extends ISpeciesRootPollinatable {
 
 	@Override
 	boolean isMember(ItemStack itemstack);
 
 	@Override
+	@Nullable
 	ITree getMember(ItemStack itemstack);
 
 	@Override
@@ -43,16 +43,16 @@ public interface ITreeRoot extends ISpeciesRoot {
 	ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/**
-	 * @param world
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(World world, GameProfile player);
+	IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
 	/**
 	 * Register a leaf tick handler.
+	 *
 	 * @param handler the {@link ILeafTickHandler} to register.
 	 */
 	void registerLeafTickHandler(ILeafTickHandler handler);
@@ -66,6 +66,7 @@ public interface ITreeRoot extends ISpeciesRoot {
 	@Override
 	EnumGermlingType getType(ItemStack stack);
 
+	@Nullable
 	ITree getTree(World world, BlockPos pos);
 
 	ITree getTree(World world, ITreeGenome genome);
@@ -78,22 +79,24 @@ public interface ITreeRoot extends ISpeciesRoot {
 	@Override
 	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, BlockPos pos);
+	boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
 
 	ITreekeepingMode getTreekeepingMode(World world);
 
+	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(World world, String name);
+	void setTreekeepingMode(World world, ITreekeepingMode mode);
 
 	/* TEMPLATES */
+
 	@Override
-	ArrayList<ITree> getIndividualTemplates();
+	List<ITree> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override

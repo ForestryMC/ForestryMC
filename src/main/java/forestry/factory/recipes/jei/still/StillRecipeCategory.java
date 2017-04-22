@@ -1,7 +1,5 @@
 package forestry.factory.recipes.jei.still;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
@@ -17,38 +15,34 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class StillRecipeCategory extends ForestryRecipeCategory {
-	
 	private static final int inputTank = 0;
 	private static final int outputTank = 1;
-	
-	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/still.png");
-	
-	@Nonnull
+
+	private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/still.png");
+
 	private final IDrawable tankOverlay;
-	@Nonnull
 	private final IDrawableAnimated progressBar;
-	
+
 	public StillRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 34, 14, 108, 60), "tile.for.still.name");
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		
+
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
 		this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
 	}
-	
-	@Nonnull
+
 	@Override
 	public String getUid() {
 		return ForestryRecipeCategoryUid.STILL;
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		progressBar.draw(minecraft, 50, 3);
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
 		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);

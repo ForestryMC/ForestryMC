@@ -3,7 +3,7 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * http:www.gnu.org/licenses/lgpl-3.0.txt
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
@@ -18,14 +18,17 @@ import java.util.Map;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import forestry.core.config.Constants;
+import forestry.core.network.PacketHandler;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.plugins.compat.PluginIC2;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -80,12 +83,12 @@ public class CropRubber extends CropDestroy {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
-		Collection<ItemStack> harvested = new ArrayList<>();
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+		NonNullList<ItemStack> harvested = NonNullList.create();
 		harvested.add(PluginIC2.resin.copy());
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		Proxies.net.sendNetworkPacket(packet, world);
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		return harvested;

@@ -13,22 +13,23 @@ package forestry.core.gui.ledgers;
 import java.awt.Rectangle;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
+import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Side ledger for guis
  */
+@SideOnly(Side.CLIENT)
 public abstract class Ledger {
 
 	protected static final int minWidth = 24;
@@ -38,8 +39,8 @@ public abstract class Ledger {
 	protected int maxHeight = 24;
 
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
-	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledgerLeft.png");
-	
+	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
+
 	private final LedgerManager manager;
 
 	private final int fontColorHeader;
@@ -143,10 +144,12 @@ public abstract class Ledger {
 		this.y = y;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public final void draw() {
 		draw(x, y);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public abstract void draw(int x, int y);
 
 	public abstract String getTooltip();
@@ -199,7 +202,7 @@ public abstract class Ledger {
 
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
-		Proxies.render.bindTexture(texture);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -214,11 +217,13 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
-		if (sprite != null) {
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
-		}
+		drawSprite(TextureManagerForestry.getInstance().getGuiTextureMap(), sprite, x, y);
+	}
+
+	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(textureMap);
+		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 	}
 
 	protected int drawHeader(String string, int x, int y) {
@@ -239,7 +244,7 @@ public abstract class Ledger {
 
 	protected int drawSplitText(String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		List strings = minecraft.fontRendererObj.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
@@ -251,7 +256,7 @@ public abstract class Ledger {
 	}
 
 	protected int drawText(String string, int x, int y) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		minecraft.fontRendererObj.drawString(string, x, y, fontColorText);
 		return minecraft.fontRendererObj.FONT_HEIGHT;
 	}

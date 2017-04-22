@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.gui.ContainerLiquidTanksSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.tiles.TileSqueezer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 

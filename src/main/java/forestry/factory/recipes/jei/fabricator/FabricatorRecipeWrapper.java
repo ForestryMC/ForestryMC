@@ -1,32 +1,35 @@
 package forestry.factory.recipes.jei.fabricator;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.jei.FactoryJeiPlugin;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRecipe> {
-	
-	public FabricatorRecipeWrapper(@Nonnull IFabricatorRecipe recipe) {
+
+	public FabricatorRecipeWrapper(IFabricatorRecipe recipe) {
 		super(recipe);
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		IFabricatorRecipe recipe = getRecipe();
-		IStackHelper stackHelper = FactoryJeiPlugin.jeiHelpers.getStackHelper();
 
-		Object[] itemInputs = recipe.getIngredients();
-		List<List<ItemStack>> itemStackInputs = stackHelper.expandRecipeItemStackInputs(Arrays.asList(itemInputs));
-		ingredients.setInputLists(ItemStack.class, itemStackInputs);
+		NonNullList<NonNullList<ItemStack>> itemInputs = recipe.getIngredients();
+		List<List<ItemStack>> inputStacks = new ArrayList<>();
+		for (List<ItemStack> stacks : itemInputs) {
+			List<ItemStack> copy = new ArrayList<>();
+			copy.addAll(stacks);
+			inputStacks.add(copy);
+		}
+
+		ingredients.setInputLists(ItemStack.class, inputStacks);
 
 		ingredients.setInputs(FluidStack.class, Collections.singletonList(getRecipe().getLiquid()));
 

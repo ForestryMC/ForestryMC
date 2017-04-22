@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
-
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
@@ -30,16 +29,22 @@ public class ForestryGuiConfig extends GuiConfig {
 	private static List<IConfigElement> getConfigCategories() {
 		List<IConfigElement> configElements = new ArrayList<>();
 
-		List<String> commonCategoryNames = Arrays.asList("crafting", "difficulty", "genetics", "performance", "structures", "tweaks", "world");
-		for (String categoryName : commonCategoryNames) {
-			ConfigCategory category = Config.configCommon.getCategory(categoryName);
-			configElements.add(new ConfigElement(category));
+		LocalizedConfiguration configCommon = Config.configCommon;
+		if (configCommon != null) {
+			List<String> commonCategoryNames = Arrays.asList("crafting", "difficulty", "genetics", "performance", "structures", "tweaks", "world");
+			for (String categoryName : commonCategoryNames) {
+				ConfigCategory category = configCommon.getCategory(categoryName);
+				configElements.add(new ConfigElement(category));
+			}
 		}
 
-		List<String> fluidCategoryNames = Arrays.asList("enableFluid", "enableFluidBlock");
-		for (String categoryName : fluidCategoryNames) {
-			ConfigCategory category = Config.configFluid.getCategory(categoryName);
-			configElements.add(new ConfigElement(category));
+		LocalizedConfiguration configFluid = Config.configFluid;
+		if (configFluid != null) {
+			List<String> fluidCategoryNames = Arrays.asList("enableFluid", "enableFluidBlock");
+			for (String categoryName : fluidCategoryNames) {
+				ConfigCategory category = configFluid.getCategory(categoryName);
+				configElements.add(new ConfigElement(category));
+			}
 		}
 
 		return configElements;

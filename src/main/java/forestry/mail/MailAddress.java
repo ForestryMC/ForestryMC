@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.mail;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.UUID;
 
-import net.minecraft.nbt.NBTTagCompound;
-
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.INbtWritable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.StringUtils;
 
 public class MailAddress implements INbtWritable, IMailAddress {
 
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 
-	@Nonnull
 	private final EnumAddressee type;
-	@Nonnull
 	private final GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
 	public MailAddress() {
@@ -37,27 +34,24 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		this.gameProfile = invalidGameProfile;
 	}
 
-	public MailAddress(@Nonnull GameProfile gameProfile) {
-		if (gameProfile == null) {
-			throw new IllegalArgumentException("gameProfile must not be null");
-		}
+	public MailAddress(GameProfile gameProfile) {
+		Preconditions.checkNotNull(gameProfile, "gameProfile must not be null");
 
 		this.type = EnumAddressee.PLAYER;
 		this.gameProfile = gameProfile;
 	}
 
-	public MailAddress(@Nonnull String name) {
-		if (name == null) {
-			throw new IllegalArgumentException("name must not be null");
-		}
+	public MailAddress(String name) {
+		Preconditions.checkNotNull(name, "name must not be null");
+		Preconditions.checkArgument(StringUtils.isNotBlank(name), "name must not be blank");
 
 		this.type = EnumAddressee.TRADER;
 		this.gameProfile = new GameProfile(null, name);
 	}
 
-	public MailAddress(@Nonnull NBTTagCompound nbt) {
+	public MailAddress(NBTTagCompound nbt) {
 		EnumAddressee type = null;
-		GameProfile gameProfile = null;
+		GameProfile gameProfile = invalidGameProfile;
 		if (nbt.hasKey("TP")) {
 			String typeName = nbt.getString("TP");
 			type = EnumAddressee.fromString(typeName);
@@ -69,13 +63,15 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		} else if (nbt.hasKey("profile")) {
 			NBTTagCompound profileTag = nbt.getCompoundTag("profile");
 			gameProfile = PlayerUtil.readGameProfileFromNBT(profileTag);
+			if (gameProfile == null) {
+				gameProfile = invalidGameProfile;
+			}
 		}
 
 		this.type = type;
 		this.gameProfile = gameProfile;
 	}
 
-	@Nonnull
 	@Override
 	public EnumAddressee getType() {
 		return type;
@@ -90,11 +86,11 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	public boolean isValid() {
 		return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
 	}
-	
+
 	@Override
 	public GameProfile getPlayerProfile() {
 		if (this.type != EnumAddressee.PLAYER) {
-			return null;
+			return invalidGameProfile;
 		}
 		return gameProfile;
 	}
@@ -128,7 +124,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString("TP", type.toString());
 
-		if (gameProfile != null) {
+		if (gameProfile != invalidGameProfile) {
 			NBTTagCompound profileNbt = new NBTTagCompound();
 			PlayerUtil.writeGameProfile(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);

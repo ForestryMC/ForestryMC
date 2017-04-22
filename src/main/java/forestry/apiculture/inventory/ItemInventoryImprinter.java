@@ -10,15 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import java.util.List;
+import java.util.Map;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeRoot;
+import forestry.api.genetics.IAllele;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemInventoryImprinter extends ItemInventory {
 	private static final short specimenSlot = 0;
@@ -72,9 +77,13 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	public IBee getSelectedBee() {
-		return new Bee(BeeManager.beeRoot.templateAsGenome(
-				BeeManager.beeRoot.getGenomeTemplates().get(BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getIdent()),
-				BeeManager.beeRoot.getGenomeTemplates().get(BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getIdent())));
+		IBeeRoot beeRoot = BeeManager.beeRoot;
+		List<IBee> individualTemplates = beeRoot.getIndividualTemplates();
+		Map<String, IAllele[]> genomeTemplates = beeRoot.getGenomeTemplates();
+		IAllele[] templateActive = genomeTemplates.get(individualTemplates.get(primaryIndex).getIdent());
+		IAllele[] templateInactive = genomeTemplates.get(individualTemplates.get(secondaryIndex).getIdent());
+		IBeeGenome genome = beeRoot.templateAsGenome(templateActive, templateInactive);
+		return new Bee(genome);
 	}
 
 	public int getPrimaryIndex() {
@@ -96,7 +105,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	@Override
 	public void onSlotClick(int slotIndex, EntityPlayer player) {
 		ItemStack specimen = getStackInSlot(specimenSlot);
-		if (specimen == null) {
+		if (specimen.isEmpty()) {
 			return;
 		}
 
@@ -106,21 +115,18 @@ public class ItemInventoryImprinter extends ItemInventory {
 		}
 
 		// Needs space
-		if (getStackInSlot(imprintedSlot) != null) {
+		if (!getStackInSlot(imprintedSlot).isEmpty()) {
 			return;
 		}
 
 		IBee imprint = getSelectedBee();
-		if (imprint == null) {
-			return;
-		}
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		imprint.writeToNBT(nbttagcompound);
 		specimen.setTagCompound(nbttagcompound);
 
 		setInventorySlotContents(imprintedSlot, specimen);
-		setInventorySlotContents(specimenSlot, null);
+		setInventorySlotContents(specimenSlot, ItemStack.EMPTY);
 	}
 
 	@Override

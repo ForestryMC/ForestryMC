@@ -1,7 +1,5 @@
 package forestry.storage.compat;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.utils.JeiUtil;
 import forestry.storage.PluginStorage;
 import forestry.storage.items.ItemRegistryStorage;
@@ -12,8 +10,8 @@ import mezz.jei.api.JEIPlugin;
 @JEIPlugin
 public class StorageJeiPlugin extends BlankModPlugin {
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
-		ItemRegistryStorage items = PluginStorage.items;
+	public void register(IModRegistry registry) {
+		ItemRegistryStorage items = PluginStorage.getItems();
 
 		JeiUtil.addDescription(registry, "minerBag",
 				items.minerBackpack,

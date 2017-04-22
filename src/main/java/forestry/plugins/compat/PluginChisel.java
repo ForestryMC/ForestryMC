@@ -11,14 +11,13 @@
 package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
-
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-
+import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.CHISEL, name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
 public class PluginChisel extends BlankForestryPlugin {
@@ -46,7 +45,8 @@ public class PluginChisel extends BlankForestryPlugin {
 				"diorite"
 		);
 		for (String wBlocks : worldgenBlocks) {
-			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-backpack-items", String.format("digger@%s:%s", Chisel, wBlocks));
+			String message = String.format("%s@%s:%s", BackpackManager.DIGGER_UID, Chisel, wBlocks);
+			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-backpack-items", message);
 		}
 
 	}

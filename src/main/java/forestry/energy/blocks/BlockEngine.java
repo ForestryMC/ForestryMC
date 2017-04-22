@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -58,7 +60,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		EnumFacing orientation = state.getValue(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
@@ -105,15 +107,13 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		if (rotate(world, pos)) {
-			return true;
-		}
-
-		return super.rotateBlock(world, pos, axis);
+		return rotate(world, pos) ||
+				super.rotateBlock(world, pos, axis);
 	}
 
 	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {
-		TileEntity tile = world.getTileEntity(pos.offset(orientation));
+		BlockPos offsetPos = pos.offset(orientation);
+		TileEntity tile = TileUtil.getTile(world, offsetPos);
 		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 

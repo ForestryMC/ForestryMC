@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -60,16 +60,12 @@ public class BeeGenome extends Genome implements IBeeGenome {
 			.expireAfterAccess(1, TimeUnit.MINUTES)
 			.build(new CacheLoader<NBTTagCompound, BeeGenome>() {
 				@Override
-				public BeeGenome load(@Nonnull NBTTagCompound tagCompound) {
+				public BeeGenome load(NBTTagCompound tagCompound) {
 					return new BeeGenome(tagCompound);
 				}
 			});
 
 	public static BeeGenome fromNBT(NBTTagCompound nbtTagCompound) {
-		if (nbtTagCompound == null) {
-			return null;
-		}
-
 		return beeGenomeCache.getUnchecked(nbtTagCompound);
 	}
 
@@ -84,9 +80,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
-		if (!BeeManager.beeRoot.isMember(itemStack)) {
-			return null;
-		}
+		Preconditions.checkArgument(BeeManager.beeRoot.isMember(itemStack), "itemStack must be a bee");
 
 		IAlleleSpecies species = getSpeciesDirectly(BeeManager.beeRoot, itemStack);
 		if (species instanceof IAlleleBeeSpecies) {

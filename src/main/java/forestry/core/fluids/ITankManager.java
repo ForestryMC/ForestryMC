@@ -10,19 +10,21 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ITankManager extends IFluidHandler {
 	void containerAdded(Container container, IContainerListener crafter);
 
-	void updateGuiData(Container container, List<IContainerListener> crafters);
+	void sendTankUpdate(Container container, List<IContainerListener> crafters);
 
 	void containerRemoved(Container container);
 
@@ -35,5 +37,6 @@ public interface ITankManager extends IFluidHandler {
 	/**
 	 * For updating tanks on the client
 	 */
-	void processTankUpdate(int tankIndex, FluidStack contents);
+	@SideOnly(Side.CLIENT)
+	void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
 }

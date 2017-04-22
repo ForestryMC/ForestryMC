@@ -10,31 +10,33 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.core.IModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
 	private final EnumVanillaWoodType woodType;
+	private final ILeafSpriteProvider leafSpriteProvider;
 
 	private ModelResourceLocation germlingModel;
 	private ModelResourceLocation pollenModel;
-	private ModelResourceLocation charcoalModel;
 
-	public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType) {
+	public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType, ILeafSpriteProvider leafSpriteProvider) {
 		this.woodType = woodType;
+		this.leafSpriteProvider = leafSpriteProvider;
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		if(type == EnumGermlingType.SAPLING){
+		if (type == EnumGermlingType.SAPLING) {
 			switch (woodType) {
 				case OAK:
 					germlingModel = manager.getModelLocation("minecraft", "oak_sapling");
@@ -55,18 +57,26 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 					germlingModel = manager.getModelLocation("minecraft", "dark_oak_sapling");
 					break;
 			}
-		}else if(type == EnumGermlingType.POLLEN){
+		} else if (type == EnumGermlingType.POLLEN) {
 			pollenModel = manager.getModelLocation("pollen");
 		}
 	}
 
-	@Nonnull
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if(type == EnumGermlingType.POLLEN){
+		if (type == EnumGermlingType.POLLEN) {
 			return pollenModel;
-		}else{
+		} else {
 			return germlingModel;
+		}
+	}
+
+	@Override
+	public int getSpriteColor(EnumGermlingType type, int renderPass) {
+		if (type == EnumGermlingType.POLLEN) {
+			return leafSpriteProvider.getColor(false);
+		} else {
+			return 0xFFFFFF;
 		}
 	}
 }

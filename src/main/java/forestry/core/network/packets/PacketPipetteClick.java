@@ -12,32 +12,38 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-public class PacketPipetteClick extends PacketSlotClick implements IForestryPacketServer {
+public class PacketPipetteClick extends ForestryPacket implements IForestryPacketServer {
+	private final int slot;
 
-	public PacketPipetteClick() {
-	}
-
-	public PacketPipetteClick(TileEntity tile, int slot) {
-		super(tile, slot);
+	public PacketPipetteClick(int slot) {
+		this.slot = slot;
 	}
 
 	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (player.openContainer instanceof IContainerLiquidTanks) {
-			((IContainerLiquidTanks) player.openContainer).handlePipetteClick(getSlot(), player);
-		}
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeVarInt(slot);
 	}
 
 	@Override
 	public PacketIdServer getPacketId() {
 		return PacketIdServer.PIPETTE_CLICK;
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			int slot = data.readVarInt();
+			if (player.openContainer instanceof IContainerLiquidTanks) {
+				((IContainerLiquidTanks) player.openContainer).handlePipetteClick(slot, player);
+			}
+		}
 	}
 }

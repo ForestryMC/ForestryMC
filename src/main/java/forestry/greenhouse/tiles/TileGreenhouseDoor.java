@@ -10,28 +10,29 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.item.ItemStack;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
 
 public class TileGreenhouseDoor extends TileGreenhouse {
 
 	public TileGreenhouseDoor() {
 	}
-	
+
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
-		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)){
-			super.setCamouflageBlock(type, camouflageBlock);
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
+		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)) {
+			super.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);
 			TileGreenhouseDoor otherDoorTile = null;
-			if(worldObj.getTileEntity(pos.up()) instanceof TileGreenhouseDoor){
-				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.up());
-			}else if(worldObj.getTileEntity(pos.down()) instanceof TileGreenhouseDoor){
-				otherDoorTile = (TileGreenhouseDoor) worldObj.getTileEntity(pos.down());
+			if (world.getTileEntity(pos.up()) instanceof TileGreenhouseDoor) {
+				otherDoorTile = (TileGreenhouseDoor) world.getTileEntity(pos.up());
+			} else if (world.getTileEntity(pos.down()) instanceof TileGreenhouseDoor) {
+				otherDoorTile = (TileGreenhouseDoor) world.getTileEntity(pos.down());
 			}
-			if(otherDoorTile != null){
-				otherDoorTile.setCamouflageBlock(type, camouflageBlock);
+			if (otherDoorTile != null) {
+				return otherDoorTile.setCamouflageBlock(type, camouflageBlock, sendClientUpdate);
 			}
 		}
+		return false;
 	}
 
 }

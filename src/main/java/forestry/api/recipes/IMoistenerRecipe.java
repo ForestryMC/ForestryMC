@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 public interface IMoistenerRecipe extends IForestryRecipe {
 	/**
 	 * Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
+	 *
 	 * @return moistener ticks to process one item.
 	 */
 	int getTimePerItem();

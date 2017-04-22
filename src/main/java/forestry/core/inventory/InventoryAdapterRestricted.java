@@ -24,23 +24,16 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null) {
-			return false;
-		}
-
-		return canSlotAccept(slotIndex, itemStack);
+		return !itemStack.isEmpty() && canSlotAccept(slotIndex, itemStack);
 	}
 
 	@Override
 	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		if (itemStack == null) {
-			return false;
-		}
-		return isItemValidForSlot(slotIndex, itemStack);
+		return !itemStack.isEmpty() && isItemValidForSlot(slotIndex, itemStack);
 	}
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
-		return itemStack != null;
+		return !itemStack.isEmpty();
 	}
 }

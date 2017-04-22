@@ -10,12 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
-
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SlotUtil;
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -23,17 +30,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.gui.slots.SlotLocked;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
-import forestry.core.utils.SlotUtil;
-
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
 
 @invtweaks.api.container.ChestContainer(showButtons = false)
 public abstract class ContainerForestry extends Container {
@@ -62,7 +58,7 @@ public abstract class ContainerForestry extends Container {
 	@Override
 	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
 		if (!canAccess(player)) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		if (clickTypeIn == ClickType.SWAP && dragType_or_button >= 0 && dragType_or_button < 9) {
@@ -70,7 +66,7 @@ public abstract class ContainerForestry extends Container {
 			int hotbarSlotIndex = 27 + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);
 			if (hotbarSlot instanceof SlotLocked) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 		}
 
@@ -88,7 +84,7 @@ public abstract class ContainerForestry extends Container {
 	@Override
 	public final ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 		if (!canAccess(player)) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
@@ -99,9 +95,7 @@ public abstract class ContainerForestry extends Container {
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
 		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayer) {
-				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
-			} else {
-				Log.error("Unknown listener type: {}", listener);
+				NetworkUtil.sendToPlayer(packet, (EntityPlayer) listener);
 			}
 		}
 	}
@@ -132,7 +126,7 @@ public abstract class ContainerForestry extends Container {
 				}
 			}
 		}
-		
+
 		return Multimaps.asMap(map);
 	}
 }

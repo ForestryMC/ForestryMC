@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import forestry.core.render.TextureManager;
-import forestry.core.tiles.IPowerHandler;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 
 public class PowerLedger extends Ledger {
+	private final EnergyManager energyManager;
 
-	private final IPowerHandler tile;
-
-	public PowerLedger(LedgerManager manager, IPowerHandler tile) {
+	public PowerLedger(LedgerManager manager, EnergyManager energyManager) {
 		super(manager, "power");
-		this.tile = tile;
+		this.energyManager = energyManager;
 		maxHeight = 94;
 	}
 
@@ -31,7 +29,7 @@ public class PowerLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		drawSprite(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+		drawSprite(TextureManagerForestry.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
 		if (!isFullyOpened()) {
 			return;
@@ -39,8 +37,6 @@ public class PowerLedger extends Ledger {
 
 		int xHeader = x + 22;
 		int xBody = x + 12;
-
-		EnergyManager energyManager = tile.getEnergyManager();
 
 		drawHeader(Translator.translateToLocal("for.gui.energy"), xHeader, y + 8);
 
@@ -56,7 +52,7 @@ public class PowerLedger extends Ledger {
 
 	@Override
 	public String getTooltip() {
-		return tile.getEnergyManager().getEnergyStored() + " RF";
+		return energyManager.getEnergyStored() + " RF";
 	}
 
 }

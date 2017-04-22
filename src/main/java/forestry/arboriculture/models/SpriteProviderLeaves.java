@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
-
-import net.minecraft.util.ResourceLocation;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
+import net.minecraft.util.ResourceLocation;
 
 public class SpriteProviderLeaves implements ILeafSpriteProvider {
 
@@ -40,10 +38,8 @@ public class SpriteProviderLeaves implements ILeafSpriteProvider {
 	}
 
 	@Override
-	@Nonnull
 	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
 		return leafTexture.getSprite(pollinated, fancy);
 	}
-
 }
 

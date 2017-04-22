@@ -5,16 +5,17 @@
  ******************************************************************************/
 package forestry.api.mail;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
+import forestry.api.core.INbtWritable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import forestry.api.core.INbtWritable;
+import net.minecraft.util.NonNullList;
 
 public interface ILetter extends IInventory, INbtWritable {
 
-	ItemStack[] getPostage();
+	NonNullList<ItemStack> getPostage();
 
 	void setProcessed(boolean flag);
 
@@ -28,9 +29,10 @@ public interface ILetter extends IInventory, INbtWritable {
 
 	boolean hasRecipient();
 
-	void setRecipient(IMailAddress address);
+	void setRecipient(@Nullable IMailAddress address);
 
-	IMailAddress[] getRecipients();
+	@Nullable
+	IMailAddress getRecipient();
 
 	String getRecipientString();
 
@@ -46,11 +48,11 @@ public interface ILetter extends IInventory, INbtWritable {
 
 	void invalidatePostage();
 
-	ItemStack[] getAttachments();
+	NonNullList<ItemStack> getAttachments();
 
 	void addAttachment(ItemStack itemstack);
 
-	void addAttachments(ItemStack[] itemstacks);
+	void addAttachments(NonNullList<ItemStack> itemstacks);
 
 	int countAttachments();
 

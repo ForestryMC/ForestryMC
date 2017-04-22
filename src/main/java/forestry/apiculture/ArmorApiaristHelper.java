@@ -21,7 +21,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 
 	@Override
 	public boolean isArmorApiarist(ItemStack stack, EntityLivingBase entity, String cause, boolean doProtect) {
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 
@@ -35,7 +35,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 			return false;
 		}
 
-		return armorApiarist.protectEntity(entity, stack, cause, doProtect);
+		return armorApiarist != null && armorApiarist.protectEntity(entity, stack, cause, doProtect);
 	}
 
 	@Override

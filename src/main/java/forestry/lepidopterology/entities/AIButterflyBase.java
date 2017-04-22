@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -25,25 +27,22 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		this.entity = entity;
 	}
 
+	@Nullable
 	protected Vec3d getRandomDestination() {
 		if (entity.isInWater()) {
 			return getRandomDestinationUpwards();
 		}
 
-		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7,
-				new Vec3d(entity.posX, entity.posY, entity.posZ));
+		Vec3d entityPos = new Vec3d(entity.posX, entity.posY, entity.posZ);
+		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
 
-		if (randomTarget == null) {
-			return null;
-		}
-
-		if (validateDestination(randomTarget, false)) {
+		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
+	@Nullable
 	protected Vec3d getRandomDestinationUpwards() {
 		Vec3d destination = new Vec3d(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
 		if (validateDestination(destination, true)) {
@@ -57,15 +56,19 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (dest.yCoord < 1) {
 			return false;
 		}
-		IBlockState blockState = entity.worldObj.getBlockState(new BlockPos(dest));
+		BlockPos pos = new BlockPos(dest);
+		if (!entity.world.isBlockLoaded(pos)) {
+			return false;
+		}
+		IBlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!allowFluids && block.getMaterial(blockState).isLiquid()) {
+		if (!allowFluids && blockState.getMaterial().isLiquid()) {
 			return false;
 		}
-		if (!block.isPassable(entity.worldObj, new BlockPos(dest))) {
+		if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
-		return entity.getButterfly().isAcceptedEnvironment(entity.worldObj, dest.xCoord, dest.yCoord, dest.zCoord);
+		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.xCoord, dest.yCoord, dest.zCoord);
 	}
 
 }

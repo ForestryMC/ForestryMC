@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,13 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.world.ITreeGenData;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
@@ -26,29 +28,27 @@ public interface ITree extends IIndividual, ITreeGenData {
 
 	IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
 
+	@SideOnly(Side.CLIENT)
 	IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
 
-	@Nonnull
 	@Override
 	ITreeGenome getGenome();
 
+	@Nullable
 	ITreeGenome getMate();
 
 	/**
 	 * @since Forestry 4.0
 	 */
-	ITree[] getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier);
+	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
 	// Products, Chance
-	@Nonnull
 	Map<ItemStack, Float> getProducts();
 
 	// Specialties, Chance
-	@Nonnull
 	Map<ItemStack, Float> getSpecialties();
 
-	@Nonnull
-	List<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
+	NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Boolean indicating whether a sapling can stay planted at the given position.
@@ -72,7 +72,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	 * @return Integer denoting how resilient leaf blocks are against adverse influences (i.e. caterpillars).
 	 */
 	int getResilience();
-	
+
 	/**
 	 * @return Integer denoting the size of the tree trunk.
 	 */

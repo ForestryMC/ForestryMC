@@ -10,12 +10,21 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.Locale;
+import java.util.regex.Pattern;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-
-import forestry.core.proxy.Proxies;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class StringUtil {
+
+	private static final Pattern camelCaseToUnderscores = Pattern.compile("(.)([A-Z])");
+
+	public static String camelCaseToUnderscores(String uid) {
+		return camelCaseToUnderscores.matcher(uid).replaceAll("$1_$2").toLowerCase(Locale.ENGLISH);
+	}
 
 	public static String append(String delim, String source, String appendix) {
 		if (source.length() <= 0) {
@@ -50,8 +59,9 @@ public class StringUtil {
 		return line.toString();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static int getLineHeight(int maxWidth, String... strings) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 		FontRenderer fontRenderer = minecraft.fontRendererObj;
 
 		int lineCount = 0;

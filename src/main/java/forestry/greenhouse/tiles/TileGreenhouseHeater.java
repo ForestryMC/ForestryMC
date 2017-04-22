@@ -17,7 +17,7 @@ import forestry.core.climate.ClimatiserDefinition;
 
 public class TileGreenhouseHeater extends TileGreenhouseClimatiser {
 
-	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.POSITIVE, 5D, EnumClimatiserTypes.TEMPERATURE);
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.015F, EnumClimatiserModes.POSITIVE, 5F, EnumClimatiserTypes.TEMPERATURE);
 
 	public TileGreenhouseHeater() {
 		super(DEFINITION);

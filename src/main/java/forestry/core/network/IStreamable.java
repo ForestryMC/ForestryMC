@@ -12,8 +12,12 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-public interface IStreamable {
-	void writeData(DataOutputStreamForestry data) throws IOException;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-	void readData(DataInputStreamForestry data) throws IOException;
+public interface IStreamable {
+	void writeData(PacketBufferForestry data);
+
+	@SideOnly(Side.CLIENT)
+	void readData(PacketBufferForestry data) throws IOException;
 }

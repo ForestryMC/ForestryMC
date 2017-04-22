@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.IStamps;
 import forestry.core.CreativeTabForestry;
 import forestry.core.items.ItemOverlay;
+import net.minecraft.item.ItemStack;
 
 public class ItemStamps extends ItemOverlay implements IStamps {
 	public ItemStamps() {

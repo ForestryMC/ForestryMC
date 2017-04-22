@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
@@ -38,18 +37,18 @@ public interface IBackpackInterface {
 	 * @param itemStack   The itemStack that the backpack should accept.
 	 *                    {@link OreDictionary#WILDCARD_VALUE} can be used for meta value.
 	 */
-	void addItemToForestryBackpack(@Nonnull String backpackUid, @Nonnull ItemStack itemStack);
+	void addItemToForestryBackpack(String backpackUid, ItemStack itemStack);
 
 	/**
 	 * Register a backpack definition with a given uid.
 	 */
-	void registerBackpackDefinition(@Nonnull String backpackUid, @Nonnull IBackpackDefinition definition);
+	void registerBackpackDefinition(String backpackUid, IBackpackDefinition definition);
 
 	/**
 	 * Get a backpack definition with a given uid.
 	 */
 	@Nullable
-	IBackpackDefinition getBackpackDefinition(@Nonnull String backpackUid);
+	IBackpackDefinition getBackpackDefinition(String backpackUid);
 
 	/**
 	 * Creates a backpack with the given UID and type, returning the item.
@@ -59,8 +58,7 @@ public interface IBackpackInterface {
 	 * @param type        Type of backpack.
 	 * @return Created backpack item.
 	 */
-	@Nonnull
-	Item createBackpack(@Nonnull String backpackUid, @Nonnull EnumBackpackType type);
+	Item createBackpack(String backpackUid, EnumBackpackType type);
 
 	/**
 	 * Create a backpack that can hold items from a specific {@link ISpeciesRoot}.
@@ -70,7 +68,7 @@ public interface IBackpackInterface {
 	 * @param speciesRoot The species root.
 	 * @return Created backpack item.
 	 */
-	Item createNaturalistBackpack(@Nonnull String backpackUid, @Nonnull ISpeciesRoot speciesRoot);
+	Item createNaturalistBackpack(String backpackUid, ISpeciesRoot speciesRoot);
 
 	/**
 	 * Makes a new configurable backpack filter. Useful for implementing {@link IBackpackDefinition}.

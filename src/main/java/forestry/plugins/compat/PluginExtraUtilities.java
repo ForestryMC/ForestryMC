@@ -15,15 +15,15 @@ import java.util.Collections;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.core.PluginCore;
-import forestry.core.circuits.Circuit;
+import forestry.core.circuits.Circuits;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableAgingCrop;
@@ -33,6 +33,7 @@ import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @ForestryPlugin(pluginID = ForestryPluginUids.EXTRA_UTILITIES, name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends BlankForestryPlugin {
 
-	private static final String ExU = "ExtraUtils2";
+	private static final String ExU = "extrautils2";
 
 	@Override
 	public boolean isAvailable() {
@@ -58,11 +59,11 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 		super.doInit();
 
 		if (Config.isExUtilEnderLilyEnabled()) {
-			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("extrautils2", "EnderLilly"));
+			Block enderLillyBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ExU, "enderlilly"));
 			Item enderLillyItem = Item.getItemFromBlock(enderLillyBlock);
 			if (enderLillyBlock == Blocks.AIR) {
 				Log.error("Could not find ender lilly block.");
-			} else if (enderLillyItem == null) {
+			} else if (enderLillyItem == Items.AIR) {
 				Log.error("Could not find ender lilly item.");
 			} else {
 				IProperty<Integer> growthProperty = BlockUtil.getProperty(enderLillyBlock, "growth", Integer.class);
@@ -71,8 +72,8 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 				} else {
 					int harvestAge = Collections.max(growthProperty.getAllowedValues());
 					int replantAge = enderLillyBlock.getDefaultState().getValue(growthProperty);
-					Farmables.farmables.put("farmEnder", new FarmableAgingCrop(new ItemStack(enderLillyItem), enderLillyBlock, growthProperty, harvestAge, replantAge));
-					Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", new FarmLogicEnder());
+					FarmRegistry.getInstance().registerFarmables("farmEnder", new FarmableAgingCrop(new ItemStack(enderLillyItem), enderLillyBlock, growthProperty, harvestAge, replantAge));
+					Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", new FarmLogicEnder());
 				}
 			}
 		}
@@ -81,9 +82,9 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 	@Override
 	public void registerRecipes() {
 		super.registerRecipes();
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && Circuit.farmEnderManaged != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && Circuits.farmEnderManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuit.farmEnderManaged);
+			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.getItems().tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 		}
 	}
 }

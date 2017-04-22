@@ -10,43 +10,60 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.FarmHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
-	private final ItemStack resource;
-	private final IBlockState soilState;
+	private final List<Soil> soils = new ArrayList<>();
 	protected final List<IFarmable> farmables;
 
-	List<ItemStack> produce = new ArrayList<>();
+	protected NonNullList<ItemStack> produce = NonNullList.create();
 
-	protected FarmLogicHomogeneous(ItemStack resource, @Nonnull IBlockState soilState, Collection<IFarmable> farmables) {
-		this.resource = resource;
-		this.soilState = soilState;
+	protected FarmLogicHomogeneous(ItemStack resource, IBlockState soilState, Collection<IFarmable> farmables) {
+		addSoil(resource, soilState, false);
 		this.farmables = new ArrayList<>(farmables);
 	}
+	
+	protected void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){
+		soils.add(new Soil(resource, soilState, hasMetaData));
+	}
 
-	protected boolean isAcceptedSoil(@Nonnull IBlockState blockState) {
-		return soilState.getBlock() == blockState.getBlock();
+	protected boolean isAcceptedSoil(IBlockState blockState) {
+		for(Soil soil : soils){
+			IBlockState soilState = soil.soilState;
+			Block soilBlock = soilState.getBlock();
+			Block block = blockState.getBlock();
+			if(soilState.getBlock() == blockState.getBlock()){
+				if(!soil.hasMetaData || block.getMetaFromState(blockState) == soilBlock.getMetaFromState(soilState)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		return resource.isItemEqual(itemstack);
+		for(Soil soil : soils){
+			ItemStack resource = soil.resource;
+			if(resource.isItemEqual(itemstack)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -71,47 +88,58 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-
-		if (maintainSoil(world, farmHousing, pos, direction, extent)) {
-			return true;
-		}
-
-		return maintainGermlings(world, farmHousing, pos.up(), direction, extent);
+		return maintainSoil(world, farmHousing, pos, direction, extent) ||
+				maintainGermlings(world, farmHousing, pos.up(), direction, extent);
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		ItemStack[] resources = new ItemStack[]{resource};
-		if (!farmHousing.getFarmInventory().hasResources(resources)) {
-			return false;
-		}
-
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos, direction, i);
-			IBlockState soilState = world.getBlockState(position);
-
-			if (FarmHelper.bricks.contains(soilState.getBlock())) {
-				break;
-			}
-
-			if (isAcceptedSoil(soilState)) {
+		for(Soil soil : soils){
+			NonNullList<ItemStack> resources = NonNullList.create();
+			resources.add(soil.resource);
+			if (!farmHousing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
-
-			BlockPos platformPosition = position.down();
-			IBlockState platformState = world.getBlockState(platformPosition);
-			if (!FarmHelper.bricks.contains(platformState.getBlock())) {
-				break;
+	
+			for (int i = 0; i < extent; i++) {
+				BlockPos position = translateWithOffset(pos, direction, i);
+				IBlockState soilState = world.getBlockState(position);
+	
+				if (FarmHelper.bricks.contains(soilState.getBlock())) {
+					break;
+				}
+	
+				if (isAcceptedSoil(soilState)) {
+					continue;
+				}
+	
+				BlockPos platformPosition = position.down();
+				IBlockState platformState = world.getBlockState(platformPosition);
+				if (!FarmHelper.bricks.contains(platformState.getBlock())) {
+					break;
+				}
+	
+				produce.addAll(BlockUtil.getBlockDrops(world, position));
+	
+				BlockUtil.setBlockWithPlaceSound(world, position, soil.soilState);
+				farmHousing.getFarmInventory().removeResources(resources);
+				return true;
 			}
-
-			produce.addAll(BlockUtil.getBlockDrops(world, position));
-
-			BlockUtil.setBlockWithPlaceSound(world, position, this.soilState);
-			farmHousing.getFarmInventory().removeResources(resources);
-			return true;
 		}
 
 		return false;
 	}
 
 	protected abstract boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent);
+	
+	private static class Soil{
+		protected final ItemStack resource;
+		protected final IBlockState soilState;
+		protected final boolean hasMetaData;
+		
+		public Soil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+			this.resource = resource;
+			this.soilState = soilState;
+			this.hasMetaData = hasMetaData;
+		}
+	}
 }

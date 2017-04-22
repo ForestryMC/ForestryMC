@@ -10,31 +10,35 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
-import forestry.core.tiles.TileForestry;
 
 public enum BlockTypeCoreTesr implements IBlockTypeTesr {
-	ANALYZER(TileAnalyzer.class, "analyzer", Proxies.render.getRendererAnalyzer()),
-	ESCRITOIRE(TileEscritoire.class, "escritoire", Proxies.render.getRenderEscritoire());
+	ANALYZER(createAnalyzerProperties(TileAnalyzer.class, "analyzer")),
+	ESCRITOIRE(createEscritoireProperties(TileEscritoire.class, "escritoire"));
 
 	public static final BlockTypeCoreTesr[] VALUES = values();
 
-	@Nonnull
 	private final IMachinePropertiesTesr machineProperties;
 
-	<T extends TileForestry> BlockTypeCoreTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<T> renderer) {
-		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks/" + name + ".0");
+	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Class<? extends TileAnalyzer> teClass, String name) {
+		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
+		Proxies.render.setRendererAnalyzer(machineProperties);
+		return machineProperties;
 	}
 
-	@Nonnull
+	private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Class<? extends TileEscritoire> teClass, String name) {
+		MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
+		Proxies.render.setRenderEscritoire(machineProperties);
+		return machineProperties;
+	}
+
+	BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
+		this.machineProperties = machineProperties;
+	}
+
 	@Override
 	public IMachinePropertiesTesr getMachineProperties() {
 		return machineProperties;

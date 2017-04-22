@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -29,13 +26,15 @@ import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
-	@Nonnull
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
-	@Nonnull
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
-	@Nonnull
 	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
@@ -43,7 +42,6 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 		setInternalInventory(inventory);
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
@@ -85,13 +83,14 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true);
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerBeeHousing(player.inventory, this, true);
 	}
 }

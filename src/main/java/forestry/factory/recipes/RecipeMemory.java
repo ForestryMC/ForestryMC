@@ -10,24 +10,24 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import forestry.api.core.INbtWritable;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
-import forestry.api.core.INbtWritable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 
@@ -46,7 +46,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		memorizedRecipes = new LinkedList<>();
 	}
 
-	public RecipeMemory(@Nonnull NBTTagCompound nbt) {
+	public RecipeMemory(NBTTagCompound nbt) {
 		memorizedRecipes = new LinkedList<>();
 		if (!nbt.hasKey("RecipeMemory")) {
 			return;
@@ -55,22 +55,21 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		NBTTagList nbttaglist = nbt.getTagList("RecipeMemory", 10);
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
-			MemorizedRecipe recipe = new MemorizedRecipe();
-			recipe.readFromNBT(recipeNbt);
+			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
 			memorizedRecipes.add(recipe);
 		}
 	}
 
-	private static boolean isValid(MemorizedRecipe recipe) {
+	private static boolean isValid(@Nullable MemorizedRecipe recipe) {
 		if (recipe == null) {
 			return false;
 		}
 		ItemStack recipeOutput = recipe.getRecipeOutput();
-		if (recipeOutput == null) {
+		if (recipeOutput.isEmpty()) {
 			return false;
 		}
 		Item item = recipeOutput.getItem();
-		return item != null && !memoryBlacklist.contains(item.getClass());
+		return !memoryBlacklist.contains(item.getClass());
 	}
 
 	public void validate(World world) {
@@ -129,6 +128,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		memorizedRecipes.set(index, updatedRecipe);
 	}
 
+	@Nullable
 	private MemorizedRecipe getOldestUnlockedRecipe() {
 		MemorizedRecipe oldest = null;
 		for (MemorizedRecipe existing : memorizedRecipes) {
@@ -143,6 +143,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		return oldest;
 	}
 
+	@Nullable
 	public MemorizedRecipe getRecipe(int recipeIndex) {
 		if (recipeIndex < 0 || recipeIndex >= memorizedRecipes.size()) {
 			return null;
@@ -153,17 +154,14 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return recipe.getRecipeOutput();
 	}
 
 	public boolean isLocked(int recipeIndex) {
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
-		if (recipe == null) {
-			return false;
-		}
-		return recipe.isLocked();
+		return recipe != null && recipe.isLocked();
 	}
 
 	public void toggleLock(long worldTime, int recipeIndex) {
@@ -173,6 +171,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		}
 	}
 
+	@Nullable
 	private MemorizedRecipe getExistingMemorizedRecipe(ItemStack craftingRecipeOutput) {
 		for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
 			if (memorizedRecipe.hasRecipeOutput(craftingRecipeOutput)) {
@@ -198,12 +197,13 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeStreamables(memorizedRecipes);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		data.readStreamables(memorizedRecipes, MemorizedRecipe.class);
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		data.readStreamables(memorizedRecipes, MemorizedRecipe::new);
 	}
 }

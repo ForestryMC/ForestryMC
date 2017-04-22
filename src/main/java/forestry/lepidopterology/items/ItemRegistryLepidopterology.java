@@ -20,9 +20,9 @@ public class ItemRegistryLepidopterology extends ItemRegistry {
 	public final ItemButterflyGE cocoonGE;
 
 	public ItemRegistryLepidopterology() {
-		butterflyGE = registerItem(new ItemButterflyGE(EnumFlutterType.BUTTERFLY), "butterflyGE");
-		serumGE = registerItem(new ItemButterflyGE(EnumFlutterType.SERUM), "serumGE");
-		caterpillarGE = registerItem(new ItemButterflyGE(EnumFlutterType.CATERPILLAR), "caterpillarGE");
-		cocoonGE = registerItem(new ItemButterflyGE(EnumFlutterType.COCOON), "cocoonGE");
+		butterflyGE = registerItem(new ItemButterflyGE(EnumFlutterType.BUTTERFLY), "butterfly_ge");
+		serumGE = registerItem(new ItemButterflyGE(EnumFlutterType.SERUM), "serum_ge");
+		caterpillarGE = registerItem(new ItemButterflyGE(EnumFlutterType.CATERPILLAR), "caterpillar_ge");
+		cocoonGE = registerItem(new ItemButterflyGE(EnumFlutterType.COCOON), "cocoon_ge");
 	}
 }

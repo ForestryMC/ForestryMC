@@ -10,22 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
-
-	public static IAlleleButterflyEffect butterflyNone;
-
-	public static void createAlleles() {
-		butterflyNone = new AlleleButterflyEffectNone();
-		AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
-	}
 
 	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
 		super(Constants.MOD_ID, "bf", valueName, isDominant);
@@ -38,7 +29,7 @@ public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public IEffectData validateStorage(IEffectData storedData) {
-		return null;
+		return storedData;
 	}
 
 	@Override

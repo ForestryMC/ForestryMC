@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -37,24 +33,24 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 
 	public static final BlockTypeEngine[] VALUES = values();
 
-	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	BlockTypeEngine(@Nonnull IMachinePropertiesTesr<?> machineProperties) {
+	BlockTypeEngine(IMachinePropertiesTesr<?> machineProperties) {
 		this.machineProperties = machineProperties;
 	}
 
-	protected static IMachinePropertiesTesr<?> createEngineProperties(@Nonnull Class<? extends TileEngine> teClass, @Nonnull String name, @Nonnull String textureName) {
-		TileEntitySpecialRenderer<TileEngine> renderer = PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesEngine<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
+	protected static IMachinePropertiesTesr<?> createEngineProperties(Class<? extends TileEngine> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		PluginEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
+		return machinePropertiesEngine;
 	}
 
-	protected static IMachinePropertiesTesr<?> createMachineProperties(@Nonnull Class<? extends TileBase> teClass, @Nonnull String name, @Nonnull String textureName) {
-		TileEntitySpecialRenderer<TileBase> renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesTesr<>(teClass, name, renderer, Constants.MOD_ID + ":blocks" + textureName + ".0");
+	protected static IMachinePropertiesTesr<?> createMachineProperties(Class<? extends TileBase> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
+		return machinePropertiesTesr;
 	}
 
-	@Nonnull
 	@Override
 	public IMachinePropertiesTesr<?> getMachineProperties() {
 		return machineProperties;

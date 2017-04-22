@@ -17,7 +17,7 @@ import net.minecraft.block.Block;
  * Only to storage data's to register a model later.
  */
 public class WoodModelEntry<T extends Block & IWoodTyped> {
-	
+
 	public final T woodTyped;
 	public final boolean withVariants;
 

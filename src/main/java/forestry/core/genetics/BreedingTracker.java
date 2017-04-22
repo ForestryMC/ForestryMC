@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,17 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -37,7 +26,14 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
@@ -63,8 +59,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Nullable
 	private World world;
 
-	protected BreedingTracker(String s) {
+	protected BreedingTracker(String s, String defaultModeName) {
 		super(s);
+		this.modeName = defaultModeName;
 	}
 
 	public void setUsername(@Nullable GameProfile username) {
@@ -89,7 +86,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	/**
 	 * Returns the common tracker
 	 *
-	 * @param player used to get worldObj
+	 * @param player used to get world
 	 * @return common tracker for this breeding system
 	 */
 	protected abstract IBreedingTracker getBreedingTracker(EntityPlayer player);
@@ -109,7 +106,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			encodeToNBT(nbttagcompound);
 			PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbttagcompound);
-			Proxies.net.sendToPlayer(packet, player);
+			NetworkUtil.sendToPlayer(packet, player);
 		}
 	}
 
@@ -124,7 +121,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				writeToNBT(nbtTagCompound, discoveredSpecies, discoveredMutations, researchedMutations);
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
-				Proxies.net.sendToPlayer(packet, player);
+				NetworkUtil.sendToPlayer(packet, player);
 			}
 		}
 	}
@@ -141,7 +138,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	@Override
-	public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		if (nbttagcompound.hasKey(MODE_NAME_KEY)) {
 			modeName = nbttagcompound.getString(MODE_NAME_KEY);
@@ -152,9 +149,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		readValuesFromNBT(nbttagcompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
 	}
 
-	@Nonnull
+
 	@Override
-	public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		writeToNBT(nbttagcompound, discoveredSpecies, discoveredMutations, researchedMutations);
 		return nbttagcompound;
 	}
@@ -175,9 +172,11 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		if (nbttagcompound.hasKey(countKey)) {
 			final int count = nbttagcompound.getInteger(countKey);
 			for (int i = 0; i < count; i++) {
-				String value = nbttagcompound.getString(key + i);
-				if (value != null && !value.isEmpty()) {
-					values.add(value);
+				if (nbttagcompound.hasKey(key + i)) {
+					String value = nbttagcompound.getString(key + i);
+					if (!value.isEmpty()) {
+						values.add(value);
+					}
 				}
 			}
 		}

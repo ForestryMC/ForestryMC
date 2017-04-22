@@ -10,13 +10,23 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.net.URL;
 import java.util.Collection;
 
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleRegistry;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.config.Constants;
+import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.render.TextureManagerForestry;
+import forestry.plugins.PluginManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
-
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -27,15 +37,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.Constants;
-import forestry.core.errors.ErrorStateRegistry;
-import forestry.core.loot.LootTableLoader;
-import forestry.core.render.TextureManager;
-import forestry.plugins.PluginManager;
-
 public class EventHandlerCore {
 
 	public EventHandlerCore() {
@@ -44,7 +45,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
 
-		if (event.isCanceled()) {
+		if (event.isCanceled() || event.getResult() == Result.ALLOW) {
 			return;
 		}
 
@@ -59,19 +60,21 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		EntityPlayer player = event.player;
-		if (player != null) {
-			Collection<ISpeciesRoot> speciesRoots = AlleleManager.alleleRegistry.getSpeciesRoot().values();
-			for (ISpeciesRoot speciesRoot : speciesRoots) {
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
-				breedingTracker.synchToPlayer(player);
-			}
+
+		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
+		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
+		for (ISpeciesRoot speciesRoot : speciesRoots) {
+			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+			breedingTracker.synchToPlayer(player);
 		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldLoad(WorldEvent.Load event) {
+		World world = event.getWorld();
+
 		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
-			handler.onWorldLoad(event.getWorld());
+			handler.onWorldLoad(world);
 		}
 	}
 
@@ -88,12 +91,13 @@ public class EventHandlerCore {
 			handler.onWorldUnload(event.getWorld());
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		ErrorStateRegistry.initSprites();
-		TextureManager.initDefaultSprites();
+		TextureManagerForestry.initDefaultSprites();
+		ModelBlockCached.clear();
 	}
 
 	@SubscribeEvent
@@ -103,12 +107,15 @@ public class EventHandlerCore {
 		}
 
 		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath());
-		LootTable forestryChestAdditions = LootTableLoader.loadBuiltinLootTable(resourceLocation);
-		if (forestryChestAdditions != null) {
-			for (String poolName : PluginManager.getLootPoolNames()) {
-				LootPool pool = forestryChestAdditions.getPool(poolName);
-				if (pool != null) {
-					event.getTable().addPool(pool);
+		URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
+		if (url != null) {
+			LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
+			if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
+				for (String poolName : PluginManager.getLootPoolNames()) {
+					LootPool pool = forestryChestAdditions.getPool(poolName);
+					if (pool != null) {
+						event.getTable().addPool(pool);
+					}
 				}
 			}
 		}

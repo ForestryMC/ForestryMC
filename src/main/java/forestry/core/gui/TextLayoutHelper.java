@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.render.ColourProperties;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.render.FontColour;
-
+@SideOnly(Side.CLIENT)
 public class TextLayoutHelper {
 	private static final int LINE_HEIGHT = 12;
 
@@ -25,16 +27,16 @@ public class TextLayoutHelper {
 	public int column2;
 	public int line;
 
-	public TextLayoutHelper(GuiForestry guiForestry, FontColour fontColour) {
+	public TextLayoutHelper(GuiForestry guiForestry, ColourProperties fontColour) {
 		this.guiForestry = guiForestry;
 		this.defaultFontColor = fontColour.get("gui.screen");
 	}
-	
+
 	public void startPage() {
 		line = LINE_HEIGHT;
 		GlStateManager.pushMatrix();
 	}
-	
+
 	public void startPage(int column0, int column1, int column2) {
 
 		this.column0 = column0;
@@ -43,37 +45,37 @@ public class TextLayoutHelper {
 
 		startPage();
 	}
-	
+
 	public int getLineY() {
 		return line;
 	}
-	
+
 	public void newLine() {
 		line += LINE_HEIGHT;
 	}
-	
+
 	public void newLineCompressed() {
 		line += LINE_HEIGHT - 2;
 	}
-	
+
 	public void newLine(int lineHeight) {
 		line += lineHeight;
 	}
-	
+
 	public void endPage() {
 		GlStateManager.popMatrix();
 	}
-	
+
 	public void drawRow(String text0, String text1, String text2, int colour0, int colour1, int colour2) {
 		drawLine(text0, column0, colour0);
 		drawLine(text1, column1, colour1);
 		drawLine(text2, column2, colour2);
 	}
-	
+
 	public void drawLine(String text, int x) {
 		drawLine(text, x, defaultFontColor);
 	}
-	
+
 	public void drawSplitLine(String text, int x, int maxWidth) {
 		drawSplitLine(text, x, maxWidth, defaultFontColor);
 	}

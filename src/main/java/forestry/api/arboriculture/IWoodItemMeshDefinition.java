@@ -15,5 +15,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IWoodItemMeshDefinition extends ItemMeshDefinition {
 
 	ResourceLocation getDefaultModelLocation(ItemStack stack);
-	
+
 }

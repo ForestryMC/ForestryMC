@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,13 +38,13 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		itemList.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		subItems.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
+		subItems.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
+		subItems.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
+		subItems.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
 	}
-	
+
 	/* MODELS*/
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -61,6 +63,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
 		if (tintIndex == 0) {
@@ -77,6 +80,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
@@ -85,21 +89,12 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 		}
 	}
 
-	public static ItemStack createCircuitboard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = PluginCore.items.circuitboards.get(type);
-		saveChipset(chipset, new CircuitBoard(type, layout, circuits));
-		return chipset;
-	}
-
-	private static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
-		if (circuitboard == null) {
-			itemstack.setTagCompound(null);
-			return;
-		}
-
+	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
+		ItemStack chipset = PluginCore.getItems().circuitboards.get(type);
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		circuitboard.writeToNBT(nbttagcompound);
-		itemstack.setTagCompound(nbttagcompound);
+		new CircuitBoard(type, layout, circuits).writeToNBT(nbttagcompound);
+		chipset.setTagCompound(nbttagcompound);
+		return chipset;
 	}
 
 	public ItemStack get(EnumCircuitBoardType type) {

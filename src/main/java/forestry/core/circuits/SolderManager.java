@@ -10,32 +10,29 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-
+import com.google.common.base.Preconditions;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
+import net.minecraft.item.ItemStack;
 
 public class SolderManager implements ISolderManager {
 	private static final List<CircuitRecipe> recipes = new ArrayList<>();
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
-		if (layout == null) {
-			throw new IllegalArgumentException("layout may not be null");
-		}
-		if (resource == null) {
-			throw new IllegalArgumentException("resource may not be null");
-		}
-		if (circuit == null) {
-			throw new IllegalArgumentException("circuit may not be null");
-		}
+		Preconditions.checkNotNull(layout, "layout may not be null");
+		Preconditions.checkNotNull(resource, "resource may not be null");
+		Preconditions.checkNotNull(circuit, "circuit may not be null");
+
 		recipes.add(new CircuitRecipe(layout, resource, circuit));
 	}
 
+	@Nullable
 	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
 		CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
 		if (circuitRecipe == null) {
@@ -44,17 +41,15 @@ public class SolderManager implements ISolderManager {
 		return circuitRecipe.getCircuit();
 	}
 
-	public static CircuitRecipe getMatchingRecipe(ICircuitLayout layout, ItemStack resource) {
-		if (layout == null || resource == null) {
-			return null;
-		}
-
-		for (CircuitRecipe recipe : recipes) {
-			if (recipe.matches(layout, resource)) {
-				return recipe;
+	@Nullable
+	public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+		if (layout != null) {
+			for (CircuitRecipe recipe : recipes) {
+				if (recipe.matches(layout, resource)) {
+					return recipe;
+				}
 			}
 		}
-
 		return null;
 	}
 }

@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.math.Vec3d;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
-
+	@Nullable
 	protected Vec3d flightTarget;
 
 	protected AIButterflyMovement(EntityButterfly entity) {
@@ -52,7 +54,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 			flightTarget = getRandomDestinationUpwards();
 		} else if (entity.isCollided) {
 			flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
-		} else if (entity.worldObj.rand.nextInt(300) == 0) {
+		} else if (entity.world.rand.nextInt(300) == 0) {
 			flightTarget = getRandomDestination();
 		}
 		entity.setDestination(flightTarget);

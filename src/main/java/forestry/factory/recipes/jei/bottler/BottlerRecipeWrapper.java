@@ -1,27 +1,37 @@
 package forestry.factory.recipes.jei.bottler;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
+import javax.annotation.Nullable;
 
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.BottlerRecipe;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BottlerRecipeWrapper extends ForestryRecipeWrapper<BottlerRecipe> {
+public class BottlerRecipeWrapper extends BlankRecipeWrapper {
+	public final ItemStack inputStack;
+	public final FluidStack fluid;
+	@Nullable
+	public final ItemStack outputStack;
+	public final boolean fillRecipe;
 
-	public BottlerRecipeWrapper(BottlerRecipe recipe) {
-		super(recipe);
+	public BottlerRecipeWrapper(ItemStack inputStack, FluidStack fluid, @Nullable ItemStack outputStack, boolean fillRecipe) {
+		this.inputStack = inputStack;
+		this.fluid = fluid;
+		this.outputStack = outputStack;
+		this.fillRecipe = fillRecipe;
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
-		BottlerRecipe recipe = getRecipe();
+	public void getIngredients(IIngredients ingredients) {
+		ingredients.setInput(ItemStack.class, inputStack);
+		if (outputStack != null) {
+			ingredients.setOutput(ItemStack.class, outputStack);
+		}
 
-		ingredients.setInputs(ItemStack.class, Collections.singletonList(recipe.empty));
-		ingredients.setInputs(FluidStack.class, Collections.singletonList(recipe.input));
-
-		ingredients.setOutput(ItemStack.class, recipe.filled);
+		if (fillRecipe) {
+			ingredients.setInput(FluidStack.class, fluid);
+		} else {
+			ingredients.setOutput(FluidStack.class, fluid);
+		}
 	}
 }

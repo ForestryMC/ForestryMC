@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.fluids.tanks.StandardTank;
-
 public class FakeTankUpdateHandler implements ITankUpdateHandler {
 
 	public static final FakeTankUpdateHandler instance = new FakeTankUpdateHandler();

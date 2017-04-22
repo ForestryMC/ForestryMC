@@ -5,21 +5,17 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public interface IInternalBlockFace {
-	
+
 	boolean isTested();
-	
+
 	void setTested(boolean tested);
-	
-	@Nonnull
+
 	EnumFacing getFace();
-	
-	@Nonnull
+
 	BlockPos getPos();
 
 }

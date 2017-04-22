@@ -10,22 +10,9 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -33,12 +20,11 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
@@ -49,28 +35,42 @@ import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
+	@Nullable
 	private IMoistenerRecipe currentRecipe;
 
 	private int burnTime = 0;
 	private int totalTime = 0;
 	private int productionTime = 0;
 	private int timePerItem = 0;
+	@Nullable
 	private ItemStack currentProduct;
+	@Nullable
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
-		super("moistener");
 		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 		tankManager = new TankManager(this, resourceTank);
 	}
 
 	/* LOADING & SAVING */
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -108,24 +108,25 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		// Load pending product
 		if (nbttagcompound.hasKey("PendingProduct")) {
 			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("PendingProduct");
-			pendingProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
+			pendingProduct = new ItemStack(nbttagcompoundP);
 		}
 		if (nbttagcompound.hasKey("CurrentProduct")) {
 			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("CurrentProduct");
-			currentProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
+			currentProduct = new ItemStack(nbttagcompoundP);
 		}
 
 		checkRecipe();
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -139,7 +140,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		// Let's get to work
-		int lightvalue = worldObj.getLightFromNeighbors(getPos().up());
+		int lightvalue = world.getLightFromNeighbors(getPos().up());
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -195,7 +196,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				checkRecipe();
 
 				// Let's see if we have a valid resource in the working slot
-				if (getStackInSlot(InventoryMoistener.SLOT_WORKING) == null) {
+				if (getStackInSlot(InventoryMoistener.SLOT_WORKING).isEmpty()) {
 					return;
 				}
 
@@ -254,7 +255,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		for (int i = startSlot; i < endSlot; i++) {
 			ItemStack slotStack = getStackInSlot(i);
 			// Empty slots are okay.
-			if (slotStack == null) {
+			if (slotStack.isEmpty()) {
 				if (slot < 0) {
 					slot = i;
 				}
@@ -266,7 +267,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 
 			// Wrong item or full
-			if (!slotStack.isItemEqual(deposit) || slotStack.stackSize >= slotStack.getMaxStackSize()) {
+			if (!slotStack.isItemEqual(deposit) || slotStack.getCount() >= slotStack.getMaxStackSize()) {
 				continue;
 			}
 
@@ -293,7 +294,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = startSlot; i < endSlot; i++) {
 			ItemStack slotStack = inventory.getStackInSlot(i);
-			if (slotStack == null) {
+			if (slotStack.isEmpty()) {
 				continue;
 			}
 
@@ -315,7 +316,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// Put working slot contents into inventory if space is available
-		if (getStackInSlot(InventoryMoistener.SLOT_WORKING) != null) {
+		if (!getStackInSlot(InventoryMoistener.SLOT_WORKING).isEmpty()) {
 			// Get the result of the consumed item in the working slot
 			ItemStack deposit;
 			if (FuelManager.moistenerResource.containsKey(getStackInSlot(InventoryMoistener.SLOT_WORKING))) {
@@ -331,16 +332,16 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				return false;
 			}
 
-			if (getStackInSlot(targetSlot) == null) {
+			if (getStackInSlot(targetSlot).isEmpty()) {
 				setInventorySlotContents(targetSlot, deposit);
 			} else {
-				getStackInSlot(targetSlot).stackSize++;
+				getStackInSlot(targetSlot).grow(1);
 			}
 
 			decrStackSize(InventoryMoistener.SLOT_WORKING, 1);
 		}
 
-		if (getStackInSlot(InventoryMoistener.SLOT_WORKING) != null) {
+		if (!getStackInSlot(InventoryMoistener.SLOT_WORKING).isEmpty()) {
 			return true;
 		}
 
@@ -359,7 +360,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		ArrayList<Integer> slotsToShift = new ArrayList<>();
 
 		for (int i = InventoryMoistener.SLOT_RESERVOIR_1; i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
-			if (getStackInSlot(i) == null) {
+			if (getStackInSlot(i).isEmpty()) {
 				continue;
 			}
 
@@ -378,7 +379,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 
 			setInventorySlotContents(targetSlot, slotStack);
-			setInventorySlotContents(slot, null);
+			setInventorySlotContents(slot, ItemStack.EMPTY);
 			shiftedSlots++;
 		}
 
@@ -395,14 +396,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				break;
 			}
 			// Else shift
-			if (getStackInSlot(targetSlot) == null) {
+			if (getStackInSlot(targetSlot).isEmpty()) {
 				setInventorySlotContents(targetSlot, getStackInSlot(resourceSlot));
-				setInventorySlotContents(resourceSlot, null);
+				setInventorySlotContents(resourceSlot, ItemStack.EMPTY);
 			} else {
 				ItemStackUtil.mergeStacks(getStackInSlot(resourceSlot), getStackInSlot(targetSlot));
-				if (getStackInSlot(resourceSlot) != null && getStackInSlot(resourceSlot).stackSize <= 0) {
-					setInventorySlotContents(resourceSlot, null);
-				}
 			}
 		}
 	}
@@ -417,7 +415,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		IInventoryAdapter inventory = getInternalInventory();
 
 		for (int i = InventoryMoistener.SLOT_STASH_1; i < InventoryMoistener.SLOT_RESERVOIR_1; i++) {
-			if (inventory.getStackInSlot(i) == null) {
+			if (inventory.getStackInSlot(i).isEmpty()) {
 				max += 64;
 				continue;
 			}
@@ -425,7 +423,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(i));
 				if (res.getItem().isItemEqual(inventory.getStackInSlot(i))) {
 					max += 64;
-					avail += inventory.getStackInSlot(i).stackSize;
+					avail += inventory.getStackInSlot(i).getCount();
 				}
 			}
 		}
@@ -435,11 +433,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE) == null) {
+		if (inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).isEmpty()) {
 			return false;
 		}
 
-		return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	public boolean isProducing() {
@@ -479,7 +477,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		return TankRenderInfo.EMPTY;
 	}
 
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -511,23 +509,24 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiMoistener(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerMoistener(player.inventory, this);
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}

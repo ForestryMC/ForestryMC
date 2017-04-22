@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.apiculture.ApicultureCapabilities;
@@ -42,7 +41,7 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if (stack != null && stack.getItem() == PluginApiculture.items.apiaristLegs) {
+		if (stack != null && stack.getItem() == PluginApiculture.getItems().apiaristLegs) {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
@@ -60,9 +59,9 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 		return false;
 	}
 
-	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	@Nullable
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
