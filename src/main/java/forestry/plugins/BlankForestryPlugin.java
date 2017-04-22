@@ -90,14 +90,6 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 	@Override
 	public void registerRecipes() {
 	}
-	
-	@Override
-	public void registerModules() {
-	}
-	
-	@Override
-	public void registerModuleContainers() {
-	}
 
 	@Override
 	public void addLootPoolNames(Set<String> lootPoolNames) {

@@ -3,6 +3,7 @@ package forestry.factory.recipes.jei.squeezer;
 import javax.annotation.Nonnull;
 
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
