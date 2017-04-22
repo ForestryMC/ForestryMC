@@ -10,19 +10,22 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-
 import forestry.core.models.BlockModelEntry;
-import forestry.core.proxy.Proxies;
+import forestry.core.models.ModelManager;
 import forestry.farming.PluginFarming;
 import forestry.farming.models.ModelFarmBlock;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ProxyFarmingClient extends ProxyFarming {
 
 	@Override
 	public void initializeModels() {
-		Proxies.render.registerBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
+		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
 				new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-				PluginFarming.blocks.farm));
+				PluginFarming.getBlocks().farm));
 	}
 }

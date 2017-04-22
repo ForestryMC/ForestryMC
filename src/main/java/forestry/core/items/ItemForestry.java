@@ -52,6 +52,7 @@ public class ItemForestry extends Item implements IItemModelRegister {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);

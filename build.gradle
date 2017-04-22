@@ -1,14 +1,7 @@
 buildscript {
 	repositories {
 		jcenter()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-				maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
+		maven { url = "http://files.minecraftforge.net/maven" }
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -16,11 +9,10 @@ buildscript {
 }
 
 plugins {
-	id "net.minecraftforge.gradle.forge" version "2.0.2"
 	id "com.matthewprenger.cursegradle" version "1.0.7"
 	id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.32"
 }
-
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
@@ -98,6 +90,9 @@ processResources {
 		exclude 'mcmod.info'
 		exclude '**/*.md'
 	}
+
+	// Move access transformers to META-INF
+	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // prevent java 8's strict doclint for javadocs from failing builds
@@ -108,7 +103,9 @@ allprojects {
 }
 
 jar {
-
+	manifest {
+		attributes 'FMLAT': 'forestry_at.cfg'
+	}
 }
 
 task sourcesJar(type: Jar) {

@@ -10,12 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.api.core.ILocatable;
+import javax.annotation.Nullable;
 
+import forestry.api.core.ILocatable;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IGuiHandlerTile extends IGuiHandlerForestry, ILocatable {
-	Object getGui(EntityPlayer player, int data);
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	GuiContainer getGui(EntityPlayer player, int data);
 
-	Object getContainer(EntityPlayer player, int data);
+	@Nullable
+	Container getContainer(EntityPlayer player, int data);
 }

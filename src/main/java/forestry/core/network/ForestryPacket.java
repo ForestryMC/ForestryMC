@@ -12,37 +12,25 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import net.minecraft.network.PacketBuffer;
-
+import forestry.core.utils.Log;
+import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
-import forestry.core.utils.Log;
-
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
-
 public abstract class ForestryPacket implements IForestryPacket {
-	private final IPacketId id = getPacketId();
-
 	@Override
 	public final FMLProxyPacket getPacket() {
-		ByteBufOutputStream buf = new ByteBufOutputStream(Unpooled.buffer());
-		DataOutputStreamForestry data = new DataOutputStreamForestry(buf);
+		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
 
 		try {
+			IPacketId id = getPacketId();
 			data.writeByte(id.ordinal());
 			writeData(data);
 		} catch (IOException e) {
 			Log.error("Failed to write packet.", e);
 		}
 
-		return new FMLProxyPacket(new PacketBuffer(buf.buffer()), PacketHandler.channelId);
+		return new FMLProxyPacket(data, PacketHandler.channelId);
 	}
 
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-	}
+	protected abstract void writeData(PacketBufferForestry data) throws IOException;
 }

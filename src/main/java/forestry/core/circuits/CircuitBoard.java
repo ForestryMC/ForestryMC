@@ -10,32 +10,31 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class CircuitBoard<T> implements ICircuitBoard {
+public class CircuitBoard implements ICircuitBoard {
 
-	@Nonnull
 	private final EnumCircuitBoardType type;
 	@Nullable
 	private final ICircuitLayout layout;
-	@Nonnull
 	private final ICircuit[] circuits;
 
-	public CircuitBoard(@Nonnull EnumCircuitBoardType type, @Nonnull ICircuitLayout layout, @Nonnull ICircuit[] circuits) {
+	public CircuitBoard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
 		this.type = type;
 		this.layout = layout;
 		this.circuits = circuits;
@@ -68,16 +67,19 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getPrimaryColor() {
 		return type.getPrimaryColor();
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getSecondaryColor() {
 		return type.getSecondaryColor();
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addTooltip(List<String> list) {
 		if (layout != null) {
 			list.add(TextFormatting.GOLD + layout.getUsage() + ":");
@@ -88,7 +90,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 				}
 			}
 
-			if (Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
+			if (GuiScreen.isShiftKeyDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
 				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
@@ -167,15 +169,16 @@ public class CircuitBoard<T> implements ICircuitBoard {
 		}
 	}
 
-	@Nonnull
 	@Override
 	public ICircuit[] getCircuits() {
 		return circuits;
 	}
 
-	@Nonnull
 	@Override
 	public ICircuitSocketType getSocketType() {
+		if (layout == null) {
+			return CircuitSocketType.NONE;
+		}
 		return layout.getSocketType();
 	}
 }

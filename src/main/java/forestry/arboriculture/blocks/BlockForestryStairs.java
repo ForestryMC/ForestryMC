@@ -1,20 +1,7 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
-
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.item.Item;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
@@ -24,7 +11,17 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
-import forestry.core.proxy.Proxies;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockStairs implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	private final boolean fireproof;
@@ -43,13 +40,13 @@ public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockSta
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
+		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
+		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, null));
 	}
 
 	@Override
@@ -57,19 +54,16 @@ public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockSta
 		return fireproof;
 	}
 
-	@Nonnull
 	@Override
 	public WoodBlockKind getBlockKind() {
 		return WoodBlockKind.STAIRS;
 	}
 
-	@Nonnull
 	@Override
 	public T getWoodType(int meta) {
 		return woodType;
 	}
 
-	@Nonnull
 	@Override
 	public Collection<T> getWoodTypes() {
 		return Collections.singleton(woodType);

@@ -14,11 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -28,6 +23,10 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 
@@ -166,8 +165,10 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	public IAllele getPartner(IAllele allele) {
 		if (species0.getUID().equals(allele.getUID())) {
 			return species1;
-		} else {
+		} else if (species1.getUID().equals(allele.getUID())) {
 			return species0;
+		} else {
+			throw new IllegalArgumentException("Tried to get partner for allele that is not part of this mutation.");
 		}
 	}
 

@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Predicate;
 
 import forestry.api.storage.BackpackManager;
@@ -24,26 +23,23 @@ import net.minecraft.nbt.NBTTagCompound;
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;
 	private final int secondaryColor;
-	@Nonnull
 	private final Predicate<ItemStack> filter;
 
-	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor) {
+	public BackpackDefinition(Color primaryColor, Color secondaryColor) {
 		this(primaryColor, secondaryColor, BackpackManager.backpackInterface.createBackpackFilter());
 	}
 
-	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor, @Nonnull Predicate<ItemStack> filter) {
+	public BackpackDefinition(Color primaryColor, Color secondaryColor, Predicate<ItemStack> filter) {
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();
 		this.filter = filter;
 	}
 
 	@Override
-	@Nonnull
 	public Predicate<ItemStack> getFilter() {
 		return filter;
 	}
 
-	@Nonnull
 	@Override
 	public String getName(ItemStack backpack) {
 		Item item = backpack.getItem();

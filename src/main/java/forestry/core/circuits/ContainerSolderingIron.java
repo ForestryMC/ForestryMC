@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
@@ -23,7 +20,11 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.packets.PacketGuiLayoutSelect;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
@@ -47,35 +48,38 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 		return inventory.getLayout();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void advanceSelection(int index) {
 		sendSelectionChange(index, 0);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void regressSelection(int index) {
 		sendSelectionChange(index, 1);
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static void sendSelectionChange(int index, int advance) {
 		IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
-		Proxies.net.sendToServer(packet);
+		NetworkUtil.sendToServer(packet);
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 
-		if (packet.getSecondaryIndex() == 0) {
-			if (packet.getPrimaryIndex() == 0) {
+		if (secondary == 0) {
+			if (primary == 0) {
 				inventory.advanceLayout();
 			}
-		} else if (packet.getPrimaryIndex() == 0) {
+		} else if (primary == 0) {
 			inventory.regressLayout();
 		}
 
 		IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
-		Proxies.net.sendToPlayer(packetResponse, player);
+		NetworkUtil.sendToPlayer(packetResponse, player);
 	}
 
-	public void setLayout(String layoutUID) {
-		inventory.setLayout(layoutUID);
+	public void setLayout(ICircuitLayout layout) {
+		inventory.setLayout(layout);
 	}
 }

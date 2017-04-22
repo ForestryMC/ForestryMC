@@ -12,10 +12,7 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
@@ -23,6 +20,9 @@ import javax.vecmath.Vector4f;
 import java.util.EnumMap;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -32,12 +32,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.EnumFacing;
-
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
+@SideOnly(Side.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
 
 	protected final ImmutableList<BakedQuad> general;
@@ -96,7 +98,7 @@ public class TRSRBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		if (side != null) {
 			return faces.get(side);
 		}
@@ -130,13 +132,13 @@ public class TRSRBakedModel implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return null;
+		return original.getOverrides();
 	}
 
 	public static class Transformer extends VertexTransformer {
 
-		protected Matrix4f transformation;
-		protected Matrix3f normalTransformation;
+		protected final Matrix4f transformation;
+		protected final Matrix3f normalTransformation;
 
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));

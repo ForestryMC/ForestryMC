@@ -10,18 +10,9 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.owner.OwnerHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
+import com.google.common.base.Preconditions;
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -29,11 +20,13 @@ import forestry.api.mail.PostManager;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.mail.gui.ContainerTradeName;
@@ -42,13 +35,21 @@ import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private IMailAddress address;
 
 	public TileTrader() {
-		super("trade.station");
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}
@@ -67,21 +68,19 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	@Override
 	public void onRemoval() {
 		if (isLinked()) {
-			PostManager.postRegistry.deleteTradeStation(worldObj, address);
+			PostManager.postRegistry.deleteTradeStation(world, address);
 		}
 	}
 
 	/* SAVING & LOADING */
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 
-		if (address != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			address.writeToNBT(nbt);
-			nbttagcompound.setTag("address", nbt);
-		}
+		NBTTagCompound nbt = new NBTTagCompound();
+		address.writeToNBT(nbt);
+		nbttagcompound.setTag("address", nbt);
+
 		ownerHandler.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}
@@ -99,24 +98,19 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	/* NETWORK */
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		ownerHandler.writeData(data);
-		String addressName = null;
-		if (address != null) {
-			addressName = address.getName();
-		}
-		if (addressName == null) {
-			addressName = "";
-		}
-		data.writeUTF(addressName);
+		String addressName = address.getName();
+		data.writeString(addressName);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		ownerHandler.readData(data);
-		String addressName = data.readUTF();
+		String addressName = data.readString();
 		if (!addressName.isEmpty()) {
 			address = PostManager.postRegistry.getMailAddress(addressName);
 		}
@@ -142,13 +136,13 @@ public class TileTrader extends TileBase implements IOwnedTile {
 
 		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		errorLogic.setCondition(tradeGood == null, EnumErrorCode.NO_TRADE);
+		errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
 
-		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, null, 1);
+		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, ItemStack.EMPTY, 1);
 		errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
 
-		if (tradeGood != null) {
-			boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
+		if (!tradeGood.isEmpty()) {
+			boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.getCount());
 			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
 		}
 
@@ -160,7 +154,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 
 	/* STATE INFORMATION */
 	public boolean isLinked() {
-		if (address == null || !address.isValid()) {
+		if (!address.isValid()) {
 			return false;
 		}
 
@@ -179,11 +173,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null) {
+			if (itemInSlot.isEmpty()) {
 				continue;
 			}
-			if (item == null || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
-				count += itemInSlot.stackSize;
+			if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
+				count += itemInSlot.getCount();
 			}
 			if (count >= itemCount) {
 				return true;
@@ -204,12 +198,12 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null) {
-				total += 64;
+			if (itemInSlot.isEmpty()) {
+				total += tradeInventory.getInventoryStackLimit();
 			} else {
 				total += itemInSlot.getMaxStackSize();
-				if (item == null || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
-					count += itemInSlot.stackSize;
+				if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
+					count += itemInSlot.getCount();
 				}
 			}
 		}
@@ -224,14 +218,14 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	public boolean hasInputBufMin(float percentage) {
 		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		if (tradeGood == null) {
+		if (tradeGood.isEmpty()) {
 			return true;
 		}
 		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
 	}
 
 	public boolean hasOutputBufMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, null) > percentage;
+		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, ItemStack.EMPTY) > percentage;
 	}
 
 	public boolean hasPostageMin(int postage) {
@@ -241,16 +235,13 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
 			ItemStack stamp = tradeInventory.getStackInSlot(i);
-			if (stamp == null) {
-				continue;
-			}
-			if (!(stamp.getItem() instanceof IStamps)) {
-				continue;
-			}
-
-			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.stackSize;
-			if (posted >= postage) {
-				return true;
+			if (!stamp.isEmpty()) {
+				if (stamp.getItem() instanceof IStamps) {
+					posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.getCount();
+					if (posted >= postage) {
+						return true;
+					}
+				}
 			}
 		}
 
@@ -267,41 +258,38 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		setAddress(address);
 
 		IMailAddress newAddress = getAddress();
-		if (newAddress != null) {
-			String newAddressName = newAddress.getName();
-			if (newAddressName != null && newAddressName.equals(addressName)) {
-				PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
-				Proxies.net.sendNetworkPacket(packetResponse, worldObj);
-			}
+		String newAddressName = newAddress.getName();
+		if (newAddressName.equals(addressName)) {
+			PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
+			NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void handleSetAddressResponse(String addressName) {
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		setAddress(address);
 	}
 
 	private void setAddress(IMailAddress address) {
-		if (address == null) {
-			throw new NullPointerException("address must not be null");
-		}
+		Preconditions.checkNotNull(address, "address must not be null");
 
-		if (this.address != null && this.address.isValid() && this.address.equals(address)) {
+		if (this.address.isValid() && this.address.equals(address)) {
 			return;
 		}
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			IErrorLogic errorLogic = getErrorLogic();
 
-			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(worldObj, address);
+			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(world, address);
 			errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOT_ALPHANUMERIC);
 
-			boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(worldObj, address);
+			boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(world, address);
 			errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOT_UNIQUE);
 
 			if (hasValidTradeAddress & hasUniqueTradeAddress) {
 				this.address = address;
-				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerHandler().getOwner(), address);
+				PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
 			}
 		} else {
 			this.address = address;
@@ -311,11 +299,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		// Handle client side
-		if (worldObj.isRemote || !address.isValid()) {
+		if (world.isRemote || !address.isValid()) {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerHandler().getOwner(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
 	}
 
 	// TODO: Buildcraft for 1.9
@@ -335,7 +323,8 @@ public class TileTrader extends TileBase implements IOwnedTile {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		if (data == 0) {
 			return new GuiTrader(player.inventory, this);
 		} else {
@@ -344,7 +333,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		if (data == 0) {
 			return new ContainerTrader(player.inventory, this);
 		} else {

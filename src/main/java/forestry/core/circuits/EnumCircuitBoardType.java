@@ -10,31 +10,33 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import forestry.core.render.ColourProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public enum EnumCircuitBoardType {
-	BASIC(1, 0x191919, 0x6dcff6),
-	ENHANCED(2, 0x191919, 0xcb7c32),
-	REFINED(3, 0x191919, 0xc9c9c9),
-	INTRICATE(4, 0x191919, 0xe2cb6b);
+	BASIC(1),
+	ENHANCED(2),
+	REFINED(3),
+	INTRICATE(4);
 
 	private final int sockets;
-	private final int primaryColor;
-	private final int secondaryColor;
 
-	EnumCircuitBoardType(int sockets, int primaryColor, int secondaryColor) {
+	EnumCircuitBoardType(int sockets) {
 		this.sockets = sockets;
-		this.primaryColor = primaryColor;
-		this.secondaryColor = secondaryColor;
 	}
 
 	public int getSockets() {
 		return sockets;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public int getPrimaryColor() {
-		return primaryColor;
+		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase() + ".primary");
 	}
 
+	@SideOnly(Side.CLIENT)
 	public int getSecondaryColor() {
-		return secondaryColor;
+		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase() + ".secondary");
 	}
 }

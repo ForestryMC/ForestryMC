@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.VectUtil;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
@@ -52,16 +51,14 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			BlockPos posBlock = VectUtil.add(randomPos, housingCoords, offset);
 
 			// Freeze water
-			Block block = world.getBlockState(posBlock).getBlock();
-			if (block != Blocks.WATER) {
-				continue;
+			if (world.isBlockLoaded(posBlock)) {
+				Block block = world.getBlockState(posBlock).getBlock();
+				if (block == Blocks.WATER) {
+					if (world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
+						world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
+					}
+				}
 			}
-
-			if (!world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
-				continue;
-			}
-
-			world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
 		}
 
 		return storedData;

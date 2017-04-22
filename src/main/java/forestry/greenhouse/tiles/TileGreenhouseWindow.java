@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nullable;
+
 import forestry.api.climate.EnumClimatiserModes;
 import forestry.api.climate.EnumClimatiserTypes;
+import forestry.api.climate.IClimatiserDefinition;
 import forestry.core.climate.ClimatiserDefinition;
 import forestry.greenhouse.GreenhouseClimateWindow;
 import forestry.greenhouse.PluginGreenhouse;
@@ -22,85 +25,88 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileGreenhouseWindow extends TileGreenhouseClimatiser{
-
+public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
+	@Nullable
 	private WindowMode mode;
-	
+	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.001F, EnumClimatiserModes.BOTH, 5F, EnumClimatiserTypes.BOTH);
+
 	public TileGreenhouseWindow() {
-		super(new ClimatiserDefinition(0.001F, EnumClimatiserModes.NONE, 5D, EnumClimatiserTypes.NONE), new GreenhouseClimateWindow(20));
+		super(DEFINITION, new GreenhouseClimateWindow(20));
 	}
-	
+
 	public void onNeighborBlockChange() {
 		WindowMode otherMode = isBlocked();
-		if(getMode() != WindowMode.PLAYER && getMode() != WindowMode.CONTROL && otherMode != getMode()){
+		if (getMode() != WindowMode.PLAYER && getMode() != WindowMode.CONTROL && otherMode != getMode()) {
 			setMode(otherMode);
 		}
 	}
-	
-	public WindowMode isBlocked(){
-		if(worldObj == null){
+
+	public WindowMode isBlocked() {
+		if (world == null) {
 			return WindowMode.BLOCK;
 		}
-		IBlockState state = worldObj.getBlockState(pos);
-		if(state == null){
+		if (!world.isBlockLoaded(pos)) {
 			return WindowMode.BLOCK;
 		}
+		IBlockState state = world.getBlockState(pos);
 		BlockPos blockedPos;
-		if(state.getBlock() == PluginGreenhouse.blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)){
+		if (state.getBlock() == PluginGreenhouse.getBlocks().getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)) {
 			blockedPos = getCoordinates().offset(EnumFacing.UP);
-		}else{
+		} else {
 			blockedPos = getCoordinates().offset(state.getValue(BlockGreenhouse.FACING));
 		}
-		return worldObj.isAirBlock(blockedPos) ? WindowMode.OPEN : WindowMode.BLOCK;
+		return world.isAirBlock(blockedPos) ? WindowMode.OPEN : WindowMode.BLOCK;
 	}
-	
+
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		if(mode != null){
+		if (mode != null) {
 			data.setShort("mode", (short) mode.ordinal());
 		}
 		return super.writeToNBT(data);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		if(data.hasKey("mode")){
+		if (data.hasKey("mode")) {
 			setMode(WindowMode.values()[data.getShort("mode")]);
 		}
 	}
-	
+
 	@Override
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
-		if(packetData.hasKey("mode")){
+		if (packetData.hasKey("mode")) {
 			setMode(WindowMode.values()[packetData.getShort("mode")]);
 		}
 	}
-	
+
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
-		if(mode != null){
+		if (mode != null) {
 			packetData.setShort("mode", (short) mode.ordinal());
 		}
 		super.encodeDescriptionPacket(packetData);
 	}
-	
+
 	@Override
 	public boolean canWork() {
 		return true;
 	}
-	
-	public void setMode(WindowMode mode){
+
+	public void setMode(WindowMode mode) {
 		this.mode = mode;
 		setActive(mode == WindowMode.OPEN);
 	}
-	
-	public WindowMode getMode(){
+
+	@Nullable
+	public WindowMode getMode() {
 		return mode;
 	}
-	
-	public static enum WindowMode{
+
+	public enum WindowMode {
 		PLAYER, BLOCK, CONTROL, OPEN
 	}
 

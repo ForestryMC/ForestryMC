@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.circuits.ISocketable;
+import forestry.core.tiles.ILiquidTankTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.fluids.IFluidTank;
-
-import forestry.core.circuits.ISocketable;
-import forestry.core.tiles.ILiquidTankTile;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankTile & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
 
@@ -35,6 +35,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 
 	/* IContainerLiquidTanks */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handlePipetteClickClient(int slot, EntityPlayer player) {
 		tanksHelper.handlePipetteClickClient(slot, player);
 	}
@@ -47,9 +48,9 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		tile.getTankManager().updateGuiData(this, listeners);
+		tile.getTankManager().sendTankUpdate(this, listeners);
 	}
-	
+
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
@@ -69,6 +70,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 
 	/* IContainerSocketed */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleChipsetClick(int slot) {
 		socketedHelper.handleChipsetClick(slot);
 	}
@@ -79,6 +81,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleSolderingIronClick(int slot) {
 		socketedHelper.handleSolderingIronClick(slot);
 	}

@@ -1,6 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "forestry:blocks/germlings/sapling.treeIpe"
-  }
-}

@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class PickupHandlerCore implements IPickupHandler {
 
 	@Override
 	public boolean onItemPickup(EntityPlayer entityPlayer, EntityItem entityitem) {
 		ItemStack itemstack = entityitem.getEntityItem();
-		if (itemstack == null || itemstack.stackSize <= 0) {
+		if (itemstack.isEmpty()) {
 			return false;
 		}
 
@@ -32,7 +31,7 @@ public class PickupHandlerCore implements IPickupHandler {
 		if (root != null) {
 			IIndividual individual = root.getMember(itemstack);
 			if (individual != null) {
-				IBreedingTracker tracker = root.getBreedingTracker(entityitem.worldObj, entityPlayer.getGameProfile());
+				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, entityPlayer.getGameProfile());
 				tracker.registerPickup(individual);
 			}
 		}

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableSet;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -21,6 +23,7 @@ import net.minecraft.inventory.IInventory;
 
 public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
 	protected final T entity;
+	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 
 	protected ContainerEntity(T entity) {
@@ -34,12 +37,12 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 
 	@Override
 	protected final boolean canAccess(EntityPlayer player) {
-		return player != null;
+		return true;
 	}
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return entity.isUseableByPlayer(entityplayer);
+		return entity.isUsableByPlayer(entityplayer);
 	}
 
 	@Override

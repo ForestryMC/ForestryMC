@@ -10,16 +10,11 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.ImmutableSet;
-
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.collect.ImmutableSet;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.ICentrifugeManager;
@@ -38,6 +33,9 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 
 public class DummyManagers {
 
@@ -71,7 +69,7 @@ public class DummyManagers {
 		}
 
 		@Override
-		public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+		public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
 
 		}
 	}
@@ -125,12 +123,22 @@ public class DummyManagers {
 	public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
 		@Override
-		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
+		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
 
 		}
 
 		@Override
-		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid) {
+		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
+
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
+
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
 
 		}
 

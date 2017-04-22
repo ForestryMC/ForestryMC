@@ -12,24 +12,24 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.base.Preconditions;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.ShapedRecipeCustom;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 
 	private final int packagingTime;
 	@Nullable
 	private final FluidStack liquid;
-	@Nullable
 	private final ItemStack box;
 	private final ShapedRecipeCustom internal;
 
-	public CarpenterRecipe(int packagingTime, @Nullable FluidStack liquid, @Nullable ItemStack box, ShapedRecipeCustom internal) {
+	public CarpenterRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+		Preconditions.checkNotNull(box);
+		Preconditions.checkNotNull(internal);
 		this.packagingTime = packagingTime;
 		this.liquid = liquid;
 		this.box = box;
@@ -42,7 +42,6 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	@Nullable
 	public ItemStack getBox() {
 		return box;
 	}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import forestry.apiculture.PluginApiculture;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -17,15 +18,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import forestry.apiculture.proxy.ProxyApicultureClient;
-
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;
 	private final BlockPos destination;
 
 	public ParticleBeeRoundTrip(World world, Vec3d origin, BlockPos destination, int color) {
 		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(ProxyApicultureClient.beeSprite);
+		setParticleTexture(PluginApiculture.getBeeSprite());
 		this.origin = origin;
 
 		this.destination = destination;
@@ -54,7 +53,7 @@ public class ParticleBeeRoundTrip extends Particle {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
 			this.motionX = (origin.xCoord - this.posX) * 0.03 + 0.1 * rand.nextFloat();
@@ -128,8 +127,8 @@ public class ParticleBeeRoundTrip extends Particle {
 
 	// avoid calculating collisions
 	@Override
-	public void moveEntity(double x, double y, double z) {
-		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+	public void move(double x, double y, double z) {
+		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
 		this.resetPositionToBB();
 	}
 

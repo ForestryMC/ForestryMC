@@ -10,20 +10,14 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
@@ -33,6 +27,13 @@ import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);
@@ -113,19 +114,18 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	/* Gui Selection Handling */
+	@SideOnly(Side.CLIENT)
 	public static void clearRecipe() {
 		sendRecipeClick(-1, 0);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		int primary = packet.getPrimaryIndex();
-		int secondary = packet.getSecondaryIndex();
-
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 		switch (primary) {
 			case -1: { // clicked clear button
 				tile.clearCraftMatrix();
@@ -140,7 +140,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 				break;
 			}
 			case 1: { // right clicked a memorized recipe
-				long time = player.worldObj.getTotalWorldTime();
+				long time = player.world.getTotalWorldTime();
 				RecipeMemory memory = tile.getMemory();
 				memory.toggleLock(time, secondary);
 				break;
@@ -158,7 +158,8 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void sendWorktableRecipeRequest(MemorizedRecipe recipe) {
-		Proxies.net.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
+		NetworkUtil.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
 	}
 }

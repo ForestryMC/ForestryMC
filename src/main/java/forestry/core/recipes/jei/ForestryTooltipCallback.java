@@ -1,21 +1,18 @@
 package forestry.core.recipes.jei;
 
-import com.google.common.collect.ArrayListMultimap;
-
 import java.text.NumberFormat;
 import java.util.List;
 
+import com.google.common.collect.ArrayListMultimap;
+import forestry.core.utils.Translator;
+import mezz.jei.api.gui.ITooltipCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-
-import forestry.core.utils.Translator;
-
-import mezz.jei.api.gui.ITooltipCallback;
 
 public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 
 	private final ArrayListMultimap<Integer, String> tooltips = ArrayListMultimap.create();
-	
+
 	@Override
 	public void onTooltip(int index, boolean input, ItemStack ingredient, List<String> tooltip) {
 		List<String> tip = tooltips.get(index);
@@ -23,7 +20,7 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 			tooltip.addAll(tip);
 		}
 	}
-	
+
 	public void addChanceTooltip(int index, float chance) {
 		if (chance < 0) {
 			chance = 0;

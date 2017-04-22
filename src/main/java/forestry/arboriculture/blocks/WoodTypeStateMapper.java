@@ -1,13 +1,18 @@
 package forestry.arboriculture.blocks;
 
-import com.google.common.collect.Maps;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+import forestry.api.arboriculture.EnumForestryWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodStateMapper;
+import forestry.api.arboriculture.IWoodType;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.models.WoodModelLoader;
+import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -17,44 +22,32 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IWoodStateMapper;
-import forestry.api.arboriculture.IWoodType;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.blocks.property.PropertyWoodType;
-import forestry.arboriculture.models.WoodModelLoader;
-import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
 public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMapper {
-
-	@Nonnull
 	private final IWoodTyped woodTyped;
-	@Nonnull
 	private final String blockPath;
 	@Nullable
 	private final PropertyWoodType<?> propertyWoodType;
-	@Nonnull
 	private final List<IProperty> propertiesToRemove = new ArrayList<>();
 
-	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nullable PropertyWoodType<?> propertyWoodType) {
+	public WoodTypeStateMapper(IWoodTyped woodTyped, @Nullable PropertyWoodType<?> propertyWoodType) {
 		this.woodTyped = woodTyped;
 		this.blockPath = woodTyped.getBlockKind().toString();
 		this.propertyWoodType = propertyWoodType;
 	}
 
-	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nonnull String blockPath, @Nullable PropertyWoodType<?> propertyWoodType) {
+	public WoodTypeStateMapper(IWoodTyped woodTyped, String blockPath, @Nullable PropertyWoodType<?> propertyWoodType) {
 		this.woodTyped = woodTyped;
 		this.blockPath = blockPath;
 		this.propertyWoodType = propertyWoodType;
 	}
-	
-	public WoodTypeStateMapper addPropertyToRemove(IProperty property){
+
+	public WoodTypeStateMapper addPropertyToRemove(IProperty property) {
 		this.propertiesToRemove.add(property);
 		return this;
 	}
-	
+
 	@Override
 	public ModelResourceLocation getModelLocation(IBlockState state) {
 		return getModelResourceLocation(state);
@@ -78,16 +71,16 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		int meta = block.getMetaFromState(state);
 		IWoodType woodType = woodTyped.getWoodType(meta);
 		if (woodType instanceof EnumForestryWoodType) {
-			if(WoodModelLoader.INSTANCE.isRegistered){
+			if (WoodModelLoader.INSTANCE.isEnabled) {
 				return getForestryModelResourceLocation(woodType, properties);
-			}else{
+			} else {
 				return getDefaultModelResourceLocation(state);
 			}
 		} else {
 			return getVanillaModelResourceLocation(block, woodType, properties);
 		}
 	}
-	
+
 	@Override
 	public ModelResourceLocation getDefaultModelResourceLocation(IBlockState state) {
 		final Map<IProperty<?>, Comparable<?>> properties;

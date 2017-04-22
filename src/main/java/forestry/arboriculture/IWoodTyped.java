@@ -10,21 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
-
 import java.util.Collection;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 
 public interface IWoodTyped {
-	@Nonnull
 	WoodBlockKind getBlockKind();
 
 	boolean isFireproof();
 
-	@Nonnull
 	IWoodType getWoodType(int meta);
 
-	@Nonnull
 	Collection<? extends IWoodType> getWoodTypes();
 }

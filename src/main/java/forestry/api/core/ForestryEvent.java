@@ -5,16 +5,13 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.common.eventhandler.Event;
-
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public abstract class ForestryEvent extends Event {
 

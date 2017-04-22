@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.inventory.InventoryAdapterTile;
+import net.minecraft.tileentity.TileEntity;
 
 public class InventoryGhostCrafting<T extends TileEntity> extends InventoryAdapterTile<T> {
 	public final static int SLOT_CRAFTING_1 = 0;

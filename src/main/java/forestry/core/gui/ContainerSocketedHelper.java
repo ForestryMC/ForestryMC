@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.core.circuits.ISocketable;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSocketedHelper<T extends TileEntity & ISocketable> implements IContainerSocketed {
 
@@ -32,13 +33,14 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleChipsetClick(int slot) {
-		Proxies.net.sendToServer(new PacketChipsetClick(tile, slot));
+		NetworkUtil.sendToServer(new PacketChipsetClick(slot));
 	}
 
 	@Override
 	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
-		if (tile.getSocket(slot) != null) {
+		if (!tile.getSocket(slot).isEmpty()) {
 			return;
 		}
 
@@ -56,47 +58,41 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 		}
 
 		ItemStack toSocket = itemstack.copy();
-		toSocket.stackSize = 1;
+		toSocket.setCount(1);
 		tile.setSocket(slot, toSocket);
 
 		ItemStack stack = player.inventory.getItemStack();
-		stack.stackSize--;
-		if (stack.stackSize <= 0) {
-			player.inventory.setItemStack(null);
-		}
+		stack.shrink(1);
 		player.updateHeldItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		NetworkUtil.sendToPlayer(packet, player);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleSolderingIronClick(int slot) {
-		Proxies.net.sendToServer(new PacketSolderingIronClick(tile, slot));
+		NetworkUtil.sendToServer(new PacketSolderingIronClick(slot));
 	}
 
 	@Override
 	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
 		ItemStack socket = tile.getSocket(slot);
-		if (socket == null) {
+		if (socket.isEmpty()) {
 			return;
 		}
 
 		InventoryUtil.stowInInventory(socket, player.inventory, true);
 		// Not sufficient space in player's inventory. failed to stow.
-		if (socket.stackSize > 0) {
+		if (!socket.isEmpty()) {
 			return;
 		}
 
-		tile.setSocket(slot, null);
+		tile.setSocket(slot, ItemStack.EMPTY);
 		itemstack.damageItem(1, player);
-		if (itemstack.stackSize <= 0) {
-			player.inventory.setItemStack(null);
-		}
 		player.updateHeldItem();
 
-
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		NetworkUtil.sendToPlayer(packet, player);
 	}
 }

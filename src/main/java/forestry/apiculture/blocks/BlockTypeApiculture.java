@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nonnull;
-
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.blocks.IBlockType;
@@ -25,14 +23,12 @@ public enum BlockTypeApiculture implements IBlockType {
 
 	public static final BlockTypeApiculture[] VALUES = values();
 
-	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeApiculture(@Nonnull Class<T> teClass, @Nonnull String name) {
+	<T extends TileForestry> BlockTypeApiculture(Class<T> teClass, String name) {
 		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
-	@Nonnull
 	@Override
 	public IMachineProperties<?> getMachineProperties() {
 		return machineProperties;

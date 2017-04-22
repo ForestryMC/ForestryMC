@@ -10,20 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -31,6 +23,14 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FruitProviderPod extends FruitProviderNone {
 
@@ -43,7 +43,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	private final EnumPodType type;
-	@Nonnull
+
 	private final Map<ItemStack, Float> drops;
 
 	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
@@ -60,22 +60,21 @@ public class FruitProviderPod extends FruitProviderNone {
 		return true;
 	}
 
-	@Nonnull
 	@Override
-	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(@Nullable ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		if (drops.isEmpty()) {
-			return Collections.emptyList();
+			return NonNullList.create();
 		}
 
 		if (ripeningTime >= 2) {
-			List<ItemStack> drops = new ArrayList<>();
+			NonNullList<ItemStack> drops = NonNullList.create();
 			for (ItemStack aDrop : this.drops.keySet()) {
 				drops.add(aDrop.copy());
 			}
 			return drops;
 		}
 
-		return Collections.emptyList();
+		return NonNullList.create();
 	}
 
 	@Override
@@ -89,10 +88,10 @@ public class FruitProviderPod extends FruitProviderNone {
 			return BlockUtil.tryPlantCocoaPod(world, pos);
 		} else {
 			IAlleleFruit activeAllele = (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS);
-			return TreeManager.treeRoot.setFruitBlock(world, activeAllele, genome.getSappiness(), pos);
+			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getSappiness(), pos);
 		}
 	}
-	
+
 	@Override
 	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		return null;
@@ -103,20 +102,18 @@ public class FruitProviderPod extends FruitProviderNone {
 		return null;
 	}
 
-	@Nonnull
 	@Override
 	public Map<ItemStack, Float> getProducts() {
 		return Collections.unmodifiableMap(drops);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 	}
 
-	@Nonnull
 	@Override
 	public String getModelName() {
 		return type.getModelName();
 	}
-
 }

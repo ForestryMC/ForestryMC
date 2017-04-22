@@ -8,11 +8,11 @@ package forestry.api.climate;
 public interface IClimatiserDefinition {
 
 	float getChange();
-	
-	double getRange();
-	
+
+	float getRange();
+
 	EnumClimatiserModes getMode();
-	
+
 	EnumClimatiserTypes getType();
-	
+
 }

@@ -13,14 +13,12 @@ package forestry.core.items;
 import java.util.EnumMap;
 import java.util.Map;
 
+import forestry.core.fluids.Fluids;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import forestry.core.fluids.Fluids;
 
 public class ItemRegistryFluids extends ItemRegistry {
 	public final ItemFluidContainerForestry canEmpty;
@@ -32,12 +30,16 @@ public class ItemRegistryFluids extends ItemRegistry {
 	public ItemStack getContainer(EnumContainerType type, Fluids fluid) {
 		return getContainer(type, fluid.getFluid());
 	}
-	
+
 	public ItemStack getContainer(EnumContainerType type, Fluid fluid) {
 		ItemStack container = new ItemStack(containers.get(type));
 		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
-		return container;
+		if (fluidHandler != null) {
+			fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
+			return container;
+		} else {
+			return ItemStack.EMPTY;
+		}
 	}
 
 	public ItemRegistryFluids() {

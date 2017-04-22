@@ -10,11 +10,16 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import javax.annotation.Nonnull;
 
-import forestry.core.network.packets.PacketDummyClient;
+import javax.annotation.Nullable;
 
-/** Packets sent to the client from the server */
+import forestry.core.network.packets.PacketHandlerDummyClient;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+/**
+ * Packets sent to the client from the server
+ */
 public enum PacketIdClient implements IPacketId {
 	INVALID,
 
@@ -52,27 +57,31 @@ public enum PacketIdClient implements IPacketId {
 
 	// Arboriculture
 	RIPENING_UPDATE,
-	
+
 	// Mail
 	TRADING_ADDRESS_RESPONSE,
 	LETTER_INFO_RESPONSE,
-	POBOX_INFO_RESPONSE;
+	POBOX_INFO_RESPONSE,
+
+	// JEI
+	RECIPE_TRANSFER_UPDATE;
 
 	public static final PacketIdClient[] VALUES = values();
 
-	@Nonnull
-	private IForestryPacketClient packetHandler;
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	private IForestryPacketHandlerClient packetHandler;
 
-	PacketIdClient() {
-		this.packetHandler = PacketDummyClient.instance;
-	}
-
-	public void setPacketHandler(@Nonnull IForestryPacketClient packetHandler) {
+	@SideOnly(Side.CLIENT)
+	public void setPacketHandler(IForestryPacketHandlerClient packetHandler) {
 		this.packetHandler = packetHandler;
 	}
 
-	@Nonnull
-	public IForestryPacketClient getPacketHandler() {
+	@SideOnly(Side.CLIENT)
+	public IForestryPacketHandlerClient getPacketHandler() {
+		if (packetHandler == null) {
+			return PacketHandlerDummyClient.INSTANCE;
+		}
 		return packetHandler;
 	}
 }

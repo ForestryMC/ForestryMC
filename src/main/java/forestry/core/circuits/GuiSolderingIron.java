@@ -13,10 +13,6 @@ package forestry.core.circuits;
 import java.io.IOException;
 import java.util.Locale;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
@@ -24,15 +20,21 @@ import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemInventorySolderingIron> {
+public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
+	private final ItemInventorySolderingIron itemInventory;
 
-	public GuiSolderingIron(EntityPlayer player, ItemInventorySolderingIron inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, inventory), inventory);
+	public GuiSolderingIron(EntityPlayer player, ItemInventorySolderingIron itemInventory) {
+		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, itemInventory));
 
-		xSize = 176;
-		ySize = 205;
+		this.itemInventory = itemInventory;
+		this.xSize = 176;
+		this.ySize = 205;
 	}
 
 	@Override
@@ -41,11 +43,11 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 
 		ICircuitLayout layout = ((ContainerSolderingIron) inventorySlots).getLayout();
 		String title = layout.getName();
-		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;
-			ItemStack tube = inventory.getStackInSlot(i + 2);
+			ItemStack tube = itemInventory.getStackInSlot(i + 2);
 			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
@@ -54,15 +56,15 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 			}
 
 			int row = i * 20;
-			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, fontColor.get("gui.screen"));
+			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
-			if (tube == null) {
+			if (tube.isEmpty()) {
 				ICircuitSocketType socketType = layout.getSocketType();
 				if (CircuitSocketType.FARM.equals(socketType)) {
 					FarmDirection farmDirection = FarmDirection.values()[i];
 					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
 					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, fontColor.get("gui.screen"));
+					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 				}
 			}
 		}
@@ -87,4 +89,9 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 		}
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(itemInventory);
+		addHintLedger("soldering.iron");
+	}
 }

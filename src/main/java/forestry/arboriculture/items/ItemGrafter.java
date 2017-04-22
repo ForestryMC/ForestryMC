@@ -12,6 +12,9 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.core.Tabs;
+import forestry.core.items.ItemForestryTool;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -22,14 +25,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.core.Tabs;
-import forestry.core.items.ItemForestryTool;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public ItemGrafter(int maxDamage) {
-		super(null);
+		super(ItemStack.EMPTY);
 		setMaxDamage(maxDamage);
 		setMaxStackSize(1);
 		setCreativeTab(Tabs.tabArboriculture);
@@ -38,6 +39,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		if (!stack.isItemDamaged()) {
@@ -48,10 +50,9 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 		Block block = state.getBlock();
-		if (block instanceof BlockLeaves || block.getMaterial(state) == Material.LEAVES) {
-			return true;
-		}
-		return super.canHarvestBlock(state, stack);
+		return block instanceof BlockLeaves ||
+				state.getMaterial() == Material.LEAVES ||
+				super.canHarvestBlock(state, stack);
 	}
 
 	@Override

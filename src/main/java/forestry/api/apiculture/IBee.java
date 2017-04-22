@@ -5,18 +5,19 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
-
-import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -28,7 +29,6 @@ public interface IBee extends IIndividualLiving {
 	/**
 	 * @return Bee's genetic information.
 	 */
-	@Nonnull
 	@Override
 	IBeeGenome getGenome();
 
@@ -51,12 +51,12 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Set the natural flag on this bee.
-	 * @param flag
 	 */
 	void setIsNatural(boolean flag);
 
 	IEffectData[] doEffect(IEffectData[] storedData, IBeeHousing housing);
 
+	@SideOnly(Side.CLIENT)
 	IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing);
 
 	/**
@@ -66,6 +66,7 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Determines whether the queen can work.
+	 *
 	 * @param housing the {@link IBeeHousing} the bee currently resides in.
 	 * @return an empty set if the queen can work, a set of error states if the queen can not work
 	 */
@@ -73,20 +74,22 @@ public interface IBee extends IIndividualLiving {
 
 	List<Biome> getSuitableBiomes();
 
-	ItemStack[] getProduceList();
+	NonNullList<ItemStack> getProduceList();
 
-	ItemStack[] getSpecialtyList();
+	NonNullList<ItemStack> getSpecialtyList();
 
-	ItemStack[] produceStacks(IBeeHousing housing);
+	NonNullList<ItemStack> produceStacks(IBeeHousing housing);
 
+	@Nullable
 	IBee spawnPrincess(IBeeHousing housing);
 
-	IBee[] spawnDrones(IBeeHousing housing);
+	List<IBee> spawnDrones(IBeeHousing housing);
 
 	void plantFlowerRandom(IBeeHousing housing);
 
-	ITree retrievePollen(IBeeHousing housing);
+	@Nullable
+	IIndividual retrievePollen(IBeeHousing housing);
 
-	boolean pollinateRandom(IBeeHousing housing, ITree pollen);
+	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
 
 }

@@ -17,7 +17,7 @@ public interface IGameMode {
 	 * @return Value of the requested setting, false if unknown setting.
 	 */
 	boolean getBooleanSetting(String ident);
-	
+
 	/**
 	 * @param ident Identifier for the setting. (See the gamemode config.)
 	 * @return Value of the requested setting, 0 if unknown setting.

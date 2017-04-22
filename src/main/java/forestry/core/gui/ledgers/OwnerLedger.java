@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import javax.annotation.Nullable;
+
 import com.mojang.authlib.GameProfile;
 import forestry.core.owner.IOwnedTile;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,7 +23,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  * Ledger displaying ownership information
  */
 public class OwnerLedger extends Ledger {
-
+	@Nullable
 	private final GameProfile owner;
 
 	public OwnerLedger(LedgerManager manager, IOwnedTile tile) {
@@ -42,7 +44,7 @@ public class OwnerLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		TextureAtlasSprite accessIcon = TextureManager.getInstance().getDefault("misc/access.shared");
+		TextureAtlasSprite accessIcon = TextureManagerForestry.getInstance().getDefault("misc/access.shared");
 		drawSprite(accessIcon, x + 3, y + 4);
 
 		// Draw description

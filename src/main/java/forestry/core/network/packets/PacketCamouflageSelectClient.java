@@ -12,29 +12,31 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketCamouflageSelectClient extends PacketCoordinates implements IForestryPacketClient{
+public class PacketCamouflageSelectClient extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final ItemStack camouflageStack;
+	private final String camouflageType;
+	private final CamouflageSelectionType selectionType;
 
-	private ItemStack camouflageStack;
-	private String camouflageType;
-	private CamouflageSelectionType selectionType;
-
-	public PacketCamouflageSelectClient() {
-	}
-	
 	public PacketCamouflageSelectClient(ICamouflageHandler handler, String camouflageType, CamouflageSelectionType selectionType) {
-		super(handler.getCoordinates());
+		this.pos = handler.getCoordinates();
 		this.camouflageStack = handler.getCamouflageBlock(camouflageType);
 		this.selectionType = selectionType;
 		this.camouflageType = camouflageType;
@@ -46,57 +48,51 @@ public class PacketCamouflageSelectClient extends PacketCoordinates implements I
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeShort(selectionType.ordinal());
-		data.writeBoolean(camouflageType != null);
-		if(camouflageType != null){
-			data.writeUTF(camouflageType);
-		}
+		data.writeString(camouflageType);
 		data.writeItemStack(camouflageStack);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		selectionType = CamouflageSelectionType.values()[data.readShort()];
-		if(data.readBoolean()){
-			camouflageType = data.readUTF();
-		}
-		camouflageStack = data.readItemStack();
-	}
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
-		TileEntity tile = getTarget(player.worldObj);
-		ICamouflageHandler handler = null;
-		if(selectionType == CamouflageSelectionType.MULTIBLOCK){
-			if (tile instanceof IMultiblockComponent) {
-				IMultiblockController controller = ((IMultiblockComponent) tile).getMultiblockLogic().getController();
-				
-				if (controller instanceof ICamouflageHandler) {
-					handler = (ICamouflageHandler) controller;
-					handler.setCamouflageBlock(camouflageType, camouflageStack);
-					for (IMultiblockComponent comp : controller.getComponents()) {
-						if (comp instanceof ICamouflagedTile) {
-							ICamouflagedTile camBlock = (ICamouflagedTile) comp;
-							if (camouflageType != null && camBlock.getCamouflageType() != null && camBlock.getCamouflageType().equals(camouflageType)) {
-								player.worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			CamouflageSelectionType selectionType = CamouflageSelectionType.values()[data.readShort()];
+			String camouflageType = data.readString();
+			ItemStack camouflageStack = data.readItemStack();
+
+			TileEntity tile = TileUtil.getTile(player.world, pos);
+			ICamouflageHandler handler;
+			if (selectionType == CamouflageSelectionType.MULTIBLOCK) {
+				if (tile instanceof IMultiblockComponent) {
+					IMultiblockController controller = ((IMultiblockComponent) tile).getMultiblockLogic().getController();
+
+					if (controller instanceof ICamouflageHandler) {
+						handler = (ICamouflageHandler) controller;
+						if (handler.setCamouflageBlock(camouflageType, camouflageStack, false)) {
+							for (IMultiblockComponent comp : controller.getComponents()) {
+								if (comp instanceof ICamouflagedTile) {
+									ICamouflagedTile camBlock = (ICamouflagedTile) comp;
+									if (camBlock.getCamouflageType().equals(camouflageType)) {
+										player.world.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
+									}
+								}
 							}
 						}
 					}
 				}
+			} else if (selectionType == CamouflageSelectionType.TILE) {
+				if (tile instanceof ICamouflageHandler) {
+					handler = (ICamouflageHandler) tile;
+					if (handler.setCamouflageBlock(camouflageType, camouflageStack, false)) {
+						player.world.markBlockRangeForRenderUpdate(pos, pos);
+					}
+				}
 			}
-		}else if(selectionType == CamouflageSelectionType.TILE){
-			if (tile instanceof ICamouflageHandler) {
-				handler = (ICamouflageHandler) tile;
-				handler.setCamouflageBlock(camouflageType, camouflageStack);
-				player.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
-			}
-		}
-		
-		if (handler != null) {
-			handler.setCamouflageBlock(camouflageType, camouflageStack);
 		}
 	}
 }

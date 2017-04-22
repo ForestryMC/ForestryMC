@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	private static final Random rand = new Random();
@@ -36,7 +34,6 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 		public static final Status[] VALUES = values();
 	}
 
-	@Nonnull
 	private EscritoireGameBoard gameBoard;
 	private long lastUpdate;
 	private int bountyLevel;
@@ -46,6 +43,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 		gameBoard = new EscritoireGameBoard();
 	}
 
+	@Nullable
 	public EscritoireGameToken getToken(int index) {
 		return gameBoard.getToken(index);
 	}
@@ -84,14 +82,14 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeInt(bountyLevel);
 		gameBoard.writeData(data);
 		data.writeEnum(status, Status.VALUES);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		bountyLevel = data.readInt();
 		gameBoard.readData(data);
 		status = data.readEnum(Status.VALUES);
@@ -126,12 +124,10 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 		int revealCount = getSampleSize(slotCount);
 		for (int i = 0; i < revealCount; i++) {
 			ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
-			if (sample == null || sample.stackSize <= 0) {
-				continue;
-			}
-
-			if (rand.nextFloat() < species.getResearchSuitability(sample)) {
-				gameBoard.probe();
+			if (!sample.isEmpty()) {
+				if (rand.nextFloat() < species.getResearchSuitability(sample)) {
+					gameBoard.probe();
+				}
 			}
 		}
 

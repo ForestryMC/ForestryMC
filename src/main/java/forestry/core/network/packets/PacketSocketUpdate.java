@@ -12,60 +12,57 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.circuits.ISocketable;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.circuits.ISocketable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
-
-public class PacketSocketUpdate extends PacketCoordinates implements IForestryPacketClient {
-
-	private ItemStack[] itemStacks;
-
-	public PacketSocketUpdate() {
-	}
+public class PacketSocketUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final NonNullList<ItemStack> itemStacks;
 
 	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
-		super(tile);
+		this.pos = tile.getPos();
 
-		itemStacks = new ItemStack[tile.getSocketCount()];
+		this.itemStacks = NonNullList.withSize(tile.getSocketCount(), ItemStack.EMPTY);
 		for (int i = 0; i < tile.getSocketCount(); i++) {
-			itemStacks[i] = tile.getSocket(i);
-		}
-	}
-
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeItemStacks(itemStacks);
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		itemStacks = data.readItemStacks();
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (!(tile instanceof ISocketable)) {
-			return;
-		}
-
-		ISocketable socketable = (ISocketable) tile;
-		for (int i = 0; i < itemStacks.length; i++) {
-			socketable.setSocket(i, itemStacks[i]);
+			this.itemStacks.set(i, tile.getSocket(i));
 		}
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.SOCKET_UPDATE;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
+		data.writeItemStacks(itemStacks);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			NonNullList<ItemStack> itemStacks = data.readItemStacks();
+
+			TileUtil.actOnTile(player.world, pos, ISocketable.class, socketable -> {
+				for (int i = 0; i < itemStacks.size(); i++) {
+					socketable.setSocket(i, itemStacks.get(i));
+				}
+			});
+		}
 	}
 }

@@ -10,31 +10,35 @@
  ******************************************************************************/
 package forestry.lepidopterology.recipes;
 
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 public class MatingRecipe implements IRecipe {
 
 	private final ItemStack unknown;
+	@Nullable
 	private ItemStack cached;
-	
+
 	public MatingRecipe() {
 		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY);
 	}
-	
+
 	@Override
 	public boolean matches(InventoryCrafting crafting, World world) {
-		
+
 		boolean mated = true;
 		int butterflies = 0;
 		int sera = 0;
-		
+
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
 			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
 				butterflies++;
@@ -44,7 +48,7 @@ public class MatingRecipe implements IRecipe {
 				sera++;
 			}
 		}
-		
+
 		return !mated && butterflies == 1 && sera == 1;
 	}
 
@@ -69,9 +73,9 @@ public class MatingRecipe implements IRecipe {
 			}
 		}
 		if (butterfly == null || serum == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
-		
+
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);
 		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY);
@@ -81,14 +85,14 @@ public class MatingRecipe implements IRecipe {
 	public int getRecipeSize() {
 		return 2;
 	}
-	
-	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
 
-		for (int i = 0; i < aitemstack.length; ++i) {
+	@Override
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> aitemstack = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+
+		for (int i = 0; i < inv.getSizeInventory(); ++i) {
 			ItemStack itemstack = inv.getStackInSlot(i);
-			aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+			aitemstack.set(i, ForgeHooks.getContainerItem(itemstack));
 		}
 		return aitemstack;
 	}

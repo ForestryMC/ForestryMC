@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@SideOnly(Side.CLIENT)
 public class ToolTip {
 
 	private final List<String> lines = new ArrayList<>();
@@ -39,11 +41,11 @@ public class ToolTip {
 		lines.clear();
 	}
 
-	public boolean add(@Nonnull String line) {
+	public boolean add(String line) {
 		return add(line, null);
 	}
 
-	public boolean add(@Nonnull String line, @Nullable TextFormatting formatting) {
+	public boolean add(String line, @Nullable TextFormatting formatting) {
 		if (formatting != null) {
 			return lines.add(formatting + line);
 		} else {
@@ -79,13 +81,7 @@ public class ToolTip {
 	}
 
 	public boolean isReady() {
-		if (delay == 0) {
-			return true;
-		}
-		if (mouseOverStart == 0) {
-			return false;
-		}
-		return System.currentTimeMillis() - mouseOverStart >= delay;
+		return delay == 0 || mouseOverStart != 0 && System.currentTimeMillis() - mouseOverStart >= delay;
 	}
 
 	public void refresh() {

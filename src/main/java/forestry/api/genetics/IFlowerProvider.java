@@ -6,6 +6,7 @@
 package forestry.api.genetics;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +28,8 @@ public interface IFlowerProvider {
 	/**
 	 * Allows the flower provider to affect the produce at the given location.
 	 * If this flowerProvider does not affect the products, it should return the products unchanged.
+	 *
 	 * @return Array of itemstacks being the (modified or unmodified) produce.
 	 */
-	ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products);
+	NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
 }

@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,54 +27,52 @@ import net.minecraft.world.IBlockAccess;
 
 public class CamouflageUtil {
 
-	public static void writeCamouflageBlockToNBT(NBTTagCompound data, ICamouflageHandler handler, String type){
+	public static void writeCamouflageBlockToNBT(NBTTagCompound data, ICamouflageHandler handler, String type) {
 		ItemStack camouflageBlock = handler.getCamouflageBlock(type);
-		if(camouflageBlock != null){
+		if (!camouflageBlock.isEmpty()) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("Camouflage" + type, nbtTag);
 		}
 	}
-	
-	public static void readCamouflageBlockFromNBT(NBTTagCompound data, ICamouflageHandler handler, String type){
-		if(data.hasKey("Camouflage" + type)){
-			handler.setCamouflageBlock(type, ItemStack.loadItemStackFromNBT(data.getCompoundTag("Camouflage" + type)));
+
+	public static void readCamouflageBlockFromNBT(NBTTagCompound data, ICamouflageHandler handler, String type) {
+		if (data.hasKey("Camouflage" + type)) {
+			handler.setCamouflageBlock(type, new ItemStack(data.getCompoundTag("Camouflage" + type)), false);
 		}
 	}
-	
-	public static void writeCamouflageBlockToData(DataOutputStreamForestry data, ICamouflageHandler handler, String type) throws IOException{
+
+	public static void writeCamouflageBlockToData(PacketBufferForestry data, ICamouflageHandler handler, String type) {
 		ItemStack camouflageBlock = handler.getCamouflageBlock(type);
-		if(camouflageBlock != null){
+		if (!camouflageBlock.isEmpty()) {
 			data.writeShort(1);
-			data.writeUTF(type);
+			data.writeString(type);
 			data.writeItemStack(camouflageBlock);
-		}else{
+		} else {
 			data.writeShort(0);
 		}
 	}
-	
-	public static void readCamouflageBlockFromData(DataInputStreamForestry data, ICamouflageHandler handler) throws IOException{
-		if(data.readShort() == 1){
-			handler.setCamouflageBlock(data.readUTF(), data.readItemStack());
+
+	public static void readCamouflageBlockFromData(PacketBufferForestry data, ICamouflageHandler handler) throws IOException {
+		if (data.readShort() == 1) {
+			handler.setCamouflageBlock(data.readString(), data.readItemStack(), false);
 		}
 	}
-	
-	public static ICamouflageHandler getCamouflageHandler(IBlockAccess world, BlockPos pos){
-		if(pos == null || world == null){
-			return null;
-		}
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof ICamouflagedTile){
+
+	@Nullable
+	public static ICamouflageHandler getCamouflageHandler(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = TileUtil.getTile(world, pos, TileEntity.class);
+		if (tile instanceof ICamouflagedTile) {
 			ICamouflagedTile block = (ICamouflagedTile) tile;
 			String type = block.getCamouflageType();
 			ICamouflageHandler handler = null;
-			if(tile instanceof ICamouflageHandler){
+			if (tile instanceof ICamouflageHandler) {
 				handler = (ICamouflageHandler) tile;
 			}
-			if((handler == null || handler.getCamouflageBlock(type) == null) && tile instanceof IMultiblockComponent){
+			if ((handler == null || handler.getCamouflageBlock(type).isEmpty()) && tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
 				IMultiblockController controller = component.getMultiblockLogic().getController();
-				if(controller instanceof ICamouflageHandler){
+				if (controller instanceof ICamouflageHandler) {
 					handler = (ICamouflageHandler) controller;
 				}
 			}
@@ -81,41 +80,30 @@ public class CamouflageUtil {
 		}
 		return null;
 	}
-	
-	public static ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos){
-		if(pos == null || world == null){
-			return null;
-		}
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof ICamouflagedTile){
+
+	public static ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = TileUtil.getTile(world, pos, TileEntity.class);
+		if (tile instanceof ICamouflagedTile) {
 			ICamouflagedTile block = (ICamouflagedTile) tile;
 			String type = block.getCamouflageType();
-			ItemStack camouflageStack = null;
-			ICamouflageHandler tileHandler = null;
-			ICamouflageHandler multiblockHandler = null;
-			if(tile instanceof ICamouflageHandler){
-				tileHandler = (ICamouflageHandler) tile;
+			ItemStack camouflageStack = ItemStack.EMPTY;
+
+			if (tile instanceof ICamouflageHandler) {
+				ICamouflageHandler tileHandler = (ICamouflageHandler) tile;
 				camouflageStack = tileHandler.getCamouflageBlock(type);
 			}
-			if(camouflageStack == null && tile instanceof IMultiblockComponent){
+			if (camouflageStack.isEmpty() && tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
 				IMultiblockController controller = component.getMultiblockLogic().getController();
-				if(controller.isAssembled() && controller instanceof ICamouflageHandler){
-					multiblockHandler = (ICamouflageHandler) controller;
+				if (controller.isAssembled() && controller instanceof ICamouflageHandler) {
+					ICamouflageHandler multiblockHandler = (ICamouflageHandler) controller;
 					camouflageStack = multiblockHandler.getCamouflageBlock(type);
 				}
 			}
-			if(camouflageStack == null){
-				if(tileHandler != null){
-					camouflageStack = tileHandler.getDefaultCamouflageBlock(type);
-				}
-				if(multiblockHandler != null && camouflageStack == null){
-					camouflageStack = multiblockHandler.getDefaultCamouflageBlock(type);
-				}
-			}
+
 			return camouflageStack;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
-	
+
 }

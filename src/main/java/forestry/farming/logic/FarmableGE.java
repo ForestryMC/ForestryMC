@@ -10,19 +10,19 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.ITreeRoot;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.core.utils.GeneticsUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.core.utils.GeneticsUtil;
 
 public class FarmableGE implements IFarmable {
 
@@ -34,7 +34,7 @@ public class FarmableGE implements IFarmable {
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		return PluginArboriculture.blocks.saplingGE == block;
+		return PluginArboriculture.getBlocks().saplingGE == block;
 	}
 
 	@Override
@@ -50,11 +50,15 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		ITree tree = TreeManager.treeRoot.getMember(germling);
-		if (tree == null) {
+		ITreeRoot treeRoot = TreeManager.treeRoot;
+
+		germling = GeneticsUtil.convertToGeneticEquivalent(germling);
+		if (treeRoot.isMember(germling)) {
+			ITree tree = treeRoot.getMember(germling);
+			return treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
+		} else {
 			return false;
 		}
-		return TreeManager.treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 
 	@Override

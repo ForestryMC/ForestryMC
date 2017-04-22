@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import net.minecraft.world.World;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
+import net.minecraft.world.World;
 
 public interface IGreenhouseHousing extends IErrorLogicSource {
 
@@ -20,11 +19,12 @@ public interface IGreenhouseHousing extends IErrorLogicSource {
 	float getExactTemperature();
 
 	float getExactHumidity();
-	
+
 	/**
 	 * Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12
+	 *
 	 * @return The world in that the housing is.
 	 */
 	World getWorldObj();
-	
+
 }

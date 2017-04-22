@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -26,6 +24,10 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeManager implements ICarpenterManager {
 
@@ -43,35 +45,37 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Override
-	public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
+	public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
 		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
 		addRecipe(recipe);
 	}
 
-	public static ICarpenterRecipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
+	@Nullable
+	public static Pair<ICarpenterRecipe, String[][]> findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
 		for (ICarpenterRecipe recipe : recipes) {
-			if (matches(recipe, liquid, item, inventorycrafting)) {
-				return recipe;
+			String[][] resourceDicts = matches(recipe, liquid, item, inventorycrafting);
+			if (resourceDicts != null) {
+				return Pair.of(recipe, resourceDicts);
 			}
 		}
-		return null;
+		return Pair.of(null, null);
 	}
 
-	public static boolean matches(ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+	public static String[][] matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
 		if (recipe == null) {
-			return false;
+			return null;
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
 		if (liquid != null) {
 			if (resource == null || !resource.containsFluid(liquid)) {
-				return false;
+				return null;
 			}
 		}
 
 		ItemStack box = recipe.getBox();
-		if (box != null && !ItemStackUtil.isCraftingEquivalent(box, item)) {
-			return false;
+		if (!box.isEmpty() && !ItemStackUtil.isCraftingEquivalent(box, item)) {
+			return null;
 		}
 
 		IDescriptiveRecipe internal = recipe.getCraftingGridRecipe();
@@ -79,7 +83,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	public static boolean isBox(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return false;
 		}
 

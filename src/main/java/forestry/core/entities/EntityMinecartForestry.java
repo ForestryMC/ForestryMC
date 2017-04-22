@@ -12,7 +12,6 @@ package forestry.core.entities;
 
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IGuiHandlerEntity;
-import forestry.core.gui.IHintSource;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
@@ -26,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
-public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IHintSource, IGuiHandlerEntity {
+public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IGuiHandlerEntity {
 
 	@SuppressWarnings("unused")
 	public EntityMinecartForestry(World world) {
@@ -40,12 +39,12 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-		if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand))) {
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand))) {
 			return true;
 		}
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			GuiHandler.openGui(player, this);
 		}
 		return true;
@@ -53,7 +52,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 
 	@Override
 	public Type getType() {
-		return null;
+		return Type.CHEST;
 	}
 
 	/* EntityMinecart */
@@ -61,7 +60,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	public boolean canBeRidden() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isPoweredCart() {
 		return false;
@@ -78,7 +77,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public void killMinecart(DamageSource damageSource) {
 		super.killMinecart(damageSource);
-		if (this.worldObj.getGameRules().getBoolean("doEntityDrops")) {
+		if (this.world.getGameRules().getBoolean("doEntityDrops")) {
 			Block block = getDisplayTile().getBlock();
 			entityDropItem(new ItemStack(block), 0.0F);
 		}
@@ -101,7 +100,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		ItemStack cartItem = getCartItem();
 		return cartItem.getUnlocalizedName() + ".name";
 	}
-	
+
 	@Override
 	public int getIdOfEntity() {
 		return getEntityId();

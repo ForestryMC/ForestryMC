@@ -10,7 +10,7 @@ public class FabricatorRecipeMaker {
 
 	private FabricatorRecipeMaker() {
 	}
-	
+
 	public static List<FabricatorRecipeWrapper> getFabricatorRecipes() {
 		List<FabricatorRecipeWrapper> recipes = new ArrayList<>();
 		for (IFabricatorRecipe recipe : RecipeManagers.fabricatorManager.recipes()) {
@@ -18,5 +18,5 @@ public class FabricatorRecipeMaker {
 		}
 		return recipes;
 	}
-	
+
 }

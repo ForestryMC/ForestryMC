@@ -1,7 +1,8 @@
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
 import forestry.api.arboriculture.IWoodType;
 
 public class WoodTypePredicate implements Predicate<IWoodType> {
@@ -14,7 +15,7 @@ public class WoodTypePredicate implements Predicate<IWoodType> {
 	}
 
 	@Override
-	public boolean apply(IWoodType woodType) {
-		return woodType.getMetadata() >= minWoodTypeMeta && woodType.getMetadata() <= maxWoodTypeMeta;
+	public boolean apply(@Nullable IWoodType woodType) {
+		return woodType != null && woodType.getMetadata() >= minWoodTypeMeta && woodType.getMetadata() <= maxWoodTypeMeta;
 	}
 }

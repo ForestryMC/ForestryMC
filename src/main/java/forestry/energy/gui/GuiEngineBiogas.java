@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.energy.gui.widgets.BiogasSlot;
 import forestry.energy.tiles.TileEngineBiogas;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
 	public GuiEngineBiogas(InventoryPlayer inventory, TileEngineBiogas tile) {
@@ -30,7 +28,7 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int temperature = inventory.getOperatingTemperatureScaled(16);
+		int temperature = tile.getOperatingTemperatureScaled(16);
 		if (temperature > 16) {
 			temperature = 16;
 		}

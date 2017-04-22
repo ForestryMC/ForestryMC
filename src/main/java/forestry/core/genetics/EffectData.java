@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.IEffectData;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class EffectData implements IEffectData {
 
 	private final int[] intData;
-	private float[] floatData;
 	private final boolean[] boolData;
 
 	public EffectData(int intSize, int boolSize) {
@@ -47,16 +45,6 @@ public class EffectData implements IEffectData {
 
 	public int getIntSize() {
 		return intData.length;
-	}
-
-	@Override
-	public void setFloat(int index, float val) {
-		floatData[index] = val;
-	}
-
-	@Override
-	public float getFloat(int index) {
-		return floatData[index];
 	}
 
 	@Override

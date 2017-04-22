@@ -10,36 +10,30 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.FarmHelper;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
 	protected final IBlockState ground;
 	private final ItemStack resource;
-	
+
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
 
-	protected List<ItemStack> produce = new ArrayList<>();
+	protected NonNullList<ItemStack> produce = NonNullList.create();
 
-	protected FarmLogicWatered(ItemStack resource, @Nonnull IBlockState ground) {
+	protected FarmLogicWatered(ItemStack resource, IBlockState ground) {
 		this.ground = ground;
 		this.resource = resource;
 	}
@@ -64,9 +58,9 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		Collection<ItemStack> products = produce;
-		produce = new ArrayList<>();
+	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+		NonNullList<ItemStack> products = produce;
+		produce = NonNullList.create();
 		return products;
 	}
 
@@ -89,7 +83,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		ItemStack[] resources = new ItemStack[]{resource};
+		NonNullList<ItemStack> resources = NonNullList.create();
+		resources.add(resource);
 
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
@@ -146,7 +141,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	private boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position) {
-		ItemStack[] resources = new ItemStack[]{resource};
+		NonNullList<ItemStack> resources = NonNullList.create();
+		resources.add(resource);
 		if (!farmHousing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(Block block) {

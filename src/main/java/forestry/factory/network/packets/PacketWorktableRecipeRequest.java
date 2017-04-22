@@ -12,63 +12,59 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
-import forestry.core.network.packets.PacketCoordinates;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Used to sync the worktable crafting grid from Client to Server.
  */
-public class PacketWorktableRecipeRequest extends PacketCoordinates implements IForestryPacketServer {
-	private MemorizedRecipe recipe;
-
-	public PacketWorktableRecipeRequest() {
-	}
+public class PacketWorktableRecipeRequest extends ForestryPacket implements IForestryPacketServer {
+	private final BlockPos pos;
+	private final MemorizedRecipe recipe;
 
 	public PacketWorktableRecipeRequest(TileWorktable worktable, MemorizedRecipe recipe) {
-		super(worktable);
+		this.pos = worktable.getPos();
 		this.recipe = recipe;
-	}
-
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeStreamable(recipe);
-	}
-
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		recipe = data.readStreamable(MemorizedRecipe.class);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
-		if (tile instanceof TileWorktable) {
-			TileWorktable worktable = (TileWorktable) tile;
-			worktable.setCurrentRecipe(recipe);
-
-			if (player.openContainer instanceof ContainerWorktable) {
-				ContainerWorktable containerWorktable = (ContainerWorktable) player.openContainer;
-				containerWorktable.updateCraftMatrix();
-			}
-
-			Proxies.net.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), player.worldObj);
-		}
 	}
 
 	@Override
 	public PacketIdServer getPacketId() {
 		return PacketIdServer.WORKTABLE_RECIPE_REQUEST;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
+		recipe.writeData(data);
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			MemorizedRecipe recipe = new MemorizedRecipe(data);
+
+			TileUtil.actOnTile(player.world, pos, TileWorktable.class, worktable -> {
+				worktable.setCurrentRecipe(recipe);
+
+				if (player.openContainer instanceof ContainerWorktable) {
+					ContainerWorktable containerWorktable = (ContainerWorktable) player.openContainer;
+					containerWorktable.updateCraftMatrix();
+				}
+
+				NetworkUtil.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.world);
+			});
+		}
 	}
 }

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 
@@ -34,7 +34,7 @@ public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 		butterflyModel.setScale(entity.getSize());
 		super.doRender(entity, x, y, z, light, partialTickTime);
 	}
-	
+
 	@Override
 	public void doRender(EntityButterfly entity, double x, double y, double z, float entityYaw, float partialTickTime) {
 		this.renderButterfly(entity, x, y, z, entityYaw, partialTickTime);
@@ -50,12 +50,12 @@ public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 		return entity.getWingFlap(partialTickTime);
 	}
 
-	public static class Factory implements IRenderFactory<EntityButterfly>{
+	public static class Factory implements IRenderFactory<EntityButterfly> {
 		@Override
 		public Render<? super EntityButterfly> createRenderFor(RenderManager manager) {
 			return new RenderButterflyEntity(manager);
 		}
-		
+
 	}
-	
+
 }

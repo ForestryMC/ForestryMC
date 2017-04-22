@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreeManager {
 
 	/**
@@ -26,4 +29,6 @@ public class TreeManager {
 	 * Used to create new tree mutations.
 	 */
 	public static ITreeMutationFactory treeMutationFactory;
+	
+	public static List<ICharcoalPileWall> pileWalls = new ArrayList<>();
 }

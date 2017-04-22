@@ -10,66 +10,47 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
-import com.google.common.collect.ForwardingCollection;
-
 import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
+
+import com.google.common.base.Preconditions;
 
 /**
  * @param <T>
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RevolvingList<T> extends ForwardingCollection<T> {
+public class RevolvingList<T> {
 
 	private final Deque<T> list = new LinkedList<>();
 
-	public RevolvingList() {
-	}
-
 	public RevolvingList(Collection<? extends T> collection) {
-		list.addAll(collection);
-	}
-
-	@Override
-	protected Collection<T> delegate() {
-		return list;
+		Preconditions.checkArgument(!collection.isEmpty());
+		for (T object : collection) {
+			Preconditions.checkNotNull(object);
+			list.add(object);
+		}
 	}
 
 	public void rotateLeft() {
-		if (list.isEmpty()) {
-			return;
-		}
 		list.addFirst(list.removeLast());
 	}
 
 	public void rotateRight() {
-		if (list.isEmpty()) {
-			return;
-		}
 		list.addLast(list.removeFirst());
 	}
 
 	public T getCurrent() {
-		if (list.isEmpty()) {
-			return null;
-		}
 		return list.getFirst();
 	}
 
 	public void setCurrent(T e) {
-		if (!contains(e)) {
+		if (!list.contains(e)) {
 			return;
 		}
 
-		if (e == null) {
-			while (getCurrent() != null) {
-				rotateRight();
-			}
-		} else {
-			while (getCurrent() == null || !getCurrent().equals(e)) {
-				rotateRight();
-			}
+		while (!getCurrent().equals(e)) {
+			rotateRight();
 		}
 	}
 

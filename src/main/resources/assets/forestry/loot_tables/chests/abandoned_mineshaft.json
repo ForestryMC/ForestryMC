@@ -6,22 +6,22 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "forestry:brokenBronzeShovel",
+                    "name": "forestry:broken_bronze_shovel",
                     "weight": 10
                 },
                 {
                     "type": "item",
-                    "name": "forestry:brokenBronzePickaxe",
+                    "name": "forestry:broken_bronze_pickaxe",
                     "weight": 30
                 },
                 {
                     "type": "item",
-                    "name": "forestry:kitPickaxe",
+                    "name": "forestry:kit_pickaxe",
                     "weight": 10
                 },
                 {
                     "type": "item",
-                    "name": "forestry:kitShovel",
+                    "name": "forestry:kit_shovel",
                     "weight": 5
                 },
                 {
@@ -36,7 +36,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "forestry:minerBag",
+                    "name": "forestry:miner_bag",
                     "weight": 1
                 },
                 {
@@ -52,7 +52,7 @@
                 {
                     "type": "item",
                     "entryName": "bee_steadfast_drone",
-                    "name": "forestry:beeDroneGE",
+                    "name": "forestry:bee_drone_ge",
                     "functions": [
                         {
                             "function": "set_species_nbt",

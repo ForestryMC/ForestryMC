@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
 
@@ -31,7 +31,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 	}
 
 	public static boolean isResource(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return false;
 		}
 
@@ -44,6 +44,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 		return false;
 	}
 
+	@Nullable
 	public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
 		for (IMoistenerRecipe recipe : recipes) {
 			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {

@@ -9,6 +9,8 @@ import forestry.api.core.ILocatable;
 
 public interface IClimateControlProvider extends ILocatable {
 
-	IClimateControl getClimateControl();
+	IClimateInfo getControlClimate();
 	
+	void setControlClimate(IClimateInfo climateControl);
+
 }

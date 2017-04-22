@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-
 import net.minecraftforge.oredict.OreDictionary;
 
 public class Stack {
@@ -48,11 +48,8 @@ public class Stack {
 		return stacks;
 	}
 
+	@Nullable
 	public static Stack parseStackString(String stackString, int missingMetaValue) {
-		if (stackString == null) {
-			return null;
-		}
-
 		stackString = stackString.trim();
 		if (stackString.isEmpty()) {
 			return null;
@@ -82,6 +79,7 @@ public class Stack {
 		return new Stack(name, meta);
 	}
 
+	@Nullable
 	public Item getItem() {
 		Item item = ItemStackUtil.getItemFromRegistry(name);
 		if (item == null) {
@@ -90,6 +88,7 @@ public class Stack {
 		return item;
 	}
 
+	@Nullable
 	public Block getBlock() {
 		Block block = ItemStackUtil.getBlockFromRegistry(name);
 		if (block == null) {

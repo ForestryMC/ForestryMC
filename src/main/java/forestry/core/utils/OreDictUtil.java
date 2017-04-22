@@ -8,6 +8,7 @@ public class OreDictUtil {
 	public static final String BLOCK_COPPER = "blockCopper";
 	public static final String BLOCK_TIN = "blockTin";
 	public static final String BLOCK_BRONZE = "blockBronze";
+	public static final String BLOCK_CHARCOAL = "blockCharcoal";
 	public static final String GEM_APATITE = "gemApatite";
 	public static final String INGOT_COPPER = "ingotCopper";
 	public static final String INGOT_TIN = "ingotTin";
@@ -66,7 +67,7 @@ public class OreDictUtil {
 	public static final String GEM_QUARTZ = "gemQuartz";
 	public static final String CHEST_WOOD = "chestWood";
 	public static final String LEATHER = "leather";
-	
+
 	public static final String DYE_YELLOW = "dyeYellow";
 	public static final String DYE_BLUE = "dyeBlue";
 	public static final String DYE_RED = "dyeRed";

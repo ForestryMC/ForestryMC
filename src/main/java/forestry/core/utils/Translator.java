@@ -9,6 +9,7 @@ public class Translator {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public static String translateToLocal(String key) {
 		if (I18n.canTranslate(key)) {
 			return I18n.translateToLocal(key);
@@ -17,6 +18,7 @@ public class Translator {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static boolean canTranslateToLocal(String key) {
 		return I18n.canTranslate(key);
 	}

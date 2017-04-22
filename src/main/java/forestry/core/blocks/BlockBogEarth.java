@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.PluginCore;
+import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,19 +32,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.PluginCore;
-import forestry.core.config.Constants;
 
 /**
  * bog earth, which becomes peat
@@ -53,14 +51,13 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 		BOG_EARTH("bog_earth"),
 		PEAT("peat");
 
-		@Nonnull
+
 		private final String name;
 
-		SoilType(@Nonnull String name) {
+		SoilType(String name) {
 			this.name = name;
 		}
-		
-		@Nonnull
+
 		@Override
 		public String getName() {
 			return name;
@@ -84,7 +81,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 
 		setDefaultState(this.blockState.getBaseState().withProperty(MATURITY, 0));
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(MATURITY);
@@ -113,7 +110,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 		SoilType type = SoilType.fromMaturity(maturity);
 
 		if (type == SoilType.PEAT) {
-			ret.add(PluginCore.items.peat.getItemStack(2));
+			ret.add(PluginCore.getItems().peat.getItemStack(2));
 			ret.add(new ItemStack(Blocks.DIRT));
 		} else {
 			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
@@ -166,8 +163,8 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, 0));
 	}
 
 	/* MODELS */

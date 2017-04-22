@@ -10,19 +10,22 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.core.utils.Log;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
 	private final Class<T> controllerClass;
 	private boolean visited;
 	private boolean saveMultiblockData;
+	@Nullable
 	private NBTTagCompound cachedMultiblockData;
+	@Nullable
 	protected T controller;
 
 	protected MultiblockLogic(Class<T> controllerClass) {
@@ -33,7 +36,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 		this.cachedMultiblockData = null;
 	}
 
-	public void setController(IMultiblockControllerInternal controller) {
+	public void setController(@Nullable IMultiblockControllerInternal controller) {
 		if (controller == null) {
 			this.controller = null;
 		} else if (controllerClass.isAssignableFrom(controller.getClass())) {
@@ -52,12 +55,13 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 
 	/**
 	 * This is called when a block is being marked as valid by the chunk, but has not yet fully
-	 * been placed into the world's TileEntity cache. this.worldObj, xCoord, yCoord and zCoord have
+	 * been placed into the world's TileEntity cache. this.world, xCoord, yCoord and zCoord have
 	 * been initialized, but any attempts to read data about the world can cause infinite loops -
 	 * if you call getTileEntity on this TileEntity's coordinate from within validate(), you will
 	 * blow your call stack.
-	 *
+	 * <p>
 	 * TL;DR: Here there be dragons.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#validate()
 	 */
 	@Override
@@ -68,6 +72,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	/**
 	 * Called when a block is removed by game actions, such as a player breaking the block
 	 * or the block being changed into another block.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#invalidate()
 	 */
 	@Override
@@ -79,6 +84,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * Called from Minecraft's tile entity loop, after all tile entities have been ticked,
 	 * as the chunk in which this tile entity is contained is unloading.
 	 * Happens before the Forge TickEnd event.
+	 *
 	 * @see net.minecraft.tileentity.TileEntity#onChunkUnload()
 	 */
 	@Override
@@ -113,7 +119,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		if (isMultiblockSaveDelegate() && isConnected()) {
+		if (isMultiblockSaveDelegate() && this.controller != null) {
 			NBTTagCompound multiblockData = new NBTTagCompound();
 			this.controller.writeToNBT(multiblockData);
 			data.setTag("multiblockData", multiblockData);
@@ -162,6 +168,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 		return this.cachedMultiblockData != null;
 	}
 
+	@Nullable
 	public final NBTTagCompound getMultiblockSaveData() {
 		return this.cachedMultiblockData;
 	}
@@ -174,11 +181,12 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * Override this to easily modify the description packet's data without having
 	 * to worry about sending the packet itself.
 	 * Decode this data in decodeDescriptionPacket.
+	 *
 	 * @param packetData An NBT compound tag into which you should write your custom description data.
 	 */
 	@Override
 	public void encodeDescriptionPacket(NBTTagCompound packetData) {
-		if (this.isMultiblockSaveDelegate() && isConnected()) {
+		if (this.isMultiblockSaveDelegate() && controller != null) {
 			NBTTagCompound tag = new NBTTagCompound();
 			controller.formatDescriptionPacket(tag);
 			packetData.setTag("multiblockData", tag);
@@ -188,13 +196,14 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	/**
 	 * Override this to easily read in data from a TileEntity's description packet.
 	 * Encoded in encodeDescriptionPacket.
+	 *
 	 * @param packetData The NBT data from the tile entity's description packet.
 	 */
 	@Override
 	public void decodeDescriptionPacket(NBTTagCompound packetData) {
 		if (packetData.hasKey("multiblockData")) {
 			NBTTagCompound tag = packetData.getCompoundTag("multiblockData");
-			if (isConnected()) {
+			if (controller != null) {
 				controller.decodeDescriptionPacket(tag);
 			} else {
 				// This part hasn't been added to a machine yet, so cache the data.

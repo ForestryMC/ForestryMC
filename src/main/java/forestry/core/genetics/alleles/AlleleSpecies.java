@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,7 @@ import java.util.Map;
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
@@ -30,8 +31,10 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
+import forestry.plugins.ForestryPluginUids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
@@ -45,15 +48,16 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	private boolean isCounted = true;
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
+	@Nullable
 	private Integer complexityOverride = null;
 
-	protected AlleleSpecies(@Nonnull String uid,
-			@Nonnull String unlocalizedName,
-			@Nonnull String authority,
-			@Nonnull String unlocalizedDescription,
-			boolean isDominant,
-			@Nonnull IClassification branch,
-			@Nonnull String binomial) {
+	protected AlleleSpecies(String uid,
+							String unlocalizedName,
+							String authority,
+							String unlocalizedDescription,
+							boolean isDominant,
+							IClassification branch,
+							String binomial) {
 		super(uid, unlocalizedName, isDominant);
 
 		this.branch = branch;
@@ -69,12 +73,12 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null) {
+		if (itemstack.isEmpty()) {
 			return 0f;
 		}
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
 			Item item = itemstack.getItem();
 			if (beeItems.honeyDrop == item) {
 				return 0.5f;
@@ -112,7 +116,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
 			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
 			if (!allMutations.isEmpty()) {
@@ -132,11 +136,13 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 				}
 
 				ItemStack researchNote = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, chosenMutation);
-				return new ItemStack[]{researchNote};
+				NonNullList<ItemStack> bounty = NonNullList.create();
+				bounty.add(researchNote);
+				return bounty;
 			}
 		}
 
-		return ItemStackUtil.EMPTY_STACK_ARRAY;
+		return NonNullList.create();
 	}
 
 	@Override

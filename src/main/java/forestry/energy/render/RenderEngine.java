@@ -12,20 +12,21 @@ package forestry.energy.render;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	private final ModelRenderer boiler;
@@ -50,7 +51,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
-	public RenderEngine() {
+	public RenderEngine(String baseTexture) {
 		ModelBase model = new EngineModelBase();
 		boiler = new ModelRenderer(model, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
@@ -75,10 +76,6 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		extension.rotationPointX = 8F;
 		extension.rotationPointY = 8F;
 		extension.rotationPointZ = 8F;
-	}
-
-	public RenderEngine(String baseTexture) {
-		this();
 
 		textures = new ResourceLocation[]{
 				new ForestryResource(baseTexture + "base.png"),
@@ -90,15 +87,18 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
-	
+
 	@Override
 	public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (engine != null) {
-			IBlockState blockState = engine.getWorldObj().getBlockState(engine.getPos());
-			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
-				EnumFacing facing = blockState.getValue(BlockBase.FACING);
-				render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
-				return;
+			World worldObj = engine.getWorldObj();
+			if (worldObj.isBlockLoaded(engine.getPos())) {
+				IBlockState blockState = worldObj.getBlockState(engine.getPos());
+				if (blockState.getBlock() instanceof BlockBase) {
+					EnumFacing facing = blockState.getValue(BlockBase.FACING);
+					render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
+					return;
+				}
 			}
 		}
 		render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
@@ -154,10 +154,11 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textures[Textures.BASE.ordinal()]);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textures[Textures.BASE.ordinal()]);
 		boiler.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.PISTON.ordinal()]);
+		textureManager.bindTexture(textures[Textures.PISTON.ordinal()]);
 		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		piston.render(factor);
 		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
@@ -183,10 +184,10 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 				break;
 
 		}
-		Proxies.render.bindTexture(texture);
+		textureManager.bindTexture(texture);
 		trunk.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		textureManager.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		float chamberf = 2F / 16F;
 
 		if (step > 0) {

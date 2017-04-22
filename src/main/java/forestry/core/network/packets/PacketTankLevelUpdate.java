@@ -10,60 +10,60 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.core.fluids.ITankManager;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketTankLevelUpdate extends PacketCoordinates implements IForestryPacketClient {
+public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos pos;
+	private final int tankIndex;
+	@Nullable
+	private final FluidStack contents;
 
-	private int tankIndex;
-	private FluidStack contents;
-
-	public PacketTankLevelUpdate() {
-	}
-
-	public PacketTankLevelUpdate(ILiquidTankTile tileEntity, int tankIndex, FluidStack contents) {
-		super(tileEntity.getCoordinates());
+	public PacketTankLevelUpdate(ILiquidTankTile tileEntity, int tankIndex, @Nullable FluidStack contents) {
+		this.pos = tileEntity.getCoordinates();
 		this.tankIndex = tankIndex;
 		this.contents = contents;
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.TANK_LEVEL_UPDATE;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeVarInt(tankIndex);
 		data.writeFluidStack(contents);
 	}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		tankIndex = data.readVarInt();
-		contents = data.readFluidStack();
-	}
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tileEntity = getTarget(Proxies.common.getRenderWorld());
-		if (tileEntity instanceof ILiquidTankTile) {
-			ITankManager tankManager = ((ILiquidTankTile) tileEntity).getTankManager();
-			tankManager.processTankUpdate(tankIndex, contents);
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			int tankIndex = data.readVarInt();
+			FluidStack contents = data.readFluidStack();
+
+			TileUtil.actOnTile(player.world, pos, ILiquidTankTile.class, tile -> {
+				ITankManager tankManager = tile.getTankManager();
+				tankManager.processTankUpdate(tankIndex, contents);
+			});
 		}
-	}
-
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TANK_LEVEL_UPDATE;
 	}
 }

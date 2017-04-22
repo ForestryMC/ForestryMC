@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImprinter> implements IGuiSelectable {
 
@@ -34,15 +32,15 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packetRequest) {
-		if (packetRequest.getPrimaryIndex() == 0) {
-			if (packetRequest.getSecondaryIndex() == 0) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+		if (primary == 0) {
+			if (secondary == 0) {
 				inventory.advancePrimary();
 			} else {
 				inventory.regressPrimary();
 			}
 		} else {
-			if (packetRequest.getSecondaryIndex() == 0) {
+			if (secondary == 0) {
 				inventory.advanceSecondary();
 			} else {
 				inventory.regressSecondary();
@@ -50,11 +48,11 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 		}
 
 		PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
-		Proxies.net.sendToPlayer(packetResponse, player);
+		NetworkUtil.sendToPlayer(packetResponse, player);
 	}
 
-	public void setSelection(PacketImprintSelectionResponse packetPayload) {
-		inventory.setPrimaryIndex(packetPayload.getPrimaryIndex());
-		inventory.setSecondaryIndex(packetPayload.getSecondaryIndex());
+	public void setSelection(int primary, int secondary) {
+		inventory.setPrimaryIndex(primary);
+		inventory.setSecondaryIndex(secondary);
 	}
 }

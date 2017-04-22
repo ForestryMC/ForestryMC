@@ -10,25 +10,22 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.command.ICommand;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketRegistry;
+import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 
 public abstract class BlankForestryPlugin implements IForestryPlugin {
 
@@ -47,7 +44,6 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 		return "";
 	}
 
-	@Nonnull
 	@Override
 	public Set<String> getDependencyUids() {
 		Set<String> dependencyUids = new HashSet<>();

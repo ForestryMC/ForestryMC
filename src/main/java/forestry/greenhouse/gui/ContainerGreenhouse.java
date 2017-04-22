@@ -10,30 +10,28 @@
  ******************************************************************************/
 package forestry.greenhouse.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
-import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouse;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 
 	public ContainerGreenhouse(InventoryPlayer playerInventory, TileGreenhouse tile) {
 		super(tile, playerInventory, 8, 84);
-		
+
 		addSlotToContainer(new SlotLiquidIn(tile, 0, 125, 37));
 	}
-	
+
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}
-	
+
 	public IFluidTank getTank(int slot) {
 		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
 	}

@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.core.IErrorStateRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ErrorStateRegistry implements IErrorStateRegistry {

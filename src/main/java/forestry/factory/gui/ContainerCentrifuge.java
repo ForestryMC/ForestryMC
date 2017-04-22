@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.factory.tiles.TileCentrifuge;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
@@ -30,7 +30,7 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
 		// Craft Preview display
 		addSlotToContainer(new SlotLocked(tile.getCraftPreviewInventory(), 0, 49, 37));
-		
+
 		// Product Inventory
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
@@ -38,8 +38,8 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 			}
 		}
 	}
-	
-	private ItemStack oldCraftPreview;
+
+	private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
 	@Override
 	public void detectAndSendChanges() {

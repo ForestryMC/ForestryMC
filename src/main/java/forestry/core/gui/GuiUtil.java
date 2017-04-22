@@ -13,38 +13,35 @@ package forestry.core.gui;
 import java.util.Collection;
 import java.util.List;
 
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
-
+@SideOnly(Side.CLIENT)
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
 		FontRenderer font = null;
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			font = stack.getItem().getFontRenderer(stack);
 		}
 		if (font == null) {
 			font = gui.getFontRenderer();
 		}
 
-		RenderItem itemRender = Proxies.common.getClientInstance().getRenderItem();
+		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
 
 	public static void drawToolTips(GuiForestry gui, ToolTip toolTips, int mouseX, int mouseY) {
-		if (toolTips == null) {
-			return;
-		}
-
 		List<String> lines = toolTips.getLines();
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();

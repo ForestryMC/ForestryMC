@@ -19,7 +19,7 @@ public enum EnumResourceType implements IStringSerializable {
 	COPPER(1, true),
 	TIN(2, true),
 	BRONZE(3, false);
-	
+
 	public static final EnumResourceType[] VALUES = values();
 
 	private final int meta;
@@ -33,7 +33,7 @@ public enum EnumResourceType implements IStringSerializable {
 	public int getMeta() {
 		return meta;
 	}
-	
+
 	public boolean hasOre() {
 		return hasOre;
 	}

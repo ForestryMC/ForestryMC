@@ -5,9 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
+
 /**
  * Biological classifications from domain down to genus.
- *
+ * <p>
  * Used by the *alyzers to display hierarchies.
  */
 public interface IClassification {
@@ -62,12 +64,12 @@ public interface IClassification {
 	/**
 	 * A branch approximates a "genus" in real life. Real life examples: "Micrapis", "Megapis"
 	 *
-	 * @return flavour text (may be null)
+	 * @return flavour text
 	 */
 	String getScientific();
 
 	/**
-	 * @return Localized description of this branch. (May be null.)
+	 * @return Localized description of this branch.
 	 */
 	String getDescription();
 
@@ -88,20 +90,17 @@ public interface IClassification {
 
 	/**
 	 * Used by the allele registry to populate internal collection of branch members on the fly.
-	 *
-	 * @param species
 	 */
 	void addMemberSpecies(IAlleleSpecies species);
 
 	/**
 	 * @return Parent classification, null if this is root.
 	 */
+	@Nullable
 	IClassification getParent();
 
 	/**
 	 * Only used internally by the AlleleRegistry if this classification has been added to another one.
-	 *
-	 * @param parent
 	 */
 	void setParent(IClassification parent);
 }

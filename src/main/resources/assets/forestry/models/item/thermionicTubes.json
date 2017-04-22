@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "forestry:items/thermionicTubes.0",
-		"layer1": "forestry:items/thermionicTubes.1"
-    }
-}

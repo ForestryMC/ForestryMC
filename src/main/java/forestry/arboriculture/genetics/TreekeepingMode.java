@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import forestry.api.arboriculture.ITreeGenome;
@@ -44,8 +46,8 @@ public class TreekeepingMode implements ITreekeepingMode {
 	}
 
 	@Override
-	public ArrayList<String> getDescription() {
-		ArrayList<String> ret = new ArrayList<>();
+	public List<String> getDescription() {
+		List<String> ret = new ArrayList<>();
 		ret.add("treemode." + name.toLowerCase(Locale.ENGLISH) + ".desc");
 		return ret;
 	}
@@ -56,7 +58,7 @@ public class TreekeepingMode implements ITreekeepingMode {
 	}
 
 	@Override
-	public float getYieldModifier(ITreeGenome genome, float currentModifier) {
+	public float getYieldModifier(@Nullable ITreeGenome genome, float currentModifier) {
 		return yieldModifier;
 	}
 

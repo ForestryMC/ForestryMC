@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
-import net.minecraft.world.World;
-
 import forestry.api.multiblock.IMultiblockLogicGreenhouse;
 import forestry.core.multiblock.MultiblockLogic;
+import net.minecraft.world.World;
 
 public class MultiblockLogicGreenhouse extends MultiblockLogic<IGreenhouseControllerInternal> implements IMultiblockLogicGreenhouse {
 
@@ -23,7 +22,7 @@ public class MultiblockLogicGreenhouse extends MultiblockLogic<IGreenhouseContro
 
 	@Override
 	public IGreenhouseControllerInternal getController() {
-		if (super.isConnected()) {
+		if (controller != null) {
 			return controller;
 		} else {
 			return FakeGreenhouseController.instance;

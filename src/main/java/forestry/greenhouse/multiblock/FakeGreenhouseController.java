@@ -11,25 +11,21 @@
 package forestry.greenhouse.multiblock;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
-import forestry.api.climate.IClimateControl;
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateRegion;
-import forestry.api.greenhouse.EnumGreenhouseEventType;
-import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.multiblock.IGreenhouseComponent.Nursery;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
+import forestry.core.climate.ClimateInfo;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
@@ -39,13 +35,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	private FakeGreenhouseController() {
 	}
 
-	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return FakeInventoryAdapter.instance();
 	}
 
-	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
@@ -58,17 +52,17 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public ItemStack getCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
-
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
+		return false;
 	}
 
 	@Override
@@ -78,16 +72,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public BlockPos getCoordinates() {
-		return null;
-	}
-
-	@Override
-	public List<IGreenhouseLogic> getLogics() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public void onChange(EnumGreenhouseEventType type, Object event) {
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
@@ -106,11 +91,12 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public void clearRegion() {
-	}
-
-	@Override
 	public Set<Listener> getListenerComponents() {
+		return Collections.emptySet();
+	}
+	
+	@Override
+	public Set<Nursery> getButterflyNurserys() {
 		return Collections.emptySet();
 	}
 
@@ -120,12 +106,22 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public IClimateControl getClimateControl() {
-		return DefaultClimateControl.instance;
+	public IClimateInfo getControlClimate() {
+		return ClimateInfo.MAX;
+	}
+	
+	@Override
+	public void setControlClimate(IClimateInfo climateControl) {
+		
+	}
+	
+	@Override
+	public boolean spawnButterfly(Nursery nursery) {
+		return false;
 	}
 
 	@Override
-	public ButterflyHatch getButterflyHatch() {
-		return null;
+	public boolean spawnButterfly(IButterfly butterfly) {
+		return false;
 	}
 }

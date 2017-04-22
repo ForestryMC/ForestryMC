@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
@@ -29,12 +19,25 @@ import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.ILiquidTankTile;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
 	private final HygroregulatorRecipe[] recipes;
@@ -43,6 +46,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	private final FilteredTank liquidTank;
 	private final IInventoryAdapter inventory;
 
+	@Nullable
 	private HygroregulatorRecipe currentRecipe;
 	private int transferTime;
 
@@ -50,7 +54,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		super(BlockAlvearyType.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
-		
+
 		Fluid water = FluidRegistry.WATER;
 		Fluid lava = FluidRegistry.LAVA;
 		Fluid liquidIce = Fluids.ICE.getFluid();
@@ -75,6 +79,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	/* UPDATING */
+	@Nullable
 	private HygroregulatorRecipe getRecipe(FluidStack liquid) {
 		HygroregulatorRecipe recipe = null;
 		for (HygroregulatorRecipe rec : recipes) {
@@ -88,12 +93,15 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	@Override
 	public void changeClimate(int tickCount, IClimateControlled climateControlled) {
-		if (transferTime <= 0 && liquidTank.getFluidAmount() > 0) {
-			currentRecipe = getRecipe(liquidTank.getFluid());
+		if (transferTime <= 0) {
+			FluidStack fluid = liquidTank.getFluid();
+			if (fluid != null && fluid.amount > 0) {
+				currentRecipe = getRecipe(fluid);
 
-			if (currentRecipe != null) {
-				liquidTank.drainInternal(currentRecipe.liquid.amount, true);
-				transferTime = currentRecipe.transferTime;
+				if (currentRecipe != null) {
+					liquidTank.drainInternal(currentRecipe.liquid.amount, true);
+					transferTime = currentRecipe.transferTime;
+				}
 			}
 		}
 
@@ -128,7 +136,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		}
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -144,22 +152,21 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	/* ILIQUIDTANKCONTAINER */
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (super.hasCapability(capability, facing)) {
-			return true;
-		}
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {
 			return super.getCapability(capability, facing);
 		}
@@ -170,12 +177,13 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiAlvearyHygroregulator(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerAlvearyHygroregulator(player.inventory, this);
 	}
 

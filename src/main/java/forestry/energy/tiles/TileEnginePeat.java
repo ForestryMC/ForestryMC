@@ -12,8 +12,6 @@ package forestry.energy.tiles;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.fuels.FuelManager;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -21,27 +19,27 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
-	private Item fuelItem;
-	private int fuelItemMeta;
+	private ItemStack fuel = ItemStack.EMPTY;
 	private int burnTime;
 	private int totalBurnTime;
 	private int ashProduction;
@@ -57,7 +55,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	private int getFuelSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL) == null) {
+		if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL).isEmpty()) {
 			return -1;
 		}
 
@@ -72,15 +70,15 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
 			ItemStack waste = inventory.getStackInSlot(i);
-			if (waste == null) {
+			if (waste.isEmpty()) {
 				return i;
 			}
 
-			if (waste.getItem() != PluginCore.items.ash) {
+			if (waste.getItem() != PluginCore.getItems().ash) {
 				continue;
 			}
 
-			if (waste.stackSize < 64) {
+			if (waste.getCount() < waste.getMaxStackSize()) {
 				return i;
 			}
 		}
@@ -113,7 +111,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			addAsh(1);
 
 			if (isRedstoneActivated()) {
-				currentOutput = determineFuelValue(new ItemStack(fuelItem, 1, fuelItemMeta));
+				currentOutput = determineFuelValue(fuel);
 				energyManager.generateEnergy(currentOutput);
 			}
 		} else if (isRedstoneActivated()) {
@@ -124,8 +122,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 				IInventoryAdapter inventory = getInternalInventory();
 				ItemStack fuelStack = inventory.getStackInSlot(fuelSlot);
 				burnTime = totalBurnTime = determineBurnDuration(fuelStack);
-				if (burnTime > 0 && fuelStack != null) {
-					fuelItem = fuelStack.getItem();
+				if (burnTime > 0 && !fuelStack.isEmpty()) {
+					fuel = fuelStack.copy();
 					decrStackSize(fuelSlot, 1);
 				}
 			}
@@ -181,10 +179,10 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
 			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
-			if (wasteStack == null) {
-				inventory.setInventorySlotContents(wasteSlot, PluginCore.items.ash.getItemStack());
+			if (wasteStack.isEmpty()) {
+				inventory.setInventorySlotContents(wasteSlot, PluginCore.getItems().ash.getItemStack());
 			} else {
-				wasteStack.stackSize++;
+				wasteStack.grow(1);
 			}
 		}
 		// Reset
@@ -217,19 +215,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	/* AUTO-EJECTING */
 	private IInventory getWasteInventory() {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory == null) {
-			return null;
-		}
-
-		return new InventoryMapper(inventory, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
+		return new InventoryMapper(this, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
 	}
 
 	private void dumpStash() {
 		IInventory wasteInventory = getWasteInventory();
-		if (wasteInventory == null) {
-			return;
-		}
 
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
@@ -261,7 +251,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 
 		IInventoryAdapter inventory = getInternalInventory();
-		return (float) inventory.getStackInSlot(fuelSlot).stackSize / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(fuelSlot).getCount() / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
 	}
 
 	// / LOADING AND SAVING
@@ -269,13 +259,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
-
-		if (!fuelItemName.isEmpty()) {
-			fuelItem = ItemStackUtil.getItemFromRegistry(fuelItemName);
+		if (nbttagcompound.hasKey("EngineFuelItemStack")) {
+			NBTTagCompound fuelItemNbt = nbttagcompound.getCompoundTag("EngineFuelItemStack");
+			fuel = new ItemStack(fuelItemNbt);
 		}
 
-		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
 		burnTime = nbttagcompound.getInteger("EngineBurnTime");
 		totalBurnTime = nbttagcompound.getInteger("EngineTotalTime");
 		if (nbttagcompound.hasKey("AshProduction")) {
@@ -283,31 +271,30 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 	}
 
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 
-		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem", ItemStackUtil.getItemNameFromRegistryAsString(fuelItem));
+		if (!fuel.isEmpty()) {
+			nbttagcompound.setTag("EngineFuelItemStack", fuel.serializeNBT());
 		}
 
-		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);
 		nbttagcompound.setInteger("EngineBurnTime", burnTime);
 		nbttagcompound.setInteger("EngineTotalTime", totalBurnTime);
 		nbttagcompound.setInteger("AshProduction", ashProduction);
 		return nbttagcompound;
 	}
-	
+
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		super.writeGuiData(data);
 		data.writeInt(burnTime);
 		data.writeInt(totalBurnTime);
 	}
-	
+
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		burnTime = data.readInt();
 		totalBurnTime = data.readInt();
@@ -325,12 +312,13 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEnginePeat(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEnginePeat(player.inventory, this);
 	}
 }

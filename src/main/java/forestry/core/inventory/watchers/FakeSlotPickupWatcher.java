@@ -21,7 +21,7 @@ public class FakeSlotPickupWatcher implements ISlotPickupWatcher {
 	}
 
 	@Override
-	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, EntityPlayer player) {
 
 	}
 }

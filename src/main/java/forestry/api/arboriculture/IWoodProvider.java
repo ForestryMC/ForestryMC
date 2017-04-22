@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
@@ -19,25 +17,23 @@ public interface IWoodProvider {
 	void registerSprites(Item item, ITextureManager manager);
 
 	/**
-	 * 
 	 * @return The texture sprite of the wood.
 	 */
 	@SideOnly(Side.CLIENT)
-	@Nonnull
 	TextureAtlasSprite getSprite(boolean isTop);
-	
+
 	/**
 	 * @return A stack of wood from the tree to craft wood pile's or other things.
 	 */
 	ItemStack getWoodStack();
-
-	/**
-	 * @return how long this wood's charcoal burns / 1000
-	 */
-	int getCombustibility();
-
+	
 	/**
 	 * The amount of charcoal dropped from a charcoal pile of this wood.
 	 */
 	int getCarbonization();
+
+	/**
+	 * The chance that a pile has to drop a extra charcoal
+	 */
+	float getCharcoalChance(int numberOfCharcoal);
 }

@@ -1,6 +1,8 @@
 package forestry.core.blocks;
 
-import java.util.List;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -9,12 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
 
 public class BlockResourceStorage extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> STORAGE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class);
@@ -26,7 +25,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 		setCreativeTab(CreativeTabForestry.tabForestry);
 		setDefaultState(this.blockState.getBaseState().withProperty(STORAGE_RESOURCES, EnumResourceType.APATITE));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, STORAGE_RESOURCES);
@@ -41,11 +40,11 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(STORAGE_RESOURCES, EnumResourceType.VALUES[meta]);
 	}
-	
+
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List<ItemStack> itemList) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumResourceType resourceType : EnumResourceType.VALUES) {
-			itemList.add(get(resourceType));
+			list.add(get(resourceType));
 		}
 	}
 
@@ -53,11 +52,11 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(EnumResourceType resourceType : EnumResourceType.VALUES){
+		for (EnumResourceType resourceType : EnumResourceType.VALUES) {
 			manager.registerItemModel(item, resourceType.getMeta(), "storage/" + resourceType.getName());
 		}
 	}

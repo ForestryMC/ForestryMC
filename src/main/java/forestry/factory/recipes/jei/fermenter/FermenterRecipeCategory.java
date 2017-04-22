@@ -1,7 +1,5 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import javax.annotation.Nonnull;
-
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
@@ -20,48 +18,45 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 
 	private static final int resourceSlot = 0;
 	private static final int fuelSlot = 1;
-	
+
 	private static final int inputTank = 0;
 	private static final int outputTank = 1;
-	
-	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/fermenter.png");
-	@Nonnull
+
+	private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/fermenter.png");
+
 	private final IDrawableAnimated progressBar0;
-	@Nonnull
 	private final IDrawableAnimated progressBar1;
-	@Nonnull
 	private final IDrawable tankOverlay;
-	
+
 	public FermenterRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "tile.for.fermenter.name");
-		
+
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 60, 4, 18);
 		this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);
 		IDrawableStatic progressBarDrawable1 = guiHelper.createDrawable(guiTexture, 176, 78, 4, 18);
 		this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
 	}
-	
-	@Nonnull
+
 	@Override
 	public String getUid() {
 		return ForestryRecipeCategoryUid.FERMENTER;
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		progressBar0.draw(minecraft, 40, 14);
 		progressBar1.draw(minecraft, 64, 28);
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FermenterRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, FermenterRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		
+
 		guiItemStacks.init(resourceSlot, true, 50, 4);
 		guiItemStacks.init(fuelSlot, true, 40, 38);
-		
+
 		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 3000, false, tankOverlay);
 		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 3000, false, tankOverlay);
 

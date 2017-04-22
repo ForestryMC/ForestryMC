@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-
 import forestry.core.gui.GuiForestry;
-import forestry.core.proxy.Proxies;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class WidgetManager {
 
 	public final GuiForestry gui;
@@ -26,7 +28,7 @@ public class WidgetManager {
 
 	public WidgetManager(GuiForestry gui) {
 		this.gui = gui;
-		this.minecraft = Proxies.common.getClientInstance();
+		this.minecraft = Minecraft.getMinecraft();
 	}
 
 	public void add(Widget slot) {
@@ -45,6 +47,7 @@ public class WidgetManager {
 		return widgets;
 	}
 
+	@Nullable
 	public Widget getAtPosition(int mX, int mY) {
 		for (Widget slot : widgets) {
 			if (slot.isMouseOver(mX, mY)) {
@@ -68,10 +71,12 @@ public class WidgetManager {
 		}
 	}
 
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+		boolean hasToStop = false;
 		for (Widget slot : widgets) {
-			slot.handleMouseRelease(mouseX, mouseY, eventType);
+			hasToStop|=slot.handleMouseRelease(mouseX, mouseY, eventType);
 		}
+		return hasToStop;
 	}
 
 	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {

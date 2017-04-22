@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.world.World;
-
 import forestry.api.multiblock.IMultiblockLogicFarm;
 import forestry.core.multiblock.MultiblockLogic;
+import net.minecraft.world.World;
 
 public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal> implements IMultiblockLogicFarm {
 	public MultiblockLogicFarm() {
@@ -22,7 +21,7 @@ public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal
 
 	@Override
 	public IFarmControllerInternal getController() {
-		if (super.isConnected()) {
+		if (controller != null) {
 			return controller;
 		} else {
 			return FakeFarmController.instance;

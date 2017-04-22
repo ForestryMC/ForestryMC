@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import com.google.common.collect.HashMultimap;
-
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
+import com.google.common.collect.HashMultimap;
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -37,10 +35,24 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.PluginCore;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
+import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
 	private static final int ALLELE_ARRAY_SIZE = 2048;
+
+	/* ALLELES */
+	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
+	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
+	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
+	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
+	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
+	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
+
+	/*
+	 * Internal Set of all alleleHandlers, which trigger when an allele or branch is registered
+	 */
+	private final Set<IAlleleHandler> alleleHandlers = new HashSet<>();
 
 	/* SPECIES ROOT */
 	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<>(16);
@@ -56,13 +68,15 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ISpeciesRoot getSpeciesRoot(String uid) {
 		return rootMap.get(uid);
 	}
 
 	@Override
+	@Nullable
 	public ISpeciesRoot getSpeciesRoot(ItemStack stack) {
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return null;
 		}
 
@@ -75,25 +89,29 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz) {
+	@Nullable
+	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
 		for (ISpeciesRoot root : rootMap.values()) {
-			if (root.getMemberClass().isAssignableFrom(clz)) {
+			if (root.getMemberClass().isAssignableFrom(individualClass)) {
 				return root;
 			}
 		}
 		return null;
 	}
 
+	@Override
+	public ISpeciesRoot getSpeciesRoot(IIndividual individual) {
+		return individual.getGenome().getSpeciesRoot();
+	}
+
 	/* INDIVIDUALS */
 	@Override
 	public boolean isIndividual(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
 		return getSpeciesRoot(stack) != null;
 	}
 
 	@Override
+	@Nullable
 	public IIndividual getIndividual(ItemStack stack) {
 		ISpeciesRoot root = getSpeciesRoot(stack);
 		if (root == null) {
@@ -102,19 +120,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 		return root.getMember(stack);
 	}
-
-	/* ALLELES */
-	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
-	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
-	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
-	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
-	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
-	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
-
-	/*
-	 * Internal HashSet of all alleleHandlers, which trigger when an allele or branch is registered
-	 */
-	private final HashSet<IAlleleHandler> alleleHandlers = new HashSet<>();
 
 	public void initialize() {
 
@@ -146,24 +151,27 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
+		addValidAlleleTypes(allele, chromosomeTypes);
+
+		alleleMap.put(allele.getUID(), allele);
+		if (allele instanceof IAlleleSpecies) {
+			IClassification branch = ((IAlleleSpecies) allele).getBranch();
+			branch.addMemberSpecies((IAlleleSpecies) allele);
+		}
+
+		for (IAlleleHandler handler : this.alleleHandlers) {
+			handler.onRegisterAllele(allele);
+		}
+	}
+
+	@Override
+	public void addValidAlleleTypes(IAllele allele, IChromosomeType... chromosomeTypes) {
 		for (IChromosomeType chromosomeType : chromosomeTypes) {
 			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
 				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
 			}
 			allelesByType.put(chromosomeType, allele);
 			typesByAllele.put(allele, chromosomeType);
-		}
-
-		alleleMap.put(allele.getUID(), allele);
-		if (allele instanceof IAlleleSpecies) {
-			IClassification branch = ((IAlleleSpecies) allele).getBranch();
-			if (branch != null) {
-				branch.addMemberSpecies((IAlleleSpecies) allele);
-			}
-		}
-
-		for (IAlleleHandler handler : this.alleleHandlers) {
-			handler.onRegisterAllele(allele);
 		}
 	}
 
@@ -177,6 +185,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	@Nullable
 	public IAllele getAllele(String uid) {
 		IAllele allele = alleleMap.get(uid);
 
@@ -282,11 +291,11 @@ public class AlleleRegistry implements IAlleleRegistry {
 	/* RESEARCH */
 	@Override
 	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
-		return EnumNoteType.createSpeciesNoteStack(PluginCore.items.researchNote, researcher, species);
+		return EnumNoteType.createSpeciesNoteStack(PluginCore.getItems().researchNote, researcher, species);
 	}
 
 	@Override
 	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
-		return EnumNoteType.createMutationNoteStack(PluginCore.items.researchNote, researcher, mutation);
+		return EnumNoteType.createMutationNoteStack(PluginCore.getItems().researchNote, researcher, mutation);
 	}
 }

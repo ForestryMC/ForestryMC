@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import com.google.common.base.Predicate;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.PluginCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -23,27 +25,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.PluginCore;
-
 public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
-	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, new Predicate<EnumResourceType>(){
-		@Override
-		public boolean apply(EnumResourceType input) {
-			return input.hasOre();
-		}
-	});
-	
+	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
+
 	public BlockResourceOre() {
 		super(Material.ROCK);
 		setHardness(3F);
@@ -70,9 +62,9 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	@Override
 	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
 		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
-		
+
 		if (state.getValue(ORE_RESOURCES) == EnumResourceType.APATITE) {
-			this.dropXpOnBlockBreak(world, pos, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
+			this.dropXpOnBlockBreak(world, pos, MathHelper.getInt(world.rand, 1, 4));
 		}
 	}
 
@@ -89,7 +81,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 
 				int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
 				if (amount > 0) {
-					drops.add(PluginCore.items.apatite.getItemStack(amount));
+					drops.add(PluginCore.getItems().apatite.getItemStack(amount));
 				}
 				break;
 			}
@@ -112,9 +104,9 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumResourceType resourceType : ORE_RESOURCES.getAllowedValues()) {
-			itemList.add(get(resourceType, 1));
+			list.add(get(resourceType, 1));
 		}
 	}
 

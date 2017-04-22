@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
@@ -31,15 +27,19 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
 	private final EntityPlayer player;
 	private final List<ITradeStation> stations = new ArrayList<>();
 
+	@Nullable
 	private ITradeStationInfo currentTrade = null;
 
 	private int stationIndex = 0;
@@ -67,7 +67,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	public ContainerCatalogue(EntityPlayer player) {
 		this.player = player;
 
-		if (!player.worldObj.isRemote) {
+		if (!player.world.isRemote) {
 			rebuildStationsList();
 		}
 	}
@@ -87,14 +87,14 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	private void rebuildStationsList() {
 		stations.clear();
 
-		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.worldObj);
-		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.worldObj);
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.world);
+		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.world);
 
 		for (ITradeStation station : tradeStations.values()) {
 			ITradeStationInfo info = station.getTradeInfo();
 
 			// Filter out any trade stations which do not actually offer anything.
-			if (info.getTradegood() != null && FILTERS.get(currentFilter).contains(info.getState())) {
+			if (FILTERS.get(currentFilter).contains(info.getState())) {
 				stations.add(station);
 			}
 		}
@@ -104,51 +104,28 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public void nextPage() {
-		if (player.worldObj.isRemote) {
-			sendSelection(true);
-			return;
+		if (!stations.isEmpty()) {
+			stationIndex = (stationIndex + 1) % stations.size();
+			updateTradeInfo();
 		}
-
-		if (stations.isEmpty()) {
-			return;
-		}
-		stationIndex = (stationIndex + 1) % stations.size();
-		updateTradeInfo();
 	}
 
 	public void previousPage() {
-		if (player.worldObj.isRemote) {
-			sendSelection(false);
-			return;
+		if (!stations.isEmpty()) {
+			stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
+			updateTradeInfo();
 		}
-
-		if (stations.isEmpty()) {
-			return;
-		}
-		stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
-		updateTradeInfo();
 	}
 
 	public void cycleFilter() {
-		if (player.worldObj.isRemote) {
-			Proxies.net.sendToServer(new PacketGuiSelectRequest(2, 0));
-			return;
-		}
-
 		currentFilter = (currentFilter + 1) % FILTERS.size();
-
 		rebuildStationsList();
-	}
-
-	private static void sendSelection(boolean advance) {
-		int value = advance ? 0 : 1;
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(value, 0));
 	}
 
 	/* Managing Trade info */
 	private void updateTradeInfo() {
 		// Updating is done by the server.
-		if (player.worldObj.isRemote) {
+		if (player.world.isRemote) {
 			return;
 		}
 
@@ -162,15 +139,16 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
-		setTradeInfo(packet.tradeInfo);
+	public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
+		setTradeInfo(tradeInfo);
 	}
 
+	@Nullable
 	public ITradeStationInfo getTradeInfo() {
 		return currentTrade;
 	}
 
-	private void setTradeInfo(ITradeStationInfo info) {
+	private void setTradeInfo(@Nullable ITradeStationInfo info) {
 		currentTrade = info;
 	}
 
@@ -185,7 +163,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
-			Proxies.net.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
+			NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
 			needsSync = false;
 		}
 	}
@@ -211,9 +189,9 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
 
-		switch (packet.getPrimaryIndex()) {
+		switch (primary) {
 			case 0:
 				nextPage();
 				break;

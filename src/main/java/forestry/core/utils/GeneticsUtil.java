@@ -25,33 +25,29 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ILeafTranslator;
+import forestry.api.genetics.IIndividualTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.ISaplingTranslator;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
-import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GeneticsUtil {
 
 	public static boolean hasNaturalistEye(EntityPlayer player) {
-		if (player == null) {
-			return false;
-		}
-
-		ItemStack armorItemStack = player.inventory.armorInventory[3];
-		if (armorItemStack == null) {
+		ItemStack armorItemStack = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		if (armorItemStack.isEmpty()) {
 			return false;
 		}
 
@@ -65,34 +61,31 @@ public class GeneticsUtil {
 			return false;
 		}
 
-		return armorNaturalist.canSeePollination(player, armorItemStack, true);
+		return armorNaturalist != null && armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IButterflyNursery) {
-			return ((IButterflyNursery) tile).canNurse(butterfly);
-		}
-
-		// vanilla leaves can always be converted and then nurse
-		return getPollen(world, pos) != null;
+		IButterflyNursery tile = TileUtil.getTile(world, pos, IButterflyNursery.class);
+		return tile != null && tile.canNurse(butterfly);
 	}
 
 	/**
 	 * Returns an ICheckPollinatable that can be checked but not mated.
 	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
 	 */
+	@Nullable
 	public static ICheckPollinatable getCheckPollinatable(World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IPollinatable) {
-			return (IPollinatable) tile;
+		IPollinatable tile = TileUtil.getTile(world, pos, IPollinatable.class);
+		if (tile != null) {
+			return tile;
 		}
 
-		ITree pollen = getPollen(world, pos);
+		IIndividual pollen = getPollen(world, pos);
 		if (pollen != null) {
-			return new CheckPollinatableTree(pollen);
+			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+			if (root instanceof ISpeciesRootPollinatable) {
+				return ((ISpeciesRootPollinatable) root).createPollinatable(pollen);
+			}
 		}
 
 		return null;
@@ -101,83 +94,104 @@ public class GeneticsUtil {
 	/**
 	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
 	 */
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-
-		if (tile instanceof IPollinatable) {
-			return (IPollinatable) tile;
-		}
-
-		if (Config.pollinateVanillaTrees) {
-			ITree pollen = getPollen(world, pos);
+	@Nullable
+	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
+		IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
+		if (pollinatable == null && convertVanilla) {
+			final IIndividual pollen = getPollen(world, pos);
 			if (pollen != null) {
-				pollen.setLeaves(world, owner, pos);
-				return (IPollinatable) world.getTileEntity(pos);
+				ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+				if (root instanceof ISpeciesRootPollinatable) {
+					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
+					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
+				}
 			}
 		}
+		return pollinatable;
+	}
 
-		return null;
+	@Nullable
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, World world, BlockPos pos, boolean convertVanilla) {
+		IButterflyNursery nursery = getNursery(world, pos);
+		if (nursery == null && convertVanilla) {
+			IIndividual pollen = GeneticsUtil.getPollen(world, pos);
+			if (pollen instanceof ITree) {
+				ITree treeLeave = (ITree) pollen;
+				if (treeLeave.setLeaves(world, gameProfile, pos)) {
+					nursery = getNursery(world, pos);
+				}
+			}
+		}
+		return nursery;
+	}
+	
+	public static boolean canCreateNursery(World world, BlockPos pos){
+		IIndividual pollen = GeneticsUtil.getPollen(world, pos);
+		return pollen != null && pollen instanceof ITree;
+	}
+
+	@Nullable
+	public static IButterflyNursery getNursery(World world, BlockPos pos) {
+		return TileUtil.getTile(world, pos, IButterflyNursery.class);
 	}
 
 	/**
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
 	@Nullable
-	public static ITree getPollen(World world, final BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
+	public static IIndividual getPollen(World world, final BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return null;
+		}
 
-		if (tile instanceof ICheckPollinatable) {
-			return ((ICheckPollinatable) tile).getPollen();
+		ICheckPollinatable checkPollinatable = TileUtil.getTile(world, pos, ICheckPollinatable.class);
+		if (checkPollinatable != null) {
+			return checkPollinatable.getPollen();
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState == null) {
+		Block block = blockState.getBlock();
+		
+		if(TreeManager.treeRoot == null){
 			return null;
 		}
-		Block block = blockState.getBlock();
-
-		ILeafTranslator leafTranslator = AlleleManager.leafTranslators.get(block);
+		
+		IIndividualTranslator<IIndividual, IBlockState> leafTranslator = TreeManager.treeRoot.getTranslator(block);
 		if (leafTranslator == null) {
 			return null;
 		}
 
-		return leafTranslator.getTreeFromLeaf(blockState);
+		return leafTranslator.getIndividualFromObject(blockState);
 	}
 
+	@Nullable
 	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
-		if (itemStack == null) {
-			return null;
-		}
-
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
+		
+		if(TreeManager.treeRoot == null){
+			return null;
+		}
 
-		ISaplingTranslator saplingTranslator = AlleleManager.saplingTranslation.get(item);
+		IIndividualTranslator<IIndividual, ItemStack> saplingTranslator = TreeManager.treeRoot.getTranslator(item);
 		if (saplingTranslator == null) {
 			return null;
 		}
-		return saplingTranslator.getTreeFromSapling(itemStack);
+		return saplingTranslator.getIndividualFromObject(itemStack);
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
-		if (foreign == null) {
-			return null;
+		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
+			IIndividual individual = getGeneticEquivalent(foreign);
+			if (individual instanceof ITree) {
+				ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+				equivalent.setCount(foreign.getCount());
+				return equivalent;
+			}
 		}
-
-		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) != null) {
-			return foreign;
-		}
-
-		IIndividual individual = getGeneticEquivalent(foreign);
-		if (individual instanceof ITree) {
-			ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
-			equivalent.stackSize = foreign.stackSize;
-			return equivalent;
-		}
-
-		return null;
+		return foreign;
 	}
 
 	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {

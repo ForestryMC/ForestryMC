@@ -12,20 +12,18 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.Random;
 
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.IPlantable;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-
 public class AlleleEffectFertile extends AlleleEffectThrottled {
-	
+
 	private static final int MAX_BLOCK_FIND_TRIES = 5;
 
 	public AlleleEffectFertile() {
@@ -34,27 +32,29 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		
+
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
 		Vec3i area = getModifiedArea(genome, housing);
-		
+
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
 		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		int blockMaxY = housingCoordinates.getY() + area.getY() / 2 + 1;
 		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
-		
+
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
-				break;
+			if (world.getChunkProvider().getLoadedChunk(blockX >> 4, blockZ >> 4) != null) {
+				if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
+					break;
+				}
+				blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+				blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 			}
-			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
-		
+
 		return storedData;
 	}
-	
+
 	private static int getRandomOffset(Random random, int centrePos, int offset) {
 		return centrePos + random.nextInt(offset) - offset / 2;
 	}

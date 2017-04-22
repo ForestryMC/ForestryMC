@@ -5,36 +5,35 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import java.util.List;
+import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import forestry.api.climate.IClimateControl;
 import forestry.api.climate.IClimateControlProvider;
 import forestry.api.climate.IClimateRegion;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseHousing;
-import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
 
 public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateControlProvider {
 	
 	/**
-	 * Handle change events.
+	 * @return All internal blocks of the greenhouse.
 	 */
-	void onChange(EnumGreenhouseEventType type, Object event);
+	Set<IInternalBlock> getInternalBlocks();
+
+	/**
+	 * spawns a butterfly in a greenhouse
+	 * @return true if it has spawned it, and false if it has not
+	 */
+	boolean spawnButterfly(IGreenhouseComponent.Nursery nursery);
 	
 	/**
-	 * @return The logics of the greenhouse.
+	 * @deprecated use {@link #spawnButterfly(IButterflyCocoon)}
 	 */
-	List<IGreenhouseLogic> getLogics();
+	@Deprecated
+	boolean spawnButterfly(IButterfly butterfly);
 	
-	@Nullable
 	IClimateRegion getRegion();
-	
-	@Override
-	@Nonnull
-	IClimateControl getClimateControl();
 
 }

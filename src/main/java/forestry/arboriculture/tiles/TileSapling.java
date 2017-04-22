@@ -10,14 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreekeepingMode;
@@ -25,9 +18,13 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.worldgen.WorldGenArboriculture;
 import forestry.core.worldgen.WorldGenBase;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class TileSapling extends TileTreeContainer {
-
 	private int timesTicked = 0;
 
 	/* SAVING & LOADING */
@@ -38,7 +35,6 @@ public class TileSapling extends TileTreeContainer {
 		timesTicked = nbttagcompound.getInteger("TT");
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -66,30 +62,29 @@ public class TileSapling extends TileTreeContainer {
 			return false;
 		}
 
-		int maturity = getRequiredMaturity(worldObj, tree);
+		int maturity = getRequiredMaturity(world, tree);
 		if (timesTicked < maturity) {
 			return true;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), true);
+		WorldGenerator generator = tree.getTreeGenerator(world, getPos(), true);
 		if (generator instanceof WorldGenArboriculture) {
 			WorldGenArboriculture arboricultureGenerator = (WorldGenArboriculture) generator;
-			arboricultureGenerator.preGenerate(worldObj, rand, getPos());
-			return arboricultureGenerator.getValidGrowthPos(worldObj, getPos()) != null;
+			arboricultureGenerator.preGenerate(world, rand, getPos());
+			return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
 		} else {
 			return true;
 		}
 	}
 
 	public void tryGrow(Random random, boolean bonemealed) {
-
 		ITree tree = getTree();
 
 		if (tree == null) {
 			return;
 		}
 
-		int maturity = getRequiredMaturity(worldObj, tree);
+		int maturity = getRequiredMaturity(world, tree);
 		if (timesTicked < maturity) {
 			if (bonemealed) {
 				timesTicked = maturity;
@@ -97,16 +92,16 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), bonemealed);
+		WorldGenerator generator = tree.getTreeGenerator(world, getPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof WorldGenBase) {
-			generated = ((WorldGenBase) generator).generate(worldObj, random, getPos(), false);
+			generated = ((WorldGenBase) generator).generate(world, random, getPos(), false);
 		} else {
-			generated = generator.generate(worldObj, random, getPos());
+			generated = generator.generate(world, random, getPos());
 		}
 
 		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwnerHandler().getOwner());
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
 			breedingTracker.registerBirth(tree);
 		}
 	}

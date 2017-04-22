@@ -12,22 +12,24 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import forestry.apiculture.gui.ContainerImprinter;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.apiculture.gui.ContainerImprinter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketGuiSelect;
-
-public class PacketImprintSelectionResponse extends PacketGuiSelect implements IForestryPacketClient {
-
-	public PacketImprintSelectionResponse() {
-	}
+public class PacketImprintSelectionResponse extends ForestryPacket implements IForestryPacketClient {
+	private final int primary;
+	private final int secondary;
 
 	public PacketImprintSelectionResponse(int primaryIndex, int secondaryIndex) {
-		super(primaryIndex, secondaryIndex);
+		this.primary = primaryIndex;
+		this.secondary = secondaryIndex;
 	}
 
 	@Override
@@ -36,12 +38,22 @@ public class PacketImprintSelectionResponse extends PacketGuiSelect implements I
 	}
 
 	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Container container = player.openContainer;
-		if (!(container instanceof ContainerImprinter)) {
-			return;
-		}
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeVarInt(primary);
+		data.writeVarInt(secondary);
+	}
 
-		((ContainerImprinter) container).setSelection(this);
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			Container container = player.openContainer;
+			if (container instanceof ContainerImprinter) {
+				int primaryIndex = data.readVarInt();
+				int secondaryIndex = data.readVarInt();
+
+				((ContainerImprinter) container).setSelection(primaryIndex, secondaryIndex);
+			}
+		}
 	}
 }

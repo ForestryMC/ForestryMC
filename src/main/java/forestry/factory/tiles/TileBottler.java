@@ -10,19 +10,20 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.EnumMap;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.FluidHelper.FillStatus;
+import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -30,36 +31,52 @@ import forestry.factory.gui.ContainerBottler;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
 	private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;
 
+	private final EnumMap<EnumFacing, Boolean> canDump;
+	private boolean dumpingFluid = false;
+	@Nullable
 	private BottlerRecipe currentRecipe;
+	@SideOnly(Side.CLIENT)
+	public boolean isFillRecipe;
 
 	public TileBottler() {
-		super("bottler", 1100, 4000);
+		super(1100, 4000);
 
 		setInternalInventory(new InventoryBottler(this));
 
 		resourceTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(this, resourceTank);
+
+		canDump = new EnumMap<>(EnumFacing.class);
 	}
 
 	/* SAVING & LOADING */
-	@Nonnull
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound = super.writeToNBT(nbttagcompound);
@@ -71,17 +88,19 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		tankManager.readFromNBT(nbttagcompound);
-		checkRecipe();
+		checkEmptyRecipe();
+		checkFillRecipe();
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 	}
@@ -91,67 +110,223 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_INPUT_FULL_CAN);
+			ItemStack leftProcessingStack = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
+			ItemStack rightProcessingStack = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
+			if (leftProcessingStack.isEmpty()) {
+				ItemStack inputStack = getStackInSlot(InventoryBottler.SLOT_INPUT_FULL_CONTAINER);
+				if (!inputStack.isEmpty()) {
+					leftProcessingStack = decrStackSize(InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 1);
+					setInventorySlotContents(InventoryBottler.SLOT_EMPTYING_PROCESSING, leftProcessingStack);
+				}
+			}
+			if (rightProcessingStack.isEmpty()) {
+				ItemStack inputStack = getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER);
+				if (!inputStack.isEmpty()) {
+					rightProcessingStack = decrStackSize(InventoryBottler.SLOT_INPUT_EMPTY_CONTAINER, 1);
+					setInventorySlotContents(InventoryBottler.SLOT_FILLING_PROCESSING, rightProcessingStack);
+				}
+			}
 		}
+
+		if (canDump()) {
+			if (dumpingFluid || updateOnInterval(20)) {
+				dumpingFluid = dumpFluid();
+			}
+		}
+	}
+
+	private boolean canDump() {
+		FluidStack fluid = tankManager.getFluid(0);
+		if (fluid != null) {
+			if (canDump.isEmpty()) {
+				for (EnumFacing facing : EnumFacing.VALUES) {
+					canDump.put(facing, FluidHelper.canAcceptFluid(world, pos.offset(facing), facing.getOpposite(), fluid));
+				}
+			}
+
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if (canDump.get(facing)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean dumpFluid() {
+		if (!resourceTank.isEmpty()) {
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if (canDump.get(facing)) {
+					IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
+					if (fluidDestination != null) {
+						if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public boolean workCycle() {
-		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), true);
-		return status == FluidHelper.FillStatus.SUCCESS;
-	}
-
-	private void checkRecipe() {
-		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN);
-		FluidStack resource = resourceTank.getFluid();
-		if (resource == null) {
-			return;
+		FluidHelper.FillStatus status;
+		if (currentRecipe != null) {
+			if (currentRecipe.fillRecipe) {
+				status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
+			} else {
+				status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, true);
+			}
+		} else {
+			return true;
 		}
 
-		if (currentRecipe == null || !currentRecipe.matches(emptyCan, resource)) {
-			currentRecipe = BottlerRecipe.create(resource.getFluid(), emptyCan);
-			if (currentRecipe != null) {
-				float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
-				viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
+		if (status == FluidHelper.FillStatus.SUCCESS) {
+			currentRecipe = null;
+			return true;
+		}
+		return false;
+	}
 
-				int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
-				float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
-				fillTime *= viscosityMultiplier;
+	@Override
+	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborTileChange(world, pos, neighbor);
 
-				setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
-				setEnergyPerWorkCycle(Math.round(fillTime * ENERGY_PER_RECIPE_TIME));
+		canDump.clear();
+	}
+
+	private void checkFillRecipe() {
+		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
+		if (!emptyCan.isEmpty()) {
+			FluidStack resource = resourceTank.getFluid();
+			if (resource == null) {
+				return;
+			}
+			//Fill Container
+			if (currentRecipe == null || !currentRecipe.matchEmpty(emptyCan, resource)) {
+				currentRecipe = BottlerRecipe.createFillingRecipe(resource.getFluid(), emptyCan);
+				if (currentRecipe != null) {
+					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
+
+					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
+					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					fillTime *= viscosityMultiplier;
+
+					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
+					setEnergyPerWorkCycle(Math.round(fillTime * ENERGY_PER_RECIPE_TIME));
+				}
+			}
+		}
+	}
+
+	private void checkEmptyRecipe() {
+		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
+		if (!filledCan.isEmpty()) {
+			//Empty Container
+			if (currentRecipe == null || !currentRecipe.matchFilled(filledCan) && !currentRecipe.fillRecipe) {
+				currentRecipe = BottlerRecipe.createEmptyingRecipe(filledCan);
+				if (currentRecipe != null) {
+					FluidStack resource = currentRecipe.fluid;
+					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
+
+					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
+					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					fillTime *= viscosityMultiplier;
+
+					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
+					setEnergyPerWorkCycle(0);
+				}
 			}
 		}
 	}
 
 	@Override
+	public void onTake(int slotIndex, EntityPlayer player) {
+		if (slotIndex == InventoryBottler.SLOT_EMPTYING_PROCESSING) {
+			if (currentRecipe != null && !currentRecipe.fillRecipe) {
+				currentRecipe = null;
+				setTicksPerWorkCycle(0);
+			}
+		} else if (slotIndex == InventoryBottler.SLOT_FILLING_PROCESSING) {
+			if (currentRecipe != null && currentRecipe.fillRecipe) {
+				currentRecipe = null;
+				setTicksPerWorkCycle(0);
+			}
+		}
+	}
+
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
+		if (currentRecipe == null) {
+			data.writeBoolean(false);
+		} else {
+			data.writeBoolean(currentRecipe.fillRecipe);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
+		isFillRecipe = data.readBoolean();
+	}
+
+	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		ItemStack emptyCan = inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN);
-		if (emptyCan == null) {
+		ItemStack emptyCan = inventory.getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
+		if (emptyCan.isEmpty()) {
 			return false;
 		}
 
-		return (float) emptyCan.stackSize / (float) emptyCan.getMaxStackSize() > percentage;
+		return (float) emptyCan.getCount() / (float) emptyCan.getMaxStackSize() > percentage;
 	}
 
 	@Override
 	public boolean hasWork() {
-		checkRecipe();
-
+		FluidHelper.FillStatus emptyStatus;
+		FluidHelper.FillStatus fillStatus;
 		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.clearErrors();
 
-		FluidHelper.FillStatus status;
-
-		if (currentRecipe == null) {
-			status = FluidHelper.FillStatus.NO_FLUID;
+		checkEmptyRecipe();
+		if (currentRecipe != null) {
+			IFluidTankProperties properties = tankManager.getTankProperties()[0];
+			if (properties != null) {
+				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
+			} else {
+				emptyStatus = FillStatus.SUCCESS;
+			}
 		} else {
-			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), false);
+			emptyStatus = null;
+		}
+		if (emptyStatus == null || emptyStatus != FillStatus.SUCCESS) {
+			checkFillRecipe();
+			if (currentRecipe == null) {
+				return false;
+			} else {
+				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
+			}
+		} else {
+			return true;
 		}
 
-		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NO_RESOURCE_LIQUID);
-		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NO_SPACE_INVENTORY);
-		return status == FluidHelper.FillStatus.SUCCESS;
+		if (fillStatus == FillStatus.SUCCESS) {
+			return true;
+		}
+
+		errorLogic.setCondition(fillStatus == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(fillStatus == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NO_SPACE_INVENTORY);
+		errorLogic.setCondition(emptyStatus == FluidHelper.FillStatus.NO_SPACE_FLUID, EnumErrorCode.NO_SPACE_TANK);
+		if (emptyStatus == FillStatus.INVALID_INPUT || fillStatus == FillStatus.INVALID_INPUT || errorLogic.hasErrors()) {
+			currentRecipe = null;
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -160,20 +335,20 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	/* ILIQUIDCONTAINER */
-	@Nonnull
+
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
+
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}
@@ -192,12 +367,13 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 //	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiBottler(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerBottler(player.inventory, this);
 	}
 }

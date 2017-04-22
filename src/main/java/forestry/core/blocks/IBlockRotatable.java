@@ -8,5 +8,5 @@ import net.minecraft.world.World;
 public interface IBlockRotatable {
 
 	void rotateAfterPlacement(EntityPlayer player, World world, BlockPos pos, EnumFacing side);
-	
+
 }

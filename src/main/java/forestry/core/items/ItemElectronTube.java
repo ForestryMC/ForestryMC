@@ -21,13 +21,16 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemElectronTube extends ItemOverlay {
 
@@ -36,11 +39,12 @@ public class ItemElectronTube extends ItemOverlay {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
-			if (Proxies.common.isShiftDown()) {
+			if (GuiScreen.isShiftKeyDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
 					list.add(TextFormatting.WHITE.toString() + TextFormatting.UNDERLINE + circuitLayoutName);
@@ -57,12 +61,12 @@ public class ItemElectronTube extends ItemOverlay {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < overlays.length; i++) {
 			if (Config.isDebug || !overlays[i].isSecret()) {
 				ItemStack itemStack = new ItemStack(this, 1, i);
 				if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
-					itemList.add(itemStack);
+					subItems.add(itemStack);
 				}
 			}
 		}

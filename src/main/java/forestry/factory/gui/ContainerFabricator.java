@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftMatrix;
@@ -23,6 +18,12 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.tiles.TileFabricator;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
 
@@ -59,6 +60,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 
@@ -72,5 +74,9 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 		for (IContainerListener crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
+	}
+
+	public TileFabricator getFabricator() {
+		return tile;
 	}
 }

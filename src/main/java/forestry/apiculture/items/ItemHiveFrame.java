@@ -12,9 +12,6 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -24,6 +21,10 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
@@ -41,7 +42,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	public ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear) {
 		frame.setItemDamage(frame.getItemDamage() + wear);
 		if (frame.getItemDamage() >= frame.getMaxDamage()) {
-			return null;
+			return ItemStack.EMPTY;
 		} else {
 			return frame;
 		}
@@ -53,6 +54,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		beeModifier.addInformation(stack, playerIn, tooltip, advanced);
@@ -79,6 +81,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 			return this.geneticDecay;
 		}
 
+		@SideOnly(Side.CLIENT)
 		public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.production", production));
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.genetic.decay", geneticDecay));

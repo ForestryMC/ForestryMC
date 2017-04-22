@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.IEffectData;
+import forestry.core.render.ParticleRender;
+import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IEffectData;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.VectUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
@@ -53,24 +55,24 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
 
-			BlockPos posBlock = randomPos.add(housing.getCoordinates());
-			posBlock = posBlock.add(offset);
+			BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
 
 			// Put snow on the ground
-			if (!world.isSideSolid(new BlockPos(posBlock.getX(), posBlock.getY() - 1, posBlock.getZ()), EnumFacing.UP, false)) {
-				continue;
-			}
+			if (world.isBlockLoaded(posBlock) && world.isSideSolid(posBlock.down(), EnumFacing.UP, false)) {
+				IBlockState state = world.getBlockState(posBlock);
+				Block block = state.getBlock();
 
-			IBlockState state = world.getBlockState(posBlock);
-			Block block = state.getBlock();
-
-			if (block == Blocks.SNOW_LAYER) {
-				int meta = block.getMetaFromState(state);
-				if (meta < 7) {
-					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1));
+				if (block == Blocks.SNOW_LAYER) {
+					Integer layers = state.getValue(BlockSnow.LAYERS);
+					if (layers < 7) {
+						IBlockState moreSnow = state.withProperty(BlockSnow.LAYERS, layers + 1);
+						world.setBlockState(posBlock, moreSnow);
+					} else {
+						world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+					}
+				} else if (block.isReplaceable(world, posBlock)) {
+					world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
 				}
-			} else if (block.isReplaceable(world, posBlock)) {
-				world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
 			}
 		}
 
@@ -78,6 +80,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorldObj().rand.nextInt(3) == 0) {
 			Vec3i area = getModifiedArea(genome, housing);
@@ -87,7 +90,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			World world = housing.getWorldObj();
 
 			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-			Proxies.render.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
+			ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
 			return storedData;
 		} else {
 			return super.doFX(genome, storedData, housing);

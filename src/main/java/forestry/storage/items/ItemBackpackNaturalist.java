@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -20,14 +18,17 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
-	@Nonnull
 	private final ISpeciesRoot speciesRoot;
 
-	public ItemBackpackNaturalist(@Nonnull ISpeciesRoot speciesRoot, IBackpackDefinition definition) {
+	public ItemBackpackNaturalist(ISpeciesRoot speciesRoot, IBackpackDefinition definition) {
 		super(definition, EnumBackpackType.NATURALIST);
 		this.speciesRoot = speciesRoot;
 	}
@@ -38,14 +39,15 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int page) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int page) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
 		ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
-		return new GuiNaturalistInventory(speciesRoot, player, container, inventory, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int page) {
+	public Container getContainer(EntityPlayer player, ItemStack heldItem, int page) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
 		return new ContainerNaturalistBackpack(player, inventory, page);
 	}

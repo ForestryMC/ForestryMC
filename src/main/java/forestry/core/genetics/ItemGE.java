@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
@@ -32,6 +31,7 @@ public abstract class ItemGE extends ItemForestry {
 		setHasSubtypes(true);
 	}
 
+	@Nullable
 	public abstract IIndividual getIndividual(ItemStack itemstack);
 
 	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
@@ -50,23 +50,27 @@ public abstract class ItemGE extends ItemForestry {
 	public boolean getShareTag() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasEffect(ItemStack stack) {
+		if (!stack.hasTagCompound()) { // villager trade wildcard bees
+			return false;
+		}
 		IAlleleSpecies species = getSpecies(stack);
-		return species != null && species.hasEffect();
+		return species.hasEffect();
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		if (!itemstack.hasTagCompound()) {
+		if (itemstack.getTagCompound() == null) {
 			return;
 		}
 
 		IIndividual individual = getIndividual(itemstack);
 
-		if (individual.isAnalyzed()) {
-			if (Proxies.common.isShiftDown()) {
+		if (individual != null && individual.isAnalyzed()) {
+			if (GuiScreen.isShiftKeyDown()) {
 				individual.addTooltip(list);
 			} else {
 				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
@@ -74,10 +78,5 @@ public abstract class ItemGE extends ItemForestry {
 		} else {
 			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
-		return 0xffffff;
 	}
 }

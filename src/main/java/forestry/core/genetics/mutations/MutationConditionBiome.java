@@ -14,16 +14,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.Translator;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class MutationConditionBiome implements IMutationCondition {
 
@@ -37,7 +36,7 @@ public class MutationConditionBiome implements IMutationCondition {
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		Biome biome = climate.getBiome();
 		for (BiomeDictionary.Type type : validBiomeTypes) {
-			if (BiomeDictionary.isBiomeOfType(biome, type)) {
+			if (BiomeDictionary.hasType(biome, type)) {
 				return 1;
 			}
 		}

@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 public interface ICrop {
@@ -17,11 +16,10 @@ public interface ICrop {
 	/**
 	 * Harvests this crop. Performs the necessary manipulations to set the crop into a "harvested" state.
 	 *
-	 * @return Products harvested.
+	 * @return Products harvested. Null if this crop cannot be harvested
 	 */
 	@Nullable
-	Collection<ItemStack> harvest();
+	NonNullList<ItemStack> harvest();
 
-	@Nonnull
 	BlockPos getPosition();
 }

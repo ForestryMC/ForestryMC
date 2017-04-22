@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -19,18 +18,19 @@ import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -39,6 +39,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank fuelTank;
@@ -60,12 +62,12 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
-	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
 
+	@Nullable
 	public Fluid getBurnTankFluidType() {
 		return burnTank.getFluidType();
 	}
@@ -107,7 +109,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			} else if (shutdown)
 
 			{
-				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluid().getFluid() == FluidRegistry.LAVA) {
+				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, true);
 				}
@@ -117,12 +119,14 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			if (heatStage > 0.2) {
 				if (burnTank.getFluidAmount() > 0) {
 					FluidStack drained = burnTank.drainInternal(1, true);
-					currentOutput = determineFuelValue(drained.getFluid());
+					currentOutput = determineFuelValue(drained);
 					energyManager.generateEnergy(currentOutput);
 				} else {
 					FluidStack fuel = fuelTank.drainInternal(Fluid.BUCKET_VOLUME, true);
-					int burnTime = determineBurnTime(fuel.getFluid());
-					fuel.amount = burnTime;
+					int burnTime = determineBurnTime(fuel);
+					if (fuel != null) {
+						fuel.amount = burnTime;
+					}
 					burnTank.setCapacity(burnTime);
 					burnTank.setFluid(fuel);
 				}
@@ -156,9 +160,11 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		// Lose extra heat when using water as fuel.
 		if (fuelTank.getFluidAmount() > 0) {
 			FluidStack fuelFluidStack = fuelTank.getFluid();
-			EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
-			if (fuel != null) {
-				loss = loss * fuel.getDissipationMultiplier();
+			if (fuelFluidStack != null) {
+				EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
+				if (fuel != null) {
+					loss = loss * fuel.getDissipationMultiplier();
+				}
 			}
 		}
 
@@ -190,23 +196,27 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
-	private static int determineFuelValue(Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
-		} else {
-			return 0;
+	private static int determineFuelValue(@Nullable FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
+				return FuelManager.bronzeEngineFuel.get(fluid).getPowerPerCycle();
+			}
 		}
+		return 0;
 	}
 
 	/**
 	 * @return Duration of burn cycle of one bucket
 	 */
-	private static int determineBurnTime(Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
-			return FuelManager.bronzeEngineFuel.get(fluid).getBurnDuration();
-		} else {
-			return 0;
+	private static int determineBurnTime(@Nullable FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
+				return FuelManager.bronzeEngineFuel.get(fluid).getBurnDuration();
+			}
 		}
+		return 0;
 	}
 
 	// / STATE INFORMATION
@@ -238,7 +248,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		tankManager.readFromNBT(nbt);
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
@@ -249,7 +258,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeBoolean(shutdown);
 		tankManager.writeData(data);
@@ -257,7 +266,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
 		tankManager.readData(data);
@@ -265,13 +275,13 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}
@@ -279,12 +289,13 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int data) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiEngineBiogas(player.inventory, this);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int data) {
+	public Container getContainer(EntityPlayer player, int data) {
 		return new ContainerEngineBiogas(player.inventory, this);
 	}
 }

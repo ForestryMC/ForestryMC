@@ -22,12 +22,13 @@ import net.minecraft.world.World;
 public class ItemFertilizer extends ItemForestry {
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack)) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 			return EnumActionResult.FAIL;
 		}
 
-		if (ItemDye.applyBonemeal(stack, worldIn, pos, playerIn)) {
+		if (ItemDye.applyBonemeal(heldItem, worldIn, pos, player)) {
 			if (!worldIn.isRemote) {
 				worldIn.playEvent(2005, pos, 0);
 			}

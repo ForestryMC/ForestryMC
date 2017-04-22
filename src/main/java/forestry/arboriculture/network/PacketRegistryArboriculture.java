@@ -10,12 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.network;
 
-import forestry.arboriculture.network.packets.PacketRipeningUpdate;
-import forestry.core.network.PacketRegistry;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketRegistryArboriculture extends PacketRegistry {
+public class PacketRegistryArboriculture implements IPacketRegistry {
 	@Override
-	public void registerPackets() {
-		registerClientPacket(new PacketRipeningUpdate());
+	public void registerPacketsServer() {
+
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerPacketsClient() {
+		PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
 	}
 }

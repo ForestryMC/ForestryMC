@@ -10,13 +10,8 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Set;
-
-import forestry.core.owner.IOwnedTile;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.INbtReadable;
@@ -24,12 +19,17 @@ import forestry.api.core.INbtWritable;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.IStreamableGui;
+import forestry.core.owner.IOwnedTile;
 import forestry.core.tiles.IClimatised;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 // internal implementation of IMultiblockController
 public interface IMultiblockControllerInternal extends IMultiblockController, INbtWritable, INbtReadable, IOwnedTile, IErrorLogicSource, IClimatised, IStreamableGui {
 	/**
 	 * Attach a new part to this machine.
+	 *
 	 * @param part The part to add.
 	 */
 	void attachBlock(IMultiblockComponent part);
@@ -37,7 +37,8 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	/**
 	 * Call to detach a block from this machine. Generally, this should be called
 	 * when the tile entity is being released, e.g. on block destruction.
-	 * @param part The part to detach from this machine.
+	 *
+	 * @param part           The part to detach from this machine.
 	 * @param chunkUnloading Is this entity detaching due to the chunk unloading? If true, the multiblock will be paused instead of broken.
 	 */
 	void detachBlock(IMultiblockComponent part, boolean chunkUnloading);
@@ -61,6 +62,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	/**
 	 * Called when this machine is consumed by another controller.
 	 * Essentially, forcibly tear down this object.
+	 *
 	 * @param otherController The controller consuming this controller.
 	 */
 	void _onAssimilated(IMultiblockControllerInternal otherController);
@@ -70,6 +72,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	 * All blocks have been stripped out of this object and handed over to the
 	 * other controller.
 	 * This is intended primarily for cleanup.
+	 *
 	 * @param assimilator The controller which has assimilated this controller.
 	 */
 	void onAssimilated(IMultiblockControllerInternal assimilator);
@@ -83,6 +86,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	/**
 	 * @return The reference coordinate, the block with the lowest x, y, z coordinates, evaluated in that order.
 	 */
+	@Nullable
 	BlockPos getReferenceCoord();
 
 	/**
@@ -93,12 +97,14 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 
 	/**
 	 * Called when the save delegate's tile entity is being asked for its description packet
+	 *
 	 * @param data A fresh compound tag to write your multiblock data into
 	 */
 	void formatDescriptionPacket(NBTTagCompound data);
 
 	/**
 	 * Called when the save delegate's tile entity receiving a description packet
+	 *
 	 * @param data A compound tag containing multiblock data to import
 	 */
 	void decodeDescriptionPacket(NBTTagCompound data);
@@ -114,6 +120,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	 * Tests whether this multiblock should consume the other multiblock
 	 * and become the new multiblock master when the two multiblocks
 	 * are adjacent. Assumes both multiblocks are the same type.
+	 *
 	 * @param otherController The other multiblock controller.
 	 * @return True if this multiblock should consume the other, false otherwise.
 	 */
@@ -134,16 +141,18 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	/**
 	 * Called when this machine may need to check for blocks that are no
 	 * longer physically connected to the reference coordinate.
+	 *
 	 * @return the parts that were disconnected and removed
 	 */
-	@Nonnull
+
 	Set<IMultiblockComponent> checkForDisconnections();
 
 	/**
 	 * Detach all parts. Return a set of all parts which still
 	 * have a valid tile entity. Chunk-safe.
+	 *
 	 * @return A set of all parts which still have a valid tile entity.
 	 */
-	@Nonnull
+
 	Set<IMultiblockComponent> detachAllBlocks();
 }

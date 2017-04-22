@@ -1,0 +1,93 @@
+{
+	"elements": [
+		{
+			"from": [ 0.5, 14, 1 ],
+			"to": [ 7.5, 14.001, 13.5 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 7, 13 ], "texture": "#butterfly" },
+				"up": { "uv": [ 9, 0, 16, 13 ], "texture": "#butterfly", "rotation": 180 }
+			}
+		},
+		{
+			"from": [ 8.5, 14, 1 ],
+			"to": [ 15.5, 14.001, 13.5 ],
+			"faces": {
+				"down": { "uv": [ 9, 0, 16, 13 ], "texture": "#butterfly" },
+				"up": { "uv": [ 0, 0, 7, 13 ], "texture": "#butterfly", "rotation": 180 }
+			}
+		},
+		{
+			"from": [ 7.3123, 13, 3.5 ],
+			"to": [ 8.3123, 14, 9.5 ],
+			"rotation": { "origin": [ 7.3125, 14, 3.5 ], "axis": "z", "angle": 45 },
+			"faces": {
+				"down": { "uv": [ 7, 7, 8, 13 ], "texture": "#butterfly" },
+				"up": { "uv": [ 8, 7, 9, 13 ], "texture": "#butterfly" },
+				"north": { "uv": [ 7, 13, 8, 14 ], "texture": "#butterfly" },
+				"south": { "uv": [ 14, 13, 15, 14 ], "texture": "#butterfly" },
+				"west": { "uv": [ 1, 13, 7, 14 ], "texture": "#butterfly" },
+				"east": { "uv": [ 8, 13, 14, 14 ], "texture": "#butterfly" }
+			}
+		},
+		{
+			"from": [ 6.9, 14, 3 ],
+			"to": [ 7.9, 15, 4 ],
+			"faces": {
+				"down": { "uv": [ 12, 15, 11, 14 ], "texture": "#butterfly" },
+				"up": { "uv": [ 12, 14, 13, 15 ], "texture": "#butterfly" },
+				"north": { "uv": [ 11, 15, 12, 16 ], "texture": "#butterfly" },
+				"south": { "uv": [ 13, 15, 14, 16 ], "texture": "#butterfly" },
+				"west": { "uv": [ 12, 15, 13, 16 ], "texture": "#butterfly" },
+				"east": { "uv": [ 10, 15, 11, 16 ], "texture": "#butterfly" }
+			}
+		},
+		{
+			"from": [ 8.099999, 14, 2.9375 ],
+			"to": [ 9.099999, 15, 3.9375 ],
+			"faces": {
+				"down": { "uv": [ 3, 14, 4, 15 ], "texture": "#butterfly" },
+				"up": { "uv": [ 4, 14, 5, 15 ], "texture": "#butterfly" },
+				"north": { "uv": [ 3, 15, 4, 16 ], "texture": "#butterfly" },
+				"south": { "uv": [ 5, 15, 6, 16 ], "texture": "#butterfly" },
+				"west": { "uv": [ 4, 15, 5, 16 ], "texture": "#butterfly" },
+				"east": { "uv": [ 2, 15, 3, 16 ], "texture": "#butterfly" }
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation":  [ 0, -2.65, 2.46 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"thirdperson_lefthand": {
+			"translation":  [ 0, -2.65, 2.46 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"firstperson_righthand": {
+			"rotation":  [ 21, 0, 0 ],
+			"translation":  [ -0.25, -0.76, 0.76 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"firstperson_lefthand": {
+			"rotation":  [ 21, 0, 0 ],
+			"translation":  [ -0.25, -0.76, 0.76 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"gui": {
+			"rotation":  [ 90, 0, 3 ],
+			"translation":  [ 0.4, -1.053, 0 ],
+			"scale":  [ 0.65, 0.65, 0.65 ]
+		},
+		"head": {
+			"translation":  [ 0, 2.5, 0 ]
+		},
+		"ground": {
+			"translation":  [ 0, -4, 0 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"fixed": {
+			"rotation":  [ 90, 0, -180 ],
+			"translation":  [ 0, 0, 6.2608 ]
+		}
+	}
+}

@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
+import forestry.api.core.IModelManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
-
 public class ItemCraftingMaterial extends ItemForestry {
 
-	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling", "camouflagedPaneling" };
+	private final String[] definition = new String[]{"pulsating_dust", "pulsating_mesh", "silk_wisp", "woven_silk", "dissipation_charge", "ice_shard", "scented_paneling", "camouflaged_paneling"};
 
 	public ItemCraftingMaterial() {
 		setMaxDamage(0);
@@ -59,9 +56,9 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < definition.length; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+			subItems.add(new ItemStack(this, 1, i));
 		}
 	}
 
@@ -92,11 +89,11 @@ public class ItemCraftingMaterial extends ItemForestry {
 	public ItemStack getScentedPaneling() {
 		return new ItemStack(this, 1, 6);
 	}
-	
+
 	public ItemStack getCamouflagedPaneling() {
 		return getCamouflagedPaneling(1);
 	}
-	
+
 	public ItemStack getCamouflagedPaneling(int stackSize) {
 		return new ItemStack(this, stackSize, 7);
 	}

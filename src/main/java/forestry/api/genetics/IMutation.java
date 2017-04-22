@@ -9,7 +9,7 @@ import java.util.Collection;
 
 /**
  * Individuals can be seeded either as hive drops or as mutation results.
- *
+ * <p>
  * {@link IAlleleRegistry} manages these.
  *
  * @author SirSengir
@@ -33,8 +33,8 @@ public interface IMutation {
 
 	/**
 	 * @return Array of {@link IAllele} representing the full default genome of the mutated side.
-	 *
-	 *         Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
+	 * <p>
+	 * Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
 	 */
 	IAllele[] getTemplate();
 
@@ -44,18 +44,16 @@ public interface IMutation {
 	float getBaseChance();
 
 	/**
-	 * @return Collection of localized, human-readable strings describing special mutation conditions, if any. 
+	 * @return Collection of localized, human-readable strings describing special mutation conditions, if any.
 	 */
 	Collection<String> getSpecialConditions();
-	
+
 	/**
-	 * @param allele
 	 * @return true if the passed allele is one of the alleles participating in this mutation.
 	 */
 	boolean isPartner(IAllele allele);
 
 	/**
-	 * @param allele
 	 * @return the other allele which was not passed as argument.
 	 */
 	IAllele getPartner(IAllele allele);

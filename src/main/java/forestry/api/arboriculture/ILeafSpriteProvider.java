@@ -5,19 +5,16 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Provides icons for leaves. Used by TreeManager.treeFactory.createSpecies()
  * Get a default Forestry implementation from TreeManager.treeFactory.getLeafIconProvider() or implement your own.
- *
+ * <p>
  * If you implement your own, be sure to register the icons.
  * Icon registration is not done here because these icons are heavily reused.
  */
 public interface ILeafSpriteProvider {
-	@Nonnull
 	ResourceLocation getSprite(boolean pollinated, boolean fancy);
 
 	int getColor(boolean pollinated);

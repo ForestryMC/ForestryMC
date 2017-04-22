@@ -10,14 +10,10 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-
-/** A packet sent from the server to the client */
+/**
+ * A packet sent from the server to the client
+ */
 public interface IForestryPacketClient extends IForestryPacket {
-	void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException;
-
 	@Override
 	PacketIdClient getPacketId();
 }

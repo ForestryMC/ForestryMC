@@ -8,6 +8,7 @@ package forestry.api.farming;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 public interface IFarmListener {
@@ -24,16 +25,16 @@ public interface IFarmListener {
 	 * Called after a crop has been harvested, but before harvested items are stowed in the farms inventory.
 	 *
 	 * @param harvested Collection of harvested stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
-	 * @param crop Harvested {@link ICrop}
+	 * @param crop      Harvested {@link ICrop}
 	 */
-	void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop);
+	void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop);
 
 	/**
 	 * Called after the stack of collected items has been returned by the farm logic, but before it is added to the farm's pending queue.
 	 *
 	 * @param collected Collection of collected stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
 	 */
-	void hasCollected(Collection<ItemStack> collected, IFarmLogic logic);
+	void hasCollected(NonNullList<ItemStack> collected, IFarmLogic logic);
 
 	/**
 	 * Called after farmland has successfully been cultivated by a farm logic.

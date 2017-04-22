@@ -1,24 +1,22 @@
 package forestry.plugins;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-
 import forestry.core.utils.Log;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
 public class ForestryPluginUtil {
 	private ForestryPluginUtil() {
 
 	}
 
-	public static List<IForestryPlugin> getForestryPlugins(@Nonnull ASMDataTable asmDataTable) {
+	public static List<IForestryPlugin> getForestryPlugins(ASMDataTable asmDataTable) {
 		return getInstances(asmDataTable, ForestryPlugin.class, IForestryPlugin.class);
 	}
 
-	private static <T> List<T> getInstances(@Nonnull ASMDataTable asmDataTable, Class annotationClass, Class<T> instanceClass) {
+	private static <T> List<T> getInstances(ASMDataTable asmDataTable, Class annotationClass, Class<T> instanceClass) {
 		String annotationClassName = annotationClass.getCanonicalName();
 		Set<ASMDataTable.ASMData> asmDatas = asmDataTable.getAll(annotationClassName);
 		List<T> instances = new ArrayList<>();

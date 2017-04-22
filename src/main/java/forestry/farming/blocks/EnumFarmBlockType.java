@@ -4,16 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import forestry.core.config.Constants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 
 public enum EnumFarmBlockType implements IStringSerializable {
 	PLAIN,
@@ -22,9 +20,9 @@ public enum EnumFarmBlockType implements IStringSerializable {
 	HATCH,
 	VALVE,
 	CONTROL;
-	
+
 	public static final EnumFarmBlockType[] VALUES = values();
-	
+
 	private static final int TYPE_PLAIN = 0;
 	private static final int TYPE_REVERSE = 1;
 	private static final int TYPE_TOP = 2;
@@ -39,7 +37,7 @@ public enum EnumFarmBlockType implements IStringSerializable {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		sprites = Arrays.asList(
 				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
 				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
@@ -51,7 +49,7 @@ public enum EnumFarmBlockType implements IStringSerializable {
 				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/control"))
 		);
 	}
-	
+
 	/**
 	 * @return The texture sprite from the type of the farm block
 	 */
@@ -81,10 +79,10 @@ public enum EnumFarmBlockType implements IStringSerializable {
 				return sprites.get(TYPE_PLAIN);
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
-	
+
 }

@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import javax.annotation.Nonnull;
 
-import forestry.core.network.packets.PacketDummyServer;
+import forestry.core.network.packets.PacketHandlerDummyServer;
 
-/** Packets sent to the server from the client */
+/**
+ * Packets sent to the server from the client
+ */
 public enum PacketIdServer implements IPacketId {
 	INVALID,
 
@@ -28,6 +29,7 @@ public enum PacketIdServer implements IPacketId {
 
 	// JEI
 	WORKTABLE_RECIPE_REQUEST,
+	RECIPE_TRANSFER_REQUEST,
 
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
@@ -35,24 +37,21 @@ public enum PacketIdServer implements IPacketId {
 	// Mail
 	LETTER_INFO_REQUEST,
 	TRADING_ADDRESS_REQUEST,
-	POBOX_INFO_REQUEST,
 	LETTER_TEXT_SET;
 
 	public static final PacketIdServer[] VALUES = values();
 
-	@Nonnull
-	private IForestryPacketServer packetHandler;
+	private IForestryPacketHandlerServer packetHandler;
 
 	PacketIdServer() {
-		this.packetHandler = PacketDummyServer.instance;
+		this.packetHandler = PacketHandlerDummyServer.instance;
 	}
 
-	public void setPacketHandler(@Nonnull IForestryPacketServer packetHandler) {
+	public void setPacketHandler(IForestryPacketHandlerServer packetHandler) {
 		this.packetHandler = packetHandler;
 	}
 
-	@Nonnull
-	public IForestryPacketServer getPacketHandler() {
+	public IForestryPacketHandlerServer getPacketHandler() {
 		return packetHandler;
 	}
 }

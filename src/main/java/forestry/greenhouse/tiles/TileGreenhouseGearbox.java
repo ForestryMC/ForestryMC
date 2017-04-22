@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.energy.EnergyManager;
-import forestry.energy.compat.rf.IEnergyHandlerDelegated;
-import forestry.energy.compat.rf.IEnergyReceiverDelegated;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyReceiverDelegated, IEnergyHandlerDelegated {
+public class TileGreenhouseGearbox extends TileGreenhouse {
 
 	public TileGreenhouseGearbox() {
 	}
 
-	@Override
+	@Nullable
 	public EnergyManager getEnergyManager() {
 		if (!getMultiblockLogic().isConnected()) {
 			return null;
@@ -33,7 +30,7 @@ public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyRece
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		EnergyManager energyManager = getEnergyManager();
 		if (energyManager != null && energyManager.hasCapability(capability)) {
 			return true;
@@ -41,9 +38,9 @@ public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyRece
 		return super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
+
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		EnergyManager energyManager = getEnergyManager();
 		if (energyManager != null) {
 			T energyCapability = energyManager.getCapability(capability);

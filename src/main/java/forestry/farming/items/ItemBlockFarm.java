@@ -12,12 +12,13 @@ package forestry.farming.items;
 
 import java.util.List;
 
+import forestry.core.utils.Translator;
+import forestry.farming.models.EnumFarmBlockTexture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
-import forestry.farming.models.EnumFarmBlockTexture;
+import net.minecraft.util.text.TextFormatting;
 
 public class ItemBlockFarm extends ItemBlock {
 
@@ -33,11 +34,13 @@ public class ItemBlockFarm extends ItemBlock {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
-		if (!itemstack.hasTagCompound()) {
+		info.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
+		if (itemstack.getTagCompound() == null) {
 			return;
 		}
+		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound());
 
-		info.add(EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound()).getName());
+		info.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " "+ texture.getName());
 	}
 
 	@Override

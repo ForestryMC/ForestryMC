@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
+import com.google.common.base.Preconditions;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateEventHandler;
@@ -24,6 +26,7 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import forestry.plugins.compat.PluginIC2;
@@ -34,6 +37,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -50,14 +54,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		name = "Forestry",
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.10]",
-		dependencies = "required-after:Forge@[12.18.1.2080,);"
-				+ "after:JEI@[3.11.2.278,);"
+		acceptedMinecraftVersions = "[1.11]",
+		dependencies = "required-after:forge@[13.20.0.2270,);"
+				+ "after:JEI@[4.3.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
+	@SuppressWarnings("NullableProblems")
 	@Mod.Instance(Constants.MOD_ID)
 	public static Forestry instance;
+	@Nullable
 	private File configFolder;
 
 	public Forestry() {
@@ -68,7 +74,13 @@ public class Forestry {
 		FluidRegistry.enableUniversalBucket();
 	}
 
-	public static PacketHandler packetHandler;
+	@Nullable
+	private static PacketHandler packetHandler;
+
+	public static PacketHandler getPacketHandler() {
+		Preconditions.checkState(packetHandler != null);
+		return packetHandler;
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -79,16 +91,19 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(new ClimateEventHandler());
+		Proxies.common.registerEventHandlers();
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
-		Config.load();
+		Config.load(event.getSide());
 
 		PluginManager.runSetup(event);
 
-		ForestryAPI.activeMode = new GameMode(Config.gameMode);
+		String gameMode = Config.gameMode;
+		Preconditions.checkState(gameMode != null);
+		ForestryAPI.activeMode = new GameMode(gameMode);
 
-		PluginManager.runPreInit();
-		
+		PluginManager.runPreInit(event.getSide());
+
 		Proxies.render.registerModels();
 	}
 
@@ -122,6 +137,7 @@ public class Forestry {
 		PluginManager.serverStarting(event.getServer());
 	}
 
+	@Nullable
 	public File getConfigFolder() {
 		return configFolder;
 	}
@@ -129,5 +145,10 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		PluginManager.processIMCMessages(event.getMessages());
+	}
+
+	@EventHandler
+	public void onMissingMappings(FMLMissingMappingsEvent event) {
+		MigrationHelper.onMissingMappings(event);
 	}
 }

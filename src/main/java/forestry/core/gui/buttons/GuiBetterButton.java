@@ -10,25 +10,26 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.render.ForestryResource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
 	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
+	@Nullable
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;
 
@@ -83,17 +84,13 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth() && mouseY < yPosition + getHeight();
 	}
 
-	protected static void bindButtonTextures(Minecraft minecraft) {
-		minecraft.renderEngine.bindTexture(TEXTURE);
-	}
-
 	@Override
 	public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
 		if (!visible) {
 			return;
 		}
 		FontRenderer fontrenderer = minecraft.fontRendererObj;
-		bindButtonTextures(minecraft);
+		minecraft.getTextureManager().bindTexture(TEXTURE);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();

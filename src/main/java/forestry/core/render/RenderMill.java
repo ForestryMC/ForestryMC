@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.tiles.TileMill;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileMill;
-
 public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
-
-	private final ModelBase model = new MillModelBase();
-
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
-	private ResourceLocation[] textures;
+	private final ResourceLocation[] textures;
 
 	private final ModelRenderer pedestal;
 	private final ModelRenderer column;
@@ -34,7 +31,8 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	private final ModelRenderer blade1;
 	private final ModelRenderer blade2;
 
-	public RenderMill() {
+	public RenderMill(String baseTexture) {
+		ModelBase model = new MillModelBase();
 		pedestal = new ModelRenderer(model, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.rotationPointX = 8;
@@ -65,11 +63,6 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		blade2.rotationPointY = 8;
 		blade2.rotationPointZ = 8;
 
-	}
-
-	public RenderMill(String baseTexture) {
-		this();
-
 		textures = new ResourceLocation[12];
 
 		textures[Textures.PEDESTAL.ordinal()] = new ForestryResource(baseTexture + "pedestal.png");
@@ -85,7 +78,7 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	public RenderMill(String baseTexture, byte charges) {
 		this(baseTexture);
 	}
-	
+
 	/**
 	 * @param mill If it null its render the item else it render the tile entity.
 	 */
@@ -117,9 +110,6 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		float[] translate = {0, 0, 0};
 		float tfactor = step / 16;
 
-		if (orientation == null) {
-			orientation = EnumFacing.WEST;
-		}
 		switch (orientation) {
 			case EAST:
 				// angle [2] = (float) Math.PI / 2;
@@ -170,23 +160,24 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.render.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
 		pedestal.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
+		textureManager.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
 		column.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		textureManager.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		extension.render(factor);
 
-		Proxies.render.bindTexture(textures[Textures.BLADE_1.ordinal()]);
+		textureManager.bindTexture(textures[Textures.BLADE_1.ordinal()]);
 		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
 		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
-		Proxies.render.bindTexture(textures[Textures.BLADE_2.ordinal()]);
+		textureManager.bindTexture(textures[Textures.BLADE_2.ordinal()]);
 		GlStateManager.translate(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 

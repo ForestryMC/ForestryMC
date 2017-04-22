@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.WorldGenHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class WorldGenMahoe extends WorldGenTree {
 
@@ -28,7 +26,6 @@ public class WorldGenMahoe extends WorldGenTree {
 		super(tree, 6, 3);
 	}
 
-	@Nonnull
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		Set<BlockPos> branchCoords = new HashSet<>();

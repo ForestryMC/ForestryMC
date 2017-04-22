@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
@@ -25,10 +24,8 @@ public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		TileEnginePeat engine = inventory;
-		int progress;
-		if (engine.isBurning()) {
-			progress = engine.getBurnTimeRemainingScaled(12);
+		if (tile.isBurning()) {
+			int progress = tile.getBurnTimeRemainingScaled(12);
 			this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
 		}
 	}

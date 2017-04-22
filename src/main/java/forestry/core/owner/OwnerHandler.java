@@ -10,48 +10,49 @@
  ******************************************************************************/
 package forestry.core.owner;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.PlayerUtil;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, INbtReadable {
+	@Nullable
 	private GameProfile owner = null;
 
 	@Override
+	@Nullable
 	public GameProfile getOwner() {
 		return owner;
 	}
 
 	@Override
-	public void setOwner(@Nonnull GameProfile owner) {
+	public void setOwner(GameProfile owner) {
 		this.owner = owner;
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		if (owner == null) {
 			data.writeBoolean(false);
 		} else {
 			data.writeBoolean(true);
 			data.writeLong(owner.getId().getMostSignificantBits());
 			data.writeLong(owner.getId().getLeastSignificantBits());
-			data.writeUTF(owner.getName());
+			data.writeString(owner.getName());
 		}
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) throws IOException {
 		if (data.readBoolean()) {
-			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 			setOwner(owner);
 		}
 	}

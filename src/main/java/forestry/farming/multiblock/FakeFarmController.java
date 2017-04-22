@@ -10,16 +10,6 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.farming.FarmDirection;
@@ -32,6 +22,14 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.farming.gui.IFarmLedgerDelegate;
+import forestry.farming.logic.FarmLogicArboreal;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
 	public static final FakeFarmController instance = new FakeFarmController();
@@ -87,7 +85,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public IFarmLogic getFarmLogic(FarmDirection direction) {
-		return null;
+		return new FarmLogicArboreal();
 	}
 
 	@Override
@@ -107,7 +105,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public ItemStack getSocket(int slot) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -130,7 +128,6 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return FakeInventoryAdapter.instance();
 	}
 
-	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
@@ -149,12 +146,12 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		}
 
 		@Override
-		public boolean hasResources(ItemStack[] resources) {
+		public boolean hasResources(NonNullList<ItemStack> resources) {
 			return false;
 		}
 
 		@Override
-		public void removeResources(ItemStack[] resources) {
+		public void removeResources(NonNullList<ItemStack> resources) {
 
 		}
 

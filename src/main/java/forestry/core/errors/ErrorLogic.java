@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import com.google.common.collect.ImmutableSet;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
+import net.minecraft.network.PacketBuffer;
 
 public class ErrorLogic implements IErrorLogic {
 	private final Set<IErrorState> errorStates = new HashSet<>();
@@ -56,7 +53,7 @@ public class ErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(PacketBuffer data) {
 		data.writeShort(errorStates.size());
 		for (IErrorState errorState : errorStates) {
 			data.writeShort(errorState.getID());
@@ -64,7 +61,7 @@ public class ErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(PacketBuffer data) {
 		clearErrors();
 
 		short errorStateCount = data.readShort();

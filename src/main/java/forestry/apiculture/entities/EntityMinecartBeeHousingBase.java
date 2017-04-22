@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Random;
 
-import com.google.common.base.Optional;
 import com.mojang.authlib.GameProfile;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -23,21 +22,20 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.apiculture.gui.IGuiBeeHousingInventory;
+import forestry.apiculture.gui.IGuiBeeHousingDelegate;
 import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.entities.EntityMinecartContainerForestry;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
-import net.minecraft.entity.item.EntityMinecart;
+import forestry.core.utils.ClimateUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -46,8 +44,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
-	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecart.class, GameProfileDataSerializer.INSTANCE);
+public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
+	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecartBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final Random random = new Random();
 	private static final int beeFXInterval = 4;
@@ -60,7 +58,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	private final IErrorLogic errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
 	private final OwnerHandler ownerHandler = new OwnerHandler() {
 		@Override
-		public void setOwner(@Nonnull GameProfile owner) {
+		public void setOwner(GameProfile owner) {
 			super.setOwner(owner);
 			dataManager.set(OWNER, Optional.of(owner));
 		}
@@ -68,11 +66,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 		@Override
 		public GameProfile getOwner() {
 			Optional<GameProfile> gameProfileOptional = dataManager.get(OWNER);
-			if (gameProfileOptional.isPresent()) {
-				return gameProfileOptional.get();
-			} else {
-				return null;
-			}
+			return gameProfileOptional.orElse(null);
 		}
 	};
 
@@ -92,7 +86,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(OWNER, Optional.absent());
+		this.dataManager.register(OWNER, Optional.empty());
 	}
 
 	/* IOwnedTile */
@@ -109,7 +103,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), worldObj, getPosition());
+		return EnumTemperature.getFromBiome(getBiome(), world, getPosition());
 	}
 
 	@Override
@@ -119,32 +113,37 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public float getExactTemperature() {
-		return ForestryAPI.climateManager.getTemperature(worldObj, getPosition());
+		return ClimateUtil.getTemperature(world, getPosition());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return ForestryAPI.climateManager.getHumidity(worldObj, getPosition());
+		return ClimateUtil.getHumidity(world, getPosition());
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getLightFromNeighbors(getPosition().add(0, +1, 0));
+		return world.getLightFromNeighbors(getPosition().up());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeSky(getPosition().add(0, +1, 0));
+		return world.canBlockSeeSky(getPosition().up());
+	}
+
+	@Override
+	public boolean isRaining() {
+		return world.isRainingAt(getPosition().up());
 	}
 
 	@Override
 	public World getWorldObj() {
-		return worldObj;
+		return world;
 	}
 
 	@Override
 	public Biome getBiome() {
-		return worldObj.getBiome(getPosition());
+		return world.getBiome(getPosition());
 	}
 
 	@Override
@@ -168,12 +167,12 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		data.writeVarInt(beeLogic.getBeeProgressPercent());
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		breedingProgressPercent = data.readVarInt();
 	}
 
@@ -185,24 +184,24 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (beeLogic.canWork()) {
 				beeLogic.doWork();
 			}
 		} else {
 			if (needsActiveUpdate) {
 				IForestryPacketServer packet = new PacketBeeLogicEntityRequest(this);
-				Proxies.net.sendToServer(packet);
+				NetworkUtil.sendToServer(packet);
 				needsActiveUpdate = false;
 			}
 
 			if (beeLogic.canDoBeeFX()) {
-				if (worldObj.getTotalWorldTime() % beeFXInterval == beeFXTime) {
+				if (world.getTotalWorldTime() % beeFXInterval == beeFXTime) {
 					beeLogic.doBeeFX();
 				}
 
-				if (worldObj.getTotalWorldTime() % pollenFXInterval == pollenFXTime) {
-					TileBeeHousingBase.doPollenFX(worldObj, posX - 0.5, posY - 0.1, posZ - 0.5);
+				if (world.getTotalWorldTime() % pollenFXInterval == pollenFXTime) {
+					TileBeeHousingBase.doPollenFX(world, posX - 0.5, posY - 0.1, posZ - 0.5);
 				}
 			}
 		}

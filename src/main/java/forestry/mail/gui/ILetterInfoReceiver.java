@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.mail.network.packets.PacketLetterInfoResponse;
+import javax.annotation.Nullable;
+
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.ITradeStationInfo;
 
 public interface ILetterInfoReceiver {
-	void handleLetterInfoUpdate(PacketLetterInfoResponse packet);
+	void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo);
 }

@@ -10,29 +10,26 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
-import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import forestry.energy.compat.rf.IEnergyHandlerDelegated;
-import forestry.energy.compat.rf.IEnergyReceiverDelegated;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 //@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiverDelegated, IEnergyHandlerDelegated, ISpeedUpgradable, IStreamableGui {
+public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -47,14 +44,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(String hintKey, int maxTransfer, int capacity) {
-		super(hintKey);
+	protected TilePowered(int maxTransfer, int capacity) {
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
 		this.ticksPerWorkCycle = 4;
+	}
 
-		hints.addAll(Config.hints.get("powered.machine"));
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 
 	public int getWorkCounter() {
@@ -67,7 +65,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	public int getTicksPerWorkCycle() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			return ticksPerWorkCycle;
 		}
 		return Math.round(ticksPerWorkCycle / speedMultiplier);
@@ -149,7 +147,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return workCounter * i / ticksPerWorkCycle;
 	}
 
-	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
@@ -164,14 +161,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		energyManager.writeData(data);
 		data.writeVarInt(workCounter);
 		data.writeVarInt(getTicksPerWorkCycle());
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		energyManager.readData(data);
 		workCounter = data.readVarInt();
 		ticksPerWorkCycle = data.readVarInt();
@@ -198,18 +196,13 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
 	/* IPowerHandler */
 	@Override
-	public EnergyManager getEnergyManager() {
-		return energyManager;
-	}
-
-	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
-	@Nonnull
 	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

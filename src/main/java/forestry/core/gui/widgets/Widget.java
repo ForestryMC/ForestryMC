@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Basic non-ItemStack slot
  */
+@SideOnly(Side.CLIENT)
 public abstract class Widget implements IToolTipProvider {
-	@Nonnull
 	protected final WidgetManager manager;
 	protected final int xPos;
 	protected final int yPos;
 	protected int width = 16;
 	protected int height = 16;
 
-	public Widget(@Nonnull WidgetManager manager, int xPos, int yPos) {
+	public Widget(WidgetManager manager, int xPos, int yPos) {
 		this.manager = manager;
 		this.xPos = xPos;
 		this.yPos = yPos;
@@ -63,7 +64,8 @@ public abstract class Widget implements IToolTipProvider {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 	}
 
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+		return false;
 	}
 
 	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {

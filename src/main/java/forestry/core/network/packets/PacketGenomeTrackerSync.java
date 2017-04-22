@@ -12,46 +12,54 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
-import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketGenomeTrackerSync extends PacketNBT implements IForestryPacketClient {
-
-	public PacketGenomeTrackerSync() {
-	}
+public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
+	private final NBTTagCompound nbt;
 
 	public PacketGenomeTrackerSync(NBTTagCompound nbtTagCompound) {
-		super(nbtTagCompound);
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		IBreedingTracker tracker = null;
-		String type = getTagCompound().getString(BreedingTracker.TYPE_KEY);
-
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
-		if (root != null && player != null) {
-			tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
-		}
-		if (tracker != null) {
-			tracker.decodeFromNBT(getTagCompound());
-			MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
-		}
+		this.nbt = nbtTagCompound;
 	}
 
 	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.GENOME_TRACKER_UPDATE;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeCompoundTag(nbt);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			NBTTagCompound nbt = data.readCompoundTag();
+			if (nbt != null) {
+				String type = nbt.getString(BreedingTracker.TYPE_KEY);
+
+				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
+				if (root != null) {
+					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+					tracker.decodeFromNBT(nbt);
+					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
+				}
+			}
+		}
 	}
 }

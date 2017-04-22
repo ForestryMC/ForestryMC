@@ -10,28 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -46,10 +29,27 @@ import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.tiles.TileUtil;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBeeHives extends BlockContainer implements IItemModelRegister, IBlockWithMeta {
 	private static final PropertyEnum<HiveType> HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);
-	
+
 	public BlockBeeHives() {
 		super(new MaterialBeehive(true));
 		setLightLevel(0.4f);
@@ -58,7 +58,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		setHarvestLevel("scoop", 0);
 		setDefaultState(this.blockState.getBaseState().withProperty(HIVE_TYPES, HiveType.FOREST));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, HIVE_TYPES);
@@ -74,7 +74,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		return getDefaultState().withProperty(HIVE_TYPES, HiveType.VALUES[meta]);
 	}
 
-	public IBlockState getStateForType(@Nonnull HiveType type) {
+	public IBlockState getStateForType(HiveType type) {
 		return getDefaultState().withProperty(HIVE_TYPES, type);
 	}
 
@@ -86,21 +86,13 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		super.onBlockClicked(world, pos, player);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tile;
-			hive.onAttack(world, pos, player);
-		}
+		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		boolean canHarvest = canHarvestBlock(world, pos, player);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IHiveTile) {
-			IHiveTile hive = (IHiveTile) tile;
-			hive.onBroken(world, pos, player, canHarvest);
-		}
+		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
 
 	@Override
@@ -162,13 +154,17 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 
 	private static List<IHiveDrop> getDropsForHive(int meta) {
 		String hiveName = getHiveNameForMeta(meta);
-		if (hiveName == null) {
+		if (hiveName == null || hiveName.equals(HiveType.SWARM.getHiveUid())) {
 			return Collections.emptyList();
 		}
-		return PluginApiculture.hiveRegistry.getDrops(hiveName);
+		return PluginApiculture.getHiveRegistry().getDrops(hiveName);
 	}
 
+	@Nullable
 	private static String getHiveNameForMeta(int meta) {
+		if (meta < 0 || meta >= HiveType.VALUES.length) {
+			return null;
+		}
 		return HiveType.VALUES[meta].getHiveUid();
 	}
 
@@ -177,11 +173,11 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (IBlockState blockState : getBlockState().getValidStates()) {
 			if (getHiveType(blockState) != HiveType.SWARM) {
 				int meta = getMetaFromState(blockState);
-				itemList.add(new ItemStack(this, 1, meta));
+				list.add(new ItemStack(this, 1, meta));
 			}
 		}
 	}
@@ -190,7 +186,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		for (HiveType hiveType : HiveType.VALUES)  {
+		for (HiveType hiveType : HiveType.VALUES) {
 			manager.registerItemModel(item, hiveType.getMeta(), "beehives/" + hiveType.getName());
 		}
 	}

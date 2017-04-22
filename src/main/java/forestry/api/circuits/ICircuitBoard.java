@@ -5,17 +5,20 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import forestry.api.core.INbtWritable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ICircuitBoard extends INbtWritable {
-
+	@SideOnly(Side.CLIENT)
 	int getPrimaryColor();
 
+	@SideOnly(Side.CLIENT)
 	int getSecondaryColor();
 
+	@SideOnly(Side.CLIENT)
 	void addTooltip(List<String> list);
 
 	void onInsertion(Object tile);
@@ -26,13 +29,11 @@ public interface ICircuitBoard extends INbtWritable {
 
 	void onTick(Object tile);
 
-	@Nonnull
 	ICircuit[] getCircuits();
 
 	/**
 	 * Specifies where a circuit can be used.
 	 */
-	@Nonnull
 	ICircuitSocketType getSocketType();
 
 }

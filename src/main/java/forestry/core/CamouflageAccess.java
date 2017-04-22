@@ -10,64 +10,61 @@
  ******************************************************************************/
 package forestry.core;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageAccess;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.core.utils.Log;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 public class CamouflageAccess implements ICamouflageAccess {
 
-	private static final Map<String, List<ICamouflageItemHandler>> camouflageItemHandlers = new HashMap<>();
-	private static final Map<String, List<ItemStack>> camouflageItemBlacklist = new HashMap<>();
-	
+	private static final ListMultimap<String, ICamouflageItemHandler> camouflageItemHandlers = ArrayListMultimap.create();
+	private static final ListMultimap<String, ItemStack> camouflageItemBlacklist = ArrayListMultimap.create();
+	private static final ListMultimap<String, String> blacklistedMods = ArrayListMultimap.create();
+	public static final ICamouflageItemHandler NONE = new CamouflageHandlerNone();
+
 	@Override
-	public void registerCamouflageItemHandler(@Nonnull ICamouflageItemHandler itemHandler) {
-		if(itemHandler == null){
-			Log.error("Fail to register a camouflage item handler, because the handler is null. The handler is form the mod with the ID: " + Loader.instance().activeModContainer().getModId() + ".");
-			return;
-		}
+	public void registerCamouflageItemHandler(ICamouflageItemHandler itemHandler) {
 		String type = itemHandler.getType();
-		if(!camouflageItemHandlers.containsKey(type)){
-			camouflageItemHandlers.put(type, new ArrayList<>());
-		}
-		if(!camouflageItemHandlers.containsValue(itemHandler)){
-			camouflageItemHandlers.get(type).add(itemHandler);
-		}else{
+
+		List<ICamouflageItemHandler> handlers = camouflageItemHandlers.get(type);
+		if (!handlers.contains(itemHandler)) {
+			handlers.add(itemHandler);
+		} else {
 			Log.error("Fail to register a camouflage item handler, because the handler is already registered. The handler is form the mod with the ID: " + Loader.instance().activeModContainer().getModId() + ".");
 		}
 	}
-	
+
 	@Override
 	public List<ICamouflageItemHandler> getCamouflageItemHandler(String type) {
-		if(type == null){
+		if (type.equals(CamouflageManager.NONE)) {
 			List<ICamouflageItemHandler> handlers = new ArrayList<>();
-			for(List<ICamouflageItemHandler> handler : camouflageItemHandlers.values()){
-				handlers.addAll(handler);
-			}
+			handlers.addAll(camouflageItemHandlers.values());
 			return handlers;
 		}
-		if(!camouflageItemHandlers.containsKey(type)){
-			return null;
-		}
+
 		return camouflageItemHandlers.get(type);
 	}
-	
+
+	@Override
+	public void addModIdToBlackList(String type, String modID) {
+		if (!blacklistedMods.get(type).contains(modID)) {
+			blacklistedMods.put(type, modID);
+		}
+	}
+
 	@Override
 	public void addItemToBlackList(String type, ItemStack camouflageBlock) {
-		if (camouflageBlock == null || camouflageBlock.getItem() == null) {
-			Log.error("Fail to add camouflage block item to the black list, because it is null");
-			return;
-		}
 		Block block = Block.getBlockFromItem(camouflageBlock.getItem());
-		if (block == null) {
+		if (block == Blocks.AIR) {
 			Log.error("Fail to add camouflage block item to the black list: because it has no block.");
 			return;
 		}
@@ -77,21 +74,24 @@ public class CamouflageAccess implements ICamouflageAccess {
 				return;
 			}
 		}
-		camouflageItemBlacklist.get(type).add(camouflageBlock);
+
+		camouflageItemBlacklist.put(type, camouflageBlock);
 	}
-	
+
 	@Override
 	public boolean isItemBlackListed(String type, ItemStack camouflageBlock) {
-		if (camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null || type != null && !camouflageItemBlacklist.containsKey(type)) {
+		if (camouflageBlock.isEmpty() || Block.getBlockFromItem(camouflageBlock.getItem()) == Blocks.AIR || !type.equals(CamouflageManager.NONE) && !camouflageItemBlacklist.containsKey(type)) {
 			return false;
 		}
+		String modId = camouflageBlock.getItem().getRegistryName().getResourceDomain();
+		if (blacklistedMods.get(type) != null && blacklistedMods.get(type).contains(modId)) {
+			return true;
+		}
 		List<ItemStack> camouflageItemBlacklisted;
-		if(type == null){
+		if (type.equals(CamouflageManager.NONE)) {
 			camouflageItemBlacklisted = new ArrayList<>();
-			for(List<ItemStack> stacks : camouflageItemBlacklist.values()){
-				camouflageItemBlacklisted.addAll(stacks);
-			}
-		}else{
+			camouflageItemBlacklisted.addAll(camouflageItemBlacklist.values());
+		} else {
 			camouflageItemBlacklisted = camouflageItemBlacklist.get(type);
 		}
 		for (ItemStack camouflageBlacklisted : camouflageItemBlacklisted) {
@@ -99,19 +99,26 @@ public class CamouflageAccess implements ICamouflageAccess {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	@Override
+	public ICamouflageItemHandler getNoneItemHandler() {
+		return NONE;
+	}
+
+	@Override
 	public ICamouflageItemHandler getHandlerFromItem(ItemStack stack) {
-		for(List<ICamouflageItemHandler> handlers : camouflageItemHandlers.values()){
-			for(ICamouflageItemHandler handler : handlers){
-				if(handler.canHandle(stack)){
-					return handler;
-				}
+		if (stack.isEmpty()) {
+			return NONE;
+		}
+		for (ICamouflageItemHandler handler : camouflageItemHandlers.values()) {
+			if (handler.canHandle(stack)) {
+				return handler;
 			}
 		}
-		return null;
+		return NONE;
 	}
 
 }

@@ -10,18 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
@@ -36,14 +27,25 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends BlankForestryPlugin {
 
 	private static final String BoP = "BiomesOPlenty";
 
+	@Nullable
 	private static Block saplings;
+	@Nullable
 	private static Block colorizedSaplings;
+	@Nullable
 	private static Item food;
 	private static int amount;
 
@@ -101,21 +103,21 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 			}
 		}
-		
+
 		//TODO BoP for 1.9: Add farmables
 //		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {
-			//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
+		//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
 //		}
 
 		Block boPTurnip = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(BoP, "turnip"));
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && boPTurnip != null) {
 			Item boPTurnipSeeds = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BoP, "turnipSeeds"));
 			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
-			if (boPTurnipSeeds != null) {
+			if (!boPTurnipSeedStack.isEmpty()) {
 				//TODO BoP for 1.9: Add farmable saplings
 				//				Farmables.farmables.get("farmVegetables").add(new FarmableHandPlanted(boPTurnipSeedStack, boPTurnip, 7));
 				if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
-					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEED_OIL.getFluid(amount));
+					RecipeManagers.squeezerManager.addRecipe(10, boPTurnipSeedStack, Fluids.SEED_OIL.getFluid(amount));
 				}
 			}
 
@@ -127,30 +129,30 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 	private static void addFermenterRecipes() {
 		int saplingYield = ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling");
 
-		if (saplings != Blocks.AIR) {
+		if (saplings != null && saplings != Blocks.AIR) {
 			RecipeUtil.addFermenterRecipes(new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
 		}
 
-		if (colorizedSaplings != Blocks.AIR) {
+		if (colorizedSaplings != null && colorizedSaplings != Blocks.AIR) {
 			RecipeUtil.addFermenterRecipes(new ItemStack(colorizedSaplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
 		}
 	}
 
 	private static void addSqueezerRecipes() {
-		ItemStack mulch = new ItemStack(PluginCore.items.mulch);
+		ItemStack mulch = new ItemStack(PluginCore.getItems().mulch);
 
 		Item pinecone = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BoP, "pinecone"));
 		if (pinecone != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(pinecone)}, Fluids.SEED_OIL.getFluid(3 * amount));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(pinecone), Fluids.SEED_OIL.getFluid(3 * amount));
 		}
 
 		if (food != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(food)}, Fluids.JUICE.getFluid(50), mulch, 5);
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(food), Fluids.JUICE.getFluid(50), mulch, 5);
 		}
 
 		Item persimmon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BoP, "persimmon"));
 		if (persimmon != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(persimmon)}, Fluids.JUICE.getFluid(200), mulch, 20);
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(persimmon), Fluids.JUICE.getFluid(200), mulch, 20);
 		}
 	}
 
@@ -232,8 +234,8 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(BoP, blockName));
 			if (block != null) {
 				Item item = Item.getItemFromBlock(block);
-				if (item != null) {
-					ItemStack blockStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+				ItemStack blockStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+				if (!blockStack.isEmpty()) {
 					BackpackManager.backpackInterface.addItemToForestryBackpack(backpackUid, blockStack);
 				} else {
 					Log.warning("Could not find an item for block: {}", blockName);

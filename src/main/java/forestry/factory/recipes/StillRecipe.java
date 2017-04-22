@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.base.Preconditions;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipe implements IStillRecipe {
 	private final int timePerUnit;
@@ -20,13 +20,10 @@ public class StillRecipe implements IStillRecipe {
 	private final FluidStack output;
 
 	public StillRecipe(int timePerUnit, FluidStack input, FluidStack output) {
+		Preconditions.checkNotNull(input, "Still recipes need an input. Input was null.");
+		Preconditions.checkNotNull(output, "Still recipes need an output. Output was null.");
+
 		this.timePerUnit = timePerUnit;
-		if (input == null) {
-			throw new IllegalArgumentException("Still recipes need an input. Input was null.");
-		}
-		if (output == null) {
-			throw new IllegalArgumentException("Still recipes need an output. Output was null.");
-		}
 		this.input = input;
 		this.output = output;
 	}

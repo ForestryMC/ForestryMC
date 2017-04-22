@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nonnull;
-import java.awt.*;
+import javax.annotation.Nullable;
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import forestry.Forestry;
@@ -38,6 +39,7 @@ import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.ItemCrated;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.models.ModelCrate;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
@@ -72,13 +74,15 @@ import net.minecraftforge.oredict.OreDictionary;
 @ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends BlankForestryPlugin {
 
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
-	
+
 	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
 
-	public static ItemRegistryStorage items;
+	@Nullable
+	private static ItemRegistryStorage items;
 
 	private final Multimap<String, String> backpackAcceptedOreDictRegexpDefaults = HashMultimap.create();
 	private final Multimap<String, String> backpackRejectedOreDictRegexpDefaults = HashMultimap.create();
@@ -93,6 +97,11 @@ public class PluginStorage extends BlankForestryPlugin {
 			BackpackManager.ADVENTURER_UID,
 			BackpackManager.BUILDER_UID
 	);
+
+	public static ItemRegistryStorage getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -133,7 +142,7 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		definition = new BackpackDefinition(new Color(0xdd3a3a), Color.WHITE);
 		BackpackManager.backpackInterface.registerBackpackDefinition(BackpackManager.BUILDER_UID, definition);
-		
+
 		proxy.registerCrateModel();
 	}
 
@@ -141,7 +150,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	public void registerItemsAndBlocks() {
 		items = new ItemRegistryStorage();
 	}
-	
+
 	@Override
 	public void preInit() {
 		registerFenceAndFenceGatesToOreDict();
@@ -163,7 +172,7 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		setDefaultsForConfig();
 
-		for (String backpackUid : forestryBackpackUids)  {
+		for (String backpackUid : forestryBackpackUids) {
 			handleBackpackConfig(config, backpackUid);
 		}
 
@@ -171,6 +180,8 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private void setDefaultsForConfig() {
+		ItemRegistryCore coreItems = PluginCore.getItems();
+
 		backpackAcceptedOreDictRegexpDefaults.get(BackpackManager.MINER_UID).addAll(Arrays.asList(
 				"obsidian",
 				"ore[A-Z].*",
@@ -245,9 +256,9 @@ public class PluginStorage extends BlankForestryPlugin {
 		backpackAcceptedItemDefaults.get(BackpackManager.MINER_UID).addAll(getItemStrings(Arrays.asList(
 				new ItemStack(Blocks.COAL_ORE),
 				new ItemStack(Items.COAL),
-				PluginCore.items.bronzePickaxe.getItemStack(),
-				PluginCore.items.kitPickaxe.getItemStack(),
-				PluginCore.items.brokenBronzePickaxe.getItemStack()
+				coreItems.bronzePickaxe.getItemStack(),
+				coreItems.kitPickaxe.getItemStack(),
+				coreItems.brokenBronzePickaxe.getItemStack()
 		)));
 
 		backpackAcceptedItemDefaults.get(BackpackManager.DIGGER_UID).addAll(getItemStrings(Arrays.asList(
@@ -257,9 +268,9 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Items.CLAY_BALL),
 				new ItemStack(Items.SNOWBALL),
 				new ItemStack(Blocks.SOUL_SAND),
-				PluginCore.items.bronzeShovel.getItemStack(),
-				PluginCore.items.kitShovel.getItemStack(),
-				PluginCore.items.brokenBronzeShovel.getItemStack()
+				coreItems.bronzeShovel.getItemStack(),
+				coreItems.kitShovel.getItemStack(),
+				coreItems.brokenBronzeShovel.getItemStack()
 		)));
 
 		backpackAcceptedItemDefaults.get(BackpackManager.FORESTER_UID).addAll(getItemStrings(Arrays.asList(
@@ -375,8 +386,8 @@ public class PluginStorage extends BlankForestryPlugin {
 				new ItemStack(Items.SPRUCE_DOOR)
 		)));
 
-		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
-		if (beeBlocks != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			BlockRegistryApiculture beeBlocks = PluginApiculture.getBlocks();
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 					new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
@@ -404,7 +415,6 @@ public class PluginStorage extends BlankForestryPlugin {
 		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.ACACIA_FENCE_GATE);
 	}
 
-	@Nonnull
 	private static Set<String> getItemStrings(List<ItemStack> itemStacks) {
 		Set<String> itemStrings = new HashSet<>(itemStacks.size());
 		for (ItemStack itemStack : itemStacks) {
@@ -511,7 +521,7 @@ public class PluginStorage extends BlankForestryPlugin {
 		for (ItemCrated crate : crates) {
 			ItemStack crateStack = new ItemStack(crate);
 			ItemStack uncrated = crate.getContained();
-			if (uncrated != null) {
+			if (!uncrated.isEmpty()) {
 				if (crate.getOreDictName() != null) {
 					addCrating(crateStack, crate.getOreDictName());
 				} else {
@@ -522,15 +532,15 @@ public class PluginStorage extends BlankForestryPlugin {
 		}
 	}
 
-	private static void addCrating(@Nonnull ItemStack crateStack, @Nonnull Object uncrated) {
+	private static void addCrating(ItemStack crateStack, Object uncrated) {
 		FluidStack water = new FluidStack(FluidRegistry.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
-		ItemStack box = items.crate.getItemStack();
+		ItemStack box = getItems().crate.getItemStack();
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
 	}
 
-	private static void addUncrating(@Nonnull ItemStack crateStack, @Nonnull ItemStack uncrated) {
+	private static void addUncrating(ItemStack crateStack, ItemStack uncrated) {
 		ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage());
-		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, null, product, "#", '#', crateStack);
+		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, ItemStack.EMPTY, product, "#", '#', crateStack);
 	}
 
 	@Override
@@ -542,19 +552,19 @@ public class PluginStorage extends BlankForestryPlugin {
 				return true;
 			}
 
-			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpackDefinition(tokens[0]);
+			String backpackUid = tokens[0];
+			String itemStackStrings = tokens[1];
+
+			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpackDefinition(backpackUid);
 			if (backpackDefinition == null) {
 				String errorMessage = IMCUtil.getInvalidIMCMessageText(message);
-				Log.warning("{} For non-existent backpack {}.", errorMessage, tokens[0]);
+				Log.error("{} For non-existent backpack {}.", errorMessage, backpackUid);
 				return true;
 			}
-			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
-			Predicate<ItemStack> filter = backpackDefinition.getFilter();
-			if (filter instanceof IBackpackFilterConfigurable) {
-				IBackpackFilterConfigurable backpackFilter = (IBackpackFilterConfigurable) filter;
-				for (ItemStack itemStack : itemStacks) {
-					backpackFilter.acceptItem(itemStack);
-				}
+
+			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(itemStackStrings, 0);
+			for (ItemStack itemStack : itemStacks) {
+				BackpackManager.backpackInterface.addItemToForestryBackpack(backpackUid, itemStack);
 			}
 
 			return true;
@@ -574,13 +584,14 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
-		if (items.apiaristBackpack != null && beeBlocks != null) {
+		ItemRegistryStorage items = getItems();
+		if (items.apiaristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			BlockRegistryApiculture beeBlocks = PluginApiculture.getBlocks();
 			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
 		}
 
-		BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.blocks;
-		if (items.lepidopteristBackpack != null && butterflyBlocks != null) {
+		if (items.lepidopteristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+			BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.getBlocks();
 			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
 			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
 		}
@@ -595,7 +606,7 @@ public class PluginStorage extends BlankForestryPlugin {
 		// / CARPENTER
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CRATES
-			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), null, items.crate.getItemStack(24),
+			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");
 
 			// / BACKPACKS WOVEN
@@ -624,8 +635,10 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
-		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
-		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), null, new ItemStack(backpackT2),
+		ItemRegistryCore coreItems = PluginCore.getItems();
+
+		ItemStack wovenSilk = coreItems.craftingMaterial.getWovenSilk();
+		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),
 				"WXW",
 				"WTW",
 				"WWW",
@@ -633,11 +646,11 @@ public class PluginStorage extends BlankForestryPlugin {
 				'W', wovenSilk,
 				'T', backpackT1);
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		ModelCrate.initModel(event);
+		ModelCrate.onModelBake(event);
 	}
 
 	@Override

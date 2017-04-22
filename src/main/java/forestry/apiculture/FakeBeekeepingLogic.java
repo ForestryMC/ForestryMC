@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.api.apiculture.IBeekeepingLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-
-import forestry.api.apiculture.IBeekeepingLogic;
 
 public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	public static final FakeBeekeepingLogic instance = new FakeBeekeepingLogic();
@@ -67,7 +65,6 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 
 	}
 
-	@Nonnull
 	@Override
 	public List<BlockPos> getFlowerPositions() {
 		return Collections.emptyList();

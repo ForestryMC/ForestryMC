@@ -10,14 +10,11 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
+import com.google.common.base.Preconditions;
 import forestry.api.circuits.ICircuit;
+import forestry.api.core.ForestryAPI;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -31,6 +28,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
@@ -42,11 +40,28 @@ import forestry.mail.network.PacketRegistryMail;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends BlankForestryPlugin {
-	public static ItemRegistryMail items;
-	public static BlockRegistryMail blocks;
+	@Nullable
+	private static ItemRegistryMail items;
+	@Nullable
+	private static BlockRegistryMail blocks;
+
+	public static ItemRegistryMail getItems() {
+		Preconditions.checkState(items != null);
+		return items;
+	}
+
+	public static BlockRegistryMail getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
 
 	@Override
 	public void setupAPI() {
@@ -64,7 +79,7 @@ public class PluginMail extends BlankForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-		
+
 		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
 		if (Config.mailAlertEnabled) {
@@ -82,6 +97,7 @@ public class PluginMail extends BlankForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
+		BlockRegistryMail blocks = getBlocks();
 		blocks.mailbox.init();
 		blocks.tradeStation.init();
 		blocks.stampCollector.init();
@@ -94,16 +110,20 @@ public class PluginMail extends BlankForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
-		Object stampGlue;
-		Object letterGlue;
+		ItemRegistryCore coreItems = PluginCore.getItems();
+		ItemRegistryMail items = getItems();
+		BlockRegistryMail blocks = getBlocks();
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
-			stampGlue = beeItems.honeyDrop;
+		ItemStack stampGlue;
+		ItemStack letterGlue;
+
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = PluginApiculture.getItems();
+			stampGlue = beeItems.honeyDrop.getItemStack();
 			letterGlue = beeItems.propolis.getWildcard();
 		} else {
-			stampGlue = Items.SLIME_BALL;
-			letterGlue = Items.SLIME_BALL;
+			stampGlue = new ItemStack(Items.SLIME_BALL);
+			letterGlue = new ItemStack(Items.SLIME_BALL);
 		}
 
 		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.PAPER, letterGlue);
@@ -123,7 +143,7 @@ public class PluginMail extends BlankForestryPlugin {
 						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.PAPER,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), null, stamps,
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), ItemStack.EMPTY, stamps,
 						"XXX",
 						"###",
 						'X', stampDefinition.getCraftingIngredient(),
@@ -135,7 +155,7 @@ public class PluginMail extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
 
 		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
@@ -145,16 +165,16 @@ public class PluginMail extends BlankForestryPlugin {
 				"XXX",
 				'#', "ingotTin",
 				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing);
+				'Y', coreItems.sturdyCasing);
 
 		RecipeUtil.addRecipe(new ItemStack(blocks.tradeStation),
 				"Z#Z",
 				"#Y#",
 				"XWX",
-				'#', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+				'#', coreItems.tubes.get(EnumElectronTube.BRONZE, 1),
 				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing,
-				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+				'Y', coreItems.sturdyCasing,
+				'Z', coreItems.tubes.get(EnumElectronTube.IRON, 1),
 				'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 	}
 

@@ -13,19 +13,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IModelManager {
-	
+
 	void registerItemModel(Item item, int meta, String modifier, String identifier);
-	
+
 	void registerItemModel(Item item, int meta, String identifier);
-	
+
 	void registerItemModel(Item item, int meta);
-	
+
 	ModelResourceLocation getModelLocation(Item item);
-	
+
 	ModelResourceLocation getModelLocation(String identifier);
-	
+
 	ModelResourceLocation getModelLocation(String modID, String identifier);
-	
+
 	void registerItemModel(Item item, ItemMeshDefinition definition);
-	
+
 }

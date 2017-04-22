@@ -30,12 +30,16 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 			return false;
 		}
 
-		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.worldObj, rest);
+		if (rest == null) {
+			return false;
+		}
+
+		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.world, rest);
 		if (checkPollinatable == null) {
 			return false;
 		}
 
-		if (!entity.getButterfly().getGenome().getFlowerProvider().isAcceptedPollinatable(entity.worldObj, checkPollinatable)) {
+		if (!entity.getButterfly().getGenome().getFlowerProvider().isAcceptedPollinatable(entity.world, checkPollinatable)) {
 			return false;
 		}
 
@@ -44,14 +48,14 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 
 	@Override
 	public void updateTask() {
-		if (continueExecuting()) {
-			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.worldObj, rest);
+		if (continueExecuting() && rest != null) {
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.world, rest);
 			if (checkPollinatable != null) {
 				if (entity.getPollen() == null) {
 					entity.setPollen(checkPollinatable.getPollen());
 					//					Log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
 				} else if (checkPollinatable.canMateWith(entity.getPollen())) {
-					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest);
+					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.world, rest, false);
 					if (realPollinatable != null) {
 						realPollinatable.mateWith(entity.getPollen());
 						//						Log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);

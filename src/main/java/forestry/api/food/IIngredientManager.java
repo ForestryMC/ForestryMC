@@ -5,10 +5,13 @@
  ******************************************************************************/
 package forestry.api.food;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 
 public interface IIngredientManager {
 
+	@Nullable
 	String getDescription(ItemStack itemstack);
 
 	void addIngredient(ItemStack ingredient, String description);

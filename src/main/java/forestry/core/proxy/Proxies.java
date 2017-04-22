@@ -13,10 +13,11 @@ package forestry.core.proxy;
 import net.minecraftforge.fml.common.SidedProxy;
 
 public class Proxies {
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
 	public static ProxyCommon common;
-	@SidedProxy(clientSide = "forestry.core.proxy.ProxyNetworkClient", serverSide = "forestry.core.proxy.ProxyNetwork")
-	public static ProxyNetwork net;
+
+	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
 	public static ProxyRender render;
 }

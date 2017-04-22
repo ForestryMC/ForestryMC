@@ -20,10 +20,10 @@ public interface ISqueezerContainerRecipe {
 
 	int getProcessingTime();
 
-	@Nullable
 	ItemStack getRemnants();
 
 	float getRemnantsChance();
 
+	@Nullable
 	ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer);
 }

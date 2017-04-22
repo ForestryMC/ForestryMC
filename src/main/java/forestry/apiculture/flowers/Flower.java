@@ -11,7 +11,6 @@
 package forestry.apiculture.flowers;
 
 import com.google.common.base.Objects;
-
 import net.minecraft.block.state.IBlockState;
 
 public final class Flower {
@@ -27,7 +26,7 @@ public final class Flower {
 	public boolean isPlantable() {
 		return this.weight != 0.0;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Flower)) {

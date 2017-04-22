@@ -10,40 +10,31 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
-import forestry.api.core.INbtWritable;
+public class PipetteContents {
 
-public class PipetteContents implements INbtWritable {
-	@Nonnull
 	private final FluidStack contents;
 
 	@Nullable
-	public static PipetteContents create(@Nullable ItemStack itemStack) {
-		if (itemStack == null) {
-			return null;
-		}
-		NBTTagCompound nbt = itemStack.getTagCompound();
-		FluidStack contents = FluidStack.loadFluidStackFromNBT(nbt);
+	public static PipetteContents create(ItemStack itemStack) {
+		FluidStack contents = FluidUtil.getFluidContained(itemStack);
 		if (contents == null) {
 			return null;
 		}
 		return new PipetteContents(contents);
 	}
 
-	public PipetteContents(@Nonnull FluidStack contents) {
+	public PipetteContents(FluidStack contents) {
 		this.contents = contents;
 	}
 
-	@Nonnull
 	public FluidStack getContents() {
 		return contents;
 	}
@@ -57,11 +48,5 @@ public class PipetteContents implements INbtWritable {
 		descr += " (" + contents.amount + " mb)";
 
 		list.add(descr);
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		contents.writeToNBT(nbttagcompound);
-		return nbttagcompound;
 	}
 }

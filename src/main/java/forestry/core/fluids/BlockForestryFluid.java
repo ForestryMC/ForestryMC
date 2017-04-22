@@ -10,9 +10,13 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Random;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.entities.ParticleColoredDripParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -28,17 +32,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.entities.ParticleColoredDripParticle;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
@@ -63,11 +62,6 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		this.flammable = flammable;
 
 		this.color = color;
-	}
-
-	@Override
-	public boolean canDrain(World world, BlockPos pos) {
-		return true;
 	}
 
 	@Override
@@ -119,7 +113,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				double px = d0 + rand.nextFloat();
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
-				
+
 				Particle fx = new ParticleColoredDripParticle(worldIn, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 			}
@@ -129,19 +123,15 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
-			return false;
-		}
-		return super.canDisplace(world, pos);
+		return !blockState.getMaterial().isLiquid() &&
+				super.canDisplace(world, pos);
 	}
-	
+
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
-		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
-			return false;
-		}
-		return super.displaceIfPossible(world, pos);
+		return !blockState.getMaterial().isLiquid() &&
+				super.displaceIfPossible(world, pos);
 	}
 
 	@Override
@@ -150,14 +140,14 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, @Nullable EnumFacing face) {
 		return flammability;
 	}
 
 	private static boolean isFlammable(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		return block.isFlammable(world, pos, null);
+		return block.isFlammable(world, pos, EnumFacing.UP);
 	}
 
 	@Override
@@ -184,17 +174,17 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			return super.getMaterial(state);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		
+
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
-		
+
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -208,14 +198,12 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 				++y;
 				z += rand.nextInt(3) - 1;
 				IBlockState blockState = world.getBlockState(new BlockPos(x, y, z));
-				Block block = blockState.getBlock();
-
-				if (block.getMaterial(blockState) == Material.AIR) {
+				if (blockState.getMaterial() == Material.AIR) {
 					if (isNeighborFlammable(world, x, y, z)) {
 						world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState());
 						return;
 					}
-				} else if (block.getMaterial(blockState).blocksMovement()) {
+				} else if (blockState.getMaterial().blocksMovement()) {
 					return;
 				}
 			}

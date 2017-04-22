@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.greenhouse.DefaultGreenhouseListener;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouseComponent.Listener {
 
@@ -26,7 +25,7 @@ public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouse
 	public TileGreenhouseControl() {
 		this.greenhouseListener = new ControlGreenhouseListener(this);
 	}
-	
+
 	@Override
 	public IGreenhouseListener getGreenhouseListener() {
 		return greenhouseListener;
@@ -38,7 +37,7 @@ public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouse
 		public ControlGreenhouseListener(TileGreenhouseControl tile) {
 			this.tile = tile;
 		}
-		
+
 		@Override
 		public boolean canWork(IGreenhouseController greenhouse, boolean canWork) {
 			return canWork && !hasRedstoneSignal();

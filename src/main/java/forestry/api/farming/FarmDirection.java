@@ -23,7 +23,6 @@ public enum FarmDirection {
 		return forgeDirection;
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	public static FarmDirection getFarmDirection(EnumFacing forgeDirection) {
 		switch (forgeDirection) {
 			case NORTH:
@@ -34,7 +33,8 @@ public enum FarmDirection {
 				return SOUTH;
 			case WEST:
 				return WEST;
+			default:
+				throw new IllegalArgumentException("Farm directios can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
 		}
-		return null;
 	}
 }

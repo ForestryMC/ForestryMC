@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -19,26 +19,24 @@ import net.minecraftforge.fluids.IFluidTank;
 public class TankRenderInfo {
 	public static final TankRenderInfo EMPTY = new TankRenderInfo(new FluidStack(FluidRegistry.WATER, 0), EnumTankLevel.EMPTY);
 
-	@Nonnull
+	@Nullable
 	private final FluidStack fluidStack;
-	@Nonnull
 	private final EnumTankLevel level;
 
-	public TankRenderInfo(@Nonnull IFluidTank fluidTank) {
+	public TankRenderInfo(IFluidTank fluidTank) {
 		this(fluidTank.getFluid(), EnumTankLevel.rateTankLevel(fluidTank));
 	}
-	
-	public TankRenderInfo(@Nonnull FluidStack fluidStack, @Nonnull EnumTankLevel level) {
+
+	public TankRenderInfo(@Nullable FluidStack fluidStack, EnumTankLevel level) {
 		this.fluidStack = fluidStack;
 		this.level = level;
 	}
-	
-	@Nonnull
+
+	@Nullable
 	public FluidStack getFluidStack() {
 		return fluidStack;
 	}
-	
-	@Nonnull
+
 	public EnumTankLevel getLevel() {
 		return level;
 	}

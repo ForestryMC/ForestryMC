@@ -12,37 +12,36 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
-
-public class PacketFXSignal extends PacketCoordinates implements IForestryPacketClient {
+public class PacketFXSignal extends ForestryPacket implements IForestryPacketClient {
 
 	public enum VisualFXType {
 		NONE, BLOCK_BREAK, SAPLING_PLACE
 	}
 
 	public enum SoundFXType {
-		NONE, BLOCK_BREAK, BLOCK_PLACE;
+		NONE, BLOCK_BREAK, BLOCK_PLACE
 	}
 
-	private VisualFXType visualFX;
-	private SoundFXType soundFX;
-
-	private IBlockState blockState;
-
-	public PacketFXSignal() {
-	}
+	private final BlockPos pos;
+	private final VisualFXType visualFX;
+	private final SoundFXType soundFX;
+	private final IBlockState blockState;
 
 	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState blockState) {
 		this(type, SoundFXType.NONE, pos, blockState);
@@ -53,15 +52,15 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 	}
 
 	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState blockState) {
-		super(pos);
+		this.pos = pos;
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
 		this.blockState = blockState;
 	}
 
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
 		Block block = blockState.getBlock();
@@ -70,37 +69,35 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		this.visualFX = VisualFXType.values()[data.readByte()];
-		this.soundFX = SoundFXType.values()[data.readByte()];
-		Block block = Block.getBlockById(data.readVarInt());
-		this.blockState = block.getStateFromMeta(data.readVarInt());
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		World world = player.getEntityWorld();
-		BlockPos pos = getPos();
-
-		if (visualFX == VisualFXType.BLOCK_BREAK) {
-			Proxies.common.addBlockDestroyEffects(world, pos, blockState);
-		}
-
-		if (soundFX != SoundFXType.NONE) {
-			Block block = blockState.getBlock();
-			SoundType soundType = block.getSoundType();
-
-			if (soundFX == SoundFXType.BLOCK_BREAK) {
-				world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
-			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
-			}
-		}
-	}
-
-	@Override
 	public PacketIdClient getPacketId() {
 		return PacketIdClient.FX_SIGNAL;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
+			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
+			Block block = Block.getBlockById(data.readVarInt());
+			IBlockState blockState = block.getStateFromMeta(data.readVarInt());
+
+			World world = player.world;
+
+			if (visualFX == VisualFXType.BLOCK_BREAK) {
+				Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);
+			}
+
+			if (soundFX != SoundFXType.NONE) {
+				SoundType soundType = block.getSoundType(blockState, world, pos, null);
+
+				if (soundFX == SoundFXType.BLOCK_BREAK) {
+					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+				} else if (soundFX == SoundFXType.BLOCK_PLACE) {
+					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+				}
+			}
+		}
 	}
 }

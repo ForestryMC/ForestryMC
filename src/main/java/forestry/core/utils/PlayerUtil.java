@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.common.util.FakePlayerFactory;
 
 public abstract class PlayerUtil {
@@ -31,10 +28,6 @@ public abstract class PlayerUtil {
 	private static final UUID emptyUUID = new UUID(0, 0);
 
 	public static boolean isSameGameProfile(GameProfile player1, GameProfile player2) {
-		if (player1 == null || player2 == null) {
-			return false;
-		}
-
 		UUID id1 = player1.getId();
 		UUID id2 = player2.getId();
 		if (id1 != null && id2 != null && !id1.equals(emptyUUID) && !id2.equals(emptyUUID)) {
@@ -44,7 +37,7 @@ public abstract class PlayerUtil {
 		return player1.getName() != null && player1.getName().equals(player2.getName());
 	}
 
-	public static String getOwnerName(GameProfile profile) {
+	public static String getOwnerName(@Nullable GameProfile profile) {
 		if (profile == null) {
 			return Translator.translateToLocal("for.gui.derelict");
 		} else {
@@ -57,11 +50,8 @@ public abstract class PlayerUtil {
 	 * If they are not in the World, returns a FakePlayer.
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
-	public static EntityPlayer getPlayer(World world, GameProfile profile) {
-		if (world == null) {
-			throw new IllegalArgumentException("World cannot be null");
-		}
-
+	@Nullable
+	public static EntityPlayer getPlayer(World world, @Nullable GameProfile profile) {
 		if (profile == null || profile.getName() == null) {
 			if (world instanceof WorldServer) {
 				return FakePlayerFactory.getMinecraft((WorldServer) world);
@@ -69,7 +59,7 @@ public abstract class PlayerUtil {
 				return null;
 			}
 		}
-		
+
 		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
 		if (player == null && world instanceof WorldServer) {
 			player = FakePlayerFactory.get((WorldServer) world, profile);
@@ -77,7 +67,7 @@ public abstract class PlayerUtil {
 		return player;
 	}
 
-	public static void writeGameProfile(@Nonnull NBTTagCompound tagCompound, @Nonnull GameProfile profile) {
+	public static void writeGameProfile(NBTTagCompound tagCompound, GameProfile profile) {
 		if (!StringUtils.isNullOrEmpty(profile.getName())) {
 			tagCompound.setString("Name", profile.getName());
 		}
@@ -88,7 +78,7 @@ public abstract class PlayerUtil {
 	}
 
 	@Nullable
-	public static GameProfile readGameProfileFromNBT(@Nonnull NBTTagCompound compound) {
+	public static GameProfile readGameProfileFromNBT(NBTTagCompound compound) {
 		return NBTUtil.readGameProfileFromNBT(compound);
 	}
 }

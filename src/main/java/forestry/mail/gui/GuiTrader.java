@@ -10,31 +10,33 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.mail.tiles.TileTrader;
+import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
+public class GuiTrader extends GuiForestry<ContainerTrader> {
+	private final TileTrader tile;
 
 	public GuiTrader(InventoryPlayer inventoryplayer, TileTrader tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile));
+		this.tile = tile;
 		this.xSize = 226;
 		this.ySize = 220;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String name = Translator.translateToLocal(inventory.getUnlocalizedTitle());
-		this.fontRendererObj.drawString(name, textLayout.getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
+		String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
+		this.fontRendererObj.drawString(name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
 
 		String receive = Translator.translateToLocal("for.gui.mail.receive");
-		this.fontRendererObj.drawString(receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, fontColor.get("gui.mail.text"));
+		this.fontRendererObj.drawString(receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, ColourProperties.INSTANCE.get("gui.mail.text"));
 
 		String send = Translator.translateToLocal("for.gui.mail.send");
-		this.fontRendererObj.drawString(send, textLayout.getCenteredOffset(send, 70) + 51, 99, fontColor.get("gui.mail.text"));
+		this.fontRendererObj.drawString(send, textLayout.getCenteredOffset(send, 70) + 51, 99, ColourProperties.INSTANCE.get("gui.mail.text"));
 
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
@@ -43,6 +45,13 @@ public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(container.getAddress().getName(), guiLeft + 19, guiTop + 22, fontColor.get("gui.mail.text"));
+		fontRendererObj.drawString(container.getAddress().getName(), guiLeft + 19, guiTop + 22, ColourProperties.INSTANCE.get("gui.mail.text"));
+	}
+
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("trade.station");
+		addOwnerLedger(tile);
 	}
 }

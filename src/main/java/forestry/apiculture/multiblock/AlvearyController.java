@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +21,7 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.climate.IClimateControlled;
+import forestry.api.climate.IClimatePosition;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -35,10 +35,10 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.ParticleRender;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -47,14 +47,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
-
-	@Nonnull
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
-	private Biome cachedBiome;
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
 
@@ -75,7 +74,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		this.beeModifiers.add(new AlvearyBeeModifier());
 	}
 
-	@Nonnull
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
@@ -86,7 +84,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		return beekeepingLogic;
 	}
 
-	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		if (isAssembled()) {
@@ -174,9 +171,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		for (int slabX = minimumCoord.getX(); slabX <= maximumCoord.getX(); slabX++) {
 			for (int slabZ = minimumCoord.getZ(); slabZ <= maximumCoord.getZ(); slabZ++) {
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
-				IBlockState state = worldObj.getBlockState(pos);
+				IBlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
-				if (!BlockUtil.isWoodSlabBlock(state, block, worldObj, pos)) {
+				if (!BlockUtil.isWoodSlabBlock(state, block, world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
@@ -195,9 +192,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
-				IBlockState blockState = worldObj.getBlockState(new BlockPos(airX, airY, airZ));
-				Block block = blockState.getBlock();
-				if (block.isOpaqueCube(blockState)) {
+				IBlockState blockState = world.getBlockState(new BlockPos(airX, airY, airZ));
+				if (blockState.isOpaqueCube()) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}
@@ -262,6 +258,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	protected void updateClient(int tickCount) {
 		for (IAlvearyComponent.Active activeComponent : activeComponents) {
 			activeComponent.updateClient(tickCount);
@@ -277,15 +274,15 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				float fxZ = center.getZ() + 0.5F;
 				float distanceFromCenter = 1.6F;
 
-				float leftRightSpreadFromCenter = distanceFromCenter * (worldObj.rand.nextFloat() - 0.5F);
-				float upSpread = worldObj.rand.nextFloat() * 0.8F;
+				float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
+				float upSpread = world.rand.nextFloat() * 0.8F;
 				fxY += upSpread;
 
 				// display fx on all 4 sides
-				Proxies.render.addEntityHoneyDustFX(worldObj, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
-				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 			}
 		}
 	}
@@ -342,13 +339,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getTemperature(getWorldObj(), coords) + tempChange;
+		return ClimateUtil.getTemperature(getWorldObj(), coords) + tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getHumidity(getWorldObj(), coords) + humidChange;
+		return ClimateUtil.getHumidity(getWorldObj(), coords) + humidChange;
 	}
 
 	@Override
@@ -381,28 +378,31 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public Biome getBiome() {
-		if (cachedBiome == null) {
-			BlockPos coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiome(coords);
-		}
-		return cachedBiome;
+		BlockPos coords = getReferenceCoord();
+		return world.getBiome(coords);
 	}
 
 	@Override
 	public int getBlockLightValue() {
 		BlockPos topCenter = getTopCenterCoord();
-		return worldObj.getLightFromNeighbors(topCenter.up());
+		return world.getLightFromNeighbors(topCenter.up());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
 		BlockPos topCenter = getTopCenterCoord();
-		return worldObj.canBlockSeeSky(topCenter.add(0, 2, 0));
+		return world.canBlockSeeSky(topCenter.add(0, 2, 0));
+	}
+
+	@Override
+	public boolean isRaining() {
+		BlockPos topCenter = getTopCenterCoord();
+		return world.isRainingAt(topCenter.add(0, 2, 0));
 	}
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		float temperature = ForestryAPI.climateManager.getTemperature(worldObj, getReferenceCoord());
+		float temperature = ClimateUtil.getTemperature(world, getReferenceCoord());
 
 		tempChange += change;
 		tempChange = Math.max(boundaryDown - temperature, tempChange);
@@ -411,7 +411,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-		float humidity = ForestryAPI.climateManager.getHumidity(worldObj, getReferenceCoord());
+		float humidity = ClimateUtil.getHumidity(world, getReferenceCoord());
 
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);
@@ -425,16 +425,24 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(PacketBufferForestry data) {
 		data.writeVarInt(beekeepingLogic.getBeeProgressPercent());
 		data.writeVarInt(Math.round(tempChange * 100));
 		data.writeVarInt(Math.round(humidChange * 100));
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getReferenceCoord());
+		if (position != null) {
+			ClimateUtil.writePositionData(position, data);
+		}
 	}
 
 	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) throws IOException {
 		breedingProgressPercent = data.readVarInt();
 		tempChange = data.readVarInt() / 100.0F;
 		humidChange = data.readVarInt() / 100.0F;
+		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getReferenceCoord());
+		if (position != null) {
+			ClimateUtil.readPositionData(position, data);
+		}
 	}
 }

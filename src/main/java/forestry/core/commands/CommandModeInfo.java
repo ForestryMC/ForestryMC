@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nullable;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -21,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
 
 public class CommandModeInfo extends SubCommand {
 	private final String[] modeStringArr;
@@ -42,7 +42,7 @@ public class CommandModeInfo extends SubCommand {
 			return;
 		}
 
-		String modeName = modeHelper.getModeNameMatching(args[0]);
+		String modeName = args[0];
 
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.error", args[0]);
@@ -73,7 +73,7 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(args, modeStringArr);
 	}
 }

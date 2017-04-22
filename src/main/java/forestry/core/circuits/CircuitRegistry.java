@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -24,6 +21,9 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
 import forestry.core.PluginCore;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
@@ -38,11 +38,11 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuitLibrary getCircuitLibrary(World world, String playerName) {
-		CircuitLibrary library = (CircuitLibrary) world.loadItemData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
+		CircuitLibrary library = (CircuitLibrary) world.loadData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
 
 		if (library == null) {
 			library = new CircuitLibrary(playerName);
-			world.setItemData("CircuitLibrary_" + playerName, library);
+			world.setData("CircuitLibrary_" + playerName, library);
 		}
 
 		return library;
@@ -74,6 +74,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ICircuitLayout getLayout(String uid) {
 		if (layoutMap.containsKey(uid)) {
 			return layoutMap.get(uid);
@@ -94,13 +95,14 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
+	@Nullable
 	public ICircuit getCircuit(String uid) {
 		return circuitMap.get(uid);
 	}
 
 	@Override
 	public boolean isChipset(ItemStack itemstack) {
-		return itemstack != null && itemstack.getItem() == PluginCore.items.circuitboards;
+		return itemstack.getItem() == PluginCore.getItems().circuitboards;
 	}
 
 	@Override

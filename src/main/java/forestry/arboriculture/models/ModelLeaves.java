@@ -10,99 +10,132 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-
-import net.minecraftforge.common.property.IExtendedBlockState;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeRoot;
-import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.models.ModelBlockDefault;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.models.ModelBlockCached;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelLeaves extends ModelBlockDefault<BlockForestryLeaves> {
+@SideOnly(Side.CLIENT)
+public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
+	public static class Key {
+		public final TextureAtlasSprite leafSprite;
+		@Nullable
+		public final TextureAtlasSprite fruitSprite;
+		public final boolean fancy;
+		private final int hashCode;
 
-	public ModelLeaves() {
-		super(BlockForestryLeaves.class);
+		public Key(TextureAtlasSprite leafSprite, @Nullable TextureAtlasSprite fruitSprite, boolean fancy) {
+			this.leafSprite = leafSprite;
+			this.fruitSprite = fruitSprite;
+			this.fancy = fancy;
+			this.hashCode = Objects.hash(leafSprite, fruitSprite, fancy);
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (other == null || !(other instanceof Key)) {
+				return false;
+			} else {
+				Key otherKey = (Key) other;
+				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
+			}
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
 	}
 
 	@Override
-	public void bakeInventoryBlock(@Nonnull BlockForestryLeaves block, @Nonnull ItemStack itemStack, @Nonnull IModelBaker baker) {
-		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
-			return;
-		}
-
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
+	protected Key getInventoryKey(ItemStack itemStack) {
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		TileLeaves leaves = new TileLeaves();
-		if (itemStack.hasTagCompound()) {
+		if (itemStack.getTagCompound() != null) {
 			leaves.readFromNBT(itemStack.getTagCompound());
 		} else {
 			leaves.setTree(TreeRoot.treeTemplates.get(0));
 		}
 
-		ResourceLocation leafSpriteLocation = leaves.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
-		TextureAtlasSprite leavesIcon = map.getAtlasSprite(leafSpriteLocation.toString());
-		if (leavesIcon == null) {
-			return;
-		}
+		boolean fancy = Proxies.render.fancyGraphicsEnabled();
+		ResourceLocation leafLocation = leaves.getLeaveSprite(fancy);
+		ResourceLocation fruitLocation = leaves.getFruitSprite();
 
-		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leavesIcon, 0);
-
-		// add fruit
-		if (!leaves.hasFruit()) {
-			return;
-		}
-
-		ResourceLocation fruitSpriteLocation = leaves.getFruitSprite();
-		if (fruitSpriteLocation != null) {
-			TextureAtlasSprite fruitTexture = map.getAtlasSprite(fruitSpriteLocation.toString());
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitTexture, 1);
-		}
+		return new Key(map.getAtlasSprite(leafLocation.toString()),
+				fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
+				fancy);
 	}
 
 	@Override
-	public void bakeWorldBlock(@Nonnull BlockForestryLeaves block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
+	protected Key getWorldKey(IBlockState state) {
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+		
+		boolean fancy = Proxies.render.fancyGraphicsEnabled();
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		
+		if (world == null || pos == null) {
+			return createEmptyKey(map, fancy);
+		}
+		
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 
-		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-
 		if (tile == null) {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
-			ResourceLocation spriteLocation = oakSpecies.getLeafSpriteProvider().getSprite(false, Proxies.render.fancyGraphicsEnabled());
-			TextureAtlasSprite sprite = map.getAtlasSprite(spriteLocation.toString());
-			baker.setParticleSprite(sprite);
-			return;
+			return createEmptyKey(map, fancy);
 		}
 
-		ResourceLocation leafSpriteLocation = tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
-		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
-		
+		ResourceLocation leafLocation = tile.getLeaveSprite(fancy);
+		ResourceLocation fruitLocation = tile.getFruitSprite();
+
+		return new Key(map.getAtlasSprite(leafLocation.toString()),
+				fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
+				fancy);
+	}
+	
+	private Key createEmptyKey(TextureMap map, boolean fancy){
+		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
+		ResourceLocation spriteLocation = oakSpecies.getLeafSpriteProvider().getSprite(false, fancy);
+		TextureAtlasSprite sprite = map.getAtlasSprite(spriteLocation.toString());
+		return new Key(sprite, null, fancy);
+	}
+
+	@Override
+	protected void bakeBlock(BlockForestryLeaves block, Key key, IModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
-		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leafSprite, 0);
+		baker.addBlockModel(null, key.leafSprite, 0);
 
-		// Render overlay for fruit leaves.
-		ResourceLocation fruitSpriteLocation = tile.getFruitSprite();
-
-		if (fruitSpriteLocation != null) {
-			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
-			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitSprite, 1);
+		if (key.fruitSprite != null) {
+			baker.addBlockModel(null, key.fruitSprite, 1);
 		}
-		
+
 		// Set the particle sprite
-		baker.setParticleSprite(leafSprite);
+		baker.setParticleSprite(key.leafSprite);
+	}
+
+	public ModelLeaves() {
+		super(BlockForestryLeaves.class);
 	}
 }

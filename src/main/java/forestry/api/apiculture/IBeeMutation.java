@@ -8,10 +8,10 @@ package forestry.api.apiculture;
 import forestry.api.genetics.IMutation;
 
 public interface IBeeMutation extends IMutation {
-	
+
 	@Override
 	IBeeRoot getRoot();
-	
+
 	/**
 	 * @return float representing the chance for mutation to occur. note that this is 0 - 100 based, since it was an integer previously!
 	 */

@@ -12,27 +12,28 @@ package forestry.mail.gui;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.gui.GuiTextField;
-
-import org.lwjgl.input.Keyboard;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.render.ColourProperties;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
+import net.minecraft.client.gui.GuiTextField;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
-public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
-
+public class GuiTradeName extends GuiForestry<ContainerTradeName> {
+	private final TileTrader tile;
 	private GuiTextField addressNameField;
 
 	public GuiTradeName(TileTrader tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile));
+		this.tile = tile;
 		this.xSize = 176;
 		this.ySize = 90;
+
+		addressNameField = new GuiTextField(0, this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
 	}
 
 	@Override
@@ -40,9 +41,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 		super.initGui();
 
 		addressNameField = new GuiTextField(0, this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
-		if (container.getAddress() != null) {
-			addressNameField.setText(container.getAddress().getName());
-		}
+		addressNameField.setText(container.getAddress().getName());
 		addressNameField.setFocused(true);
 	}
 
@@ -75,7 +74,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();
 		textLayout.newLine();
-		textLayout.drawCenteredLine(prompt, 0, fontColor.get("gui.mail.text"));
+		textLayout.drawCenteredLine(prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
 		textLayout.endPage();
 		addressNameField.drawTextBox();
 	}
@@ -89,9 +88,13 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 	private void setAddress() {
 		String address = addressNameField.getText();
 		if (StringUtils.isNotBlank(address)) {
-			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(inventory, address);
-			Proxies.net.sendToServer(packet);
+			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
+			NetworkUtil.sendToServer(packet);
 		}
 	}
 
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+	}
 }

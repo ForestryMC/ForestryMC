@@ -12,20 +12,22 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketBufferForestry;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
@@ -37,7 +39,6 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	private int numPlayersUsing;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
-		super("naturalist.chest");
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}
@@ -59,7 +60,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	protected void updateClientSide() {
 		updates();
 	}
-	
+
 	@Override
 	protected void updateServerSide() {
 		updates();
@@ -90,7 +91,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(SoundEvent sound) {
-		this.worldObj.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
@@ -100,25 +101,27 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	/* IStreamable */
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		data.writeInt(numPlayersUsing);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
+	@SideOnly(Side.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		numPlayersUsing = data.readInt();
 	}
 
 	@Override
-	public Object getGui(EntityPlayer player, int page) {
+	@SideOnly(Side.CLIENT)
+	public GuiContainer getGui(EntityPlayer player, int page) {
 		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
-		return new GuiNaturalistInventory(speciesRoot, player, container, this, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override
-	public Object getContainer(EntityPlayer player, int page) {
+	public Container getContainer(EntityPlayer player, int page) {
 		return new ContainerNaturalistInventory(player.inventory, this, page);
 	}
 }

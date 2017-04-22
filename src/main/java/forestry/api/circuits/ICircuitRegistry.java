@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ public interface ICircuitRegistry {
 
 	void registerCircuit(ICircuit circuit);
 
+	@Nullable
 	ICircuit getCircuit(String uid);
 
 	ICircuitLibrary getCircuitLibrary(World world, String playerName);
@@ -26,10 +28,12 @@ public interface ICircuitRegistry {
 
 	void registerLayout(ICircuitLayout layout);
 
+	@Nullable
 	ICircuitLayout getLayout(String uid);
 
 	ICircuitLayout getDefaultLayout();
 
+	@Nullable
 	ICircuitBoard getCircuitBoard(ItemStack itemstack);
 
 	boolean isChipset(ItemStack itemstack);

@@ -1,5 +1,5 @@
 {
-  "parent": "block/column_side",
+  "parent": "block/cube_column",
   "textures": {
     "side": "forestry:blocks/wood/bark.acacia",
     "end": "forestry:blocks/wood/heart.acacia"

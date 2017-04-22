@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.fabricator;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,49 +28,47 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 	private static final int smeltingInputSlot = 1;
 	private static final int craftOutputSlot = 2;
 	private static final int craftInputSlot = 3;
-	
+
 	private static final int inputTank = 0;
-	
+
 	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/fabricator.png");
-	@Nonnull
 	private final ICraftingGridHelper craftingGridHelper;
-	
+
 	public FabricatorRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "tile.for.fabricator.name");
-		
+
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
 	}
-	
-	@Nonnull
+
 	@Override
 	public String getUid() {
 		return ForestryRecipeCategoryUid.FABRICATOR;
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FabricatorRecipeWrapper recipeWrapper, @Nonnull IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, FabricatorRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		
+
 		guiItemStacks.init(planSlot, true, 118, 0);
-		
+
 		guiItemStacks.init(smeltingInputSlot, true, 5, 4);
-		
+
 		guiItemStacks.init(craftOutputSlot, false, 118, 36);
-		
+
 		for (int y = 0; y < 3; ++y) {
 			for (int x = 0; x < 3; ++x) {
 				int index = craftInputSlot + x + y * 3;
 				guiItemStacks.init(index, true, 46 + x * 18, y * 18);
 			}
 		}
-		
+
 		guiFluidStacks.init(inputTank, true, 6, 32, 16, 16, 2000, false, null);
 
 		IFabricatorRecipe recipe = recipeWrapper.getRecipe();
 
 		ItemStack plan = recipe.getPlan();
-		if (plan != null) {
+		if (!plan.isEmpty()) {
 			guiItemStacks.set(planSlot, plan);
 		}
 
@@ -84,18 +81,18 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 			guiItemStacks.set(smeltingInputSlot, smeltingInput);
 		}
 
-		List<ItemStack> itemOutputs = ingredients.getOutputs(ItemStack.class);
-		craftingGridHelper.setOutput(guiItemStacks, itemOutputs);
+		List<List<ItemStack>> itemOutputs = ingredients.getOutputs(ItemStack.class);
+		guiItemStacks.set(craftOutputSlot, itemOutputs.get(0));
 
 		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(ItemStack.class);
-		craftingGridHelper.setInputStacks(guiItemStacks, itemStackInputs, recipe.getWidth(), recipe.getHeight());
+		craftingGridHelper.setInputs(guiItemStacks, itemStackInputs, recipe.getWidth(), recipe.getHeight());
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
 		if (!fluidInputs.isEmpty()) {
 			guiFluidStacks.set(inputTank, fluidInputs.get(0));
 		}
 	}
-	
+
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
 		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
 		for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {

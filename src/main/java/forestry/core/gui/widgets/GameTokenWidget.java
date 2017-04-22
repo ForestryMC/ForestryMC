@@ -10,19 +10,24 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SoundUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GameTokenWidget extends Widget {
 	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
@@ -36,11 +41,13 @@ public class GameTokenWidget extends Widget {
 		this.index = index;
 	}
 
+	@Nullable
 	private EscritoireGameToken getToken() {
 		return game.getToken(index);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void draw(int startX, int startY) {
 
 		EscritoireGameToken token = getToken();
@@ -54,7 +61,8 @@ public class GameTokenWidget extends Widget {
 		float colorG = (tokenColour >> 8 & 255) / 255.0F;
 		float colorB = (tokenColour & 255) / 255.0F;
 
-		Proxies.render.bindTexture(manager.gui.textureFile);
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		textureManager.bindTexture(manager.gui.textureFile);
 
 		GlStateManager.enableDepth();
 		GlStateManager.color(colorR, colorG, colorB);
@@ -69,9 +77,9 @@ public class GameTokenWidget extends Widget {
 		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
 		GlStateManager.disableDepth();
+		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
-			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			TextureAtlasSprite icon = TextureManager.getInstance().getDefault(ident);
+			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
 			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
 		}
 		GlStateManager.enableDepth();
@@ -92,7 +100,7 @@ public class GameTokenWidget extends Widget {
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		game.choose(index);
-		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, 0));
-		Proxies.common.playButtonClick();
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, 0));
+		SoundUtil.playButtonClick();
 	}
 }

@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotWatched;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.factory.tiles.TileMoistener;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
@@ -53,6 +54,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 

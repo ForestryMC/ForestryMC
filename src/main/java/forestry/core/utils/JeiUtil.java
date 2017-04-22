@@ -5,6 +5,7 @@ import java.util.List;
 
 import mezz.jei.api.IModRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -22,7 +23,7 @@ public class JeiUtil {
 	public static void addDescription(IModRegistry registry, Block... blocks) {
 		for (Block block : blocks) {
 			Item item = Item.getItemFromBlock(block);
-			if (item != null) {
+			if (item != Items.AIR) {
 				addDescription(registry, item);
 			} else {
 				Log.error("No item for block {}", block);

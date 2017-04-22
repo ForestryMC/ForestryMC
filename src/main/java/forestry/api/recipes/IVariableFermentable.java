@@ -12,9 +12,8 @@ import net.minecraft.item.ItemStack;
  * This does not supersede adding a proper recipe to the fermenter!
  */
 public interface IVariableFermentable {
-	
+
 	/**
-	 * @param itemstack
 	 * @return Float representing the modification to be applied to the matching recipe's biomass output.
 	 */
 	float getFermentationModifier(ItemStack itemstack);

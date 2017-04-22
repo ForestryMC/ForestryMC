@@ -12,27 +12,26 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.packets.PacketCoordinates;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketBeeLogicActive extends PacketCoordinates implements IForestryPacketClient {
-	private BeekeepingLogic beekeepingLogic;
-
-	public PacketBeeLogicActive() {
-	}
+public class PacketBeeLogicActive extends ForestryPacket implements IForestryPacketClient {
+	private final BlockPos tilePos;
+	private final BeekeepingLogic beekeepingLogic;
 
 	public PacketBeeLogicActive(IBeeHousing tile) {
-		super(tile.getCoordinates());
+		this.tilePos = tile.getCoordinates();
 		this.beekeepingLogic = (BeekeepingLogic) tile.getBeekeepingLogic();
 	}
 
@@ -42,19 +41,23 @@ public class PacketBeeLogicActive extends PacketCoordinates implements IForestry
 	}
 
 	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(tilePos);
 		beekeepingLogic.writeData(data);
 	}
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IBeeHousing) {
-			IBeeHousing beeHousing = (IBeeHousing) tile;
-			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-			if (beekeepingLogic instanceof BeekeepingLogic) {
-				((BeekeepingLogic) beekeepingLogic).readData(data);
+	@SideOnly(Side.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+			BlockPos tilePos = data.readBlockPos();
+
+			IBeeHousing beeHousing = TileUtil.getTile(player.world, tilePos, IBeeHousing.class);
+			if (beeHousing != null) {
+				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+				if (beekeepingLogic instanceof BeekeepingLogic) {
+					((BeekeepingLogic) beekeepingLogic).readData(data);
+				}
 			}
 		}
 	}

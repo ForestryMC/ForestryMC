@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import forestry.api.core.IModelManager;
+import forestry.core.tiles.TileForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -22,15 +24,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.api.core.IModelManager;
-import forestry.core.tiles.TileForestry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
-	@Nonnull
-	String getTeIdent();
-
-	@Nonnull
 	Class<T> getTeClass();
 
 	/**
@@ -38,18 +35,20 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	 */
 	void registerTileEntity();
 
+	@SideOnly(Side.CLIENT)
 	void registerModel(Item item, IModelManager manager);
 
-	@Nonnull
 	TileEntity createTileEntity();
 
-	void setBlock(@Nonnull Block block);
+	void setBlock(Block block);
 
+	@Nullable
 	Block getBlock();
 
-	@Nonnull
-	AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state);
+	boolean isFullCube(IBlockState state);
 
-	@Nonnull
-	RayTraceResult collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec);
+	AxisAlignedBB getBoundingBox(BlockPos pos, IBlockState state);
+
+	@Nullable
+	RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec);
 }

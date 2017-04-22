@@ -12,12 +12,11 @@ package forestry.apiculture.genetics;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
+import net.minecraft.entity.EntityLiving;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.

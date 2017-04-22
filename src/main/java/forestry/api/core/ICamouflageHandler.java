@@ -12,20 +12,22 @@ public interface ICamouflageHandler extends ILocatable {
 	/**
 	 * @return The item of the block that is the camouflage of this handler for the type.
 	 */
-    ItemStack getCamouflageBlock(String type);
+	ItemStack getCamouflageBlock(String type);
 
-    /**
-     * @return The default camouflage block item for the type.
-     */
-    ItemStack getDefaultCamouflageBlock(String type);
+	/**
+	 * @return The default camouflage block item for the type.
+	 */
+	ItemStack getDefaultCamouflageBlock(String type);
 
-    /**
-     * @return True if the handler can handle this type of camouflage.
-     */
-    boolean canHandleType(String type);
+	/**
+	 * @return True if the handler can handle this type of camouflage.
+	 */
+	boolean canHandleType(String type);
 
-    /**
-     * Set the camouflage block item for the type.
-     */
-    void setCamouflageBlock(String type, ItemStack camouflageBlock);
+	/**
+	 * Set the camouflage block item for the type.
+	 *
+	 * @return True if the block has chanced.
+	 */
+	boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate);
 }

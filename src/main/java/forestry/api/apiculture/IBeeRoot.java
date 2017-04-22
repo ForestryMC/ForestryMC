@@ -6,7 +6,6 @@
 package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.authlib.GameProfile;
@@ -19,15 +18,16 @@ import net.minecraft.world.World;
 public interface IBeeRoot extends ISpeciesRoot {
 
 	/**
-	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != EnumBeeType.NONE
+	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != null
 	 */
 	@Override
 	boolean isMember(ItemStack stack);
 
 	/**
-	 * @return {@link IBee} pattern parsed from the passed stack's nbt data.
+	 * @return {@link IBee} pattern parsed from the passed stack's nbt data. Null if the ItemStack is not a valid member.
 	 */
 	@Override
+	@Nullable
 	IBee getMember(ItemStack stack);
 
 	@Override
@@ -49,16 +49,15 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* BREEDING TRACKER */
 
 	/**
-	 * @param world
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(World world, GameProfile player);
+	IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 
 	/**
-	 * @return type of bee encoded on the itemstack. EnumBeeType.NONE if it isn't a bee.
+	 * @return type of bee encoded on the itemstack. null if it isn't a bee.
 	 */
 	@Nullable
 	@Override
@@ -75,8 +74,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	boolean isMated(ItemStack stack);
 
 	/**
-	 * @param genome
-	 *            Valid {@link IBeeGenome}
+	 * @param genome Valid {@link IBeeGenome}
 	 * @return {@link IBee} from the passed genome
 	 */
 	IBee getBee(IBeeGenome genome);
@@ -84,17 +82,16 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/**
 	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
 	 *
-	 * @param genome
-	 *            Valid {@link IBeeGenome}
-	 * @param mate
-	 *            Valid {@link IBee} representing the mate.
+	 * @param genome Valid {@link IBeeGenome}
+	 * @param mate   Valid {@link IBee} representing the mate.
 	 * @return Mated {@link IBee} from the passed genomes.
 	 */
 	IBee getBee(World world, IBeeGenome genome, IBee mate);
 
 	/* TEMPLATES */
+
 	@Override
-	ArrayList<IBee> getIndividualTemplates();
+	List<IBee> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override
@@ -103,15 +100,16 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* GAME MODE */
 	void resetBeekeepingMode();
 
-	ArrayList<IBeekeepingMode> getBeekeepingModes();
+	List<IBeekeepingMode> getBeekeepingModes();
 
 	IBeekeepingMode getBeekeepingMode(World world);
 
+	@Nullable
 	IBeekeepingMode getBeekeepingMode(String name);
 
 	void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(World world, String name);
+	void setBeekeepingMode(World world, IBeekeepingMode mode);
 
 	/* MISC */
 

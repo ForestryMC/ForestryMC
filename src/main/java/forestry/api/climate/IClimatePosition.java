@@ -5,30 +5,31 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * A IClimatePosition contains the climate infos (temperature and humidity) of one position.
+ */
 public interface IClimatePosition extends INbtReadable, INbtWritable {
-	
-	@Nonnull 
+
 	IClimateRegion getClimateRegion();
-	
-	@Nonnull 
+
 	BlockPos getPos();
-	
+
 	void setTemperature(float temperature);
-	
+
 	void addTemperature(float temperature);
-	
+
 	float getTemperature();
 
 	void setHumidity(float humidity);
-	
+
 	void addHumidity(float humidity);
-	
+
 	float getHumidity();
+	
+	IClimateInfo getInfo();
 
 }

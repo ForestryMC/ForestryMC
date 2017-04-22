@@ -19,9 +19,11 @@ import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,13 +39,11 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	public MutationConditionRequiresResource(String oreDictName) {
 		this.displayName = oreDictName;
 		for (ItemStack ore : OreDictionary.getOres(oreDictName)) {
-			if (ore != null) {
+			if (!ore.isEmpty()) {
 				Item oreItem = ore.getItem();
-				if (oreItem != null) {
-					Block oreBlock = Block.getBlockFromItem(oreItem);
-					if (oreBlock != null) {
-						this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
-					}
+				Block oreBlock = Block.getBlockFromItem(oreItem);
+				if (oreBlock != Blocks.AIR) {
+					this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
 				}
 			}
 		}
@@ -59,7 +59,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 		TileEntity tile;
 		do {
 			pos = pos.down();
-			tile = world.getTileEntity(pos);
+			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing);
 
 		IBlockState blockState = world.getBlockState(pos);

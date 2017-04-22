@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import javax.annotation.Nonnull;
-
+import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimatePosition;
 import forestry.api.climate.IClimateRegion;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,47 +18,43 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class ClimatePosition implements IClimatePosition {
+	protected final IClimateRegion region;
 
-	@Nonnull 
-	protected final IClimateRegion climateRegion;
-	@Nonnull 
 	protected final BlockPos pos;
 	protected float temperature;
 	protected float humidity;
-	
-	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos, NBTTagCompound nbtTag) {
-		this.climateRegion = climateRegion;
+
+	public ClimatePosition(IClimateRegion rRegion, BlockPos pos, NBTTagCompound nbtTag) {
+		this.region = rRegion;
 		this.pos = pos;
 		readFromNBT(nbtTag);
 	}
-	
-	public ClimatePosition(IClimateRegion climateRegion, BlockPos pos) {
-		Biome biome = climateRegion.getWorld().getBiome(pos);
-		this.climateRegion = climateRegion;
+
+	public ClimatePosition(IClimateRegion region, BlockPos pos) {
+		Biome biome = region.getWorld().getBiome(pos);
+		this.region = region;
 		this.pos = pos;
 		this.temperature = biome.getTemperature();
 		this.humidity = biome.getRainfall();
 	}
-	
-	public ClimatePosition(@Nonnull IClimateRegion climateRegion, @Nonnull BlockPos pos, float temperature, float humidity) {
-		this.climateRegion = climateRegion;
+
+	public ClimatePosition(IClimateRegion region, BlockPos pos, float temperature, float humidity) {
+		this.region = region;
 		this.pos = pos;
 		this.temperature = temperature;
 		this.humidity = humidity;
 	}
-	
-	@Nonnull
+
 	@Override
 	public IClimateRegion getClimateRegion() {
-		return climateRegion;
+		return region;
 	}
-	
-	@Nonnull 
+
 	@Override
 	public BlockPos getPos() {
 		return pos;
 	}
-	
+
 	@Override
 	public void setTemperature(float temperature) {
 		this.temperature = temperature;
@@ -69,17 +64,17 @@ public class ClimatePosition implements IClimatePosition {
 	public float getTemperature() {
 		return temperature;
 	}
-	
+
 	@Override
 	public void addTemperature(float temperature) {
 		setTemperature(getTemperature() + temperature);
 	}
-	
+
 	@Override
 	public void addHumidity(float humidity) {
 		setHumidity(getHumidity() + humidity);
 	}
-	
+
 	@Override
 	public void setHumidity(float humidity) {
 		this.humidity = humidity;
@@ -88,6 +83,11 @@ public class ClimatePosition implements IClimatePosition {
 	@Override
 	public float getHumidity() {
 		return humidity;
+	}
+	
+	@Override
+	public IClimateInfo getInfo() {
+		return new ClimateInfo(temperature, humidity);
 	}
 
 	@Override
@@ -102,5 +102,4 @@ public class ClimatePosition implements IClimatePosition {
 		nbt.setFloat("Humidity", humidity);
 		return nbt;
 	}
-
 }

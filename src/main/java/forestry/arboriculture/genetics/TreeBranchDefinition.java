@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Locale;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -21,13 +20,12 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleGrowth;
-import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
+import org.apache.commons.lang3.text.WordUtils;
 
 public enum TreeBranchDefinition implements IBranchDefinition {
 	ACACIA,
@@ -78,6 +76,7 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		branch = new BranchTrees(name, scientific);
 	}
 
+	@Nullable
 	private static IAllele[] defaultTemplate;
 
 	@Override
@@ -85,20 +84,15 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		if (defaultTemplate == null) {
 			defaultTemplate = new IAllele[EnumTreeChromosome.values().length];
 
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FRUITS, AlleleFruit.fruitNone);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.GROWTH, AlleleGrowth.growthLightLevel);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.PLANT, AllelePlantType.plantTypeNone);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.TERRITORY, EnumAllele.Territory.AVERAGE);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.EFFECT, AlleleLeafEffect.leavesNone);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.GIRTH, 1);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.COMBUSTIBILITY, 20);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.CARBONIZATION, 4);
-			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FRUITS, AlleleFruits.fruitNone);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.EFFECT, AlleleLeafEffects.leavesNone);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.GIRTH, 1);
+			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
 		}
 		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}
@@ -108,7 +102,7 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		return branch;
 	}
 
-	public static void createAlleles() {
+	public static void registerAlleles() {
 
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 

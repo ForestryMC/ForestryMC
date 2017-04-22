@@ -5,30 +5,28 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import forestry.api.genetics.IFruitFamily;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.genetics.IFruitFamily;
-
 public interface IFruitProvider {
-
 	IFruitFamily getFamily();
 
 	int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
 
-	/** return the color to use for decorative leaves. Usually the ripe color. */
+	/**
+	 * return the color to use for decorative leaves. Usually the ripe color.
+	 */
 	int getDecorativeColor();
 
 	boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
@@ -36,15 +34,12 @@ public interface IFruitProvider {
 	int getRipeningPeriod();
 
 	// / Products, Chance
-	@Nonnull
 	Map<ItemStack, Float> getProducts();
 
 	// / Specialty, Chance
-	@Nonnull
 	Map<ItemStack, Float> getSpecialty();
 
-	@Nonnull
-	List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
+	NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
@@ -54,7 +49,6 @@ public interface IFruitProvider {
 	@Nullable
 	String getModelName();
 
-	@Nonnull
 	String getModID();
 
 	/* TEXTURE OVERLAY */
@@ -66,7 +60,9 @@ public interface IFruitProvider {
 	@Nullable
 	ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
 
-	/** return the ResourceLocation to display on decorative leaves */
+	/**
+	 * return the ResourceLocation to display on decorative leaves
+	 */
 	@Nullable
 	ResourceLocation getDecorativeSprite();
 

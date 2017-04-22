@@ -21,7 +21,6 @@ import forestry.core.utils.Log;
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";
 	private String identifier = "EASY";
-	private final String category;
 
 	private final Map<String, Boolean> booleanSettings = new HashMap<>();
 	private final Map<String, Integer> integerSettings = new HashMap<>();
@@ -30,7 +29,7 @@ public class GameMode implements IGameMode {
 	private static final float ENERGY_DEMAND_MODIFIER = 1.0f;
 	private static final float FUEL_MODIFIER = 1.0f;
 
-	private static final int FARM_FERTILIZER_VALUE = 2000;
+	private static final int FARM_FERTILIZER_MODIFIER = 4;
 
 	private static final int recipeFertilizerOutputApatite = 8;
 	private static final int recipeFertilizerOutputAsh = 16;
@@ -66,7 +65,7 @@ public class GameMode implements IGameMode {
 	public GameMode(String identifier) {
 
 		this.identifier = identifier;
-		this.category = "gamemodes/" + identifier;
+		String category = "gamemodes/" + identifier;
 
 		File configFile = new File(Forestry.instance.getConfigFolder(), category + ".cfg");
 
@@ -75,7 +74,7 @@ public class GameMode implements IGameMode {
 		initSettingFloat(config, "energy", "demand.modifier", ENERGY_DEMAND_MODIFIER);
 		initSettingBoolean(config, "energy", "engine.clockwork", true);
 
-		initSettingInt(config, "farms", "fertilizer.value", FARM_FERTILIZER_VALUE);
+		initSettingInt(config, "farms", "fertilizer.modifier", FARM_FERTILIZER_MODIFIER);
 
 		initSettingFloat(config, "fuel.ethanol", "generator", FUEL_MODIFIER);
 		initSettingFloat(config, "fuel.ethanol", "combustion", FUEL_MODIFIER);

@@ -10,9 +10,24 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.farming.models.EnumFarmBlockTexture;
+import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,11 +43,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -40,24 +55,10 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.propertys.UnlistedBlockAccess;
-import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
-
 public class BlockFarm extends BlockStructure {
 
 	public static final PropertyEnum<EnumFarmBlockType> META = PropertyEnum.create("meta", EnumFarmBlockType.class);
-	
+
 	public BlockFarm() {
 		super(Material.ROCK);
 		setHardness(1.0f);
@@ -65,7 +66,7 @@ public class BlockFarm extends BlockStructure {
 		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
 		setCreativeTab(Tabs.tabAgriculture);
 	}
-	
+
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
@@ -90,15 +91,14 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;
 			}
 
 			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(item, 1, i);
+				ItemStack stack = new ItemStack(itemIn, 1, i);
 				NBTTagCompound compound = new NBTTagCompound();
 				block.saveToCompound(compound);
 				stack.setTagCompound(compound);
@@ -115,17 +115,19 @@ public class BlockFarm extends BlockStructure {
 		}
 		return drops.get(0);
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
-		
-		if (!stack.hasTagCompound()) {
+
+		if (stack.getTagCompound() == null) {
 			return;
 		}
 
-		TileFarm tile = (TileFarm) world.getTileEntity(pos);
-		tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
+		TileFarm tile = TileUtil.getTile(world, pos, TileFarm.class);
+		if (tile != null) {
+			tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
+		}
 	}
 
 	@Override
@@ -138,21 +140,18 @@ public class BlockFarm extends BlockStructure {
 		}
 		return world.setBlockToAir(pos);
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
 		int meta = getMetaFromState(state);
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileFarm) {
-			TileFarm farm = (TileFarm) tile;
-
+		TileUtil.actOnTile(world, pos, TileFarm.class, farm -> {
 			ItemStack stack = new ItemStack(this, 1, meta != 1 ? meta : 0);
 			NBTTagCompound compound = new NBTTagCompound();
 			farm.getFarmBlockTexture().saveToCompound(compound);
 			stack.setTagCompound(compound);
 			drops.add(stack);
-		}
+		});
 		return drops;
 	}
 
@@ -178,12 +177,12 @@ public class BlockFarm extends BlockStructure {
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < 6;i++){
-			if(i == 1){
+		for (int i = 0; i < 6; i++) {
+			if (i == 1) {
 				continue;
 			}
 			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
@@ -191,7 +190,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
 		return state.getValue(META) == EnumFarmBlockType.CONTROL;
 	}
 

@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-public enum EnumPileType{
+public enum EnumPileType {
 	WOOD,
 	DIRT,
 	ASH;
-	
+
 	public static final EnumPileType[] VALUES = values();
 }

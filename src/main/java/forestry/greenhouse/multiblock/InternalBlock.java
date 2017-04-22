@@ -10,68 +10,63 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class InternalBlock implements IInternalBlock {
-	@Nonnull
 	private final BlockPos pos;
-	@Nonnull
 	private final List<IInternalBlockFace> faces = new ArrayList<>(6);
 	@Nullable
 	private final IInternalBlock root;
-	
-	public InternalBlock(@Nonnull BlockPos pos) {
+
+	public InternalBlock(BlockPos pos) {
 		this.pos = pos;
 		this.root = null;
-		
+
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			this.faces.add(new InternalBlockFace(facing, getPos().offset(facing), false));
 		}
 	}
-	
-	public InternalBlock(@Nonnull BlockPos pos, EnumFacing rootFace, @Nonnull IInternalBlock root) {
+
+	public InternalBlock(BlockPos pos, EnumFacing rootFace, IInternalBlock root) {
 		this.pos = pos;
 		this.root = root;
-		
+
 		for (EnumFacing face : EnumFacing.VALUES) {
 			this.faces.add(new InternalBlockFace(face, getPos().offset(face), face == rootFace));
 		}
 	}
-	
-	@Nonnull
+
 	@Override
 	public BlockPos getPos() {
 		return pos;
 	}
-	
-	@Nonnull
+
 	@Override
 	public Collection<IInternalBlockFace> getFaces() {
 		return faces;
 	}
-	
+
 	@Nullable
 	@Override
 	public IInternalBlock getRoot() {
 		return root;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof IInternalBlock)) {
 			return false;
 		}
 		IInternalBlock internalBlock = (IInternalBlock) obj;
-		return internalBlock.getPos().equals(getPos());
+		return getPos().equals(internalBlock.getPos());
 	}
 
 	@Override

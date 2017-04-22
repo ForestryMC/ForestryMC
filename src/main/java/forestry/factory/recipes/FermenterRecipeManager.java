@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FermenterRecipeManager implements IFermenterManager {
 
@@ -41,6 +40,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
 	}
 
+	@Nullable
 	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
 		for (IFermenterRecipe recipe : recipes) {
 			if (matches(recipe, res, liqu)) {
@@ -57,11 +57,11 @@ public class FermenterRecipeManager implements IFermenterManager {
 		}
 
 		FluidStack fluid = recipe.getFluidResource();
-		return liqu != null && liqu.isFluidEqual(fluid);
+		return liqu.isFluidEqual(fluid);
 	}
 
 	public static boolean isResource(ItemStack resource) {
-		if (resource == null) {
+		if (resource.isEmpty()) {
 			return false;
 		}
 

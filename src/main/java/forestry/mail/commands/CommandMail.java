@@ -12,6 +12,13 @@
  */
 package forestry.mail.commands;
 
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SubCommand;
+import forestry.core.utils.StringUtil;
+import forestry.mail.MailAddress;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,14 +27,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.ITradeStationInfo;
-import forestry.api.mail.PostManager;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SubCommand;
-import forestry.core.utils.StringUtil;
-import forestry.mail.MailAddress;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -53,7 +52,7 @@ public class CommandMail extends SubCommand {
 			if (!(sender instanceof EntityPlayer)) {
 				return;
 			}
-			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(((EntityPlayer) sender).worldObj).getActiveTradeStations(((EntityPlayer) sender).worldObj).values()) {
+			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(((EntityPlayer) sender).world).getActiveTradeStations(((EntityPlayer) sender).world).values()) {
 				CommandHelpers.sendChatMessage(sender, makeTradeListEntry(trade.getTradeInfo()));
 			}
 		}
@@ -62,14 +61,14 @@ public class CommandMail extends SubCommand {
 			TextFormatting formatting = info.getState().isOk() ? TextFormatting.GREEN : TextFormatting.RED;
 
 			String tradegood = "[ ? ]";
-			if (info.getTradegood() != null) {
-				tradegood = info.getTradegood().stackSize + "x" + info.getTradegood().getDisplayName();
+			if (!info.getTradegood().isEmpty()) {
+				tradegood = info.getTradegood().getCount() + "x" + info.getTradegood().getDisplayName();
 			}
 			String demand = "[ ? ]";
-			if (info.getRequired().length > 0) {
+			if (!info.getRequired().isEmpty()) {
 				demand = "";
 				for (ItemStack dmd : info.getRequired()) {
-					demand = StringUtil.append(", ", demand, dmd.stackSize + "x" + dmd.getDisplayName());
+					demand = StringUtil.append(", ", demand, dmd.getCount() + "x" + dmd.getDisplayName());
 				}
 			}
 

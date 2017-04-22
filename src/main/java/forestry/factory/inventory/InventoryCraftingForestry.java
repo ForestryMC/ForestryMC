@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.inventory.InventoryCrafting;
-
 import forestry.core.gui.ContainerDummy;
 import forestry.factory.gui.ContainerWorktable;
+import net.minecraft.inventory.InventoryCrafting;
 
 public class InventoryCraftingForestry extends InventoryCrafting {
 	public InventoryCraftingForestry(ContainerWorktable containerWorktable) {

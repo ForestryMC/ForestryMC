@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.climate;
 
+import javax.annotation.Nullable;
+
 /**
  * A climate source is used to change the climate in a region.
  */
@@ -12,15 +14,17 @@ public interface IClimateSource {
 
 	/**
 	 * @param tickCount The current tick count.
-	 * @param region The climate region, in that the source stands.
+	 * @param region    The climate region, in that the source stands.
+	 * @return Return true if the the climate has changed.
 	 */
-	void changeClimate(int tickCount, IClimateRegion region);
+	boolean changeClimate(int tickCount, IClimateRegion region);
 
 	/**
 	 * @return The ticks that are required for one change.
 	 */
 	int getTicksForChange(IClimateRegion region);
-	
+
+	@Nullable
 	IClimateSourceProvider getProvider();
 
 }

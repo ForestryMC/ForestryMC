@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import forestry.factory.tiles.ICrafterWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,28 +24,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.stats.AchievementList;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import forestry.factory.tiles.ICrafterWorktable;
-
 public class SlotCrafter extends Slot {
 
-	/** The craft matrix inventory linked to this result slot. */
+	/**
+	 * The craft matrix inventory linked to this result slot.
+	 */
 	private final IInventory craftMatrix;
 	private final ICrafterWorktable crafter;
-	
-	/** The player that is using the GUI where this slot resides. */
-	private final EntityPlayer thePlayer;
-	/** The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset. */
+
+	/**
+	 * The player that is using the GUI where this slot resides.
+	 */
+	private final EntityPlayer player;
+	/**
+	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
+	 */
 	private int amountCrafted;
 
 	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(craftMatrix, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
-		this.thePlayer = player;
+		this.player = player;
 	}
-	
+
 	/**
 	 * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
 	 */
@@ -70,56 +73,57 @@ public class SlotCrafter extends Slot {
 	@Override
 	protected void onCrafting(ItemStack stack) {
 		if (this.amountCrafted > 0) {
-			stack.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.amountCrafted);
+			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
+			net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(this.player, stack, craftMatrix);
 		}
 
 		this.amountCrafted = 0;
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.CRAFTING_TABLE)) {
-			this.thePlayer.addStat(AchievementList.BUILD_WORK_BENCH);
+			this.player.addStat(AchievementList.BUILD_WORK_BENCH);
 		}
 
 		if (stack.getItem() instanceof ItemPickaxe) {
-			this.thePlayer.addStat(AchievementList.BUILD_PICKAXE);
+			this.player.addStat(AchievementList.BUILD_PICKAXE);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.FURNACE)) {
-			this.thePlayer.addStat(AchievementList.BUILD_FURNACE);
+			this.player.addStat(AchievementList.BUILD_FURNACE);
 		}
 
 		if (stack.getItem() instanceof ItemHoe) {
-			this.thePlayer.addStat(AchievementList.BUILD_HOE);
+			this.player.addStat(AchievementList.BUILD_HOE);
 		}
 
 		if (stack.getItem() == Items.BREAD) {
-			this.thePlayer.addStat(AchievementList.MAKE_BREAD);
+			this.player.addStat(AchievementList.MAKE_BREAD);
 		}
 
 		if (stack.getItem() == Items.CAKE) {
-			this.thePlayer.addStat(AchievementList.BAKE_CAKE);
+			this.player.addStat(AchievementList.BAKE_CAKE);
 		}
 
 		if (stack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) stack.getItem()).getToolMaterial() != Item.ToolMaterial.WOOD) {
-			this.thePlayer.addStat(AchievementList.BUILD_BETTER_PICKAXE);
+			this.player.addStat(AchievementList.BUILD_BETTER_PICKAXE);
 		}
 
 		if (stack.getItem() instanceof ItemSword) {
-			this.thePlayer.addStat(AchievementList.BUILD_SWORD);
+			this.player.addStat(AchievementList.BUILD_SWORD);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.ENCHANTING_TABLE)) {
-			this.thePlayer.addStat(AchievementList.ENCHANTMENTS);
+			this.player.addStat(AchievementList.ENCHANTMENTS);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)) {
-			this.thePlayer.addStat(AchievementList.BOOKCASE);
+			this.player.addStat(AchievementList.BOOKCASE);
 		}
 	}
 
 	@Override
 	public ItemStack decrStackSize(int amount) {
 		if (!this.getHasStack()) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		return this.getStack();
@@ -137,18 +141,16 @@ public class SlotCrafter extends Slot {
 
 	@Override
 	public boolean getHasStack() {
-		return getStack() != null && crafter.canTakeStack(getSlotIndex());
+		return !getStack().isEmpty() && crafter.canTakeStack(getSlotIndex());
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		if (!crafter.onCraftingStart(player)) {
-			return;
+	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+		if (crafter.onCraftingStart(player)) {
+			this.onCrafting(itemStack); // handles crafting achievements, maps, and statistics
+
+			crafter.onCraftingComplete(player);
 		}
-
-		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, craftMatrix);
-		this.onCrafting(itemStack); // handles crafting achievements, maps, and statistics
-
-		crafter.onCraftingComplete(player);
+		return itemStack;
 	}
 }

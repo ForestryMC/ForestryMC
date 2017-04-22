@@ -13,10 +13,9 @@ package forestry.core.config;
 import java.io.File;
 import java.util.Arrays;
 
+import forestry.core.utils.Translator;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import forestry.core.utils.Translator;
 
 public class LocalizedConfiguration extends Configuration {
 

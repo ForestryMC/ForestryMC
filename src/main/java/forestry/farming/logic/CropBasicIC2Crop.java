@@ -1,12 +1,14 @@
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,7 +32,7 @@ public class CropBasicIC2Crop extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		return getCropDrops(this.tileEntity);
 	}
 
@@ -73,10 +75,12 @@ public class CropBasicIC2Crop extends Crop {
 	 * @return list containing the drops.
 	 */
 	@Optional.Method(modid = PluginIC2.modId)
-	private static List<ItemStack> getCropDrops(TileEntity tileEntity) {
+	private static NonNullList<ItemStack> getCropDrops(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile) tileEntity;
-			return crop.performHarvest();
+			NonNullList<ItemStack> drops = NonNullList.create();
+			drops.addAll(crop.performHarvest());
+			return drops;
 		}
 		return null;
 	}

@@ -11,25 +11,22 @@
 package forestry.core.network;
 
 import java.io.IOException;
-import java.io.InputStream;
 
+import com.google.common.base.Preconditions;
+import forestry.core.utils.Log;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.IThreadListener;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
-
-import io.netty.buffer.ByteBufInputStream;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketHandler {
 	public static final String channelId = "FOR";
@@ -42,70 +39,52 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ServerCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.getPacket());
+		PacketBufferForestry data = new PacketBufferForestry(event.getPacket().payload());
 		EntityPlayerMP player = ((NetHandlerPlayServer) event.getHandler()).playerEntity;
 
-		try {
-			byte packetIdOrdinal = data.readByte();
-			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
-			IForestryPacketServer packetHandler = packetId.getPacketHandler();
-			checkThreadAndEnqueue(packetHandler, data, player, player.getServerWorld());
-		} catch (IOException e) {
-			Log.error("Failed to read packet.", e);
-		}
+		byte packetIdOrdinal = data.readByte();
+		PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
+		IForestryPacketHandlerServer packetHandler = packetId.getPacketHandler();
+		checkThreadAndEnqueue(packetHandler, data, player, player.getServerWorld());
 	}
 
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onPacket(ClientCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.getPacket());
-		EntityPlayer player = Proxies.common.getPlayer();
+		PacketBufferForestry data = new PacketBufferForestry(event.getPacket().payload());
 
-		try {
-			byte packetIdOrdinal = data.readByte();
-			PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
-			IForestryPacketClient packetHandler = packetId.getPacketHandler();
-			checkThreadAndEnqueue(packetHandler, data, player, Minecraft.getMinecraft());
-		} catch (IOException e) {
-			Log.error("Failed to read packet.", e);
-		}
-	}
-
-	private static DataInputStreamForestry getStream(FMLProxyPacket fmlPacket) {
-		InputStream is = new ByteBufInputStream(fmlPacket.payload());
-		return new DataInputStreamForestry(is);
+		byte packetIdOrdinal = data.readByte();
+		PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
+		IForestryPacketHandlerClient packetHandler = packetId.getPacketHandler();
+		checkThreadAndEnqueue(packetHandler, data, Minecraft.getMinecraft());
 	}
 
 	public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
 		channel.sendTo(packet, player);
 	}
 
-	private static void checkThreadAndEnqueue(final IForestryPacketClient packet, final DataInputStreamForestry data, final EntityPlayer player, IThreadListener threadListener) {
+	@SideOnly(Side.CLIENT)
+	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
 		if (!threadListener.isCallingFromMinecraftThread()) {
-			threadListener.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						packet.readData(data);
-						packet.onPacketData(data, player);
-					} catch (IOException e) {
-						Log.error("Network Error", e);
-					}
+			threadListener.addScheduledTask(() -> {
+				try {
+					EntityPlayer player = Minecraft.getMinecraft().player;
+					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
+					packet.onPacketData(data, player);
+				} catch (IOException e) {
+					Log.error("Network Error", e);
 				}
 			});
 		}
 	}
 
-	private static void checkThreadAndEnqueue(final IForestryPacketServer packet, final DataInputStreamForestry data, final EntityPlayerMP player, IThreadListener threadListener) {
+	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final EntityPlayerMP player, IThreadListener threadListener) {
 		if (!threadListener.isCallingFromMinecraftThread()) {
-			threadListener.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						packet.readData(data);
-						packet.onPacketData(data, player);
-					} catch (IOException e) {
-						Log.error("Network Error", e);
-					}
+			threadListener.addScheduledTask(() -> {
+				try {
+					packet.onPacketData(data, player);
+				} catch (IOException e) {
+					Log.error("Network Error", e);
 				}
 			});
 		}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +24,7 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +37,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -44,6 +47,7 @@ public class ItemResearchNote extends ItemForestry {
 
 		public static final EnumNoteType[] VALUES = values();
 
+		@Nullable
 		private static IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
 			IAllele allele0 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
 			IAllele allele1 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL1"));
@@ -70,10 +74,10 @@ public class ItemResearchNote extends ItemForestry {
 			return encoded;
 		}
 
-		public ArrayList<String> getTooltip(NBTTagCompound compound) {
-			ArrayList<String> tooltips = new ArrayList<>();
+		public List<String> getTooltip(NBTTagCompound compound) {
+			List<String> tooltips = new ArrayList<>();
 
-			if (compound == null || this == NONE) {
+			if (this == NONE) {
 				return tooltips;
 			}
 
@@ -99,7 +103,7 @@ public class ItemResearchNote extends ItemForestry {
 				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.2", mutationChance));
 				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.3", speciesResult));
 
-				if (encoded.getSpecialConditions() != null && !encoded.getSpecialConditions().isEmpty()) {
+				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (String line : encoded.getSpecialConditions()) {
 						tooltips.add(TextFormatting.GOLD + line);
 					}
@@ -122,7 +126,7 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public boolean registerResults(World world, EntityPlayer player, NBTTagCompound compound) {
-			if (compound == null || this == NONE) {
+			if (this == NONE) {
 				return false;
 			}
 
@@ -139,7 +143,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.addChatMessage(new TextComponentTranslation("for.chat.cannotmemorizeagain"));
+					player.sendMessage(new TextComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
@@ -152,9 +156,9 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.addChatMessage(new TextComponentTranslation("for.chat.memorizednote"));
+				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote"));
 
-				player.addChatMessage(new TextComponentTranslation("for.chat.memorizednote2",
+				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote2",
 						TextFormatting.GRAY + species0.getName(),
 						TextFormatting.GRAY + species1.getName(),
 						TextFormatting.GREEN + speciesResult.getName()));
@@ -203,7 +207,7 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	public static class ResearchNote {
-
+		@Nullable
 		private final GameProfile researcher;
 		private final EnumNoteType type;
 		private final NBTTagCompound inner;
@@ -214,7 +218,7 @@ public class ItemResearchNote extends ItemForestry {
 			this.inner = inner;
 		}
 
-		public ResearchNote(NBTTagCompound compound) {
+		public ResearchNote(@Nullable NBTTagCompound compound) {
 			if (compound != null) {
 				if (compound.hasKey("res")) {
 					this.researcher = PlayerUtil.readGameProfileFromNBT(compound.getCompoundTag("res"));
@@ -242,7 +246,7 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public void addTooltip(List<String> list) {
-			ArrayList<String> tooltips = type.getTooltip(inner);
+			List<String> tooltips = type.getTooltip(inner);
 			if (tooltips.size() <= 0) {
 				list.add(TextFormatting.ITALIC + TextFormatting.RED.toString() + Translator.translateToLocal("for.researchNote.error.0"));
 				list.add(Translator.translateToLocal("for.researchNote.error.1"));
@@ -274,6 +278,7 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		super.addInformation(itemstack, player, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
@@ -281,23 +286,19 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (worldIn.isRemote) {
-			return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
+			return ActionResult.newResult(EnumActionResult.PASS, heldItem);
 		}
 
-		ResearchNote note = new ResearchNote(itemStackIn.getTagCompound());
+		ResearchNote note = new ResearchNote(heldItem.getTagCompound());
 		if (note.registerResults(worldIn, playerIn)) {
 			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
 			// Notify player that his inventory has changed.
-			Proxies.net.inventoryChangeNotify(playerIn);
+			NetworkUtil.inventoryChangeNotify(playerIn);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
 	}
-
-//	@Override
-//	public int getColorFromItemstack(ItemStack itemstack, int j) {
-//		return 0xffe8a5;
-//	}
 }

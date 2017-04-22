@@ -10,31 +10,32 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
+
+import forestry.core.gui.ContainerTile;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SlotUtil;
+import forestry.mail.POBox;
+import forestry.mail.POBoxInfo;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import forestry.mail.tiles.TileMailbox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.ContainerTile;
-import forestry.core.gui.slots.SlotOutput;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.SlotUtil;
-import forestry.mail.POBox;
-import forestry.mail.POBoxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
-import forestry.mail.tiles.TileMailbox;
-
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
 	public static final short SLOT_LETTERS = 0;
 	public static final short SLOT_LETTERS_COUNT = 7 * 12;
-
+	@Nullable
 	private final POBox mailInventory;
 
 	public ContainerMailbox(InventoryPlayer playerInventory, TileMailbox tile) {
 		super(tile, playerInventory, 35, 145);
-		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.worldObj, playerInventory.player.getGameProfile());
+		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
 
 		if (inventory instanceof POBox) {
 			this.mailInventory = (POBox) inventory;
@@ -54,9 +55,9 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 		ItemStack stack = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
-			if (!player.worldObj.isRemote && mailInventory != null) {
+			if (!player.world.isRemote && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(info), player);
+				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
 			}
 		}
 

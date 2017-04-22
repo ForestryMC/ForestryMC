@@ -36,8 +36,8 @@ public class FarmableBasicIC2Crop implements IFarmable {
 			if (crop.getStorageWater() <= 200) {
 				crop.setStorageWater(200);
 			}
-			if (crop.getStorageNutrient() <= 100) {
-				crop.setStorageNutrient(crop.getStorageNutrient() + 100);
+			if (crop.getStorageNutrients() <= 100) {
+				crop.setStorageNutrients(crop.getStorageNutrients() + 100);
 			}
 		}
 	}

@@ -3,8 +3,8 @@ package forestry.core.inventory;
 import forestry.api.core.ICamouflageHandler;
 import forestry.core.network.packets.CamouflageSelectionType;
 import forestry.core.network.packets.PacketCamouflageSelectServer;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +23,7 @@ public class ItemInventoryCamouflageSprayCan extends ItemInventory implements IC
 
 	@Override
 	public ItemStack getDefaultCamouflageBlock(String type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -32,15 +32,17 @@ public class ItemInventoryCamouflageSprayCan extends ItemInventory implements IC
 	}
 
 	@Override
-	public void setCamouflageBlock(String type, ItemStack camouflageBlock) {
-		if(!ItemStackUtil.isIdenticalItem(camouflageBlock, getStackInSlot(0))){
+	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
+		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, getStackInSlot(0))) {
 			setInventorySlotContents(0, camouflageBlock);
-			
-			World world = player.worldObj;
-			if (world != null && world.isRemote) {
-				Proxies.net.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.ITEM));
+
+			World world = player.world;
+			if (sendClientUpdate && world != null && world.isRemote) {
+				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.ITEM));
 			}
+			return true;
 		}
+		return false;
 	}
 
 	@Override

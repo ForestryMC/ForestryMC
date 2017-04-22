@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,17 +15,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe> {
-	
-	@Nonnull
 	private final ItemStack fermentable;
-	
-	public FermenterRecipeWrapper(@Nonnull IFermenterRecipe recipe, @Nonnull ItemStack fermentable) {
+
+	public FermenterRecipeWrapper(IFermenterRecipe recipe, ItemStack fermentable) {
 		super(recipe);
 		this.fermentable = fermentable;
 	}
 
 	@Override
-	public void getIngredients(@Nonnull IIngredients ingredients) {
+	public void getIngredients(IIngredients ingredients) {
 		List<ItemStack> fuelInputs = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
 			fuelInputs.add(fuel.getItem());
@@ -47,10 +44,5 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 		}
 		FluidStack fluidOutput = new FluidStack(getRecipe().getOutput(), amount);
 		ingredients.setOutput(FluidStack.class, fluidOutput);
-	}
-
-	@Nonnull
-	public ItemStack getFermentable() {
-		return fermentable;
 	}
 }

@@ -14,23 +14,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
-
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class HiveDecorator {
 
@@ -45,7 +43,7 @@ public abstract class HiveDecorator {
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
-		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
+		List<Hive> hives = PluginApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
 			decorateHivesDebug(world, rand, chunkX, chunkZ, hives);

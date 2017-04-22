@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.google.common.collect.AbstractIterator;
-
-import java.util.Iterator;
+import javax.annotation.Nullable;
 import java.util.Random;
 
+import com.google.common.collect.AbstractIterator;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -62,12 +61,7 @@ public final class VectUtil {
 		final BlockPos minPos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
 		final BlockPos maxPos = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
 
-		return new Iterable<BlockPos.MutableBlockPos>() {
-			@Override
-			public Iterator<BlockPos.MutableBlockPos> iterator() {
-				return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
-			}
-		};
+		return () -> new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
 	}
 
 	private static class MutableBlockPosSpiralIterator extends AbstractIterator<BlockPos.MutableBlockPos> {
@@ -79,6 +73,7 @@ public final class VectUtil {
 		private final int maxSpiralLayers;
 		private int direction;
 
+		@Nullable
 		private BlockPos.MutableBlockPos theBlockPos;
 
 		public MutableBlockPosSpiralIterator(World world, BlockPos center, BlockPos maxPos, BlockPos minPos) {
@@ -94,6 +89,7 @@ public final class VectUtil {
 		}
 
 		@Override
+		@Nullable
 		protected BlockPos.MutableBlockPos computeNext() {
 			BlockPos.MutableBlockPos pos;
 
@@ -105,6 +101,7 @@ public final class VectUtil {
 			return pos;
 		}
 
+		@Nullable
 		protected BlockPos.MutableBlockPos nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
