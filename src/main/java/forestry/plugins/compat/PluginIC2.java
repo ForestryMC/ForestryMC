@@ -58,6 +58,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
@@ -170,6 +171,10 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		if (crateRegistry == null) {
 			return;
+		}
+		if(Loader.isModLoaded("IC2-Classic-Spmod")) //Needs to be lowercased with 1.11
+		{
+			return;//Prevents that Classic Items get loaded into crates and cause a renderCrash. Fix Until renderer is Fixed
 		}
 
 		if (resin != null) {
