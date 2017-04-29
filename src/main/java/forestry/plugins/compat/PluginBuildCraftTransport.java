@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_TRANSPORT, name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends BlankForestryPlugin {
 
-	private static final String BCT = "BuildCraft|Transport";
+	private static final String BCT = "buildcrafttransport";
 
 	@Override
 	public boolean isAvailable() {
@@ -35,13 +35,13 @@ public class PluginBuildCraftTransport extends BlankForestryPlugin {
 
 	@Override
 	public String getFailMessage() {
-		return "BuildCraft|Transport not found";
+		return "buildcrafttransport not found";
 	}
 
 	@Override
 	public void registerRecipes() {
 		Item beeswax = PluginCore.getItems().beeswax;
-		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "pipeWaterproof"));
+		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "waterproof"));
 		if (pipeWaterproof != null) {
 			RecipeUtil.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
 		} else {
