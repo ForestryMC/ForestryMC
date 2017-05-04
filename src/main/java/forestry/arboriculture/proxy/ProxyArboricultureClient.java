@@ -24,7 +24,9 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
+import forestry.arboriculture.models.ModelDefaultLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.MultipartModel;
 import forestry.arboriculture.models.WoodModelLoader;
@@ -72,6 +74,15 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
 					new ModelDecorativeLeaves(), leaves);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
+		}
+
+		for (BlockDefaultLeaves leaves : PluginArboriculture.getBlocks().leavesDefault) {
+			String resourceName = "forestry:leaves.default." + leaves.getBlockNumber();
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
+			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
+					new ModelDefaultLeaves(), leaves);
 			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 		}
 

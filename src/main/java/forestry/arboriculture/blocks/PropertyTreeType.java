@@ -32,5 +32,7 @@ public class PropertyTreeType extends PropertyEnum<TreeDefinition> {
 		super(name, valueClass, allowedValues);
 	}
 
-
+	public TreeDefinition getFirstType() {
+		return getAllowedValues().iterator().next();
+	}
 }

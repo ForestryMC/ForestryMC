@@ -38,6 +38,7 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
@@ -47,6 +48,7 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,6 +83,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int damage;
 
 	private IEffectData effectData[] = new IEffectData[2];
+
+	/**
+	 * Worldgen trees used to create TileLeaves, but now they use BlockDefaultLeaves instead.
+	 * We add a check to convert the TileLeaves into the new format.
+	 * This boolean keeps track of whether this leaf has checked if it should replace itself.
+	 */
+	private boolean checkedForConversionToDefaultLeaves;
 
 	/* SAVING & LOADING */
 	@Override
@@ -127,9 +136,19 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		ITreeGenome genome = tree.getGenome();
+		IAlleleTreeSpecies primary = genome.getPrimary();
+
+		if (!checkedForConversionToDefaultLeaves) {
+			if (shouldConvertToDefaultLeaves()) {
+				IBlockState defaultLeaves = PluginArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				worldIn.setBlockState(getPos(), defaultLeaves);
+				return;
+			}
+			checkedForConversionToDefaultLeaves = true;
+		}
 
 		boolean isDestroyed = isDestroyed(tree, damage);
-		for (ILeafTickHandler tickHandler : genome.getPrimary().getRoot().getLeafTickHandlers()) {
+		for (ILeafTickHandler tickHandler : primary.getRoot().getLeafTickHandlers()) {
 			if (tickHandler.onRandomLeafTick(tree, world, rand, getPos(), isDestroyed)) {
 				return;
 			}
@@ -159,6 +178,19 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		effectData = tree.doEffect(effectData, world, getPos());
+	}
+
+	/**
+	 * Worldgen trees with default genomes should be converted to leaves without tile entities.
+	 */
+	private boolean shouldConvertToDefaultLeaves() {
+		if (getOwnerHandler().getOwner() == null) { // null owner likely means it's a worldgen tree
+			ITree tree = getTree();
+			if (tree != null && tree.getGenome().matchesTemplateGenome()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

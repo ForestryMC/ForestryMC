@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -60,6 +62,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 	public final BlockSapling saplingGE;
 	public final BlockForestryLeaves leaves;
+	public final List<BlockDefaultLeaves> leavesDefault;
+	public final Map<String, IBlockState> speciesToLeavesDefault;
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
@@ -236,6 +240,20 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
 		registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
+		leavesDefault = BlockDefaultLeaves.create();
+		speciesToLeavesDefault = new HashMap<>();
+		for (BlockDefaultLeaves leaves : leavesDefault) {
+			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default." + leaves.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
+
+			for (IBlockState state : leaves.getBlockState().getValidStates()) {
+				TreeDefinition treeDefinition = leaves.getTreeDefinition(state);
+				Preconditions.checkNotNull(treeDefinition);
+				String speciesUid = treeDefinition.getUID();
+				speciesToLeavesDefault.put(speciesUid, state);
+			}
+		}
+
 		leavesDecorative = BlockDecorativeLeaves.create();
 		speciesToLeavesDecorative = new HashMap<>();
 		for (BlockDecorativeLeaves leaves : leavesDecorative) {
@@ -280,6 +298,10 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			return ItemStack.EMPTY;
 		}
 		return itemStack.copy();
+	}
+
+	public IBlockState getDefaultLeaves(String speciesUid) {
+		return speciesToLeavesDefault.get(speciesUid);
 	}
 
 	@Nullable

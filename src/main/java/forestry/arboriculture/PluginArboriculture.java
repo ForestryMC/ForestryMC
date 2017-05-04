@@ -33,12 +33,14 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBlockTranslator;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IItemTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
+import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
@@ -530,6 +532,17 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				return null;
 			}
 		});
+
+		for (BlockDefaultLeaves leaves : getBlocks().leavesDefault) {
+			TreeManager.treeRoot.registerTranslator(leaves, (IBlockTranslator<IIndividual>) blockState -> {
+				TreeDefinition treeDefinition = leaves.getTreeDefinition(blockState);
+				if (treeDefinition != null) {
+					return treeDefinition.getIndividual();
+				} else {
+					return null;
+				}
+			});
+		}
 	}
 
 	@Override

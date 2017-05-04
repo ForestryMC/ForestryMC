@@ -44,4 +44,9 @@ public interface ITreeGenome extends IGenome {
 	 * @return A ItemStack that is used in getPickBlock of the leave block.
 	 */
 	ItemStack getDecorativeLeaves();
+
+	/**
+	 * @return true if this genome matches one of the default template genomes
+	 */
+	boolean matchesTemplateGenome();
 }

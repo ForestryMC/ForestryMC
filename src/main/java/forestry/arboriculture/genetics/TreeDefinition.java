@@ -996,30 +996,31 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos) {
-		boolean placed = world.setBlockState(pos, PluginArboriculture.getBlocks().leaves.getDefaultState());
-		if (!placed) {
-			return false;
-		}
+		if (owner == null && genome.matchesTemplateGenome()) {
+			String speciesUid = genome.getPrimary().getUID();
+			IBlockState defaultLeaves = PluginArboriculture.getBlocks().getDefaultLeaves(speciesUid);
+			return world.setBlockState(pos, defaultLeaves);
+		} else {
+			IBlockState leaves = PluginArboriculture.getBlocks().leaves.getDefaultState();
+			boolean placed = world.setBlockState(pos, leaves);
+			if (!placed) {
+				return false;
+			}
 
-		Block block = world.getBlockState(pos).getBlock();
-		if (PluginArboriculture.getBlocks().leaves != block) {
-			world.setBlockToAir(pos);
-			return false;
-		}
+			TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
+			if (tileLeaves == null) {
+				world.setBlockToAir(pos);
+				return false;
+			}
 
-		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (tileLeaves == null) {
-			world.setBlockToAir(pos);
-			return false;
-		}
+			if (owner != null) {
+				tileLeaves.getOwnerHandler().setOwner(owner);
+			}
+			tileLeaves.setTree(new Tree(genome));
 
-		if (owner != null) {
-			tileLeaves.getOwnerHandler().setOwner(owner);
+			world.markBlockRangeForRenderUpdate(pos, pos);
+			return true;
 		}
-		tileLeaves.setTree(new Tree(genome));
-
-		world.markBlockRangeForRenderUpdate(pos, pos);
-		return true;
 	}
 
 	public static void initTrees() {

@@ -23,9 +23,4 @@ public abstract class PropertyWoodType<T extends Enum<T> & IWoodType> extends Pr
 	public T getFirstType() {
 		return getAllowedValues().iterator().next();
 	}
-
-	@Override
-	public Collection<T> getAllowedValues() {
-		return super.getAllowedValues();
-	}
 }

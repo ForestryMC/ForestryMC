@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Preconditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -18,6 +20,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
@@ -28,6 +31,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TreeGenome extends Genome implements ITreeGenome {
+	@Nullable
+	private Boolean matchesTemplateCached;
 
 	public TreeGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
@@ -108,5 +113,32 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
+	}
+
+	@Override
+	public boolean matchesTemplateGenome() {
+		if (matchesTemplateCached == null) {
+			matchesTemplateCached = calculateMatchesTemplateGenome();
+		}
+		return matchesTemplateCached;
+	}
+
+	private boolean calculateMatchesTemplateGenome() {
+		IAlleleTreeSpecies primary = getPrimary();
+		IAllele[] template = getSpeciesRoot().getTemplate(primary);
+		IChromosome[] chromosomes = getChromosomes();
+		for (int i = 0; i < chromosomes.length; i++) {
+			IChromosome chromosome = chromosomes[i];
+			String templateUid = template[i].getUID();
+			IAllele primaryAllele = chromosome.getPrimaryAllele();
+			if (!primaryAllele.getUID().equals(templateUid)) {
+				return false;
+			}
+			IAllele secondaryAllele = chromosome.getSecondaryAllele();
+			if (!secondaryAllele.getUID().equals(templateUid)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

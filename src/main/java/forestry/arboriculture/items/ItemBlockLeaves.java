@@ -11,6 +11,7 @@
 package forestry.arboriculture.items;
 
 import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
@@ -27,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IColoredItem {
+public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
 	public ItemBlockLeaves(Block block) {
 		super(block);
