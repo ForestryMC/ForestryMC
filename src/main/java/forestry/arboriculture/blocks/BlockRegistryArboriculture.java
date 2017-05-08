@@ -32,6 +32,7 @@ import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -246,11 +247,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default." + leaves.getBlockNumber());
 			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
-			for (IBlockState state : leaves.getBlockState().getValidStates()) {
-				TreeDefinition treeDefinition = leaves.getTreeDefinition(state);
+			PropertyTreeType treeType = leaves.getVariant();
+			for (TreeDefinition treeDefinition : treeType.getAllowedValues()) {
 				Preconditions.checkNotNull(treeDefinition);
 				String speciesUid = treeDefinition.getUID();
-				speciesToLeavesDefault.put(speciesUid, state);
+				IBlockState blockState = leaves.getDefaultState().withProperty(treeType, treeDefinition);
+				speciesToLeavesDefault.put(speciesUid, blockState);
 			}
 		}
 

@@ -2,6 +2,7 @@ package forestry.arboriculture;
 
 import java.util.Random;
 
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
@@ -23,11 +24,18 @@ public class LeafDecayHelper {
 		leafDecayValues = new byte[ARRAY_SIZE][ARRAY_SIZE][ARRAY_SIZE];
 	}
 
-	public static void leafDecay(BlockLeaves leaves, World world, BlockPos pos) {
+	public static void leafDecay(BlockAbstractLeaves leaves, World world, BlockPos pos) {
 		if (world.isRemote) {
 			return;
 		}
 		IBlockState state = world.getBlockState(pos);
+
+		// Fix a bug where Forestry leaves were not decayable.
+		// The non-decayable Forestry leaves are all BlockDecorativeLeaves.
+		if (!state.getValue(BlockLeaves.DECAYABLE)) {
+			state = state.withProperty(BlockLeaves.DECAYABLE, true);
+			world.setBlockState(pos, state);
+		}
 
 		if (state.getValue(BlockLeaves.CHECK_DECAY) && state.getValue(BlockLeaves.DECAYABLE)) {
 			byte radius = 4;
