@@ -250,15 +250,15 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES)) {
-			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.trees.hybrid").replaceAll("%PRIMARY", primary.getAlleleName()).replaceAll("%SECONDARY", secondary.getAlleleName()));
 		}
 
-		String sappiness = TextFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
-		String maturation = TextFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
-		String height = TextFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
+		String sappiness = TextFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getAlleleName();
+		String maturation = TextFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getAlleleName();
+		String height = TextFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getAlleleName();
 		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
-		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
-		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getAlleleName();
+		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getAlleleName();
 		String carbonization = TextFormatting.GRAY + "CA: " + secondary.getWoodProvider().getCarbonization();
 		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));

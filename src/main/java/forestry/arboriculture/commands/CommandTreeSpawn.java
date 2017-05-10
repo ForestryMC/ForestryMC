@@ -72,7 +72,7 @@ public final class CommandTreeSpawn extends SubCommand {
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				species.add(allele.getName().replaceAll("\\s", ""));
+				species.add(allele.getAlleleName().replaceAll("\\s", ""));
 			}
 		}
 

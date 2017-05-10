@@ -33,4 +33,8 @@ public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 		return getProvider().getDescription();
 	}
 
+	@Override
+	public String getAlleleName() {
+		return getProvider().getDescription();
+	}
 }

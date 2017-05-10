@@ -92,11 +92,11 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
-				String species1 = encoded.getAllele0().getName();
-				String species2 = encoded.getAllele1().getName();
+				String species1 = encoded.getAllele0().getAlleleName();
+				String species2 = encoded.getAllele1().getAlleleName();
 				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
-				String speciesResult = encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()].getName();
+				String speciesResult = encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()].getAlleleName();
 
 				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.0"));
 				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
@@ -119,7 +119,7 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				tooltips.add("researchNote.discovered.0");
-				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovered.1", allele0.getName(), allele0.getBinomial()));
+				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovered.1", allele0.getAlleleName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
@@ -159,9 +159,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote"));
 
 				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote2",
-						TextFormatting.GRAY + species0.getName(),
-						TextFormatting.GRAY + species1.getName(),
-						TextFormatting.GREEN + speciesResult.getName()));
+						TextFormatting.GRAY + species0.getAlleleName(),
+						TextFormatting.GRAY + species1.getAlleleName(),
+						TextFormatting.GREEN + speciesResult.getAlleleName()));
 
 				return true;
 			}

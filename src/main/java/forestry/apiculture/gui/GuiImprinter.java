@@ -62,11 +62,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		fontRendererObj.drawString(primary.getName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		fontRendererObj.drawString(primary.getAlleleName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		fontRendererObj.drawString(secondary.getAlleleName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - fontRendererObj.getStringWidth(youCheater)) / 2;

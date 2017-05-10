@@ -94,7 +94,7 @@ public class CommandBeeGive extends SubCommand {
 		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType);
 		player.dropItem(beeStack, false, true);
 
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getName(), beeType.getName());
+		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getAlleleName(), beeType.getName());
 	}
 
 	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
@@ -115,7 +115,7 @@ public class CommandBeeGive extends SubCommand {
 
 		if (species == null) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleBeeSpecies && allele.getName().equals(speciesName)) {
+				if (allele instanceof IAlleleBeeSpecies && allele.getAlleleName().equals(speciesName)) {
 					species = (IAlleleBeeSpecies) allele;
 					break;
 				}
@@ -150,7 +150,7 @@ public class CommandBeeGive extends SubCommand {
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				species.add(allele.getName());
+				species.add(allele.getAlleleName());
 			}
 		}
 

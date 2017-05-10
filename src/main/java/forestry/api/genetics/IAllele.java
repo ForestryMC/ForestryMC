@@ -28,8 +28,19 @@ public interface IAllele {
 
 	/**
 	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
+	 * @deprecated since Forestry 5.3.4. Use {@link #getAlleleName()}.
 	 */
+	@Deprecated
 	String getName();
+
+	/**
+	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
+	 * @since Forestry 5.3.4
+	 * @apiNote This can't be named "getName" or it can conflict during obfuscation. https://github.com/md-5/SpecialSource/issues/12
+	 */
+	default String getAlleleName() {
+		return getName();
+	}
 
 	/**
 	 * @return The unlocalized identifier

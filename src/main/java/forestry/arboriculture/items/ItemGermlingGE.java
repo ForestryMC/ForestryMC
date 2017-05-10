@@ -83,7 +83,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			return Translator.translateToLocal(customTreeKey);
 		}
 		String typeString = Translator.translateToLocal("for.trees.grammar." + type.getName() + ".type");
-		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", typeString);
+		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getAlleleName()).replaceAll("%TYPE", typeString);
 	}
 
 	@Override

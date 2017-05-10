@@ -54,7 +54,7 @@ public abstract class Individual implements IIndividual {
 
 	@Override
 	public String getDisplayName() {
-		return getGenome().getPrimary().getName();
+		return getGenome().getPrimary().getAlleleName();
 	}
 
 	/* INFORMATION */

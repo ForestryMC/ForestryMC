@@ -41,6 +41,11 @@ public abstract class Allele implements IAllele {
 	}
 
 	@Override
+	public String getAlleleName() {
+		return Translator.translateToLocal(getUnlocalizedName());
+	}
+
+	@Override
 	public String getUnlocalizedName() {
 		return unlocalizedName;
 	}

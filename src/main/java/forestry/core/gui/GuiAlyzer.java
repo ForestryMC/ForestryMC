@@ -94,7 +94,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public final void drawChromosomeRow(String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
-		textLayout.drawRow(chromosomeName, active.getName(), inactive.getName(),
+		textLayout.drawRow(chromosomeName, active.getAlleleName(), inactive.getAlleleName(),
 				ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
 				getColorCoding(inactive.isDominant()));
 	}
@@ -111,8 +111,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GuiUtil.drawItemStack(this, iconStacks.get(primary.getUID()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
 		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getUID()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
 
-		String primaryName = customPrimaryName == null ? primary.getName() : customPrimaryName;
-		String secondaryName = customSecondaryName == null ? secondary.getName() : customSecondaryName;
+		String primaryName = customPrimaryName == null ? primary.getAlleleName() : customPrimaryName;
+		String secondaryName = customSecondaryName == null ? secondary.getAlleleName() : customSecondaryName;
 
 		drawSplitLine(primaryName, textLayout.column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, textLayout.column2, columnwidth, individual, chromosome, true);
@@ -400,7 +400,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public void drawToleranceInfo(IAlleleTolerance toleranceAllele, int x) {
 		int textColor = getColorCoding(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getName() + ")";
+		String text = "(" + toleranceAllele.getAlleleName() + ")";
 
 		// Enable correct lighting.
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

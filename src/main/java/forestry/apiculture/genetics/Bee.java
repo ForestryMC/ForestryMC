@@ -361,7 +361,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES)) {
-			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getAlleleName()).replaceAll("%SECONDARY", secondary.getAlleleName()));
 		}
 
 		if (generation > 0) {
@@ -389,12 +389,12 @@ public class Bee extends IndividualLiving implements IBee {
 		if (Translator.canTranslateToLocal(unlocalizedCustomSpeed)) {
 			speed = Translator.translateToLocal(unlocalizedCustomSpeed);
 		} else {
-			speed = speedAllele.getName() + ' ' + Translator.translateToLocal("for.gui.worker");
+			speed = speedAllele.getAlleleName() + ' ' + Translator.translateToLocal("for.gui.worker");
 		}
 
-		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + Translator.translateToLocal("for.gui.life");
-		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
-		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
+		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getAlleleName() + ' ' + Translator.translateToLocal("for.gui.life");
+		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getAlleleName();
+		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getAlleleName();
 		String flowers = genome.getFlowerProvider().getDescription();
 
 		list.add(lifespan);

@@ -18,7 +18,7 @@ public class TemplateNotFoundException extends CommandException {
 	private static final long serialVersionUID = 1L;
 
 	public TemplateNotFoundException(IAlleleSpecies species) {
-		super("Could not find template for species %s with UID %s", species.getName(), species.getUID());
+		super("Could not find template for species %s with UID %s", species.getAlleleName(), species.getUID());
 	}
 
 }

@@ -87,7 +87,7 @@ public final class TreeGenHelper {
 
 		if (species == null) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleTreeSpecies && allele.getName().replaceAll("\\s", "").equals(speciesName)) {
+				if (allele instanceof IAlleleTreeSpecies && allele.getAlleleName().replaceAll("\\s", "").equals(speciesName)) {
 					species = (IAlleleTreeSpecies) allele;
 					break;
 				}

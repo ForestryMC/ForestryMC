@@ -364,7 +364,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (species == null) {
 			return super.getName();
 		}
-		return species.getName();
+		return species.getAlleleName();
 	}
 
 	@Override

@@ -88,21 +88,21 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAlleleButterflySpecies primary = genome.getPrimary();
 		IAlleleButterflySpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumButterflyChromosome.SPECIES)) {
-			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.butterflies.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.butterflies.hybrid").replaceAll("%PRIMARY", primary.getAlleleName()).replaceAll("%SECONDARY", secondary.getAlleleName()));
 		}
 
 		if (getMate() != null) {
 			list.add(TextFormatting.RED + Translator.translateToLocal("for.gui.fecundated").toUpperCase(Locale.ENGLISH));
 		}
-		list.add(TextFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
-		list.add(TextFormatting.DARK_GREEN + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName());
-		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + ' ' + Translator.translateToLocal("for.gui.life"));
+		list.add(TextFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getAlleleName());
+		list.add(TextFormatting.DARK_GREEN + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getAlleleName());
+		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getAlleleName() + ' ' + Translator.translateToLocal("for.gui.life"));
 
 		IAlleleTolerance tempTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		list.add(TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
+		list.add(TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getAlleleName());
 
 		IAlleleTolerance humidTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
-		list.add(TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
+		list.add(TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getAlleleName());
 
 		list.add(TextFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 

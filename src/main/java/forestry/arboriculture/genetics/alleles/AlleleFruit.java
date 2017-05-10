@@ -39,6 +39,11 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		return getProvider().getDescription();
 	}
 
+	@Override
+	public String getAlleleName() {
+		return getProvider().getDescription();
+	}
+
 	@Nullable
 	@Override
 	public String getModelName() {

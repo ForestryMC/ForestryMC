@@ -75,17 +75,17 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 			guiAlyzer.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), butterfly, EnumButterflyChromosome.SPECIES, null, null);
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),
-					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SIZE).getName(), butterfly, EnumButterflyChromosome.SPEED);
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getAlleleName(),
+					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SIZE).getAlleleName(), butterfly, EnumButterflyChromosome.SPEED);
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.lifespan"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
-					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.LIFESPAN).getName(), butterfly,
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.lifespan"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getAlleleName(),
+					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.LIFESPAN).getAlleleName(), butterfly,
 					EnumButterflyChromosome.LIFESPAN);
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.speed"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getName(),
-					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SPEED).getName(), butterfly, EnumButterflyChromosome.SPEED);
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.speed"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getAlleleName(),
+					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SPEED).getAlleleName(), butterfly, EnumButterflyChromosome.SPEED);
 			textLayout.newLine();
 
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.metabolism"), GenericRatings.rateMetabolism(butterfly.getGenome().getMetabolism()),
@@ -105,8 +105,8 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 							.getDescription(), butterfly, EnumButterflyChromosome.FLOWER_PROVIDER);
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.effect"), butterfly.getGenome().getEffect().getName(),
-					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT).getName(), butterfly,
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.effect"), butterfly.getGenome().getEffect().getAlleleName(),
+					butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT).getAlleleName(), butterfly,
 					EnumButterflyChromosome.EFFECT);
 
 			textLayout.newLine();

@@ -177,7 +177,7 @@ public final class CommandSaveStats extends SubCommand {
 			notCounted = notCountedSymbol;
 		}
 
-		return speciesListEntry(discovered, blacklisted, notCounted, species.getUID(), species.getName(), species.getAuthority());
+		return speciesListEntry(discovered, blacklisted, notCounted, species.getUID(), species.getAlleleName(), species.getAuthority());
 	}
 
 	private static String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
