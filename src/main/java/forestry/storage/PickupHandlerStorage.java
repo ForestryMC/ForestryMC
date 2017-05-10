@@ -38,11 +38,11 @@ public class PickupHandlerStorage implements IPickupHandler {
 		topOffPlayerInventory(player, itemstack);
 
 		for (ItemStack pack : player.inventory.mainInventory) {
-			if (pack.isEmpty() || itemstack.isEmpty()) {
+			if (itemstack.isEmpty()) {
 				break;
 			}
 
-			if (!(pack.getItem() instanceof ItemBackpack)) {
+			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack)) {
 				continue;
 			}
 
