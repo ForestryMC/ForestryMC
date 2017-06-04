@@ -46,6 +46,6 @@ public class WorldGenMahoe extends WorldGenTree {
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		WorldGenHelper.generateSphereFromTreeStartPos(world, new BlockPos(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, WorldGenHelper.EnumReplaceMode.AIR);
+		WorldGenHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 	}
 }

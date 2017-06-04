@@ -63,7 +63,7 @@ public class WorldGenKapok extends WorldGenTree {
 			}
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
-			WorldGenHelper.generateSphere(world, new BlockPos(x_off, h, y_off), 1 + rand.nextInt(1), leaf, WorldGenHelper.EnumReplaceMode.AIR);
+			WorldGenHelper.generateSphere(world, startPos.add(x_off, h, y_off), 1 + rand.nextInt(1), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 	}
 }

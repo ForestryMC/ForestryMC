@@ -60,7 +60,7 @@ public class WorldGenBaobab extends WorldGenTree {
 			int x_off = -girth + rand.nextInt(2 * girth);
 			int y_off = -girth + rand.nextInt(2 * girth);
 
-			BlockPos center = new BlockPos(x_off, h, y_off);
+			BlockPos center = startPos.add(x_off, h, y_off);
 			int radius = 1;
 			if (girth > 1) {
 				radius += rand.nextInt(girth - 1);
@@ -78,7 +78,7 @@ public class WorldGenBaobab extends WorldGenTree {
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
 
-			BlockPos center = new BlockPos(x_off, h, y_off);
+			BlockPos center = startPos.add(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(2);
 			WorldGenHelper.generateSphere(world, center, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
