@@ -17,7 +17,7 @@ public class JeiUtil {
 			itemStacks.add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
 		}
 
-		registry.addDescription(itemStacks, "for.jei.description." + itemKey);
+		registry.addIngredientInfo(itemStacks, ItemStack.class, "for.jei.description." + itemKey);
 	}
 
 	public static void addDescription(IModRegistry registry, Block... blocks) {
@@ -44,6 +44,6 @@ public class JeiUtil {
 
 	public static void addDescription(IModRegistry registry, Item item, String itemKey) {
 		ItemStack itemStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
-		registry.addDescription(itemStack, "for.jei.description." + itemKey);
+		registry.addIngredientInfo(itemStack, ItemStack.class, "for.jei.description." + itemKey);
 	}
 }

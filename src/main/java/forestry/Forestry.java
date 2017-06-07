@@ -51,12 +51,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 @Mod(
 		modid = Constants.MOD_ID,
-		name = "Forestry",
+		name = Constants.MOD_NAME,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.11]",
 		dependencies = "required-after:forge@[13.20.0.2270,);"
-				+ "after:JEI@[4.3.0,);"
+				+ "after:JEI@[4.5.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 

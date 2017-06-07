@@ -1,5 +1,6 @@
 package forestry.core.recipes.jei;
 
+import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.BlankRecipeCategory;
@@ -19,6 +20,11 @@ public abstract class ForestryRecipeCategory<T extends IRecipeWrapper> extends B
 		return localizedName;
 	}
 
+	@Override
+	public String getModName() {
+		return Constants.MOD_NAME;
+	}
+	
 	@Override
 	public IDrawable getBackground() {
 		return background;

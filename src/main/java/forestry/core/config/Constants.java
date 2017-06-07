@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 
 public class Constants implements IForestryConstants {
 	// System
+	public static final String MOD_NAME = "Forestry";
 	public static final String MOD_ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 

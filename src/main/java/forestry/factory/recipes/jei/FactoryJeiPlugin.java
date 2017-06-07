@@ -46,6 +46,7 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.BlankAdvancedGuiHandler;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
@@ -59,10 +60,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 	public static IJeiHelpers jeiHelpers;
 	
 	@Override
-	public void register(IModRegistry registry) {
-		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
-		
-		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
+	public void registerCategories(IRecipeCategoryRegistration registry) {
+		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
 			return;
 		}
 		
@@ -80,6 +79,16 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new SqueezerRecipeCategory(guiHelper),
 				new StillRecipeCategory(guiHelper)
 		);
+	}
+
+	@Override
+	public void register(IModRegistry registry) {
+		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
+		
+		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
+			return;
+		}
+		jeiHelpers = registry.getJeiHelpers();
 
 		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.BOTTLER);
 		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes(), ForestryRecipeCategoryUid.CARPENTER);
@@ -106,16 +115,16 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		BlockRegistryFactory blocks = PluginFactory.getBlocks();
 		Preconditions.checkNotNull(blocks);
 
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(blocks.worktable), VanillaRecipeCategoryUid.CRAFTING);
+		registry.addRecipeCatalyst(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipeCatalyst(new ItemStack(blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
+		registry.addRecipeCatalyst(new ItemStack(blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
+		registry.addRecipeCatalyst(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
+		registry.addRecipeCatalyst(new ItemStack(blocks.worktable), VanillaRecipeCategoryUid.CRAFTING);
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
 		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
