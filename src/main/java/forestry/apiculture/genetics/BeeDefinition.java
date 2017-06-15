@@ -1021,11 +1021,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		for (BeeDefinition bee : values()) {
 			bee.registerMutations();
 		}
-		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot, IAlleleBeeSpecies.class));
 	}
 
 	public static void preInit() {
-
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent(BeeManager.beeRoot, IAlleleBeeSpecies.class));
 	}
 
 	private void init() {
