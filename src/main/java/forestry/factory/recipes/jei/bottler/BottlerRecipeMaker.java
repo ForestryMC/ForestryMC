@@ -42,7 +42,7 @@ public class BottlerRecipeMaker {
 								int fill = fillingCapability.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
 								if (fill > 0) {
 									FluidStack filledFluid = new FluidStack(fluid, fill);
-									ItemStack filled = fluidHandler.getContainer();
+									ItemStack filled = fillingCapability.getContainer();
 									recipes.add(new BottlerRecipeWrapper(stack, filledFluid, filled, true));
 								}
 							} else {
