@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.Tabs;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.items.ItemForestry;
-import net.minecraft.item.ItemStack;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
@@ -27,7 +28,11 @@ public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 	@Override
 	public ItemStack planUsed(ItemStack plan, ItemStack result) {
 		plan.setItemDamage(plan.getItemDamage() + result.getCount());
-		return plan;
+		if (plan.getItemDamage() >= plan.getMaxDamage()) {
+			return ItemStack.EMPTY;
+		} else {
+			return plan;
+		}
 	}
 
 }
