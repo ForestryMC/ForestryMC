@@ -10,18 +10,24 @@
  ******************************************************************************/
 package forestry.storage;
 
-import forestry.api.storage.BackpackResupplyEvent;
-import forestry.core.IResupplyHandler;
-import forestry.core.inventory.ItemInventory;
-import forestry.storage.inventory.ItemInventoryBackpack;
-import forestry.storage.items.ItemBackpack;
+import java.util.LinkedList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.common.MinecraftForge;
+
 import net.minecraftforge.fml.common.eventhandler.Event;
+
+import forestry.api.storage.BackpackResupplyEvent;
+import forestry.core.IResupplyHandler;
+import forestry.core.inventory.ItemInventory;
+import forestry.storage.inventory.ItemInventoryBackpack;
+import forestry.storage.items.ItemBackpack;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -72,9 +78,11 @@ public class ResupplyHandler implements IResupplyHandler {
 			return false;
 		}
 		InventoryPlayer playerInventory = player.inventory;
-		NonNullList<ItemStack> mainInventory = playerInventory.mainInventory;
+		List<ItemStack> inventory = new LinkedList<>();
+		inventory.addAll(playerInventory.mainInventory);
+		inventory.addAll(playerInventory.offHandInventory);
 
-		for (ItemStack inventoryStack : mainInventory) {
+		for (ItemStack inventoryStack : inventory) {
 			if (playerInventory.canMergeStacks(inventoryStack, itemstack)) {
 				inventoryStack.grow(1);
 				inventoryStack.setAnimationsToGo(5);
