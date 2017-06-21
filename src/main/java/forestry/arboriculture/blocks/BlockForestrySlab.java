@@ -3,16 +3,6 @@ package forestry.arboriculture.blocks;
 import java.util.Collection;
 import java.util.Random;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,8 +18,20 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 
 public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends BlockSlab implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	protected static final int VARIANTS_PER_BLOCK = 8;
@@ -52,7 +54,6 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 		setDefaultState(iblockstate.withProperty(variant, variant.getFirstType()));
 
 		setCreativeTab(Tabs.tabArboriculture);
-		setLightOpacity(0);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setSoundType(SoundType.WOOD);
