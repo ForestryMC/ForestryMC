@@ -10,10 +10,31 @@
  ******************************************************************************/
 package forestry.lepidopterology.items;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
@@ -40,24 +61,6 @@ import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
@@ -183,7 +186,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
 			Preconditions.checkNotNull(tagCompound);
-			Preconditions.checkState(tagCompound.hasKey(NBT_AGE));
+			if(!tagCompound.hasKey(NBT_AGE)){
+				tagCompound.setInteger(NBT_AGE, 0);
+			}
 			int age = tagCompound.getInteger(NBT_AGE);
 			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
 			Preconditions.checkNotNull(individual);

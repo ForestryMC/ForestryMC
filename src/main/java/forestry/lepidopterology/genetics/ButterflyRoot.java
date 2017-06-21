@@ -10,14 +10,24 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
@@ -43,15 +53,9 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
@@ -172,6 +176,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		butterfly.writeToNBT(nbttagcompound);
 		ItemStack stack = new ItemStack(butterflyItem);
 		stack.setTagCompound(nbttagcompound);
+		if(type == EnumFlutterType.CATERPILLAR){
+			ItemButterflyGE.setAge(stack, 0);
+		}
 		return stack;
 
 	}
