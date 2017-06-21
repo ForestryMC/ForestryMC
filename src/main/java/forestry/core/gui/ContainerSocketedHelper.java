@@ -10,19 +10,22 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.core.circuits.ISocketable;
+import forestry.core.circuits.ISolderingIron;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSocketedHelper<T extends TileEntity & ISocketable> implements IContainerSocketed {
 
@@ -78,7 +81,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	@Override
 	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
 		ItemStack socket = tile.getSocket(slot);
-		if (socket.isEmpty()) {
+		if (socket.isEmpty() || !(itemstack.getItem() instanceof ISolderingIron)) {
 			return;
 		}
 
