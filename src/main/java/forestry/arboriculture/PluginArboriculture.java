@@ -10,16 +10,54 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.AchievementList;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -42,6 +80,7 @@ import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.blocks.BlockForestryLog;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.charcoal.CharcoalPileWall;
@@ -83,36 +122,6 @@ import forestry.core.utils.VillagerTradeLists;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockNewLeaf;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends BlankForestryPlugin {
@@ -675,6 +684,22 @@ public class PluginArboriculture extends BlankForestryPlugin {
 						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, EnumHand.MAIN_HAND);
 					}
 				}
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void handleItemPickup(EntityItemPickupEvent event) {
+		if (event.isCanceled()) {
+			return;
+		}
+		EntityItem pickedUp = event.getItem();
+		ItemStack stack = pickedUp.getEntityItem();
+		if(!stack.isEmpty()){
+			Block block = Block.getBlockFromItem(stack.getItem());
+			if(block != null && block instanceof BlockForestryLog){
+				EntityPlayer player = event.getEntityPlayer();
+				player.addStat(AchievementList.MINE_WOOD);
 			}
 		}
 	}
