@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import com.google.common.collect.LinkedListMultimap;
+
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,14 +25,15 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import com.google.common.collect.LinkedListMultimap;
+import net.minecraftforge.common.config.Property;
+
+import net.minecraftforge.fml.relauncher.Side;
+
 import forestry.Forestry;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.mail.gui.GuiMailboxInfo;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class Config {
 
@@ -193,7 +196,7 @@ public class Config {
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 		
-		enableVillagers = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
+		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
