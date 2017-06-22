@@ -58,6 +58,7 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 		setResistance(5.0F);
 		setSoundType(SoundType.WOOD);
 		setHarvestLevel("axe", 0);
+		useNeighborBrightness = true;
 	}
 
 	@Override
