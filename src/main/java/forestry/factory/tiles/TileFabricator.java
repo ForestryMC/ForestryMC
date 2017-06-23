@@ -207,10 +207,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			if (removeFromInventory(crafting, myRecipePair.getOreDictEntries(), myRecipe, false)) {
+			if (removeFromInventory(crafting, myRecipePair, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, false);
 				if (drained != null && drained.isFluidStackIdentical(liquid)) {
-					removeFromInventory(crafting, myRecipePair.getOreDictEntries(), myRecipe, true);
+					removeFromInventory(crafting, myRecipePair, true);
 					moltenTank.drain(liquid.amount, true);
 
 					// Damage plan
@@ -228,9 +228,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(NonNullList<ItemStack> set, String[][] oreDicts, IFabricatorRecipe recipe, boolean doRemove) {
+	private boolean removeFromInventory(NonNullList<ItemStack> set, RecipePair<IFabricatorRecipe> recipePair, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, InventoryUtil.getOreDictAsList(oreDicts), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, recipePair.getOreDictEntries(), null, true, false, doRemove);
 	}
 
 	@Override
@@ -241,10 +241,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
-		IFabricatorRecipe recipe = recipePair.getRecipe();
-		if (recipe != null) {
+		if (!recipePair.isEmpty()) {
+			IFabricatorRecipe recipe = recipePair.getRecipe();
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			hasResources = removeFromInventory(crafting, recipePair.getOreDictEntries(), recipe, false);
+			hasResources = removeFromInventory(crafting, recipePair, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, false);
 			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);

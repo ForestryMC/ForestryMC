@@ -65,8 +65,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
-	@Nullable
-	private String[][] oreDicts;
+	private NonNullList<String> oreDicts;
 
 	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
@@ -199,7 +198,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, craftingSets, InventoryUtil.getOreDictAsList(oreDicts), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, craftingSets, oreDicts, null, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */

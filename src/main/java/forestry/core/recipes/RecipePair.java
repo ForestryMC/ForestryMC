@@ -12,7 +12,10 @@ package forestry.core.recipes;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.util.NonNullList;
+
 import forestry.api.recipes.IForestryRecipe;
+import forestry.core.utils.InventoryUtil;
 
 public class RecipePair<R extends IForestryRecipe> {
 	
@@ -20,12 +23,11 @@ public class RecipePair<R extends IForestryRecipe> {
 	
 	@Nullable
 	private final R recipe;
-	@Nullable
-	private final String[][] oreDictEntries;
+	private final NonNullList<String> oreDictEntries;
 	
 	public RecipePair(R recipe, String[][] oreDictEntries) {
 		this.recipe = recipe;
-		this.oreDictEntries = oreDictEntries;
+		this.oreDictEntries = InventoryUtil.getOreDictAsList(oreDictEntries);
 	}
 	
 	public boolean isEmpty(){
@@ -36,7 +38,7 @@ public class RecipePair<R extends IForestryRecipe> {
 		return recipe;
 	}
 	
-	public String[][] getOreDictEntries() {
+	public NonNullList<String> getOreDictEntries() {
 		return oreDictEntries;
 	}
 }
