@@ -11,26 +11,25 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.api.recipes.IFabricatorManager;
-import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 
-public class FabricatorRecipeManager implements IFabricatorManager {
+import forestry.api.recipes.IFabricatorManager;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.core.recipes.RecipePair;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.utils.ItemStackUtil;
 
-	public static final Pair EMPTY_RECIPE = Pair.of(null, null);
+public class FabricatorRecipeManager implements IFabricatorManager {
+	
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override
@@ -43,7 +42,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 	}
 
 	@Nullable
-	public static Pair<IFabricatorRecipe, String[][]> findMatchingRecipe(ItemStack plan, IInventory resources) {
+	public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
 		for (IFabricatorRecipe recipe : recipes) {
@@ -52,11 +51,11 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 			}
 			String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
 			if (oreDicts != null) {
-				return Pair.of(recipe, oreDicts);
+				return new RecipePair<>(recipe, oreDicts);
 			}
 		}
 
-		return EMPTY_RECIPE;
+		return RecipePair.EMPTY;
 	}
 
 	public static boolean isPlan(ItemStack plan) {

@@ -13,26 +13,6 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.core.tiles.IItemStackDisplay;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.core.utils.InventoryUtil;
-import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.gui.GuiCarpenter;
-import forestry.factory.inventory.InventoryCarpenter;
-import forestry.factory.inventory.InventoryGhostCrafting;
-import forestry.factory.recipes.CarpenterRecipeManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -43,12 +23,35 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.api.core.IErrorLogic;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.recipes.RecipePair;
+import forestry.core.render.TankRenderInfo;
+import forestry.core.tiles.IItemStackDisplay;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.core.utils.InventoryUtil;
+import forestry.factory.gui.ContainerCarpenter;
+import forestry.factory.gui.GuiCarpenter;
+import forestry.factory.inventory.InventoryCarpenter;
+import forestry.factory.inventory.InventoryGhostCrafting;
+import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -118,11 +121,11 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
-			Pair<ICarpenterRecipe, String[][]> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
-			currentRecipe = recipePair.getLeft();
-			oreDicts = recipePair.getRight();
+			RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
+			currentRecipe = recipePair.getRecipe();
+			oreDicts = recipePair.getOreDictEntries();
 
-			if (currentRecipe != null) {
+			if (!recipePair.isEmpty()) {
 				int recipeTime = currentRecipe.getPackagingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
