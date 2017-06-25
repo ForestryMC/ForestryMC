@@ -26,7 +26,6 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -622,7 +621,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
-		WoodTextureManager.parseFile(Minecraft.getMinecraft().getResourceManager());
+		WoodTextureManager.parseFile();
 		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites();
 		}

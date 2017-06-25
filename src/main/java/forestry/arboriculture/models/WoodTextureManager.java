@@ -10,6 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonReader;
+
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,36 +28,29 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonReader;
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.models.WoodTexture;
-import forestry.arboriculture.models.WoodTexture.SimpleTexture;
-import forestry.arboriculture.models.WoodTexture.TextureMap;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.models.WoodTexture.SimpleTexture;
+import forestry.arboriculture.models.WoodTexture.TextureMap;
 
 @SideOnly(Side.CLIENT)
 public class WoodTextureManager {
 	protected static final Map<String, WoodTexture> WOOD_TEXTURES = new HashMap<>();
 	public static final String KIND_KEY = "kind";
-	public static final ResourceLocation LOCATION = new ResourceLocation("forestry:textures/woodTextures.json");
+	public static final String LOCATION = "/assets/forestry/textures/wood_textures.json";
 
-	public static void parseFile(IResourceManager resourceManager) {
+	public static void parseFile() {
 		try {
-			InputStream stream = resourceManager.getResource(LOCATION).getInputStream();
+			InputStream stream = WoodTextureManager.class.getResourceAsStream(LOCATION);
 			JsonReader reader = null;
 			try {
+				if(stream == null){
+					return;
+				}
 				reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
 				JsonElement json = Streams.parse(reader);
 				if (json.isJsonObject()) {
@@ -78,9 +80,9 @@ public class WoodTextureManager {
 		WOOD_TEXTURES.put(key, createSimpleTexture(object));
 	}
 	
-	private static void addTextureMap(String key, JsonArray jaonArray){
+	private static void addTextureMap(String key, JsonArray jsonArray){
 		ImmutableMap.Builder<String, SimpleTexture> textures = new ImmutableMap.Builder<>();
-		for (JsonElement elementEntry : jaonArray) {
+		for (JsonElement elementEntry : jsonArray) {
 			if (elementEntry.isJsonObject()) {
 				JsonObject obj = elementEntry.getAsJsonObject();
 				String kind = getKind(obj);
