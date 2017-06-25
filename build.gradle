@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-	id "com.matthewprenger.cursegradle" version "1.0.7"
+	id "com.matthewprenger.cursegradle" version "1.0.9"
 	id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.32"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -150,8 +150,7 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef =  "HEAD"
 	templateContent = """
-Alpha version, still buggy. Do not create a world you care about with this version, it can and will break things severely.<br/>
-Please help the project by trying it out and <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a><br/>
+Please help the Forestry project by <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a><br/>
 {{#tags}}
   <h3>{{name}}</h3>
   <ul>
