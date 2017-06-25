@@ -12,17 +12,19 @@ package forestry.core.gui.buttons;
 
 import javax.annotation.Nullable;
 
-import forestry.core.config.Constants;
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.render.ForestryResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.config.Constants;
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.render.ForestryResource;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
@@ -81,15 +83,15 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	}
 
 	public boolean isMouseOverButton(int mouseX, int mouseY) {
-		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth() && mouseY < yPosition + getHeight();
+		return mouseX >= x && mouseY >= y && mouseX < x + getWidth() && mouseY < y + getHeight();
 	}
-
+	
 	@Override
-	public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
+	public void drawButton(Minecraft minecraft, int mouseX, int mouseY, float partialTicks) {
 		if (!visible) {
 			return;
 		}
-		FontRenderer fontrenderer = minecraft.fontRendererObj;
+		FontRenderer fontrenderer = minecraft.fontRenderer;
 		minecraft.getTextureManager().bindTexture(TEXTURE);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
@@ -99,13 +101,13 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		boolean mouseOver = isMouseOverButton(mouseX, mouseY);
 		int hoverState = getHoverState(mouseOver);
 		if (useTexWidth) {
-			drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, w, h);
+			drawTexturedModalRect(x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {
-			drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, width / 2, h);
-			drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+			drawTexturedModalRect(x, y, xOffset, yOffset + hoverState * h, width / 2, h);
+			drawTexturedModalRect(x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 		mouseDragged(minecraft, mouseX, mouseY);
-		drawCenteredString(fontrenderer, displayString, xPosition + getWidth() / 2, yPosition + (h - 8) / 2, getTextColor(mouseOver));
+		drawCenteredString(fontrenderer, displayString, x + getWidth() / 2, y + (h - 8) / 2, getTextColor(mouseOver));
 	}
 
 	@Override

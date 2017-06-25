@@ -5,18 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.LeafDecayHelper;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -36,8 +24,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.IItemModelRegister;
+import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
@@ -56,7 +56,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	public abstract IBlockState getStateFromMeta(int meta);
 
 	@Override
-	public final void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public final void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 

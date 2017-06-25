@@ -10,15 +10,16 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.factory.tiles.TileBottler;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	private final TileBottler tile;

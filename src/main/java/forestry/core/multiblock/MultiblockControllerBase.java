@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,8 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.Translator;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are
@@ -453,7 +455,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
 						Chunk chunkToSave = this.world.getChunkFromChunkCoords(x, z);
-						chunkToSave.setChunkModified();
+						chunkToSave.markDirty();
 					}
 				}
 			}

@@ -1,18 +1,9 @@
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
-import forestry.apiculture.items.EnumHoneyComb;
-import forestry.core.blocks.IBlockWithMeta;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -27,9 +18,20 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.apiculture.items.EnumHoneyComb;
+import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
 
 public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock, IStateMapperRegister {
 	public final int minMeta;
@@ -75,7 +77,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumHoneyComb honeyComb : getVariant().getAllowedValues()) {
 			if(!honeyComb.isSecret() || Config.isDebug){
 				list.add(get(honeyComb));

@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.farming.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.core.utils.Translator;
-import forestry.farming.models.EnumFarmBlockTexture;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import forestry.core.utils.Translator;
+import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends ItemBlock {
 
@@ -33,7 +36,7 @@ public class ItemBlockFarm extends ItemBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> info, ITooltipFlag par4) {
 		info.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
 		if (itemstack.getTagCompound() == null) {
 			return;

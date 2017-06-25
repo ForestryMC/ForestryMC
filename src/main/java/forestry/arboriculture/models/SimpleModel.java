@@ -10,17 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.Variant;
@@ -29,19 +32,17 @@ import net.minecraft.client.renderer.block.model.WeightedBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.client.model.MultiModelState;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
 
 @SideOnly(Side.CLIENT)
-public class SimpleModel implements IRetexturableModel {
+public class SimpleModel implements IModel {
 
 	private static final ModelResourceLocation MISSING = new ModelResourceLocation("builtin/missing", "missing");
 
@@ -104,10 +105,9 @@ public class SimpleModel implements IRetexturableModel {
 	public Collection<ResourceLocation> getTextures() {
 		return ImmutableSet.copyOf(textures);
 	}
-
+	
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format,
-							Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		if (variants.size() == 1) {
 			IModel model = models.get(0);
 			return model.bake(MultiModelState.getPartState(state, model, 0), format, bakedTextureGetter);
@@ -150,7 +150,7 @@ public class SimpleModel implements IRetexturableModel {
 			for (ResourceLocation location : model.getDependencies()) {
 				ModelLoaderRegistry.getModelOrMissing(location);
 			}
-			model = ModelProcessingHelper.retexture(model, textures);
+			model = model.retexture(textures);
 
 			models.add(model);
 			builder.add(Pair.of(model, variant.getState()));

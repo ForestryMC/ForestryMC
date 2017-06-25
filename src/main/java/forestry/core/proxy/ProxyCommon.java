@@ -12,13 +12,15 @@ package forestry.core.proxy;
 
 import java.io.File;
 
-import forestry.core.TickHandlerCoreServer;
-import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.worldgen.WorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.common.MinecraftForge;
+
+import forestry.core.TickHandlerCoreServer;
+import forestry.core.multiblock.MultiblockServerTickHandler;
+import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommon {
 	public void registerItem(Item item) {

@@ -13,17 +13,18 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.farming.FarmRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicGourd extends FarmLogic {
 

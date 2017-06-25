@@ -19,7 +19,21 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.FlowerManager;
@@ -56,17 +70,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 import forestry.core.utils.VectUtil;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -269,7 +272,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / Check for the sky, except if in hell
-		if (!world.provider.hasNoSky()) {
+		if (!world.provider.isNether()) {
 			if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
 				errorStates.add(EnumErrorCode.NO_SKY);
 			}

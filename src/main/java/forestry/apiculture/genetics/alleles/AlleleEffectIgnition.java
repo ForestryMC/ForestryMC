@@ -12,16 +12,18 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	private static final int ignitionChance = 50;
@@ -72,7 +74,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			ParticleRender.addEntityIgnitionFX(world, beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord);
+			ParticleRender.addEntityIgnitionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z);
 		}
 		return storedData;
 	}

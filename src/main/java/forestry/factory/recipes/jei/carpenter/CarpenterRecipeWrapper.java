@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
 	private final List<List<ItemStack>> inputStacks;
@@ -19,7 +22,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 		super(recipe);
 
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getIngredients();
+		NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getRawIngredients();
 
 		this.inputStacks = new ArrayList<>();
 		for (List<ItemStack> stacks : inputs) {

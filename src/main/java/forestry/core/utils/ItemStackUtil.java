@@ -11,13 +11,12 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,9 +28,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public abstract class ItemStackUtil {
 

@@ -13,6 +13,19 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -28,16 +41,6 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.Translator;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 
@@ -81,7 +84,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
 		if (itemstack.getTagCompound() == null) {
 			return;
 		}
@@ -94,12 +97,12 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 				list.add(TextFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
 			}
 		}
-
-		super.addInformation(itemstack, player, list, flag);
+		
+		super.addInformation(itemstack, world, list, flag);
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		addCreativeItems(subItems, true);
 	}
 

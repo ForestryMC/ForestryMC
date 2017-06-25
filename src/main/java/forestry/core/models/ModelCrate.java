@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
@@ -18,11 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
-import forestry.core.items.ItemCrated;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.ModelUtil;
-import forestry.storage.PluginStorage;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -34,14 +33,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.core.items.ItemCrated;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.ModelUtil;
+import forestry.storage.PluginStorage;
 
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankModel {
@@ -129,8 +133,8 @@ public class ModelCrate extends BlankModel {
 		}
 
 	}
-
-	public static class BakedCrateModel extends BlankModel implements IPerspectiveAwareModel {
+	
+	public static class BakedCrateModel extends BlankModel implements IBakedModel {
 		private final BakedCrateModel other;
 		private final boolean gui;
 		private final List<BakedQuad> quads = new ArrayList<>();
@@ -159,7 +163,7 @@ public class ModelCrate extends BlankModel {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-			Pair<? extends IBakedModel, Matrix4f> pair = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, ModelManager.getInstance().getDefaultItemState(), cameraTransformType);
+			Pair<? extends IBakedModel, Matrix4f> pair = PerspectiveMapWrapper.handlePerspective(this, ModelManager.getInstance().getDefaultItemState(), cameraTransformType);
 			if (cameraTransformType == TransformType.GUI && !gui && pair.getRight() == null) {
 				return Pair.of(other, null);
 			} else if (cameraTransformType != TransformType.GUI && gui) {

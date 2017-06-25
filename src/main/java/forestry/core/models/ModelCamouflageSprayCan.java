@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -20,13 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.core.inventory.ItemInventoryCamouflageSprayCan;
 
 @SideOnly(Side.CLIENT)
 public class ModelCamouflageSprayCan extends BlankModel {
@@ -63,8 +66,8 @@ public class ModelCamouflageSprayCan extends BlankModel {
 		}
 
 	}
-
-	private class SprayCanModel extends BlankModel implements IPerspectiveAwareModel {
+	
+	private class SprayCanModel extends BlankModel {
 
 		private final IBakedModel originalModel;
 		@Nullable
@@ -92,9 +95,9 @@ public class ModelCamouflageSprayCan extends BlankModel {
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 			if (cameraTransformType == TransformType.GUI) {
-				return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, state, cameraTransformType);
+				return PerspectiveMapWrapper.handlePerspective(this, state, cameraTransformType);
 			}
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(originalModel, state, cameraTransformType);
+			return PerspectiveMapWrapper.handlePerspective(originalModel, state, cameraTransformType);
 		}
 
 	}

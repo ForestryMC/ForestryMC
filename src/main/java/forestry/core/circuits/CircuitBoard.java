@@ -14,6 +14,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -21,11 +28,6 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.utils.Translator;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CircuitBoard implements ICircuitBoard {
 

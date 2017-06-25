@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
 
 public class ItemForestryFood extends ItemFood implements IItemModelRegister {
 

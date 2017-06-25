@@ -13,10 +13,6 @@ package forestry.core.inventory;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import forestry.core.config.Constants;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -24,6 +20,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+
+import forestry.core.config.Constants;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.InventoryUtil;
 
 /**
  * With permission from Krapht.

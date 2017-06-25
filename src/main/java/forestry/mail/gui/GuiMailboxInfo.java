@@ -12,11 +12,6 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
-import forestry.core.utils.SoundUtil;
-import forestry.mail.POBoxInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -26,8 +21,15 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.render.ForestryResource;
+import forestry.core.utils.SoundUtil;
+import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
 
@@ -42,15 +44,15 @@ public class GuiMailboxInfo extends Gui {
 	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
 	private static final int WIDTH = 98;
 	private static final int HEIGHT = 17;
-
-	private final FontRenderer fontRendererObj;
+	
+	private final FontRenderer fontRenderer;
 	@Nullable
 	private POBoxInfo poInfo;
 	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
-		fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
+		fontRenderer = Minecraft.getMinecraft().fontRenderer;
 	}
 
 	public void render() {
@@ -76,13 +78,13 @@ public class GuiMailboxInfo extends Gui {
 		textureManager.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
-
-		fontRendererObj.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+		
+		fontRenderer.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRenderer.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
+		return (xWidth - fontRenderer.getStringWidth(string)) / 2;
 	}
 
 	public boolean hasPOBoxInfo() {

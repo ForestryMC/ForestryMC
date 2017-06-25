@@ -16,11 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.IFruitFamily;
-import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -29,8 +24,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.IFruitFamily;
+import forestry.core.config.Constants;
+import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 

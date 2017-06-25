@@ -2,6 +2,19 @@ package forestry.core.render;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IHiveTile;
@@ -15,17 +28,6 @@ import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
 import forestry.core.utils.VectUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleRender {
@@ -59,7 +61,7 @@ public class ParticleRender {
 		// Avoid rendering bee particles that are too far away, they're very small.
 		// At 32+ distance, have no bee particles. Make more particles up close.
 		BlockPos playerPosition = Minecraft.getMinecraft().player.getPosition();
-		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.xCoord, particleStart.yCoord, particleStart.zCoord);
+		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.x, particleStart.y, particleStart.z);
 		if (world.rand.nextInt(1024) < playerDistanceSq) {
 			return;
 		}

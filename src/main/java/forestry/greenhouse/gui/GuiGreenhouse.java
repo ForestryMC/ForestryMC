@@ -12,6 +12,8 @@ package forestry.greenhouse.gui;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.api.core.CamouflageManager;
 import forestry.core.climate.ClimateInfo;
 import forestry.core.config.Constants;
@@ -21,7 +23,6 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.core.owner.IOwnedTile;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouse;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
@@ -59,7 +60,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 		super.initGui();
 		
 		if(hasFields()){
-			fields = new ClimateTextFields(controller, fontRendererObj, guiLeft, guiTop);
+			fields = new ClimateTextFields(controller, fontRenderer, guiLeft, guiTop);
 		}else{
 			fields = null;
 		}

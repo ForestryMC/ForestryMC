@@ -14,20 +14,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -48,12 +34,28 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.farming.models.EnumFarmBlockTexture;
+import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
@@ -91,14 +93,14 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;
 			}
 
 			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(itemIn, 1, i);
+				ItemStack stack = new ItemStack(this, 1, i);
 				NBTTagCompound compound = new NBTTagCompound();
 				block.saveToCompound(compound);
 				stack.setTagCompound(compound);

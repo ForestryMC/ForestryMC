@@ -13,6 +13,10 @@ package forestry.core.circuits;
 import java.io.IOException;
 import java.util.Locale;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
@@ -22,9 +26,6 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	private final ItemInventorySolderingIron itemInventory;
@@ -43,7 +44,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 
 		ICircuitLayout layout = ((ContainerSolderingIron) inventorySlots).getLayout();
 		String title = layout.getName();
-		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		fontRenderer.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;
@@ -56,7 +57,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 			}
 
 			int row = i * 20;
-			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+			fontRenderer.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
 			if (tube.isEmpty()) {
 				ICircuitSocketType socketType = layout.getSocketType();
@@ -64,7 +65,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 					FarmDirection farmDirection = FarmDirection.values()[i];
 					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
 					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+					fontRenderer.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 				}
 			}
 		}

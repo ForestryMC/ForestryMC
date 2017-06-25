@@ -10,10 +10,22 @@
  ******************************************************************************/
 package forestry.factory;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.BlockDirt.DirtType;
+import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -61,15 +73,6 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.PluginStorage;
-import net.minecraft.block.BlockDirt.DirtType;
-import net.minecraft.block.BlockPlanks.EnumType;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends BlankForestryPlugin {
@@ -338,7 +341,7 @@ public class PluginFactory extends BlankForestryPlugin {
 						'X', beeItems.propolis.getWildcard()});
 			}
 			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS, 1, 0), new Object[]{
-					"#", "X",
+					"X",
 					'X', beeItems.propolis.getWildcard()});
 		}
 

@@ -29,7 +29,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -297,8 +296,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, heat);
-		iCrafting.sendProgressBarUpdate(container, 1, getMeltingPoint());
+		iCrafting.sendWindowProperty(container, 0, heat);
+		iCrafting.sendWindowProperty(container, 1, getMeltingPoint());
 	}
 
 	/**

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-import forestry.api.core.IModelBakerModel;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -28,11 +30,14 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.api.core.IModelBakerModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
@@ -169,7 +174,7 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	public void setModelState(@Nullable IModelState modelState) {
 		this.modelState = modelState;
-		this.transforms = MapWrapper.getTransforms(modelState);
+		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
 	}
 
 	public void addModelQuads(Pair<IBlockState, IBakedModel> model) {
@@ -207,6 +212,6 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-		return MapWrapper.handlePerspective(this, transforms, cameraTransformType);
+		return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType);
 	}
 }

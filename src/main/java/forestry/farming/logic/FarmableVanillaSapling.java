@@ -10,16 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.api.genetics.IIndividual;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +21,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.api.genetics.IIndividual;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.plugins.ForestryPluginUids;
 
 public class FarmableVanillaSapling implements IFarmable {
 

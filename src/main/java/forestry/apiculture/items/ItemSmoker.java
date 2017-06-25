@@ -2,12 +2,6 @@ package forestry.apiculture.items;
 
 import javax.annotation.Nullable;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.IHiveTile;
-import forestry.api.core.Tabs;
-import forestry.core.items.ItemForestry;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,8 +15,16 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.apiculture.IHiveTile;
+import forestry.api.core.Tabs;
+import forestry.core.items.ItemForestry;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileUtil;
 
 public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
@@ -72,16 +74,16 @@ public class ItemSmoker extends ItemForestry {
 		} else {
 			handOffset = look.crossProduct(new Vec3d(0, -1, 0));
 		}
-
-		Vec3d lookDistance = new Vec3d(look.xCoord * distance, look.yCoord * distance, look.zCoord * distance);
+		
+		Vec3d lookDistance = new Vec3d(look.x * distance, look.y * distance, look.z * distance);
 		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
 		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
 
 		if (world.isRemote) {
-			ParticleRender.addEntitySmokeFX(world, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
+			ParticleRender.addEntitySmokeFX(world, smokePos.x, smokePos.y + 1, smokePos.z);
 		}
-
-		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
+		
+		BlockPos blockPos = new BlockPos(smokePos.x, smokePos.y + 1, smokePos.z);
 		TileUtil.actOnTile(world, blockPos, IHiveTile.class, IHiveTile::calmBees);
 	}
 

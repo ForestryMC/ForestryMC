@@ -7,9 +7,12 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class MigrationHelper {
@@ -47,34 +50,40 @@ public class MigrationHelper {
 			remappings.put(nameWithoutUnderscores, name);
 		}
 	}
-
-	public static void onMissingMappings(FMLMissingMappingsEvent event) {
-		for (FMLMissingMappingsEvent.MissingMapping missingMapping : event.get()) {
-			ResourceLocation resourceLocation = missingMapping.resourceLocation;
-
+	
+	public static void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
+		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
+			ResourceLocation resourceLocation = missingMapping.key;
+			
 			String resourcePath = resourceLocation.getResourcePath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
-			} else {
-				switch (missingMapping.type) {
-					case BLOCK:
-						if (blockRemappings.containsKey(resourcePath)) {
-							ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), blockRemappings.get(resourcePath));
-							if (ForgeRegistries.BLOCKS.containsKey(remappedResourceLocation)) {
-								Block remappedBlock = ForgeRegistries.BLOCKS.getValue(remappedResourceLocation);
-								missingMapping.remap(remappedBlock);
-							}
-						}
-						break;
-					case ITEM:
-						if (itemRemappings.containsKey(resourcePath)) {
-							ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), itemRemappings.get(resourcePath));
-							if (ForgeRegistries.ITEMS.containsKey(remappedResourceLocation)) {
-								Item remappedItem = ForgeRegistries.ITEMS.getValue(remappedResourceLocation);
-								missingMapping.remap(remappedItem);
-							}
-						}
-						break;
+			} else if (blockRemappings.containsKey(resourcePath)) {
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), blockRemappings.get(resourcePath));
+				if (ForgeRegistries.BLOCKS.containsKey(remappedResourceLocation)) {
+					Block remappedBlock = ForgeRegistries.BLOCKS.getValue(remappedResourceLocation);
+					if (remappedBlock != null && remappedBlock != Blocks.AIR) {
+						missingMapping.remap(remappedBlock);
+					}
+				}
+			}
+		}
+	}
+	
+	public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
+		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
+			ResourceLocation resourceLocation = missingMapping.key;
+			
+			String resourcePath = resourceLocation.getResourcePath();
+			if (ignoredMappings.contains(resourcePath)) {
+				missingMapping.ignore();
+			} else if (itemRemappings.containsKey(resourcePath)) {
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), itemRemappings.get(resourcePath));
+				if (ForgeRegistries.ITEMS.containsKey(remappedResourceLocation)) {
+					Item remappedItem = ForgeRegistries.ITEMS.getValue(remappedResourceLocation);
+					if (remappedItem != null && remappedItem != Items.AIR) {
+						missingMapping.remap(remappedItem);
+					}
 				}
 			}
 		}

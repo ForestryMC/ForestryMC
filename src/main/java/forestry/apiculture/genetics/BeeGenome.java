@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.concurrent.TimeUnit;
-
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+
+import java.util.concurrent.TimeUnit;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -33,9 +38,6 @@ import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3i;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**

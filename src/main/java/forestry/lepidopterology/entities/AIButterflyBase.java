@@ -53,7 +53,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 	}
 
 	private boolean validateDestination(Vec3d dest, boolean allowFluids) {
-		if (dest.yCoord < 1) {
+		if (dest.y < 1) {
 			return false;
 		}
 		BlockPos pos = new BlockPos(dest);
@@ -68,7 +68,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
-		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.xCoord, dest.yCoord, dest.zCoord);
+		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);
 	}
 
 }

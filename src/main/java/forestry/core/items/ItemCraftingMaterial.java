@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.IModelManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
 
 public class ItemCraftingMaterial extends ItemForestry {
 
@@ -56,7 +58,7 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < definition.length; i++) {
 			subItems.add(new ItemStack(this, 1, i));
 		}

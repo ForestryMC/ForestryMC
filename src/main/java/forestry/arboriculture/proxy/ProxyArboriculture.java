@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
+
+import forestry.arboriculture.IWoodTyped;
 
 public class ProxyArboriculture {
 

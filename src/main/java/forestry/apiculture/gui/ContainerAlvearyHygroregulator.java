@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 

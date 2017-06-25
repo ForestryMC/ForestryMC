@@ -12,10 +12,6 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.models.ModelEscritoire;
-import forestry.core.tiles.TileEscritoire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,6 +24,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.models.ModelEscritoire;
+import forestry.core.tiles.TileEscritoire;
+
 public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> {
 
 	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
@@ -39,7 +40,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	 * @param escritoire If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(@Nullable TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (escritoire != null) {
 			World world = escritoire.getWorldObj();
 			if (world.isBlockLoaded(escritoire.getPos())) {
@@ -94,7 +95,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 			{
 				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
 				GlStateManager.scale(renderScale, renderScale, renderScale);
-				dummyEntityItem.setEntityItemStack(itemstack);
+				dummyEntityItem.setItem(itemstack);
 
 				if (world.getTotalWorldTime() != lastTick) {
 					lastTick = world.getTotalWorldTime();

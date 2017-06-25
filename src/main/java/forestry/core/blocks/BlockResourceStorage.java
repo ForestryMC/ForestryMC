@@ -1,8 +1,5 @@
 package forestry.core.blocks;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -12,8 +9,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
 
 public class BlockResourceStorage extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> STORAGE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class);
@@ -42,7 +44,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumResourceType resourceType : EnumResourceType.VALUES) {
 			list.add(get(resourceType));
 		}

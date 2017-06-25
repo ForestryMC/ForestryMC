@@ -10,9 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -27,8 +31,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TreeGenome extends Genome implements ITreeGenome {
 	@Nullable

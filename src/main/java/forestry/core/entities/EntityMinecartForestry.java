@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerEntity;
-import forestry.core.tiles.ITitled;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -22,8 +18,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerEntity;
+import forestry.core.tiles.ITitled;
+import forestry.core.utils.Translator;
 
 public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IGuiHandlerEntity {
 
@@ -85,7 +87,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 
 	// fix cart contents rendering as black in the End dimension
 	@Override
-	public float getBrightness(float p_70013_1_) {
+	public float getBrightness() {
 		return 1.0f;
 	}
 

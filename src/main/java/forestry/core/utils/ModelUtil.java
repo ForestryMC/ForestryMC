@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,9 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.commons.io.IOUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -33,11 +36,11 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
+
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
 
 @SideOnly(Side.CLIENT)
 public class ModelUtil {
@@ -57,7 +60,7 @@ public class ModelUtil {
 	}
 
 	public static SimpleModelState loadModelState(ResourceLocation location) {
-		return new SimpleModelState(MapWrapper.getTransforms(loadTransformFromJson(location)));
+		return new SimpleModelState(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
 	}
 
 	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {

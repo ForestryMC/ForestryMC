@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,8 +29,8 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean advanced) {
-		super.addInformation(itemstack, player, info, advanced);
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> info, ITooltipFlag advanced) {
+		super.addInformation(itemstack, world, info, advanced);
 
 		if (itemstack.getTagCompound() != null) {
 			info.add("There are still some scribbles on this.");

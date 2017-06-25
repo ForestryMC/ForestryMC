@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.tiles.TileMill;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -19,6 +18,8 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
+import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
@@ -83,7 +84,7 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	 * @param mill If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileMill mill, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileMill mill, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (mill != null) {
 			render(mill.progress, mill.charge, EnumFacing.WEST, x, y, z);
 		} else {

@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,6 +17,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNaturalistChest> {
 
@@ -34,7 +35,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 	 * @param chest If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (chest != null) {
 			World worldObj = chest.getWorldObj();
 			if (worldObj.isBlockLoaded(chest.getPos())) {

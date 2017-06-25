@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
@@ -29,10 +34,6 @@ import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
@@ -158,9 +159,9 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 
 		if (needsSync) {
 			for (IContainerListener crafter : listeners) {
-				crafter.sendProgressBarUpdate(this, 0, stationIndex);
-				crafter.sendProgressBarUpdate(this, 1, stations.size());
-				crafter.sendProgressBarUpdate(this, 2, currentFilter);
+				crafter.sendWindowProperty(this, 0, stationIndex);
+				crafter.sendWindowProperty(this, 1, stations.size());
+				crafter.sendWindowProperty(this, 2, currentFilter);
 			}
 
 			NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);

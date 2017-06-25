@@ -2,16 +2,6 @@ package forestry.arboriculture.blocks;
 
 import java.util.Collection;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,8 +18,20 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 
 public abstract class BlockForestryPlanks<T extends Enum<T> & IWoodType> extends Block implements IWoodTyped, IStateMapperRegister, IItemModelRegister {
 	protected static final int VARIANTS_PER_BLOCK = 16;
@@ -103,7 +105,7 @@ public abstract class BlockForestryPlanks<T extends Enum<T> & IWoodType> extends
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (T woodType : getVariant().getAllowedValues()) {
 			list.add(TreeManager.woodAccess.getStack(woodType, getBlockKind(), fireproof));
 		}

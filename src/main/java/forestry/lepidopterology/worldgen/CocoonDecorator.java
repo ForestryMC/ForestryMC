@@ -15,6 +15,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.IChunkGenerator;
+
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+import net.minecraftforge.event.terraingen.TerrainGen;
+
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Constants;
@@ -22,17 +35,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class CocoonDecorator {
 

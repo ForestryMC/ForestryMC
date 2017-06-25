@@ -12,15 +12,19 @@ package forestry.lepidopterology.recipes;
 
 import javax.annotation.Nullable;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.ForgeHooks;
+
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.config.Constants;
 
 public class MatingRecipe implements IRecipe {
 
@@ -82,8 +86,8 @@ public class MatingRecipe implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 2;
+	public boolean canFit(int width, int height) {
+		return width * height >= 2;
 	}
 
 	@Override
@@ -96,5 +100,20 @@ public class MatingRecipe implements IRecipe {
 		}
 		return aitemstack;
 	}
-
+	
+	@Override
+	public IRecipe setRegistryName(ResourceLocation name) {
+		throw new IllegalStateException();
+	}
+	
+	@Nullable
+	@Override
+	public ResourceLocation getRegistryName() {
+		return new ResourceLocation(Constants.MOD_ID, "butterflyMating");
+	}
+	
+	@Override
+	public Class<IRecipe> getRegistryType() {
+		return IRecipe.class;
+	}
 }

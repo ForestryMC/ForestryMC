@@ -16,7 +16,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -29,10 +35,6 @@ import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class PostRegistry implements IPostRegistry {
 	@Nullable

@@ -17,6 +17,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
@@ -39,12 +47,6 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import org.apache.commons.lang3.StringUtils;
 
 public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
@@ -205,8 +207,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
 		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
-
-		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
+		
+		fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
@@ -272,7 +274,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
-			fontRendererObj.drawStringWithShadow(extinct, guiLeft + 200 - fontRendererObj.getStringWidth(extinct),
+			fontRenderer.drawStringWithShadow(extinct, guiLeft + 200 - fontRenderer.getStringWidth(extinct),
 					guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}
 
@@ -285,7 +287,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			textLayout.drawSplitLine(tokens[0], 12, 200, 0x666666);
 			if (tokens.length > 1) {
 				String signature = "- " + tokens[1];
-				fontRendererObj.drawStringWithShadow(signature, guiLeft + 210 - fontRendererObj.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
+				fontRenderer.drawStringWithShadow(signature, guiLeft + 210 - fontRenderer.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
 			}
 		}
 
@@ -392,7 +394,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
-			fontRendererObj.drawString("+", x + 9, y + 1, 0);
+			fontRenderer.drawString("+", x + 9, y + 1, 0);
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
@@ -462,8 +464,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = Integer.toString(fertility) + " x";
-
-		int stringWidth = fontRendererObj.getStringWidth(fertilityString);
+		
+		int stringWidth = fontRenderer.getStringWidth(fertilityString);
 
 		bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + textLayout.getLineY() - 1, 60, 240 + texOffset, 12, 8);

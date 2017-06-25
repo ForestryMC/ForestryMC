@@ -1,12 +1,12 @@
 package forestry.api.arboriculture;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelProcessingHelper;
 
 public enum WoodBlockKind {
 	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
@@ -57,6 +57,6 @@ public enum WoodBlockKind {
 				break;
 		}
 		textures.putAll(customTextures);
-		return ModelProcessingHelper.retexture(model, new ImmutableMap.Builder<String, String>().putAll(textures).build());
+		return model.retexture(new ImmutableMap.Builder<String, String>().putAll(textures).build());
 	}
 }

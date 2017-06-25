@@ -15,7 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -27,18 +43,6 @@ import forestry.core.items.ItemForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -279,8 +283,8 @@ public class ItemResearchNote extends ItemForestry {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		super.addInformation(itemstack, player, list, flag);
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+		super.addInformation(itemstack, world, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
 		note.addTooltip(list);
 	}

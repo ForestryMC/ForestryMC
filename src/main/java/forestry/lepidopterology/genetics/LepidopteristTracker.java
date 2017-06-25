@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.BreedingTracker;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 

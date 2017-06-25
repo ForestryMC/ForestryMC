@@ -5,14 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -32,10 +24,20 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
 
 public abstract class BlockDecorativeLeaves extends Block implements IItemModelRegister, IColoredBlock, IShearable {
 	private static final int VARIANTS_PER_BLOCK = 16;
@@ -79,10 +81,10 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (IBlockState state : getBlockState().getValidStates()) {
 			int meta = getMetaFromState(state);
-			ItemStack itemStack = new ItemStack(itemIn, 1, meta);
+			ItemStack itemStack = new ItemStack(this, 1, meta);
 			list.add(itemStack);
 		}
 	}

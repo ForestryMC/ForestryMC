@@ -11,11 +11,13 @@
 package forestry.farming;
 
 import com.google.common.collect.ImmutableSet;
-import forestry.api.farming.FarmDirection;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import forestry.api.farming.FarmDirection;
 
 public class FarmHelper {
 

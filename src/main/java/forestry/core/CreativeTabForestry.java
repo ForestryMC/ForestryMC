@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -26,11 +33,6 @@ import forestry.core.config.Constants;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CreativeTabForestry extends CreativeTabs {
 

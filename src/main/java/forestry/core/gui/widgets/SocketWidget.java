@@ -10,20 +10,23 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.Translator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SocketWidget extends Widget {
 
@@ -59,7 +62,7 @@ public class SocketWidget extends Widget {
 			if (!stack.isEmpty()) {
 				Minecraft minecraft = Minecraft.getMinecraft();
 				EntityPlayer player = minecraft.player;
-				toolTip.add(stack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
+				toolTip.add(stack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
 				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));

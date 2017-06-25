@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.core.render.ColourProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.render.ColourProperties;
 
 public enum EnumCircuitBoardType {
 	BASIC(1),

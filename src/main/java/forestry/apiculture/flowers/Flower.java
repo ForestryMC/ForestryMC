@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
 import net.minecraft.block.state.IBlockState;
 
 public final class Flower {
@@ -57,7 +59,7 @@ public final class Flower {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
+		return MoreObjects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
 	}
 
 }

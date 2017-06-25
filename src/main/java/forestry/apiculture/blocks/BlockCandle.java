@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -20,14 +22,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -51,9 +45,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider, IColoredBlock {
 
@@ -148,7 +151,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, 0));
 	}
 
@@ -200,9 +203,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
 			worldIn.markBlockRangeForRenderUpdate(pos, pos);
-			worldIn.theProfiler.startSection("checkLight");
+			worldIn.profiler.startSection("checkLight");
 			worldIn.checkLight(pos);
-			worldIn.theProfiler.endSection();
+			worldIn.profiler.endSection();
 			flag = true;
 		}
 		return flag;
@@ -287,9 +290,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			tileCandle.setColour(colour);
 			tileCandle.setLit(isLit);
 			if (tileCandle.isLit()) {
-				world.theProfiler.startSection("checkLight");
+				world.profiler.startSection("checkLight");
 				world.checkLight(pos);
-				world.theProfiler.endSection();
+				world.profiler.endSection();
 			}
 		}
 	}

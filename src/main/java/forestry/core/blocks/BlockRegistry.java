@@ -11,18 +11,19 @@
 package forestry.core.blocks;
 
 import javax.annotation.Nullable;
-
 import java.util.Locale;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
 import forestry.plugins.PluginManager;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {
@@ -36,14 +37,14 @@ public abstract class BlockRegistry {
 
 		block.setUnlocalizedName("for." + name);
 		block.setRegistryName(name);
-		GameRegistry.register(block);
+		ForgeRegistries.BLOCKS.register(block);
 		Proxies.common.registerBlock(block);
 
 		MigrationHelper.addBlockName(name);
 
 		if (itemBlock != null) {
 			itemBlock.setRegistryName(name);
-			GameRegistry.register(itemBlock);
+			ForgeRegistries.ITEMS.register(itemBlock);
 			Proxies.common.registerItem(itemBlock);
 			MigrationHelper.addItemName(name);
 		}

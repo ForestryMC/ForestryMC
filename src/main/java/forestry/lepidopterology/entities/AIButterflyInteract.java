@@ -45,7 +45,7 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 	protected abstract boolean canInteract();
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return canInteract && !hasInteracted;
 	}
 

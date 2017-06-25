@@ -1,10 +1,12 @@
 package forestry.core.render;
 
+import com.google.common.collect.Maps;
+
 import java.io.IOException;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-import forestry.core.utils.Log;
+import org.apache.commons.io.IOUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.Stitcher;
@@ -17,11 +19,13 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
+
+import forestry.core.utils.Log;
 
 @SideOnly(Side.CLIENT)
 public class TextureMapForestry extends TextureMap {
@@ -157,9 +161,9 @@ public class TextureMapForestry extends TextureMap {
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Applying mipmap");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Sprite being mipmapped");
-			crashreportcategory.setDetail("Sprite name", texture::getIconName);
-			crashreportcategory.setDetail("Sprite size", () -> texture.getIconWidth() + " x " + texture.getIconHeight());
-			crashreportcategory.setDetail("Sprite frames", () -> texture.getFrameCount() + " frames");
+			crashreportcategory.addDetail("Sprite name", texture::getIconName);
+			crashreportcategory.addDetail("Sprite size", () -> texture.getIconWidth() + " x " + texture.getIconHeight());
+			crashreportcategory.addDetail("Sprite frames", () -> texture.getFrameCount() + " frames");
 			crashreportcategory.addCrashSection("Mipmap levels", 0);
 			throw new ReportedException(crashreport);
 		}

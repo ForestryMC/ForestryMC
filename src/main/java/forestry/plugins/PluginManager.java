@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,9 +24,22 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.IChunkGenerator;
+
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.core.IPickupHandler;
@@ -32,20 +49,6 @@ import forestry.core.PluginCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class PluginManager {
 

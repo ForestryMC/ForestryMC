@@ -10,11 +10,35 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -34,26 +58,6 @@ import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final IBackpackDefinition definition;
@@ -195,8 +199,8 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		super.addInformation(itemstack, player, list, flag);
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+		super.addInformation(itemstack, world, list, flag);
 
 		if (type == EnumBackpackType.WOVEN) {
 			list.add(Translator.translateToLocalFormatted("item.for.bag.woven.tooltip"));

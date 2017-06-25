@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.config.Constants;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
@@ -39,8 +36,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.config.Constants;
 
 public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable {
 
@@ -158,9 +160,9 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(itemIn, 1, 0));
-		list.add(new ItemStack(itemIn, 1, 1));
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, 0));
+		list.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override

@@ -13,12 +13,13 @@ package forestry.core.genetics;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class Chromosome implements IChromosome {
 	private static final String UID0_TAG = "UID0";

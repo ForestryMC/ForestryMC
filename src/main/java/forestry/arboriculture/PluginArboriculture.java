@@ -27,14 +27,12 @@ import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -43,19 +41,17 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.oredict.OreDictionary;
-
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -79,7 +75,6 @@ import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.blocks.BlockForestryLog;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.charcoal.CharcoalPileWall;
@@ -262,7 +257,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		if (Config.enableVillagers) {
 			villagerArborist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK, Constants.TEXTURE_SKIN_ZOMBIE_LUMBERJACK);
-			VillagerRegistry.instance().register(villagerArborist);
+			ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerArborist);
 
 			VillagerRegistry.VillagerCareer arboristCareer = new VillagerRegistry.VillagerCareer(villagerArborist, "arborist");
 			arboristCareer.addTrade(1,
@@ -336,7 +331,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 				slabs.setCount(6);
 				planks.setCount(1);
-				RecipeUtil.addPriorityRecipe(slabs.copy(), "###", '#', planks.copy());
+				RecipeUtil.addRecipe(slabs.copy(), "###", '#', planks.copy());
 
 				fences.setCount(3);
 				planks.setCount(1);
@@ -354,7 +349,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 				stairs.setCount(4);
 				planks.setCount(1);
-				RecipeUtil.addPriorityRecipe(stairs.copy(),
+				RecipeUtil.addRecipe(stairs.copy(),
 						"#  ",
 						"## ",
 						"###",
@@ -362,7 +357,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 				doors.setCount(3);
 				planks.setCount(1);
-				RecipeUtil.addPriorityRecipe(doors.copy(),
+				RecipeUtil.addRecipe(doors.copy(),
 						"## ",
 						"## ",
 						"## ",
@@ -375,7 +370,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			fireproofSlabs.setCount(6);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addPriorityRecipe(fireproofSlabs.copy(),
+			RecipeUtil.addRecipe(fireproofSlabs.copy(),
 					"###",
 					'#', fireproofPlanks.copy());
 
@@ -395,7 +390,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			fireproofStairs.setCount(4);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addPriorityRecipe(fireproofStairs.copy(),
+			RecipeUtil.addRecipe(fireproofStairs.copy(),
 					"#  ",
 					"## ",
 					"###",
@@ -403,7 +398,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			doors.setCount(3);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addPriorityRecipe(doors.copy(),
+			RecipeUtil.addRecipe(doors.copy(),
 					"## ",
 					"## ",
 					"## ",
@@ -679,22 +674,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, EnumHand.MAIN_HAND);
 					}
 				}
-			}
-		}
-	}
-	
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void handleItemPickup(EntityItemPickupEvent event) {
-		if (event.isCanceled()) {
-			return;
-		}
-		EntityItem pickedUp = event.getItem();
-		ItemStack stack = pickedUp.getEntityItem();
-		if(!stack.isEmpty()){
-			Block block = Block.getBlockFromItem(stack.getItem());
-			if(block != null && block instanceof BlockForestryLog){
-				EntityPlayer player = event.getEntityPlayer();
-				player.addStat(AchievementList.MINE_WOOD);
 			}
 		}
 	}

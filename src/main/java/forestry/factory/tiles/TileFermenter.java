@@ -13,6 +13,22 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
@@ -31,20 +47,6 @@ import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
@@ -291,10 +293,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, fuelBurnTime);
-		iCrafting.sendProgressBarUpdate(container, 1, fuelTotalTime);
-		iCrafting.sendProgressBarUpdate(container, 2, fermentationTime);
-		iCrafting.sendProgressBarUpdate(container, 3, fermentationTotalTime);
+		iCrafting.sendWindowProperty(container, 0, fuelBurnTime);
+		iCrafting.sendWindowProperty(container, 1, fuelTotalTime);
+		iCrafting.sendWindowProperty(container, 2, fermentationTime);
+		iCrafting.sendWindowProperty(container, 3, fermentationTotalTime);
 	}
 
 

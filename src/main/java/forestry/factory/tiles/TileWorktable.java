@@ -10,10 +10,25 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
@@ -28,18 +43,6 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private RecipeMemory recipeMemory;
@@ -171,7 +174,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		Preconditions.checkState(currentRecipe != null);
 
 		ForgeHooks.setCraftingPlayer(player);
-		NonNullList<ItemStack> remainingItems = CraftingManager.getInstance().getRemainingItems(currentRecipe.getCraftMatrix(), player.world);
+		NonNullList<ItemStack> remainingItems = CraftingManager.getRemainingItems(currentRecipe.getCraftMatrix(), player.world);
 		ForgeHooks.setCraftingPlayer(null);
 
 		for (ItemStack remainingItem : remainingItems) {

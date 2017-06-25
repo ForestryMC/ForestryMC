@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.buttons.GuiBetterButton;
@@ -21,8 +24,6 @@ import forestry.factory.gui.widgets.ClearWorktable;
 import forestry.factory.gui.widgets.MemorizedRecipeSlot;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private static final int SPACING = 18;

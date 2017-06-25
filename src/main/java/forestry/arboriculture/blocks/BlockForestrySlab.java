@@ -138,7 +138,7 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (!isDouble()) {
 			for (T woodType : getVariant().getAllowedValues()) {
 				list.add(TreeManager.woodAccess.getStack(woodType, getBlockKind(), fireproof));

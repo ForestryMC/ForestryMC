@@ -3,11 +3,12 @@ package forestry.core.owner;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
+
+import com.mojang.authlib.GameProfile;
 
 public class GameProfileDataSerializer implements DataSerializer<Optional<GameProfile>> {
 	public static final GameProfileDataSerializer INSTANCE = new GameProfileDataSerializer();
@@ -48,5 +49,10 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 	@Override
 	public DataParameter<Optional<GameProfile>> createKey(int id) {
 		return new DataParameter<>(id, this);
+	}
+	
+	@Override
+	public Optional<GameProfile> copyValue(Optional<GameProfile> value) {
+		return value;
 	}
 }

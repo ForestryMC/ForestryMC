@@ -41,7 +41,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		if (entity.getState() != EnumButterflyState.RISING) {
 			return false;
 		}

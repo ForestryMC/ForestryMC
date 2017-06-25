@@ -12,15 +12,17 @@ package forestry.core.items;
 
 import java.util.Locale;
 
-import forestry.api.core.IModelManager;
-import forestry.core.PluginCore;
-import forestry.core.utils.OreDictUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.core.PluginCore;
+import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {
 
@@ -86,7 +88,7 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i < EnumFruit.values().length; i++) {
 			subItems.add(new ItemStack(this, 1, i));
 		}

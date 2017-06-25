@@ -5,16 +5,18 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.IChunkGenerator;
+
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketRegistry;
-import net.minecraft.command.ICommand;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 public interface IForestryPlugin {
 	boolean isAvailable();

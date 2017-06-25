@@ -13,27 +13,34 @@ package forestry.core.recipes;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.factory.inventory.InventoryCraftingForestry;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public abstract class RecipeUtil {
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 
+public abstract class RecipeUtil {
+	
+	// hack to make unique recipe names.
+	// TODO use json recipes
+	private static int recipeIndex;
+	
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
@@ -112,8 +119,8 @@ public abstract class RecipeUtil {
 			matchingRecipes.add(repairRecipe);
 			return matchingRecipes;
 		}
-
-		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
+		
+		for (Object recipe : ForgeRegistries.RECIPES.getValues()) {
 			IRecipe irecipe = (IRecipe) recipe;
 
 			if (irecipe.matches(inventory, world)) {
@@ -173,11 +180,9 @@ public abstract class RecipeUtil {
 	}
 
 	public static void addRecipe(ItemStack itemstack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapedRecipeCustom(itemstack, obj));
-	}
-
-	public static void addPriorityRecipe(ItemStack itemStack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapedRecipeCustom(itemStack, obj));
+		ShapedRecipeCustom recipe = new ShapedRecipeCustom(itemstack, obj);
+		recipe.setRegistryName(Constants.MOD_ID, "Recipe" + recipeIndex++);
+		ForgeRegistries.RECIPES.register(recipe);
 	}
 
 	public static void addShapelessRecipe(Item item, Object... obj) {
@@ -185,7 +190,9 @@ public abstract class RecipeUtil {
 	}
 
 	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(itemstack, obj));
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(null, itemstack, obj);
+		recipe.setRegistryName(Constants.MOD_ID, "Recipe" + recipeIndex++);
+		ForgeRegistries.RECIPES.register(recipe);
 	}
 
 	public static void addSmelting(ItemStack res, Item prod, float xp) {
@@ -197,7 +204,7 @@ public abstract class RecipeUtil {
 	}
 
 	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getIngredients();
+		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getRawIngredients();
 		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();

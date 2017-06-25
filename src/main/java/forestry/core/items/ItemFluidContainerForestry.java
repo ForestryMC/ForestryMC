@@ -13,11 +13,6 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,6 +31,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
@@ -45,6 +41,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -65,13 +67,13 @@ public class ItemFluidContainerForestry extends ItemForestry {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		// empty
-		subItems.add(new ItemStack(item));
+		subItems.add(new ItemStack(this));
 
 		// filled
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-			ItemStack itemStack = new ItemStack(item);
+			ItemStack itemStack = new ItemStack(this);
 			IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 			if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
 				ItemStack filled = fluidHandler.getContainer();

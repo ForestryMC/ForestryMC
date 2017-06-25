@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import forestry.factory.tiles.ICrafterWorktable;
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.stats.AchievementList;
+import net.minecraft.item.crafting.IRecipe;
+
+import forestry.factory.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
 
@@ -67,7 +65,6 @@ public class SlotCrafter extends Slot {
 	}
 
 	/**
-	 * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
 	 * Copied from {@link SlotCrafting#onCrafting(ItemStack)}
 	 */
 	@Override
@@ -76,47 +73,14 @@ public class SlotCrafter extends Slot {
 			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
 			net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(this.player, stack, craftMatrix);
 		}
-
+		
 		this.amountCrafted = 0;
-
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.CRAFTING_TABLE)) {
-			this.player.addStat(AchievementList.BUILD_WORK_BENCH);
-		}
-
-		if (stack.getItem() instanceof ItemPickaxe) {
-			this.player.addStat(AchievementList.BUILD_PICKAXE);
-		}
-
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.FURNACE)) {
-			this.player.addStat(AchievementList.BUILD_FURNACE);
-		}
-
-		if (stack.getItem() instanceof ItemHoe) {
-			this.player.addStat(AchievementList.BUILD_HOE);
-		}
-
-		if (stack.getItem() == Items.BREAD) {
-			this.player.addStat(AchievementList.MAKE_BREAD);
-		}
-
-		if (stack.getItem() == Items.CAKE) {
-			this.player.addStat(AchievementList.BAKE_CAKE);
-		}
-
-		if (stack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) stack.getItem()).getToolMaterial() != Item.ToolMaterial.WOOD) {
-			this.player.addStat(AchievementList.BUILD_BETTER_PICKAXE);
-		}
-
-		if (stack.getItem() instanceof ItemSword) {
-			this.player.addStat(AchievementList.BUILD_SWORD);
-		}
-
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.ENCHANTING_TABLE)) {
-			this.player.addStat(AchievementList.ENCHANTMENTS);
-		}
-
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)) {
-			this.player.addStat(AchievementList.BOOKCASE);
+		InventoryCraftResult inventorycraftresult = (InventoryCraftResult) this.inventory;
+		IRecipe irecipe = inventorycraftresult.getRecipeUsed();
+		
+		if (irecipe != null && !irecipe.isHidden()) {
+			this.player.unlockRecipes(Lists.newArrayList(irecipe));
+			inventorycraftresult.setRecipeUsed(null);
 		}
 	}
 

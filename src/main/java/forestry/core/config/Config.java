@@ -26,7 +26,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.minecraftforge.common.config.Property;
-
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;

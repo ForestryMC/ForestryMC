@@ -86,7 +86,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		addCreativeItems(subItems, true);
 	}
 
@@ -129,8 +129,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (rand.nextInt(24) != 0) {
 			return false;
 		}
-
-		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getEntityItem());
+		
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getItem());
 		if (butterfly == null) {
 			return false;
 		}
@@ -146,8 +146,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		EntityUtil.spawnEntity(entityItem.world,
 				new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX,
 				entityItem.posY, entityItem.posZ);
-		if (!entityItem.getEntityItem().isEmpty()) {
-			entityItem.getEntityItem().shrink(1);
+		if (!entityItem.getItem().isEmpty()) {
+			entityItem.getItem().shrink(1);
 		} else {
 			entityItem.setDead();
 		}

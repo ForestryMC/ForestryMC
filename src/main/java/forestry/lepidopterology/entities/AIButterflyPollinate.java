@@ -48,7 +48,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 
 	@Override
 	public void updateTask() {
-		if (continueExecuting() && rest != null) {
+		if (shouldContinueExecuting() && rest != null) {
 			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.world, rest);
 			if (checkPollinatable != null) {
 				if (entity.getPollen() == null) {

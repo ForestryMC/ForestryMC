@@ -10,10 +10,28 @@
  ******************************************************************************/
 package forestry;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.io.File;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateEventHandler;
@@ -30,19 +48,6 @@ import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import forestry.plugins.compat.PluginIC2;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Forestry Minecraft Mod
@@ -54,9 +59,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		name = Constants.MOD_NAME,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.11]",
-		dependencies = "required-after:forge@[13.20.0.2270,);"
-				+ "after:JEI@[4.5.0,);"
+		acceptedMinecraftVersions = "[1.12]",
+		dependencies = "required-after:forge@[14.21.0.2363,);"
+				+ "after:JEI@[4.7.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
@@ -148,7 +153,12 @@ public class Forestry {
 	}
 
 	@EventHandler
-	public void onMissingMappings(FMLMissingMappingsEvent event) {
-		MigrationHelper.onMissingMappings(event);
+	public void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
+		MigrationHelper.onMissingBlockMappings(event);
+	}
+	
+	@EventHandler
+	public void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
+		MigrationHelper.onMissingItemMappings(event);
 	}
 }

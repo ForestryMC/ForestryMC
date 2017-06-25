@@ -10,14 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.base.Predicate;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
-import com.google.common.base.Predicate;
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -30,8 +27,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
@@ -86,7 +89,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		List<EntityItem> entityItems = world.getEntitiesWithinAABB(EntityItem.class, harvestBox, entitySelectorFarm);
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		for (EntityItem entity : entityItems) {
-			ItemStack contained = entity.getEntityItem();
+			ItemStack contained = entity.getItem();
 			stacks.add(contained.copy());
 			entity.setDead();
 		}
@@ -109,8 +112,8 @@ public abstract class FarmLogic implements IFarmLogic {
 			if (entity.getEntityData().getBoolean("PreventRemoteMovement")) {
 				return false;
 			}
-
-			ItemStack contained = entity.getEntityItem();
+			
+			ItemStack contained = entity.getItem();
 			return farmLogic.isAcceptedGermling(contained) || farmLogic.isAcceptedWindfall(contained);
 		}
 	}

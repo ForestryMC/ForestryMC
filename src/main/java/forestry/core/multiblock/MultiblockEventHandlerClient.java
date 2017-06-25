@@ -2,11 +2,6 @@ package forestry.core.multiblock;
 
 import java.util.Set;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Log;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -19,11 +14,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.Log;
 
 @SideOnly(Side.CLIENT)
 public class MultiblockEventHandlerClient {
@@ -34,8 +36,8 @@ public class MultiblockEventHandlerClient {
 			if(event.getType() == RenderGameOverlayEvent.ElementType.ALL && Minecraft.getMinecraft().currentScreen == null){
 				Minecraft minecraft = Minecraft.getMinecraft();
 	            RayTraceResult posHit = minecraft.objectMouseOver;
-	            FontRenderer font = minecraft.fontRendererObj;
-	            ScaledResolution resolution = event.getResolution();
+				FontRenderer font = minecraft.fontRenderer;
+				ScaledResolution resolution = event.getResolution();
 	
 	            if(posHit != null && posHit.getBlockPos() != null){
 					TileUtil.actOnTile(minecraft.world, posHit.getBlockPos(), IMultiblockComponent.class, component -> {
@@ -43,7 +45,7 @@ public class MultiblockEventHandlerClient {
 						String lastValidationError = controller.getLastValidationError();
 						if(lastValidationError != null){
 							lastValidationError = TextFormatting.DARK_RED.toString() + TextFormatting.ITALIC.toString() + lastValidationError;
-							minecraft.fontRendererObj.drawSplitString(lastValidationError, resolution.getScaledWidth() / 2 + 35, resolution.getScaledHeight() / 2 - 25, 128, 16777215);
+							minecraft.fontRenderer.drawSplitString(lastValidationError, resolution.getScaledWidth() / 2 + 35, resolution.getScaledHeight() / 2 - 25, 128, 16777215);
 						}
 					});
 	            }

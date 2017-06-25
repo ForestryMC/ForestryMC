@@ -10,22 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.Translator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WidgetCamouflageSlot extends Widget {
 	private final ICamouflageHandler camouflageHandler;
@@ -96,7 +99,7 @@ public class WidgetCamouflageSlot extends Widget {
 				toolTip.add(TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
 			} else {
 				Minecraft minecraft = Minecraft.getMinecraft();
-				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.player, minecraft.gameSettings.advancedItemTooltips));
+				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
 			}
 		}
 	};

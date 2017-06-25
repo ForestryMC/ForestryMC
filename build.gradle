@@ -4,7 +4,7 @@ buildscript {
 		maven { url = "http://files.minecraftforge.net/maven" }
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 	}
 }
 
@@ -26,8 +26,8 @@ ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
 // java version
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
 	version = mcversion + "-" + forgeversion
@@ -60,7 +60,7 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "net.darkhax.tesla:Tesla:${tesla_version}"
+	deobfCompile "net.darkhax.tesla:Tesla-${mcversion}:${tesla_version}"
 	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
 	runtime "mezz.jei:jei_${mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"

@@ -12,17 +12,19 @@ package forestry.storage;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class CrateRegistry implements ICrateRegistry {
 
@@ -51,7 +53,7 @@ public class CrateRegistry implements ICrateRegistry {
 
 		MigrationHelper.addItemName(crateName);
 
-		GameRegistry.register(crate);
+		ForgeRegistries.ITEMS.register(crate);
 		Proxies.common.registerItem(crate);
 		PluginStorage.registerCrate(crate);
 	}

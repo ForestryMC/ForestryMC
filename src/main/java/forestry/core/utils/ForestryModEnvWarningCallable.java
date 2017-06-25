@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.base.Joiner;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Joiner;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ICrashCallable;
+
 import forestry.core.config.Constants;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.ICrashCallable;
 
 /**
  * ICrashCallable for listing disabled modules for crash reports.

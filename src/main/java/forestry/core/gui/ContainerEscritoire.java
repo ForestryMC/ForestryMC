@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
 	private long lastUpdate;

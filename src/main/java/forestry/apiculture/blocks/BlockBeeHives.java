@@ -16,20 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IHiveDrop;
-import forestry.api.apiculture.IHiveTile;
-import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.tiles.TileHive;
-import forestry.core.blocks.IBlockWithMeta;
-import forestry.core.tiles.TileUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -44,8 +30,24 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.tiles.TileHive;
+import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHives extends BlockContainer implements IItemModelRegister, IBlockWithMeta {
 	private static final PropertyEnum<HiveType> HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);
@@ -173,7 +175,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (IBlockState blockState : getBlockState().getValidStates()) {
 			if (getHiveType(blockState) != HiveType.SWARM) {
 				int meta = getMetaFromState(blockState);

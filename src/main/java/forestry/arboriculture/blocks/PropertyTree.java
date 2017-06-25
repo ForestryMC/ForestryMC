@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.base.Objects;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -34,7 +35,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleTreeSpecies.class).add("values", this.getAllowedValues()).toString();
+		return MoreObjects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleTreeSpecies.class).add("values", this.getAllowedValues()).toString();
 	}
 
 	@Override

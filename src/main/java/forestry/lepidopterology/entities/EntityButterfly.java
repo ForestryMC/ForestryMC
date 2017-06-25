@@ -12,24 +12,6 @@ package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IToolScoop;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.PluginLepidopterology;
-import forestry.lepidopterology.genetics.Butterfly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFlower;
@@ -57,9 +39,29 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IToolScoop;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.genetics.Butterfly;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
 
@@ -499,9 +501,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		super.updateAITasks();
 
 		if (getState().doesMovement && flightTarget != null) {
-			double diffX = flightTarget.xCoord + 0.5d - posX;
-			double diffY = flightTarget.yCoord + 0.1d - posY;
-			double diffZ = flightTarget.zCoord + 0.5d - posZ;
+			double diffX = flightTarget.x + 0.5d - posX;
+			double diffY = flightTarget.y + 0.1d - posY;
+			double diffZ = flightTarget.z + 0.5d - posZ;
 
 			motionX += (Math.signum(diffX) * 0.5d - motionX) * 0.10000000149011612d;
 			motionY += (Math.signum(diffY) * 0.699999988079071d - motionY) * 0.10000000149011612d;

@@ -10,22 +10,25 @@
  ******************************************************************************/
 package forestry.core;
 
+import com.google.common.collect.LinkedListMultimap;
+
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.LinkedListMultimap;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.worldgen.WorldGenerator;
-import forestry.plugins.PluginManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.worldgen.WorldGenerator;
+import forestry.plugins.PluginManager;
 
 public class TickHandlerCoreServer {
 
@@ -65,9 +68,9 @@ public class TickHandlerCoreServer {
 				Random random = new Random(worldSeed);
 				long xSeed = random.nextLong() >> 2 + 1L;
 				long zSeed = random.nextLong() >> 2 + 1L;
-				random.setSeed(xSeed * coords.xCoord + zSeed * coords.zCoord ^ worldSeed);
-
-				worldGenerator.retroGen(random, coords.xCoord, coords.zCoord, world);
+				random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
+				
+				worldGenerator.retroGen(random, coords.x, coords.z, world);
 			}
 		}
 	}
@@ -98,13 +101,13 @@ public class TickHandlerCoreServer {
 
 	private static class ChunkCoords {
 		public final int dimension;
-		public final int xCoord;
-		public final int zCoord;
+		public final int x;
+		public final int z;
 
 		public ChunkCoords(Chunk chunk) {
 			this.dimension = chunk.getWorld().provider.getDimension();
-			this.xCoord = chunk.xPosition;
-			this.zCoord = chunk.zPosition;
+			this.x = chunk.x;
+			this.z = chunk.z;
 		}
 	}
 

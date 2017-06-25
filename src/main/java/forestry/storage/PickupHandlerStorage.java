@@ -10,21 +10,22 @@
  ******************************************************************************/
 package forestry.storage;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.items.ItemBackpack;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class PickupHandlerStorage implements IPickupHandler {
 
 	@Override
 	public boolean onItemPickup(EntityPlayer player, EntityItem entityitem) {
 
-		ItemStack itemstack = entityitem.getEntityItem();
+		ItemStack itemstack = entityitem.getItem();
 		if (itemstack.isEmpty()) {
 			return false;
 		}

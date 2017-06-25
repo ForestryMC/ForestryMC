@@ -10,19 +10,23 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.utils.ItemTooltipUtil;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemForestry extends Item implements IItemModelRegister {
 	public ItemForestry() {
@@ -53,8 +57,8 @@ public class ItemForestry extends Item implements IItemModelRegister {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
-		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, world, tooltip, advanced);
+		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 }

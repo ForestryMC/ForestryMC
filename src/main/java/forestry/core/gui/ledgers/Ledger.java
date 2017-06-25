@@ -13,18 +13,20 @@ package forestry.core.gui.ledgers;
 import java.awt.Rectangle;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.TextureManagerForestry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Side ledger for guis
@@ -157,8 +159,8 @@ public abstract class Ledger {
 	public boolean handleMouseClicked(int x, int y, int mouseButton) {
 		return false;
 	}
-
-	public boolean intersectsWith(int mouseX, int mouseY) {
+	
+	public boolean intersects(int mouseX, int mouseY) {
 		return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY && mouseY <= currentShiftY + getHeight();
 	}
 
@@ -245,11 +247,11 @@ public abstract class Ledger {
 	protected int drawSplitText(String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
 		Minecraft minecraft = Minecraft.getMinecraft();
-		List strings = minecraft.fontRendererObj.listFormattedStringToWidth(string, width);
+		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
-				minecraft.fontRendererObj.drawString((String) obj, x, y, color, shadow);
-				y += minecraft.fontRendererObj.FONT_HEIGHT;
+				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
+				y += minecraft.fontRenderer.FONT_HEIGHT;
 			}
 		}
 		return y - originalY;
@@ -257,7 +259,7 @@ public abstract class Ledger {
 
 	protected int drawText(String string, int x, int y) {
 		Minecraft minecraft = Minecraft.getMinecraft();
-		minecraft.fontRendererObj.drawString(string, x, y, fontColorText);
-		return minecraft.fontRendererObj.FONT_HEIGHT;
+		minecraft.fontRenderer.drawString(string, x, y, fontColorText);
+		return minecraft.fontRenderer.FONT_HEIGHT;
 	}
 }

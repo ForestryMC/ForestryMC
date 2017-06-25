@@ -13,6 +13,27 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -27,25 +48,6 @@ import forestry.core.tiles.TileBase;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
@@ -161,7 +163,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, containerFiller.getFillingProgress());
+		iCrafting.sendWindowProperty(container, 0, containerFiller.getFillingProgress());
 	}
 
 	@Override

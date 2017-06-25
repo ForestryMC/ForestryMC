@@ -10,13 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import forestry.core.gui.GuiUtil;
-import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.gui.GuiUtil;
+import forestry.core.gui.tooltips.ToolTip;
 
 public abstract class ItemStackWidgetBase extends Widget {
 	public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
@@ -41,7 +44,7 @@ public abstract class ItemStackWidgetBase extends Widget {
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (!itemStack.isEmpty()) {
-			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips));
+			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
 		}
 		return tip;
 	}

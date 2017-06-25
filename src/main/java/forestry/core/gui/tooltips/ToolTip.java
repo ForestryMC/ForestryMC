@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.text.TextFormatting;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

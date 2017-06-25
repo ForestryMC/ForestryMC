@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public abstract class Genome implements IGenome {
 	private static final String SLOT_TAG = "Slot";
@@ -244,7 +246,7 @@ public abstract class Genome implements IGenome {
 
 	@Override
 	public String toString() {
-		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(this);
+		MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(this);
 		int i = 0;
 		for (IChromosome chromosome : chromosomes) {
 			toStringHelper.add(String.valueOf(i++), chromosome);

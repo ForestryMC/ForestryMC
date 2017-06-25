@@ -15,6 +15,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.GlStateManager;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
@@ -22,9 +27,6 @@ import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LedgerManager {
@@ -90,7 +92,7 @@ public class LedgerManager {
 
 				ledger.currentShiftX = xShift;
 				ledger.currentShiftY = yShift;
-				if (ledger.intersectsWith(mX, mY)) {
+				if (ledger.intersects(mX, mY)) {
 					return ledger;
 				}
 
@@ -108,7 +110,7 @@ public class LedgerManager {
 
 			errorLedger.currentShiftX = xShiftError - errorLedger.getWidth();
 			errorLedger.currentShiftY = yShiftError;
-			if (errorLedger.intersectsWith(mX, mY)) {
+			if (errorLedger.intersects(mX, mY)) {
 				return errorLedger;
 			}
 

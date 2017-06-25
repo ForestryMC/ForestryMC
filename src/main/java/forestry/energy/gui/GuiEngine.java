@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import net.minecraft.inventory.Container;
+
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.Translator;
-import net.minecraft.inventory.Container;
 
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;

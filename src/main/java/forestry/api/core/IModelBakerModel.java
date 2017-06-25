@@ -8,14 +8,15 @@ package forestry.api.core;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IModelBakerModel extends IPerspectiveAwareModel {
+public interface IModelBakerModel extends IBakedModel {
 
 	void setGui3d(boolean gui3d);
 

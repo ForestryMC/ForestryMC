@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.farming.FarmRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 

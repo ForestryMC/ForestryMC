@@ -18,6 +18,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.common.IPlantable;
 
 public class AIButterflyRest extends AIButterflyBase {
@@ -62,7 +63,7 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		if (entity.getExhaustion() <= 0 && entity.canFly()) {
 			return false;
 		}

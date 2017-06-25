@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,8 +21,40 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.storage.loot.LootTableList;
+
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
+
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -96,36 +131,6 @@ import forestry.food.items.ItemRegistryFood;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends BlankForestryPlugin {
@@ -306,7 +311,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 			villagerRegistry.registerVillageCreationHandler(villageHandler);
 
 			villagerApiarist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-			villagerRegistry.register(villagerApiarist);
+			IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfessions = ForgeRegistries.VILLAGER_PROFESSIONS;
+			villagerProfessions.register(villagerApiarist);
 
 			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
 			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);

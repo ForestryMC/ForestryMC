@@ -13,10 +13,11 @@ package forestry.core.gui.ledgers;
 import java.util.List;
 import java.util.Random;
 
-import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 
@@ -32,7 +33,7 @@ public class HintLedger extends Ledger {
 		hintTooltip = Translator.translateToLocal("for.hints." + hint + ".tag");
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		FontRenderer fontRenderer = minecraft.fontRendererObj;
+		FontRenderer fontRenderer = minecraft.fontRenderer;
 		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}

@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 

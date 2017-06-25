@@ -11,11 +11,9 @@
 package forestry.arboriculture;
 
 import com.google.common.base.Preconditions;
-import forestry.api.core.CamouflageManager;
-import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflageItemHandler;
-import forestry.api.core.ICamouflagedTile;
-import forestry.arboriculture.items.ItemBlockWoodDoor;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,9 +22,15 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.api.core.CamouflageManager;
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflageItemHandler;
+import forestry.api.core.ICamouflagedTile;
+import forestry.arboriculture.items.ItemBlockWoodDoor;
 
 public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 
@@ -57,8 +61,8 @@ public class CamouflageHandlerArbDoor implements ICamouflageItemHandler {
 		IBlockState currentState = blockState.getActualState(world, pos);
 
 		ItemBlockWoodDoor itemDoor = (ItemBlockWoodDoor) stack.getItem();
-
-		IBlockState doorState = itemDoor.block.getDefaultState()
+		
+		IBlockState doorState = itemDoor.getBlock().getDefaultState()
 				.withProperty(BlockDoor.FACING, currentState.getValue(BlockDoor.FACING))
 				.withProperty(BlockDoor.HINGE, currentState.getValue(BlockDoor.HINGE))
 				.withProperty(BlockDoor.OPEN, currentState.getValue(BlockDoor.OPEN))

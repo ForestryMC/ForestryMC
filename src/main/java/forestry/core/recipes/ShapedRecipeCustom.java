@@ -13,16 +13,18 @@ package forestry.core.recipes;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.core.utils.ItemStackUtil;
 
 public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
 	//Added in for future ease of change, but hard coded for now.
@@ -36,7 +38,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	private boolean mirrored = true;
 
 	public ShapedRecipeCustom(ItemStack result, Object... recipe) {
-		super(result, recipe);
+		super(null, result, recipe);
 		ItemStack output = result.copy();
 
 		String shape = "";
@@ -137,9 +139,8 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	public int getHeight() {
 		return height;
 	}
-
-	@Override
-	public NonNullList<NonNullList<ItemStack>> getIngredients() {
+	
+	public NonNullList<NonNullList<ItemStack>> getRawIngredients() {
 		return input;
 	}
 	
@@ -160,16 +161,21 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 				if (checkMatch(inv, x, y, false)) {
 					return true;
 				}
-
+				
 				if (mirrored && checkMatch(inv, x, y, true)) {
 					return true;
 				}
 			}
 		}
-
+		
 		return false;
 	}
-
+	
+	@Override
+	public boolean isHidden() {
+		return false;
+	}
+	
 	@Override
 	public boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
 		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {

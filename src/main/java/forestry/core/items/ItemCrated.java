@@ -12,9 +12,6 @@ package forestry.core.items;
 
 import javax.annotation.Nullable;
 
-import forestry.api.core.IModelManager;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -26,9 +23,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Translator;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;

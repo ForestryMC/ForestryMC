@@ -47,7 +47,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 
 	@Override
 	public void updateTask() {
-		if (continueExecuting()) {
+		if (shouldContinueExecuting()) {
 			if (entity.getButterfly().getMate() == null && targetMate != null) {
 				if (entity.cooldownMate <= 0 && entity.getDistanceSqToEntity(targetMate) < 9.0D) {
 					entity.getButterfly().mate(targetMate.getButterfly());
@@ -88,8 +88,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		if (!super.continueExecuting()) {
+	public boolean shouldContinueExecuting() {
+		if (!super.shouldContinueExecuting()) {
 			return false;
 		}
 		if (entity.getButterfly().getMate() == null) {

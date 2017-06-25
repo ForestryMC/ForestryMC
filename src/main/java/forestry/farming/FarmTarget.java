@@ -12,10 +12,11 @@ package forestry.farming;
 
 import javax.annotation.Nullable;
 
-import forestry.api.farming.FarmDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.FarmDirection;
 
 public class FarmTarget {
 

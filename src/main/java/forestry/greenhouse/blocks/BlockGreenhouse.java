@@ -16,6 +16,44 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Plane;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelManager;
@@ -36,7 +74,6 @@ import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import forestry.greenhouse.tiles.TileGreenhouseClimateControl;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -46,46 +83,12 @@ import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhouseHumidifier;
+import forestry.greenhouse.tiles.TileGreenhouseNursery;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Plane;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister, IColoredBlock, IBlockRotatable {
 	private static final AxisAlignedBB SPRINKLER_BOUNDS = new AxisAlignedBB(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
@@ -450,7 +453,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(Translator.translateToLocal("tile.for.greenhouse.tooltip"));
 		tooltip.add(TextFormatting.GREEN.toString() + TextFormatting.ITALIC.toString() + Translator.translateToLocal("tile.for.greenhouse.camouflage.tooltip"));
 	}

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import com.google.common.base.Preconditions;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,9 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -30,7 +33,6 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import net.minecraft.item.ItemStack;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	/* TRANSLATORS */
