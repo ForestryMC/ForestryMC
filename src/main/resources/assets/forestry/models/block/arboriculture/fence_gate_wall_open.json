@@ -1,5 +1,5 @@
 {
-  "parent": "block/wall_gate_closed",
+  "parent": "block/wall_gate_open",
   "textures": {
     "texture": "forestry:blocks/wood/planks.acacia"
   }
