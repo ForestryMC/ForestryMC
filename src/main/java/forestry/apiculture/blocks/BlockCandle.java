@@ -14,10 +14,8 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -46,9 +44,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -241,9 +240,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			drop.set(itemStack);
 		}
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack dropStack = drop.get();
 		drop.remove();
 
@@ -252,10 +251,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			dropStack = getCandleDrop(world, pos);
 		}
 
-		ArrayList<ItemStack> drops = new ArrayList<>(1);
 		drops.add(dropStack);
-
-		return drops;
 	}
 
 	@Override

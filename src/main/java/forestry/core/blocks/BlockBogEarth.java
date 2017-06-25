@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -33,6 +31,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -103,22 +102,18 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	public int tickRate(World world) {
 		return 500;
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = new ArrayList<>();
-
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Integer maturity = state.getValue(MATURITY);
 		SoilType type = SoilType.fromMaturity(maturity);
 
 		if (type == SoilType.PEAT) {
-			ret.add(PluginCore.getItems().peat.getItemStack(2));
-			ret.add(new ItemStack(Blocks.DIRT));
+			drops.add(PluginCore.getItems().peat.getItemStack(2));
+			drops.add(new ItemStack(Blocks.DIRT));
 		} else {
-			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
+			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
 		}
-
-		return ret;
 	}
 
 	@Override

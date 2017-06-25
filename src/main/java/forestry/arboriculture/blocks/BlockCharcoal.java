@@ -1,12 +1,5 @@
 package forestry.arboriculture.blocks;
 
-import java.util.Collections;
-import java.util.List;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -18,11 +11,19 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.client.model.ModelLoader;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
 
 public class BlockCharcoal extends Block implements IStateMapperRegister, IItemModelRegister {
 
@@ -60,11 +61,11 @@ public class BlockCharcoal extends Block implements IStateMapperRegister, IItemM
 	}
 	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		if(state.getValue(AMOUNT) > 0){
-			return Collections.singletonList(new ItemStack(Items.COAL, state.getValue(AMOUNT) + 9, 1));
+			drops.add(new ItemStack(Items.COAL, state.getValue(AMOUNT) + 9, 1));
 		}
-		return super.getDrops(world, pos, state, fortune);
+		super.getDrops(drops, world, pos, state, fortune);
 	}
 
 	@SideOnly(Side.CLIENT)

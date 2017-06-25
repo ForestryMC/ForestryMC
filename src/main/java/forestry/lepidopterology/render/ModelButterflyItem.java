@@ -11,7 +11,6 @@
 package forestry.lepidopterology.render;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
@@ -32,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,7 +67,7 @@ public class ModelButterflyItem extends BlankModel {
 			try {
 				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterfly_ge"));
 			} catch (Exception e) {
-				Throwables.propagate(e);
+				throw new RuntimeException(e);
 			}
 			if (modelButterfly == null) {
 				throw new IllegalArgumentException("Could not bake butterfly model");

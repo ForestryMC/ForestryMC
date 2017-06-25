@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -69,10 +66,9 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 			this.dropXpOnBlockBreak(world, pos, MathHelper.getInt(world.rand, 1, 4));
 		}
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> drops = new ArrayList<>();
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		EnumResourceType type = state.getValue(ORE_RESOURCES);
 		switch (type) {
 			case APATITE: {
@@ -96,8 +92,6 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 				break;
 			}
 		}
-
-		return drops;
 	}
 
 	@Override

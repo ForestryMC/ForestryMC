@@ -13,9 +13,9 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.core.utils.Translator;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
+public class RainmakerRecipeWrapper implements IRecipeWrapper {
 	private final RainSubstrate substrate;
 
 	public RainmakerRecipeWrapper(RainSubstrate substrate) {
@@ -30,8 +30,6 @@ public class RainmakerRecipeWrapper extends BlankRecipeWrapper {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-		super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
-
 		minecraft.fontRenderer.drawString(getEffectString(), 24, 0, Color.darkGray.getRGB());
 		String speed = Translator.translateToLocalFormatted("for.jei.rainmaker.speed", substrate.getSpeed());
 		minecraft.fontRenderer.drawString(speed, 24, 10, Color.gray.getRGB());

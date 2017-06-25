@@ -158,7 +158,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because there is no Player parameter in getDrops()
 	//          and Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<List<ItemStack>> drops = new ThreadLocal<>();
+	private final ThreadLocal<NonNullList<ItemStack>> drops = new ThreadLocal<>();
 
 	/**
 	 * {@link IToolGrafter}'s drop bonus handling is done here.
@@ -180,22 +180,22 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		}
 
 		GameProfile playerProfile = player.getGameProfile();
-		List<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
-		drops.set(leafDrops);
+		NonNullList<ItemStack> drops = NonNullList.create();
+		getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
+		this.drops.set(drops);
 	}
-
+	
 	@Override
-	public final List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = drops.get();
-		drops.remove();
-
-		// leaves not harvested, get drops normally
-		if (ret == null) {
-			ret = getLeafDrop((World) world, null, pos, 1.0f, fortune);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		List<ItemStack> ret = this.drops.get();
+		this.drops.remove();
+		if (ret != null) {
+			drops.addAll(ret);
+		} else {
+			// leaves not harvested, get drops normally
+			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
 		}
-
-		return ret;
 	}
-
-	protected abstract NonNullList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
+	
+	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
 }

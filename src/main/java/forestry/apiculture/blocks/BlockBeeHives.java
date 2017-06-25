@@ -11,7 +11,6 @@
 package forestry.apiculture.blocks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -98,9 +97,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> drops = new ArrayList<>();
-
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random random = world instanceof World ? ((World) world).rand : RANDOM;
 
 		List<IHiveDrop> hiveDrops = getDropsForHive(getMetaFromState(state));
@@ -144,8 +141,6 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 				break;
 			}
 		}
-
-		return drops;
 	}
 
 	// / CREATIVE INVENTORY

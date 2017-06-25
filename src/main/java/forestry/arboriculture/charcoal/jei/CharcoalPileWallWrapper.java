@@ -2,13 +2,15 @@ package forestry.arboriculture.charcoal.jei;
 
 import java.util.Collections;
 
-import forestry.api.arboriculture.ICharcoalPileWall;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class CharcoalPileWallWrapper extends BlankRecipeWrapper {
+import forestry.api.arboriculture.ICharcoalPileWall;
+
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IRecipeWrapper;
+
+public class CharcoalPileWallWrapper implements IRecipeWrapper {
 
 	private final ICharcoalPileWall pileWall;
 

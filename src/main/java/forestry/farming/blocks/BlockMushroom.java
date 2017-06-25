@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -101,14 +99,13 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	public boolean getTickRandomly() {
 		return true;
 	}
-
-	// / DROPS
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		MushroomType type = state.getValue(VARIANT);
-		return Collections.singletonList(type.getDrop());
+		drops.add(type.getDrop());
 	}
-
+	
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return super.canPlaceBlockAt(worldIn, pos) && this.canBlockStay(worldIn, pos, this.getDefaultState());

@@ -11,7 +11,6 @@
 package forestry.farming.blocks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -39,6 +38,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -142,10 +142,9 @@ public class BlockFarm extends BlockStructure {
 		}
 		return world.setBlockToAir(pos);
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<>();
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		int meta = getMetaFromState(state);
 		TileUtil.actOnTile(world, pos, TileFarm.class, farm -> {
 			ItemStack stack = new ItemStack(this, 1, meta != 1 ? meta : 0);
@@ -154,7 +153,6 @@ public class BlockFarm extends BlockStructure {
 			stack.setTagCompound(compound);
 			drops.add(stack);
 		});
-		return drops;
 	}
 
 	@Override

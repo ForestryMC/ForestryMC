@@ -14,21 +14,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IToolScoop;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
@@ -46,12 +31,31 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IToolScoop;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEntityProvider, IGrowable {
 
@@ -126,17 +130,15 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	}
 
 	@Override
-	protected NonNullList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
-		NonNullList<ItemStack> prod = NonNullList.create();
-
+	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
-			return prod;
+			return;
 		}
 
 		ITree tree = tile.getTree();
 		if (tree == null) {
-			return prod;
+			return;
 		}
 
 		// Add saplings
@@ -144,16 +146,14 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				prod.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
 		// Add fruits
 		if (tile.hasFruit()) {
-			prod.addAll(tree.produceStacks(world, pos, tile.getRipeningTime()));
+			drops.addAll(tree.produceStacks(world, pos, tile.getRipeningTime()));
 		}
-
-		return prod;
 	}
 
 	/* MODELS */

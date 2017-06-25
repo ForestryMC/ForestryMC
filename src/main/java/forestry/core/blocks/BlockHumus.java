@@ -1,7 +1,5 @@
 package forestry.core.blocks;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -25,6 +23,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -72,10 +71,10 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	public int tickRate(World world) {
 		return 500;
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		return Collections.singletonList(new ItemStack(Blocks.DIRT));
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		drops.add(new ItemStack(Blocks.DIRT));
 	}
 
 	@Override

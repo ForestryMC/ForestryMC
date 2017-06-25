@@ -39,6 +39,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -117,7 +118,7 @@ public class ModelUtil {
 
 		try {
 			inputStream = resource.getInputStream();
-			definition = ModelBlockDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8));
+			definition = ModelBlockDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8), location);
 		} catch (Exception exception) {
 			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
 					+ "\' from: \'" + resource.getResourceLocation() + "\' in resourcepack: \'"
