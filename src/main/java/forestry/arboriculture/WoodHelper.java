@@ -3,6 +3,14 @@ package forestry.arboriculture;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
@@ -11,13 +19,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
-import forestry.core.models.ModelManager;
 import forestry.core.utils.Translator;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WoodHelper {
 
@@ -86,7 +88,12 @@ public class WoodHelper {
 			if (woodType instanceof EnumVanillaWoodType) {
 				return new ModelResourceLocation("minecraft:" + woodType + "_" + blockKind, "inventory");
 			} else {
-				return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
+				String modID = Constants.MOD_ID;
+				Block block = Block.getBlockFromItem(stack.getItem());
+				if(block != null){
+					modID = block.getRegistryName().getResourceDomain();
+				}
+				return new ModelResourceLocation(modID + ":" + blockKind + "/" + woodType, "inventory");
 			}
 		}
 
