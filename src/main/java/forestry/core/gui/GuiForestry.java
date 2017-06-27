@@ -83,6 +83,12 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 		addLedgers();
 	}
+	
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	protected abstract void addLedgers();
 
