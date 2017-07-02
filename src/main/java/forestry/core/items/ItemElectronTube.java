@@ -66,11 +66,13 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for (int i = 0; i < overlays.length; i++) {
-			if (Config.isDebug || !overlays[i].isSecret()) {
-				ItemStack itemStack = new ItemStack(this, 1, i);
-				if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
-					subItems.add(itemStack);
+		if (this.isInCreativeTab(tab)) {
+			for (int i = 0; i < overlays.length; i++) {
+				if (Config.isDebug || !overlays[i].isSecret()) {
+					ItemStack itemStack = new ItemStack(this, 1, i);
+					if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
+						subItems.add(itemStack);
+					}
 				}
 			}
 		}

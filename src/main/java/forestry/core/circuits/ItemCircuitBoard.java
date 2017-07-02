@@ -42,10 +42,12 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
-		subItems.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
-		subItems.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
-		subItems.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+		if (this.isInCreativeTab(tab)) {
+			subItems.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
+			subItems.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
+			subItems.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
+			subItems.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+		}
 	}
 
 	/* MODELS*/

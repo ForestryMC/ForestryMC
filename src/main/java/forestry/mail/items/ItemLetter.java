@@ -86,7 +86,9 @@ public class ItemLetter extends ItemWithGui {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		LetterProperties.getSubItems(this, tab, subItems);
+		if (this.isInCreativeTab(tab)) {
+			LetterProperties.getSubItems(this, tab, subItems);
+		}
 	}
 
 	public List<ItemStack> getEmptiedLetters() {

@@ -68,16 +68,18 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		// empty
-		subItems.add(new ItemStack(this));
-
-		// filled
-		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-			ItemStack itemStack = new ItemStack(this);
-			IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-			if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
-				ItemStack filled = fluidHandler.getContainer();
-				subItems.add(filled);
+		if (this.isInCreativeTab(tab)) {
+			// empty
+			subItems.add(new ItemStack(this));
+			
+			// filled
+			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+				ItemStack itemStack = new ItemStack(this);
+				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
+				if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
+					ItemStack filled = fluidHandler.getContainer();
+					subItems.add(filled);
+				}
 			}
 		}
 	}

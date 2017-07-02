@@ -59,8 +59,10 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for (int i = 0; i < definition.length; i++) {
-			subItems.add(new ItemStack(this, 1, i));
+		if (this.isInCreativeTab(tab)) {
+			for (int i = 0; i < definition.length; i++) {
+				subItems.add(new ItemStack(this, 1, i));
+			}
 		}
 	}
 
