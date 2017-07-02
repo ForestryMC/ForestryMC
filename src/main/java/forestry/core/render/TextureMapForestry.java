@@ -59,7 +59,7 @@ public class TextureMapForestry extends TextureMap {
 				IResource iresource = null;
 
 				if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
-					if (textureatlassprite.load(resourceManager, resourcelocation)) {
+					if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.get(l.toString()))) {
 						continue;
 					}
 				} else

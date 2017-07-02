@@ -28,7 +28,7 @@ public class ItemFertilizer extends ItemForestry {
 			return EnumActionResult.FAIL;
 		}
 
-		if (ItemDye.applyBonemeal(heldItem, worldIn, pos, player)) {
+		if (ItemDye.applyBonemeal(heldItem, worldIn, pos, player, hand)) {
 			if (!worldIn.isRemote) {
 				worldIn.playEvent(2005, pos, 0);
 			}
