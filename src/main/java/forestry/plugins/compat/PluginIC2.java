@@ -270,7 +270,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 			int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 			if (bogEarthOutputCan > 0) {
 					ItemStack bogEarthCan = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
+				RecipeUtil.addRecipe("ic2_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 			}
 		}
 
@@ -294,7 +294,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 
 		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
 		if (energyBlocks != null) {
-			RecipeUtil.addRecipe(blocks.generator,
+			RecipeUtil.addRecipe("ic2_generator", blocks.generator,
 					"X#X",
 					"XYX",
 					"X#X",
@@ -302,7 +302,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 					'X', "ingotGold",
 					'Y', coreItems.sturdyCasing);
 
-			RecipeUtil.addRecipe(blocks.electricalEngine,
+			RecipeUtil.addRecipe("ic2_eletrical_engine", blocks.electricalEngine,
 					"###",
 					" X ",
 					"YVY",

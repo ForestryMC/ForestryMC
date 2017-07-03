@@ -327,29 +327,29 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			if (woodType instanceof EnumForestryWoodType) {
 				planks.setCount(4);
 				logs.setCount(1);
-				RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
+				RecipeUtil.addShapelessRecipe("planks_" + woodType.getName(), planks.copy(), logs.copy());
 
 				slabs.setCount(6);
 				planks.setCount(1);
-				RecipeUtil.addRecipe(slabs.copy(), "###", '#', planks.copy());
+				RecipeUtil.addRecipe("slabs_" + woodType.getName(), slabs.copy(), "###", '#', planks.copy());
 
 				fences.setCount(3);
 				planks.setCount(1);
-				RecipeUtil.addRecipe(fences.copy(),
+				RecipeUtil.addRecipe("fences_" + woodType.getName(), fences.copy(),
 						"#X#",
 						"#X#",
 						'#', planks.copy(), 'X', "stickWood");
 
 				fenceGates.setCount(1);
 				planks.setCount(1);
-				RecipeUtil.addRecipe(fenceGates.copy(),
+				RecipeUtil.addRecipe("fence_gates_" + woodType.getName(), fenceGates.copy(),
 						"X#X",
 						"X#X",
 						'#', planks.copy(), 'X', "stickWood");
 
 				stairs.setCount(4);
 				planks.setCount(1);
-				RecipeUtil.addRecipe(stairs.copy(),
+				RecipeUtil.addRecipe("stairs_" + woodType.getName(), stairs.copy(),
 						"#  ",
 						"## ",
 						"###",
@@ -357,7 +357,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 				doors.setCount(3);
 				planks.setCount(1);
-				RecipeUtil.addRecipe(doors.copy(),
+				RecipeUtil.addRecipe("doors_" + woodType.getName(), doors.copy(),
 						"## ",
 						"## ",
 						"## ",
@@ -366,31 +366,31 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			fireproofPlanks.setCount(4);
 			fireproofLogs.setCount(1);
-			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
+			RecipeUtil.addShapelessRecipe("fireproof_planks_" + woodType.getName(), fireproofPlanks.copy(), fireproofLogs.copy());
 
 			fireproofSlabs.setCount(6);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(fireproofSlabs.copy(),
+			RecipeUtil.addRecipe("fireproof_slabs_" + woodType.getName(), fireproofSlabs.copy(),
 					"###",
 					'#', fireproofPlanks.copy());
 
 			fireproofFences.setCount(3);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(fireproofFences.copy(),
+			RecipeUtil.addRecipe("fireproof_fences_" + woodType.getName(), fireproofFences.copy(),
 					"#X#",
 					"#X#",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			fireproofFenceGates.setCount(1);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(fireproofFenceGates.copy(),
+			RecipeUtil.addRecipe("fireproof_fence_gates_" + woodType.getName(), fireproofFenceGates.copy(),
 					"X#X",
 					"X#X",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			fireproofStairs.setCount(4);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(fireproofStairs.copy(),
+			RecipeUtil.addRecipe("fireproof_stairs_" + woodType.getName(), fireproofStairs.copy(),
 					"#  ",
 					"## ",
 					"###",
@@ -398,7 +398,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 			doors.setCount(3);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(doors.copy(),
+			RecipeUtil.addRecipe("fireproof_doors_" + woodType.getName(), doors.copy(),
 					"## ",
 					"## ",
 					"## ",
@@ -445,14 +445,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		}
 
 		// Grafter
-		RecipeUtil.addRecipe(items.grafter.getItemStack(),
+		RecipeUtil.addRecipe("grafter", items.grafter.getItemStack(),
 				"  B",
 				" # ",
 				"#  ",
 				'B', "ingotBronze",
 				'#', "stickWood");
 
-		RecipeUtil.addRecipe(blocks.treeChest,
+		RecipeUtil.addRecipe("tree_chest", blocks.treeChest,
 				" # ",
 				"XYX",
 				"XXX",
@@ -461,10 +461,10 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'Y', "chestWood");
 
 		//Wood Pile
-		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
+		RecipeUtil.addShapelessRecipe("wood_pile", new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
 
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
+		RecipeUtil.addShapelessRecipe("loam", new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
 	}
 
 	private static void registerAlleles() {

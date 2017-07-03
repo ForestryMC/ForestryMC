@@ -103,7 +103,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		BlockRegistryGreenhouse blocks = getBlocks();
 
 		Block greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
-		RecipeUtil.addRecipe(new ItemStack(greenhousePlainBlock, 2),
+		RecipeUtil.addRecipe("greenhouse_plain", new ItemStack(greenhousePlainBlock, 2),
 				"#X#",
 				"SIS",
 				'I', OreDictUtil.INGOT_IRON,
@@ -112,7 +112,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
-		RecipeUtil.addRecipe(new ItemStack(greenhouseGlassBlock, 2),
+		RecipeUtil.addRecipe("greenhouse_glass", new ItemStack(greenhouseGlassBlock, 2),
 				"#X#",
 				"PIP",
 				'I', OreDictUtil.INGOT_IRON,
@@ -121,7 +121,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 
 		Block greenhouseHatchInputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_INPUT);
-		RecipeUtil.addRecipe(greenhouseHatchInputBlock,
+		RecipeUtil.addRecipe("greenhouse_hatch_in", greenhouseHatchInputBlock,
 				"TXT",
 				"#H#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
@@ -130,7 +130,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseHatchOutputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_OUTPUT);
-		RecipeUtil.addRecipe(greenhouseHatchOutputBlock,
+		RecipeUtil.addRecipe("greenhouse_hatch_out", greenhouseHatchOutputBlock,
 				"#H#",
 				"TXT",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
@@ -139,7 +139,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1));
 
 		Block greenhouseControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CONTROL);
-		RecipeUtil.addRecipe(greenhouseControlBlock,
+		RecipeUtil.addRecipe("greenhouse_control", greenhouseControlBlock,
 				" X ",
 				"#T#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
@@ -147,14 +147,14 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		Block greenhouseGearBoxBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GEARBOX);
-		RecipeUtil.addRecipe(greenhouseGearBoxBlock,
+		RecipeUtil.addRecipe("greenhouse_gearbox", greenhouseGearBoxBlock,
 				" X ",
 				"###",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
 				'#', OreDictUtil.GEAR_TIN);
 
 		Block greenhouseValveBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.VALVE);
-		RecipeUtil.addRecipe(greenhouseValveBlock,
+		RecipeUtil.addRecipe("greenhouse_valve", greenhouseValveBlock,
 				" X ",
 				"#G#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
@@ -162,7 +162,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'G', OreDictUtil.GEAR_TIN);
 
 		Block greenhouseHeaterBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HEATER);
-		RecipeUtil.addRecipe(greenhouseHeaterBlock,
+		RecipeUtil.addRecipe("greenhouse_heater", greenhouseHeaterBlock,
 				"T#T",
 				"#X#",
 				"T#T",
@@ -171,7 +171,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		Block greenhouseFanlock = blocks.getGreenhouseBlock(BlockGreenhouseType.FAN);
-		RecipeUtil.addRecipe(greenhouseFanlock,
+		RecipeUtil.addRecipe("greenhouse_fan", greenhouseFanlock,
 				"T#T",
 				"#X#",
 				"T#T",
@@ -180,7 +180,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
 
 		Block greenhouseDryerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DEHUMIDIFIER);
-		RecipeUtil.addRecipe(greenhouseDryerBlock,
+		RecipeUtil.addRecipe("greenhouse_dryer", greenhouseDryerBlock,
 				"T#T",
 				"#X#",
 				"T#T",
@@ -189,7 +189,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
 		Block greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HUMIDIFIER);
-		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
+		RecipeUtil.addRecipe("greenhouse_sprinkler", greenhouseSprinklerBlock,
 				"T#T",
 				"#X#",
 				"T#T",
@@ -198,7 +198,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
 
 		Block greenhouseDoorBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DOOR);
-		RecipeUtil.addRecipe(greenhouseDoorBlock,
+		RecipeUtil.addRecipe("greenhouse_door", greenhouseDoorBlock,
 				true,
 				"GG ",
 				"GG ",
@@ -206,7 +206,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS));
 
 		Block greenhouseWindowBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW);
-		RecipeUtil.addRecipe(greenhouseWindowBlock,
+		RecipeUtil.addRecipe("greenhouse_window", greenhouseWindowBlock,
 				true,
 				"GGS",
 				"GGG",
@@ -215,7 +215,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'S', OreDictUtil.STICK_WOOD);
 
 		Block greenhouseWindowRoofBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP);
-		RecipeUtil.addRecipe(greenhouseWindowRoofBlock,
+		RecipeUtil.addRecipe("greenhouse_window_roof", greenhouseWindowRoofBlock,
 				true,
 				"SGS",
 				"GGG",
@@ -224,7 +224,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				'S', OreDictUtil.STICK_WOOD);
 
 		Block greenhouseClimateControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CLIMATE_CONTROL);
-		RecipeUtil.addRecipe(greenhouseClimateControlBlock,
+		RecipeUtil.addRecipe("greenhouse_climate_control", greenhouseClimateControlBlock,
 				true,
 				"IRG",
 				"EBT",
@@ -238,7 +238,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			Block greenhouseButterflyHatchBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.NURSERY);
-			RecipeUtil.addRecipe(greenhouseButterflyHatchBlock,
+			RecipeUtil.addRecipe("greenhouse_butterfly_hatch", greenhouseButterflyHatchBlock,
 					true,
 					"IRG",
 					"SBS",

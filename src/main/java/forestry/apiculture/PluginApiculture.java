@@ -437,59 +437,59 @@ public class PluginApiculture extends BlankForestryPlugin {
 		// / APIARIST'S ARMOR
 
 		ItemStack wovenSilk = coreItems.craftingMaterial.getWovenSilk();
-		RecipeUtil.addRecipe(items.apiaristHat,
+		RecipeUtil.addRecipe("apiarist_hat", items.apiaristHat,
 				"###", "# #",
 				'#', wovenSilk);
-		RecipeUtil.addRecipe(items.apiaristChest,
+		RecipeUtil.addRecipe("apiarist_chest", items.apiaristChest,
 				"# #", "###", "###",
 				'#', wovenSilk);
-		RecipeUtil.addRecipe(items.apiaristLegs,
+		RecipeUtil.addRecipe("apiarist_legs", items.apiaristLegs,
 				"###", "# #", "# #",
 				'#', wovenSilk);
-		RecipeUtil.addRecipe(items.apiaristBoots,
+		RecipeUtil.addRecipe("apiarist_boots", items.apiaristBoots,
 				"# #", "# #",
 				'#', wovenSilk);
 
 		// / HABITAT LOCATOR
-		RecipeUtil.addRecipe(items.habitatLocator,
+		RecipeUtil.addRecipe("habitat_locator", items.habitatLocator,
 				" X ",
 				"X#X",
 				" X ",
 				'#', OreDictUtil.DUST_REDSTONE, 'X', OreDictUtil.INGOT_BRONZE);
 
 		// Bees
-		RecipeUtil.addRecipe(items.scoop,
+		RecipeUtil.addRecipe("scoop", items.scoop,
 				"#X#", "###", " # ",
 				'#', OreDictUtil.STICK_WOOD,
 				'X', Blocks.WOOL);
-		RecipeUtil.addRecipe(items.smoker,
+		RecipeUtil.addRecipe("smoker", items.smoker,
 				"LS#",
 				"LF#",
 				"###",
 				'#', "ingotTin", 'S', OreDictUtil.STICK_WOOD, 'F', Items.FLINT_AND_STEEL, 'L', OreDictUtil.LEATHER);
-		RecipeUtil.addRecipe(new ItemStack(Items.SLIME_BALL),
+		RecipeUtil.addRecipe("propolis_to_slime", new ItemStack(Items.SLIME_BALL),
 				"#X#", "#X#", "#X#",
 				'#', items.propolis,
 				'X', items.pollenCluster.get(EnumPollenCluster.NORMAL, 1));
-		RecipeUtil.addRecipe(new ItemStack(Items.SPECKLED_MELON),
+		RecipeUtil.addRecipe("honey_melon", new ItemStack(Items.SPECKLED_MELON),
 				"#X#", "#Y#", "#X#",
 				'#', items.honeyDrop,
 				'X', items.honeydew,
 				'Y', Items.MELON);
-		RecipeUtil.addRecipe(items.frameUntreated,
+		RecipeUtil.addRecipe("frame_untreated", items.frameUntreated,
 				"###", "#S#", "###",
 				'#', OreDictUtil.STICK_WOOD,
 				'S', Items.STRING);
-		RecipeUtil.addRecipe(items.frameImpregnated,
+		RecipeUtil.addRecipe("frame_impregnated", items.frameImpregnated,
 				"###", "#S#", "###",
 				'#', coreItems.stickImpregnated,
 				'S', Items.STRING);
-		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
+		RecipeUtil.addRecipe("bee_house_minecart", items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
 				'B', new ItemStack(blocks.beeHouse),
 				'C', Items.MINECART);
-		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
+		RecipeUtil.addRecipe("apiary_minecart", items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
 				'B', new ItemStack(blocks.apiary),
@@ -497,7 +497,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for(int i = 0;i < blocks.beeCombs.length;i++){
 			BlockHoneyComb block = blocks.beeCombs[i];
 			for(int m = 0;m < EnumHoneyComb.VALUES.length - i * 16;m++){
-				RecipeUtil.addRecipe(new ItemStack(block, 1, m), 
+				RecipeUtil.addRecipe("comb." + m, new ItemStack(block, 1, m),
 						"###", 
 						"###", 
 						"###", '#', items.beeComb.get(EnumHoneyComb.get(i * 16 + m), 1));
@@ -507,17 +507,17 @@ public class PluginApiculture extends BlankForestryPlugin {
 		// FOOD STUFF
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FOOD)) {
 			ItemRegistryFood foodItems = PluginFood.getItems();
-			RecipeUtil.addRecipe(new ItemStack(foodItems.honeyedSlice, 4),
+			RecipeUtil.addRecipe("honeyed_slice", new ItemStack(foodItems.honeyedSlice, 4),
 					"###", "#X#", "###",
 					'#', items.honeyDrop,
 					'X', Items.BREAD);
 
-			RecipeUtil.addRecipe(foodItems.honeyPot,
+			RecipeUtil.addRecipe("honey_pot", foodItems.honeyPot,
 					"# #", " X ", "# #",
 					'#', items.honeyDrop,
 					'X', fluidItems.waxCapsuleEmpty);
 
-			RecipeUtil.addRecipe(foodItems.ambrosia,
+			RecipeUtil.addRecipe("ambrosia", foodItems.ambrosia,
 					"#Y#", "XXX", "###",
 					'#', items.honeydew,
 					'X', items.royalJelly,
@@ -529,33 +529,33 @@ public class PluginApiculture extends BlankForestryPlugin {
 		int outputCapsuleAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule");
 		if (outputCapsuleAmount > 0) {
 			ItemStack capsule = fluidItems.waxCapsuleEmpty.getItemStack(outputCapsuleAmount);
-			RecipeUtil.addRecipe(capsule, "###", '#', coreItems.beeswax);
+			RecipeUtil.addRecipe("wax_capsule", capsule, "###", '#', coreItems.beeswax);
 		}
 
 		int outputRefractoryAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.refractory");
 		if (outputRefractoryAmount > 0) {
 			ItemStack capsule = fluidItems.refractoryEmpty.getItemStack(outputRefractoryAmount);
-			RecipeUtil.addRecipe(capsule, "###", '#', coreItems.refractoryWax);
+			RecipeUtil.addRecipe("refractory_capsule", capsule, "###", '#', coreItems.refractoryWax);
 		}
 
 		// / BITUMINOUS PEAT
-		RecipeUtil.addRecipe(coreItems.bituminousPeat.getItemStack(),
+		RecipeUtil.addRecipe("bituminous_peat", coreItems.bituminousPeat.getItemStack(),
 				" # ", "XYX", " # ",
 				'#', OreDictUtil.DUST_ASH,
 				'X', coreItems.peat,
 				'Y', items.propolis);
 
 		// / TORCHES
-		RecipeUtil.addRecipe(new ItemStack(Blocks.TORCH, 3),
+		RecipeUtil.addRecipe("beeswax_worth", new ItemStack(Blocks.TORCH, 3),
 				" # ", " # ", " Y ",
 				'#', coreItems.beeswax,
 				'Y', OreDictUtil.STICK_WOOD);
-		RecipeUtil.addRecipe(coreItems.craftingMaterial.getPulsatingMesh(),
+		RecipeUtil.addRecipe("pulsating_mesh", coreItems.craftingMaterial.getPulsatingMesh(),
 				"# #", " # ", "# #",
 				'#', items.propolis.get(EnumPropolis.PULSATING, 1));
 
 		// / WAX CAST
-		RecipeUtil.addRecipe(items.waxCast,
+		RecipeUtil.addRecipe("wax_cast", items.waxCast,
 				"###",
 				"# #",
 				"###",
@@ -563,14 +563,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		// / ALVEARY
 		ItemStack alvearyPlainBlock = blocks.getAlvearyBlock(BlockAlvearyType.PLAIN);
-		RecipeUtil.addRecipe(alvearyPlainBlock,
+		RecipeUtil.addRecipe("alveary_plain", alvearyPlainBlock,
 				"###",
 				"#X#",
 				"###",
 				'X', coreItems.impregnatedCasing,
 				'#', coreItems.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SWARMER),
+		RecipeUtil.addRecipe("alveary_swarmer", blocks.getAlvearyBlock(BlockAlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -578,7 +578,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', alvearyPlainBlock,
 				'G', OreDictUtil.INGOT_GOLD);
 		// FAN
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.FAN),
+		RecipeUtil.addRecipe("alveary_fan", blocks.getAlvearyBlock(BlockAlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -586,7 +586,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', alvearyPlainBlock,
 				'I', OreDictUtil.INGOT_IRON);
 		// HEATER
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HEATER),
+		RecipeUtil.addRecipe("alveary_heater", blocks.getAlvearyBlock(BlockAlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -594,7 +594,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', alvearyPlainBlock,
 				'I', OreDictUtil.INGOT_IRON, 'Y', OreDictUtil.STONE);
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HYGRO),
+		RecipeUtil.addRecipe("alveary_hygro", blocks.getAlvearyBlock(BlockAlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -602,14 +602,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'I', OreDictUtil.INGOT_IRON,
 				'G', OreDictUtil.BLOCK_GLASS);
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.STABILISER),
+		RecipeUtil.addRecipe("alveary_stabiliser", blocks.getAlvearyBlock(BlockAlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', alvearyPlainBlock,
 				'G', OreDictUtil.GEM_QUARTZ);
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SIEVE),
+		RecipeUtil.addRecipe("alveary_sieve", blocks.getAlvearyBlock(BlockAlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",
@@ -657,8 +657,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 					"#X#",
 					'#', coreItems.beeswax,
 					'X', coreItems.craftingMaterial.getSilkWisp());
-			RecipeUtil.addShapelessRecipe(blocks.candle.getUnlitCandle(1), blocks.candle.getUnlitCandle(1));
-			RecipeUtil.addShapelessRecipe(blocks.candle.getLitCandle(1), blocks.candle.getLitCandle(1));
+			RecipeUtil.addShapelessRecipe("candle_unlit_reset", blocks.candle.getUnlitCandle(1), blocks.candle.getUnlitCandle(1));
+			RecipeUtil.addShapelessRecipe("candle_lit_reset", blocks.candle.getLitCandle(1), blocks.candle.getLitCandle(1));
 
 			// / CENTRIFUGE
 			// Honey combs
@@ -758,7 +758,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
 		}
 
-		RecipeUtil.addRecipe(blocks.apiary,
+		RecipeUtil.addRecipe("apiary", blocks.apiary,
 				"XXX",
 				"#C#",
 				"###",
@@ -766,7 +766,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'#', OreDictUtil.PLANK_WOOD,
 				'C', coreItems.impregnatedCasing);
 
-		RecipeUtil.addRecipe(blocks.beeChest,
+		RecipeUtil.addRecipe("bee_chest", blocks.beeChest,
 				" # ",
 				"XYX",
 				"XXX",
@@ -774,7 +774,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', OreDictUtil.BEE_COMB,
 				'Y', OreDictUtil.CHEST_WOOD);
 
-		RecipeUtil.addRecipe(blocks.beeHouse,
+		RecipeUtil.addRecipe("bee_house", blocks.beeHouse,
 				"XXX",
 				"#C#",
 				"###",

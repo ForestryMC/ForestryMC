@@ -37,9 +37,7 @@ import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 	
-	// hack to make unique recipe names.
 	// TODO use json recipes
-	private static int recipeIndex;
 	
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
@@ -171,27 +169,27 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static void addRecipe(Block block, Object... obj) {
-		addRecipe(new ItemStack(block), obj);
+	public static void addRecipe(String recipeName, Block block, Object... obj) {
+		addRecipe(recipeName, new ItemStack(block), obj);
 	}
 
-	public static void addRecipe(Item item, Object... obj) {
-		addRecipe(new ItemStack(item), obj);
+	public static void addRecipe(String recipeName, Item item, Object... obj) {
+		addRecipe(recipeName, new ItemStack(item), obj);
 	}
 
-	public static void addRecipe(ItemStack itemstack, Object... obj) {
+	public static void addRecipe(String recipeName, ItemStack itemstack, Object... obj) {
 		ShapedRecipeCustom recipe = new ShapedRecipeCustom(itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, "Recipe" + recipeIndex++);
+		recipe.setRegistryName(Constants.MOD_ID, recipeName);
 		ForgeRegistries.RECIPES.register(recipe);
 	}
 
-	public static void addShapelessRecipe(Item item, Object... obj) {
-		addShapelessRecipe(new ItemStack(item), obj);
+	public static void addShapelessRecipe(String recipeName, Item item, Object... obj) {
+		addShapelessRecipe(recipeName, new ItemStack(item), obj);
 	}
 
-	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
+	public static void addShapelessRecipe(String recipeName, ItemStack itemstack, Object... obj) {
 		ShapelessOreRecipe recipe = new ShapelessOreRecipe(null, itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, "Recipe" + recipeIndex++);
+		recipe.setRegistryName(Constants.MOD_ID, recipeName);
 		ForgeRegistries.RECIPES.register(recipe);
 	}
 

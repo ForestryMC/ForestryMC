@@ -19,7 +19,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
-	public final ItemForestry fertilizerBio;
+	public final ItemForestry compost;
 	public final ItemFertilizer fertilizerCompound;
 
 	/* Gems */
@@ -91,7 +91,7 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemCamouflageSprayCan camouflageSprayCan;
 
 	public ItemRegistryCore() {
-		fertilizerBio = registerItem(new ItemForestry(), "fertilizer_bio");
+		compost = registerItem(new ItemForestry(), "fertilizer_bio");
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");

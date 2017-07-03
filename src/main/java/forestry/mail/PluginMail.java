@@ -126,7 +126,7 @@ public class PluginMail extends BlankForestryPlugin {
 			letterGlue = new ItemStack(Items.SLIME_BALL);
 		}
 
-		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.PAPER, letterGlue);
+		RecipeUtil.addShapelessRecipe("letter", items.letters.getItemStack(), Items.PAPER, letterGlue);
 
 		if (Config.craftingStampsEnabled) {
 			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
@@ -136,7 +136,7 @@ public class PluginMail extends BlankForestryPlugin {
 
 				ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
-				RecipeUtil.addRecipe(stamps,
+				RecipeUtil.addRecipe("stamps", stamps,
 						"XXX",
 						"###",
 						"ZZZ",
@@ -152,14 +152,14 @@ public class PluginMail extends BlankForestryPlugin {
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
+		RecipeUtil.addRecipe("letter_recycling", new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
 
-		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
+		RecipeUtil.addShapelessRecipe("catalogue", items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
-		RecipeUtil.addRecipe(new ItemStack(blocks.mailbox),
+		RecipeUtil.addRecipe("mailbox", new ItemStack(blocks.mailbox),
 				" # ",
 				"#Y#",
 				"XXX",
@@ -167,7 +167,7 @@ public class PluginMail extends BlankForestryPlugin {
 				'X', "chestWood",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(new ItemStack(blocks.tradeStation),
+		RecipeUtil.addRecipe("trade_station", new ItemStack(blocks.tradeStation),
 				"Z#Z",
 				"#Y#",
 				"XWX",

@@ -303,7 +303,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		ForgeRegistries.RECIPES.register(new MatingRecipe());
 
-		RecipeUtil.addRecipe(blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
+		RecipeUtil.addRecipe("butterfly_chest", blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
 				new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
 	}
 

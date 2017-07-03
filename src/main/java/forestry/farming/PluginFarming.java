@@ -213,7 +213,7 @@ public class PluginFarming extends BlankForestryPlugin {
 			valve.setTagCompound(compound);
 			control.setTagCompound(compound);
 
-			RecipeUtil.addRecipe(basic,
+			RecipeUtil.addRecipe("farm_basic", basic,
 					"I#I",
 					"WCW",
 					'#', block.getBase(),
@@ -221,27 +221,27 @@ public class PluginFarming extends BlankForestryPlugin {
 					'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
 					'I', "ingotCopper");
 
-			RecipeUtil.addRecipe(gearbox,
+			RecipeUtil.addRecipe("farm_gearbox", gearbox,
 					" # ",
 					"TTT",
 					'#', basic,
 					'T', "gearTin");
 
-			RecipeUtil.addRecipe(hatch,
+			RecipeUtil.addRecipe("farm_hatch", hatch,
 					" # ",
 					"TDT",
 					'#', basic,
 					'T', "gearTin",
 					'D', OreDictUtil.TRAPDOOR_WOOD);
 
-			RecipeUtil.addRecipe(valve,
+			RecipeUtil.addRecipe("farm_valve", valve,
 					" # ",
 					"XTX",
 					'#', basic,
 					'T', "gearTin",
 					'X', "blockGlass");
 
-			RecipeUtil.addRecipe(control,
+			RecipeUtil.addRecipe("farm_control", control,
 					" # ",
 					"XTX",
 					'#', basic,

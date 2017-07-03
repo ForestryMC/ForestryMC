@@ -587,21 +587,21 @@ public class PluginStorage extends BlankForestryPlugin {
 		ItemRegistryStorage items = getItems();
 		if (items.apiaristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			BlockRegistryApiculture beeBlocks = PluginApiculture.getBlocks();
-			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
+			addBackpackRecipe("bee", items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
 		}
 
 		if (items.lepidopteristBackpack != null && ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.getBlocks();
 			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
-			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
+			addBackpackRecipe("butterfly", items.lepidopteristBackpack, "stickWood", chest);
 		}
 
-		addBackpackRecipe(items.minerBackpack, "ingotIron");
-		addBackpackRecipe(items.diggerBackpack, "stone");
-		addBackpackRecipe(items.foresterBackpack, "logWood");
-		addBackpackRecipe(items.hunterBackpack, Items.FEATHER);
-		addBackpackRecipe(items.adventurerBackpack, Items.BONE);
-		addBackpackRecipe(items.builderBackpack, Items.CLAY_BALL);
+		addBackpackRecipe("mining", items.minerBackpack, "ingotIron");
+		addBackpackRecipe("digging", items.diggerBackpack, "stone");
+		addBackpackRecipe("foresting", items.foresterBackpack, "logWood");
+		addBackpackRecipe("hunting", items.hunterBackpack, Items.FEATHER);
+		addBackpackRecipe("adventuring", items.adventurerBackpack, Items.BONE);
+		addBackpackRecipe("building", items.builderBackpack, Items.CLAY_BALL);
 
 		// / CARPENTER
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
@@ -619,12 +619,12 @@ public class PluginStorage extends BlankForestryPlugin {
 		}
 	}
 
-	private static void addBackpackRecipe(Item backpack, Object material) {
-		addBackpackRecipe(backpack, material, "chestWood");
+	private static void addBackpackRecipe(String recipeName, Item backpack, Object material) {
+		addBackpackRecipe(recipeName, backpack, material, "chestWood");
 	}
 
-	private static void addBackpackRecipe(Item backpack, Object material, Object chest) {
-		RecipeUtil.addRecipe(backpack,
+	private static void addBackpackRecipe(String recipeName, Item backpack, Object material, Object chest) {
+		RecipeUtil.addRecipe("backpack_" + recipeName, backpack,
 				"X#X",
 				"VYV",
 				"X#X",

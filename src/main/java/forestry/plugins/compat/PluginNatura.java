@@ -277,8 +277,8 @@ public class PluginNatura extends BlankForestryPlugin {
 			RecipeUtil.addFermenterRecipes(itemBarley, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 			if (compostWheatAmount > 0) {
-				ItemStack compostWheat = PluginCore.getItems().fertilizerBio.getItemStack(compostWheatAmount);
-				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', itemBarley);
+				ItemStack compostWheat = PluginCore.getItems().compost.getItemStack(compostWheatAmount);
+				RecipeUtil.addRecipe("natura_compost_wheat", compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', itemBarley);
 			}
 			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, PluginCore.getItems().mouldyWheat.getItemStack(), 0, 300));
 		}
