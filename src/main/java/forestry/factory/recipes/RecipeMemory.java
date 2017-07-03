@@ -12,32 +12,23 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemMap;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 
 	private static final int capacity = 9;
-
-	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<>();
-
-	static {
-		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
-	}
 
 	private final LinkedList<MemorizedRecipe> memorizedRecipes;
 	private long lastUpdate;
@@ -56,31 +47,8 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
 			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
-			memorizedRecipes.add(recipe);
-		}
-	}
-
-	private static boolean isValid(@Nullable MemorizedRecipe recipe) {
-		if (recipe == null) {
-			return false;
-		}
-		ItemStack recipeOutput = recipe.getRecipeOutput();
-		if (recipeOutput.isEmpty()) {
-			return false;
-		}
-		Item item = recipeOutput.getItem();
-		return !memoryBlacklist.contains(item.getClass());
-	}
-
-	public void validate(World world) {
-		Iterator<MemorizedRecipe> iterator = memorizedRecipes.iterator();
-		while (iterator.hasNext()) {
-			MemorizedRecipe recipe = iterator.next();
-			if (recipe != null) {
-				recipe.calculateRecipeOutput(world);
-				if (!isValid(recipe)) {
-					iterator.remove();
-				}
+			if (recipe.getSelectedRecipe() != null) {
+				memorizedRecipes.add(recipe);
 			}
 		}
 	}
@@ -90,7 +58,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe) {
-		if (!isValid(recipe)) {
+		if (recipe.getSelectedRecipe() == null) {
 			return;
 		}
 
@@ -102,7 +70,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		}
 
 		// update existing matching recipes
-		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getRecipeOutput());
+		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getSelectedRecipe());
 		if (memory != null) {
 			updateExistingRecipe(memory, recipe);
 			return;
@@ -156,7 +124,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		if (recipe == null) {
 			return ItemStack.EMPTY;
 		}
-		return recipe.getRecipeOutput();
+		return recipe.getOutputIcon();
 	}
 
 	public boolean isLocked(int recipeIndex) {
@@ -172,10 +140,12 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Nullable
-	private MemorizedRecipe getExistingMemorizedRecipe(ItemStack craftingRecipeOutput) {
-		for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
-			if (memorizedRecipe.hasRecipeOutput(craftingRecipeOutput)) {
-				return memorizedRecipe;
+	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable IRecipe recipe) {
+		if (recipe != null) {
+			for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
+				if (memorizedRecipe.hasRecipe(recipe)) {
+					return memorizedRecipe;
+				}
 			}
 		}
 
@@ -186,7 +156,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		NBTTagList nbttaglist = new NBTTagList();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
-			if (recipe != null) {
+			if (recipe != null && recipe.getSelectedRecipe() != null) {
 				NBTTagCompound recipeNbt = new NBTTagCompound();
 				recipe.writeToNBT(recipeNbt);
 				nbttaglist.appendTag(recipeNbt);

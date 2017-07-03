@@ -14,12 +14,12 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
+import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
@@ -27,7 +27,7 @@ public class SlotCrafter extends Slot {
 	/**
 	 * The craft matrix inventory linked to this result slot.
 	 */
-	private final IInventory craftMatrix;
+	private final InventoryCraftingForestry craftMatrix;
 	private final ICrafterWorktable crafter;
 
 	/**
@@ -38,9 +38,9 @@ public class SlotCrafter extends Slot {
 	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
 	 */
 	private int amountCrafted;
-
-	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
-		super(craftMatrix, slot, xPos, yPos);
+	
+	public SlotCrafter(EntityPlayer player, InventoryCraftingForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
 		this.player = player;
@@ -75,12 +75,9 @@ public class SlotCrafter extends Slot {
 		}
 		
 		this.amountCrafted = 0;
-		InventoryCraftResult inventorycraftresult = (InventoryCraftResult) this.inventory;
-		IRecipe irecipe = inventorycraftresult.getRecipeUsed();
-		
+		IRecipe irecipe = crafter.getRecipeUsed();
 		if (irecipe != null && !irecipe.isHidden()) {
 			this.player.unlockRecipes(Lists.newArrayList(irecipe));
-			inventorycraftresult.setRecipeUsed(null);
 		}
 	}
 
@@ -100,7 +97,7 @@ public class SlotCrafter extends Slot {
 
 	@Override
 	public ItemStack getStack() {
-		return crafter.getResult();
+		return crafter.getResult(craftMatrix, player.world);
 	}
 
 	@Override

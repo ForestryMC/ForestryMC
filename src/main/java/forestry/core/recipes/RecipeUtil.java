@@ -12,6 +12,7 @@ package forestry.core.recipes;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
@@ -56,7 +57,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static InventoryCraftingForestry getCraftRecipe(NonNullList<ItemStack> recipeItems, NonNullList<ItemStack> availableItems, World world, ItemStack recipeOutput) {
+	public static InventoryCraftingForestry getCraftRecipe(NonNullList<ItemStack> recipeItems, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
 		// Need at least one matched set
 		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
 			return null;
@@ -103,70 +104,15 @@ public abstract class RecipeUtil {
 			}
 		}
 
-		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
-		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
-			return null;
+		List<IRecipe> outputs = findMatchingRecipes(crafting, world);
+		if (outputs.contains(recipe)) {
+			return crafting;
 		}
-		return crafting;
+		return null;
 	}
 
-	public static NonNullList<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		NonNullList<ItemStack> matchingRecipes = NonNullList.create();
-		ItemStack repairRecipe = findRepairRecipe(inventory);
-		if (!repairRecipe.isEmpty()) {
-			matchingRecipes.add(repairRecipe);
-			return matchingRecipes;
-		}
-		
-		for (Object recipe : ForgeRegistries.RECIPES.getValues()) {
-			IRecipe irecipe = (IRecipe) recipe;
-
-			if (irecipe.matches(inventory, world)) {
-				ItemStack result = irecipe.getCraftingResult(inventory);
-				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
-					matchingRecipes.add(result);
-				}
-			}
-		}
-
-		return matchingRecipes;
-	}
-
-	private static ItemStack findRepairRecipe(InventoryCrafting inventory) {
-		int craftIngredientCount = 0;
-		ItemStack itemstack0 = ItemStack.EMPTY;
-		ItemStack itemstack1 = ItemStack.EMPTY;
-
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack itemstack = inventory.getStackInSlot(j);
-
-			if (!itemstack.isEmpty()) {
-				if (craftIngredientCount == 0) {
-					itemstack0 = itemstack;
-				}
-
-				if (craftIngredientCount == 1) {
-					itemstack1 = itemstack;
-				}
-
-				++craftIngredientCount;
-			}
-		}
-
-		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.getCount() == 1 && itemstack1.getCount() == 1 && itemstack0.getItem().isRepairable()) {
-			int damage0 = itemstack0.getMaxDamage() - itemstack0.getItemDamage();
-			int damage1 = itemstack0.getMaxDamage() - itemstack1.getItemDamage();
-			int repairAmount = damage0 + damage1 + itemstack0.getMaxDamage() * 5 / 100;
-			int repairedDamage = itemstack0.getMaxDamage() - repairAmount;
-
-			if (repairedDamage < 0) {
-				repairedDamage = 0;
-			}
-
-			return new ItemStack(itemstack0.getItem(), 1, repairedDamage);
-		}
-
-		return ItemStack.EMPTY;
+	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
 	public static void addRecipe(String recipeName, Block block, Object... obj) {
