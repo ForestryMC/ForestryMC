@@ -44,6 +44,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -284,7 +285,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(ITextureManager manager) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumButterflyChromosome.SPECIES)) {
 			if (allele instanceof IAlleleButterflySpecies) {
 				((IAlleleButterflySpecies) allele).registerSprites();
 			}

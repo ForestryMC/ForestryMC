@@ -71,24 +71,23 @@ public class ModelButterfly extends ModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float swing, float f3, float f4, float f5) {
-		super.render(entity, f, f1, swing, f3, f4, f5);
+	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
 		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
 		//body.rotateAngleY = 0.0F;
-		wingRight.rotateAngleZ = MathHelper.cos(swing * 1.3F) * (float) Math.PI * 0.25F;
+		wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
 		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.scale(scale, scale, scale);
-		GlStateManager.translate(0.0F, 20.0f / scale * f5, 0.0F);
-		wingRight.render(f5);
-		eyeRight.render(f5);
-		eyeLeft.render(f5);
-		wingLeft.render(f5);
-		body.render(f5);
+		GlStateManager.scale(this.scale, this.scale, this.scale);
+		GlStateManager.translate(0.0F, 20.0f / this.scale * scale, 0.0F);
+		wingRight.render(scale);
+		eyeRight.render(scale);
+		eyeLeft.render(scale);
+		wingLeft.render(scale);
+		body.render(scale);
 		GlStateManager.popMatrix();
-
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

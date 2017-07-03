@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.core.config.Constants;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
@@ -60,12 +61,11 @@ public class ModelButterflyItem extends BlankModel {
 	}
 
 	private IBakedModel bakeModel(IButterfly butterfly) {
-		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		textures.put("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
+		ImmutableMap<String, String> textures = ImmutableMap.of("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
 
 		if (modelButterfly == null) {
 			try {
-				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterfly_ge"));
+				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly_ge"));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -73,7 +73,7 @@ public class ModelButterflyItem extends BlankModel {
 				throw new IllegalArgumentException("Could not bake butterfly model");
 			}
 		}
-		IModel retexturedModel = modelButterfly.retexture(textures.build());
+		IModel retexturedModel = modelButterfly.retexture(textures);
 		IBakedModel bakedModel = retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 		return new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
 	}
