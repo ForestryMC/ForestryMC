@@ -43,7 +43,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -72,7 +71,6 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
-import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
@@ -87,7 +85,6 @@ import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
-import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
@@ -545,11 +542,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	@Override
-	public IFuelHandler getFuelHandler() {
-		return new FuelHandler(getItems().sapling);
-	}
-
-	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryArboriculture();
 	}
@@ -573,44 +565,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// sapling itemBlock is different from the normal item
 		hiddenItems.add(new ItemStack(getBlocks().saplingGE));
-	}
-
-	private static class FuelHandler implements IFuelHandler {
-		private final ItemGermlingGE sapling;
-
-		public FuelHandler(ItemGermlingGE sapling) {
-			this.sapling = sapling;
-		}
-
-		@Override
-		public int getBurnTime(ItemStack fuel) {
-			Item item = fuel.getItem();
-			if (sapling == item) {
-				return 100;
-			}
-
-			if(Item.getItemFromBlock(blocks.charcoal) == item){
-				return 16000;
-			}
-			if(Item.getItemFromBlock(blocks.woodPile) == item){
-				return 1200;
-			}
-			
-			Block block = Block.getBlockFromItem(item);
-
-			if (block instanceof IWoodTyped) {
-				IWoodTyped woodTypedBlock = (IWoodTyped) block;
-				if (woodTypedBlock.isFireproof()) {
-					return 0;
-				} else if (block instanceof BlockArbSlab) {
-					return 150;
-				} else {
-					return 300;
-				}
-			}
-
-			return 0;
-		}
 	}
 
 	@SubscribeEvent

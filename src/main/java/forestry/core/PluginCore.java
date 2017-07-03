@@ -52,7 +52,6 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -71,12 +70,10 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends BlankForestryPlugin {
@@ -162,8 +159,6 @@ public class PluginCore extends BlankForestryPlugin {
 		alleleHelper.init();
 
 		Proxies.render.initRendering();
-
-		RecipeSorter.register("forestry:shaped", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "");
 	}
 
 	@Override
@@ -467,34 +462,9 @@ public class PluginCore extends BlankForestryPlugin {
 	}
 
 	@Override
-	public IFuelHandler getFuelHandler() {
-		return new FuelHandler(getItems());
-	}
-
-	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// research note items are not useful without actually having completed research
 		hiddenItems.add(new ItemStack(getItems().researchNote));
-	}
-
-	private static class FuelHandler implements IFuelHandler {
-		private final ItemRegistryCore items;
-
-		public FuelHandler(ItemRegistryCore items) {
-			this.items = items;
-		}
-
-		@Override
-		public int getBurnTime(ItemStack fuel) {
-			if (fuel != null && fuel.getItem() == items.peat) {
-				return 2000;
-			}
-			if (fuel != null && fuel.getItem() == items.bituminousPeat) {
-				return 4200;
-			}
-
-			return 0;
-		}
 	}
 
 	@SubscribeEvent

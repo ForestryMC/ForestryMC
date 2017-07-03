@@ -74,7 +74,4 @@ public interface IForestryPlugin {
 
 	@Nullable
 	ICommand[] getConsoleCommands();
-
-	@Nullable
-	IFuelHandler getFuelHandler();
 }

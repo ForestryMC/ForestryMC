@@ -60,7 +60,7 @@ import forestry.plugins.compat.PluginIC2;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.12]",
-		dependencies = "required-after:forge@[14.21.0.2363,);"
+		dependencies = "required-after:forge@[14.21.1.2395,);"
 				+ "after:JEI@[4.7.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
