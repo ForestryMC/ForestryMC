@@ -80,6 +80,10 @@ public enum MothDefinition implements IButterflyDefinition {
 		setSpeciesProperties(speciesBuilder);
 		species = speciesBuilder.build();
 	}
+	
+	public static void preInit() {
+		// just used to initialize the enums
+	}
 
 	public static void initMoths() {
 		for (MothDefinition butterfly : values()) {

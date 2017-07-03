@@ -131,7 +131,12 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-
+		
+		ButterflyDefinition.preInit();
+		MothDefinition.preInit();
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
+		
+		
 		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
 		proxy.preInitializeRendering();
 	}
