@@ -1,18 +1,12 @@
 package forestry.arboriculture.blocks;
 
+import com.google.common.collect.Maps;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IWoodStateMapper;
-import forestry.api.arboriculture.IWoodType;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.models.WoodModelLoader;
-import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -20,8 +14,16 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodStateMapper;
+import forestry.api.arboriculture.IWoodType;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.models.WoodModelLoader;
+import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
 public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMapper {
@@ -70,14 +72,14 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		Block block = state.getBlock();
 		int meta = block.getMetaFromState(state);
 		IWoodType woodType = woodTyped.getWoodType(meta);
-		if (woodType instanceof EnumForestryWoodType) {
+		if (woodType instanceof EnumVanillaWoodType) {
+			return getVanillaModelResourceLocation(block, woodType, properties);
+		} else {
 			if (WoodModelLoader.INSTANCE.isEnabled) {
-				return getForestryModelResourceLocation(woodType, properties);
+				return getModelResourceLocation(woodType, properties, block.getRegistryName().getResourceDomain());
 			} else {
 				return getDefaultModelResourceLocation(state);
 			}
-		} else {
-			return getVanillaModelResourceLocation(block, woodType, properties);
 		}
 	}
 
@@ -100,10 +102,10 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		return new ModelResourceLocation(Constants.MOD_ID + ':' + resourceLocation, propertyString);
 	}
 
-	private ModelResourceLocation getForestryModelResourceLocation(IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties) {
+	private ModelResourceLocation getModelResourceLocation(IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties, String modID) {
 		String resourceLocation = "arboriculture/" + blockPath + '/' + woodType;
 		String propertyString = this.getPropertyString(properties);
-		return new ModelResourceLocation(Constants.MOD_ID + ':' + resourceLocation, propertyString);
+		return new ModelResourceLocation(modID + ':' + resourceLocation, propertyString);
 	}
 
 	private ModelResourceLocation getVanillaModelResourceLocation(Block block, IWoodType woodType, Map<IProperty<?>, Comparable<?>> properties) {
