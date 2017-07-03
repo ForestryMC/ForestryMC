@@ -29,8 +29,6 @@ import forestry.core.utils.Log;
 
 @SideOnly(Side.CLIENT)
 public class TextureMapForestry extends TextureMap {
-	private boolean skipFirst = true;
-
 	public TextureMapForestry(String basePathIn) {
 		super(basePathIn, null, true);
 	}
@@ -49,44 +47,41 @@ public class TextureMapForestry extends TextureMap {
 		this.mapUploadedSprites.clear();
 		this.listAnimatedSprites.clear();
 
-		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", skipFirst ? 0 : this.mapRegisteredSprites.size());
+		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
+		
+		for (Map.Entry<String, TextureAtlasSprite> entry : this.mapRegisteredSprites.entrySet()) {
+			TextureAtlasSprite textureatlassprite = entry.getValue();
+			ResourceLocation resourcelocation = this.getResourceLocation(textureatlassprite);
+			bar.step(resourcelocation.getResourcePath());
+			IResource iresource = null;
 
-		if (!skipFirst) {
-			for (Map.Entry<String, TextureAtlasSprite> entry : this.mapRegisteredSprites.entrySet()) {
-				TextureAtlasSprite textureatlassprite = entry.getValue();
-				ResourceLocation resourcelocation = this.getResourceLocation(textureatlassprite);
-				bar.step(resourcelocation.getResourcePath());
-				IResource iresource = null;
+			if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
+				if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.get(l.toString()))) {
+					continue;
+				}
+			} else
+				try {
+					PngSizeInfo pngsizeinfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourcelocation));
+					iresource = resourceManager.getResource(resourcelocation);
+					boolean flag = iresource.getMetadata("animation") != null;
+					textureatlassprite.loadSprite(pngsizeinfo, flag);
+				} catch (RuntimeException runtimeexception) {
+					FMLClientHandler.instance().trackBrokenTexture(resourcelocation, runtimeexception.getMessage());
+					continue;
+				} catch (IOException ioexception) {
+					FMLClientHandler.instance().trackMissingTexture(resourcelocation);
+					continue;
+				} finally {
+					IOUtils.closeQuietly(iresource);
+				}
 
-				if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
-					if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.get(l.toString()))) {
-						continue;
-					}
-				} else
-					try {
-						PngSizeInfo pngsizeinfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourcelocation));
-						iresource = resourceManager.getResource(resourcelocation);
-						boolean flag = iresource.getMetadata("animation") != null;
-						textureatlassprite.loadSprite(pngsizeinfo, flag);
-					} catch (RuntimeException runtimeexception) {
-						FMLClientHandler.instance().trackBrokenTexture(resourcelocation, runtimeexception.getMessage());
-						continue;
-					} catch (IOException ioexception) {
-						FMLClientHandler.instance().trackMissingTexture(resourcelocation);
-						continue;
-					} finally {
-						IOUtils.closeQuietly(iresource);
-					}
-
-				stitcher.addSprite(textureatlassprite);
-			}
+			stitcher.addSprite(textureatlassprite);
 		}
-
+		
 		ProgressManager.pop(bar);
 
 		this.missingImage.generateMipmaps(0);
 		stitcher.addSprite(this.missingImage);
-		skipFirst = false;
 		bar = ProgressManager.push("Texture creation", 2);
 
 		bar.step("Stitching");
