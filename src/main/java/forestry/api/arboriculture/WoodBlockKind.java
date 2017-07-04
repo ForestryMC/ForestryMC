@@ -57,6 +57,6 @@ public enum WoodBlockKind {
 				break;
 		}
 		textures.putAll(customTextures);
-		return model.retexture(new ImmutableMap.Builder<String, String>().putAll(textures).build());
+		return model.retexture(ImmutableMap.copyOf(textures));
 	}
 }
