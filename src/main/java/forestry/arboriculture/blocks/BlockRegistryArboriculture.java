@@ -271,10 +271,22 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		}
 		
 		charcoal = new BlockCharcoal();
-		registerBlock(charcoal, new ItemBlockForestry(charcoal), "charcoal");
+		ItemBlockForestry itemBlockCharcoal = new ItemBlockForestry(charcoal) {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 16000;
+			}
+		};
+		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
 		
 		woodPile = new BlockWoodPile();
-		registerBlock(woodPile, new ItemBlockForestry(woodPile), "wood_pile");
+		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry(woodPile) {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 1200;
+			}
+		};
+		registerBlock(woodPile, itemBlockWoodPile, "wood_pile");
 		
 		loam = new BlockLoam();
 		registerBlock(loam, new ItemBlockForestry(loam), "loam");

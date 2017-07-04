@@ -218,4 +218,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		return tree.getGenome().getSappiness() * 10;
 	}
+	
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		return 100;
+	}
 }

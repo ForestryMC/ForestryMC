@@ -52,4 +52,13 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
 			}
 		}
 	}
+	
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		if (getBlock().isFireproof()) {
+			return 0;
+		} else {
+			return 200;
+		}
+	}
 }

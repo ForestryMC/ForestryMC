@@ -116,13 +116,25 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		spectacles = registerItem(new ItemArmorNaturalist(), "naturalist_helmet");
 
-		peat = registerItem(new ItemForestry(), "peat");
+		peat = new ItemForestry() {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 2000;
+			}
+		};
+		registerItem(peat, "peat");
 		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
 		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
-		bituminousPeat = registerItem(new ItemForestry(), "bituminous_peat");
+		bituminousPeat = new ItemForestry() {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 4200;
+			}
+		};
+		registerItem(bituminousPeat, "bituminous_peat");
 
 		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE, "gear_bronze");
 		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");

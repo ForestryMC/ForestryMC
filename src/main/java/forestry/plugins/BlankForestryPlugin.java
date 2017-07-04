@@ -145,12 +145,6 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 		return null;
 	}
 
-	@Nullable
-	@Override
-	public IFuelHandler getFuelHandler() {
-		return null;
-	}
-
 	@Override
 	public String toString() {
 		ForestryPlugin forestryPlugin = getClass().getAnnotation(ForestryPlugin.class);

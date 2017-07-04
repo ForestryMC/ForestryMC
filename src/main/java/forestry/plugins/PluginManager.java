@@ -33,11 +33,9 @@ import net.minecraft.world.gen.IChunkGenerator;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -107,11 +105,6 @@ public class PluginManager {
 		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
 		if (resupplyHandler != null) {
 			resupplyHandlers.add(resupplyHandler);
-		}
-
-		IFuelHandler fuelHandler = plugin.getFuelHandler();
-		if (fuelHandler != null) {
-			GameRegistry.registerFuelHandler(fuelHandler);
 		}
 	}
 
