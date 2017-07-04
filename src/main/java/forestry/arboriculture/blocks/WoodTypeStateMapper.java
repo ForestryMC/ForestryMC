@@ -22,7 +22,6 @@ import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
@@ -75,11 +74,7 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		if (woodType instanceof EnumVanillaWoodType) {
 			return getVanillaModelResourceLocation(block, woodType, properties);
 		} else {
-			if (WoodModelLoader.INSTANCE.isEnabled) {
-				return getModelResourceLocation(woodType, properties, block.getRegistryName().getResourceDomain());
-			} else {
-				return getDefaultModelResourceLocation(state);
-			}
+			return getModelResourceLocation(woodType, properties, block.getRegistryName().getResourceDomain());
 		}
 	}
 

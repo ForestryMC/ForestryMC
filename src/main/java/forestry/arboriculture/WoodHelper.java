@@ -17,7 +17,6 @@ import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.models.WoodModelLoader;
 import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
 
@@ -79,9 +78,6 @@ public class WoodHelper {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if (!WoodModelLoader.INSTANCE.isEnabled) {
-				return new ModelResourceLocation(getDefaultModelLocation(stack), "inventory");
-			}
 			int meta = stack.getMetadata();
 			IWoodType woodType = wood.getWoodType(meta);
 			WoodBlockKind blockKind = wood.getBlockKind();

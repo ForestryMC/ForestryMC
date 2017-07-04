@@ -10,12 +10,32 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.multipart.Multipart;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.IRegistry;
+import net.minecraft.world.ColorizerFoliage;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
@@ -35,22 +55,6 @@ import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.models.SimpleRetexturedModel;
 import forestry.core.models.WoodModelEntry;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.model.multipart.Multipart;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.IRegistry;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyArboricultureClient extends ProxyArboriculture {
@@ -110,7 +114,6 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 	@SubscribeEvent
 	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
-		WoodModelLoader.INSTANCE.isEnabled = true;
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
 
 		for (WoodModelEntry<T> entry : woodModelEntrys) {
