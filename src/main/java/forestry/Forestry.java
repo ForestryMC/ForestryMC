@@ -56,7 +56,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.11]",
 		dependencies = "required-after:forge@[13.20.0.2270,);"
-				+ "after:JEI@[4.5.0,);"
+				+ "after:jei@[4.5.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
