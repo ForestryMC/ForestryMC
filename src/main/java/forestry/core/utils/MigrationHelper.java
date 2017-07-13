@@ -13,8 +13,12 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.event.RegistryEvent;
+
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+@Mod.EventBusSubscriber
 public class MigrationHelper {
 	private static Map<String, String> blockRemappings = new HashMap<>();
 	private static Map<String, String> itemRemappings = new HashMap<>();
@@ -51,6 +55,7 @@ public class MigrationHelper {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
 		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
@@ -70,6 +75,7 @@ public class MigrationHelper {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
 		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
