@@ -24,6 +24,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeDroneGE;
 	public final ItemBeeGE beePrincessGE;
 	public final ItemBeeGE beeLarvaeGE;
+	public final ItemBeeGE beeRoyalLarvaeGE;
 
 	public final ItemHabitatLocator habitatLocator;
 	public final ItemBeealyzer beealyzer;
@@ -56,6 +57,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		beeDroneGE = registerItem(new ItemBeeGE(EnumBeeType.DRONE), "beeDroneGE");
 		beePrincessGE = registerItem(new ItemBeeGE(EnumBeeType.PRINCESS), "beePrincessGE");
 		beeLarvaeGE = registerItem(new ItemBeeGE(EnumBeeType.LARVAE), "beeLarvaeGE");
+		beeRoyalLarvaeGE = registerItem(new ItemBeeGE(EnumBeeType.ROYAL_LARVAE), "beeRoyalLarvaeGE");
 		
 		beealyzer = registerItem(new ItemBeealyzer(), "beealyzer");
 		habitatLocator = registerItem(new ItemHabitatLocator(), "habitatLocator");
