@@ -53,6 +53,7 @@ public class NEIIntegrationConfig implements IConfigureNEI {
 		API.addSubset("Forestry.Bees.Princesses", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.PRINCESS.ordinal(), true));
 		API.addSubset("Forestry.Bees.Drones", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.DRONE.ordinal(), true));
 		API.addSubset("Forestry.Bees.Larvae", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.LARVAE.ordinal(), true));
+		API.addSubset("Forestry.Bees.RoyalLarvae", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.ROYAL_LARVAE.ordinal(), true));
 
 		API.addSubset("Forestry.Trees.Saplings", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.SAPLING.ordinal(), true));
 		API.addSubset("Forestry.Trees.Pollen", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.POLLEN.ordinal(), true));

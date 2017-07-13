@@ -10,21 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Map.Entry;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import cpw.mods.fml.common.FMLCommonHandler;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -50,6 +37,16 @@ import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map.Entry;
 
 public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
@@ -122,6 +119,9 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			case LARVAE:
 				beeItem = PluginApiculture.items.beeLarvaeGE;
 				break;
+			case ROYAL_LARVAE:
+				beeItem = PluginApiculture.items.beeRoyalLarvaeGE;
+				break;
 			default:
 				throw new RuntimeException("Cannot instantiate a bee of type " + type);
 		}
@@ -149,6 +149,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return EnumBeeType.QUEEN;
 		} else if (PluginApiculture.items.beeLarvaeGE == item) {
 			return EnumBeeType.LARVAE;
+		} else if (PluginApiculture.items.beeRoyalLarvaeGE == item) {
+			return EnumBeeType.ROYAL_LARVAE;
 		}
 
 		return EnumBeeType.NONE;

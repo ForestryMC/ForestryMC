@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeIconProvider;
 import forestry.core.render.TextureManager;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+
+import java.util.Locale;
 
 public class DefaultBeeIconProvider implements IBeeIconProvider {
 
@@ -44,10 +42,12 @@ public class DefaultBeeIconProvider implements IBeeIconProvider {
 				continue;
 			}
 
-			String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+			String beeTypeNameBase = beeIconDir + beeType.toString()
+				.toLowerCase(Locale.ENGLISH)
+				.replace("_", "");
 
 			icons[i][0] = TextureManager.registerTex(register, beeTypeNameBase + ".outline");
-			if (beeType == EnumBeeType.LARVAE) {
+			if (beeType == EnumBeeType.LARVAE || beeType == EnumBeeType.ROYAL_LARVAE) {
 				icons[i][1] = TextureManager.registerTex(register, beeTypeNameBase + ".body");
 			} else {
 				icons[i][1] = body1;
