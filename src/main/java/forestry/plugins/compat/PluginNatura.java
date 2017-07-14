@@ -41,7 +41,7 @@ import forestry.plugins.ForestryPluginUids;
 @ForestryPlugin(pluginID = ForestryPluginUids.NATURA, name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends BlankForestryPlugin {
 
-	private static final String NATURA = "natura";
+	private static final String NATURA = "Natura";
 
 	private static Block logNatura;
 	private static Block logWillow;
