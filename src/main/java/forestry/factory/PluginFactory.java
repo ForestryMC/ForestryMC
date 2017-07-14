@@ -238,6 +238,8 @@ public class PluginFactory extends BlankForestryPlugin {
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', new ItemStack(Items.DYE, 1, 4)});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.ENDER, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ENDER_EYE, 1, 0), 'X', new ItemStack(Blocks.END_STONE, 1, 0)});
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.ORCHID, 4),
+				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.REPEATER, 1, 0), 'X', new ItemStack(Blocks.REDSTONE_ORE, 1, 0)});
 
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
