@@ -13,6 +13,8 @@ package forestry.plugins.compat;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.api.farming.Farmables;
+import forestry.farming.logic.FarmableSapling;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -86,26 +88,18 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 
 	private static void addFarmCrops() {
 		List<String> saplingItemKeys = new ArrayList<>();
-
-		if (saplings != null) {
-			saplingItemKeys.add("saplings");
-		}
-		if (colorizedSaplings != null) {
-			saplingItemKeys.add("colorizedSaplings");
-		}
+		saplingItemKeys.add("sapling_0");
+		saplingItemKeys.add("sapling_1");
+		saplingItemKeys.add("sapling_2");
 
 		for (String key : saplingItemKeys) {
 			Item saplingItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BoP, key));
-			String saplingName = ItemStackUtil.getItemNameFromRegistryAsString(saplingItem);
-			if (saplingName != null) {
-				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
-			}
+			if (saplingItem == null) continue;
+			Farmables.farmables.put("farmArboreal", new FarmableSapling(
+					new ItemStack(saplingItem),
+					new ItemStack[] {}
+			));
 		}
-		
-		//TODO BoP for 1.9: Add farmables
-//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {
-			//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
-//		}
 
 		Block boPTurnip = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(BoP, "turnip"));
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && boPTurnip != null) {
