@@ -43,11 +43,11 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @ForestryPlugin(pluginID = ForestryPluginUids.EXTRA_UTILITIES, name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends BlankForestryPlugin {
 
-	private static final String ExU = "extrautils2";
+	public static final String modId = "extrautils2";
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isModLoaded(ExU);
+		return ModUtil.isModLoaded(modId);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class PluginExtraUtilities extends BlankForestryPlugin {
 	}
 
 	private void registerExPlant(String id, String itemResourceName, String itemName, Block soil, Consumer<ICircuit> assignTo) {
-		Block plantBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ExU, itemResourceName));
+		Block plantBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(modId, itemResourceName));
 		Item plantItem = Item.getItemFromBlock(plantBlock);
 		if(plantBlock == Blocks.AIR) {
 			Log.error("Could not find {} block.", itemName);
