@@ -26,7 +26,9 @@ import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
+import forestry.plugins.compat.PluginExtraUtilities;
 import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.compat.PluginNatura;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -53,7 +55,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		acceptedMinecraftVersions = "[1.10]",
 		dependencies = "required-after:Forge@[12.18.1.2080,);"
 				+ "after:JEI@[3.11.2.278,);"
-				+ "after:" + PluginIC2.modId + ";")
+				+ "after:" + PluginIC2.modId + ";"
+				+ "after:" + PluginExtraUtilities.modId + ";"
+				+ "after:" + PluginNatura.modId + ";")
 public class Forestry {
 
 	@Mod.Instance(Constants.MOD_ID)
