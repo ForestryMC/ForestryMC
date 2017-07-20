@@ -7,6 +7,7 @@ import java.util.Set;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.IChunkGenerator;
 
@@ -57,6 +58,8 @@ public interface IForestryPlugin {
 	void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated);
 
 	void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ);
+
+	void decorateBiome(World world, Random rand, BlockPos pos);
 
 	void getHiddenItems(List<ItemStack> hiddenItems);
 
