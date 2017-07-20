@@ -19,6 +19,7 @@ import java.util.Set;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 
@@ -111,6 +112,10 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+	}
+
+	@Override
+	public void decorateBiome(World world, Random rand, BlockPos pos) {
 	}
 
 	@Override
