@@ -29,6 +29,7 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 
@@ -288,6 +289,12 @@ public class PluginManager {
 	public static void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		for (IForestryPlugin plugin : loadedPlugins) {
 			plugin.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+		}
+	}
+
+	public static void decorateBiome(World world, Random rand, BlockPos pos) {
+		for (IForestryPlugin plugin : loadedPlugins) {
+			plugin.decorateBiome(world, rand, pos);
 		}
 	}
 
