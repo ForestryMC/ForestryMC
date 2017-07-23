@@ -2,62 +2,25 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
+import forestry.api.farming.IFarmRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableAgingCrop;
-import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.MAGICAL_AGRICULTURE, name = "mysticalagriculture", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.mysticalagriculture.description")
-public class PluginMysticalAgriculture extends BlankForestryPlugin {
+public class PluginMysticalAgriculture extends CompatPlugin {
 	private static final String MAGICAL_AGRICULTURE = "mysticalagriculture";
 
 	public PluginMysticalAgriculture() {
-	}
-
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isModLoaded(MAGICAL_AGRICULTURE);
-	}
-
-	@Override
-	public String getFailMessage() {
-		return "Mystical Agriculture not found";
-	}
-
-	@Nullable
-	private static ItemStack getItemStack(@Nonnull String itemName) {
-		ResourceLocation key = new ResourceLocation(MAGICAL_AGRICULTURE, itemName);
-		if (ForgeRegistries.ITEMS.containsKey(key)) {
-			return new ItemStack(ForgeRegistries.ITEMS.getValue(key),1);
-		} else {
-			return null;
-		}
-	}
-
-	@Nullable
-	private static Block getBlock(@Nonnull String blockName) {
-		ResourceLocation key = new ResourceLocation(MAGICAL_AGRICULTURE, blockName);
-		if (ForgeRegistries.BLOCKS.containsKey(key)) {
-			return ForgeRegistries.BLOCKS.getValue(key);
-		} else {
-			return null;
-		}
+		super("Mystical Agriculture", MAGICAL_AGRICULTURE);
 	}
 
 	@Override
@@ -177,17 +140,18 @@ public class PluginMysticalAgriculture extends BlankForestryPlugin {
 				"quartz_enriched_iron"
 			);
 
+			IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 			int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
 			for(String cropName : crops){
-				ItemStack seed = getItemStack( cropName + "_seeds");
+				ItemStack seeds = getItemStack( cropName + "_seeds");
 				Block block = getBlock(cropName + "_crop");
-				if (seed != null) {
-					RecipeManagers.squeezerManager.addRecipe(10, seed, Fluids.SEED_OIL.getFluid(seedAmount));
+				if (seeds != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
-				if (seed != null && block != null) {
-					Farmables.farmables.get("farmWheat").add(new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7));
-					Farmables.farmables.get("farmOrchard").add(new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
+				if (seeds != null && block != null) {
+					farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7));
+					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
 		}

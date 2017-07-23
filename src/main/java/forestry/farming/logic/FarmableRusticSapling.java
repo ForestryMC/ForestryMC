@@ -1,0 +1,68 @@
+package forestry.farming.logic;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
+
+public class FarmableRusticSapling implements IFarmable {
+
+	protected final Item germling;
+	protected final Block germlingBlock;
+	private final ItemStack[] windfall;
+
+	public FarmableRusticSapling(Item germling, ItemStack[] windfall) {
+		this.germling = germling;
+		this.germlingBlock = Block.getBlockFromItem(germling);
+		this.windfall = windfall;
+	}
+
+	@Override
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		if (world.setBlockState(pos, germlingBlock.getStateFromMeta(germling.getItemDamage()))) {
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, germlingBlock.getStateFromMeta(germling.getItemDamage()));
+			NetworkUtil.sendNetworkPacket(packet, pos, world);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isSaplingAt(World world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock() == Blocks.SAPLING;
+	}
+
+	@Override
+	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+		Block block = blockState.getBlock();
+		if (!block.isWood(world, pos)) {
+			return null;
+		}
+
+		return new CropDestroy(world, blockState, pos, null);
+	}
+
+	@Override
+	public boolean isGermling(ItemStack itemstack) {
+		return germling == itemstack.getItem();
+	}
+
+	@Override
+	public boolean isWindfall(ItemStack itemstack) {
+		for (ItemStack drop : windfall) {
+			if (drop.isItemEqual(itemstack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+}

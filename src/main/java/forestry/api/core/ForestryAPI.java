@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 import forestry.api.climate.IClimateManager;
@@ -52,6 +53,7 @@ public class ForestryAPI {
 	/**
 	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s
 	 */
+	@Nullable
 	public static IFarmRegistry farmRegistry;
 	
 	/**
