@@ -30,4 +30,5 @@ public class ForestryPluginUids {
 	public static final String IMMERSIVE_ENGINEERING = "forestry.immersiveengineering";
 	public static final String MAGICAL_AGRICULTURE = "forestry.mysticalagriculture";
 	public static final String RUSTIC = "forestry.rustic";
+	public static final String ROOTS = "forestry.roots";
 }

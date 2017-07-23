@@ -15,7 +15,7 @@ import forestry.farming.logic.FarmableAgingCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.MAGICAL_AGRICULTURE, name = "mysticalagriculture", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.mysticalagriculture.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.MAGICAL_AGRICULTURE, name = "Mystical Agriculture", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.mysticalagriculture.description")
 public class PluginMysticalAgriculture extends CompatPlugin {
 	private static final String MAGICAL_AGRICULTURE = "mysticalagriculture";
 

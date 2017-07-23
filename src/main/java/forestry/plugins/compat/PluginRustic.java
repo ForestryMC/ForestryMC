@@ -17,12 +17,11 @@ import forestry.farming.logic.FarmableRusticSapling;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.RUSTIC, name = "rustic", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.rustic.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.ROOTS, name = "rustic", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.rustic.description")
 public class PluginRustic extends CompatPlugin {
-	private static final String RUSTIC = "rustic";
 
 	public PluginRustic() {
-		super("Rustic", RUSTIC);
+		super("Rustic", "rustic");
 	}
 
 	@Override
