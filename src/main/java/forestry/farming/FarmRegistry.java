@@ -1,5 +1,8 @@
 package forestry.farming;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,13 +11,14 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ForestryAPI;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
@@ -24,19 +28,12 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmLogicSimple;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.OreDictionary;
 
 public final class FarmRegistry implements IFarmRegistry {
 
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
-
-	static {
-		ForestryAPI.farmRegistry = INSTANCE;
-	}
 
 	public static FarmRegistry getInstance() {
 		return INSTANCE;

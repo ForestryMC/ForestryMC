@@ -14,7 +14,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
-import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -74,9 +73,9 @@ public class PluginActuallyAdditions extends CompatPlugin {
 			Block plantBlock = getBlock(blockName);
 			if (plantBlock != null) {
 				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7);
-				FarmRegistry.getInstance().registerFarmables("farmWheat", crop);
+				ForestryAPI.farmRegistry.registerFarmables("farmWheat", crop);
 				FarmableAgingCrop cropOrchard = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
-				FarmRegistry.getInstance().registerFarmables("farmOrchard", cropOrchard);
+				ForestryAPI.farmRegistry.registerFarmables("farmOrchard", cropOrchard);
 			}
 		}
 	}

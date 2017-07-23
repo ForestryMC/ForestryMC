@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,10 @@ public interface IFarmRegistry {
 	
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.
+	 *
+	 * @return Null if the farming plugin is not active.
 	 */
+	@Nullable
 	IFarmLogic createLogic(ISimpleFarmLogic simpleFarmLogic);
 	
 	/**

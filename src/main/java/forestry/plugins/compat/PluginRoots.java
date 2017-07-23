@@ -15,7 +15,7 @@ import forestry.farming.logic.FarmableAgingCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.RUSTIC, name = "Roots", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.roots.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.ROOTS, name = "Roots", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.roots.description")
 public class PluginRoots extends CompatPlugin {
 	public PluginRoots() {
 		super("Roots", "roots");
@@ -23,43 +23,41 @@ public class PluginRoots extends CompatPlugin {
 
 	@Override
 	public void registerRecipes() {
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
-			ImmutableList<String> crops = ImmutableList.of(
-				"moonglow",
-				"terra_moss",
-				"aubergine"
-			);
+		ImmutableList<String> crops = ImmutableList.of(
+			"moonglow",
+			"terra_moss",
+			"aubergine"
+		);
 
-			ImmutableList<String> seeds = ImmutableList.of(
-				"moontinged_seed",
-				"terra_moss_spore",
-				"aubergine_seeds"
-			);
+		ImmutableList<String> seeds = ImmutableList.of(
+			"moontinged_seed",
+			"terra_moss_spore",
+			"aubergine_seeds"
+		);
 
-			ImmutableList<String> fruits = ImmutableList.of(
-				"moonglow_leaf",
-				"terra_moss_ball",
-				"aubergine_item"
-			);
+		ImmutableList<String> fruits = ImmutableList.of(
+			"moonglow_leaf",
+			"terra_moss_ball",
+			"aubergine_item"
+		);
 
-			IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
-			int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-			int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
+		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
+		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 
-			for(int i = 0;i < fruits.size();i++){
-				ItemStack seed = getItemStack( seeds.get(i));
-				Block block = getBlock(crops.get(i));
-				ItemStack fruit = getItemStack(fruits.get(i));
-				if (seed != null && i != 1) {
-					RecipeManagers.squeezerManager.addRecipe(10, seed, Fluids.SEED_OIL.getFluid(seedAmount));
-				}
-				if(fruit != null && i == 2){
-					RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
-				}
-				if (seed != null && block != null) {
-					farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7));
-					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
-				}
+		for(int i = 0;i < fruits.size();i++){
+			ItemStack seed = getItemStack( seeds.get(i));
+			Block block = getBlock(crops.get(i));
+			ItemStack fruit = getItemStack(fruits.get(i));
+			if (seed != null && i != 1) {
+				RecipeManagers.squeezerManager.addRecipe(10, seed, Fluids.SEED_OIL.getFluid(seedAmount));
+			}
+			if(fruit != null && i == 2){
+				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
+			}
+			if (seed != null && block != null) {
+				farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7));
+				farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
 			}
 		}
 	}

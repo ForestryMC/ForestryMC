@@ -53,7 +53,6 @@ public class ForestryAPI {
 	/**
 	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s
 	 */
-	@Nullable
 	public static IFarmRegistry farmRegistry;
 	
 	/**

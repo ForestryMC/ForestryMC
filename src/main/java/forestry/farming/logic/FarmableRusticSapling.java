@@ -3,7 +3,6 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +37,7 @@ public class FarmableRusticSapling implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == Blocks.SAPLING;
+		return world.getBlockState(pos).getBlock() == germlingBlock;
 	}
 
 	@Override

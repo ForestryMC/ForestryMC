@@ -28,7 +28,6 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
-import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -176,7 +175,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 		genericCropsBuilder.addAll(herbs);
 		genericCropsBuilder.addAll(spices);
 
-		IFarmRegistry farmRegistry = FarmRegistry.getInstance();
+		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 		
 		ImmutableList<String> genericCrops = genericCropsBuilder.build();
 

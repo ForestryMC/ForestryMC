@@ -101,6 +101,16 @@ public class PluginFarming extends BlankForestryPlugin {
 	}
 
 	@Override
+	public void setupAPI() {
+		ForestryAPI.farmRegistry = FarmRegistry.getInstance();
+	}
+
+	@Override
+	public void disabledSetupAPI() {
+		ForestryAPI.farmRegistry = new DummyFarmRegistry();
+	}
+
+	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryFarming();
 	}
@@ -111,7 +121,7 @@ public class PluginFarming extends BlankForestryPlugin {
 		BlockRegistryFarming blocks = getBlocks();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		IFarmRegistry registry = FarmRegistry.getInstance();
+		IFarmRegistry registry = ForestryAPI.farmRegistry;
 		
 		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {

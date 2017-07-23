@@ -10,16 +10,24 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
@@ -31,7 +39,6 @@ import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockBogEarth;
-import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
 import forestry.core.config.Constants;
@@ -42,27 +49,20 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.energy.PluginEnergy;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
-import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
 import forestry.farming.logic.FarmableBasicIC2Crop;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
+
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends BlankForestryPlugin {
@@ -120,7 +120,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
 
 		if(fertilizer != null){
-			FarmRegistry.getInstance().registerFertilizer(fertilizer, 250);
+			ForestryAPI.farmRegistry.registerFertilizer(fertilizer, 250);
 		}
 	}
 
@@ -288,7 +288,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			}
 
-			FarmRegistry.getInstance().registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
+			ForestryAPI.farmRegistry.registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
 		}
 
 
