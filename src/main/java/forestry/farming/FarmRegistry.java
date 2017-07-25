@@ -87,7 +87,11 @@ public final class FarmRegistry implements IFarmRegistry {
 			try {
 				String fertilizer = fertilizerList[i];
 				String[] fertilizers = fertilizer.split(";");
-				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(fertilizers[0], OreDictionary.WILDCARD_VALUE);
+				String itemName = fertilizers[0];
+				if(itemName.equals("forestry:fertilizerCompound")){
+					itemName = "forestry:fertilizer_compound";
+				}
+				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
 				int fertilizerValue = Integer.parseInt(fertilizers[1]);
 				registerFertilizer(fertilizerItem, fertilizerValue);
 			} catch (Exception e) {
