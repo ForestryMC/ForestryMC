@@ -72,7 +72,7 @@ public class PluginActuallyAdditions extends BlankForestryPlugin {
 			}
 
 			//add canola oil fermenting in still
-			Fluid oil = getFluid("oil");
+			Fluid oil = getFluid("refinedcanolaoil");
 			if (oil != null) {
 				RecipeManagers.stillManager.addRecipe(200, new FluidStack(canolaOil, 5), new FluidStack(oil, 5));
 			}

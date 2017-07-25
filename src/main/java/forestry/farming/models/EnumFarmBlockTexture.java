@@ -12,6 +12,8 @@ package forestry.farming.models;
 
 import javax.annotation.Nullable;
 
+import java.util.Locale;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -108,6 +110,10 @@ public enum EnumFarmBlockTexture {
 
 	public String getName() {
 		return base.getItem().getItemStackDisplayName(base);
+	}
+	
+	public String getUid() {
+		return toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	public ItemStack getBase() {

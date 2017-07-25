@@ -15,12 +15,9 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -44,7 +41,6 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import forestry.plugins.compat.PluginIC2;
@@ -61,7 +57,7 @@ import forestry.plugins.compat.PluginIC2;
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.12]",
 		dependencies = "required-after:forge@[14.21.1.2395,);"
-				+ "after:JEI@[4.7.0,);"
+				+ "after:jei@[4.7.0,);"
 				+ "after:" + PluginIC2.modId + ";")
 public class Forestry {
 
@@ -150,15 +146,5 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		PluginManager.processIMCMessages(event.getMessages());
-	}
-
-	@EventHandler
-	public void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
-		MigrationHelper.onMissingBlockMappings(event);
-	}
-	
-	@EventHandler
-	public void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
-		MigrationHelper.onMissingItemMappings(event);
 	}
 }
