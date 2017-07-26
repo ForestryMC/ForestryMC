@@ -85,6 +85,7 @@ public class Config {
 	public static int farmSize = 2;
 	public static boolean squareFarms = false;
 	private static boolean enableExUtilEnderLily = true;
+	private static boolean enableExUtilRedOrchid = true;
 	private static boolean enableMagicalCropsSupport = true;
 
 	// Mail
@@ -123,6 +124,8 @@ public class Config {
 	public static boolean isExUtilEnderLilyEnabled() {
 		return enableExUtilEnderLily;
 	}
+
+	public static boolean isExUtilRedOrchidEnabled() { return enableExUtilRedOrchid; }
 
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
@@ -226,6 +229,7 @@ public class Config {
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
 		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
+		enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
