@@ -13,11 +13,6 @@ package forestry.core.recipes;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.factory.inventory.InventoryCraftingForestry;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -27,14 +22,38 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
+		if (RecipeManagers.fermenterManager == null) {
+			return;
+		}
+
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+		}
+
+		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+		}
+	}
+
+	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}

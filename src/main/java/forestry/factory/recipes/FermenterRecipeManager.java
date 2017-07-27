@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.minecraft.item.ItemStack;
 
@@ -27,7 +28,7 @@ import forestry.core.utils.ItemStackUtil;
 
 public class FermenterRecipeManager implements IFermenterManager {
 
-	private static final Set<IFermenterRecipe> recipes = new HashSet<>();
+	private static final Set<IFermenterRecipe> recipes = new TreeSet<>();
 	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
 	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
 
@@ -40,6 +41,17 @@ public class FermenterRecipeManager implements IFermenterManager {
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
 		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
+	}
+
+	@Override
+	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+		IFermenterRecipe recipe = new FermenterRecipe(resourceOreName, fermentationValue, modifier, output.getFluid(), liquid);
+		addRecipe(recipe);
+	}
+
+	@Override
+	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
+		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
 	}
 
 	@Nullable
@@ -57,7 +69,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
 		ItemStack resource = recipe.getResource();
-		if (!ItemStackUtil.isCraftingEquivalent(resource, res)) {
+		if (!ItemStackUtil.isCraftingEquivalent(resource, res, recipe.getResourceOreName(), false)) {
 			return false;
 		}
 
@@ -71,7 +83,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		}
 
 		for (IFermenterRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource)) {
+			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource, recipe.getResourceOreName(), false)) {
 				return true;
 			}
 		}
