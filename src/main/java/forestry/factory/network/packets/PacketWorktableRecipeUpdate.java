@@ -55,7 +55,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
+			MemorizedRecipe recipe = data.readStreamable(data1 -> new MemorizedRecipe(data1, player.world));
 
 			TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
 		}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.tiles.ICrafterWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -29,7 +30,7 @@ public class SlotCrafter extends Slot {
 	/**
 	 * The craft matrix inventory linked to this result slot.
 	 */
-	private final IInventory craftMatrix;
+	private final InventoryCraftingForestry craftMatrix;
 	private final ICrafterWorktable crafter;
 
 	/**
@@ -40,9 +41,9 @@ public class SlotCrafter extends Slot {
 	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
 	 */
 	private int amountCrafted;
-
-	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
-		super(craftMatrix, slot, xPos, yPos);
+	
+	public SlotCrafter(EntityPlayer player, InventoryCraftingForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
 		this.player = player;
@@ -136,7 +137,7 @@ public class SlotCrafter extends Slot {
 
 	@Override
 	public ItemStack getStack() {
-		return crafter.getResult();
+		return crafter.getResult(craftMatrix, player.world);
 	}
 
 	@Override
