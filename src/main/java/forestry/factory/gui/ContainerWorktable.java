@@ -60,7 +60,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 
 		// CraftResult display
-		addSlotToContainer(new SlotCrafter(player, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlotToContainer(new SlotCrafter(player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
 			onCraftMatrixChanged(tile.getCraftingDisplay(), i);

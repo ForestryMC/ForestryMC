@@ -15,6 +15,9 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -45,9 +48,10 @@ public class PacketWorktableRecipeUpdate extends PacketCoordinates implements IF
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		recipe = data.readStreamable(MemorizedRecipe.class);
+		recipe = data.readStreamable(data1 -> new MemorizedRecipe(data1, Proxies.common.getRenderWorld()));
 	}
 
 	@Override

@@ -11,15 +11,18 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.RecipesMapCloning;
+import net.minecraft.item.crafting.RecipesMapExtending;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -28,15 +31,22 @@ import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.proxy.Proxies;
+
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 
 	private static final int capacity = 9;
-
-	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<>();
+	
+	private static final List<Class<? extends IRecipe>> memoryBlacklist = new ArrayList<>();
 
 	static {
-		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
+		// almost every ItemMap is unique
+		memoryBlacklist.add(RecipesMapCloning.class);
+		memoryBlacklist.add(RecipesMapExtending.class);
 	}
 
 	private final LinkedList<MemorizedRecipe> memorizedRecipes;
@@ -55,8 +65,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		NBTTagList nbttaglist = nbt.getTagList("RecipeMemory", 10);
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
-			MemorizedRecipe recipe = new MemorizedRecipe();
-			recipe.readFromNBT(recipeNbt);
+			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
 			memorizedRecipes.add(recipe);
 		}
 	}
@@ -65,12 +74,8 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		if (recipe == null) {
 			return false;
 		}
-		ItemStack recipeOutput = recipe.getRecipeOutput();
-		if (recipeOutput == null) {
-			return false;
-		}
-		Item item = recipeOutput.getItem();
-		return item != null && !memoryBlacklist.contains(item.getClass());
+		IRecipe recipeOutput = recipe.getSelectedRecipe();
+		return recipeOutput != null && !memoryBlacklist.contains(recipeOutput.getClass());
 	}
 
 	public void validate(World world) {
@@ -78,7 +83,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		while (iterator.hasNext()) {
 			MemorizedRecipe recipe = iterator.next();
 			if (recipe != null) {
-				recipe.calculateRecipeOutput(world);
+				recipe.validate(world);
 				if (!isValid(recipe)) {
 					iterator.remove();
 				}
@@ -89,26 +94,26 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	public long getLastUpdate() {
 		return lastUpdate;
 	}
-
+	
 	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe) {
-		if (!isValid(recipe)) {
+		if (recipe.getSelectedRecipe() == null) {
 			return;
 		}
-
+		
 		lastUpdate = worldTime;
 		recipe.updateLastUse(lastUpdate);
-
+		
 		if (recipe.hasRecipeConflict()) {
 			recipe.removeRecipeConflicts();
 		}
-
+		
 		// update existing matching recipes
-		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getRecipeOutput());
+		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getSelectedRecipe());
 		if (memory != null) {
 			updateExistingRecipe(memory, recipe);
 			return;
 		}
-
+		
 		// add a new recipe
 		if (memorizedRecipes.size() < capacity) {
 			memorizedRecipes.add(recipe);
@@ -149,13 +154,13 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		}
 		return memorizedRecipes.get(recipeIndex);
 	}
-
+	
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
 			return null;
 		}
-		return recipe.getRecipeOutput();
+		return recipe.getOutputIcon();
 	}
 
 	public boolean isLocked(int recipeIndex) {
@@ -172,14 +177,17 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 			memorizedRecipes.get(recipeIndex).toggleLock();
 		}
 	}
-
-	private MemorizedRecipe getExistingMemorizedRecipe(ItemStack craftingRecipeOutput) {
-		for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
-			if (memorizedRecipe.hasRecipeOutput(craftingRecipeOutput)) {
-				return memorizedRecipe;
+	
+	@Nullable
+	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable IRecipe recipe) {
+		if (recipe != null) {
+			for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
+				if (memorizedRecipe.hasRecipe(recipe)) {
+					return memorizedRecipe;
+				}
 			}
 		}
-
+		
 		return null;
 	}
 
@@ -203,7 +211,8 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void readData(DataInputStreamForestry data) throws IOException {
-		data.readStreamables(memorizedRecipes, MemorizedRecipe.class);
+		data.readStreamables(memorizedRecipes, data1 -> new MemorizedRecipe(data1, Proxies.common.getRenderWorld()));
 	}
 }

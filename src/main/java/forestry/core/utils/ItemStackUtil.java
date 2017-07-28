@@ -494,5 +494,30 @@ public abstract class ItemStackUtil {
 		}
 		return null;
 	}
-
+	
+	public static ItemStack createCopyWithCount(ItemStack itemStack, int count) {
+		ItemStack copy = itemStack.copy();
+		copy.stackSize = count;
+		return copy;
+	}
+	
+	/**
+	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
+	 * but ignores stack size (count).
+	 */
+	public static boolean areItemStacksEqualIgnoreCount(ItemStack a, ItemStack b) {
+		if (a == null && b == null) {
+			return true;
+		} else if (a == null || b == null) {
+			return false;
+		} else if (a.getItem() != b.getItem()) {
+			return false;
+		} else if (a.getItemDamage() != b.getItemDamage()) {
+			return false;
+		} else if (a.getTagCompound() == null && b.getTagCompound() != null) {
+			return false;
+		} else {
+			return (a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound())) && a.areCapsCompatible(b);
+		}
+	}
 }

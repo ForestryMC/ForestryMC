@@ -208,7 +208,51 @@ public abstract class InventoryUtil {
 			return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
 		}
 	}
-
+	
+	public static boolean deleteExactSet(IInventory inventory, ItemStack[] required) {
+		ItemStack[] offered = getStacks(inventory);
+		ItemStack[]condensedRequired = ItemStackUtil.condenseStacks(required);
+		ItemStack[] condensedOffered = ItemStackUtil.condenseStacks(offered);
+		
+		for (ItemStack req : condensedRequired) {
+			if (!containsExactStack(req, condensedOffered)) {
+				return false;
+			}
+		}
+		
+		for (ItemStack itemStack : condensedRequired) {
+			deleteExactStack(inventory, itemStack);
+		}
+		return true;
+	}
+	
+	private static boolean containsExactStack(ItemStack req, ItemStack[] condensedOffered) {
+		for (ItemStack offer : condensedOffered) {
+			if (offer.stackSize >= req.stackSize && ItemStackUtil.areItemStacksEqualIgnoreCount(req, offer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static void deleteExactStack(IInventory inventory, ItemStack itemStack) {
+		int count = itemStack.stackSize;
+		for (int j = 0; j < inventory.getSizeInventory(); j++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(j);
+			if (stackInSlot != null && stackInSlot.stackSize > 0) {
+				if (ItemStackUtil.areItemStacksEqualIgnoreCount(itemStack, stackInSlot)) {
+					ItemStack removed = inventory.decrStackSize(j, count);
+					if (removed != null) {
+						count -= removed.stackSize;
+						if (count == 0) {
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		ItemStack[] removed = new ItemStack[set.length];
 		ItemStack[] stock = getStacks(inventory);

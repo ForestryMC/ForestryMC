@@ -12,14 +12,14 @@ package forestry.core.utils;
 
 import java.util.List;
 
+import forestry.core.gui.slots.SlotCrafter;
+import forestry.core.gui.slots.SlotForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.slots.SlotForestry;
 
 public abstract class SlotUtil {
 
@@ -71,7 +71,7 @@ public abstract class SlotUtil {
 			return null;
 		}
 
-		boolean fromCraftingSlot = slot instanceof SlotCrafting;
+		boolean fromCraftingSlot = slot instanceof SlotCrafting || slot instanceof SlotCrafter;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import forestry.factory.inventory.InventoryCraftingForestry;
+import forestry.factory.tiles.ICrafterWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -25,21 +27,21 @@ import net.minecraft.stats.AchievementList;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import forestry.factory.tiles.ICrafterWorktable;
-
 public class SlotCrafter extends Slot {
-
-	/** The craft matrix inventory linked to this result slot. */
-	private final IInventory craftMatrix;
+	
+	/**
+	 * The craft matrix inventory linked to this result slot.
+	 */
+	private final InventoryCraftingForestry craftMatrix;
 	private final ICrafterWorktable crafter;
 	
 	/** The player that is using the GUI where this slot resides. */
 	private final EntityPlayer thePlayer;
 	/** The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset. */
 	private int amountCrafted;
-
-	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
-		super(craftMatrix, slot, xPos, yPos);
+	
+	public SlotCrafter(EntityPlayer player, InventoryCraftingForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
 		this.thePlayer = player;
@@ -132,7 +134,7 @@ public class SlotCrafter extends Slot {
 
 	@Override
 	public ItemStack getStack() {
-		return crafter.getResult();
+		return crafter.getResult(craftMatrix, thePlayer.worldObj);
 	}
 
 	@Override

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -94,120 +94,77 @@ public abstract class RecipeUtil {
 		result[9] = output;
 		return result;
 	}
-
-	public static InventoryCraftingForestry getCraftRecipe(ItemStack[] recipeItems, ItemStack[] availableItems, World world, ItemStack recipeOutput) {
-		// Need at least one matched set
-		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
+	
+	@Nullable
+	public static InventoryCraftingForestry getCraftRecipe(InventoryCrafting originalCrafting, ItemStack[] availableItems, World world, IRecipe recipe) {
+		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
-
-		// Check that it doesn't make a different recipe.
-		// For example:
-		// Wood Logs are all ore dictionary equivalent with each other,
-		// but an Oak Log shouldn't be able to make Ebony Wood Planks
-		// because it makes Oak Wood Planks using the same recipe.
-		// Strategy:
-		// Create a fake crafting inventory using items we have in availableItems
-		// in place of the ones in the saved crafting inventory.
-		// Check that the recipe it makes is the same as the currentRecipe.
+		
+		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
+		if (expectedOutput == null) {
+			return null;
+		}
+		
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
-
-		for (int slot = 0; slot < recipeItems.length; slot++) {
-			ItemStack recipeStack = recipeItems[slot];
-			if (recipeStack == null) {
-				continue;
-			}
-
-			// Use crafting equivalent (not oredict) items first
-			for (ItemStack stockStack : stockCopy) {
-				if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
-					stockStack.stackSize--;
-					crafting.setInventorySlotContents(slot, stack);
-					break;
+		
+		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
+			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
+			if (stackInSlot != null) {
+				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
+				if (equivalent == null) {
+					return null;
+				} else {
+					crafting.setInventorySlotContents(slot, equivalent);
 				}
 			}
+		}
+		
+		if (recipe.matches(crafting, world)) {
+			ItemStack output = recipe.getCraftingResult(crafting);
+			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
+				return crafting;
+			}
+		}
 
-			// Use oredict items if crafting equivalent items aren't available
-			if (crafting.getStackInSlot(slot) == null) {
-				for (ItemStack stockStack : stockCopy) {
-					if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
-						stockStack.stackSize--;
-						crafting.setInventorySlotContents(slot, stack);
-						break;
+		return null;
+	}
+	
+	@Nullable
+	private static ItemStack getCraftingEquivalent(ItemStack[] stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput)
+	{
+		ItemStack originalStack = crafting.getStackInSlot(slot);
+		for (ItemStack stockStack : stockCopy)
+		{
+			if (stockStack != null)
+			{
+				ItemStack singleStockStack = ItemStackUtil.createCopyWithCount(stockStack, 1);
+				crafting.setInventorySlotContents(slot, singleStockStack);
+				if (recipe.matches(crafting, world))
+				{
+					ItemStack output = recipe.getCraftingResult(crafting);
+					if (ItemStack.areItemStacksEqual(output, expectedOutput))
+					{
+						crafting.setInventorySlotContents(slot, originalStack);
+						return stockStack.splitStack(1);
 					}
 				}
 			}
 		}
-
-		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
-		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
-			return null;
-		}
-		return crafting;
-	}
-
-	@Nonnull
-	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		ItemStack repairRecipe = findRepairRecipe(inventory);
-		if (repairRecipe != null) {
-			return Collections.singletonList(repairRecipe);
-		}
-
-		List<ItemStack> matchingRecipes = new ArrayList<>();
-
-		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
-			IRecipe irecipe = (IRecipe) recipe;
-
-			if (irecipe.matches(inventory, world)) {
-				ItemStack result = irecipe.getCraftingResult(inventory);
-				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
-					matchingRecipes.add(result);
-				}
-			}
-		}
-
-		return matchingRecipes;
-	}
-
-	private static ItemStack findRepairRecipe(InventoryCrafting inventory) {
-		int craftIngredientCount = 0;
-		ItemStack itemstack0 = null;
-		ItemStack itemstack1 = null;
-
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack itemstack = inventory.getStackInSlot(j);
-
-			if (itemstack != null) {
-				if (craftIngredientCount == 0) {
-					itemstack0 = itemstack;
-				}
-
-				if (craftIngredientCount == 1) {
-					itemstack1 = itemstack;
-				}
-
-				++craftIngredientCount;
-			}
-		}
-
-		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.stackSize == 1 && itemstack1.stackSize == 1 && itemstack0.getItem().isRepairable()) {
-			Item item = itemstack0.getItem();
-			int damage0 = item.getMaxDamage() - itemstack0.getItemDamage();
-			int damage1 = item.getMaxDamage() - itemstack1.getItemDamage();
-			int repairAmount = damage0 + damage1 + item.getMaxDamage() * 5 / 100;
-			int repairedDamage = item.getMaxDamage() - repairAmount;
-
-			if (repairedDamage < 0) {
-				repairedDamage = 0;
-			}
-
-			return new ItemStack(itemstack0.getItem(), 1, repairedDamage);
-		}
-
+		crafting.setInventorySlotContents(slot, originalStack);
 		return null;
+	}
+	
+	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		List<IRecipe> matchingRecipes = new ArrayList<>();
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
+			if (recipe.matches(inventory, world)) {
+				matchingRecipes.add(recipe);
+			}
+		}
+		
+		return matchingRecipes;
 	}
 
 	public static void addRecipe(Block block, Object... obj) {

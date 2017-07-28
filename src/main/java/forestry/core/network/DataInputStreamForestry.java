@@ -1,5 +1,6 @@
 package forestry.core.network;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,6 +96,29 @@ public class DataInputStreamForestry extends DataInputStream {
 				outputList.add(streamable);
 			}
 		}
+	}
+	
+	public <T extends IStreamable> void readStreamables(List<T> outputList, IStreamableFactory<T> factory) throws IOException {
+		outputList.clear();
+		int length = readVarInt();
+		if (length > 0) {
+			for (int i = 0; i < length; i++) {
+				T streamable = readStreamable(factory);
+				outputList.add(streamable);
+			}
+		}
+	}
+	
+	@Nullable
+	public <T extends IStreamable> T readStreamable(IStreamableFactory<T> factory) throws IOException {
+		if (readBoolean()) {
+			return factory.create(this);
+		}
+		return null;
+	}
+	
+	public interface IStreamableFactory<T extends IStreamable> {
+		T create(DataInputStreamForestry data) throws IOException;
 	}
 
 	/**
