@@ -11,7 +11,6 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.circuits.ISocketable;
@@ -32,75 +31,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class InventoryUtil {
-
-	public static boolean isWildcard(ItemStack stack) {
-		return stack.getItemDamage() == OreDictionary.WILDCARD_VALUE;
-	}
-
-	/**
-	 * A more robust item comparison function. Supports items with damage = -1
-	 * matching any sub-type.
-	 *
-	 * @param a An ItemStack
-	 * @param b An ItemStack
-	 * @return True if equal
-	 */
-	public static boolean isItemEqual(ItemStack a, ItemStack b) {
-		return isItemEqual(a, b, true, true);
-	}
-
-	public static boolean isItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
-		if (a.isEmpty() || b.isEmpty()) {
-			return false;
-		}
-		if (a.getItem() != b.getItem()) {
-			return false;
-		}
-		if (matchNBT && !ItemStack.areItemStackTagsEqual(a, b)) {
-			return false;
-		}
-		if (matchDamage && a.getHasSubtypes()) {
-			if (isWildcard(a) || isWildcard(b)) {
-				return true;
-			}
-			if (a.getItemDamage() != b.getItemDamage()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Returns true if the item is equal to any one of several possible matches.
-	 */
-	public static boolean isItemEqual(ItemStack stack, ItemStack... matches) {
-		for (ItemStack match : matches) {
-			if (isItemEqual(stack, match)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Returns true if the item is equal to any one of several possible matches.
-	 *
-	 * @param stack   the ItemStack to test
-	 * @param matches the ItemStacks to test against
-	 * @return true if a match is found
-	 */
-	public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
-		for (ItemStack match : matches) {
-			if (isItemEqual(stack, match)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * Attempts to move an ItemStack from one inventory to another.
 	 *
@@ -216,6 +148,48 @@ public abstract class InventoryUtil {
 			return removed != null && removed.size() >= count;
 		} else {
 			return ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) >= count;
+		}
+	}
+	
+	public static boolean deleteExactSet(IInventory inventory, NonNullList<ItemStack> required) {
+		NonNullList<ItemStack> offered = getStacks(inventory);
+		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(required);
+		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(offered);
+		
+		for (ItemStack req : condensedRequired) {
+			if (!containsExactStack(req, condensedOffered)) {
+				return false;
+			}
+		}
+		
+		for (ItemStack itemStack : condensedRequired) {
+			deleteExactStack(inventory, itemStack);
+		}
+		return true;
+	}
+	
+	private static boolean containsExactStack(ItemStack req, NonNullList<ItemStack> condensedOffered) {
+		for (ItemStack offer : condensedOffered) {
+			if (offer.getCount() >= req.getCount() && ItemStackUtil.areItemStacksEqualIgnoreCount(req, offer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static void deleteExactStack(IInventory inventory, ItemStack itemStack) {
+		int count = itemStack.getCount();
+		for (int j = 0; j < inventory.getSizeInventory(); j++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(j);
+			if (!stackInSlot.isEmpty()) {
+				if (ItemStackUtil.areItemStacksEqualIgnoreCount(itemStack, stackInSlot)) {
+					ItemStack removed = inventory.decrStackSize(j, count);
+					count -= removed.getCount();
+					if (count == 0) {
+						return;
+					}
+				}
+			}
 		}
 	}
 
@@ -394,7 +368,7 @@ public abstract class InventoryUtil {
 	public static boolean tryAddStacksCopy(IInventory inventory, NonNullList<ItemStack> stacks, int startSlot, int slots, boolean all) {
 
 		for (ItemStack stack : stacks) {
-			if (stack == null) {
+			if (stack == null || stack.isEmpty()) {
 				continue;
 			}
 

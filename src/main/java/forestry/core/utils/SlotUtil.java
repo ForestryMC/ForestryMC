@@ -12,6 +12,7 @@ package forestry.core.utils;
 
 import java.util.List;
 
+import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.gui.slots.SlotForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -70,7 +71,7 @@ public abstract class SlotUtil {
 			return ItemStack.EMPTY;
 		}
 
-		boolean fromCraftingSlot = slot instanceof SlotCrafting;
+		boolean fromCraftingSlot = slot instanceof SlotCrafting || slot instanceof SlotCrafter;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();
@@ -82,7 +83,7 @@ public abstract class SlotUtil {
 
 		slot.onSlotChange(stackInSlot, originalStack);
 		if (stackInSlot.isEmpty()) {
-			slot.putStack(stackInSlot);
+			slot.putStack(ItemStack.EMPTY);
 		} else {
 			slot.onSlotChanged();
 		}
