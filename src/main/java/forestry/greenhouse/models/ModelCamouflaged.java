@@ -16,12 +16,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -50,12 +50,11 @@ import forestry.greenhouse.multiblock.GreenhouseController;
 public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends ModelBlockDefault<B, ModelCamouflaged.Key> {
 	public static final int DEFAULT_COLOR_INDEX = 100;
 	public static final int OVERLAY_COLOR_INDEX = 101;
+	public final ModelOverlay<B> overlayModel;
+
 	public ModelCamouflaged(Class<B> blockClass) {
 		super(blockClass);
-	}
-
-	private boolean isDefaultModel(Key key) {
-		return key.pos == null || key.state == null || key.world == null;
+		overlayModel = new ModelOverlay(blockClass);
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 
 	@Override
 	protected Key getInventoryKey(ItemStack stack) {
-		return new Key(null, null, null, stack.getItemDamage());
+		return new Key(stack, stack.getItemDamage());
 	}
 
 	@Override
@@ -82,14 +81,21 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 		BlockPos pos = key.pos;
 		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		addCamouflageModel(block, baker, layer, world, pos);
-		if (layer == BlockRenderLayer.CUTOUT || layer == null) {
+		/*if (layer == BlockRenderLayer.CUTOUT || layer == null) {
 			for (int overlayLayer = 0; overlayLayer < block.getLayers(); overlayLayer++) {
 				addOverlaySprite(block, baker, world, pos, key.state, key.meta, overlayLayer);
 			}
+		}*/
+		IBakedModel model;
+		if(key.state != null){
+			model = overlayModel.getModel(key.state);
+		}else{
+			model = overlayModel.getModel(key.itemStack, Minecraft.getMinecraft().world);
 		}
+		baker.addBakedModelPost(key.state, model);
 	}
 
-	private void addOverlaySprite(B block, IModelBaker baker, IBlockAccess world, BlockPos pos, IBlockState state, int meta, int layer) {
+	/*private void addOverlaySprite(B block, IModelBaker baker, IBlockAccess world, BlockPos pos, IBlockState state, int meta, int layer) {
 		if (block.hasOverlaySprite(world, pos, meta, layer)) {
 			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
 			for (EnumFacing facing : EnumFacing.VALUES) {
@@ -97,7 +103,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 			}
 			baker.addBlockModel(pos, sprite, OVERLAY_COLOR_INDEX + layer);
 		}
-	}
+	}*/
 
 	private void addCamouflageModel(B block, IModelBaker baker, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
 		if (world == null || pos == null) {
@@ -105,6 +111,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 
 			baker.addBlockModel(pos, defaultSprite, DEFAULT_COLOR_INDEX);
 			baker.setParticleSprite(defaultSprite);
+			ItemStack camouflageStack = GreenhouseController.createDefaultCamouflageBlock();
 		} else {
 			ItemStack camouflageStack = block.getCamouflageBlock(world, pos);
 			Block camouflageBlock = Block.getBlockFromItem(camouflageStack.getItem());
@@ -137,6 +144,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 		public final IBlockAccess world;
 		@Nullable
 		public final BlockPos pos;
+		public final ItemStack itemStack;
 		public final int meta;
 
 		public Key(@Nullable IExtendedBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int meta) {
@@ -144,6 +152,15 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 			this.world = world;
 			this.pos = pos;
 			this.meta = meta;
+			this.itemStack = ItemStack.EMPTY;
+		}
+
+		public Key(ItemStack itemStack, int meta) {
+			this.state = null;
+			this.world = null;
+			this.pos = null;
+			this.meta = meta;
+			this.itemStack = itemStack;
 		}
 	}
 }

@@ -23,7 +23,7 @@ public interface IBlockCamouflaged<B extends Block & IBlockCamouflaged<B>> {
 	ICamouflageHandler getCamouflageHandler(@Nullable IBlockAccess world, @Nullable BlockPos pos);
 
 	@SideOnly(Side.CLIENT)
-	boolean hasOverlaySprite(@Nullable IBlockAccess world, @Nullable BlockPos pos, int meta, int layer);
+	boolean hasOverlaySprite(int meta, int layer);
 
 	int getLayers();
 

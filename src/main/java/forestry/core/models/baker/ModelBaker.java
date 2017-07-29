@@ -14,9 +14,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.api.core.IModelBaker;
-import forestry.api.core.IModelBakerModel;
-import forestry.core.models.ModelManager;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -29,11 +28,17 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.model.IModelState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
 import org.lwjgl.util.vector.Vector3f;
+
+import forestry.api.core.IModelBaker;
+import forestry.api.core.IModelBakerModel;
+import forestry.core.models.ModelManager;
 
 /**
  * A model baker to make custom block models with more than one texture layer.
@@ -48,6 +53,7 @@ public final class ModelBaker implements IModelBaker {
 
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 	private final List<Pair<IBlockState, IBakedModel>> bakedModels = new ArrayList<>();
+	private final List<Pair<IBlockState, IBakedModel>> bakedModelsPost = new ArrayList<>();
 
 	protected final ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().getDefaultBlockState());
 
@@ -104,6 +110,11 @@ public final class ModelBaker implements IModelBaker {
 	}
 
 	@Override
+	public void addBakedModelPost(@Nullable IBlockState state, IBakedModel model) {
+		this.bakedModelsPost.add(Pair.of(state, model));
+	}
+
+	@Override
 	public void addFace(EnumFacing facing, TextureAtlasSprite sprite) {
 		if (sprite != Minecraft.getMinecraft().getTextureMapBlocks().missingImage) {
 			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
@@ -121,6 +132,10 @@ public final class ModelBaker implements IModelBaker {
 		// Add baked models to the current model.
 		for (Pair<IBlockState, IBakedModel> bakedModel : bakedModels) {
 			currentModel.addModelQuads(bakedModel);
+		}
+
+		for (Pair<IBlockState, IBakedModel> bakedModel : bakedModelsPost) {
+			currentModel.addModelQuadsPost(bakedModel);
 		}
 
 		for (ModelBakerFace face : faces) {

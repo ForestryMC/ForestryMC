@@ -68,7 +68,7 @@ public class WidgetClimatePanel extends Widget {
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
 		textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
-		table = new Table(Translator.translateToLocal("for.gui." + type.getName()));
+		table = new Table();
 		for(Map.Entry<String, Float> entry : data.getData(type).entrySet()){
 			table.addValueEntry(entry.getKey(), StringUtil.floatAsPercent(entry.getValue()));
 		}
@@ -88,7 +88,7 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		textField.drawTextBox();
 
-		table.draw(xPos + startX + 0, yPos + startY + 26, 14737632, false);
+		table.draw(xPos + startX - 2, yPos + startY + 26, 14737632, false);
 	}
 
 	@Override

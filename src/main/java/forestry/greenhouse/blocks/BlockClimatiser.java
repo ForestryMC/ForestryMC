@@ -268,7 +268,7 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasOverlaySprite(IBlockAccess world, BlockPos pos, int meta, int layer) {
+	public boolean hasOverlaySprite(int meta, int layer) {
 		return true;
 	}
 

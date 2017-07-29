@@ -14,22 +14,19 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelBaker;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
 import forestry.greenhouse.blocks.BlockGreenhouseSprite;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -50,54 +47,53 @@ public class ModelOverlay<B extends Block & IBlockCamouflaged> extends ModelBloc
 	}
 
 	@Override
+	public IBakedModel getModel(IBlockState state) {
+		return super.getModel(state);
+	}
+
+	@Override
+	public IBakedModel getModel(ItemStack stack, World world) {
+		return super.getModel(stack, world);
+	}
+
+	@Override
 	protected Key getInventoryKey(ItemStack stack) {
-		return new Key(null, null, null, stack.getItemDamage());
+		return new Key(null, stack.getItemDamage());
 	}
 
 	@Override
 	protected Key getWorldKey(IBlockState state) {
-		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
 		int meta = state.getBlock().getMetaFromState(state);
-		return new Key(stateExtended, world, pos, meta);
+		return new Key(state, meta);
 	}
 
 	@Override
 	protected void bakeBlock(B block, Key key, IModelBaker baker, boolean inventory) {
-		IBlockAccess world = key.world;
-		BlockPos pos = key.pos;
 		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		if (layer == BlockRenderLayer.CUTOUT || layer == null) {
 			for (int overlayLayer = 0; overlayLayer < block.getLayers(); overlayLayer++) {
-				addOverlaySprite(block, baker, world, pos, key.state, key.meta, overlayLayer);
+				addOverlaySprite(block, baker, key.state, key.meta, overlayLayer);
 			}
 		}
 	}
 
-	private void addOverlaySprite(B block, IModelBaker baker, IBlockAccess world, BlockPos pos, IBlockState state, int meta, int layer) {
-		if (block.hasOverlaySprite(world, pos, meta, layer)) {
+	private void addOverlaySprite(B block, IModelBaker baker, IBlockState state, int meta, int layer) {
+		if (block.hasOverlaySprite(meta, layer)) {
 			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				sprite[facing.ordinal()] = block.getOverlaySprite(facing, state, meta, layer);
 			}
-			baker.addBlockModel(pos, sprite, OVERLAY_COLOR_INDEX + layer);
+			baker.addBlockModel(null, sprite, OVERLAY_COLOR_INDEX + layer);
 		}
 	}
 
 	public static class Key {
 		@Nullable
 		public final IBlockState state;
-		@Nullable
-		public final IBlockAccess world;
-		@Nullable
-		public final BlockPos pos;
 		public final int meta;
 
-		public Key(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int meta) {
+		public Key(@Nullable IBlockState state, int meta) {
 			this.state = state;
-			this.world = world;
-			this.pos = pos;
 			this.meta = meta;
 		}
 

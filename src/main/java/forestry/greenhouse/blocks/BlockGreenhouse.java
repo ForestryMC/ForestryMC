@@ -350,7 +350,7 @@ public class BlockGreenhouse extends BlockStructure implements ISpriteRegister, 
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasOverlaySprite(IBlockAccess world, BlockPos pos, int meta, int layer) {
+	public boolean hasOverlaySprite(int meta, int layer) {
 		BlockGreenhouseType type = BlockGreenhouseType.VALUES[meta];
 		return layer == 0 || type.twoLayers;
 	}

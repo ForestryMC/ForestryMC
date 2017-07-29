@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-import forestry.api.core.IModelBakerModel;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -28,11 +30,14 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
+
+import forestry.api.core.IModelBakerModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
@@ -48,6 +53,7 @@ public class ModelBakerModel implements IModelBakerModel {
 	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
 	private final List<Pair<IBlockState, IBakedModel>> models;
+	private final List<Pair<IBlockState, IBakedModel>> modelsPost;
 
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
@@ -55,6 +61,7 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	public ModelBakerModel(IModelState modelState) {
 		models = new ArrayList<>();
+		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(EnumFacing.class);
 		generalQuads = new ArrayList<>();
 		particleSprite = Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
@@ -67,8 +74,9 @@ public class ModelBakerModel implements IModelBakerModel {
 		}
 	}
 
-	private ModelBakerModel(List<Pair<IBlockState, IBakedModel>> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+	private ModelBakerModel(List<Pair<IBlockState, IBakedModel>> models, List<Pair<IBlockState, IBakedModel>> modelsPost, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
 		this.models = models;
+		this.modelsPost = modelsPost;
 		this.faceQuads = faceQuads;
 		this.generalQuads = generalQuads;
 		this.isGui3d = isGui3d;
@@ -176,6 +184,10 @@ public class ModelBakerModel implements IModelBakerModel {
 		this.models.add(model);
 	}
 
+	public void addModelQuadsPost(Pair<IBlockState, IBakedModel> model) {
+		this.modelsPost.add(model);
+	}
+
 	@Override
 	public void addQuad(@Nullable EnumFacing facing, BakedQuad quad) {
 		if (facing != null) {
@@ -198,11 +210,17 @@ public class ModelBakerModel implements IModelBakerModel {
 			quads.addAll(faceQuads.get(side));
 		}
 		quads.addAll(generalQuads);
+		for (Pair<IBlockState, IBakedModel> model : this.modelsPost) {
+			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
+			if (!modelQuads.isEmpty()) {
+				quads.addAll(modelQuads);
+			}
+		}
 		return quads;
 	}
 
 	public ModelBakerModel copy() {
-		return new ModelBakerModel(models, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, modelState, rotation, translation, scale, particleSprite);
+		return new ModelBakerModel(models, modelsPost, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, modelState, rotation, translation, scale, particleSprite);
 	}
 
 	@Override
