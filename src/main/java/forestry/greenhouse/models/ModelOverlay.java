@@ -32,7 +32,6 @@ import forestry.greenhouse.blocks.BlockGreenhouseSprite;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.IBlockCamouflaged;
 
-// DO NOT CACHE THIS. PLEASE. I BEG YOU. NOT IN THE CURRENT STATE.
 @SideOnly(Side.CLIENT)
 public class ModelOverlay<B extends Block & IBlockCamouflaged> extends ModelBlockCached<B, ModelOverlay.Key> {
 	public static final int OVERLAY_COLOR_INDEX = 101;
@@ -44,16 +43,6 @@ public class ModelOverlay<B extends Block & IBlockCamouflaged> extends ModelBloc
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		return BlockGreenhouseSprite.getSprite(BlockGreenhouseType.PLAIN, null, null, -1);
-	}
-
-	@Override
-	public IBakedModel getModel(IBlockState state) {
-		return super.getModel(state);
-	}
-
-	@Override
-	public IBakedModel getModel(ItemStack stack, World world) {
-		return super.getModel(stack, world);
 	}
 
 	@Override
@@ -75,6 +64,16 @@ public class ModelOverlay<B extends Block & IBlockCamouflaged> extends ModelBloc
 				addOverlaySprite(block, baker, key.state, key.meta, overlayLayer);
 			}
 		}
+	}
+
+	@Override
+	public IBakedModel getModel(IBlockState state) {
+		return super.getModel(state);
+	}
+
+	@Override
+	public IBakedModel getModel(ItemStack stack, World world) {
+		return super.getModel(stack, world);
 	}
 
 	private void addOverlaySprite(B block, IModelBaker baker, IBlockState state, int meta, int layer) {

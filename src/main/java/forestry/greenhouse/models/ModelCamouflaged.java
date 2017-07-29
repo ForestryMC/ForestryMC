@@ -87,9 +87,9 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 			}
 		}*/
 		IBakedModel model;
-		if(key.state != null){
+		if (key.state != null) {
 			model = overlayModel.getModel(key.state);
-		}else{
+		} else {
 			model = overlayModel.getModel(key.itemStack, Minecraft.getMinecraft().world);
 		}
 		baker.addBakedModelPost(key.state, model);

@@ -119,7 +119,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 		IGreenhouseComponent component = MultiblockUtil.getComponent(world, pos, IGreenhouseComponent.class);
 		if (component != null) {
 			IGreenhouseController controller = component.getMultiblockLogic().getController();
-			if(!controller.isAssembled()){
+			if (!controller.isAssembled()) {
 				if (!world.isRemote) {
 					player.sendStatusMessage(new TextComponentTranslation("for.message.greenhouse_screen.notassembled"), true);
 				}
@@ -137,7 +137,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 				}
 				return EnumActionResult.PASS;
 			}
-			if(!world.isBlockLoaded(pos)){
+			if (!world.isBlockLoaded(pos)) {
 				if (!world.isRemote) {
 					player.sendStatusMessage(new TextComponentTranslation("for.message.greenhouse_screen.away"), true);
 				}

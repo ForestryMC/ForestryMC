@@ -78,9 +78,6 @@ public class ModelCamouflageSprayCan extends BlankModel {
 			return new SprayCanModel(model, filledModel, camouflageModel, ModelManager.getInstance().getDefaultItemState());
 		}
 
-	}	@Override
-	protected ItemOverrideList createOverrides() {
-		return new SprayCanOverrideList();
 	}
 
 	private class SprayCanModel extends BlankModel implements IPerspectiveAwareModel {
@@ -116,7 +113,11 @@ public class ModelCamouflageSprayCan extends BlankModel {
 			return IPerspectiveAwareModel.MapWrapper.handlePerspective(originalModel, state, cameraTransformType);
 		}
 
+	}	@Override
+	protected ItemOverrideList createOverrides() {
+		return new SprayCanOverrideList();
 	}
+
 
 
 

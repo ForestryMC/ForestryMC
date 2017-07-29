@@ -69,7 +69,7 @@ public class WidgetClimatePanel extends Widget {
 		textField.setEnableBackgroundDrawing(false);
 		textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
 		table = new Table();
-		for(Map.Entry<String, Float> entry : data.getData(type).entrySet()){
+		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
 			table.addValueEntry(entry.getKey(), StringUtil.floatAsPercent(entry.getValue()));
 		}
 	}
