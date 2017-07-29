@@ -437,6 +437,10 @@ public class PluginCore extends BlankForestryPlugin {
 			RecipeUtil.addShapelessRecipe(ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
+		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)){
+			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
+		}
+
 		RecipeUtil.addRecipe(blocks.ashBrick,
 			"A#A",
 			"# #",
