@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.utils.Log;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -136,12 +136,23 @@ public abstract class Genome implements IGenome {
 
 	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		Preconditions.checkArgument(nbtTagCompound != null, "itemStack must have nbt");
+		if (nbtTagCompound == null) {
+			nbtTagCompound = new NBTTagCompound();
+			itemStack.setTagCompound(nbtTagCompound);
+		}
 
-		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
-		Preconditions.checkArgument(!genome.hasNoTags(), "itemStack nbt must have a genome tag");
+		NBTTagCompound genomeNbt = nbtTagCompound.getCompoundTag("Genome");
+		if (genomeNbt.hasNoTags()) {
+			Log.error("Got a genetic item with no genome, setting it to a default value.");
+			genomeNbt = new NBTTagCompound();
 
-		IChromosome[] chromosomes = getChromosomes(genome, speciesRoot);
+			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
+			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
+			genome.writeToNBT(genomeNbt);
+			nbtTagCompound.setTag("Genome", genomeNbt);
+		}
+
+		IChromosome[] chromosomes = getChromosomes(genomeNbt, speciesRoot);
 
 		return chromosomes[chromosomeType.ordinal()];
 	}
