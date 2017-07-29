@@ -13,6 +13,8 @@ package forestry.greenhouse.gui.widgets;
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
@@ -21,12 +23,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateTable;
-import forestry.core.gui.tables.TableHelper;
+import forestry.api.climate.IClimateData;
+import forestry.core.gui.tables.Table;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.gui.GuiGreenhouse;
 
@@ -52,10 +54,10 @@ public class WidgetClimatePanel extends Widget {
 	};
 	private final GuiGreenhouse gui;
 	private final ClimateType type;
-	private final IClimateTable table;
+	private final Table table;
 	private final GuiTextField textField;
 
-	public WidgetClimatePanel(WidgetManager manager, GuiGreenhouse gui, int xPos, int yPos, ClimateType type, IClimateContainer container) {
+	public WidgetClimatePanel(WidgetManager manager, GuiGreenhouse gui, int xPos, int yPos, ClimateType type, IClimateData data) {
 		super(manager, xPos, yPos);
 		this.width = 85;
 		this.height = 98;
@@ -66,7 +68,10 @@ public class WidgetClimatePanel extends Widget {
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
 		textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
-		table = container.getTable(TableHelper.INSTANCE, type, false);
+		table = new Table(Translator.translateToLocal("for.gui." + type.getName()));
+		for(Map.Entry<String, Float> entry : data.getData(type).entrySet()){
+			table.addValueEntry(entry.getKey(), StringUtil.floatAsPercent(entry.getValue()));
+		}
 	}
 
 	@Override
@@ -83,7 +88,7 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		textField.drawTextBox();
 
-		TableHelper.INSTANCE.drawTable(table, xPos + startX + 0, yPos + startY + 26, 14737632, false);
+		table.draw(xPos + startX + 0, yPos + startY + 26, 14737632, false);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.IClimateData;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -48,11 +49,13 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 		this.xSize = 196;
 		this.ySize = 202;
 
+		IClimateData data = container.getData();
+
 		//Add the camouflage tab
 		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 2 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
 		widgetManager.add(new WidgetClimatePillar(widgetManager, -WidgetClimatePillar.WIDTH, GUI_HEIGHT / 2 - WidgetClimatePillar.HEIGHT / 2));
-		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, container));
-		widgetManager.add(humidityPanel = new WidgetClimatePanel(widgetManager, this, 102, 18, ClimateType.HUMIDITY, container));
+		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, data));
+		widgetManager.add(humidityPanel = new WidgetClimatePanel(widgetManager, this, 102, 18, ClimateType.HUMIDITY, data));
 	}
 
 	public void sendNetworkUpdate() {

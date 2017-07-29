@@ -17,11 +17,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
-import forestry.api.climate.IClimateTable;
-import forestry.api.climate.IClimateTableEntry;
-
-public class Table implements IClimateTable {
-	private final List<IClimateTableEntry> lines = new ArrayList<>();
+public class Table {
+	private final List<TableEntry> lines = new ArrayList<>();
 	
 	public Table() {
 	}
@@ -29,52 +26,59 @@ public class Table implements IClimateTable {
 	public Table(String title) {
 		lines.add(new TableTitle(title));
 	}
-	
-	@Override
-	public IClimateTable addValueEntry(String textKey, String value) {
+
+	public Table addValueEntry(String textKey, String value) {
 		lines.add(new TableValueText(textKey + ": ", value));
 		return this;
 	}
-	
-	@Override
-	public IClimateTable addCenteredEntry(String textKey) {
+
+	public Table addCenteredEntry(String textKey) {
 		lines.add(new TableTextCentered(textKey));
 		return this;
 	}
-	
-	@Override
-	public IClimateTable addEmptyEntry() {
+
+	public Table addEmptyEntry() {
 		lines.add(new TableEmptyLine());
 		return this;
 	}
-	
-	@Override
-	public IClimateTable addEntry(IClimateTableEntry entry) {
+
+	public Table addEntry(TableEntry entry) {
 		lines.add(entry);
 		return this;
 	}
-	
-	@Override
-	public Collection<IClimateTableEntry> getEntrys() {
+
+	public void draw(int x, int y, int fontColor, boolean drawBackground){
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		int lineWidth = getLineWidth();
+		int lineStart = x + 2;
+		int lineEnd = lineStart + lineWidth;
+		int rowTopY = y + 1;
+
+		for (TableEntry entry : lines) {
+			int rowBottomY = rowTopY + entry.getHeight(fontRenderer) - 1;
+			entry.draw(fontRenderer, x, y, lineWidth, lineStart, lineEnd, rowTopY, rowBottomY, fontColor, drawBackground);
+			rowTopY += + entry.getHeight(fontRenderer) - 1;
+		}
+	}
+
+	public Collection<TableEntry> getEntrys() {
 		return lines;
 	}
-	
-	@Override
+
 	public int getHeight() {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		int height = 0;
-		for (IClimateTableEntry entry : lines) {
+		for (TableEntry entry : lines) {
 			height += entry.getHeight(fontRenderer);
 		}
 		return height;
 	}
-	
-	@Override
+
 	public int getLineWidth() {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		int lineWidth = 0;
 		
-		for (IClimateTableEntry entry : lines) {
+		for (TableEntry entry : lines) {
 			lineWidth = Math.max(entry.getLineWidth(fontRenderer), lineWidth);
 		}
 		

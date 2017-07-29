@@ -56,9 +56,9 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	ImmutableClimateState getTargetedState();
 	
 	void setTargetedState(ImmutableClimateState state);
-	
+
 	@Nullable
 	@SideOnly(Side.CLIENT)
-	IClimateTable getTable(IClimateTableHelper helper, ClimateType type, boolean withTitle);
+	IClimateData getData();
 
 }

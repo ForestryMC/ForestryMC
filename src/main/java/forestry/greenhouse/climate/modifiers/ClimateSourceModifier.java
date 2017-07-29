@@ -22,13 +22,12 @@ import forestry.api.climate.ClimateChange;
 import forestry.api.climate.ClimateState;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.IClimateData;
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTable;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.core.config.Config;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 public class ClimateSourceModifier extends BlankClimateModifier {
@@ -89,19 +88,18 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addTableEntries(IClimateContainer container, IClimateState climateState, NBTTagCompound data, ClimateType tableType, IClimateTable table) {
-		IClimateState rangeDown = new ClimateState(data.getCompoundTag("rangeDown"));
-		IClimateState rangeUp = new ClimateState(data.getCompoundTag("rangeUp"));
-		IClimateState change = new ClimateState(data.getCompoundTag("change"));
-		if (tableType == ClimateType.HUMIDITY) {
-			table.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.range.up"), StringUtil.floatAsPercent(rangeUp.getHumidity()))
-				.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.range.down"), StringUtil.floatAsPercent(rangeDown.getHumidity()))
-				.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.change"), StringUtil.floatAsPercent(change.getHumidity()));
-		} else {
-			table.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.range.up"), StringUtil.floatAsPercent(rangeUp.getTemperature()))
-				.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.range.down"), StringUtil.floatAsPercent(rangeDown.getTemperature()))
-				.addValueEntry(Translator.translateToLocal("for.gui.modifier.sources.change"), StringUtil.floatAsPercent(change.getTemperature()));
-		}
+	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
+		IClimateState rangeDown = new ClimateState(nbtData.getCompoundTag("rangeDown"));
+		IClimateState rangeUp = new ClimateState(nbtData.getCompoundTag("rangeUp"));
+		IClimateState change = new ClimateState(nbtData.getCompoundTag("change"));
+
+		data.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getHumidity())
+			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getHumidity())
+			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.change"), change.getHumidity());
+
+		data.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getTemperature())
+			.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getTemperature())
+			.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.change"), change.getTemperature());
 	}
 
 	@Override

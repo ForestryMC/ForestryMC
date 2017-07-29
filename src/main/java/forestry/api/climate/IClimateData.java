@@ -5,7 +5,11 @@
  ******************************************************************************/
 package forestry.api.climate;
 
+import java.util.Map;
+
 public interface IClimateData {
 
-	void addData(ClimateType type, float value);
+	IClimateData addData(ClimateType type, String displayName, float value);
+
+	Map<String, Float> getData(ClimateType type);
 }

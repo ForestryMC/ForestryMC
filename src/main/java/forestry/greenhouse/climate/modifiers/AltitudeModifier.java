@@ -20,11 +20,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.climate.BlankClimateModifier;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.IClimateData;
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTable;
 import forestry.api.climate.ImmutableClimateState;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 public class AltitudeModifier extends BlankClimateModifier {
@@ -47,10 +46,8 @@ public class AltitudeModifier extends BlankClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addTableEntries(IClimateContainer container, IClimateState climateState, NBTTagCompound data, ClimateType tableType, IClimateTable table) {
-		if (tableType == ClimateType.TEMPERATURE) {
-			table.addValueEntry(Translator.translateToLocal("for.gui.modifier.altitude"), StringUtil.floatAsPercent(data.getFloat("altitudeChange")));
-		}
+	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
+		data.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.altitude"), nbtData.getFloat("altitudeChange"));
 	}
 
 }

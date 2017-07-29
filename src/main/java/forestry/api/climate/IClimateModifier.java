@@ -21,13 +21,13 @@ public interface IClimateModifier {
 	 * @param container the climate container
 	 * @param newState the new climate state
 	 * @param oldState the climate static of the previous modification.
-	 * @param data A {@link NBTTagCompound} that can be used to save custom data or to send it to the client to show it in the {@link IClimateTable}.
+	 * @param data A {@link NBTTagCompound} that can be used to save custom data or to send it to the client to add it to the {@link IClimateData}.
 	 * @return a modify newState or the newState.
 	 */
 	IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data);
-	
+
 	@SideOnly(Side.CLIENT)
-	void addTableEntries(IClimateContainer container, IClimateState climateState, NBTTagCompound data, ClimateType tableType, IClimateTable table);
+	void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data);
 	
 	/**
 	 * @return The priority of this modifier. The modifier with the highest priority is called first and the modifier with the lowest at last.

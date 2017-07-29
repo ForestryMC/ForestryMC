@@ -7,20 +7,16 @@ package forestry.api.climate;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public class BlankClimateModifier implements IClimateModifier {
 	@Override
 	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data) {
 		return newState;
 	}
-	
+
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addTableEntries(IClimateContainer container, IClimateState climateState, NBTTagCompound data, ClimateType tableType, IClimateTable table) {
+	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
 	}
-	
+
 	@Override
 	public int getPriority() {
 		return 0;

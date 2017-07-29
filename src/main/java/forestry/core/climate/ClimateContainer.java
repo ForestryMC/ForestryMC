@@ -29,20 +29,17 @@ import forestry.api.climate.ClimateState;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateContainerListener;
+import forestry.api.climate.IClimateData;
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateModifier;
 import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTable;
-import forestry.api.climate.IClimateTableHelper;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.greenhouse.GreenhouseManager;
-import forestry.core.gui.tables.Table;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 
 public class ClimateContainer implements IClimateContainer, IStreamable {
 	public static final float CLIMATE_CHANGE = 0.01F;
@@ -289,21 +286,16 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	public int hashCode() {
 		return parent.getCoordinates().hashCode();
 	}
-	
+
 	@Nullable
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IClimateTable getTable(IClimateTableHelper helper, ClimateType type, boolean withTitle) {
-		IClimateTable table;
-		if(withTitle){
-			table = new Table(Translator.translateToLocal("for.gui." + type.getName()));
-		}else{
-			table = new Table();
-		}
+	public IClimateData getData() {
+		IClimateData data = new ClimateData();
 		for(IClimateModifier modifier : GreenhouseManager.greenhouseHelper.getModifiers()){
-			modifier.addTableEntries(this, state, modifierData, type, table);
+			modifier.addData(this, state, modifierData, data);
 		}
-		return table;
+		return data;
 	}
 	
 	private static final class ClimateContainerListeners implements IClimateContainerListener{
