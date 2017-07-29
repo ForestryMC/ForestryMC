@@ -34,7 +34,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
-	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
+	private InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
 	private List<IRecipe> recipes = NonNullList.create();
 	private int selectedRecipe;
 	private long lastUsed;
@@ -55,6 +55,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	
 	public InventoryCraftingForestry getCraftMatrix() {
 		return craftMatrix;
+	}
+	
+	public void setCraftMatrix(InventoryCraftingForestry craftMatrix) {
+		this.craftMatrix = craftMatrix;
 	}
 	
 	public void validate(World world) {
