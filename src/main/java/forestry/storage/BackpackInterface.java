@@ -12,12 +12,11 @@ package forestry.storage;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -28,13 +27,14 @@ import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class BackpackInterface implements IBackpackInterface {
 
 	private final Map<String, IBackpackDefinition> definitions = new HashMap<>();
-	private final Multimap<String, String> backpackAcceptedItems = HashMultimap.create();
+	private final Map<String, List<String>> backpackAcceptedItems = new HashMap<>();
 
-	public Multimap<String, String> getBackpackAcceptedItems() {
+	public Map<String, List<String>> getBackpackAcceptedItems() {
 		return backpackAcceptedItems;
 	}
 
@@ -45,7 +45,10 @@ public class BackpackInterface implements IBackpackInterface {
 		Preconditions.checkArgument(!itemStack.isEmpty(), "itemStack must not be empty");
 
 		String stringForItemStack = ItemStackUtil.getStringForItemStack(itemStack);
-		backpackAcceptedItems.put(backpackUid, stringForItemStack);
+		if (stringForItemStack != null) {
+			List<String> acceptedItems = backpackAcceptedItems.computeIfAbsent(backpackUid, k -> NonNullList.create());
+			acceptedItems.add(stringForItemStack);
+		}
 	}
 
 	@Override
