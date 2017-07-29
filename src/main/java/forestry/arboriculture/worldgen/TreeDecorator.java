@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -28,22 +41,10 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.commands.TreeGenHelper;
 import forestry.core.utils.BlockUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
 
 public class TreeDecorator {
-
-	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_TREES", new Class[0]);
 	private static final List<IAlleleTreeSpecies> SPECIES = new ArrayList<>();
-	private static final Map<Biome, Set<ITree>> biomeCache = new HashMap<>();
+	private static final Map<ResourceLocation, Set<ITree>> biomeCache = new HashMap<>();
 	
 	@SubscribeEvent
 	public void decorateTrees(Decorate event) {
@@ -53,7 +54,7 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if(biomeCache.isEmpty()){
+		if (biomeCache.isEmpty()) {
 			generateBiomeCache(world, rand);
 		}
 		for (int tries = 0; tries < 4 + rand.nextInt(2); tries++) {
@@ -62,9 +63,9 @@ public class TreeDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			Biome biome = world.getBiome(pos);
-
-			Set<ITree> trees = biomeCache.get(biome);
-			for(ITree tree : trees){
+			
+			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
+			for (ITree tree : trees) {
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
 				if (species.getRarity()  >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
@@ -83,15 +84,16 @@ public class TreeDecorator {
 		}
 	}
 	
+	@Nullable
 	private static BlockPos getValidPos(World world, int x, int z, ITree tree){
 		// get to the ground
 		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
-
+		
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
-
+		
 		IBlockState blockState = world.getBlockState(pos);
 		IBlockState downState = world.getBlockState(pos.down());
 		while (BlockUtil.canReplace(blockState, world, pos)) {
@@ -124,14 +126,14 @@ public class TreeDecorator {
 	}
 	
 	private static void generateBiomeCache(World world, Random rand){
-		for(IAlleleTreeSpecies species : getSpecies()){
+		for (IAlleleTreeSpecies species : getSpecies()) {
 			IAllele[] template = TreeManager.treeRoot.getTemplate(species);
 			ITreeGenome genome = TreeManager.treeRoot.templateAsGenome(template);
 			ITree tree = TreeManager.treeRoot.getTree(world, genome);
 			IGrowthProvider growthProvider = species.getGrowthProvider();
-			for(Biome biome : Biome.REGISTRY){
-				Set<ITree> trees = biomeCache.computeIfAbsent(biome, k -> new HashSet<>());
-				if(growthProvider.isBiomeValid(tree, biome)){
+			for (Biome biome : Biome.REGISTRY) {
+				Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
+				if (growthProvider.isBiomeValid(tree, biome)) {
 					trees.add(tree);
 				}
 			}
