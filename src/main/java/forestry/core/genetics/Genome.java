@@ -11,7 +11,6 @@
 package forestry.core.genetics;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -26,6 +25,7 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.utils.Log;
 
 public abstract class Genome implements IGenome {
 	private static final String SLOT_TAG = "Slot";
@@ -138,12 +138,23 @@ public abstract class Genome implements IGenome {
 
 	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		Preconditions.checkArgument(nbtTagCompound != null, "itemStack must have nbt");
+		if (nbtTagCompound == null) {
+			nbtTagCompound = new NBTTagCompound();
+			itemStack.setTagCompound(nbtTagCompound);
+		}
 
-		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
-		Preconditions.checkArgument(!genome.hasNoTags(), "itemStack nbt must have a genome tag");
+		NBTTagCompound genomeNbt = nbtTagCompound.getCompoundTag("Genome");
+		if (genomeNbt.hasNoTags()) {
+			Log.error("Got a genetic item with no genome, setting it to a default value.");
+			genomeNbt = new NBTTagCompound();
+			
+			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
+			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
+			genome.writeToNBT(genomeNbt);
+			nbtTagCompound.setTag("Genome", genomeNbt);
+		}
 
-		IChromosome[] chromosomes = getChromosomes(genome, speciesRoot);
+		IChromosome[] chromosomes = getChromosomes(genomeNbt, speciesRoot);
 
 		return chromosomes[chromosomeType.ordinal()];
 	}
