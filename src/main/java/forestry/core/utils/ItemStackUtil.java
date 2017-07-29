@@ -594,5 +594,24 @@ public abstract class ItemStackUtil {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
+	 * but ignores stack size (count).
+	 */
+	public static boolean areItemStacksEqualIgnoreCount(ItemStack a, ItemStack b) {
+		if (a.isEmpty() && b.isEmpty()) {
+			return true;
+		} else if (a.isEmpty() || b.isEmpty()) {
+			return false;
+		} else if (a.getItem() != b.getItem()) {
+			return false;
+		} else if (a.getItemDamage() != b.getItemDamage()) {
+			return false;
+		} else if (a.getTagCompound() == null && b.getTagCompound() != null) {
+			return false;
+		} else {
+			return (a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound())) && a.areCapsCompatible(b);
+		}
+	}
 }

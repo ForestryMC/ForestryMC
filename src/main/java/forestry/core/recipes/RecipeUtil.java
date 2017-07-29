@@ -13,11 +13,6 @@ package forestry.core.recipes;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.factory.inventory.InventoryCraftingForestry;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -27,10 +22,18 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 
@@ -50,118 +53,91 @@ public abstract class RecipeUtil {
 		}
 	}
 
-	@Nullable
-	public static InventoryCraftingForestry getCraftRecipe(NonNullList<ItemStack> recipeItems, NonNullList<ItemStack> availableItems, World world, ItemStack recipeOutput) {
-		// Need at least one matched set
-		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
-			return null;
+	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
+		if (RecipeManagers.fermenterManager == null) {
+			return;
 		}
 
-		// Check that it doesn't make a different recipe.
-		// For example:
-		// Wood Logs are all ore dictionary equivalent with each other,
-		// but an Oak Log shouldn't be able to make Ebony Wood Planks
-		// because it makes Oak Wood Planks using the same recipe.
-		// Strategy:
-		// Create a fake crafting inventory using items we have in availableItems
-		// in place of the ones in the saved crafting inventory.
-		// Check that the recipe it makes is the same as the currentRecipe.
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+		}
+
+		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+		}
+	}
+
+	@Nullable
+	public static InventoryCraftingForestry getCraftRecipe(InventoryCrafting originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
+		if (!recipe.matches(originalCrafting, world)) {
+			return null;
+		}
+		
+		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
+		if (expectedOutput.isEmpty()) {
+			return null;
+		}
+		
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
-		for (int slot = 0; slot < recipeItems.size(); slot++) {
-			ItemStack recipeStack = recipeItems.get(slot);
-			if (recipeStack.isEmpty()) {
-				continue;
-			}
-
-			// Use crafting equivalent (not oredict) items first
-			for (ItemStack stockStack : stockCopy) {
-				if (stockStack.getCount() > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = ItemStackUtil.createCopyWithCount(stockStack, 1);
-					stockStack.shrink(1);
-					crafting.setInventorySlotContents(slot, stack);
-					break;
+		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
+			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
+			if (!stackInSlot.isEmpty()) {
+				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
+				if (equivalent.isEmpty()) {
+					return null;
+				} else {
+					crafting.setInventorySlotContents(slot, equivalent);
 				}
 			}
+		}
+		
+		if (recipe.matches(crafting, world)) {
+			ItemStack output = recipe.getCraftingResult(crafting);
+			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
+				return crafting;
+			}
+		}
 
-			// Use oredict items if crafting equivalent items aren't available
-			if (crafting.getStackInSlot(slot).isEmpty()) {
-				for (ItemStack stockStack : stockCopy) {
-					if (stockStack.getCount() > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = ItemStackUtil.createCopyWithCount(stockStack, 1);
-						stockStack.shrink(1);
-						crafting.setInventorySlotContents(slot, stack);
-						break;
+		return null;
+	}
+	
+	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput)
+	{
+		ItemStack originalStack = crafting.getStackInSlot(slot);
+		for (ItemStack stockStack : stockCopy)
+		{
+			if (!stockStack.isEmpty())
+			{
+				ItemStack singleStockStack = ItemStackUtil.createCopyWithCount(stockStack, 1);
+				crafting.setInventorySlotContents(slot, singleStockStack);
+				if (recipe.matches(crafting, world))
+				{
+					ItemStack output = recipe.getCraftingResult(crafting);
+					if (ItemStack.areItemStacksEqual(output, expectedOutput))
+					{
+						crafting.setInventorySlotContents(slot, originalStack);
+						return stockStack.splitStack(1);
 					}
 				}
 			}
 		}
-
-		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
-		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
-			return null;
-		}
-		return crafting;
+		crafting.setInventorySlotContents(slot, originalStack);
+		return ItemStack.EMPTY;
 	}
 
-	public static NonNullList<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		NonNullList<ItemStack> matchingRecipes = NonNullList.create();
-		ItemStack repairRecipe = findRepairRecipe(inventory);
-		if (!repairRecipe.isEmpty()) {
-			matchingRecipes.add(repairRecipe);
-			return matchingRecipes;
-		}
-
-		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
-			IRecipe irecipe = (IRecipe) recipe;
-
-			if (irecipe.matches(inventory, world)) {
-				ItemStack result = irecipe.getCraftingResult(inventory);
-				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
-					matchingRecipes.add(result);
-				}
+	public static NonNullList<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		NonNullList<IRecipe> matchingRecipes = NonNullList.create();
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
+			if (recipe.matches(inventory, world)) {
+				matchingRecipes.add(recipe);
 			}
 		}
 
 		return matchingRecipes;
-	}
-
-	private static ItemStack findRepairRecipe(InventoryCrafting inventory) {
-		int craftIngredientCount = 0;
-		ItemStack itemstack0 = ItemStack.EMPTY;
-		ItemStack itemstack1 = ItemStack.EMPTY;
-
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack itemstack = inventory.getStackInSlot(j);
-
-			if (!itemstack.isEmpty()) {
-				if (craftIngredientCount == 0) {
-					itemstack0 = itemstack;
-				}
-
-				if (craftIngredientCount == 1) {
-					itemstack1 = itemstack;
-				}
-
-				++craftIngredientCount;
-			}
-		}
-
-		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.getCount() == 1 && itemstack1.getCount() == 1 && itemstack0.getItem().isRepairable()) {
-			int damage0 = itemstack0.getMaxDamage() - itemstack0.getItemDamage();
-			int damage1 = itemstack0.getMaxDamage() - itemstack1.getItemDamage();
-			int repairAmount = damage0 + damage1 + itemstack0.getMaxDamage() * 5 / 100;
-			int repairedDamage = itemstack0.getMaxDamage() - repairAmount;
-
-			if (repairedDamage < 0) {
-				repairedDamage = 0;
-			}
-
-			return new ItemStack(itemstack0.getItem(), 1, repairedDamage);
-		}
-
-		return ItemStack.EMPTY;
 	}
 
 	public static void addRecipe(Block block, Object... obj) {
@@ -196,6 +172,7 @@ public abstract class RecipeUtil {
 		GameRegistry.addSmelting(res, prod, xp);
 	}
 
+	@Nullable
 	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
 		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getIngredients();
 		NonNullList<String> oreDicts = recipe.getOreDicts();
@@ -204,6 +181,7 @@ public abstract class RecipeUtil {
 		return matches(recipeIngredients, oreDicts, width, height, inventoryCrafting);
 	}
 
+	@Nullable
 	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory inventoryCrafting) {
 		ItemStack[][] resources = getResources(inventoryCrafting);
 		return matches(recipeIngredients, oreDicts, width, height, resources);

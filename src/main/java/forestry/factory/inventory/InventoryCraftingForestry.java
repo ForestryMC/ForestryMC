@@ -12,14 +12,31 @@ package forestry.factory.inventory;
 
 import forestry.core.gui.ContainerDummy;
 import forestry.factory.gui.ContainerWorktable;
+
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 
 public class InventoryCraftingForestry extends InventoryCrafting {
+	private final Container eventHandlerIn;
+	
 	public InventoryCraftingForestry(ContainerWorktable containerWorktable) {
-		super(containerWorktable, 3, 3);
+		this(containerWorktable, 3, 3);
 	}
 
 	public InventoryCraftingForestry() {
-		super(ContainerDummy.instance, 3, 3);
+		this(ContainerDummy.instance, 3, 3);
+	}
+	
+	private InventoryCraftingForestry(Container eventHandlerIn, int width, int height) {
+		super(eventHandlerIn, width, height);
+		this.eventHandlerIn = eventHandlerIn;
+	}
+	
+	public InventoryCraftingForestry copy() {
+		InventoryCraftingForestry copy = new InventoryCraftingForestry(this.eventHandlerIn, getWidth(), getHeight());
+		for (int slot = 0; slot < getSizeInventory(); slot++) {
+			copy.setInventorySlotContents(slot, getStackInSlot(slot).copy());
+		}
+		return copy;
 	}
 }
