@@ -10,154 +10,112 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import forestry.api.climate.IClimateInfo;
-import forestry.api.climate.IClimateManager;
-import forestry.api.climate.IClimatePosition;
-import forestry.api.climate.IClimateProvider;
-import forestry.api.climate.IClimateRegion;
-import forestry.api.climate.IClimateSourceProvider;
-import forestry.api.core.ForestryAPI;
-import forestry.core.DefaultClimateProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.IClimateManager;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.climate.IClimateSourceOwner;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.ImmutableClimateState;
+import forestry.api.core.ILocatable;
+import forestry.api.greenhouse.Position2D;
+import forestry.core.DefaultClimateProvider;
+import forestry.core.utils.World2ObjectMap;
 
 public class ClimateManager implements IClimateManager {
 
-	protected final Map<World, List<IClimateRegion>> regions;
-	private final Object regionsMutex;
+	private static final ClimateManager INSTANCE = new ClimateManager();
+	
+	private static final Map<Biome, ImmutableClimateState> BIOME_STATES = new HashMap<>();
+	
+	private final World2ObjectMap<ClimateWorldManager> managers;
 
-	public ClimateManager() {
-		regions = new HashMap<>();
-		regionsMutex = new Object();
+	private ClimateManager() {
+		managers = new World2ObjectMap(world->new ClimateWorldManager(this));
 	}
-
-	@Override
-	public void addRegion(IClimateRegion region) {
-		synchronized (regionsMutex) {
-			World world = region.getWorld();
-			if (!regions.containsKey(world)) {
-				this.regions.put(world, new ArrayList<>());
-			}
-			List<IClimateRegion> regions = this.regions.get(world);
-			if (!regions.contains(region)) {
-				if(!regions.isEmpty()){
-					for (IClimatePosition pos : region.getPositions()) {
-						if (getRegionForPos(world, pos.getPos()) != null) {
-							return;
-						}
-					}
-				}
-				regions.add(region);
-			}
-		}
-	}
-
-	@Override
-	public void removeRegion(IClimateRegion region) {
-		synchronized (regionsMutex) {
-			World world = region.getWorld();
-			if (!regions.containsKey(world)) {
-				this.regions.put(world, new ArrayList<>());
-			}
-			List<IClimateRegion> regions = this.regions.get(world);
-			regions.remove(region);
-		}
-	}
-
-	@Override
-	public void removeSource(IClimateSourceProvider source) {
-		synchronized (regionsMutex) {
-			World world = source.getWorldObj();
-			if (!regions.containsKey(world)) {
-				regions.put(world, new ArrayList<>());
-			}
-			IClimateRegion region = getRegionForPos(source.getWorldObj(), source.getCoordinates());
-			if (region != null) {
-				if (region.getSources().contains(source.getClimateSource())) {
-					region.removeSource(source.getClimateSource());
-				}
-			}
-		}
-	}
-
-	@Override
-	public void addSource(IClimateSourceProvider source) {
-		synchronized (regionsMutex) {
-			World world = source.getWorldObj();
-			if (!regions.containsKey(world)) {
-				regions.put(world, new ArrayList<>());
-			}
-			IClimateRegion region = getRegionForPos(source.getWorldObj(), source.getCoordinates());
-			if (region != null) {
-				if (!region.getSources().contains(source.getClimateSource())) {
-					region.addSource(source.getClimateSource());
-				}
-			}
-		}
+	
+	public static ClimateManager getInstance(){
+		return INSTANCE;
 	}
 	
 	@Override
-	public IClimateInfo createInfo(float temperature, float humidity) {
-		return new ClimateInfo(temperature, humidity);
+	public ImmutableClimateState getBiomeState(World world, BlockPos pos) {
+		Biome biome = world.getBiome(pos);
+		return getBiomeState(biome);
+	}
+	
+	private ImmutableClimateState getBiomeState(Biome biome) {
+		if (!BIOME_STATES.containsKey(biome)) {
+			BIOME_STATES.put(biome, new ImmutableClimateState(biome.getTemperature(), biome.getRainfall()));
+		}
+		return BIOME_STATES.get(biome);
 	}
 	
 	@Override
-	public IClimateInfo getInfo(World world, BlockPos pos) {
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, pos);
-
-		if (position != null) {
-			return position.getInfo();
+	public IClimateState getClimateState(World world, BlockPos pos) {
+		ClimateWorldManager manager = managers.get(world);
+		if(manager == null){
+			return getBiomeState(world, pos);
 		}
-		return BiomeClimateInfo.getInfo(world.getBiome(pos));
+		return manager.getClimateState(world, pos);
 	}
 
+	@Nullable
 	@Override
-	public Map<World, List<IClimateRegion>> getRegions() {
-		return regions;
-	}
-
-	@Override
-	public IClimatePosition getPosition(World world, BlockPos pos) {
-		if (!regions.containsKey(world)) {
-			regions.put(world, new ArrayList<>());
+	public IClimateContainer getContainer(World world, BlockPos pos) {
+		ClimateWorldManager manager = managers.get(world);
+		if(manager == null){
 			return null;
 		}
-		for (IClimateRegion region : regions.get(world)) {
-			IClimatePosition position = region.getPosition(pos);
-			if(position != null){
-				return position;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IClimateRegion getRegionForPos(World world, BlockPos pos) {
-		if (!regions.containsKey(world)) {
-			this.regions.put(world, new ArrayList<>());
-		}
-		List<IClimateRegion> regions = this.regions.get(world);
-		for (IClimateRegion region : regions) {
-			if (region.getPosition(pos) != null) {
-				return region;
-			}
-		}
-		return null;
+		return manager.getContainer(world, pos);
 	}
 	
-	@Override
-	public void onWorldUnload(World world) {
-		regions.remove(world);
+	@Nullable
+	private IClimateContainer getContainer(ILocatable locatable){
+		return getContainer(locatable.getWorldObj(), locatable.getCoordinates());
 	}
 
 	@Override
 	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {
 		return new DefaultClimateProvider(world, pos);
+	}
+	
+	@Override
+	public void addSource(IClimateSourceOwner owner){
+		World world = owner.getWorldObj();
+		ClimateWorldManager manager = managers.get(world);
+		if(manager == null){
+			return;
+		}
+		manager.addSource(owner);
+	}
+	
+	@Override
+	public void removeSource(IClimateSourceOwner owner){
+		World world = owner.getWorldObj();
+		ClimateWorldManager manager = managers.get(world);
+		if(manager == null){
+			return;
+		}
+		manager.removeSource(owner);
+	}
+	
+	@Override
+	public Collection<IClimateSourceOwner> getSources(World world, Position2D position) {
+		ClimateWorldManager manager = managers.get(world);
+		if(manager == null){
+			return Collections.emptyList();
+		}
+		return manager.getSources(position);
 	}
 
 }

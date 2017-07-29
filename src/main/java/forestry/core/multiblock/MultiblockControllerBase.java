@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,8 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.Translator;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are
@@ -432,7 +434,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return;
 		}
 
-		if (onlyUpdateWhenAssembled() && this.assemblyState != AssemblyState.Assembled) {
+		if (this.assemblyState != AssemblyState.Assembled) {
 			// Not assembled - don't run game logic
 			return;
 		}
@@ -470,7 +472,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
 	 */
 	protected abstract boolean updateServer(int tickCount);
-
+	
+	protected int getTickCount() {
+		return tickCount;
+	}
+	
 	/**
 	 * Client-side update loop. Generally, this shouldn't do anything, but if you want
 	 * to do some interpolation or something, do it here.
@@ -866,9 +872,5 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	private static boolean isInvalid(IMultiblockComponent part) {
 		return part instanceof TileEntity && ((TileEntity) part).isInvalid();
-	}
-
-	protected boolean onlyUpdateWhenAssembled() {
-		return true;
 	}
 }

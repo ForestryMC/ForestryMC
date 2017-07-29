@@ -5,14 +5,15 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.climate.IClimateFactory;
 import forestry.api.climate.IClimateManager;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.ISimpleFarmLogic;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.
@@ -49,6 +50,12 @@ public class ForestryAPI {
 	public static IModelManager modelManager;
 
 	public static IClimateManager climateManager;
+	
+	/**
+	 * A factory to create climate related things.
+	 * @since 5.3.4
+	 */
+	public static IClimateFactory climateFactory;
 
 	/**
 	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s

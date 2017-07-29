@@ -11,16 +11,12 @@
 package forestry.farming.logic;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import forestry.core.config.Constants;
-import forestry.core.network.PacketHandler;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.plugins.compat.PluginIC2;

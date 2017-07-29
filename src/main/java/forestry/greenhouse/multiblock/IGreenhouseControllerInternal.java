@@ -10,29 +10,16 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.fluids.ITankManager;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
 import forestry.core.owner.IOwnedTile;
 import forestry.energy.EnergyManager;
 
 public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IOwnedTile, IStreamableGui {
-
-	/**
-	 * @return The inventory of the controller.
-	 */
-	IInventoryAdapter getInternalInventory();
-
-	/**
-	 * @return The tank manager of the controller.
-	 */
-	ITankManager getTankManager();
 
 	/**
 	 * @return The energy manager of the controller.
@@ -48,10 +35,4 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	 * @return A Set with listener componets.
 	 */
 	Set<IGreenhouseComponent.Listener> getListenerComponents();
-
-	/**
-	 * @return A Set of butterfly nurserys.
-	 */
-	@Nullable
-	Set<IGreenhouseComponent.Nursery> getButterflyNurserys();
 }

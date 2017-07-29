@@ -1,12 +1,15 @@
 package forestry.arboriculture.charcoal.jei;
 
-import java.util.Collections;
+import com.google.common.collect.ImmutableList;
 
-import forestry.api.arboriculture.ICharcoalPileWall;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.core.PluginCore;
+
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 
 public class CharcoalPileWallWrapper extends BlankRecipeWrapper {
 
@@ -19,7 +22,14 @@ public class CharcoalPileWallWrapper extends BlankRecipeWrapper {
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, pileWall.getDisplyItems());
-		ingredients.setOutputs(ItemStack.class, Collections.singletonList(new ItemStack(Items.COAL, 9 + pileWall.getCharcoalAmount(), 1)));
+		int amount = 9 + pileWall.getCharcoalAmount();
+		ItemStack charcoal = new ItemStack(Items.COAL, amount, 1);
+		ItemStack ash = new ItemStack(PluginCore.getItems().ash, amount / 4);
+		ImmutableList<ItemStack> outputs = ImmutableList.of(
+			charcoal,
+			ash
+		);
+		ingredients.setOutputs(ItemStack.class, outputs);
 	}
 
 }

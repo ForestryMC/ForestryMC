@@ -16,6 +16,14 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Locale;
 
+import org.apache.commons.lang3.text.WordUtils;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.MinecraftForge;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -36,11 +44,6 @@ import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-import org.apache.commons.lang3.text.WordUtils;
 
 public enum BeeDefinition implements IBeeDefinition {
 	/* HONEY BRANCH */

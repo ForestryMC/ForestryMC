@@ -12,26 +12,85 @@ package forestry.greenhouse.tiles;
 
 import javax.annotation.Nullable;
 
-import forestry.api.climate.EnumClimatiserModes;
-import forestry.api.climate.EnumClimatiserTypes;
-import forestry.api.climate.IClimatiserDefinition;
-import forestry.core.climate.ClimatiserDefinition;
-import forestry.greenhouse.GreenhouseClimateWindow;
-import forestry.greenhouse.PluginGreenhouse;
-import forestry.greenhouse.blocks.BlockGreenhouse;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.climate.IClimateSource;
+import forestry.api.climate.IClimateSourceOwner;
+import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.tiles.IActivatable;
+import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.blocks.BlockGreenhouseWindow;
+import forestry.greenhouse.climate.ClimateSourceWindow;
+
+public class TileGreenhouseWindow extends TileEntity implements IActivatable, IClimateSourceOwner {
+	private final ClimateSourceWindow source;
 	@Nullable
 	private WindowMode mode;
-	private static final IClimatiserDefinition DEFINITION = new ClimatiserDefinition(0.001F, EnumClimatiserModes.BOTH, 5F, EnumClimatiserTypes.BOTH);
+	private String glass;
+	private boolean active;
 
 	public TileGreenhouseWindow() {
-		super(DEFINITION, new GreenhouseClimateWindow(20));
+		source = new ClimateSourceWindow(0.05F, 5F);
+		source.setOwner(this);
+		glass = "glass";
+	}
+
+	@Override
+	public IClimateSource getClimateSource() {
+		return source;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getItemStack() {
+		return ((BlockGreenhouseWindow) getBlockType()).getItem(glass);
+	}
+
+	@Override
+	public boolean isCircuitable() {
+		return false;
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
+
+	/* IActivatable */
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+
+		this.active = active;
+
+		if (world != null) {
+			if (world.isRemote) {
+				world.markBlockRangeForRenderUpdate(getCoordinates(), getCoordinates());
+			} else {
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), getCoordinates(), world);
+			}
+		}
+	}
+
+	@Override
+	public World getWorldObj() {
+		return world;
 	}
 
 	public void onNeighborBlockChange() {
@@ -50,21 +109,12 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
 		}
 		IBlockState state = world.getBlockState(pos);
 		BlockPos blockedPos;
-		if (state.getBlock() == PluginGreenhouse.getBlocks().getGreenhouseBlock(BlockGreenhouseType.WINDOW_UP)) {
+		if (((BlockGreenhouseWindow) state.getBlock()).isRoofWindow()) {
 			blockedPos = getCoordinates().offset(EnumFacing.UP);
 		} else {
-			blockedPos = getCoordinates().offset(state.getValue(BlockGreenhouse.FACING));
+			blockedPos = getCoordinates().offset(state.getValue(BlockGreenhouseWindow.FACING));
 		}
 		return world.isAirBlock(blockedPos) ? WindowMode.OPEN : WindowMode.BLOCK;
-	}
-
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		if (mode != null) {
-			data.setShort("mode", (short) mode.ordinal());
-		}
-		return super.writeToNBT(data);
 	}
 
 	@Override
@@ -73,37 +123,55 @@ public class TileGreenhouseWindow extends TileGreenhouseClimatiser {
 		if (data.hasKey("mode")) {
 			setMode(WindowMode.values()[data.getShort("mode")]);
 		}
-	}
-
-	@Override
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
-		super.decodeDescriptionPacket(packetData);
-		if (packetData.hasKey("mode")) {
-			setMode(WindowMode.values()[packetData.getShort("mode")]);
+		if (data.hasKey("Glass")) {
+			glass = data.getString("Glass");
 		}
 	}
 
 	@Override
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		if (mode != null) {
-			packetData.setShort("mode", (short) mode.ordinal());
+			data.setShort("mode", (short) mode.ordinal());
 		}
-		super.encodeDescriptionPacket(packetData);
+		if (glass != null) {
+			data.setString("Glass", glass);
+		}
+		return super.writeToNBT(data);
 	}
 
 	@Override
-	public boolean canWork() {
-		return true;
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound data = super.getUpdateTag();
+		if (mode != null) {
+			data.setShort("mode", (short) mode.ordinal());
+		}
+		if (glass != null) {
+			data.setString("Glass", glass);
+		}
+		return data;
 	}
 
-	public void setMode(WindowMode mode) {
-		this.mode = mode;
-		setActive(mode == WindowMode.OPEN);
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return oldState.getBlock() != newSate.getBlock();
+	}
+
+	public String getGlass() {
+		return glass;
+	}
+
+	public void setGlass(String glass) {
+		this.glass = glass;
 	}
 
 	@Nullable
 	public WindowMode getMode() {
 		return mode;
+	}
+
+	public void setMode(WindowMode mode) {
+		this.mode = mode;
+		setActive(mode == WindowMode.OPEN);
 	}
 
 	public enum WindowMode {

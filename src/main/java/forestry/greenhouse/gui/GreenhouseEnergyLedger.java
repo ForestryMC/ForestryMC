@@ -9,7 +9,7 @@ import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 public class GreenhouseEnergyLedger extends Ledger {
 
 	final IGreenhouseControllerInternal controller;
-	
+
 	public GreenhouseEnergyLedger(LedgerManager ledgerManager, IGreenhouseControllerInternal controller) {
 		super(ledgerManager, "power");
 		maxHeight = 48;

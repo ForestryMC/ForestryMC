@@ -5,26 +5,43 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
+import javax.annotation.Nullable;
+
+import forestry.api.climate.IClimateHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
-import net.minecraft.world.World;
 
-public interface IGreenhouseHousing extends IErrorLogicSource {
-
-	EnumTemperature getTemperature();
-
-	EnumHumidity getHumidity();
-
-	float getExactTemperature();
-
-	float getExactHumidity();
-
+public interface IGreenhouseHousing extends IErrorLogicSource, IClimateHousing{
+	
 	/**
-	 * Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12
-	 *
-	 * @return The world in that the housing is.
+	 * @return The current tempreture as an enum.
 	 */
-	World getWorldObj();
-
+	EnumTemperature getTemperature();
+	
+	/**
+	 * @return The current humidity as an enum.
+	 */
+	EnumHumidity getHumidity();
+	
+	/**
+	 * @return The current tempreture as an float. Range: 0.0F ~ 2.0F
+	 */
+	float getExactTemperature();
+	
+	/**
+	 * @return The current humidity as an float. Range: 0.0F ~ 2.0F
+	 */
+	float getExactHumidity();
+	
+	/**
+	 * @return the manager of this housing.
+	 */
+	IGreenhouseProvider getProvider();
+	
+	/**
+	 * @return the maximal and minimal settings of this housing.
+	 */
+	@Nullable
+	IGreenhouseLimits getLimits();
 }

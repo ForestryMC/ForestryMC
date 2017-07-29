@@ -10,37 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.tiles;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.common.base.Preconditions;
 
-import forestry.api.genetics.IAllele;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyCocoon;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseComponent.Nursery;
-import forestry.api.multiblock.IGreenhouseController;
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.packets.PacketTileStream;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.owner.OwnerHandler;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.NetworkUtil;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.genetics.ButterflyDefinition;
+import javax.annotation.Nullable;
+import java.io.IOException;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -52,8 +26,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
+import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.packets.PacketTileStream;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyDefinition;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -181,12 +174,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 				world.notifyBlockUpdate(pos, blockState, blockState, 0);
 			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
 				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
-				for(IGreenhouseComponent.Nursery nursery : getNursery(world, pos)){
-					nursery.addCocoonLoot(this, cocoonDrops);
-					if(isListEmpty(cocoonDrops)){
-						break;
-					}
-				}
 				for (ItemStack drop : cocoonDrops) {
 					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
 				}
@@ -194,28 +181,6 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 				attemptButterflySpawn(world, caterpillar, getPos());
 			}
 		}
-	}
-
-	private Set<Nursery> getNursery(World world, BlockPos pos) {
-		if (GreenhouseManager.greenhouseHelper == null) {
-			return Collections.emptySet();
-		}
-		IGreenhouseController controller = GreenhouseManager.greenhouseHelper.getGreenhouseController(world, pos);
-		if (controller != null) {
-			Set<Nursery> nurserys;
-			if (controller instanceof IGreenhouseControllerInternal) {
-				nurserys = ((IGreenhouseControllerInternal) controller).getButterflyNurserys();
-			}else{
-				nurserys = new HashSet<>();
-				for (IMultiblockComponent greenhouseComponent : controller.getComponents()) {
-					if (greenhouseComponent instanceof Nursery) {
-						nurserys.add((Nursery) greenhouseComponent);
-					}
-				}
-			}
-			return nurserys;
-		}
-		return Collections.emptySet();
 	}
 	
 	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops){

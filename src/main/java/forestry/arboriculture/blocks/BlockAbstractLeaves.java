@@ -9,13 +9,10 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IItemModelRegister;
-import forestry.api.core.Tabs;
 import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
@@ -51,8 +48,10 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		LeafDecayHelper.leafDecay(this, world, pos);
 	}
 
+	@Override
 	public abstract int getMetaFromState(IBlockState state);
 
+	@Override
 	public abstract IBlockState getStateFromMeta(int meta);
 
 	@Override

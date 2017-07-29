@@ -13,9 +13,10 @@ package forestry.core.network;
 
 import javax.annotation.Nullable;
 
-import forestry.core.network.packets.PacketHandlerDummyClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.network.packets.PacketHandlerDummyClient;
 
 /**
  * Packets sent to the client from the server
@@ -31,7 +32,6 @@ public enum PacketIdClient implements IPacketId {
 	GUI_LAYOUT_SELECT,
 	GUI_ENERGY,
 	SOCKET_UPDATE,
-	CAMOUFLAGE_SELECTION,
 
 	// Core Tile Entities
 	TILE_FORESTRY_UPDATE,
@@ -62,6 +62,11 @@ public enum PacketIdClient implements IPacketId {
 	TRADING_ADDRESS_RESPONSE,
 	LETTER_INFO_RESPONSE,
 	POBOX_INFO_RESPONSE,
+	
+	// Greenhouse
+	GREENHOUSE_DATA,
+	UPDATE_CLIMATE,
+	CAMOUFLAGE_SELECTION,
 
 	// JEI
 	RECIPE_TRANSFER_UPDATE;

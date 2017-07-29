@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -19,16 +20,28 @@ public class MigrationHelper {
 	private static Set<String> ignoredMappings = new HashSet<>();
 	static {
 		ignoredMappings.add("greenhouse.sprinkler");
-
-		itemRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
-		blockRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
-		itemRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
-		blockRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
+		
+		itemRemappings.put("greenhouse.plain", "greenhouse");
+		blockRemappings.put("greenhouse.plain", "greenhouse");
+		itemRemappings.put("greenhouse.gearbox", "greenhouse");
+		blockRemappings.put("greenhouse.gearbox", "greenhouse");
+		itemRemappings.put("greenhouse.control", "greenhouse");
+		blockRemappings.put("greenhouse.control", "greenhouse");
+		itemRemappings.put("greenhouse.fan", "climatiser.fan");
+		blockRemappings.put("greenhouse.fan", "climatiser.fan");
+		blockRemappings.put("greenhouse.heater", "climatiser.heater");
+		itemRemappings.put("greenhouse.heater", "climatiser.heater");
+		blockRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
+		itemRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
+		blockRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
+		itemRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
+		itemRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
+		blockRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_wood", "wood_pile");
-		blockRemappings.put("pile_ash", "charcoal");
+		blockRemappings.put("pile_ash", "ash_block");
 	}
 
 	public static Pattern underscores = Pattern.compile("_");

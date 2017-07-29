@@ -12,20 +12,23 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+
+import net.minecraftforge.common.MinecraftForge;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.worldgen.WorldGenerator;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)

@@ -10,15 +10,20 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.tiles.TileUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
 
 public class MultiblockUtil {
 	/**
@@ -52,4 +57,28 @@ public class MultiblockUtil {
 		}
 		return neighborParts;
 	}
+	
+	@Nullable
+	public static <C extends IMultiblockComponent> C getComponent(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+		return TileUtil.getTile(world, pos, componentClass);
+	}
+	
+	@Nullable
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+		C component = getComponent(world, pos, componentClass);
+		if(component == null){
+			return null;
+		}
+		return (L) component.getMultiblockLogic();
+	}
+	
+	@Nullable
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+		L logic = getLogic(world, pos, componentClass);
+		if(logic == null || !logic.isConnected()){
+			return null;
+		}
+		return (M) logic.getController();
+	}
+	
 }

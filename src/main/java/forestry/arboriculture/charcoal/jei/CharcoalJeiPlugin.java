@@ -1,14 +1,16 @@
 package forestry.arboriculture.charcoal.jei;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.charcoal.CharcoalPileWall;
+
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class CharcoalJeiPlugin extends BlankModPlugin {

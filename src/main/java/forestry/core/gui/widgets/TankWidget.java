@@ -17,7 +17,6 @@ import forestry.core.fluids.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.farming.gui.ContainerFarm;
-import forestry.greenhouse.gui.ContainerGreenhouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -67,8 +66,6 @@ public class TankWidget extends Widget {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
-		} else if (container instanceof ContainerGreenhouse) {
-			return ((ContainerGreenhouse) container).getTank(slot);
 		}
 		return null;
 	}

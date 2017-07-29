@@ -12,13 +12,19 @@ package forestry.farming.items;
 
 import java.util.List;
 
-import forestry.core.utils.Translator;
-import forestry.farming.models.EnumFarmBlockTexture;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.utils.ItemTooltipUtil;
+import forestry.core.utils.Translator;
+import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends ItemBlock {
 
@@ -31,18 +37,23 @@ public class ItemBlockFarm extends ItemBlock {
 	public int getMetadata(int i) {
 		return i;
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
-		info.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
-		if (itemstack.getTagCompound() == null) {
-			return;
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+		if(GuiScreen.isShiftKeyDown()){
+			tooltip.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
+			if (stack.getTagCompound() == null) {
+				return;
+			}
+			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
+			
+			tooltip.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " "+ texture.getName());
+		}else{
+			ItemTooltipUtil.addShiftInformation(stack, player, tooltip, advanced);
 		}
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound());
-
-		info.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " "+ texture.getName());
 	}
-
+	
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		return super.getUnlocalizedName(itemstack) + "." + itemstack.getItemDamage();

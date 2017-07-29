@@ -1,9 +1,0 @@
-@ParametersAreNonnullByDefault
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-package forestry.greenhouse.entities;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import forestry.core.utils.FieldsAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;

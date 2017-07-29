@@ -6,36 +6,42 @@
 package forestry.api.climate;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.greenhouse.Position2D;
+
 public interface IClimateManager {
-
-	IClimateInfo createInfo(float temperature, float humidity);
 	
-	IClimateInfo getInfo(World world, BlockPos pos);
+	/**
+	 * @return The current state of a container at this position if one exists.
+	 * @since 5.3.4
+	 */
+	@Nullable
+	IClimateContainer getContainer(World world, BlockPos pos);
+	
+	/**
+	 * Gets the current state of a container at this position or setSettings one with the datas from the biome.
+	 * @since 5.3.4
+	 */
+	IClimateState getClimateState(World world, BlockPos pos);
+	
+	/**
+	 * Creates a climate state with the help of the biome on this position.
+	 */
+	ImmutableClimateState getBiomeState(World world, BlockPos pos);
 
+	/**
+	 * @return Create a climate manager.
+	 */
 	IClimateProvider getDefaultClimate(World world, BlockPos pos);
-
-	void addRegion(IClimateRegion region);
-
-	void removeRegion(IClimateRegion region);
-
-	void addSource(IClimateSourceProvider source);
-
-	void removeSource(IClimateSourceProvider source);
-
-	void onWorldUnload(World world);
 	
-	@Nullable
-	IClimatePosition getPosition(World world, BlockPos pos);
+	void addSource(IClimateSourceOwner owner);
+	
+	void removeSource(IClimateSourceOwner owner);
 
-	@Nullable
-	IClimateRegion getRegionForPos(World world, BlockPos pos);
-
-	Map<World, List<IClimateRegion>> getRegions();
+	Collection<IClimateSourceOwner> getSources(World world, Position2D position);
 
 }

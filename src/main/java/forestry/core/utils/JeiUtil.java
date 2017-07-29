@@ -3,12 +3,14 @@ package forestry.core.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import mezz.jei.api.IModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import mezz.jei.api.IModRegistry;
 
 public class JeiUtil {
 	public static void addDescription(IModRegistry registry, String itemKey, Item... items) {

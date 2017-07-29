@@ -9,12 +9,4 @@ public class CamouflageManager {
 
 	public static ICamouflageAccess camouflageAccess;
 
-	public static final String BLOCK = "block";
-
-	public static final String GLASS = "glass";
-
-	public static final String DOOR = "door";
-	
-	public static final String NONE = "none";
-
 }

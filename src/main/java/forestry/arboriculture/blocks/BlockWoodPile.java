@@ -2,13 +2,6 @@ package forestry.arboriculture.blocks;
 
 import java.util.Random;
 
-import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,20 +19,30 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.PluginArboriculture;
 
 public class BlockWoodPile extends Block implements IItemModelRegister, IStateMapperRegister {
 
 	public static final PropertyBool IS_ACTIVE = PropertyBool.create("active");
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
-	public static final int RANDOM_TICK = 40;
+	public static final int RANDOM_TICK = 160;
+	public static final int CHANCE = 25;
 	
 	public BlockWoodPile() {
 		super(Material.WOOD);
 		setHardness(1.5f);
-		setTickRandomly(true);
 		setCreativeTab(Tabs.tabArboriculture);
 		setSoundType(SoundType.WOOD);
 	}
@@ -62,7 +65,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	
 	@Override
 	public int tickRate(World world) {
-		return 40;
+		return 960;
 	}
 	
 	@Override
@@ -74,7 +77,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isFullBlock(IBlockState state) {
 		return false;
@@ -95,19 +98,19 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
     }
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		IBlockState fromState = world.getBlockState(fromPos);
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block fromBlock, BlockPos fromPos) {
 		boolean isActive = state.getValue(IS_ACTIVE);
-		if(fromState.getBlock() == this){
-			if(fromState.getValue(IS_ACTIVE) && !isActive){
-				world.setBlockState(pos, state.withProperty(IS_ACTIVE, true));
-				world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
-			}
-		} else if(fromState.getBlock() == Blocks.FIRE) {
+		if(fromBlock == Blocks.FIRE) {
 			if(!isActive){
-				world.setBlockState(pos, state.withProperty(IS_ACTIVE, true));
-				world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+				activatePile(state, world, pos, true);
 			}
+		}
+	}
+
+	private void activatePile(IBlockState state, World world, BlockPos pos, boolean scheduleUpdate){
+		world.setBlockState(pos, state.withProperty(IS_ACTIVE, true), 2);
+		if(scheduleUpdate){
+			world.scheduleUpdate(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
 		}
 	}
 	
@@ -115,18 +118,28 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if(state.getValue(IS_ACTIVE)){
 			for(EnumFacing facing : EnumFacing.VALUES){
-				if(world.isAirBlock(pos.offset(facing))){
-					world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
-				}
-				if(rand.nextInt(150) == 0){
-					if(state.getValue(AGE) < 7){
-						world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1));
-					}else{
-						world.setBlockState(pos, PluginArboriculture.getBlocks().charcoal.getDefaultState().withProperty(BlockCharcoal.AMOUNT, Math.round(getCharcoalAmount(world, pos))));
+				BlockPos position = pos.offset(facing);
+				IBlockState blockState = world.getBlockState(position);
+				Block block = blockState.getBlock();
+				if(block == this){
+					if(!state.getValue(IS_ACTIVE) && blockState.getValue(IS_ACTIVE)){
+						activatePile(state, world, pos, false);
+					}else if(!blockState.getValue(IS_ACTIVE) && state.getValue(IS_ACTIVE)){
+						activatePile(blockState, world, position, true);
 					}
+				} else if(world.isAirBlock(position) || !blockState.isSideSolid(world, position, facing.getOpposite()) || block.isFlammable(world, position, facing.getOpposite())){
+					world.setBlockState(position, Blocks.FIRE.getDefaultState());
 				}
-				world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 			}
+			if(rand.nextFloat() < 0.5F){
+				if(state.getValue(AGE) < 7){
+					world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
+				}else{
+					IBlockState ashState = PluginArboriculture.getBlocks().ash.getDefaultState();
+					world.setBlockState(pos, ashState.withProperty(BlockAsh.AMOUNT, Math.round(getCharcoalAmount(world, pos))), 2);
+				}
+			}
+			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 		}
 	}
 	
@@ -157,7 +170,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (state.getValue(IS_ACTIVE)) {
-	        if (rand.nextInt(24) == 0){
+	        if (rand.nextDouble() < 0.1D){
 	            world.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F, false);
 	        }
 			float f = pos.getX() + 0.5F;
@@ -165,10 +178,10 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 			float f2 = pos.getZ() + 0.5F;
 			float f3 = 0.52F;
 			float f4 = rand.nextFloat() * 0.6F - 0.3F;
-	        if(rand.nextInt(12) == 0){
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, f + f3 - 0.5, f1 + 1, f2 + f4, 0.0D, 0.0D, 0.0D);
+	        if(rand.nextDouble() < 0.2D){
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, f + f3 - 0.5, f1 + 1, f2 + f4, 0.0D, 0.15D, 0.0D);
 	        }else{
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3 - 0.5, f1 + 1, f2 + f4, 0.0D, 0.05D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3 - 0.5, f1 + 1, f2 + f4, 0.0D, 0.15D, 0.0D);
 	        }
 		}
 	}
@@ -189,22 +202,20 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing){
 		int faceAmount = 0;
-		for(int i = 0;i < 18;i++){
+		for(int i = 0;i < 16;i++){
 			BlockPos testPos = pos.offset(facing, i);
 			IBlockState state = world.getBlockState(testPos);
 			if(state.getBlock() == Blocks.AIR){
-				faceAmount = 0;
+				break;
 			}else if(state.getBlock() == this || state.getBlock() == PluginArboriculture.getBlocks().charcoal){
-				if(i == 17){
+				if(i == 15){
 					return getCharcoalFaceAmount(world, testPos, facing);
 				}
 				continue;
-			}else{
-				for(ICharcoalPileWall wall : TreeManager.pileWalls){
-					if(wall.matches(state)){
-						faceAmount = wall.getCharcoalAmount();
-						break;
-					}
+			}
+			for(ICharcoalPileWall wall : TreeManager.pileWalls){
+				if(wall.matches(state)){
+					return wall.getCharcoalAmount();
 				}
 			}
 			break;

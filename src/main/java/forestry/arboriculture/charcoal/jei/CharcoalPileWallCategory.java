@@ -1,18 +1,21 @@
 package forestry.arboriculture.charcoal.jei;
 
-import forestry.arboriculture.PluginArboriculture;
-import forestry.core.config.Constants;
-import forestry.core.recipes.jei.ForestryRecipeCategory;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawableAnimated;
-import mezz.jei.api.gui.IDrawableStatic;
-import mezz.jei.api.gui.IGuiItemStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.IDrawableAnimated.StartDirection;
-import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import forestry.arboriculture.PluginArboriculture;
+import forestry.core.config.Constants;
+import forestry.core.recipes.jei.ForestryRecipeCategory;
+import forestry.core.recipes.jei.ForestryTooltipCallback;
+
+import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.gui.IDrawableAnimated;
+import mezz.jei.api.gui.IDrawableAnimated.StartDirection;
+import mezz.jei.api.gui.IDrawableStatic;
+import mezz.jei.api.gui.IGuiItemStackGroup;
+import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 
 public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPileWallWrapper> {
 
@@ -48,6 +51,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		slot.draw(minecraft, 0, 16);
 		slot.draw(minecraft, 20, 16);
 		slot.draw(minecraft, 84, 16);
+		slot.draw(minecraft, 104, 16);
 	}
 	
 	@Override
@@ -56,9 +60,16 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		itemStackGroup.init(0, true, 0, 16);
 		itemStackGroup.init(1, true, 20, 16);
 		itemStackGroup.init(2, false, 84, 16);
+		itemStackGroup.init(3, false, 104, 16);
+
 		itemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
 		itemStackGroup.set(1, new ItemStack(PluginArboriculture.getBlocks().woodPile));
 		itemStackGroup.set(2, ingredients.getOutputs(ItemStack.class).get(0));
-	}
+		itemStackGroup.set(3, ingredients.getOutputs(ItemStack.class).get(1));
 
+		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
+		tooltip.addFortuneTooltip(2);
+		tooltip.addFortuneTooltip(3);
+		itemStackGroup.addTooltipCallback(tooltip);
+	}
 }

@@ -137,7 +137,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (itemstack.isEmpty()) {
 			return false;
 		}
-		
+
 		return ForestryAPI.farmRegistry.getFertilizeValue(itemstack) > 0;
 	}
 

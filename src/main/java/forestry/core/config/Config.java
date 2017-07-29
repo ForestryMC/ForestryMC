@@ -63,6 +63,11 @@ public class Config {
 	//Humus
 	public static int humusDegradeDelimiter = 3;
 	
+	//Greenhouse
+	public static int climateSourceRange = 36;
+	public static int greenhouseSize = 4;
+	public static boolean showClimateTable = true;
+	
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
@@ -150,8 +155,8 @@ public class Config {
 	}
 
 	@SubscribeEvent
-	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event){
-		if(!event.getModID().equals(Constants.MOD_ID)){
+	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+		if (!event.getModID().equals(Constants.MOD_ID)) {
 			return;
 		}
 		loadConfigCommon(FMLCommonHandler.instance().getSide());
@@ -199,7 +204,7 @@ public class Config {
 
 		generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
 		generateBeehivesDebug = configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
-
+		
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
@@ -248,6 +253,10 @@ public class Config {
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
+		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
+		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
+		showClimateTable = configCommon.getBooleanLocalized("tweaks.greenhouse", "table", showClimateTable);
+		
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
 		disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);

@@ -143,8 +143,8 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 			IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 			int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
-			for(String cropName : crops){
-				ItemStack seeds = getItemStack( cropName + "_seeds");
+			for (String cropName : crops) {
+				ItemStack seeds = getItemStack(cropName + "_seeds");
 				Block block = getBlock(cropName + "_crop");
 				if (seeds != null) {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));

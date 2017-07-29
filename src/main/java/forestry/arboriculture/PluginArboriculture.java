@@ -64,7 +64,6 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
@@ -225,14 +224,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
-
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerArbDoor());
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
-		TreeManager.pileWalls.add(new CharcoalPileWall(PluginArboriculture.getBlocks().loam, 5));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 4));
 	}
 
 	@Override
@@ -282,6 +273,18 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(5, 20), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
 			);
 		}
+	}
+
+	@Override
+	public void postInit() {
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
+		TreeManager.pileWalls.add(new CharcoalPileWall(PluginArboriculture.getBlocks().loam, 4));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.GRAVEL, 1));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 3));
+		TreeManager.pileWalls.add(new CharcoalPileWall(PluginCore.getBlocks().ashBrick, 5));
 	}
 
 	@Override
@@ -466,6 +469,16 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		//Wood Pile
 		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPile), blocks.woodPileDecorative);
+		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.woodPileDecorative), blocks.woodPile);
+
+		//Charcoal
+		RecipeUtil.addRecipe(blocks.charcoal,
+			"###",
+			"###",
+			"###",
+			'#', new ItemStack(Items.COAL, 1, 1));
+		RecipeUtil.addShapelessRecipe(new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block
 		RecipeUtil.addShapelessRecipe(new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);

@@ -1,4 +1,5 @@
 {
+	"uvlock": true,
 	"textures": {
 		"particle": "blocks/log_oak",
 		"texture": "blocks/log_oak",
@@ -9,7 +10,7 @@
 			"from": [ 1, 0, 1 ],
 			"to": [ 7, 16, 7 ],
 			"faces": {
-				"down": { "uv": [ 1, 9, 7, 15 ], "texture": "#texture" },
+				"down": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"up": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"north": { "uv": [ 9, 15, 15, 16 ], "texture": "#texture" },
 				"south": { "uv": [ 1, 15, 7, 16 ], "texture": "#texture" },
@@ -69,7 +70,7 @@
 			"from": [ 9, 0, 1 ],
 			"to": [ 15, 16, 7 ],
 			"faces": {
-				"down": { "uv": [ 1, 9, 7, 15 ], "texture": "#texture" },
+				"down": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"up": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"north": { "uv": [ 9, 15, 15, 16 ], "texture": "#texture" },
 				"south": { "uv": [ 1, 15, 7, 16 ], "texture": "#texture" },
@@ -129,7 +130,7 @@
 			"from": [ 1, 0, 9 ],
 			"to": [ 7, 16, 15 ],
 			"faces": {
-				"down": { "uv": [ 1, 9, 7, 15 ], "texture": "#texture" },
+				"down": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"up": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"north": { "uv": [ 9, 15, 15, 16 ], "texture": "#texture" },
 				"south": { "uv": [ 1, 15, 7, 16 ], "texture": "#texture" },
@@ -189,7 +190,7 @@
 			"from": [ 9, 0, 9 ],
 			"to": [ 15, 16, 15 ],
 			"faces": {
-				"down": { "uv": [ 1, 9, 7, 15 ], "texture": "#texture" },
+				"down": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"up": { "uv": [ 5, 5, 11, 11 ], "texture": "#top" },
 				"north": { "uv": [ 9, 15, 15, 16 ], "texture": "#texture" },
 				"south": { "uv": [ 1, 15, 7, 16 ], "texture": "#texture" },

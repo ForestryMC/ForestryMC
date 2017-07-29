@@ -35,7 +35,7 @@ public class WorldGenHelper {
 	}
 
 	/**
-	 * Uses startPos and girth of a tree to calculate the center
+	 * Uses centerPos and girth of a tree to calculate the center
 	 */
 	public static void generateCylinderFromTreeStartPos(World world, ITreeBlockType block, BlockPos startPos, int girth, float radius, int height, EnumReplaceMode replace) {
 		generateCylinderFromPos(world, block, startPos.add(girth / 2, 0, girth / 2), radius, height, replace);
