@@ -169,9 +169,10 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		if (!simulate && !world.isRemote) {
+		if (!simulate) {
 			// update crafting display to match the ingredients that were actually used
-			setCraftingDisplay(crafting);
+			currentRecipe.setCraftMatrix(crafting);
+			setCurrentRecipe(currentRecipe);
 		}
 
 		return true;
