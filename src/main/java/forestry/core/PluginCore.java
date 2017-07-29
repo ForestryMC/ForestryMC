@@ -10,15 +10,34 @@
  ******************************************************************************/
 package forestry.core;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
+
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.circuits.ChipsetManager;
-import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
@@ -44,8 +63,6 @@ import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.loot.SetSpeciesNBT;
-import forestry.core.models.ModelCamouflageSprayCan;
-import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -62,23 +79,6 @@ import forestry.core.utils.World2ObjectMap;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends BlankForestryPlugin {
@@ -292,9 +292,6 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / WRENCH
 		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-
-		// / CAMOUFLAGE SPRAY CAN
-		RecipeUtil.addRecipe(items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
 		
 		// / WEB
 		RecipeUtil.addRecipe(new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
