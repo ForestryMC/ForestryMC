@@ -66,7 +66,8 @@ public class PluginManager {
 		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
 		SETUP_DISABLED, // setup fallback API to avoid crashes
 		REGISTER, // register basic blocks and items
-		PRE_INIT, // register handlers, triggers, definitions, backpacks, crates, and anything that depends on basic items
+		PRE_INIT, // register handlers, triggers, definitions, and anything that depends on basic items
+		BACKPACKS_CRATES, // backpacks, crates
 		INIT, // anything that depends on PreInit stages, recipe registration
 		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
 		FINISHED
@@ -228,11 +229,19 @@ public class PluginManager {
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_STATEMENTS)) {
 				plugin.registerTriggers();
 			}
+			Log.debug("Pre-Init Complete: {}", plugin);
+		}
+	}
+
+	public static void runRegisterBackpacksAndCrates() {
+		stage = Stage.BACKPACKS_CRATES;
+		for (IForestryPlugin plugin : loadedPlugins) {
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.STORAGE)) {
+				Log.debug("BackpacksAndCrates Start: {}", plugin);
 				plugin.registerBackpackItems();
 				plugin.registerCrates();
+				Log.debug("BackpacksAndCrates Complete: {}", plugin);
 			}
-			Log.debug("Pre-Init Complete: {}", plugin);
 		}
 	}
 
