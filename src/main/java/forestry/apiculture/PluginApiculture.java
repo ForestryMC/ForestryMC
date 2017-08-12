@@ -33,6 +33,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -899,6 +900,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	@Override
 	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+		if(!world.provider.getDimensionType().equals(DimensionType.THE_END)) return;
+		if (Config.getBeehivesAmount() > 0.0) {
+			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
+		}
+	}
+
+	@Override
+	public void decorateBiome(World world, Random rand, BlockPos pos) {
 		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.decorateHives(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
