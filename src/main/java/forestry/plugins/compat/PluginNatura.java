@@ -164,6 +164,15 @@ public class PluginNatura extends BlankForestryPlugin {
 		final NonNullList<ItemStack> subItems = NonNullList.create();
 		item.getSubItems(CreativeTabs.SEARCH, subItems);
 
+		// Fallback if item is not returned in sub items
+		if(subItems.isEmpty()) {
+			final ItemStack itemStack = new ItemStack(item, 1);
+			final String subItemName = itemStack.getUnlocalizedName();
+			Log.info("[PluginNatura] Adding '{}' to list of {}", subItemName, groupName);
+			consumer.accept(itemStack);
+			return;
+		}
+
 		subItems.forEach(itemStack -> {
 			final String subItemName = itemStack.getUnlocalizedName();
 			Log.info("[PluginNatura] Adding '{}' to list of {}", subItemName, groupName);
@@ -204,7 +213,7 @@ public class PluginNatura extends BlankForestryPlugin {
 				Log.info("[PluginNatura] Addding crop '{}'", itemStack);
 				if(seedItem == null) return;
 
-				Farmables.farmables.get("farmWheat").add(
+				FarmRegistry.getInstance().registerFarmables("farmWheat",
 					new FarmableAgingCrop(
 						seedItem,
 						block,
