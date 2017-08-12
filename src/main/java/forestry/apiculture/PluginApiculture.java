@@ -909,7 +909,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 	@Override
 	public void decorateBiome(World world, Random rand, BlockPos pos) {
 		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.decorateHives(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
+			int chunkX = pos.getX() >> 4;
+			int chunkZ = pos.getZ() >> 4;
+			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
 	}
 

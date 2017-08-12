@@ -24,9 +24,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.INbtReadable;
@@ -38,7 +35,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
-	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
+	private InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
 	private List<IRecipe> recipes = new ArrayList<>();
 	private int selectedRecipe;
 	private long lastUsed;
@@ -59,6 +56,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 
 	public InventoryCraftingForestry getCraftMatrix() {
 		return craftMatrix;
+	}
+	
+	public void setCraftMatrix(InventoryCraftingForestry craftMatrix) {
+		this.craftMatrix = craftMatrix;
 	}
 
 	public void incrementRecipe() {

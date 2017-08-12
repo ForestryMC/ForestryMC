@@ -1,5 +1,8 @@
 package forestry.farming;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,11 +11,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmLogic;
@@ -24,9 +29,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmLogicSimple;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.OreDictionary;
 
 public final class FarmRegistry implements IFarmRegistry {
 
@@ -90,7 +92,11 @@ public final class FarmRegistry implements IFarmRegistry {
 			try {
 				String fertilizer = fertilizerList[i];
 				String[] fertilizers = fertilizer.split(";");
-				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(fertilizers[0], OreDictionary.WILDCARD_VALUE);
+				String itemName = fertilizers[0];
+				if(itemName.equals("forestry:fertilizerCompound")){
+					itemName = "forestry:fertilizer_compound";
+				}
+				ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
 				int fertilizerValue = Integer.parseInt(fertilizers[1]);
 				registerFertilizer(fertilizerItem, fertilizerValue);
 			} catch (Exception e) {

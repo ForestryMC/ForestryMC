@@ -23,7 +23,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -150,14 +149,13 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 		NonNullList<ItemStack> inventoryStacks = InventoryUtil.getStacks(this);
-		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventoryStacks, world, selectedRecipe);
+		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(currentRecipe.getCraftMatrix(), inventoryStacks, world, selectedRecipe);
 		if (crafting == null) {
 			return false;
 		}
-
-		recipeItems = InventoryUtil.getStacks(crafting);
+		
+		NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(crafting);
 
 		IInventory inventory;
 		if (simulate) {
@@ -167,15 +165,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			inventory = this;
 		}
 
-		// craft recipe should exactly match ingredients here, so no oreDict or tool matching
-		NonNullList<ItemStack> removed = InventoryUtil.removeSets(inventory, 1, recipeItems, null, false, false, false);
-		if (removed == null) {
+		if (!InventoryUtil.deleteExactSet(inventory, recipeItems)) {
 			return false;
 		}
 
 		if (!simulate) {
 			// update crafting display to match the ingredients that were actually used
-			setCraftingDisplay(crafting);
+			currentRecipe.setCraftMatrix(crafting);
+			setCurrentRecipe(currentRecipe);
 		}
 
 		return true;
@@ -184,13 +181,16 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	@Override
 	public void onCraftingComplete(EntityPlayer player) {
 		Preconditions.checkState(currentRecipe != null);
-
+		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
+		Preconditions.checkState(selectedRecipe != null);
+		
 		ForgeHooks.setCraftingPlayer(player);
-		NonNullList<ItemStack> remainingItems = CraftingManager.getRemainingItems(currentRecipe.getCraftMatrix(), player.world);
+		InventoryCraftingForestry craftMatrix = currentRecipe.getCraftMatrix();
+		NonNullList<ItemStack> remainingItems = selectedRecipe.getRemainingItems(craftMatrix.copy());
 		ForgeHooks.setCraftingPlayer(null);
 
 		for (ItemStack remainingItem : remainingItems) {
-			if (remainingItem != null) {
+			if (remainingItem != null && !remainingItem.isEmpty()) {
 				if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
 					player.dropItem(remainingItem, false);
 				}

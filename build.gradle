@@ -5,15 +5,17 @@ buildscript {
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.47"
 	}
 }
 
 plugins {
 	id "com.matthewprenger.cursegradle" version "1.0.9"
-	id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.32"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
@@ -149,17 +151,7 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	untaggedName = "Current release ${project.version}"
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef =  "HEAD"
-	templateContent = """
-Please help the Forestry project by <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a><br/>
-{{#tags}}
-  <h3>{{name}}</h3>
-  <ul>
-    {{#commits}}
-    <li>{{{message}}} - {{authorName}}</li>
-    {{/commits}}
-  </ul>
-{{/tags}}
-"""
+	templateContent = file('changelog.mustache').getText('UTF-8')
 }
 
 curseforge {
@@ -168,7 +160,7 @@ curseforge {
 		id = '59751'
 		changelog = file('changelog.html')
 		changelogType = 'html'
-		releaseType = 'alpha'
+		releaseType = 'beta'
 	}
 }
 
