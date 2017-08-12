@@ -140,6 +140,14 @@ public abstract class BlockForestryLog<T extends Enum<T> & IWoodType> extends Bl
 		return woodType.getHardness();
 	}
 
+	@Override
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
+		ItemStack silkTouchDrop = super.getSilkTouchDrop(state);
+		int damage = this.damageDropped(state);
+		silkTouchDrop.setItemDamage(damage);
+		return silkTouchDrop;
+	}
+
 	/* PROPERTIES */
 	@Override
 	public final int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
