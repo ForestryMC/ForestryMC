@@ -137,7 +137,7 @@ public abstract class RecipeUtil {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy)
 		{
-			if (stockStack != null)
+			if (stockStack != null && stockStack.stackSize > 0)
 			{
 				ItemStack singleStockStack = ItemStackUtil.createCopyWithCount(stockStack, 1);
 				crafting.setInventorySlotContents(slot, singleStockStack);
