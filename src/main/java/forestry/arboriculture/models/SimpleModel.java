@@ -47,28 +47,35 @@ public class SimpleModel implements IModel {
 	private static final ModelResourceLocation MISSING = new ModelResourceLocation("builtin/missing", "missing");
 
 	private final List<Variant> variants;
-	private final List<ResourceLocation> locations = new ArrayList<>();
-	private final Set<ResourceLocation> textures = Sets.newHashSet();
-	private final List<IModel> models = new ArrayList<>();
+	private final ImmutableList<ResourceLocation> locations;
+	private final ImmutableSet<ResourceLocation> textures;
+	private final ImmutableList<IModel> models;
 	private final IModelState defaultState;
 
 	public SimpleModel(List<ResourceLocation> locations, List<IModel> models, List<Variant> variants,
 					   IModelState defaultState) {
-		this.locations.addAll(locations);
-		this.models.addAll(models);
 		this.variants = variants;
+		this.locations = ImmutableList.copyOf(locations);
+		this.models = ImmutableList.copyOf(models);
 		this.defaultState = defaultState;
+
+		ImmutableSet.Builder<ResourceLocation> texturesBuilder = ImmutableSet.builder();
 		for (IModel model : models) {
-			textures.addAll(model.getTextures());
+			texturesBuilder.addAll(model.getTextures());
 		}
+		textures = texturesBuilder.build();
 	}
 
 	public SimpleModel(ResourceLocation parent, VariantList variants) throws Exception {
 		this.variants = variants.getVariantList();
 		ImmutableList.Builder<Pair<IModel, IModelState>> builder = ImmutableList.builder();
+		ImmutableList.Builder<IModel> modelsBuilder = ImmutableList.builder();
+		ImmutableList.Builder<ResourceLocation> locationsBuilder = ImmutableList.builder();
+		ImmutableSet.Builder<ResourceLocation> texturesBuilder = ImmutableSet.builder();
+
 		for (Variant variant : this.variants) {
 			ResourceLocation loc = variant.getModelLocation();
-			locations.add(loc);
+			locationsBuilder.add(loc);
 
 			IModel model;
 			if (loc.equals(MISSING)) {
@@ -81,19 +88,23 @@ public class SimpleModel implements IModel {
 			for (ResourceLocation location : model.getDependencies()) {
 				ModelLoaderRegistry.getModelOrMissing(location);
 			}
-			textures.addAll(model.getTextures());
+			texturesBuilder.addAll(model.getTextures());
 
-			models.add(model);
+			modelsBuilder.add(model);
 			builder.add(Pair.of(model, variant.getState()));
 		}
 
-		if (models.size() == 0) {
+		if (this.variants.size() == 0) {
 			IModel missing = ModelLoaderRegistry.getMissingModel();
-			models.add(missing);
+			modelsBuilder.add(missing);
 			builder.add(Pair.of(missing, TRSRTransformation.identity()));
 		}
 
 		defaultState = new MultiModelState(builder.build());
+
+		locations = locationsBuilder.build();
+		models = modelsBuilder.build();
+		textures = texturesBuilder.build();
 	}
 
 	@Override
@@ -129,6 +140,7 @@ public class SimpleModel implements IModel {
 
 	@Override
 	public IModel retexture(ImmutableMap<String, String> textures) {
+		List<ResourceLocation> locations = new ArrayList<>();
 		List<IModel> models = new ArrayList<>();
 		ImmutableList.Builder<Pair<IModel, IModelState>> builder = ImmutableList.builder();
 		for (Variant variant : this.variants) {
