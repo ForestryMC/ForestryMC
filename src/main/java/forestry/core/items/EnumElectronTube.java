@@ -26,7 +26,8 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	EMERALD(new Color(0x00CC41)),
 	APATITE(new Color(0x579CD9)),
 	LAPIS(new Color(0x1c57c6)),
-	ENDER(new Color(0x33adad), new Color(0x255661));
+	ENDER(new Color(0x33adad), new Color(0x255661)),
+	ORCHID(new Color(0x820208), new Color(0xc64f3f));
 
 	public static final EnumElectronTube[] VALUES = values();
 
