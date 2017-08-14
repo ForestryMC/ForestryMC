@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -51,7 +52,7 @@ public class WidgetCamouflageSlot extends Widget {
 				toolTip.add(TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
 			} else {
 				Minecraft minecraft = Minecraft.getMinecraft();
-				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.player, minecraft.gameSettings.advancedItemTooltips));
+				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
 			}
 		}
 	};

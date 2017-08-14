@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
@@ -107,7 +107,7 @@ public class ImmutableClimateState implements IClimateState, INbtWritable{
 	
     @Override
 	public String toString() {
-        return Objects.toStringHelper(this).add("temperature", temperature).add("humidity", humidity).toString();
+        return MoreObjects.toStringHelper(this).add("temperature", temperature).add("humidity", humidity).toString();
     }
 
 }

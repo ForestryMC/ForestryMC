@@ -48,7 +48,7 @@ public class Table {
 	}
 
 	public void draw(int x, int y, int fontColor, boolean drawBackground){
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		int lineWidth = getLineWidth();
 		int lineStart = x + 2;
 		int lineEnd = lineStart + lineWidth;
@@ -66,7 +66,7 @@ public class Table {
 	}
 
 	public int getHeight() {
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		int height = 0;
 		for (TableEntry entry : lines) {
 			height += entry.getHeight(fontRenderer);
@@ -75,7 +75,7 @@ public class Table {
 	}
 
 	public int getLineWidth() {
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		int lineWidth = 0;
 		
 		for (TableEntry entry : lines) {

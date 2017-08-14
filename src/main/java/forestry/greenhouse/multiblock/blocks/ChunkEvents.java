@@ -59,7 +59,7 @@ public class ChunkEvents {
 		Chunk chunk = event.getChunk();
 		World world = event.getWorld();
 		GreenhouseBlockManager manager = GreenhouseBlockManager.getInstance();
-		manager.loadChunk(world, chunk.xPosition, chunk.zPosition);
+		manager.loadChunk(world, chunk.x, chunk.z);
 	}
 
 	@SubscribeEvent
@@ -67,7 +67,7 @@ public class ChunkEvents {
 		Chunk chunk = event.getChunk();
 		World world = event.getWorld();
 		GreenhouseBlockManager manager = GreenhouseBlockManager.getInstance();
-		manager.unloadChunk(world, chunk.xPosition, chunk.zPosition);
+		manager.unloadChunk(world, chunk.x, chunk.z);
 	}
 
 	@SubscribeEvent

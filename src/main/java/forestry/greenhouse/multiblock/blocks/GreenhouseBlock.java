@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock.blocks;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -98,6 +98,6 @@ public abstract class GreenhouseBlock<P extends IGreenhouseBlock> implements IGr
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).add("x", pos.getX()).add("y", pos.getY()).add("z", pos.getZ()).toString();
+		return MoreObjects.toStringHelper(this).add("x", pos.getX()).add("y", pos.getY()).add("z", pos.getZ()).toString();
 	}
 }

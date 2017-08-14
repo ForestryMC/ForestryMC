@@ -60,26 +60,6 @@ import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
-import forestry.api.core.IModelManager;
-import forestry.api.storage.BackpackStowEvent;
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.gui.GuiHandler;
-import forestry.core.inventory.ItemHandlerInventoryManipulator;
-import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.StandardStackFilters;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemWithGui;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Translator;
-import forestry.storage.BackpackMode;
-import forestry.storage.gui.ContainerBackpack;
-import forestry.storage.gui.GuiBackpack;
-import forestry.storage.gui.GuiBackpackT2;
-import forestry.storage.inventory.ItemInventoryBackpack;
-
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;

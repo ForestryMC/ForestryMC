@@ -26,14 +26,15 @@ public class GuiTextFieldAdvanced extends GuiTextField {
 	}
 
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+	public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		boolean wasFocused = isFocused();
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+		boolean clicked = super.mouseClicked(mouseX, mouseY, mouseButton);
 		if (wasFocused && !isFocused()) {
 			if (listener != null) {
 				setText(listener.parseValue(getText()));
 			}
 		}
+		return clicked;
 	}
 
 	public interface ITextFieldListener {

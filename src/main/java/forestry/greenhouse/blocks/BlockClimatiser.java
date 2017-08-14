@@ -25,6 +25,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -147,10 +148,9 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < BlockClimatiserType.VALUES.length; i++) {
-			list.add(new ItemStack(itemIn, 1, i));
+			list.add(new ItemStack(this, 1, i));
 		}
 	}
 
@@ -161,11 +161,11 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 		if (GuiScreen.isShiftKeyDown()) {
 			tooltip.add(TextFormatting.GREEN.toString() + TextFormatting.ITALIC.toString() + Translator.translateToLocal("tile.for.greenhouse.camouflage.tooltip"));
 		} else {
-			ItemTooltipUtil.addShiftInformation(stack, player, tooltip, advanced);
+			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}
 

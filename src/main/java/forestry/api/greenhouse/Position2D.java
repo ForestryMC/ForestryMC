@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -117,6 +117,6 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
+		return MoreObjects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
 	}
 }

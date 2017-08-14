@@ -18,7 +18,6 @@ import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.ModelProcessingHelper;
 import net.minecraftforge.client.model.ModelStateComposition;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -99,7 +98,7 @@ public class ModelGreenhouseWindow extends ModelBlockCustomCached<BlockGreenhous
 		} else if (facing == EnumFacing.NORTH) {
 			state = new ModelStateComposition(state, ModelRotation.X0_Y180);
 		}
-		IModel retexturedModel = ModelProcessingHelper.retexture(model, textures.build());
+		IModel retexturedModel = model.retexture(textures.build());
 		return retexturedModel.bake(state, key.inventory ? DefaultVertexFormats.ITEM : DefaultVertexFormats.BLOCK, DefaultTextureGetter.INSTANCE);
 	}
 

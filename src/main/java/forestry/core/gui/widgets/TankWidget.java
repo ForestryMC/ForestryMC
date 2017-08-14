@@ -29,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,7 +38,6 @@ import forestry.core.fluids.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.farming.gui.ContainerFarm;
-import forestry.greenhouse.gui.ContainerGreenhouse;
 
 /**
  * Slot for liquid tanks
@@ -69,8 +69,6 @@ public class TankWidget extends Widget {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
-		} else if (container instanceof ContainerGreenhouse) {
-			return ((ContainerGreenhouse) container).getTank(slot);
 		}
 		return null;
 	}

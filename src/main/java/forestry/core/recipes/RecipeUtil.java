@@ -25,9 +25,10 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
@@ -39,8 +40,24 @@ import forestry.factory.inventory.InventoryCraftingForestry;
 public abstract class RecipeUtil {
 	
 	// TODO use json recipes
-	
+
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
+		if (RecipeManagers.fermenterManager == null) {
+			return;
+		}
+
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+		}
+
+		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+		}
+	}
+
+	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}

@@ -64,7 +64,7 @@ public class WidgetClimatePanel extends Widget {
 		this.type = type;
 		this.gui = gui;
 		int textFieldLength = 50;
-		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRendererObj, xPos + width / 2 - textFieldLength / 2, yPos + 14, textFieldLength, 10);
+		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRenderer, xPos + width / 2 - textFieldLength / 2, yPos + 14, textFieldLength, 10);
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
 		textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
@@ -79,9 +79,9 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(gui.textureFile);
-		gui.drawTexturedModalRect(startX + textField.xPosition - 2, startY + textField.yPosition - 2, 204, 115, 52, 12);
+		gui.drawTexturedModalRect(startX + textField.x - 2, startY + textField.y - 2, 204, 115, 52, 12);
 
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		String title = Translator.translateToLocal("for.gui." + type.getName());
 		fontRenderer.drawString(title, xPos + startX + width / 2 - fontRenderer.getStringWidth(title) / 2, startY + yPos + 2, ColourProperties.INSTANCE.get("gui.greenhouse." + type.getName() + ".header"));
 

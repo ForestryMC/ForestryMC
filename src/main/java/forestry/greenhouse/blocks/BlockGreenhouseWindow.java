@@ -196,7 +196,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (String glass : GreenhouseManager.greenhouseHelper.getWindowGlasses()) {
 			list.add(getItem(glass));
 		}
