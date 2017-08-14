@@ -51,8 +51,10 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		LeafDecayHelper.leafDecay(this, world, pos);
 	}
 
+	@Override
 	public abstract int getMetaFromState(IBlockState state);
 
+	@Override
 	public abstract IBlockState getStateFromMeta(int meta);
 
 	@Override
@@ -184,7 +186,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
 		this.drops.set(drops);
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> ret = this.drops.get();
@@ -196,6 +198,6 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
 		}
 	}
-	
+
 	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
 }

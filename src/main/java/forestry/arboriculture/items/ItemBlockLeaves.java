@@ -12,7 +12,6 @@ package forestry.arboriculture.items;
 
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;

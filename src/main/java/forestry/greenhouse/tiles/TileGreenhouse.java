@@ -10,57 +10,53 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
-import forestry.api.core.CamouflageManager;
-import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedTile;
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.packets.CamouflageSelectionType;
-import forestry.core.network.packets.PacketCamouflageSelectServer;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.tiles.ITitled;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.greenhouse.blocks.BlockGreenhouse;
-import forestry.greenhouse.blocks.BlockGreenhouseDoor;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
-import forestry.greenhouse.gui.ContainerGreenhouse;
-import forestry.greenhouse.gui.GuiGreenhouse;
-import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled, ICamouflageHandler, ICamouflagedTile {
+import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.ImmutableClimateState;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflagedTile;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.greenhouse.IGreenhouseHousing;
+import forestry.api.greenhouse.IGreenhouseLimits;
+import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.tiles.ITitled;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.camouflage.CamouflageHandlerType;
+import forestry.greenhouse.gui.ContainerGreenhouse;
+import forestry.greenhouse.gui.GuiGreenhouse;
+import forestry.greenhouse.multiblock.GreenhouseController;
+import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
+import forestry.greenhouse.network.packets.PacketCamouflageSelectionServer;
+
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IGreenhouseHousing, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled, ICamouflageHandler, ICamouflagedTile {
 	protected ItemStack camouflageBlock;
 
-	protected TileGreenhouse() {
+	public TileGreenhouse() {
 		super(new MultiblockLogicGreenhouse());
-		camouflageBlock = ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-		if (newSate.getBlock() instanceof BlockGreenhouseDoor && oldState.getBlock() instanceof BlockGreenhouseDoor) {
-			return false;
-		}
-		return super.shouldRefresh(world, pos, oldState, newSate);
+		camouflageBlock = getDefaultCamouflageBlock();
 	}
 
 	@Override
@@ -75,13 +71,32 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		markDirty();
 	}
 
+	/* TILEFORESTRY */
+	@Override
+	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+		super.encodeDescriptionPacket(packetData);
+		if (!camouflageBlock.isEmpty()) {
+			NBTTagCompound nbtTag = new NBTTagCompound();
+			camouflageBlock.writeToNBT(nbtTag);
+			packetData.setTag("Camouflage", nbtTag);
+		}
+	}
+
+	@Override
+	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
+		super.decodeDescriptionPacket(packetData);
+		if (packetData.hasKey("Camouflage")) {
+			setCamouflageBlock(new ItemStack(packetData.getCompoundTag("Camouflage")), true);
+		}
+	}
+
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 
-		if (data.hasKey("CamouflageBlock")) {
-			camouflageBlock = new ItemStack(data.getCompoundTag("CamouflageBlock"));
+		if (data.hasKey("Camouflage")) {
+			camouflageBlock = new ItemStack(data.getCompoundTag("Camouflage"));
 		}
 	}
 
@@ -91,59 +106,34 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		if (!camouflageBlock.isEmpty()) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
-			data.setTag("CamouflageBlock", nbtTag);
+			data.setTag("Camouflage", nbtTag);
 		}
 		return data;
 	}
 
+	@Override
+	public ItemStack getCamouflageBlock() {
+		return camouflageBlock;
+	}
+
+	@Override
+	public ItemStack getDefaultCamouflageBlock() {
+		return GreenhouseController.createDefaultCamouflageBlock();
+	}
+
 	/* ICamouflageHandler */
 	@Override
-	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
+	public boolean setCamouflageBlock(ItemStack camouflageBlock, boolean sendClientUpdate) {
 		if (!ItemStackUtil.isIdenticalItem(camouflageBlock, this.camouflageBlock)) {
 			this.camouflageBlock = camouflageBlock;
 
 			if (sendClientUpdate && world != null && world.isRemote) {
-				NetworkUtil.sendToServer(new PacketCamouflageSelectServer(this, type, CamouflageSelectionType.TILE));
+				NetworkUtil.sendToServer(new PacketCamouflageSelectionServer(this, CamouflageHandlerType.TILE));
 				world.markBlockRangeForRenderUpdate(pos, pos);
 			}
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public boolean canHandleType(String type) {
-		return type.equals(getCamouflageType());
-	}
-
-	@Override
-	public ItemStack getCamouflageBlock(String type) {
-		return camouflageBlock;
-	}
-
-	@Override
-	public ItemStack getDefaultCamouflageBlock(String type) {
-		return ItemStack.EMPTY;
-	}
-
-	/* TILEFORESTRY */
-
-	@Override
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
-		super.encodeDescriptionPacket(packetData);
-		if (!camouflageBlock.isEmpty()) {
-			NBTTagCompound nbtTag = new NBTTagCompound();
-			camouflageBlock.writeToNBT(nbtTag);
-			packetData.setTag("CamouflageBlock", nbtTag);
-		}
-	}
-
-	@Override
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
-		super.decodeDescriptionPacket(packetData);
-		if (packetData.hasKey("CamouflageBlock")) {
-			setCamouflageBlock(getCamouflageType(), new ItemStack(packetData.getCompoundTag("CamouflageBlock")), true);
-		}
 	}
 
 	/* IErrorLogicSource */
@@ -188,20 +178,56 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		return new ContainerGreenhouse(player.inventory, this);
 	}
 	
-	/* ICamouflagedTile */
+	/* IGreenhouseHousing */
+
 	@Override
-	public String getCamouflageType() {
-		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			return CamouflageManager.GLASS;
-		} else if (((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.DOOR) {
-			return CamouflageManager.DOOR;
-		}
-		return CamouflageManager.BLOCK;
+	public IClimateContainer getClimateContainer() {
+		return getMultiblockLogic().getController().getClimateContainer();
 	}
 
 	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return getMultiblockLogic().getController().getInternalInventory();
+	public int getSize() {
+		return getMultiblockLogic().getController().getSize();
 	}
 
+	@Override
+	public void onUpdateClimate() {
+		getMultiblockLogic().getController().onUpdateClimate();
+	}
+
+	@Override
+	public ImmutableClimateState getDefaultClimate() {
+		return getMultiblockLogic().getController().getDefaultClimate();
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return getMultiblockLogic().getController().getTemperature();
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return getMultiblockLogic().getController().getHumidity();
+	}
+
+	@Override
+	public float getExactTemperature() {
+		return getMultiblockLogic().getController().getExactTemperature();
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return getMultiblockLogic().getController().getExactHumidity();
+	}
+
+	@Override
+	public IGreenhouseProvider getProvider() {
+		return getMultiblockLogic().getController().getProvider();
+	}
+
+	@Nullable
+	@Override
+	public IGreenhouseLimits getLimits() {
+		return getMultiblockLogic().getController().getLimits();
+	}
 }

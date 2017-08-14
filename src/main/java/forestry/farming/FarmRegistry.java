@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
@@ -35,10 +34,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
-
-	static {
-		ForestryAPI.farmRegistry = INSTANCE;
-	}
 
 	public static FarmRegistry getInstance() {
 		return INSTANCE;

@@ -26,6 +26,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -40,11 +41,13 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -60,7 +63,6 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
@@ -218,14 +220,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
-
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerArbDoor());
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
-		TreeManager.pileWalls.add(new CharcoalPileWall(PluginArboriculture.getBlocks().loam, 5));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 4));
 	}
 
 	@Override
@@ -275,6 +269,18 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(5, 20), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
 			);
 		}
+	}
+
+	@Override
+	public void postInit() {
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
+		TreeManager.pileWalls.add(new CharcoalPileWall(PluginArboriculture.getBlocks().loam, 4));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.GRAVEL, 1));
+		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 3));
+		TreeManager.pileWalls.add(new CharcoalPileWall(PluginCore.getBlocks().ashBrick, 5));
 	}
 
 	@Override
@@ -459,9 +465,19 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		//Wood Pile
 		RecipeUtil.addShapelessRecipe("wood_pile", new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
+		RecipeUtil.addShapelessRecipe("wood_pile_decorative", new ItemStack(blocks.woodPile), blocks.woodPileDecorative);
+		RecipeUtil.addShapelessRecipe("decorative_wood_pile", new ItemStack(blocks.woodPileDecorative), blocks.woodPile);
+
+		//Charcoal
+		RecipeUtil.addRecipe("charcoal_block", blocks.charcoal,
+			"###",
+			"###",
+			"###",
+			'#', new ItemStack(Items.COAL, 1, 1));
+		RecipeUtil.addShapelessRecipe("charcoal", new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe("loam", new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
+		RecipeUtil.addShapelessRecipe("loam", new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.fertilizerBio, Items.CLAY_BALL);
 	}
 
 	private static void registerAlleles() {

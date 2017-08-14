@@ -35,9 +35,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.items.IItemHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
+
+import forestry.api.core.IModelManager;
+import forestry.api.storage.BackpackStowEvent;
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.gui.GuiHandler;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.StandardStackFilters;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemWithGui;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Translator;
+import forestry.storage.BackpackMode;
+import forestry.storage.gui.ContainerBackpack;
+import forestry.storage.gui.GuiBackpack;
+import forestry.storage.gui.GuiBackpackT2;
+import forestry.storage.inventory.ItemInventoryBackpack;
 
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
@@ -201,10 +222,6 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
-
-		if (type == EnumBackpackType.WOVEN) {
-			list.add(Translator.translateToLocalFormatted("item.for.bag.woven.tooltip"));
-		}
 
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 

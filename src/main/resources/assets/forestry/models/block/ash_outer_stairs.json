@@ -1,0 +1,8 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "forestry:blocks/ash_brick",
+        "top": "forestry:blocks/ash_brick",
+        "side": "forestry:blocks/ash_brick"
+    }
+}

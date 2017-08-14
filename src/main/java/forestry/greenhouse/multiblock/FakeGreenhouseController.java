@@ -10,24 +10,20 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import forestry.api.climate.IClimateInfo;
-import forestry.api.climate.IClimateRegion;
-import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.multiblock.IGreenhouseComponent.Nursery;
-import forestry.api.multiblock.IGreenhouseComponent.Listener;
-import forestry.core.climate.ClimateInfo;
-import forestry.core.fluids.FakeTankManager;
-import forestry.core.fluids.ITankManager;
-import forestry.core.inventory.FakeInventoryAdapter;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.multiblock.FakeMultiblockController;
-import forestry.energy.EnergyManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+
+import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.ImmutableClimateState;
+import forestry.api.greenhouse.IGreenhouseLimits;
+import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.api.multiblock.IGreenhouseComponent.Listener;
+import forestry.core.multiblock.FakeMultiblockController;
+import forestry.energy.EnergyManager;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -36,68 +32,8 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return FakeInventoryAdapter.instance();
-	}
-
-	@Override
-	public ITankManager getTankManager() {
-		return FakeTankManager.instance;
-	}
-
-	@Override
 	public EnergyManager getEnergyManager() {
 		return null;
-	}
-
-	@Override
-	public ItemStack getCamouflageBlock(String type) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public ItemStack getDefaultCamouflageBlock(String type) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean setCamouflageBlock(String type, ItemStack camouflageBlock, boolean sendClientUpdate) {
-		return false;
-	}
-
-	@Override
-	public boolean canHandleType(String type) {
-		return false;
-	}
-
-	@Override
-	public BlockPos getCoordinates() {
-		return BlockPos.ORIGIN;
-	}
-
-	@Override
-	public Set<IInternalBlock> getInternalBlocks() {
-		return Collections.emptySet();
-	}
-
-	@Override
-	public String getUnlocalizedType() {
-		return "for.multiblock.greenhouse.type";
-	}
-
-	@Override
-	public IClimateRegion getRegion() {
-		return null;
-	}
-
-	@Override
-	public Set<Listener> getListenerComponents() {
-		return Collections.emptySet();
-	}
-	
-	@Override
-	public Set<Nursery> getButterflyNurserys() {
-		return Collections.emptySet();
 	}
 
 	@Override
@@ -106,22 +42,72 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public IClimateInfo getControlClimate() {
-		return ClimateInfo.MAX;
+	public Set<Listener> getListenerComponents() {
+		return Collections.emptySet();
 	}
-	
+
 	@Override
-	public void setControlClimate(IClimateInfo climateControl) {
-		
+	public ItemStack getCamouflageBlock() {
+		return ItemStack.EMPTY;
 	}
-	
+
 	@Override
-	public boolean spawnButterfly(Nursery nursery) {
+	public ItemStack getDefaultCamouflageBlock() {
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public boolean setCamouflageBlock(ItemStack camouflageBlock, boolean sendClientUpdate) {
 		return false;
 	}
 
 	@Override
-	public boolean spawnButterfly(IButterfly butterfly) {
-		return false;
+	public String getUnlocalizedType() {
+		return GreenhouseController.TYPE;
+	}
+
+	@Override
+	public IClimateContainer getClimateContainer() {
+		return null;
+	}
+
+	@Override
+	public int getSize() {
+		return 0;
+	}
+
+	@Override
+	public void onUpdateClimate() {
+	}
+
+	@Override
+	public ImmutableClimateState getDefaultClimate() {
+		return null;
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return BlockPos.ORIGIN;
+	}
+
+	@Override
+	public IGreenhouseProvider getProvider() {
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public IGreenhouseLimits getLimits() {
+		return null;
+	}
+
+	@Override
+	public BlockPos getCenterCoordinates() {
+		return null;
+	}
+
+	@Override
+	public void setCenterCoordinates(BlockPos cordinates) {
+
 	}
 }

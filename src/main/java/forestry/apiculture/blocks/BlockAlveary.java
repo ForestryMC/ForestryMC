@@ -22,9 +22,11 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,6 +39,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
 
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
@@ -56,6 +65,7 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
@@ -263,6 +273,10 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(Translator.translateToLocal("tile.for.alveary.tooltip"));
+		if(GuiScreen.isShiftKeyDown()){
+			tooltip.add(Translator.translateToLocal("tile.for.alveary.tooltip"));
+		}else{
+			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, advanced.isAdvanced());
+		}
 	}
 }

@@ -12,37 +12,195 @@ package forestry.core.climate;
 
 import javax.annotation.Nullable;
 
-import forestry.api.climate.IClimateRegion;
+import net.minecraft.world.World;
+
+import forestry.api.climate.ClimateChange;
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateSource;
-import forestry.api.climate.IClimateSourceProvider;
+import forestry.api.climate.IClimateSourceOwner;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.ImmutableClimateState;
+import forestry.api.core.ForestryAPI;
 
-public abstract class ClimateSource<P extends IClimateSourceProvider> implements IClimateSource {
-	@Nullable
-	protected P provider;
-	protected final int ticksForChange;
+public abstract class ClimateSource<O extends IClimateSourceOwner> implements IClimateSource {
+	
+	protected O owner;
+	protected float change;
+	protected final float range;
+	protected final ClimateSourceType sourceType;
+	protected ClimateSourceMode temperatureMode;
+	protected ClimateSourceMode humidityMode;
+	protected IClimateContainer container;
+	protected boolean addedToManager;
+	protected boolean isActive;
 
-	public ClimateSource(int ticksForChange) {
-		this.ticksForChange = ticksForChange;
+	public ClimateSource(float change, float range, ClimateSourceType sourceType) {
+		this.change = change;
+		this.range = range;
+		this.sourceType = sourceType;
+		this.temperatureMode = ClimateSourceMode.NONE;
+		this.humidityMode = ClimateSourceMode.NONE;
 	}
-
-	public void setProvider(P provider) {
-		this.provider = provider;
+	
+	public void setHumidityMode(ClimateSourceMode humidityMode) {
+		this.humidityMode = humidityMode;
+	}
+	
+	public void setTemperatureMode(ClimateSourceMode temperatureMode) {
+		this.temperatureMode = temperatureMode;
+	}
+	
+	public void setOwner(O owner) {
+		this.owner = owner;
+	}
+	
+	@Override
+	public float getBoundaryModifier(ClimateType type, boolean boundaryUp) {
+		if(type == ClimateType.HUMIDITY){
+			if(humidityMode == ClimateSourceMode.POSITIVE && boundaryUp){
+				return getRange(ClimateType.HUMIDITY);
+			}else if(humidityMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
+				return getRange(ClimateType.HUMIDITY);
+			}
+		}else {
+			if(temperatureMode == ClimateSourceMode.POSITIVE && boundaryUp){
+				return getRange(ClimateType.TEMPERATURE);
+			}else if(temperatureMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
+				return getRange(ClimateType.TEMPERATURE);
+			}
+		}
+		return 0;
+	}
+	
+	protected float getRange(ClimateType type){
+		return range;
+	}
+	
+	protected float getChange(ClimateType type) {
+		return change;
+	}
+	
+	@Override
+	public boolean isActive() {
+		return isActive;
+	}
+	
+	@Override
+	public boolean affectClimateType(ClimateType type) {
+		return sourceType.affectClimateType(type);
 	}
 
 	@Override
-	public boolean changeClimate(int tickCount, IClimateRegion region) {
+	public IClimateSourceOwner getOwner() {
+		return owner;
+	}
+	
+	@Override
+	public void onAdded(IClimateContainer container) {
+		this.container = container;
+	}
+	
+	@Override
+	public void onRemoved(IClimateContainer container) {
+		this.container = null;
+	}
+	
+	public void update() {
+		if(!addedToManager){
+			onLoad();
+		}
+	}
+	
+	public void onLoad() {
+		World world = owner.getWorldObj();
+		if(!addedToManager && !world.isRemote) {
+			ForestryAPI.climateManager.addSource(owner);
+		}
+		
+	}
+	
+	public void invalidate() {
+		this.onChunkUnload();
+	}
+	
+	public void onChunkUnload() {
+		World world = owner.getWorldObj();
+		if(addedToManager &&!world.isRemote) {
+			ForestryAPI.climateManager.removeSource(owner);
+		}
+		
+	}
+	
+	@Override
+	public ClimateChange work(IClimateState state, ImmutableClimateState target) {
+		beforeWork();
+		ClimateSourceType validType = getValidType(state, target);
+		if(validType == null){
+			isNotValid();
+			isActive = false;
+			return ClimateChange.ORIGIN;
+		}
+		if(!canWork(state, target)){
+			isActive = false;
+			return ClimateChange.ORIGIN;
+		}
+		removeResources(state, target);
+		isActive = true;
+		return getChange(validType, state, target);
+	}
+	
+	protected void isNotValid(){
+		
+	}
+	
+	protected void beforeWork(){
+	}
+	
+	/**
+	 * @param state the {@link IClimateState} that the source has to work on.
+	 * @param target the by the {@link IClimateContainer} targeted {@link IClimateState}.
+	 * 
+	 * @return true if the source can work, false if it can not.
+	 */
+	protected abstract boolean canWork(IClimateState state, ImmutableClimateState target);
+	
+	protected abstract void removeResources(IClimateState state, ImmutableClimateState target);
+	
+	protected abstract ClimateChange getChange(ClimateSourceType type, IClimateState state, ImmutableClimateState target);
+	
+	@Nullable
+	private ClimateSourceType getValidType(IClimateState state, ImmutableClimateState target){
+		boolean canChangeHumidity = false;
+		boolean canChangeTemperature = false;
+		if(sourceType.canChangeHumidity()){
+			if(canChange(state.getHumidity(), target.getHumidity(), humidityMode)){
+				canChangeHumidity = true;
+			}
+		}
+		if(sourceType.canChangeTemperature()){
+			if(canChange(state.getTemperature(), target.getTemperature(), temperatureMode)){
+				canChangeTemperature = true;
+			}
+		}
+		if(canChangeHumidity){
+			if(canChangeTemperature){
+				return ClimateSourceType.BOTH;
+			}
+			return ClimateSourceType.HUMIDITY;
+		}else if(canChangeTemperature){
+			return ClimateSourceType.TEMPERATURE;
+		}
+		return null;
+	}
+	
+	private boolean canChange(float value, float target, ClimateSourceMode mode){
+		if(mode == ClimateSourceMode.POSITIVE && value < target){
+			return true;
+		}else if(mode == ClimateSourceMode.NEGATIVE && value > target){
+			return true;
+		}
 		return false;
-	}
-
-	@Override
-	public int getTicksForChange(IClimateRegion region) {
-		return ticksForChange;
-	}
-
-	@Override
-	@Nullable
-	public IClimateSourceProvider getProvider() {
-		return provider;
 	}
 
 }

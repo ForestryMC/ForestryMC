@@ -13,10 +13,6 @@ package forestry.core.render;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ITextureManager;
-import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,8 +20,14 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ITextureManager;
+import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
 public class TextureManagerForestry implements ITextureManager {
@@ -53,7 +55,7 @@ public class TextureManagerForestry implements ITextureManager {
 	public static void initDefaultSprites() {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
-				"misc/access.shared", "misc/energy", "misc/hint",
+				"misc/access.shared", "misc/energy", "misc/hint", "misc/humidity",  "misc/temperature",
 				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
 				"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
 				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",

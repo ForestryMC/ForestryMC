@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.IFarmHousing;
-import forestry.farming.FarmRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
+import forestry.api.core.ForestryAPI;
+import forestry.api.farming.IFarmHousing;
+
 public class FarmLogicMushroom extends FarmLogicArboreal {
 
 	public FarmLogicMushroom() {
-		super(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmShroom"));
+		super(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState(), ForestryAPI.farmRegistry.getFarmables("farmShroom"));
 		addSoil(new ItemStack(Blocks.DIRT, 1, 2), Blocks.DIRT.getStateFromMeta(2), true);
 	}
 

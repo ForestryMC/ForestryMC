@@ -23,6 +23,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
+
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -36,6 +37,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.models.ModelBlockCached;
+import forestry.core.models.ModelBlockCustomCached;
 import forestry.core.render.TextureManagerForestry;
 import forestry.plugins.PluginManager;
 
@@ -100,6 +102,7 @@ public class EventHandlerCore {
 		ErrorStateRegistry.initSprites();
 		TextureManagerForestry.initDefaultSprites();
 		ModelBlockCached.clear();
+		ModelBlockCustomCached.clear();
 	}
 
 	@SubscribeEvent

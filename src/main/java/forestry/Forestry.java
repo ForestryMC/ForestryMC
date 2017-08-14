@@ -31,7 +31,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
-import forestry.core.climate.ClimateEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -58,7 +57,8 @@ import forestry.plugins.compat.PluginIC2;
 		acceptedMinecraftVersions = "[1.12]",
 		dependencies = "required-after:forge@[14.21.1.2395,);"
 				+ "after:jei@[4.7.0,);"
-				+ "after:" + PluginIC2.modId + ";")
+				+ "after:" + PluginIC2.modId + ";"
+				+ "after:toughasnails;")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
@@ -91,7 +91,7 @@ public class Forestry {
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
-		MinecraftForge.EVENT_BUS.register(new ClimateEventHandler());
+		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);

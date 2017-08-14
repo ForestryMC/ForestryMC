@@ -16,6 +16,7 @@ import net.minecraftforge.event.RegistryEvent;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 @Mod.EventBusSubscriber
@@ -27,15 +28,27 @@ public class MigrationHelper {
 	static {
 		ignoredMappings.add("greenhouse.sprinkler");
 
-		itemRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
-		blockRemappings.put("greenhouse.dryer", "greenhouse.dehumidifier");
-		itemRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
-		blockRemappings.put("greenhouse.butterfly_hatch", "greenhouse.nursery");
+		itemRemappings.put("greenhouse.plain", "greenhouse");
+		blockRemappings.put("greenhouse.plain", "greenhouse");
+		itemRemappings.put("greenhouse.gearbox", "greenhouse");
+		blockRemappings.put("greenhouse.gearbox", "greenhouse");
+		itemRemappings.put("greenhouse.control", "greenhouse");
+		blockRemappings.put("greenhouse.control", "greenhouse");
+		itemRemappings.put("greenhouse.fan", "climatiser.fan");
+		blockRemappings.put("greenhouse.fan", "climatiser.fan");
+		blockRemappings.put("greenhouse.heater", "climatiser.heater");
+		itemRemappings.put("greenhouse.heater", "climatiser.heater");
+		blockRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
+		itemRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
+		blockRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
+		itemRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
+		itemRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
+		blockRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_wood", "wood_pile");
-		blockRemappings.put("pile_ash", "charcoal");
+		blockRemappings.put("pile_ash", "ash_block");
 	}
 
 	public static Pattern underscores = Pattern.compile("_");
@@ -54,12 +67,12 @@ public class MigrationHelper {
 			remappings.put(nameWithoutUnderscores, name);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
 		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
-			
+
 			String resourcePath = resourceLocation.getResourcePath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
@@ -74,12 +87,12 @@ public class MigrationHelper {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
 		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
-			
+
 			String resourcePath = resourceLocation.getResourcePath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();

@@ -26,6 +26,10 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.minecraftforge.common.config.Property;
+
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -59,6 +63,11 @@ public class Config {
 	//Humus
 	public static int humusDegradeDelimiter = 3;
 	
+	//Greenhouse
+	public static int climateSourceRange = 36;
+	public static int greenhouseSize = 4;
+	public static boolean showClimateTable = true;
+
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
@@ -80,8 +89,6 @@ public class Config {
 
 	// Performance
 	public static boolean enableBackpackResupply = true;
-	//public static int planterThrottle = 10;
-	//public static int harvesterThrottle = 200;
 
 	// Customization
 	private static boolean craftingBronzeEnabled = true;
@@ -137,17 +144,26 @@ public class Config {
 
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		loadConfigCommon(side, configCommonFile);
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.0");
+		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
-		loadConfigFluids(configFluidsFile);
+		configFluid = new LocalizedConfiguration(configFluidsFile, "1.0.0");
+		loadConfigFluids();
 
 		loadHints();
 	}
 
-	private static void loadConfigCommon(Side side, File configFileCommon) {
+	@SubscribeEvent
+	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+		if (!event.getModID().equals(Constants.MOD_ID)) {
+			return;
+		}
+		loadConfigCommon(FMLCommonHandler.instance().getSide());
+		loadConfigFluids();
+	}
 
-		configCommon = new LocalizedConfiguration(configFileCommon, "1.2.0");
+	private static void loadConfigCommon(Side side) {
 
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
@@ -219,12 +235,6 @@ public class Config {
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
 		humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
-		
-		//planterThrottle = configCommon.getIntLocalized("performance", "performance.planter", planterThrottle, 1, 2000);
-		//propThrottle.Comment = "higher numbers increase working speeds of planters but also increase cpu load.";
-
-		//harvesterThrottle = configCommon.getIntLocalized("performance", "performance.harvester", harvesterThrottle, 1, 2000);
-		//propThrottle.Comment = "higher numbers increase working speeds of harvesters but also increase cpu load.";
 
 		if (side == Side.CLIENT) {
 			mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
@@ -243,6 +253,10 @@ public class Config {
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
+		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
+		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
+		showClimateTable = configCommon.getBooleanLocalized("tweaks.greenhouse", "table", showClimateTable);
+
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
 		disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
@@ -257,9 +271,7 @@ public class Config {
 		configCommon.save();
 	}
 
-	private static void loadConfigFluids(File configFile) {
-		configFluid = new LocalizedConfiguration(configFile, "1.0.0");
-
+	private static void loadConfigFluids() {
 		for (Fluids fluid : Fluids.values()) {
 			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
 

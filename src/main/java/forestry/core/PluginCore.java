@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -31,13 +30,16 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+
 import forestry.api.circuits.ChipsetManager;
-import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
@@ -49,6 +51,7 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
+import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
@@ -62,8 +65,6 @@ import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.loot.SetSpeciesNBT;
-import forestry.core.models.ModelCamouflageSprayCan;
-import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -75,6 +76,7 @@ import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
+import forestry.core.utils.World2ObjectMap;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -122,9 +124,8 @@ public class PluginCore extends BlankForestryPlugin {
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
-		ForestryAPI.climateManager = new ClimateManager();
-
-		CamouflageManager.camouflageAccess = new CamouflageAccess();
+		ForestryAPI.climateManager = ClimateManager.getInstance();
+		ForestryAPI.climateFactory = new ClimateFactory();
 	}
 
 	@Override
@@ -140,12 +141,9 @@ public class PluginCore extends BlankForestryPlugin {
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(World2ObjectMap.class);
 
 		rootCommand.addChildCommand(new CommandPlugins());
-
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerBlock());
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
 	}
 
 	@Override
@@ -293,9 +291,6 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / WRENCH
 		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-
-		// / CAMOUFLAGE SPRAY CAN
-		RecipeUtil.addRecipe("camoflage_spray_can", items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
 		
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
@@ -441,6 +436,23 @@ public class PluginCore extends BlankForestryPlugin {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
+		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)){
+			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
+		}
+
+		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
+			"A#A",
+			"# #",
+			"A#A",
+			'#', Items.BRICK,
+			'A', OreDictUtil.DUST_ASH);
+		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
+			true,
+			"#  ",
+			"## ",
+			"###",
+			'#', Items.BRICK);
+
 		// alternate recipes
 		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
@@ -473,11 +485,7 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModels(ModelBakeEvent event) {
-		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflage_spray_can", "inventory");
-		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
-		ModelManager modelManager = ModelManager.getInstance();
-		modelManager.registerCustomModel(blockModelIndex);
-		modelManager.onBakeModels(event);
+		ModelManager.getInstance().onBakeModels(event);
 	}
 
 	@SubscribeEvent

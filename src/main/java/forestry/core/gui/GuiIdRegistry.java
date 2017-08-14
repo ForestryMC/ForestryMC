@@ -26,7 +26,6 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.items.ItemAlyzer;
-import forestry.core.items.ItemCamouflageSprayCan;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
@@ -46,7 +45,13 @@ import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
 import forestry.factory.tiles.TileWorktable;
 import forestry.farming.tiles.TileFarm;
+import forestry.greenhouse.items.ItemCamouflageSprayCan;
+import forestry.greenhouse.tiles.TileDehumidifier;
+import forestry.greenhouse.tiles.TileFan;
 import forestry.greenhouse.tiles.TileGreenhouse;
+import forestry.greenhouse.tiles.TileHeater;
+import forestry.greenhouse.tiles.TileHumidifier;
+import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.tiles.TileMailbox;
@@ -86,6 +91,11 @@ public class GuiIdRegistry {
 				TileFarm.class,
 
 				TileGreenhouse.class,
+				TileHeater.class,
+				TileFan.class,
+				TileHumidifier.class,
+				TileDehumidifier.class,
+				TileHygroregulator.class,
 
 				TileEngineBiogas.class,
 				TileEngineElectric.class,

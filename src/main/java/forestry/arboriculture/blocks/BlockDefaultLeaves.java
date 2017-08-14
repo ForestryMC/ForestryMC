@@ -113,6 +113,7 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		return i;
 	}
 
+	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, getVariant(), CHECK_DECAY, DECAYABLE);
 	}

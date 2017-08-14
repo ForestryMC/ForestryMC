@@ -434,7 +434,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return;
 		}
 
-		if (onlyUpdateWhenAssembled() && this.assemblyState != AssemblyState.Assembled) {
+		if (this.assemblyState != AssemblyState.Assembled) {
 			// Not assembled - don't run game logic
 			return;
 		}
@@ -472,7 +472,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
 	 */
 	protected abstract boolean updateServer(int tickCount);
-
+	
+	protected int getTickCount() {
+		return tickCount;
+	}
+	
 	/**
 	 * Client-side update loop. Generally, this shouldn't do anything, but if you want
 	 * to do some interpolation or something, do it here.
@@ -868,9 +872,5 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	private static boolean isInvalid(IMultiblockComponent part) {
 		return part instanceof TileEntity && ((TileEntity) part).isInvalid();
-	}
-
-	protected boolean onlyUpdateWhenAssembled() {
-		return true;
 	}
 }

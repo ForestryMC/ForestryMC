@@ -10,9 +10,13 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.fuels.FuelManager;
@@ -24,52 +28,17 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.ModUtil;
-import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
-import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.HARVESTCRAFT, name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
-public class PluginHarvestCraft extends BlankForestryPlugin {
+public class PluginHarvestCraft extends CompatPlugin {
 
 	private static final String HC = "harvestcraft";
 
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isModLoaded(HC);
-	}
-
-	@Override
-	public String getFailMessage() {
-		return "HarvestCraft not found";
-	}
-
-	@Nullable
-	private static ItemStack getItemStack(String itemName) {
-		ResourceLocation key = new ResourceLocation(HC, itemName);
-		if (ForgeRegistries.ITEMS.containsKey(key)) {
-			return new ItemStack(ForgeRegistries.ITEMS.getValue(key), 1);
-		} else {
-			return null;
-		}
-	}
-
-	@Nullable
-	private static Block getBlock(String blockName) {
-		ResourceLocation key = new ResourceLocation(HC, blockName);
-		if (ForgeRegistries.BLOCKS.containsKey(key)) {
-			return ForgeRegistries.BLOCKS.getValue(key);
-		} else {
-			return null;
-		}
+	public PluginHarvestCraft() {
+		super("HarvestCraft", HC);
 	}
 
 	@Override
@@ -206,7 +175,7 @@ public class PluginHarvestCraft extends BlankForestryPlugin {
 		genericCropsBuilder.addAll(herbs);
 		genericCropsBuilder.addAll(spices);
 
-		IFarmRegistry farmRegistry = FarmRegistry.getInstance();
+		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 		
 		ImmutableList<String> genericCrops = genericCropsBuilder.build();
 

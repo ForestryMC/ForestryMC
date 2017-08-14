@@ -10,13 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -31,11 +38,6 @@ import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbLog> logs;
@@ -71,6 +73,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	
 	public final BlockCharcoal charcoal;
 	public final BlockWoodPile woodPile;
+	public final BlockDecorativeWoodPile woodPileDecorative;
+	public final BlockAsh ash;
 	public final Block loam;
 
 	public final BlockArboriculture treeChest;
@@ -287,7 +291,19 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			}
 		};
 		registerBlock(woodPile, itemBlockWoodPile, "wood_pile");
-		
+
+		woodPileDecorative = new BlockDecorativeWoodPile();
+		ItemBlockForestry itemBlockWoodPileDecorative = new ItemBlockForestry(woodPileDecorative) {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 1200;
+			}
+		};
+		registerBlock(woodPileDecorative, itemBlockWoodPileDecorative, "wood_pile_decorative");
+
+		ash = new BlockAsh();
+		registerBlock(ash, new ItemBlockForestry(ash), "ash_block");
+
 		loam = new BlockLoam();
 		registerBlock(loam, new ItemBlockForestry(loam), "loam");
 

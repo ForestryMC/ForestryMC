@@ -17,6 +17,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,6 +40,8 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.utils.Translator;
+
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemElectronTube extends ItemOverlay {
 
@@ -57,7 +64,7 @@ public class ItemElectronTube extends ItemOverlay {
 					}
 				}
 			} else {
-				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+				ItemTooltipUtil.addShiftInformation(itemstack, world, list, flag);
 			}
 		} else {
 			list.add("<" + Translator.translateToLocal("for.gui.noeffect") + ">");

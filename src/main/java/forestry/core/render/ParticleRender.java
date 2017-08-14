@@ -159,4 +159,16 @@ public class ParticleRender {
 			effectRenderer.addEffect(particle);
 		}
 	}
+	
+	public static void addEntityBiodustFX(World world, double x, double y, double z){
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.VILLAGER_HAPPY.ordinal(), x, y, z, 0, 0, 0);
+		if (particle != null) {
+			effectRenderer.addEffect(particle);
+		}
+	}
 }

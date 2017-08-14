@@ -102,6 +102,17 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		}
 		return parent;
 	}
+	
+	@Nullable
+	protected EnumHand getHand(){
+		for (EnumHand hand : EnumHand.values()) {
+			ItemStack held = player.getHeldItem(hand);
+			if (isSameItemInventory(held, parent)) {
+				return hand;
+			}
+		}
+		return null;
+	}
 
 	private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {
 		if (base.isEmpty() || comparison.isEmpty()) {

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import forestry.core.network.packets.PacketCamouflageSelectClient;
-import forestry.core.network.packets.PacketCamouflageSelectServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
@@ -28,9 +29,7 @@ import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.network.packets.PacketUpdateClimateControl;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.core.network.packets.PacketUpdateClimate;
 
 public class PacketRegistryCore implements IPacketRegistry {
 	@Override
@@ -39,8 +38,6 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
 		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
 		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
-		PacketIdServer.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectServer.Handler());
-		PacketIdServer.CLIMATE_CONTROL_UPDATE.setPacketHandler(new PacketUpdateClimateControl.Handler());
 	}
 
 	@Override
@@ -58,6 +55,6 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdClient.FX_SIGNAL.setPacketHandler(new PacketFXSignal.Handler());
 		PacketIdClient.TANK_LEVEL_UPDATE.setPacketHandler(new PacketTankLevelUpdate.Handler());
 		PacketIdClient.GENOME_TRACKER_UPDATE.setPacketHandler(new PacketGenomeTrackerSync.Handler());
-		PacketIdClient.CAMOUFLAGE_SELECTION.setPacketHandler(new PacketCamouflageSelectClient.Handler());
+		PacketIdClient.UPDATE_CLIMATE.setPacketHandler(new PacketUpdateClimate.Handler());
 	}
 }

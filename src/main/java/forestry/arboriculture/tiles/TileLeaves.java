@@ -48,7 +48,6 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

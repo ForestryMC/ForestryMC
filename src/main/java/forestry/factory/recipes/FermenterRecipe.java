@@ -11,14 +11,20 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-import forestry.api.recipes.IFermenterRecipe;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFermenterRecipe;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
 	private final ItemStack resource;
+	private final String resourceOreName;
 	private final int fermentationValue;
 	private final float modifier;
 	private final Fluid output;
@@ -31,15 +37,37 @@ public class FermenterRecipe implements IFermenterRecipe {
 		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
 		this.resource = resource;
+		this.resourceOreName = null;
 		this.fermentationValue = fermentationValue;
 		this.modifier = modifier;
 		this.output = output;
 		this.fluidResource = fluidResource;
 	}
 
+	public FermenterRecipe(String resourceOreName, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+		Preconditions.checkNotNull(resourceOreName, "Fermenter Resource cannot be null!");
+		Preconditions.checkArgument(!resourceOreName.isEmpty(), "Fermenter Resource ore name cannot be empty!");
+		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
+		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
+
+		this.resource = ItemStack.EMPTY;
+		this.resourceOreName = resourceOreName;
+		this.fermentationValue = fermentationValue;
+		this.modifier = modifier;
+		this.output = output;
+		this.fluidResource = fluidResource;
+	}
+
+
 	@Override
 	public ItemStack getResource() {
 		return resource;
+	}
+
+	@Nullable
+	@Override
+	public String getResourceOreName() {
+		return resourceOreName;
 	}
 
 	@Override
@@ -60,5 +88,10 @@ public class FermenterRecipe implements IFermenterRecipe {
 	@Override
 	public Fluid getOutput() {
 		return output;
+	}
+
+	@Override
+	public int compareTo(IFermenterRecipe o) {
+		return resource.isEmpty() ? 1 : 0;
 	}
 }

@@ -226,9 +226,10 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
-		Biome biome = world.getBiome(new BlockPos(x, y, z));
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, new BlockPos(x, y, z));
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, new BlockPos(x, y, z)));
+		BlockPos pos = new BlockPos(x, y, z);
+		Biome biome = world.getBiome(pos);
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
 				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
 				getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());

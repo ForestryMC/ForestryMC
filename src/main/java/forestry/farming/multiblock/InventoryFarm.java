@@ -12,6 +12,16 @@ package forestry.farming.multiblock;
 
 import java.util.Stack;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmInventory;
@@ -24,15 +34,6 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.farming.FarmRegistry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;
@@ -136,8 +137,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (itemstack.isEmpty()) {
 			return false;
 		}
-		
-		return FarmRegistry.getInstance().getFertilizeValue(itemstack) > 0;
+
+		return ForestryAPI.farmRegistry.getFertilizeValue(itemstack) > 0;
 	}
 
 	@Override
@@ -213,7 +214,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return 0;
 		}
 
-		int fertilizerValue = FarmRegistry.getInstance().getFertilizeValue(fertilizerStack);
+		int fertilizerValue = ForestryAPI.farmRegistry.getFertilizeValue(fertilizerStack);
 		if(fertilizerValue > 0){
 			return fertilizerValue * FERTILIZER_MODIFIER;
 		}

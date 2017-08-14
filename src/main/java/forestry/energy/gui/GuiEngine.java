@@ -26,12 +26,6 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		this.tile = tile;
 	}
 
-	@Override
-	public void initGui() {
-		super.initGui();
-		ledgerManager.insert(new EngineLedger());
-	}
-
 	protected class EngineLedger extends Ledger {
 
 		public EngineLedger() {

@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
-import forestry.api.climate.IClimateInfo;
-import forestry.api.climate.IClimatePosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import forestry.api.climate.ClimateState;
+import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -23,11 +26,7 @@ import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
-import forestry.core.climate.ClimateRegion;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.PacketBufferForestry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class ClimateUtil implements IClimateHelper {
 
@@ -48,26 +47,9 @@ public class ClimateUtil implements IClimateHelper {
 	public boolean isWithinLimits(EnumHumidity humidity, EnumHumidity baseHumid, EnumTolerance tolHumid) {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
-	
-	public static boolean isWithinLimits(IClimateInfo minInfo, IClimateInfo maxInfo, IClimateInfo info){
-		if(0.0F != minInfo.getTemperature() && info.getTemperature() < minInfo.getTemperature()){
-			return false;
-		}
-		if(0.0F != minInfo.getHumidity() && info.getHumidity() < minInfo.getHumidity()){
-			return false;
-		}
-		if(0.0F != maxInfo.getTemperature() && info.getTemperature() > maxInfo.getTemperature()){
-			return false;
-		}
-		if(0.0F != maxInfo.getHumidity() & info.getHumidity() > maxInfo.getHumidity()){
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
-
 		ArrayList<EnumHumidity> tolerated = new ArrayList<>();
 		tolerated.add(prefered);
 
@@ -77,18 +59,18 @@ public class ClimateUtil implements IClimateHelper {
 			case BOTH_4:
 			case BOTH_3:
 			case BOTH_2:
-				if (prefered.ordinal() + 2 < EnumHumidity.values().length) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() + 2]);
+				if (prefered.ordinal() + 2 < EnumHumidity.VALUES.length) {
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() + 2]);
 				}
 				if (prefered.ordinal() - 2 >= 0) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() - 2]);
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() - 2]);
 				}
 			case BOTH_1:
-				if (prefered.ordinal() + 1 < EnumHumidity.values().length) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() + 1]);
+				if (prefered.ordinal() + 1 < EnumHumidity.VALUES.length) {
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() + 1]);
 				}
 				if (prefered.ordinal() - 1 >= 0) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() - 1]);
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() - 1]);
 				}
 				return tolerated;
 
@@ -96,12 +78,12 @@ public class ClimateUtil implements IClimateHelper {
 			case UP_4:
 			case UP_3:
 			case UP_2:
-				if (prefered.ordinal() + 2 < EnumHumidity.values().length) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() + 2]);
+				if (prefered.ordinal() + 2 < EnumHumidity.VALUES.length) {
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() + 2]);
 				}
 			case UP_1:
-				if (prefered.ordinal() + 1 < EnumHumidity.values().length) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() + 1]);
+				if (prefered.ordinal() + 1 < EnumHumidity.VALUES.length) {
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() + 1]);
 				}
 				return tolerated;
 
@@ -110,11 +92,11 @@ public class ClimateUtil implements IClimateHelper {
 			case DOWN_3:
 			case DOWN_2:
 				if (prefered.ordinal() - 2 >= 0) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() - 2]);
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() - 2]);
 				}
 			case DOWN_1:
 				if (prefered.ordinal() - 1 >= 0) {
-					tolerated.add(EnumHumidity.values()[prefered.ordinal() - 1]);
+					tolerated.add(EnumHumidity.VALUES[prefered.ordinal() - 1]);
 				}
 				return tolerated;
 
@@ -126,90 +108,89 @@ public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public ArrayList<EnumTemperature> getToleratedTemperature(EnumTemperature prefered, EnumTolerance tolerance) {
-
 		ArrayList<EnumTemperature> tolerated = new ArrayList<>();
 		tolerated.add(prefered);
 
 		switch (tolerance) {
 
 			case BOTH_5:
-				if (prefered.ordinal() + 5 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 5]);
+				if (prefered.ordinal() + 5 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 5]);
 				}
 				if (prefered.ordinal() - 5 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 5]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 5]);
 				}
 			case BOTH_4:
-				if (prefered.ordinal() + 4 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 4]);
+				if (prefered.ordinal() + 4 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 4]);
 				}
 				if (prefered.ordinal() - 4 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 4]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 4]);
 				}
 			case BOTH_3:
-				if (prefered.ordinal() + 3 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 3]);
+				if (prefered.ordinal() + 3 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 3]);
 				}
 				if (prefered.ordinal() - 3 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 3]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 3]);
 				}
 			case BOTH_2:
-				if (prefered.ordinal() + 2 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 2]);
+				if (prefered.ordinal() + 2 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 2]);
 				}
 				if (prefered.ordinal() - 2 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 2]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 2]);
 				}
 			case BOTH_1:
-				if (prefered.ordinal() + 1 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 1]);
+				if (prefered.ordinal() + 1 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 1]);
 				}
 				if (prefered.ordinal() - 1 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 1]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 1]);
 				}
 				return tolerated;
 
 			case UP_5:
-				if (prefered.ordinal() + 5 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 5]);
+				if (prefered.ordinal() + 5 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 5]);
 				}
 			case UP_4:
-				if (prefered.ordinal() + 4 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 4]);
+				if (prefered.ordinal() + 4 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 4]);
 				}
 			case UP_3:
-				if (prefered.ordinal() + 3 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 3]);
+				if (prefered.ordinal() + 3 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 3]);
 				}
 			case UP_2:
-				if (prefered.ordinal() + 2 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 2]);
+				if (prefered.ordinal() + 2 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 2]);
 				}
 			case UP_1:
-				if (prefered.ordinal() + 1 < EnumTemperature.values().length) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() + 1]);
+				if (prefered.ordinal() + 1 < EnumTemperature.VALUES.length) {
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 1]);
 				}
 				return tolerated;
 
 			case DOWN_5:
 				if (prefered.ordinal() - 5 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 5]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 5]);
 				}
 			case DOWN_4:
 				if (prefered.ordinal() - 4 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 4]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 4]);
 				}
 			case DOWN_3:
 				if (prefered.ordinal() - 3 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 3]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 3]);
 				}
 			case DOWN_2:
 				if (prefered.ordinal() - 2 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 2]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 2]);
 				}
 			case DOWN_1:
 				if (prefered.ordinal() - 1 >= 0) {
-					tolerated.add(EnumTemperature.values()[prefered.ordinal() - 1]);
+					tolerated.add(EnumTemperature.VALUES[prefered.ordinal() - 1]);
 				}
 				return tolerated;
 
@@ -249,30 +230,70 @@ public class ClimateUtil implements IClimateHelper {
 		}
 	}
 	
+	public static boolean addHumidity(ClimateState state, IClimateState targetedState, float value){
+		float humidity = state.getHumidity();
+		float targetedHumidity = targetedState.getHumidity();
+		if(Float.isNaN(humidity)){
+			state.setHumidity(humidity = 0);
+		}
+		if (humidity != targetedHumidity) {
+			if (humidity > targetedHumidity) {
+				value=Math.min(value, humidity - targetedHumidity);
+			} else {
+				value=Math.min(value, targetedHumidity - humidity);
+			}
+			state.addHumidity(value);
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean addTemperature(ClimateState state, IClimateState targetedState, float value){
+		float temperature = state.getTemperature();
+		float targetedTemperature = targetedState.getTemperature();
+		if(Float.isNaN(temperature)){
+			state.setTemperature(temperature = 0);
+		}
+		if (temperature != targetedTemperature) {
+			if (temperature > targetedTemperature) {
+				value=Math.min(value, temperature - targetedTemperature);
+			} else {
+				value=Math.min(value, targetedTemperature - temperature);
+			}
+			state.addTemperature(value);
+			return true;
+		}
+		return false;
+	}
+	
 	public static float getTemperature(World world, BlockPos pos){
-		return ForestryAPI.climateManager.getInfo(world, pos).getTemperature();
+		IClimateState state = ForestryAPI.climateManager.getClimateState(world, pos);
+		return state.getTemperature();
 	}
 	
 	public static float getHumidity(World world, BlockPos pos){
-		return ForestryAPI.climateManager.getInfo(world, pos).getHumidity();
+		IClimateState state = ForestryAPI.climateManager.getClimateState(world, pos);
+		return state.getHumidity();
 	}
-
-	public static void writeRoomPositionData(IClimatePosition position, PacketBufferForestry data) {
-		data.writeBlockPos(position.getPos());
-		writePositionData(position, data);
-	}
-
-	public static void writePositionData(IClimatePosition position, PacketBufferForestry data) {
-		data.writeFloat(position.getTemperature());
-		data.writeFloat(position.getHumidity());
-	}
-
-	public static void readRoomPositionData(ClimateRegion room, PacketBufferForestry data) {
-		room.setPosition(data.readBlockPos(), data.readFloat(), data.readFloat());
-	}
-
-	public static void readPositionData(IClimatePosition position, PacketBufferForestry data) {
-		position.setTemperature(data.readFloat());
-		position.setHumidity(data.readFloat());
+	
+	public static int getColor(EnumTemperature temperature){
+		switch (temperature){
+			case ICY:
+				return 0xe6e6fa;
+			case COLD:
+				return 0x31698a;
+			case NORMAL:
+				return 0xf0e9cc;
+			case WARM:
+				return 0xcd9b1d;
+			case HOT:
+				return 0xdf512e;
+			case HELLISH:
+				return 0x9c433e;
+			case NONE:
+				return 0x011f4b;
+			default:
+				return 16777215;
+		}
 	}
 }

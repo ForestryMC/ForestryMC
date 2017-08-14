@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,5 +23,10 @@ public class ItemTooltipUtil {
 			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo, 150);
 			tooltip.addAll(tooltipInfoWrapped);
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void addShiftInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+		tooltip.add(TextFormatting.ITALIC .toString() + '<' + Translator.translateToLocal("for.gui.tooltip.tmi") + '>');
 	}
 }

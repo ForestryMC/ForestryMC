@@ -12,9 +12,11 @@ package forestry.greenhouse.tiles;
 
 import javax.annotation.Nullable;
 
-import forestry.energy.EnergyManager;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.common.capabilities.Capability;
+
+import forestry.energy.EnergyManager;
 
 public class TileGreenhouseGearbox extends TileGreenhouse {
 

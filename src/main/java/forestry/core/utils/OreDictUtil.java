@@ -53,9 +53,13 @@ public class OreDictUtil {
 	public static final String CROP_DATE = "cropDate";
 	public static final String CROP_PAPAYA = "cropPapaya";
 
+	public static final String CROP_WHEAT = "cropWheat";
+	public static final String CROP_POTATO = "cropPotato";
+	public static final String CROP_CARROT = "cropCarrot";
+	public static final String SUGARCANE = "sugarcane";
+
 	public static final String PANE_GLASS = "paneGlass";
 	public static final String SAND = "sand";
-	public static final String CROP_WHEAT = "cropWheat";
 	public static final String DUST_REDSTONE = "dustRedstone";
 	public static final String GEM_DIAMOND = "gemDiamond";
 	public static final String STICK_WOOD = "stickWood";
@@ -67,6 +71,7 @@ public class OreDictUtil {
 	public static final String GEM_QUARTZ = "gemQuartz";
 	public static final String CHEST_WOOD = "chestWood";
 	public static final String LEATHER = "leather";
+	public static final String BLOCK_CACTUS = "blockCactus";
 
 	public static final String DYE_YELLOW = "dyeYellow";
 	public static final String DYE_BLUE = "dyeBlue";

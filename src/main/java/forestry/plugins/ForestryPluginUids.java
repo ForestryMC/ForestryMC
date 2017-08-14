@@ -28,4 +28,8 @@ public class ForestryPluginUids {
 	public static final String ACT_ADD = "forestry.actuallyadditions";
 	public static final String HARVESTCRAFT = "forestry.harvestcraft";
 	public static final String IMMERSIVE_ENGINEERING = "forestry.immersiveengineering";
+	public static final String MAGICAL_AGRICULTURE = "forestry.mysticalagriculture";
+	public static final String RUSTIC = "forestry.rustic";
+	public static final String ROOTS = "forestry.roots";
+	public static final String BETTER_WITH_MODS = "forestry.betterwithmods";
 }

@@ -5,12 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.util.math.BlockPos;
-
-public interface ICamouflagedTile {
-
-	String getCamouflageType();
-
-	BlockPos getCoordinates();
+public interface ICamouflagedTile extends ILocatable {
 
 }

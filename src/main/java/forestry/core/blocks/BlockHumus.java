@@ -143,9 +143,8 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "soil/humus");
-		manager.registerItemModel(item, 1, "soil/humus");
-		manager.registerItemModel(item, 2, "soil/humus");
-		manager.registerItemModel(item, 3, "soil/humus");
+		for(int i = 0;i < degradeDelimiter;i++){
+			manager.registerItemModel(item, i, "soil/humus");
+		}
 	}
 }
