@@ -16,16 +16,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.IChunkGenerator;
+
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketRegistry;
-import net.minecraft.command.ICommand;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 
 public abstract class BlankForestryPlugin implements IForestryPlugin {
 
@@ -110,6 +113,10 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 	}
 
 	@Override
+	public void decorateBiome(World world, Random rand, BlockPos pos) {
+	}
+
+	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 	}
 
@@ -140,12 +147,6 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 	@Nullable
 	@Override
 	public ICommand[] getConsoleCommands() {
-		return null;
-	}
-
-	@Nullable
-	@Override
-	public IFuelHandler getFuelHandler() {
 		return null;
 	}
 

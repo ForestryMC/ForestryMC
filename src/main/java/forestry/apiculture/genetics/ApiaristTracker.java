@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
@@ -18,8 +21,6 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.BreedingTracker;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 

@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
-import net.minecraft.item.ItemStack;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public ItemScoop() {

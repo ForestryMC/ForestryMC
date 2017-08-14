@@ -4,16 +4,18 @@ buildscript {
 		maven { url = "http://files.minecraftforge.net/maven" }
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.47"
 	}
 }
 
 plugins {
-	id "com.matthewprenger.cursegradle" version "1.0.7"
-	id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.32"
+	id "com.matthewprenger.cursegradle" version "1.0.9"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
@@ -26,8 +28,8 @@ ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
 // java version
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
 	version = mcversion + "-" + forgeversion
@@ -60,10 +62,10 @@ repositories {
 }
 
 dependencies {
-	deobfProvided "net.darkhax.tesla:Tesla:${tesla_version}"
-	deobfProvided "mezz.jei:jei_${mcversion}:${jei_version}:api"
+	deobfCompile "net.darkhax.tesla:Tesla-${mcversion}:${tesla_version}"
+	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
 	runtime "mezz.jei:jei_${mcversion}:${jei_version}"
-	deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 }
 
 configurations {
@@ -149,18 +151,7 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	untaggedName = "Current release ${project.version}"
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef =  "HEAD"
-	templateContent = """
-Alpha version, still buggy. Do not create a world you care about with this version, it can and will break things severely.<br/>
-Please help the project by trying it out and <a href="https://github.com/ForestryMC/ForestryMC/issues">reporting issues here.</a><br/>
-{{#tags}}
-  <h3>{{name}}</h3>
-  <ul>
-    {{#commits}}
-    <li>{{{message}}} - {{authorName}}</li>
-    {{/commits}}
-  </ul>
-{{/tags}}
-"""
+	templateContent = file('changelog.mustache').getText('UTF-8')
 }
 
 curseforge {
@@ -169,7 +160,7 @@ curseforge {
 		id = '59751'
 		changelog = file('changelog.html')
 		changelogType = 'html'
-		releaseType = 'alpha'
+		releaseType = 'beta'
 	}
 }
 

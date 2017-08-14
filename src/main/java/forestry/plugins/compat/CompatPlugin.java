@@ -48,7 +48,7 @@ public abstract class CompatPlugin extends BlankForestryPlugin {
 		if (item == null) {
 			return null;
 		}
-		return new ItemStack(item,1, meta);
+		return new ItemStack(item, 1, meta);
 	}
 
 	@Nullable

@@ -13,17 +13,19 @@ package forestry.core.gui;
 import java.util.Collection;
 import java.util.List;
 
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 
 @SideOnly(Side.CLIENT)
 public class GuiUtil {
@@ -47,7 +49,7 @@ public class GuiUtil {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			ScaledResolution scaledresolution = new ScaledResolution(gui.mc);
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.mc.fontRendererObj);
+			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.mc.fontRenderer);
 			GlStateManager.popMatrix();
 		}
 	}

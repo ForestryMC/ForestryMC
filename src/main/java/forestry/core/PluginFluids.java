@@ -10,9 +10,19 @@
  ******************************************************************************/
 package forestry.core;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -27,14 +37,6 @@ import forestry.core.utils.Log;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
@@ -68,11 +70,11 @@ public class PluginFluids extends BlankForestryPlugin {
 					String name = "fluid." + forestryFluid.getTag();
 					fluidBlock.setUnlocalizedName("forestry." + name);
 					fluidBlock.setRegistryName(name);
-					GameRegistry.register(fluidBlock);
+					ForgeRegistries.BLOCKS.register(fluidBlock);
 
 					ItemBlock itemBlock = new ItemBlock(fluidBlock);
 					itemBlock.setRegistryName(name);
-					GameRegistry.register(itemBlock);
+					ForgeRegistries.ITEMS.register(itemBlock);
 
 					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					if (forestryFluid.getOtherContainers().isEmpty()) {

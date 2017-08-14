@@ -45,14 +45,14 @@ public class PluginRoots extends CompatPlugin {
 		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 
-		for(int i = 0;i < fruits.size();i++){
-			ItemStack seed = getItemStack( seeds.get(i));
+		for (int i = 0; i < fruits.size(); i++) {
+			ItemStack seed = getItemStack(seeds.get(i));
 			Block block = getBlock(crops.get(i));
 			ItemStack fruit = getItemStack(fruits.get(i));
 			if (seed != null && i != 1) {
 				RecipeManagers.squeezerManager.addRecipe(10, seed, Fluids.SEED_OIL.getFluid(seedAmount));
 			}
-			if(fruit != null && i == 2){
+			if (fruit != null && i == 2) {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
 			}
 			if (seed != null && block != null) {

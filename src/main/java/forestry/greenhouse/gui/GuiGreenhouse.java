@@ -12,91 +12,77 @@ package forestry.greenhouse.gui;
 
 import java.io.IOException;
 
-import forestry.api.core.CamouflageManager;
-import forestry.core.climate.ClimateInfo;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateContainer;
+import forestry.api.climate.IClimateData;
+import forestry.api.climate.ImmutableClimateState;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.TextLayoutHelper;
-import forestry.core.gui.widgets.TankWidget;
-import forestry.core.owner.IOwnedTile;
+import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.gui.widgets.WidgetCamouflageTab;
+import forestry.greenhouse.gui.widgets.WidgetClimatePanel;
+import forestry.greenhouse.gui.widgets.WidgetClimatePillar;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
+import forestry.greenhouse.network.packets.PacketSelectClimateTargeted;
 import forestry.greenhouse.tiles.TileGreenhouse;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
+	//The space between the top of the gui and the inventory.
+	private static final int GUI_HEIGHT = 119;
+
 	private final IGreenhouseControllerInternal controller;
-	private final IOwnedTile tile;
-	private ClimateTextFields fields;
+	private final TileGreenhouse tile;
+	public WidgetClimatePanel temperaturePanel;
+	public WidgetClimatePanel humidityPanel;
+	public IClimateContainer container;
 
 	public GuiGreenhouse(EntityPlayer player, TileGreenhouse tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/greenhouse.png", new ContainerGreenhouse(player.inventory, tile), tile);
 		this.controller = tile.getMultiblockLogic().getController();
+		this.container = controller.getClimateContainer();
 		this.tile = tile;
+		this.xSize = 196;
+		this.ySize = 202;
 
-		//Add the water tank
-		widgetManager.add(new TankWidget(widgetManager, 152, 16, 0).setOverlayOrigin(176, 0));
-		//Add the multiblock camouflage tabs
-		WidgetCamouflageTab previous;
-		int x = 3;
-		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, controller, tile, CamouflageManager.BLOCK));
-		x+=50 + (previous.getHandlerSlot()  != null ? 20 : 0);
-		widgetManager.add(previous = new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, controller, tile, CamouflageManager.GLASS));
-		x+=50 + (previous.getHandlerSlot()  != null ? 20 : 0);
-		widgetManager.add(new WidgetCamouflageTab(widgetManager, guiLeft + x, guiTop - 25, controller, tile, CamouflageManager.DOOR));
-		
-		if(hasFields()){
-			widgetManager.add(new WidgetClimatePillar(widgetManager, guiLeft- 23, guiTop + 5));
-		}
-	}
-	
-	public boolean hasFields(){
-		return controller != null && controller.getControlClimate() != ClimateInfo.MAX;
+		IClimateData data = container.getData();
+
+		//Add the camouflage tab
+		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 2 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
+		widgetManager.add(new WidgetClimatePillar(widgetManager, -WidgetClimatePillar.WIDTH, GUI_HEIGHT / 2 - WidgetClimatePillar.HEIGHT / 2));
+		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, data));
+		widgetManager.add(humidityPanel = new WidgetClimatePanel(widgetManager, this, 102, 18, ClimateType.HUMIDITY, data));
 	}
 
-	@Override
-	public void initGui() {
-		super.initGui();
-		
-		if(hasFields()){
-			fields = new ClimateTextFields(controller, fontRendererObj, guiLeft, guiTop);
-		}else{
-			fields = null;
-		}
+	public void sendNetworkUpdate() {
+		BlockPos pos = controller.getCoordinates();
+		float temp = temperaturePanel.parseValue();
+		float hum = humidityPanel.parseValue();
+		setClimate(container, temp, hum);
+		NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, container.getTargetedState()));
 	}
-	
-	public ClimateTextFields getFields() {
-		return fields;
+
+	public void setClimate(IClimateContainer container, float temp, float hum) {
+		temperaturePanel.setValue(temp);
+		humidityPanel.setValue(hum);
+		container.setTargetedState(new ImmutableClimateState(temp, hum));
 	}
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (fields == null || !fields.keyTyped(typedChar, keyCode)) {
+		if (!temperaturePanel.keyTyped(typedChar, keyCode) && !humidityPanel.keyTyped(typedChar, keyCode)) {
 			super.keyTyped(typedChar, keyCode);
 		}
 	}
 
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		if (fields != null) {
-			fields.mouseClicked(mouseX, mouseY, mouseButton);
-		}
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
-
-		if (fields != null) {
-			fields.draw(this, mouseX, mouseY);
-		}
-	}
-	
 	TextLayoutHelper getTextLayout() {
 		return textLayout;
 	}
-	
+
 	@Override
 	protected void addLedgers() {
 		addErrorLedger(controller);

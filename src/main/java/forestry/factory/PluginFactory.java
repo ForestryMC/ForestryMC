@@ -145,7 +145,7 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		int cyclesCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost");
 		int valueCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost");
-		ItemStack fertilizerBio = coreItems.fertilizerBio.getItemStack();
+		ItemStack fertilizerBio = coreItems.compost.getItemStack();
 		ItemStack mulch = coreItems.mulch.getItemStack();
 		FuelManager.fermenterFuel.put(fertilizerBio, new FermenterFuel(fertilizerBio, valueCompost, cyclesCompost));
 		FuelManager.fermenterFuel.put(mulch, new FermenterFuel(mulch, valueCompost, cyclesCompost));
@@ -342,7 +342,7 @@ public class PluginFactory extends BlankForestryPlugin {
 						'X', beeItems.propolis.getWildcard()});
 			}
 			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS, 1, 0), new Object[]{
-					"#", "X",
+					"X",
 					'X', beeItems.propolis.getWildcard()});
 		}
 
@@ -541,7 +541,7 @@ public class PluginFactory extends BlankForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
 
-		RecipeUtil.addRecipe(blocks.bottler,
+		RecipeUtil.addRecipe("bottler", blocks.bottler,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -549,7 +549,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', fluidItems.canEmpty,
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.carpenter,
+		RecipeUtil.addRecipe("carpenter", blocks.carpenter,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -557,7 +557,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "ingotBronze",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.centrifuge,
+		RecipeUtil.addRecipe("centrifuge", blocks.centrifuge,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -565,7 +565,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "ingotCopper",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.fermenter,
+		RecipeUtil.addRecipe("fermenter", blocks.fermenter,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -573,7 +573,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "gearBronze",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.moistener,
+		RecipeUtil.addRecipe("moistener", blocks.moistener,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -581,7 +581,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "gearCopper",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.squeezer,
+		RecipeUtil.addRecipe("squeezer", blocks.squeezer,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -589,7 +589,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "ingotTin",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.still,
+		RecipeUtil.addRecipe("still", blocks.still,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -597,7 +597,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "dustRedstone",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.rainmaker,
+		RecipeUtil.addRecipe("rainmaker", blocks.rainmaker,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -605,7 +605,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "gearTin",
 				'Y', coreItems.hardenedCasing);
 
-		RecipeUtil.addRecipe(blocks.fabricator,
+		RecipeUtil.addRecipe("fabricator", blocks.fabricator,
 				"X#X",
 				"#Y#",
 				"XZX",
@@ -614,7 +614,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'Y', coreItems.sturdyCasing,
 				'Z', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.raintank,
+		RecipeUtil.addRecipe("raintank", blocks.raintank,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -622,7 +622,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'X', "ingotIron",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.worktable,
+		RecipeUtil.addRecipe("worktable", blocks.worktable,
 				"B",
 				"W",
 				"C",

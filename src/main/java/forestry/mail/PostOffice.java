@@ -13,6 +13,12 @@ package forestry.mail;
 import java.io.File;
 import java.util.LinkedHashMap;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldSavedData;
+
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -23,11 +29,6 @@ import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.mail.items.EnumStampDefinition;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
@@ -17,7 +19,6 @@ import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.mail.TradeStation;
 import forestry.mail.tiles.TileTrader;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerTrader extends ContainerTile<TileTrader> {
 

@@ -12,13 +12,13 @@ package forestry.core.recipes;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -27,15 +27,19 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
+	
+	// TODO use json recipes
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
@@ -105,20 +109,15 @@ public abstract class RecipeUtil {
 		return null;
 	}
 	
-	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput)
-	{
+	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
-		for (ItemStack stockStack : stockCopy)
-		{
-			if (!stockStack.isEmpty())
-			{
+		for (ItemStack stockStack : stockCopy) {
+			if (!stockStack.isEmpty()) {
 				ItemStack singleStockStack = ItemStackUtil.createCopyWithCount(stockStack, 1);
 				crafting.setInventorySlotContents(slot, singleStockStack);
-				if (recipe.matches(crafting, world))
-				{
+				if (recipe.matches(crafting, world)) {
 					ItemStack output = recipe.getCraftingResult(crafting);
-					if (ItemStack.areItemStacksEqual(output, expectedOutput))
-					{
+					if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
 						crafting.setInventorySlotContents(slot, originalStack);
 						return stockStack.splitStack(1);
 					}
@@ -129,39 +128,32 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static NonNullList<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		NonNullList<IRecipe> matchingRecipes = NonNullList.create();
-		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
-			if (recipe.matches(inventory, world)) {
-				matchingRecipes.add(recipe);
-			}
-		}
-
-		return matchingRecipes;
+	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
-	public static void addRecipe(Block block, Object... obj) {
-		addRecipe(new ItemStack(block), obj);
+	public static void addRecipe(String recipeName, Block block, Object... obj) {
+		addRecipe(recipeName, new ItemStack(block), obj);
 	}
 
-	public static void addRecipe(Item item, Object... obj) {
-		addRecipe(new ItemStack(item), obj);
+	public static void addRecipe(String recipeName, Item item, Object... obj) {
+		addRecipe(recipeName, new ItemStack(item), obj);
 	}
 
-	public static void addRecipe(ItemStack itemstack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapedRecipeCustom(itemstack, obj));
+	public static void addRecipe(String recipeName, ItemStack itemstack, Object... obj) {
+		ShapedRecipeCustom recipe = new ShapedRecipeCustom(itemstack, obj);
+		recipe.setRegistryName(Constants.MOD_ID, recipeName);
+		ForgeRegistries.RECIPES.register(recipe);
 	}
 
-	public static void addPriorityRecipe(ItemStack itemStack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapedRecipeCustom(itemStack, obj));
+	public static void addShapelessRecipe(String recipeName, Item item, Object... obj) {
+		addShapelessRecipe(recipeName, new ItemStack(item), obj);
 	}
 
-	public static void addShapelessRecipe(Item item, Object... obj) {
-		addShapelessRecipe(new ItemStack(item), obj);
-	}
-
-	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(itemstack, obj));
+	public static void addShapelessRecipe(String recipeName, ItemStack itemstack, Object... obj) {
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(null, itemstack, obj);
+		recipe.setRegistryName(Constants.MOD_ID, recipeName);
+		ForgeRegistries.RECIPES.register(recipe);
 	}
 
 	public static void addSmelting(ItemStack res, Item prod, float xp) {
@@ -174,7 +166,7 @@ public abstract class RecipeUtil {
 
 	@Nullable
 	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getIngredients();
+		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getRawIngredients();
 		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();

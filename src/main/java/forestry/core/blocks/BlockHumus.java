@@ -1,14 +1,7 @@
 package forestry.core.blocks;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.IGrowable;
@@ -27,10 +20,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
 
 public class BlockHumus extends Block implements IItemModelRegister {
 	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
@@ -70,10 +71,10 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	public int tickRate(World world) {
 		return 500;
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		return Collections.singletonList(new ItemStack(Blocks.DIRT));
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		drops.add(new ItemStack(Blocks.DIRT));
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this));
 	}
 
@@ -142,9 +143,8 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "soil/humus");
-		manager.registerItemModel(item, 1, "soil/humus");
-		manager.registerItemModel(item, 2, "soil/humus");
-		manager.registerItemModel(item, 3, "soil/humus");
+		for(int i = 0;i < degradeDelimiter;i++){
+			manager.registerItemModel(item, i, "soil/humus");
+		}
 	}
 }

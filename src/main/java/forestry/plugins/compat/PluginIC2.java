@@ -13,6 +13,7 @@ package forestry.plugins.compat;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Set;
 
 import net.minecraft.init.Blocks;
@@ -20,7 +21,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
@@ -54,6 +54,7 @@ import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
+import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
 import forestry.farming.logic.FarmableBasicIC2Crop;
@@ -67,21 +68,20 @@ import ic2.api.recipe.Recipes;
 @ForestryPlugin(pluginID = ForestryPluginUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends BlankForestryPlugin {
 	public static final String modId = "ic2";
-	public static PluginIC2 instance;
-
+	
+	@Nullable
 	private static ItemStack rubberSapling;
+	@Nullable
 	private static ItemStack rubber;
+	@Nullable
 	public static ItemStack rubberWood;
+	@Nullable
 	public static ItemStack resin;
+	@Nullable
 	public static ItemStack fertilizer;
-
+	
+	@Nullable
 	public BlockRegistryIC2 blocks;
-
-	public PluginIC2() {
-		if (PluginIC2.instance == null) {
-			PluginIC2.instance = this;
-		}
-	}
 
 	@Override
 	public boolean isAvailable() {
@@ -120,7 +120,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
 
 		if(fertilizer != null){
-			ForestryAPI.farmRegistry.registerFertilizer(fertilizer, 250);
+			FarmRegistry.getInstance().registerFertilizer(fertilizer, 250);
 		}
 	}
 
@@ -270,7 +270,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 			int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 			if (bogEarthOutputCan > 0) {
 					ItemStack bogEarthCan = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
+				RecipeUtil.addRecipe("ic2_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 			}
 		}
 
@@ -288,13 +288,13 @@ public class PluginIC2 extends BlankForestryPlugin {
 				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			}
 
-			ForestryAPI.farmRegistry.registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
+			FarmRegistry.getInstance().registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
 		}
 
 
 		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
 		if (energyBlocks != null) {
-			RecipeUtil.addRecipe(blocks.generator,
+			RecipeUtil.addRecipe("ic2_generator", blocks.generator,
 					"X#X",
 					"XYX",
 					"X#X",
@@ -302,7 +302,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 					'X', "ingotGold",
 					'Y', coreItems.sturdyCasing);
 
-			RecipeUtil.addRecipe(blocks.electricalEngine,
+			RecipeUtil.addRecipe("ic2_eletrical_engine", blocks.electricalEngine,
 					"###",
 					" X ",
 					"YVY",

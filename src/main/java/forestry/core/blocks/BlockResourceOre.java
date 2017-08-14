@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.PluginCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -30,8 +23,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.PluginCore;
 
 public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
@@ -67,10 +66,9 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 			this.dropXpOnBlockBreak(world, pos, MathHelper.getInt(world.rand, 1, 4));
 		}
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> drops = new ArrayList<>();
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		EnumResourceType type = state.getValue(ORE_RESOURCES);
 		switch (type) {
 			case APATITE: {
@@ -94,8 +92,6 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 				break;
 			}
 		}
-
-		return drops;
 	}
 
 	@Override
@@ -104,7 +100,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumResourceType resourceType : ORE_RESOURCES.getAllowedValues()) {
 			list.add(get(resourceType, 1));
 		}

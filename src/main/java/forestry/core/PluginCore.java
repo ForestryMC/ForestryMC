@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -38,8 +37,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+
 import forestry.api.circuits.ChipsetManager;
-import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
@@ -51,6 +51,7 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
+import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.RootCommand;
@@ -64,8 +65,6 @@ import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.loot.SetSpeciesNBT;
-import forestry.core.models.ModelCamouflageSprayCan;
-import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -73,11 +72,11 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
+import forestry.core.utils.World2ObjectMap;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -125,9 +124,8 @@ public class PluginCore extends BlankForestryPlugin {
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
-		ForestryAPI.climateManager = new ClimateManager();
-
-		CamouflageManager.camouflageAccess = new CamouflageAccess();
+		ForestryAPI.climateManager = ClimateManager.getInstance();
+		ForestryAPI.climateFactory = new ClimateFactory();
 	}
 
 	@Override
@@ -143,12 +141,9 @@ public class PluginCore extends BlankForestryPlugin {
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(World2ObjectMap.class);
 
 		rootCommand.addChildCommand(new CommandPlugins());
-
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerBlock());
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerGlass());
-		CamouflageManager.camouflageAccess.registerCamouflageItemHandler(new CamouflageHandlerDoor());
 	}
 
 	@Override
@@ -166,8 +161,6 @@ public class PluginCore extends BlankForestryPlugin {
 		alleleHelper.init();
 
 		Proxies.render.initRendering();
-
-		RecipeSorter.register("forestry:shaped", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "");
 	}
 
 	@Override
@@ -264,16 +257,16 @@ public class PluginCore extends BlankForestryPlugin {
 		if (Config.isCraftingBronzeEnabled()) {
 			ItemStack ingotBronze = items.ingotBronze.copy();
 			ingotBronze.setCount(4);
-			RecipeUtil.addShapelessRecipe(ingotBronze, OreDictUtil.INGOT_TIN, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER);
+			RecipeUtil.addShapelessRecipe("bronze_ingot", ingotBronze, OreDictUtil.INGOT_TIN, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER, OreDictUtil.INGOT_COPPER);
 		}
 
 		/* STURDY MACHINE */
-		RecipeUtil.addRecipe(items.sturdyCasing, "###", "# #", "###", '#', OreDictUtil.INGOT_BRONZE);
+		RecipeUtil.addRecipe("sturdy_casing", items.sturdyCasing, "###", "# #", "###", '#', OreDictUtil.INGOT_BRONZE);
 
 		// / EMPTY CANS
 		int canAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.can");
 		ItemStack canOutput = fluidItems.canEmpty.getItemStack(canAmount);
-		RecipeUtil.addRecipe(canOutput, " # ", "# #", '#', OreDictUtil.INGOT_TIN);
+		RecipeUtil.addRecipe("tin_can", canOutput, " # ", "# #", '#', OreDictUtil.INGOT_TIN);
 
 		// / GEARS
 		List<ItemStack> stoneGear = OreDictionary.getOres(OreDictUtil.GEAR_STONE);
@@ -283,27 +276,24 @@ public class PluginCore extends BlankForestryPlugin {
 		} else {
 			gearCenter = OreDictUtil.INGOT_COPPER;
 		}
-		RecipeUtil.addRecipe(items.gearBronze, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_BRONZE, 'X', gearCenter);
-		RecipeUtil.addRecipe(items.gearCopper, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_COPPER, 'X', gearCenter);
-		RecipeUtil.addRecipe(items.gearTin, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_TIN, 'X', gearCenter);
+		RecipeUtil.addRecipe("gear_bronze", items.gearBronze, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_BRONZE, 'X', gearCenter);
+		RecipeUtil.addRecipe("gear_copper", items.gearCopper, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_COPPER, 'X', gearCenter);
+		RecipeUtil.addRecipe("gear_tin", items.gearTin, " # ", "#X#", " # ", '#', OreDictUtil.INGOT_TIN, 'X', gearCenter);
 
 		// / SURVIVALIST TOOLS
-		RecipeUtil.addRecipe(items.bronzePickaxe, " X ", " X ", "###", '#', OreDictUtil.INGOT_BRONZE, 'X', OreDictUtil.STICK_WOOD);
-		RecipeUtil.addRecipe(items.bronzeShovel, " X ", " X ", " # ", '#', OreDictUtil.INGOT_BRONZE, 'X', OreDictUtil.STICK_WOOD);
-		RecipeUtil.addShapelessRecipe(items.kitPickaxe, items.bronzePickaxe, items.carton);
-		RecipeUtil.addShapelessRecipe(items.kitShovel, items.bronzeShovel, items.carton);
+		RecipeUtil.addRecipe("bronze_pickaxe", items.bronzePickaxe, " X ", " X ", "###", '#', OreDictUtil.INGOT_BRONZE, 'X', OreDictUtil.STICK_WOOD);
+		RecipeUtil.addRecipe("bronze_shovel", items.bronzeShovel, " X ", " X ", " # ", '#', OreDictUtil.INGOT_BRONZE, 'X', OreDictUtil.STICK_WOOD);
+		RecipeUtil.addShapelessRecipe("pickaxe_kit", items.kitPickaxe, items.bronzePickaxe, items.carton);
+		RecipeUtil.addShapelessRecipe("shovel_kit", items.kitShovel, items.bronzeShovel, items.carton);
 
 		/* NATURALIST'S ARMOR */
-		RecipeUtil.addRecipe(items.spectacles, " X ", "Y Y", 'X', OreDictUtil.INGOT_BRONZE, 'Y', OreDictUtil.PANE_GLASS);
+		RecipeUtil.addRecipe("spectacles", items.spectacles, " X ", "Y Y", 'X', OreDictUtil.INGOT_BRONZE, 'Y', OreDictUtil.PANE_GLASS);
 
 		// / WRENCH
-		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-
-		// / CAMOUFLAGE SPRAY CAN
-		RecipeUtil.addRecipe(items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', items.craftingMaterial.getCamouflagedPaneling());
+		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
 		
 		// / WEB
-		RecipeUtil.addRecipe(new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
+		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CARPENTER
@@ -325,7 +315,7 @@ public class PluginCore extends BlankForestryPlugin {
 					'Y', OreDictUtil.DYE_YELLOW);
 		} else {
 			// Portable ANALYZER
-			RecipeUtil.addRecipe(items.portableAlyzer.getItemStack(),
+			RecipeUtil.addRecipe("portable_alyzer", items.portableAlyzer.getItemStack(),
 					"X#X",
 					"X#X",
 					"RDR",
@@ -334,7 +324,7 @@ public class PluginCore extends BlankForestryPlugin {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeUtil.addRecipe(items.craftingMaterial.getCamouflagedPaneling(8),
+			RecipeUtil.addRecipe("camoflaged_paneling", items.craftingMaterial.getCamouflagedPaneling(8),
 					"WWW",
 					"YBR",
 					"WWW",
@@ -345,7 +335,7 @@ public class PluginCore extends BlankForestryPlugin {
 		}
 
 		// ANALYZER
-		RecipeUtil.addRecipe(blocks.analyzer,
+		RecipeUtil.addRecipe("alyzer", blocks.analyzer,
 				"XTX",
 				" Y ",
 				"X X",
@@ -356,46 +346,46 @@ public class PluginCore extends BlankForestryPlugin {
 		// Manure and Fertilizer
 		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 		if (compostWheatAmount > 0) {
-			ItemStack compost = items.fertilizerBio.getItemStack(compostWheatAmount);
-			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', OreDictUtil.CROP_WHEAT);
+			ItemStack compost = items.compost.getItemStack(compostWheatAmount);
+			RecipeUtil.addRecipe("wheat_to_compost", compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', OreDictUtil.CROP_WHEAT);
 		}
 
 		int compostAshAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.ash");
 		if (compostAshAmount > 0) {
-			ItemStack compost = items.fertilizerBio.getItemStack(compostAshAmount);
-			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', OreDictUtil.DUST_ASH);
+			ItemStack compost = items.compost.getItemStack(compostAshAmount);
+			RecipeUtil.addRecipe("ash_to_compost", compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', OreDictUtil.DUST_ASH);
 		}
 
 		int fertilizerApatiteAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.fertilizer.apatite");
 		if (fertilizerApatiteAmount > 0) {
 			ItemStack fertilizer = items.fertilizerCompound.getItemStack(fertilizerApatiteAmount);
-			RecipeUtil.addRecipe(fertilizer, " # ", " X ", " # ", '#', OreDictUtil.SAND, 'X', OreDictUtil.GEM_APATITE);
+			RecipeUtil.addRecipe("sand_to_fertilizer", fertilizer, " # ", " X ", " # ", '#', OreDictUtil.SAND, 'X', OreDictUtil.GEM_APATITE);
 		}
 
 		int fertilizerAshAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.fertilizer.ash");
 		if (fertilizerAshAmount > 0) {
 			ItemStack fertilizer = items.fertilizerCompound.getItemStack(fertilizerAshAmount);
-			RecipeUtil.addRecipe(fertilizer, "###", "#X#", "###", '#', OreDictUtil.DUST_ASH, 'X', OreDictUtil.GEM_APATITE);
+			RecipeUtil.addRecipe("ash_to_fertilizer", fertilizer, "###", "#X#", "###", '#', OreDictUtil.DUST_ASH, 'X', OreDictUtil.GEM_APATITE);
 		}
 
 		// Humus
 		int humusCompostAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.compost");
 		if (humusCompostAmount > 0) {
 			ItemStack humus = new ItemStack(blocks.humus, humusCompostAmount);
-			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.fertilizerBio);
+			RecipeUtil.addRecipe("compost_humus", humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.compost);
 		}
 
 		int humusFertilizerAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.fertilizer");
 		if (humusFertilizerAmount > 0) {
 			ItemStack humus = new ItemStack(blocks.humus, humusFertilizerAmount);
-			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.fertilizerCompound);
+			RecipeUtil.addRecipe("fertilizer_humus", humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.fertilizerCompound);
 		}
 
 		// Bog earth
 		int bogEarthOutputBucket = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.bucket");
 		if (bogEarthOutputBucket > 0) {
 			ItemStack bogEarth = blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputBucket);
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', Items.WATER_BUCKET, 'Y', OreDictUtil.SAND);
+			RecipeUtil.addRecipe("bucket_bog_earth", bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', Items.WATER_BUCKET, 'Y', OreDictUtil.SAND);
 		}
 
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
@@ -404,47 +394,64 @@ public class PluginCore extends BlankForestryPlugin {
 			ItemStack canWater = fluidItems.getContainer(EnumContainerType.CAN, FluidRegistry.WATER);
 			ItemStack waxCapsuleWater = fluidItems.getContainer(EnumContainerType.CAPSULE, FluidRegistry.WATER);
 			ItemStack refractoryWater = fluidItems.getContainer(EnumContainerType.REFRACTORY, FluidRegistry.WATER);
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', OreDictUtil.SAND);
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', OreDictUtil.SAND);
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', OreDictUtil.SAND);
+			RecipeUtil.addRecipe("can_bog_earth", bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', OreDictUtil.SAND);
+			RecipeUtil.addRecipe("capsule_bog_earth", bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', OreDictUtil.SAND);
+			RecipeUtil.addRecipe("refractory_capsule_bog_earth", bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', OreDictUtil.SAND);
 		}
 
 		// Crafting Material
-		RecipeUtil.addRecipe(new ItemStack(Items.STRING), "#", "#", "#", '#', items.craftingMaterial.getSilkWisp());
+		RecipeUtil.addRecipe("silk_to_string", new ItemStack(Items.STRING), "#", "#", "#", '#', items.craftingMaterial.getSilkWisp());
 
 		// / Pipette
-		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', OreDictUtil.PANE_GLASS, '#', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeUtil.addRecipe("pipette", items.pipette, "  #", " X ", "X  ", 'X', OreDictUtil.PANE_GLASS, '#', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Storage Blocks
 		{
-			RecipeUtil.addRecipe(blocks.resourceStorageApatite, "###", "###", "###", '#', OreDictUtil.GEM_APATITE);
+			RecipeUtil.addRecipe("apatite_block", blocks.resourceStorageApatite, "###", "###", "###", '#', OreDictUtil.GEM_APATITE);
 
-			RecipeUtil.addShapelessRecipe(new ItemStack(items.apatite, 9), OreDictUtil.BLOCK_APATITE);
+			RecipeUtil.addShapelessRecipe("block_to_apatite", new ItemStack(items.apatite, 9), OreDictUtil.BLOCK_APATITE);
 		}
 
 		{
-			RecipeUtil.addRecipe(blocks.resourceStorageCopper, "###", "###", "###", '#', OreDictUtil.INGOT_COPPER);
+			RecipeUtil.addRecipe("copper_block", blocks.resourceStorageCopper, "###", "###", "###", '#', OreDictUtil.INGOT_COPPER);
 
 			ItemStack ingotCopper = items.ingotCopper.copy();
 			ingotCopper.setCount(9);
-			RecipeUtil.addShapelessRecipe(ingotCopper, OreDictUtil.BLOCK_COPPER);
+			RecipeUtil.addShapelessRecipe("block_to_copper", ingotCopper, OreDictUtil.BLOCK_COPPER);
 		}
 
 		{
-			RecipeUtil.addRecipe(blocks.resourceStorageTin, "###", "###", "###", '#', OreDictUtil.INGOT_TIN);
+			RecipeUtil.addRecipe("tin_block", blocks.resourceStorageTin, "###", "###", "###", '#', OreDictUtil.INGOT_TIN);
 
 			ItemStack ingotTin = items.ingotTin.copy();
 			ingotTin.setCount(9);
-			RecipeUtil.addShapelessRecipe(ingotTin, OreDictUtil.BLOCK_TIN);
+			RecipeUtil.addShapelessRecipe("block_to_tin", ingotTin, OreDictUtil.BLOCK_TIN);
 		}
 
 		{
-			RecipeUtil.addRecipe(blocks.resourceStorageBronze, "###", "###", "###", '#', OreDictUtil.INGOT_BRONZE);
+			RecipeUtil.addRecipe("bronze_block", blocks.resourceStorageBronze, "###", "###", "###", '#', OreDictUtil.INGOT_BRONZE);
 
 			ItemStack ingotBronze = items.ingotBronze.copy();
 			ingotBronze.setCount(9);
-			RecipeUtil.addShapelessRecipe(ingotBronze, OreDictUtil.BLOCK_BRONZE);
+			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
+
+		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)){
+			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
+		}
+
+		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
+			"A#A",
+			"# #",
+			"A#A",
+			'#', Items.BRICK,
+			'A', OreDictUtil.DUST_ASH);
+		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
+			true,
+			"#  ",
+			"## ",
+			"###",
+			'#', Items.BRICK);
 
 		// alternate recipes
 		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
@@ -470,44 +477,15 @@ public class PluginCore extends BlankForestryPlugin {
 	}
 
 	@Override
-	public IFuelHandler getFuelHandler() {
-		return new FuelHandler(getItems());
-	}
-
-	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// research note items are not useful without actually having completed research
 		hiddenItems.add(new ItemStack(getItems().researchNote));
 	}
 
-	private static class FuelHandler implements IFuelHandler {
-		private final ItemRegistryCore items;
-
-		public FuelHandler(ItemRegistryCore items) {
-			this.items = items;
-		}
-
-		@Override
-		public int getBurnTime(ItemStack fuel) {
-			if (fuel != null && fuel.getItem() == items.peat) {
-				return 2000;
-			}
-			if (fuel != null && fuel.getItem() == items.bituminousPeat) {
-				return 4200;
-			}
-
-			return 0;
-		}
-	}
-
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModels(ModelBakeEvent event) {
-		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:camouflage_spray_can", "inventory");
-		ModelEntry blockModelIndex = new ModelEntry(modelLocation, new ModelCamouflageSprayCan());
-		ModelManager modelManager = ModelManager.getInstance();
-		modelManager.registerCustomModel(blockModelIndex);
-		modelManager.onBakeModels(event);
+		ModelManager.getInstance().onBakeModels(event);
 	}
 
 	@SubscribeEvent

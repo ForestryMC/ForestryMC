@@ -13,6 +13,12 @@ package forestry.factory.network.packets;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
@@ -21,10 +27,6 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileUtil;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Used to sync the worktable crafting result from Server to Client.
@@ -55,7 +57,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			MemorizedRecipe recipe = data.readStreamable(data1 -> new MemorizedRecipe(data1, player.world));
+			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 
 			TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
 		}

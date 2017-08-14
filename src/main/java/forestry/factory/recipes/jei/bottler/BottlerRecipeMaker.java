@@ -3,8 +3,8 @@ package forestry.factory.recipes.jei.bottler;
 import java.util.ArrayList;
 import java.util.List;
 
-import mezz.jei.api.ingredients.IIngredientRegistry;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import mezz.jei.api.ingredients.IIngredientRegistry;
 
 public class BottlerRecipeMaker {
 

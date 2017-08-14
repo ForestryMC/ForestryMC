@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Objects;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -33,7 +34,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleButterflyCocoon.class).add("values", this.getAllowedValues()).toString();
+		return MoreObjects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleButterflyCocoon.class).add("values", this.getAllowedValues()).toString();
 	}
 
 	@Override

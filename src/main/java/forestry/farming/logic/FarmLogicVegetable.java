@@ -13,12 +13,12 @@ package forestry.farming.logic;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ForestryAPI;
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicVegetable extends FarmLogicCrops {
 
 	public FarmLogicVegetable() {
-		super(ForestryAPI.farmRegistry.getFarmables("farmVegetables"));
+		super(FarmRegistry.getInstance().getFarmables("farmVegetables"));
 	}
 
 	@Override

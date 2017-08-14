@@ -12,9 +12,6 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileAnalyzer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,6 +21,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 
@@ -39,7 +40,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	 * @param analyzer If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (analyzer != null) {
 			World worldObj = analyzer.getWorldObj();
 			if (worldObj.isBlockLoaded(analyzer.getPos())) {
@@ -68,7 +69,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.translate(0.5f, 0.2f, 0.5f);
 		GlStateManager.scale(renderScale, renderScale, renderScale);
-		dummyEntityItem.setEntityItemStack(itemstack);
+		dummyEntityItem.setItem(itemstack);
 
 		if (world.getTotalWorldTime() != lastTick) {
 			lastTick = world.getTotalWorldTime();

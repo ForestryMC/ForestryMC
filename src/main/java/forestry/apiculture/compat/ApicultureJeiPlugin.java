@@ -7,13 +7,13 @@ import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.genetics.Genome;
 import forestry.core.utils.JeiUtil;
-import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 
 @JEIPlugin
-public class ApicultureJeiPlugin extends BlankModPlugin {
+public class ApicultureJeiPlugin implements IModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
 		ItemRegistryApiculture items = PluginApiculture.getItems();

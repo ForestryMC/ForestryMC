@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import com.google.common.collect.LinkedListMultimap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,16 +19,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.LinkedListMultimap;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
@@ -83,7 +86,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		String str = Translator.translateToLocal("item.for.habitatLocator.name").toUpperCase();
-		fontRendererObj.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		fontRenderer.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();

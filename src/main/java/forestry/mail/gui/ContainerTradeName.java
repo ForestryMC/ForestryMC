@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
 import forestry.mail.tiles.TileTrader;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerTradeName extends ContainerTile<TileTrader> {
 

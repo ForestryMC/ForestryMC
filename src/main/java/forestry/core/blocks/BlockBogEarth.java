@@ -10,15 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.PluginCore;
-import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -36,9 +29,17 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.PluginCore;
+import forestry.core.config.Constants;
 
 /**
  * bog earth, which becomes peat
@@ -101,22 +102,18 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	public int tickRate(World world) {
 		return 500;
 	}
-
+	
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = new ArrayList<>();
-
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Integer maturity = state.getValue(MATURITY);
 		SoilType type = SoilType.fromMaturity(maturity);
 
 		if (type == SoilType.PEAT) {
-			ret.add(PluginCore.getItems().peat.getItemStack(2));
-			ret.add(new ItemStack(Blocks.DIRT));
+			drops.add(PluginCore.getItems().peat.getItemStack(2));
+			drops.add(new ItemStack(Blocks.DIRT));
 		} else {
-			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
+			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
 		}
-
-		return ret;
 	}
 
 	@Override
@@ -163,7 +160,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, 0));
 	}
 

@@ -57,7 +57,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 		super.registerRecipes();
 		Preconditions.checkState(blocks != null);
 
-		RecipeUtil.addRecipe(new ItemStack(blocks.peatEngine),
+		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -66,7 +66,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'Y', "gearCopper",
 				'V', Blocks.PISTON);
 
-		RecipeUtil.addRecipe(new ItemStack(blocks.biogasEngine),
+		RecipeUtil.addRecipe("biogas_engine", new ItemStack(blocks.biogasEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -76,7 +76,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'V', Blocks.PISTON);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe(new ItemStack(blocks.clockworkEngine),
+			RecipeUtil.addRecipe("clockwork_engine", new ItemStack(blocks.clockworkEngine),
 					"###",
 					" X ",
 					"ZVY",

@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
-	public final ItemForestry fertilizerBio;
+	public final ItemForestry compost;
 	public final ItemFertilizer fertilizerCompound;
 
 	/* Gems */
@@ -87,11 +89,8 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry refractoryWax;
 	public final ItemFruit fruits;
 
-	/* Camouflage */
-	public final ItemCamouflageSprayCan camouflageSprayCan;
-
 	public ItemRegistryCore() {
-		fertilizerBio = registerItem(new ItemForestry(), "fertilizer_bio");
+		compost = registerItem(new ItemForestry(), "fertilizer_bio");
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
@@ -116,13 +115,25 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		spectacles = registerItem(new ItemArmorNaturalist(), "naturalist_helmet");
 
-		peat = registerItem(new ItemForestry(), "peat");
+		peat = new ItemForestry() {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 2000;
+			}
+		};
+		registerItem(peat, "peat");
 		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
 		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
-		bituminousPeat = registerItem(new ItemForestry(), "bituminous_peat");
+		bituminousPeat = new ItemForestry() {
+			@Override
+			public int getItemBurnTime(ItemStack itemStack) {
+				return 4200;
+			}
+		};
+		registerItem(bituminousPeat, "bituminous_peat");
 
 		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE, "gear_bronze");
 		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");
@@ -187,9 +198,6 @@ public class ItemRegistryCore extends ItemRegistry {
 			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
 			OreDictionary.registerOre(def.getOreDict(), fruit);
 		}
-
-		// CAMOUFLAGE
-		camouflageSprayCan = registerItem(new ItemCamouflageSprayCan(), "camouflage_spray_can");
 	}
 
 }

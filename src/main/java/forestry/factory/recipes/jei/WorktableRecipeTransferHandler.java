@@ -31,17 +31,14 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 	public IRecipeTransferError transferRecipe(ContainerWorktable container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
-
+			
 			InventoryCraftingForestry inventory = new InventoryCraftingForestry(container);
-
-			NonNullList<ItemStack> recipeOutputs = NonNullList.create();
+			
 			for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : guiIngredients.entrySet()) {
 				int recipeSlot = entry.getKey();
 				List<ItemStack> allIngredients = entry.getValue().getAllIngredients();
 				if (!allIngredients.isEmpty()) {
-					if (recipeSlot == 0) {
-						recipeOutputs.addAll(allIngredients);
-					} else {
+					if (recipeSlot != 0) { // skip the output slot
 						ItemStack firstIngredient = allIngredients.get(0);
 						inventory.setInventorySlotContents(recipeSlot - 1, firstIngredient);
 					}

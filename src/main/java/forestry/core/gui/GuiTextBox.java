@@ -19,15 +19,15 @@ public class GuiTextBox extends GuiTextField {
 	private static final int enabledColor = 14737632;
 	private static final int disabledColor = 7368816;
 
-	private final FontRenderer fontRendererObj;
+	private final FontRenderer fontRenderer;
 	private final int startX, startY, width, height;
 
 	private int lineScroll = 0;
 	private int maxLines = 0;
 
-	public GuiTextBox(int ID, FontRenderer fontRendererObj, int startX, int startY, int width, int height) {
-		super(ID, fontRendererObj, startX, startY, width, height);
-		this.fontRendererObj = fontRendererObj;
+	public GuiTextBox(int ID, FontRenderer fontRenderer, int startX, int startY, int width, int height) {
+		super(ID, fontRenderer, startX, startY, width, height);
+		this.fontRenderer = fontRenderer;
 		this.startX = startX;
 		this.startY = startY;
 		this.width = width;
@@ -51,7 +51,7 @@ public class GuiTextBox extends GuiTextField {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRendererObj.listFormattedStringToWidth(getCursoredText(), width).size() * fontRendererObj.FONT_HEIGHT < height;
+		return fontRenderer.listFormattedStringToWidth(getCursoredText(), width).size() * fontRenderer.FONT_HEIGHT < height;
 	}
 
 	private String getCursoredText() {
@@ -71,7 +71,7 @@ public class GuiTextBox extends GuiTextField {
 	}
 
 	private void drawScrolledSplitString(String text, int startX, int startY, int width, int textColour) {
-		List<String> lines = fontRendererObj.listFormattedStringToWidth(text, width);
+		List<String> lines = fontRenderer.listFormattedStringToWidth(text, width);
 		maxLines = lines.size();
 
 		int count = 0;
@@ -81,12 +81,12 @@ public class GuiTextBox extends GuiTextField {
 			if (count < lineScroll) {
 				count++;
 				continue;
-			} else if (lineY + fontRendererObj.FONT_HEIGHT - startY > height) {
+			} else if (lineY + fontRenderer.FONT_HEIGHT - startY > height) {
 				break;
 			}
 
-			fontRendererObj.drawString(line, startX, lineY, textColour);
-			lineY += fontRendererObj.FONT_HEIGHT;
+			fontRenderer.drawString(line, startX, lineY, textColour);
+			lineY += fontRenderer.FONT_HEIGHT;
 
 			count++;
 		}

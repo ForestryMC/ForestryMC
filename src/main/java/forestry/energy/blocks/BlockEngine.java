@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import com.google.common.collect.ImmutableList;
+
 import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileUtil;
-import forestry.energy.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +27,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.EnergyHelper;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
@@ -69,7 +71,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
 			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
-			if (entityBox.intersectsWith(boundingBox)) {
+			if (entityBox.intersects(boundingBox)) {
 				collidingBoxes.add(boundingBox);
 			}
 		}

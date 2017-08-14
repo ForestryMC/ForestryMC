@@ -2,12 +2,14 @@ package forestry.factory.recipes.jei.bottler;
 
 import javax.annotation.Nullable;
 
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
 
-public class BottlerRecipeWrapper extends BlankRecipeWrapper {
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IRecipeWrapper;
+
+public class BottlerRecipeWrapper implements IRecipeWrapper {
 	public final ItemStack inputStack;
 	public final FluidStack fluid;
 	@Nullable

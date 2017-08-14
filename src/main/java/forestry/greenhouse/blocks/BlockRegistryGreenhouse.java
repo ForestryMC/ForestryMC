@@ -1,29 +1,26 @@
 package forestry.greenhouse.blocks;
 
-import java.util.Map;
-
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
-import forestry.greenhouse.items.ItemBlockGreenhouseDoor;
-import net.minecraft.item.ItemBlock;
 
 public class BlockRegistryGreenhouse extends BlockRegistry {
 
-	private final Map<BlockGreenhouseType, BlockGreenhouse> greenhouseBlockMap;
+	public final BlockGreenhouse greenhouseBlock;
+	public final BlockClimatiser climatiserBlock;
+	public final BlockGreenhouseWindow window;
+	public final BlockGreenhouseWindow roofWindow;
 
 	public BlockRegistryGreenhouse() {
-		greenhouseBlockMap = BlockGreenhouse.create();
-		for (BlockGreenhouse block : greenhouseBlockMap.values()) {
-			ItemBlock itemBlock = new ItemBlockForestry(block);
-			if (block instanceof BlockGreenhouseDoor) {
-				itemBlock = new ItemBlockGreenhouseDoor(block);
-			}
-			registerBlock(block, itemBlock, "greenhouse." + block.getGreenhouseType());
-		}
-	}
+		greenhouseBlock = new BlockGreenhouse();
+		registerBlock(greenhouseBlock, new ItemBlockForestry(greenhouseBlock), "greenhouse");
+		climatiserBlock = new BlockClimatiser();
+		registerBlock(climatiserBlock, new ItemBlockForestry(climatiserBlock), "climatiser");
 
-	public BlockGreenhouse getGreenhouseBlock(BlockGreenhouseType type) {
-		return greenhouseBlockMap.get(type);
+		window = new BlockGreenhouseWindow(false);
+		registerBlock(window, new ItemBlockForestry(window), "greenhouse.window");
+
+		roofWindow = new BlockGreenhouseWindow(true);
+		registerBlock(roofWindow, new ItemBlockForestry(roofWindow), "greenhouse.window_up");
 	}
 
 }

@@ -7,15 +7,15 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.utils.JeiUtil;
 import forestry.plugins.PluginManager;
-import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import net.minecraft.item.ItemStack;
 
 @JEIPlugin
-public class ForestryJeiPlugin extends BlankModPlugin {
+public class ForestryJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();

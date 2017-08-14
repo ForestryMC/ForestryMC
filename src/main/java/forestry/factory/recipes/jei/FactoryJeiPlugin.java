@@ -40,9 +40,9 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.plugins.ForestryPluginUids;
-import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.BlankAdvancedGuiHandler;
@@ -55,7 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @JEIPlugin
 @SideOnly(Side.CLIENT)
-public class FactoryJeiPlugin extends BlankModPlugin {
+public class FactoryJeiPlugin implements IModPlugin {
 	@Nullable
 	public static IJeiHelpers jeiHelpers;
 	

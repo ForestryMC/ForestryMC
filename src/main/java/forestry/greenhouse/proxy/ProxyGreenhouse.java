@@ -14,4 +14,12 @@ public class ProxyGreenhouse {
 
 	public void initializeModels() {
 	}
+
+	public void preInti() {
+
+	}
+
+	public void inti() {
+
+	}
 }

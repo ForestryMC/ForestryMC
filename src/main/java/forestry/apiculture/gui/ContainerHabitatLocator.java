@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 

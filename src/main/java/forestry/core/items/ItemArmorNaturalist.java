@@ -13,24 +13,27 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister {
 
@@ -58,8 +61,8 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		ItemTooltipUtil.addInformation(stack, playerIn, tooltip, advanced);
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 
 	@Override

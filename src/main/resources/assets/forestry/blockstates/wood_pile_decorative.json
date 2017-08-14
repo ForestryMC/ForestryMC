@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":  { "model": "forestry:wood_pile" },
+        "axis=z":   { "model": "forestry:wood_pile", "x": 90 },
+        "axis=x":   { "model": "forestry:wood_pile", "x": 90, "y": 90 },
+        "axis=none": { "model": "forestry:wood_pile" }
+    }
+}

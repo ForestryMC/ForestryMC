@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -62,7 +63,7 @@ public class StringUtil {
 	@SideOnly(Side.CLIENT)
 	public static int getLineHeight(int maxWidth, String... strings) {
 		Minecraft minecraft = Minecraft.getMinecraft();
-		FontRenderer fontRenderer = minecraft.fontRendererObj;
+		FontRenderer fontRenderer = minecraft.fontRenderer;
 
 		int lineCount = 0;
 		for (String string : strings) {

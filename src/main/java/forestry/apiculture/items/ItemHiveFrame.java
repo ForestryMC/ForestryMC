@@ -10,7 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
@@ -21,10 +29,6 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
@@ -55,9 +59,9 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
-		beeModifier.addInformation(stack, playerIn, tooltip, advanced);
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, world, tooltip, advanced);
+		beeModifier.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isItemDamaged()) {
 			tooltip.add(Translator.translateToLocalFormatted("item.for.durability", stack.getMaxDamage()));
 		}
@@ -82,7 +86,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		}
 
 		@SideOnly(Side.CLIENT)
-		public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.production", production));
 			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.genetic.decay", geneticDecay));
 		}

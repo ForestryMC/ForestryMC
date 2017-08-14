@@ -14,10 +14,6 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.fluids.Fluids;
-import forestry.core.tiles.IRenderableTile;
-import forestry.core.tiles.TileBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -28,6 +24,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.fluids.Fluids;
+import forestry.core.tiles.IRenderableTile;
+import forestry.core.tiles.TileBase;
 
 public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 
@@ -81,12 +82,12 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
-
+	
 	/**
 	 * @param tile If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (tile != null) {
 			IRenderableTile generator = (IRenderableTile) tile;
 			World worldObj = tile.getWorldObj();

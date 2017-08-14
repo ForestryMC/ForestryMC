@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import forestry.apiculture.PluginApiculture;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import forestry.apiculture.PluginApiculture;
 
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;
 	private final BlockPos destination;
 
 	public ParticleBeeRoundTrip(World world, Vec3d origin, BlockPos destination, int color) {
-		super(world, origin.xCoord, origin.yCoord, origin.zCoord, 0.0D, 0.0D, 0.0D);
+		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
 		setParticleTexture(PluginApiculture.getBeeSprite());
 		this.origin = origin;
 
@@ -56,9 +57,9 @@ public class ParticleBeeRoundTrip extends Particle {
 		this.move(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
-			this.motionX = (origin.xCoord - this.posX) * 0.03 + 0.1 * rand.nextFloat();
-			this.motionY = (origin.yCoord - this.posY) * 0.03 + 0.1 * rand.nextFloat();
-			this.motionZ = (origin.zCoord - this.posZ) * 0.03 + 0.1 * rand.nextFloat();
+			this.motionX = (origin.x - this.posX) * 0.03 + 0.1 * rand.nextFloat();
+			this.motionY = (origin.y - this.posY) * 0.03 + 0.1 * rand.nextFloat();
+			this.motionZ = (origin.z - this.posZ) * 0.03 + 0.1 * rand.nextFloat();
 		}
 
 		if (this.particleAge < this.particleMaxAge * 0.25) {
@@ -75,15 +76,15 @@ public class ParticleBeeRoundTrip extends Particle {
 		} else if (this.particleAge < this.particleMaxAge * 0.75) {
 			// venture back
 			this.motionX *= 0.95;
-			this.motionY = (origin.yCoord - this.posY) * 0.03;
+			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
 			// get to origin
-			this.motionX = (origin.xCoord - this.posX) * 0.03;
-			this.motionY = (origin.yCoord - this.posY) * 0.03;
+			this.motionX = (origin.x - this.posX) * 0.03;
+			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ = (origin.zCoord - this.posZ) * 0.03;
+			this.motionZ = (origin.z - this.posZ) * 0.03;
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {
@@ -92,7 +93,7 @@ public class ParticleBeeRoundTrip extends Particle {
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
@@ -113,10 +114,10 @@ public class ParticleBeeRoundTrip extends Particle {
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
-		worldRendererIn.pos(f11 - rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 - rotationYZ * f10 - rotationXZ * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		worldRendererIn.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		worldRendererIn.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		worldRendererIn.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		buffer.pos(f11 - rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 - rotationYZ * f10 - rotationXZ * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		buffer.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		buffer.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		buffer.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 	}
 
 	// avoid calculating lighting for bees, it is too much processing

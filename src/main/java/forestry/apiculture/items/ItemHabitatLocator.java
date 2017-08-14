@@ -10,7 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -25,17 +41,6 @@ import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -69,18 +74,22 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		super.addInformation(itemstack, player, list, flag);
-
-		Biome currentBiome = player.world.getBiome(player.getPosition());
-
-		float temperatureValue = ClimateUtil.getTemperature(player.world, player.getPosition());
-		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
-		EnumHumidity humidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(player.world, player.getPosition()));
-
-		list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
-		list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
-		list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+		super.addInformation(itemstack, world, list, flag);
+		
+		Minecraft minecraft = Minecraft.getMinecraft();
+		if (world != null && minecraft.player != null) {
+			EntityPlayerSP player = minecraft.player;
+			Biome currentBiome = player.world.getBiome(player.getPosition());
+			
+			float temperatureValue = ClimateUtil.getTemperature(world, player.getPosition());
+			EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
+			EnumHumidity humidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, player.getPosition()));
+			
+			list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
+			list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
+			list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
+		}
 	}
 
 	@Override

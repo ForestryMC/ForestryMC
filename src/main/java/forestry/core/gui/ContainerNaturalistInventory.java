@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
+
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 

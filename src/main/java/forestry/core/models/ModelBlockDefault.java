@@ -119,7 +119,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		return (itemModel != null || blockModel != null) &&
 				(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
 	}
-
+	
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		if (blockModel != null) {
@@ -127,7 +127,6 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		}
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
-
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {

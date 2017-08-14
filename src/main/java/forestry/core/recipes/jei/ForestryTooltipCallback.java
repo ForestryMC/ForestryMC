@@ -1,13 +1,16 @@
 package forestry.core.recipes.jei;
 
+import com.google.common.collect.ArrayListMultimap;
+
 import java.text.NumberFormat;
 import java.util.List;
 
-import com.google.common.collect.ArrayListMultimap;
-import forestry.core.utils.Translator;
-import mezz.jei.api.gui.ITooltipCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+
+import forestry.core.utils.Translator;
+
+import mezz.jei.api.gui.ITooltipCallback;
 
 public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 
@@ -19,6 +22,10 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		if (!tip.isEmpty()) {
 			tooltip.addAll(tip);
 		}
+	}
+
+	public void addFortuneTooltip(int index) {
+		tooltips.get(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.fortune"));
 	}
 
 	public void addChanceTooltip(int index, float chance) {

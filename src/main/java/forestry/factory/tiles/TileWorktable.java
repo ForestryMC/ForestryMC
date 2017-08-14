@@ -10,11 +10,29 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.ForgeHooks;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
@@ -29,21 +47,6 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private RecipeMemory recipeMemory;
@@ -95,12 +98,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		recipeMemory.readData(data);
 	}
 
-	@Override
-	public void validate() {
-		super.validate();
-		recipeMemory.validate(world);
-	}
-
 	/* Recipe Conflicts */
 	public boolean hasRecipeConflict() {
 		return currentRecipe != null && currentRecipe.hasRecipeConflict();
@@ -117,7 +114,15 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			currentRecipe.decrementRecipe();
 		}
 	}
-
+	
+	@Override
+	public ItemStack getResult(InventoryCrafting inventoryCrafting, World world) {
+		if (currentRecipe != null) {
+			return currentRecipe.getCraftingResult(inventoryCrafting, world);
+		}
+		return ItemStack.EMPTY;
+	}
+	
 	/* ICrafterWorktable */
 	@Override
 	public boolean canTakeStack(int craftingSlotIndex) {
@@ -138,6 +143,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (currentRecipe == null) {
 			return false;
 		}
+		
 		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
 		if (selectedRecipe == null) {
 			return false;
@@ -148,7 +154,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (crafting == null) {
 			return false;
 		}
-
+		
 		NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(crafting);
 
 		IInventory inventory;
@@ -159,13 +165,11 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			inventory = this;
 		}
 
-		if (!InventoryUtil.deleteExactSet(inventory, recipeItems))
-		{
+		if (!InventoryUtil.deleteExactSet(inventory, recipeItems)) {
 			return false;
 		}
 
-		if (!simulate)
-		{
+		if (!simulate) {
 			// update crafting display to match the ingredients that were actually used
 			currentRecipe.setCraftMatrix(crafting);
 			setCurrentRecipe(currentRecipe);
@@ -186,25 +190,26 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		ForgeHooks.setCraftingPlayer(null);
 
 		for (ItemStack remainingItem : remainingItems) {
-			if (remainingItem != null && !remainingItem.isEmpty())
-			{
+			if (remainingItem != null && !remainingItem.isEmpty()) {
 				if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
 					player.dropItem(remainingItem, false);
 				}
 			}
 		}
-
+		
 		if (!world.isRemote) {
 			recipeMemory.memorizeRecipe(world.getTotalWorldTime(), currentRecipe);
 		}
 	}
 	
+	@Nullable
 	@Override
-	public ItemStack getResult(InventoryCrafting inventoryCrafting, World world) {
-		if (currentRecipe != null) {
-			return currentRecipe.getCraftingResult(inventoryCrafting, world);
+	public IRecipe getRecipeUsed() {
+		if (currentRecipe == null) {
+			return null;
 		}
-		return ItemStack.EMPTY;
+		
+		return currentRecipe.getSelectedRecipe();
 	}
 
 	/* Crafting Container methods */
@@ -232,11 +237,11 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			craftingDisplay.setInventorySlotContents(slot, ItemStack.EMPTY);
 		}
 	}
-	
+
 	public void setCurrentRecipe(InventoryCraftingForestry crafting) {
 		List<IRecipe> recipes = RecipeUtil.findMatchingRecipes(crafting, world);
 		MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
-		
+
 		if (currentRecipe != null && recipe != null) {
 			if (recipe.hasRecipe(currentRecipe.getSelectedRecipe())) {
 				NonNullList<ItemStack> stacks = InventoryUtil.getStacks(crafting);
@@ -246,7 +251,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 				}
 			}
 		}
-		
+
 		setCurrentRecipe(recipe);
 	}
 

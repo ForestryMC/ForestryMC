@@ -12,19 +12,6 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.ITextureManager;
-import forestry.core.circuits.ISocketable;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.MachineStateMapper;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -52,13 +39,25 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.ITextureManager;
+import forestry.core.circuits.ISocketable;
+import forestry.core.render.MachineParticleCallback;
+import forestry.core.render.MachineStateMapper;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister, IBlockRotatable {
 	/**
@@ -156,13 +155,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 				ItemStack heldItem = playerIn.getHeldItem(hand);
 				if (!playerIn.isSneaking()) {
-					if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
-						IFluidHandler tileFluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-						FluidActionResult fluidActionResult = FluidUtil.interactWithFluidHandler(heldItem, tileFluidHandler, playerIn);
-						if (fluidActionResult.isSuccess()) {
-							playerIn.setHeldItem(hand, fluidActionResult.getResult());
-							return true;
-						}
+					if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, facing)) {
+						return true;
 					}
 				}
 

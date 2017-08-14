@@ -207,7 +207,7 @@ public interface IAlleleRegistry {
 	 * @param handler IAlleleHandler to register.
 	 */
 	void registerAlleleHandler(IAlleleHandler handler);
-
+	
 	/* BLACKLIST */
 
 	/**

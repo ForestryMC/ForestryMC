@@ -10,36 +10,94 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import net.minecraft.item.ItemStack;
+
+import forestry.api.climate.IClimateModifier;
 import forestry.api.greenhouse.IGreenhouseHelper;
-import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.multiblock.IMultiblockControllerInternal;
-import forestry.core.multiblock.MultiblockRegistry;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import forestry.greenhouse.multiblock.InternalBlockCheck;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
-	@Override
-	@Nullable
-	public IGreenhouseController getGreenhouseController(World world, BlockPos pos) {
-		for (IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)) {
-			if (controllerInternal instanceof IGreenhouseControllerInternal &&
-					controllerInternal.isAssembled() &&
-					isPositionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)) {
-				return (IGreenhouseController) controllerInternal;
-			}
-		}
-		return null;
+	private final Set<IClimateModifier> modifiers;
+	private List<IGreenhouseLogicFactory> factories = new ArrayList<>();
+	private Map<String, GreenhouseWindowGlass> windowGlasses = new HashMap<>();
+
+	public GreenhouseHelper() {
+		modifiers = new TreeSet<IClimateModifier>((firstModifier, secondModifier) -> firstModifier.getPriority() > secondModifier.getPriority() ? 1 : -1);
 	}
 
-	private static boolean isPositionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos) {
-		IInternalBlock checkBlock = new InternalBlockCheck(pos);
-		return controller.getInternalBlocks().contains(checkBlock);
+	@Override
+	public void registerWindowGlass(String name, ItemStack item, String texture) {
+		windowGlasses.put(name, new GreenhouseWindowGlass(name, texture, item));
+	}
+
+	@Override
+	public ItemStack getGlassItem(String name) {
+		GreenhouseWindowGlass glass = windowGlasses.get(name);
+		if (glass == null) {
+			return ItemStack.EMPTY;
+		}
+		return glass.item.copy();
+	}
+
+	@Override
+	public String getGlassTexture(String name) {
+		GreenhouseWindowGlass glass = windowGlasses.get(name);
+		if (glass == null) {
+			return "minecraft:blocks/glass";
+		}
+		return glass.texture;
+	}
+
+	@Override
+	public Collection<String> getWindowGlasses() {
+		return windowGlasses.keySet();
+	}
+
+	@Override
+	public void registerLogic(IGreenhouseLogicFactory logicFactory) {
+		factories.add(logicFactory);
+	}
+
+	@Override
+	public Collection<IGreenhouseLogic> createLogics(IGreenhouseController controller) {
+		List<IGreenhouseLogic> logics = new ArrayList<>();
+		for (IGreenhouseLogicFactory factory : factories) {
+			logics.add(factory.createLogic(controller));
+		}
+		return logics;
+	}
+
+	@Override
+	public void registerModifier(IClimateModifier modifier) {
+		modifiers.add(modifier);
+	}
+
+	@Override
+	public Collection<IClimateModifier> getModifiers() {
+		return modifiers;
+	}
+
+	private final class GreenhouseWindowGlass {
+		ItemStack item;
+		String name;
+		String texture;
+
+		public GreenhouseWindowGlass(String name, String texture, ItemStack item) {
+			this.name = name;
+			this.texture = texture;
+			this.item = item;
+		}
 	}
 
 }

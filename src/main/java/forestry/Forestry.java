@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
-import forestry.core.climate.ClimateEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -42,7 +40,6 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import forestry.plugins.compat.PluginIC2;
@@ -57,10 +54,11 @@ import forestry.plugins.compat.PluginIC2;
 		name = Constants.MOD_NAME,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.11]",
-		dependencies = "required-after:forge@[13.20.0.2270,);"
-				+ "after:jei@[4.5.0,);"
-				+ "after:" + PluginIC2.modId + ";")
+		acceptedMinecraftVersions = "[1.12]",
+		dependencies = "required-after:forge@[14.21.1.2395,);"
+				+ "after:jei@[4.7.0,);"
+				+ "after:" + PluginIC2.modId + ";"
+				+ "after:toughasnails;")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
@@ -93,7 +91,6 @@ public class Forestry {
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
-		MinecraftForge.EVENT_BUS.register(new ClimateEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
 
@@ -149,10 +146,5 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		PluginManager.processIMCMessages(event.getMessages());
-	}
-
-	@EventHandler
-	public void onMissingMappings(FMLMissingMappingsEvent event) {
-		MigrationHelper.onMissingMappings(event);
 	}
 }

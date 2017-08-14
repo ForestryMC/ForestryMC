@@ -34,6 +34,8 @@ public interface IModelBaker {
 
 	void addBakedModel(@Nullable IBlockState state, IBakedModel model);
 
+	void addBakedModelPost(@Nullable IBlockState state, IBakedModel model);
+
 	void addFace(EnumFacing facing, TextureAtlasSprite sprite);
 
 	void setModelState(@Nullable IModelState modelState);

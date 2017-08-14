@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.core.PluginCore;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,9 +24,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import forestry.core.PluginCore;
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
 	private final ItemStack remnants;

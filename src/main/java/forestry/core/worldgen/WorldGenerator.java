@@ -13,21 +13,24 @@ package forestry.core.worldgen;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
 import forestry.plugins.PluginManager;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class WorldGenerator implements IWorldGenerator {
 	@Nullable
@@ -52,10 +55,15 @@ public class WorldGenerator implements IWorldGenerator {
 		PluginManager.populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
 	}
 
+	@SubscribeEvent
+	public void decorateBiome(DecorateBiomeEvent.Post event) {
+		PluginManager.decorateBiome(event.getWorld(), event.getRand(), event.getPos());
+	}
+
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
 		PluginManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
-		world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+		world.getChunkFromChunkCoords(chunkX, chunkZ).markDirty();
 	}
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {

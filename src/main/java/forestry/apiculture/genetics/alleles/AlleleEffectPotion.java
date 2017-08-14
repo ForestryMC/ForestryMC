@@ -14,11 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.render.ParticleRender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Potion;
@@ -26,8 +21,15 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.render.ParticleRender;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
@@ -93,7 +95,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
+			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
 		}
 		return storedData;
 	}

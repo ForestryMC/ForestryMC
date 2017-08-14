@@ -12,38 +12,39 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NBTUtilForestry;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
 	private InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
-	private List<IRecipe> recipes = NonNullList.create();
+	private List<IRecipe> recipes = new ArrayList<>();
 	private int selectedRecipe;
 	private long lastUsed;
 	private boolean locked;
-	
-	public MemorizedRecipe(PacketBufferForestry data, World world) throws IOException {
-		readData(data, world);
+
+	public MemorizedRecipe(PacketBufferForestry data) throws IOException {
+		readData(data);
 	}
-	
+
 	public MemorizedRecipe(NBTTagCompound nbt) {
 		readFromNBT(nbt);
 	}
@@ -52,7 +53,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
 		this.recipes = recipes;
 	}
-	
+
 	public InventoryCraftingForestry getCraftMatrix() {
 		return craftMatrix;
 	}
@@ -60,32 +61,25 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public void setCraftMatrix(InventoryCraftingForestry craftMatrix) {
 		this.craftMatrix = craftMatrix;
 	}
-	
-	public void validate(World world) {
-		recipes = RecipeUtil.findMatchingRecipes(craftMatrix, world);
-		if (selectedRecipe > recipes.size()) {
-			selectedRecipe = 0;
-		}
-	}
-	
+
 	public void incrementRecipe() {
 		selectedRecipe++;
 		if (selectedRecipe >= recipes.size()) {
 			selectedRecipe = 0;
 		}
 	}
-	
+
 	public void decrementRecipe() {
 		selectedRecipe--;
 		if (selectedRecipe < 0) {
 			selectedRecipe = recipes.size() - 1;
 		}
 	}
-	
+
 	public boolean hasRecipeConflict() {
 		return recipes.size() > 1;
 	}
-	
+
 	public void removeRecipeConflicts() {
 		IRecipe recipe = getSelectedRecipe();
 		recipes.clear();
@@ -127,43 +121,66 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public boolean hasRecipe(@Nullable IRecipe recipe) {
 		return this.recipes.contains(recipe);
 	}
-	
+
 	public void updateLastUse(long lastUsed) {
 		this.lastUsed = lastUsed;
 	}
-	
+
 	public long getLastUsed() {
 		return lastUsed;
 	}
-	
+
 	public void toggleLock() {
 		locked = !locked;
 	}
-	
+
 	public boolean isLocked() {
 		return locked;
 	}
-	
+
 	/* INbtWritable */
 	@Override
 	public final void readFromNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.readFromNBT(craftMatrix, nbttagcompound);
 		lastUsed = nbttagcompound.getLong("LastUsed");
 		locked = nbttagcompound.getBoolean("Locked");
-		
+
 		if (nbttagcompound.hasKey("SelectedRecipe")) {
 			selectedRecipe = nbttagcompound.getInteger("SelectedRecipe");
 		}
 		
 		recipes.clear();
+		NBTTagList recipesNbt = nbttagcompound.getTagList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
+		for (int i = 0; i < recipesNbt.tagCount(); i++) {
+			String recipeKey = recipesNbt.getStringTagAt(i);
+			ResourceLocation key = new ResourceLocation(recipeKey);
+			IRecipe recipe = ForgeRegistries.RECIPES.getValue(key);
+			if (recipe != null) {
+				recipes.add(recipe);
+			}
+		}
+		
+		if (selectedRecipe > recipes.size()) {
+			selectedRecipe = 0;
+		}
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(craftMatrix, nbttagcompound);
 		nbttagcompound.setLong("LastUsed", lastUsed);
 		nbttagcompound.setBoolean("Locked", locked);
 		nbttagcompound.setInteger("SelectedRecipe", selectedRecipe);
+		
+		NBTTagList recipesNbt = new NBTTagList();
+		for (IRecipe recipe : recipes) {
+			ResourceLocation recipeKey = ForgeRegistries.RECIPES.getKey(recipe);
+			if (recipeKey != null) {
+				recipesNbt.appendTag(new NBTTagString(recipeKey.toString()));
+			}
+		}
+		nbttagcompound.setTag("Recipes", recipesNbt);
+		
 		return nbttagcompound;
 	}
 
@@ -173,20 +190,30 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		data.writeInventory(craftMatrix);
 		data.writeBoolean(locked);
 		data.writeVarInt(selectedRecipe);
+		
+		data.writeVarInt(recipes.size());
+		for (IRecipe recipe: recipes) {
+			ResourceLocation recipeId = ForgeRegistries.RECIPES.getKey(recipe);
+			if (recipeId != null) {
+				data.writeString(recipeId.toString());
+			}
+		}
 	}
-	
+
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
-		readData(data, Minecraft.getMinecraft().world);
-	}
-	
-	public void readData(PacketBufferForestry data, World world) throws IOException {
 		data.readInventory(craftMatrix);
 		locked = data.readBoolean();
 		selectedRecipe = data.readVarInt();
 		
 		recipes.clear();
-		validate(world);
+		int recipeCount = data.readVarInt();
+		for (int i = 0; i < recipeCount; i++) {
+			String recipeId = data.readString();
+			IRecipe recipe = ForgeRegistries.RECIPES.getValue(new ResourceLocation(recipeId));
+			if (recipe != null) {
+				recipes.add(recipe);
+			}
+		}
 	}
 }

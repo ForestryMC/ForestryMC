@@ -13,7 +13,6 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.core.network.packets.PacketFXSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
@@ -30,7 +29,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.core.network.packets.PacketFXSignal;
 
 public abstract class BlockUtil {
 
@@ -210,21 +212,21 @@ public abstract class BlockUtil {
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
 	private static boolean isVecInsideYZBounds(@Nullable Vec3d vec, double minY, double minZ, double maxY, double maxZ) {
-		return vec != null && vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ;
+		return vec != null && vec.y >= minY && vec.y <= maxY && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
 	private static boolean isVecInsideXZBounds(@Nullable Vec3d vec, double minX, double minZ, double maxX, double maxZ) {
-		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ;
+		return vec != null && vec.x >= minX && vec.x <= maxX && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
 	private static boolean isVecInsideXYBounds(@Nullable Vec3d vec, double minX, double minY, double maxX, double maxY) {
-		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY;
+		return vec != null && vec.x >= minX && vec.x <= maxX && vec.y >= minY && vec.y <= maxY;
 	}
 	
 	/* CHUNKS */

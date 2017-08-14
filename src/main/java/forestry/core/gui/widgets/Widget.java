@@ -12,10 +12,11 @@ package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 
 /**
  * Basic non-ItemStack slot

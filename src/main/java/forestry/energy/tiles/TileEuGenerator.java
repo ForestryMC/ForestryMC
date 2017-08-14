@@ -25,15 +25,17 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.FilteredTank;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
@@ -43,7 +45,7 @@ import forestry.core.tiles.TileBase;
 import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.ForestryPluginUids;
 
 import ic2.api.energy.prefab.BasicSource;
 
@@ -66,8 +68,8 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		resourceTank.setFilters(FuelManager.generatorFuel.keySet());
 
 		tankManager = new TankManager(this, resourceTank);
-
-		if (PluginIC2.instance.isAvailable()) {
+		
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT2)) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}
 	}

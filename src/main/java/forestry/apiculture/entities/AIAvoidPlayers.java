@@ -63,17 +63,17 @@ public class AIAvoidPlayers extends EntityAIBase {
 		if (randomTarget == null) {
 			return false;
 		}
-
-		if (player.getDistanceSq(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord) < player.getDistanceSqToEntity(mob)) {
+		
+		if (player.getDistanceSq(randomTarget.x, randomTarget.y, randomTarget.z) < player.getDistanceSqToEntity(mob)) {
 			return false;
 		}
-
-		path = pathNavigator.getPathToXYZ(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord);
+		
+		path = pathNavigator.getPathToXYZ(randomTarget.x, randomTarget.y, randomTarget.z);
 		return path != null;
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return !this.pathNavigator.noPath();
 	}
 

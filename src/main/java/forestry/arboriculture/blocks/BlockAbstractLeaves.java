@@ -5,18 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.LeafDecayHelper;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -36,8 +24,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.IItemModelRegister;
+import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
@@ -51,12 +51,14 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		LeafDecayHelper.leafDecay(this, world, pos);
 	}
 
+	@Override
 	public abstract int getMetaFromState(IBlockState state);
 
+	@Override
 	public abstract IBlockState getStateFromMeta(int meta);
 
 	@Override
-	public final void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public final void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 
@@ -158,7 +160,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because there is no Player parameter in getDrops()
 	//          and Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<List<ItemStack>> drops = new ThreadLocal<>();
+	private final ThreadLocal<NonNullList<ItemStack>> drops = new ThreadLocal<>();
 
 	/**
 	 * {@link IToolGrafter}'s drop bonus handling is done here.
@@ -180,22 +182,22 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		}
 
 		GameProfile playerProfile = player.getGameProfile();
-		List<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
-		drops.set(leafDrops);
+		NonNullList<ItemStack> drops = NonNullList.create();
+		getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
+		this.drops.set(drops);
 	}
 
 	@Override
-	public final List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = drops.get();
-		drops.remove();
-
-		// leaves not harvested, get drops normally
-		if (ret == null) {
-			ret = getLeafDrop((World) world, null, pos, 1.0f, fortune);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		List<ItemStack> ret = this.drops.get();
+		this.drops.remove();
+		if (ret != null) {
+			drops.addAll(ret);
+		} else {
+			// leaves not harvested, get drops normally
+			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
 		}
-
-		return ret;
 	}
 
-	protected abstract NonNullList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
+	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
 }

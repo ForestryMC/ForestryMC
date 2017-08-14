@@ -248,7 +248,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 			ItemStack grainSeed = getItemStack(grainName + "seedItem");
 			Block grainBlock = getBlock("pam" + grainName + "Crop");
 			if (grain != null && wheatamount > 0) {
-				RecipeUtil.addRecipe(coreItems.fertilizerBio.getItemStack(wheatamount), " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', grain);
+				RecipeUtil.addRecipe("pam_compost_" + grainName, coreItems.compost.getItemStack(wheatamount), " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', grain);
 				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, coreItems.mouldyWheat.getItemStack(), 0, 300));
 			}
 			if (grainSeed != null) {
@@ -356,7 +356,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 
 		ItemStack hcBeeswaxItem = getItemStack("beeswaxItem");
 		if (hcBeeswaxItem != null) {
-			RecipeUtil.addRecipe(PluginFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
+			RecipeUtil.addRecipe("pam_wax_capsule", PluginFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
 		}
 	}
 

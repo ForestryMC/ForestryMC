@@ -14,11 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.EntityUtil;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
@@ -33,6 +28,12 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
@@ -97,7 +98,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		if (entity.isDead) {
 			return false;
 		}
-		ItemStack contained = entity.getEntityItem();
+		ItemStack contained = entity.getItem();
 		for (Resurrectable entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
 				EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);

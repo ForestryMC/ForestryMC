@@ -13,17 +13,6 @@ package forestry.arboriculture.blocks;
 import java.util.Collection;
 import java.util.Collections;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.SoundType;
@@ -37,8 +26,21 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
+import forestry.arboriculture.proxy.ProxyArboricultureClient;
 
 public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends BlockFenceGate implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 
@@ -99,7 +101,7 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(TreeManager.woodAccess.getStack(woodType, getBlockKind(), fireproof));
 	}
 

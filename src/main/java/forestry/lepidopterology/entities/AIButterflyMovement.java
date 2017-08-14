@@ -26,7 +26,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		if (entity.getState() != EnumButterflyState.FLYING) {
 			return false;
 		}

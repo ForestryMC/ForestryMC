@@ -30,7 +30,7 @@ public interface IDescriptiveRecipe {
 	 * @return array of all the ingredients in the crafting table.
 	 * Each inner list represents one slot's accepted ItemStacks
 	 */
-	NonNullList<NonNullList<ItemStack>> getIngredients();
+	NonNullList<NonNullList<ItemStack>> getRawIngredients();
 	
 	NonNullList<String> getOreDicts();
 

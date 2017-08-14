@@ -20,18 +20,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicGourd extends FarmLogic {
 
 	private final IFarmable[] seeds;
 
 	public FarmLogicGourd() {
-		Collection<IFarmable> farmables = ForestryAPI.farmRegistry.getFarmables("farmGourd");
+		Collection<IFarmable> farmables = FarmRegistry.getInstance().getFarmables("farmGourd");
 		seeds = farmables.toArray(new IFarmable[farmables.size()]);
 	}
 

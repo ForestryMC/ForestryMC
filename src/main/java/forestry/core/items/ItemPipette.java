@@ -13,23 +13,26 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.api.core.IModelManager;
-import forestry.api.core.IToolPipette;
-import forestry.core.fluids.PipetteContents;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.api.core.IToolPipette;
+import forestry.core.fluids.PipetteContents;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SideOnly(Side.CLIENT)
@@ -48,8 +51,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
-		super.addInformation(itemstack, player, list, flag);
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+		super.addInformation(itemstack, world, list, flag);
 
 		PipetteContents contained = PipetteContents.create(itemstack);
 		if (contained != null) {

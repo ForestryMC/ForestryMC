@@ -21,36 +21,36 @@ class GreenhouseMultiblockSizeLimits implements IMultiblockSizeLimits {
 
 	@Override
 	public int getMinimumNumberOfBlocksForAssembledMachine() {
-		return 0;
+		return 18;
 	}
 
 	@Override
 	public int getMaximumXSize() {
-		return 64;
+		return 5;
 	}
 
 	@Override
 	public int getMaximumZSize() {
-		return 64;
+		return 5;
 	}
 
 	@Override
 	public int getMaximumYSize() {
-		return 150;
+		return 5;
 	}
 
 	@Override
 	public int getMinimumXSize() {
-		return 5;
-	}
-
-	@Override
-	public int getMinimumZSize() {
-		return 5;
+		return 3;
 	}
 
 	@Override
 	public int getMinimumYSize() {
-		return 5;
+		return 2;
+	}
+
+	@Override
+	public int getMinimumZSize() {
+		return 3;
 	}
 }

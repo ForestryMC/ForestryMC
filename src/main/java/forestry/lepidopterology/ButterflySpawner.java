@@ -12,13 +12,14 @@ package forestry.lepidopterology;
 
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class ButterflySpawner implements ILeafTickHandler {
 

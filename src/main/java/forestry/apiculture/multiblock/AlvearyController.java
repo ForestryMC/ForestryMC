@@ -21,11 +21,9 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.climate.IClimateControlled;
-import forestry.api.climate.IClimatePosition;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.AlvearyBeeModifier;
@@ -429,10 +427,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		data.writeVarInt(beekeepingLogic.getBeeProgressPercent());
 		data.writeVarInt(Math.round(tempChange * 100));
 		data.writeVarInt(Math.round(humidChange * 100));
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getReferenceCoord());
-		if (position != null) {
-			ClimateUtil.writePositionData(position, data);
-		}
 	}
 
 	@Override
@@ -440,9 +434,5 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		breedingProgressPercent = data.readVarInt();
 		tempChange = data.readVarInt() / 100.0F;
 		humidChange = data.readVarInt() / 100.0F;
-		IClimatePosition position = ForestryAPI.climateManager.getPosition(world, getReferenceCoord());
-		if (position != null) {
-			ClimateUtil.readPositionData(position, data);
-		}
 	}
 }

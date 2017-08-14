@@ -36,6 +36,7 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.models.WoodTexture.SimpleTexture;
 import forestry.arboriculture.models.WoodTexture.TextureMap;
+import forestry.core.utils.Log;
 
 @SideOnly(Side.CLIENT)
 public class WoodTextureManager {
@@ -44,14 +45,11 @@ public class WoodTextureManager {
 	public static final String LOCATION = "/assets/forestry/textures/wood_textures.json";
 
 	public static void parseFile() {
-		try {
-			InputStream stream = WoodTextureManager.class.getResourceAsStream(LOCATION);
-			JsonReader reader = null;
-			try {
-				if(stream == null){
-					return;
-				}
-				reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
+		try (InputStream stream = WoodTextureManager.class.getResourceAsStream(LOCATION)) {
+			if (stream == null){
+				return;
+			}
+			try (JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)))){
 				JsonElement json = Streams.parse(reader);
 				if (json.isJsonObject()) {
 					JsonObject jsonObject = json.getAsJsonObject();
@@ -64,14 +62,10 @@ public class WoodTextureManager {
 						}
 					}
 				}
-			} finally {
-				if (reader != null) {
-					reader.close();
-				}
 			}
 		} catch (IOException e) {
 			if (!(e instanceof FileNotFoundException)) {
-				e.printStackTrace();
+				Log.error("Error finding wood textures.", e);
 			}
 		}
 	}
@@ -124,11 +118,13 @@ public class WoodTextureManager {
 		return new SimpleTexture(locations.build());
 	}
 	
+	@Nullable
 	private static WoodTexture getKindTexture(WoodBlockKind blockKind){
 		String kindName = blockKind.getName();
 		return WOOD_TEXTURES.get(kindName);
 	}
 	
+	@Nullable
 	private static WoodTexture getTexture(IWoodType woodType){
 		String woodName = woodType.getName();
 		woodName = woodName.toLowerCase(Locale.ENGLISH);

@@ -10,15 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.genetics.IFruitBearer;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.IFruitBearer;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class CropFruit extends Crop {
 

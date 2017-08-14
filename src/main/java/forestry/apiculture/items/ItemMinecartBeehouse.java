@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.apiculture.entities.EntityMinecartApiary;
-import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
-import forestry.apiculture.entities.EntityMinecartBeehouse;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,8 +25,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.apiculture.entities.EntityMinecartApiary;
+import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
+import forestry.apiculture.entities.EntityMinecartBeehouse;
 
 public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
@@ -94,9 +96,11 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegi
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for (int i = 0; i < definition.length; i++) {
-			subItems.add(new ItemStack(this, 1, i));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab)) {
+			for (int i = 0; i < definition.length; i++) {
+				subItems.add(new ItemStack(this, 1, i));
+			}
 		}
 	}
 

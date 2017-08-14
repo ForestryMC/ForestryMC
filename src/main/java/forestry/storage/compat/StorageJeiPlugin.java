@@ -3,12 +3,12 @@ package forestry.storage.compat;
 import forestry.core.utils.JeiUtil;
 import forestry.storage.PluginStorage;
 import forestry.storage.items.ItemRegistryStorage;
-import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 
 @JEIPlugin
-public class StorageJeiPlugin extends BlankModPlugin {
+public class StorageJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		ItemRegistryStorage items = PluginStorage.getItems();

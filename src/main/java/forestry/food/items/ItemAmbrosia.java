@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import forestry.core.config.Constants;
-import forestry.core.items.ItemForestryFood;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+
+import forestry.core.config.Constants;
+import forestry.core.items.ItemForestryFood;
 
 public class ItemAmbrosia extends ItemForestryFood {
 

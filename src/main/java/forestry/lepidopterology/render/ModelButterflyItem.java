@@ -10,21 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import com.google.common.base.Preconditions;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableMap;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.models.BlankModel;
-import forestry.core.models.DefaultTextureGetter;
-import forestry.core.models.TRSRBakedModel;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelRotation;
@@ -33,12 +27,21 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.ModelProcessingHelper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.config.Constants;
+import forestry.core.models.BlankModel;
+import forestry.core.models.DefaultTextureGetter;
+import forestry.core.models.TRSRBakedModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankModel {
@@ -58,20 +61,19 @@ public class ModelButterflyItem extends BlankModel {
 	}
 
 	private IBakedModel bakeModel(IButterfly butterfly) {
-		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		textures.put("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
+		ImmutableMap<String, String> textures = ImmutableMap.of("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
 
 		if (modelButterfly == null) {
 			try {
-				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/butterfly_ge"));
+				modelButterfly = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly_ge"));
 			} catch (Exception e) {
-				Throwables.propagate(e);
+				throw new RuntimeException(e);
 			}
 			if (modelButterfly == null) {
 				throw new IllegalArgumentException("Could not bake butterfly model");
 			}
 		}
-		IModel retexturedModel = ModelProcessingHelper.retexture(modelButterfly, textures.build());
+		IModel retexturedModel = modelButterfly.retexture(textures);
 		IBakedModel bakedModel = retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 		return new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
 	}

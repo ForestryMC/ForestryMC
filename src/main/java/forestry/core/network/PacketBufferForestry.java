@@ -4,16 +4,20 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.greenhouse.Position2D;
+
+import io.netty.buffer.ByteBuf;
 
 public class PacketBufferForestry extends PacketBuffer {
 	public PacketBufferForestry(ByteBuf wrapped) {
@@ -83,6 +87,15 @@ public class PacketBufferForestry extends PacketBuffer {
 		return null;
 	}
 
+	public void writePosition(Position2D position) {
+		writeInt(position.getX());
+		writeInt(position.getZ());
+	}
+
+	public Position2D readPosition() {
+		return new Position2D(readInt(), readInt());
+	}
+
 	public void writeEntityById(Entity entity) {
 		writeVarInt(entity.getEntityId());
 	}
@@ -109,6 +122,16 @@ public class PacketBufferForestry extends PacketBuffer {
 			ordinal = readVarInt();
 		}
 		return enumValues[ordinal];
+	}
+	
+	public void writeStreamable(@Nullable Object object) {
+		if (object != null && object instanceof IStreamable) {
+			IStreamable streamable = (IStreamable) object;
+			writeBoolean(true);
+			streamable.writeData(this);
+		} else {
+			writeBoolean(false);
+		}
 	}
 
 	public void writeStreamable(@Nullable IStreamable streamable) {

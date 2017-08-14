@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.core.blocks.properties.BlockAshStairs;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
@@ -22,6 +26,8 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockBogEarth bogEarth;
 	public final BlockHumus humus;
 	public final BlockResourceOre resources;
+	public final BlockAshBrick ashBrick;
+	public final BlockStairs ashStairs;
 	public final ItemStack resourceStorageApatite;
 	public final ItemStack resourceStorageTin;
 	public final ItemStack resourceStorageCopper;
@@ -64,6 +70,12 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
 		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
+
+		ashBrick = new BlockAshBrick();
+		registerBlock(ashBrick, new ItemBlockForestry(ashBrick), "ash_brick");
+
+		ashStairs = new BlockAshStairs(ashBrick.getDefaultState());
+		registerBlock(ashStairs, new ItemBlockForestry(ashStairs), "ash_stairs");
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);

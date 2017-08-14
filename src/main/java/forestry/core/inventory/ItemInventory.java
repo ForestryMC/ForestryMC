@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import com.google.common.base.Preconditions;
-import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -25,11 +25,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
+import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";
@@ -98,6 +101,17 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			}
 		}
 		return parent;
+	}
+	
+	@Nullable
+	protected EnumHand getHand(){
+		for (EnumHand hand : EnumHand.values()) {
+			ItemStack held = player.getHeldItem(hand);
+			if (isSameItemInventory(held, parent)) {
+				return hand;
+			}
+		}
+		return null;
 	}
 
 	private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {

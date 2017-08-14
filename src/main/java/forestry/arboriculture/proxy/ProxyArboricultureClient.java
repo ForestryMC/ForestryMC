@@ -10,12 +10,33 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.multipart.Multipart;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.IRegistry;
+import net.minecraft.world.ColorizerFoliage;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
@@ -35,22 +56,6 @@ import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.core.models.SimpleRetexturedModel;
 import forestry.core.models.WoodModelEntry;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.model.multipart.Multipart;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.IRegistry;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyArboricultureClient extends ProxyArboriculture {
@@ -110,7 +115,6 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 	@SubscribeEvent
 	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
-		WoodModelLoader.INSTANCE.isEnabled = true;
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
 
 		for (WoodModelEntry<T> entry : woodModelEntrys) {
@@ -145,28 +149,27 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
 									IWoodItemMeshDefinition woodDefinition) {
 		if (woodKind != WoodBlockKind.DOOR) {
-			IModel basicItemModel = ModelLoaderRegistry
-					.getModelOrMissing(woodDefinition.getDefaultModelLocation(itemStack));
+			ResourceLocation defaultModelLocation = woodDefinition.getDefaultModelLocation(itemStack);
+			IModel basicItemModel = ModelLoaderRegistry.getModelOrMissing(defaultModelLocation);
 			ModelResourceLocation basicItemLocation = woodDefinition.getModelLocation(itemStack);
-
-			registry.putObject(basicItemLocation,
-					new SimpleRetexturedModel(woodKind.retextureModel(basicItemModel, woodType, textures)));
+			IModel retextureModel = woodKind.retextureModel(basicItemModel, woodType, textures);
+			registry.putObject(basicItemLocation, new SimpleRetexturedModel(retextureModel));
 		}
 	}
 
 	private void retexturBlockModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
 									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
 									IWoodStateMapper woodMapper) {
-		IModel basicModel = ModelLoaderRegistry
-				.getModelOrMissing(woodMapper.getDefaultModelResourceLocation(blockState));
+		ModelResourceLocation defaultModelResourceLocation = woodMapper.getDefaultModelResourceLocation(blockState);
+		IModel basicModel = ModelLoaderRegistry.getModelOrMissing(defaultModelResourceLocation);
 		if (basicModel instanceof MultipartModel) {
 			MultipartModel multipartModel = (MultipartModel) basicModel;
 			Multipart multipart = multipartModel.getMultipart();
 			multipart.setStateContainer(blockState.getBlock().getBlockState());
 		}
 		ModelResourceLocation basicLocation = woodMapper.getModelLocation(blockState);
-		registry.putObject(basicLocation,
-				new SimpleRetexturedModel(woodKind.retextureModel(basicModel, woodType, textures)));
+		IModel retextureModel = woodKind.retextureModel(basicModel, woodType, textures);
+		registry.putObject(basicLocation, new SimpleRetexturedModel(retextureModel));
 
 	}
 

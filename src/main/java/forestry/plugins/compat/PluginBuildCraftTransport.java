@@ -43,7 +43,7 @@ public class PluginBuildCraftTransport extends BlankForestryPlugin {
 		Item beeswax = PluginCore.getItems().beeswax;
 		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "waterproof"));
 		if (pipeWaterproof != null) {
-			RecipeUtil.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
+			RecipeUtil.addShapelessRecipe("pipe_waterproof", new ItemStack(pipeWaterproof), beeswax);
 		} else {
 			Log.warning("No BuildCraft pipe waterproof found.");
 		}

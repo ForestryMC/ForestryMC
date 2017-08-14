@@ -12,9 +12,11 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import forestry.core.utils.Log;
-import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+
+import forestry.core.utils.Log;
+
+import io.netty.buffer.Unpooled;
 
 public abstract class ForestryPacket implements IForestryPacket {
 	@Override

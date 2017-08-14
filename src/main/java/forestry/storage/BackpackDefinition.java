@@ -13,12 +13,13 @@ package forestry.storage;
 import java.awt.Color;
 import java.util.function.Predicate;
 
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.utils.Translator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;

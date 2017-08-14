@@ -39,8 +39,8 @@ public class PluginRustic extends CompatPlugin {
 		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 
-		ItemStack grapes = getItemStack( "grapes");
-		ItemStack grapeSeeds = getItemStack( "grape_stem");
+		ItemStack grapes = getItemStack("grapes");
+		ItemStack grapeSeeds = getItemStack("grape_stem");
 		Block grapeLeaves = getBlock("grape_leaves");
 		if (grapeSeeds != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, grapeSeeds, Fluids.SEED_OIL.getFluid(seedAmount));
@@ -48,26 +48,26 @@ public class PluginRustic extends CompatPlugin {
 		if (grapes != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, grapes, Fluids.JUICE.getFluid(juiceAmount / 12));
 		}
-		if(grapeLeaves != null){
+		if (grapeLeaves != null) {
 			farmRegistry.registerFarmables("farmOrchard", new FarmableRusticGrape(grapeLeaves));
 		}
 
 		ItemStack sapling = getItemStack("sapling");
 		ItemStack ironBerries = getItemStack("ironberries");
 		ItemStack olives = getItemStack("olives");
-		if(sapling != null && ironBerries != null && olives != null){
+		if (sapling != null && ironBerries != null && olives != null) {
 			farmRegistry.registerFarmables("farmArboreal", new FarmableRusticSapling(sapling.getItem(), new ItemStack[]{ironBerries, olives}));
 		}
 
-		for(int i = 0;i <fruits.size();i++){
+		for (int i = 0; i < fruits.size(); i++) {
 			String fruitName = fruits.get(i);
-			ItemStack seeds = getItemStack( fruitName + "_seeds");
+			ItemStack seeds = getItemStack(fruitName + "_seeds");
 			Block block = getBlock(crops.get(i) + "_crop");
 			ItemStack fruit = getItemStack(fruitName);
 			if (seeds != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 			}
-			if(fruit != null){
+			if (fruit != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount / 25));
 			}
 			if (seeds != null && block != null) {

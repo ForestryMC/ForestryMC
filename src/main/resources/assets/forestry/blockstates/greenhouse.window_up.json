@@ -7,10 +7,10 @@
     "variants": {
 		"state": {
 		    "on": {
-				"model": "forestry:greenhouse.window_up_open"
+				"model": "forestry:greenhouse_window_up_open"
             },
             "off": {
-				 "model": "forestry:greenhouse.window_up_closed"
+				 "model": "forestry:greenhouse_window_up_closed"
             }
 		},
 		"facing":{
@@ -24,9 +24,6 @@
             },
 			"north": {
 				"y": 180
-            },
-			"up": {
-				"x": 90
             }
 		}
     }

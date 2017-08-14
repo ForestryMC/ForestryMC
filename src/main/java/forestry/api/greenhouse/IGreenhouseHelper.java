@@ -5,17 +5,29 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import javax.annotation.Nullable;
+import java.util.Collection;
+
+import net.minecraft.item.ItemStack;
+
+import forestry.api.climate.IClimateModifier;
 import forestry.api.multiblock.IGreenhouseController;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public interface IGreenhouseHelper {
-
-	/**
-	 * @return A {@link IGreenhouseController} of a greenhouse, when the pos is a greenhouse
-	 */
-	@Nullable
-	IGreenhouseController getGreenhouseController(World world, BlockPos pos);
+	
+	void registerWindowGlass(String name, ItemStack item, String texture);
+	
+	ItemStack getGlassItem(String name);
+	
+	String getGlassTexture(String name);
+	
+	Collection<String> getWindowGlasses();
+	
+	void registerLogic(IGreenhouseLogicFactory logicFactory);
+	
+	Collection<IGreenhouseLogic> createLogics(IGreenhouseController controller);
+	
+	void registerModifier(IClimateModifier modifier);
+	
+	Collection<IClimateModifier> getModifiers();
 
 }

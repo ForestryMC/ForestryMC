@@ -21,15 +21,15 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.ItemStackUtil;
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicSucculent extends FarmLogic {
-	private final Collection<IFarmable> germlings = ForestryAPI.farmRegistry.getFarmables("farmSucculentes");
+	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmSucculentes");
 
 	@Override
 	public ItemStack getIconItemStack() {

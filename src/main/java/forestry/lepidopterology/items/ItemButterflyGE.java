@@ -44,6 +44,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -86,8 +87,10 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		addCreativeItems(subItems, true);
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab)) {
+			addCreativeItems(subItems, true);
+		}
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
@@ -129,8 +132,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (rand.nextInt(24) != 0) {
 			return false;
 		}
-
-		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getEntityItem());
+		
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getItem());
 		if (butterfly == null) {
 			return false;
 		}
@@ -146,8 +149,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		EntityUtil.spawnEntity(entityItem.world,
 				new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX,
 				entityItem.posY, entityItem.posZ);
-		if (!entityItem.getEntityItem().isEmpty()) {
-			entityItem.getEntityItem().shrink(1);
+		if (!entityItem.getItem().isEmpty()) {
+			entityItem.getItem().shrink(1);
 		} else {
 			entityItem.setDead();
 		}
@@ -282,7 +285,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(ITextureManager manager) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumButterflyChromosome.SPECIES)) {
 			if (allele instanceof IAlleleButterflySpecies) {
 				((IAlleleButterflySpecies) allele).registerSprites();
 			}

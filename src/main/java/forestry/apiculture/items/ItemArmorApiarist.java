@@ -12,13 +12,6 @@ package forestry.apiculture.items;
 
 import javax.annotation.Nullable;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.apiculture.PluginApiculture;
-import forestry.core.config.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -26,10 +19,19 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.PluginApiculture;
+import forestry.core.config.Constants;
 
 public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 

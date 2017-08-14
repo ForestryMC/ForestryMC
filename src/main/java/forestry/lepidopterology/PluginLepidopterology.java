@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,9 +25,23 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.IChunkGenerator;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -59,21 +77,6 @@ import forestry.lepidopterology.worldgen.CocoonDecorator;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends BlankForestryPlugin {
@@ -128,7 +131,12 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-
+		
+		ButterflyDefinition.preInit();
+		MothDefinition.preInit();
+		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
+		
+		
 		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
 		proxy.preInitializeRendering();
 	}
@@ -293,9 +301,9 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		BlockRegistryLepidopterology blocks = getBlocks();
 		ItemRegistryLepidopterology items = getItems();
 
-		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
+		ForgeRegistries.RECIPES.register(new MatingRecipe());
 
-		RecipeUtil.addRecipe(blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
+		RecipeUtil.addRecipe("butterfly_chest", blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
 				new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
 	}
 

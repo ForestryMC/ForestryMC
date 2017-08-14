@@ -10,20 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
-import forestry.core.config.Constants;
-import forestry.core.network.PacketHandler;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.plugins.compat.PluginIC2;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -31,6 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.plugins.compat.PluginIC2;
 
 public class CropRubber extends CropDestroy {
 

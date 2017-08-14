@@ -15,17 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	public ItemHoneyComb() {
@@ -59,11 +61,13 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
-			if (!honeyComb.isSecret() || Config.isDebug) {
-				subItems.add(new ItemStack(this, 1, i));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab)) {
+			for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+				EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
+				if (!honeyComb.isSecret() || Config.isDebug) {
+					subItems.add(new ItemStack(this, 1, i));
+				}
 			}
 		}
 	}

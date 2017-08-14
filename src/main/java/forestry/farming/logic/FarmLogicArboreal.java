@@ -26,12 +26,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
+import forestry.farming.FarmRegistry;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	public FarmLogicArboreal(ItemStack resource, IBlockState ground, Collection<IFarmable> germlings) {
@@ -39,7 +39,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal() {
-		super(new ItemStack(Blocks.DIRT), PluginCore.getBlocks().humus.getDefaultState(), ForestryAPI.farmRegistry.getFarmables("farmArboreal"));
+		super(new ItemStack(Blocks.DIRT), PluginCore.getBlocks().humus.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmArboreal"));
 	}
 
 	@Override

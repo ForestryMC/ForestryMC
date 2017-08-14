@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileFermenter;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
 	private final TileFermenter tile;
