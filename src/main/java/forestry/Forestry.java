@@ -15,7 +15,10 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import forestry.plugins.compat.PluginNatura;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -54,10 +58,11 @@ import forestry.plugins.compat.PluginIC2;
 		name = Constants.MOD_NAME,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.12]",
+		acceptedMinecraftVersions = "[1.12, 1.12.1]",
 		dependencies = "required-after:forge@[14.21.1.2395,);"
 				+ "after:jei@[4.7.0,);"
 				+ "after:" + PluginIC2.modId + ";"
+				+ "after:" + PluginNatura.modId + ";"
 				+ "after:toughasnails;")
 public class Forestry {
 
@@ -73,6 +78,7 @@ public class Forestry {
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Nullable
@@ -105,6 +111,11 @@ public class Forestry {
 
 		PluginManager.runPreInit(event.getSide());
 
+	}
+
+	@SubscribeEvent
+	public void registerModels(ModelRegistryEvent event) {
+		PluginManager.runRegisterBackpacksAndCrates();
 		Proxies.render.registerModels();
 	}
 

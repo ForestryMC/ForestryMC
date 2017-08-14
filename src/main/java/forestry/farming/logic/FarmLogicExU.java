@@ -13,35 +13,44 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import forestry.farming.FarmRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 
-public class FarmLogicEnder extends FarmLogicHomogeneous {
+public class FarmLogicExU extends FarmLogicHomogeneous {
 
-	public FarmLogicEnder() {
-		super(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState(), ForestryAPI.farmRegistry.getFarmables("farmEnder"));
+	private final String name;
+	private final Item iconItem;
+
+	public FarmLogicExU(String name, Item iconItem, Block soil, String farmablesKey) {
+		super(new ItemStack(soil), soil.getDefaultState(), FarmRegistry.getInstance().getFarmables(farmablesKey));
+		if (soil.equals(Blocks.REDSTONE_ORE)) {
+			super.addSoil(new ItemStack(Blocks.LIT_REDSTONE_ORE), Blocks.LIT_REDSTONE_ORE.getDefaultState(), false);
+		}
+		this.name = name;
+		this.iconItem = iconItem;
 	}
 
 	@Override
 	public String getName() {
-		return "Managed Ender Farm";
+		return name;
 	}
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.ENDER_EYE);
+		return new ItemStack(iconItem);
 	}
 
 	@Override
