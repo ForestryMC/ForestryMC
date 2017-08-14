@@ -18,10 +18,10 @@ import java.util.Set;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IBlankBlock;
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseBlockStorage;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IBlankBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockStorage;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 
 public abstract class GreenhouseBlock<P extends IGreenhouseBlock> implements IGreenhouseBlock {
 	protected final BlockPos pos;

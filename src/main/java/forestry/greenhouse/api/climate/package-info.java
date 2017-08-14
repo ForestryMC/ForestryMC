@@ -3,15 +3,10 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+package forestry.greenhouse.api.climate;
 
-public interface IClimateContainerListener {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-	/**
-	 * Test if the container is closed.
-	 *
-	 * @return true to let the container slowly set his climate state back to the default climate state.
-	 */
-	boolean isClosed(IClimateContainer container);
-	
-}
+import mcp.MethodsReturnNonnullByDefault;

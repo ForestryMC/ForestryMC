@@ -1,8 +1,8 @@
 package forestry.core.climate;
 
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateFactory;
-import forestry.api.climate.IClimateHousing;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateFactory;
+import forestry.api.greenhouse.IClimateHousing;
 
 public class ClimateFactory implements IClimateFactory{
 

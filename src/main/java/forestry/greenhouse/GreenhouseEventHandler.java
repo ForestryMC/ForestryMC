@@ -34,9 +34,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.greenhouse.IGreenhouseLimits;
-import forestry.api.greenhouse.IGreenhouseProvider;
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.greenhouse.items.ItemGreenhouseScreen;

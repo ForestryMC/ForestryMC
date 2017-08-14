@@ -3,7 +3,7 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.greenhouse;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -11,8 +11,8 @@ import java.util.Collection;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.climate.GreenhouseState;
-import forestry.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.GreenhouseState;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 /**

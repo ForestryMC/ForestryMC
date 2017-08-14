@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.greenhouse.Position2D;
 
 import io.netty.buffer.ByteBuf;
 

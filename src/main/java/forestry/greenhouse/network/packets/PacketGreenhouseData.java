@@ -15,18 +15,19 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IGreenhouseProvider;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderClient;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderServer;
+import forestry.greenhouse.multiblock.blocks.world.GreenhouseBlockManager;
 
 public class PacketGreenhouseData extends ForestryPacket implements IForestryPacketClient {
 
@@ -57,7 +58,7 @@ public class PacketGreenhouseData extends ForestryPacket implements IForestryPac
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			IGreenhouseController controller = MultiblockUtil.getController(player.world, pos, IGreenhouseComponent.class);
+			IGreenhouseControllerInternal controller = MultiblockUtil.getController(player.world, pos, IGreenhouseComponent.class);
 			if (controller == null) {
 				return;
 			}
@@ -66,9 +67,9 @@ public class PacketGreenhouseData extends ForestryPacket implements IForestryPac
 				GreenhouseProviderClient providerClient = (GreenhouseProviderClient) provider;
 				providerClient.readData(data);
 			}
-			//GreenhouseBlockManager manager = GreenhouseBlockManager.getInstance();
-			provider.onBlockChange();
-			//manager.markProviderDirty(player.world, controller.getProvider().getCenterPos(), provider);
+			GreenhouseBlockManager manager = GreenhouseBlockManager.getInstance();
+			//provider.recreate();
+			manager.markProviderDirty(player.world, controller.getProvider().getCenterPos(), provider);
 		}
 	}
 }

@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.IGreenhouseComponent;

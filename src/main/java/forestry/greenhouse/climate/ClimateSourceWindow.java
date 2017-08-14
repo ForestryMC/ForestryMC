@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.api.climate.ClimateChange;
+import forestry.greenhouse.api.climate.ClimateChange;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.ForestryAPI;

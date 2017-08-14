@@ -24,7 +24,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.core.utils.Log;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseChunk;
 

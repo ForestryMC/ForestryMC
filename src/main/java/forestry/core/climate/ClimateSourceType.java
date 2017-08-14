@@ -11,7 +11,7 @@
 package forestry.core.climate;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
 
 /**

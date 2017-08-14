@@ -14,14 +14,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.world.World;
 
-import forestry.api.climate.ClimateChange;
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateSource;
-import forestry.api.climate.IClimateSourceOwner;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
-import forestry.api.core.ForestryAPI;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.climate.ClimateChange;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 
 public abstract class ClimateSource<O extends IClimateSourceOwner> implements IClimateSource {
 	
@@ -115,7 +115,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	public void onLoad() {
 		World world = owner.getWorldObj();
 		if(!addedToManager && !world.isRemote) {
-			ForestryAPI.climateManager.addSource(owner);
+			GreenhouseManager.climateManager.addSource(owner);
 		}
 		
 	}
@@ -127,7 +127,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	public void onChunkUnload() {
 		World world = owner.getWorldObj();
 		if(addedToManager &&!world.isRemote) {
-			ForestryAPI.climateManager.removeSource(owner);
+			GreenhouseManager.climateManager.removeSource(owner);
 		}
 		
 	}

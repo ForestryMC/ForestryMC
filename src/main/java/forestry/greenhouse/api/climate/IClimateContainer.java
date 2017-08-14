@@ -3,7 +3,7 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.climate;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -13,8 +13,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
+import forestry.api.greenhouse.IClimateHousing;
 
 public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateSourceContainer {
 	
@@ -38,7 +41,7 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	/**
 	 * Add a listener to this container.
 	 */
-	void addListaner(IClimateContainerListener listener);
+	void addListener(IClimateContainerListener listener);
 	
 	/**
 	 * Remove a listener to this container.

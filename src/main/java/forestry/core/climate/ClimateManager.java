@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,14 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import forestry.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateManager;
 import forestry.api.climate.IClimateProvider;
-import forestry.api.climate.IClimateSourceOwner;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
-import forestry.api.core.ILocatable;
-import forestry.api.greenhouse.Position2D;
 import forestry.core.DefaultClimateProvider;
 import forestry.core.utils.World2ObjectMap;
 
@@ -69,53 +62,9 @@ public class ClimateManager implements IClimateManager {
 		return manager.getClimateState(world, pos);
 	}
 
-	@Nullable
-	@Override
-	public IClimateContainer getContainer(World world, BlockPos pos) {
-		ClimateWorldManager manager = managers.get(world);
-		if(manager == null){
-			return null;
-		}
-		return manager.getContainer(world, pos);
-	}
-	
-	@Nullable
-	private IClimateContainer getContainer(ILocatable locatable){
-		return getContainer(locatable.getWorldObj(), locatable.getCoordinates());
-	}
-
 	@Override
 	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {
 		return new DefaultClimateProvider(world, pos);
-	}
-	
-	@Override
-	public void addSource(IClimateSourceOwner owner){
-		World world = owner.getWorldObj();
-		ClimateWorldManager manager = managers.get(world);
-		if(manager == null){
-			return;
-		}
-		manager.addSource(owner);
-	}
-	
-	@Override
-	public void removeSource(IClimateSourceOwner owner){
-		World world = owner.getWorldObj();
-		ClimateWorldManager manager = managers.get(world);
-		if(manager == null){
-			return;
-		}
-		manager.removeSource(owner);
-	}
-	
-	@Override
-	public Collection<IClimateSourceOwner> getSources(World world, Position2D position) {
-		ClimateWorldManager manager = managers.get(world);
-		if(manager == null){
-			return Collections.emptyList();
-		}
-		return manager.getSources(position);
 	}
 
 }

@@ -3,17 +3,14 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.api.greenhouse;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IClimateHousing {
+import forestry.api.climate.ImmutableClimateState;
 
-	/**
-	 * @return The climate container of this region.
-	 */
-	IClimateContainer getClimateContainer();
+public interface IClimateHousing {
 	
 	/**
 	 * @return The size of the region in blocks.

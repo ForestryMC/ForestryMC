@@ -3,12 +3,15 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.climate;
 
-public class GreenhouseManager {
+import java.util.Map;
 
-	public static IGreenhouseHelper greenhouseHelper;
-	
-	public static IGreenhouseBlockManager greenhouseBlockManager;
+import forestry.api.climate.ClimateType;
 
+public interface IClimateData {
+
+	IClimateData addData(ClimateType type, String displayName, float value);
+
+	Map<String, Float> getData(ClimateType type);
 }

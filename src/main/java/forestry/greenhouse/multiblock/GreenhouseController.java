@@ -26,21 +26,21 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.GreenhouseState;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateContainerListener;
+import forestry.greenhouse.api.climate.GreenhouseState;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainerListener;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedTile;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseProvider;
-import forestry.api.greenhouse.IGreenhouseProviderListener;
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
+import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.Active;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
@@ -99,7 +99,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 		this.camouflage = getDefaultCamouflageBlock();
 		this.climateContainer = new ClimateContainer(this);
-		this.climateContainer.addListaner(this);
+		this.climateContainer.addListener(this);
 		this.centerPos = BlockPos.ORIGIN;
 		if (world.isRemote) {
 			provider = new GreenhouseProviderClient(world, climateContainer);
@@ -107,7 +107,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			provider = new GreenhouseProviderServer(world, climateContainer);
 		}
 		provider.addListener(this);
-		this.logics = GreenhouseManager.greenhouseHelper.createLogics(this);
+		this.logics = GreenhouseManager.helper.createLogics(this);
 		for (IGreenhouseLogic logic : logics) {
 			if (logic instanceof IGreenhouseProviderListener) {
 				this.provider.addListener((IGreenhouseProviderListener) logic);

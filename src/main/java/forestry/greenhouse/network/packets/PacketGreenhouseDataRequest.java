@@ -17,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -25,6 +24,7 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderServer;
 
 public class PacketGreenhouseDataRequest extends ForestryPacket implements IForestryPacketServer {
@@ -50,7 +50,7 @@ public class PacketGreenhouseDataRequest extends ForestryPacket implements IFore
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
 			BlockPos position = data.readBlockPos();
 			World world = player.world;
-			IGreenhouseController controller = MultiblockUtil.getController(world, position, IGreenhouseComponent.class);
+			IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, position, IGreenhouseComponent.class);
 			if (controller != null) {
 				NetworkUtil.sendToPlayer(new PacketGreenhouseData(position, (GreenhouseProviderServer) controller.getProvider()), player);
 			}

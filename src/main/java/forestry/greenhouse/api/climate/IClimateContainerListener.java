@@ -3,12 +3,15 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.climate;
 
-import net.minecraft.util.math.BlockPos;
+public interface IClimateContainerListener {
 
-public interface IGreenhouseProviderListener {
-	
-	void onCheckPosition(BlockPos pos);
+	/**
+	 * Test if the container is closed.
+	 *
+	 * @return true to let the container slowly set his climate state back to the default climate state.
+	 */
+	boolean isClosed(IClimateContainer container);
 	
 }

@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseChunk;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;

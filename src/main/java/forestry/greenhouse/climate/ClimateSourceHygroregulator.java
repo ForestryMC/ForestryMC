@@ -12,7 +12,7 @@ package forestry.greenhouse.climate;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.climate.ClimateChange;
+import forestry.greenhouse.api.climate.ClimateChange;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;

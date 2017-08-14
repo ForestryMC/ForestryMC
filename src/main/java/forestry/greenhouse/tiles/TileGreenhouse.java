@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -23,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateContainer;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -32,8 +30,6 @@ import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.greenhouse.IGreenhouseHousing;
-import forestry.api.greenhouse.IGreenhouseLimits;
-import forestry.api.greenhouse.IGreenhouseProvider;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
@@ -179,11 +175,11 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 	
 	/* IGreenhouseHousing */
-
-	@Override
+	//TODO:Greenhouse Api
+	/*@Override
 	public IClimateContainer getClimateContainer() {
 		return getMultiblockLogic().getController().getClimateContainer();
-	}
+	}*/
 
 	@Override
 	public int getSize() {
@@ -220,7 +216,8 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		return getMultiblockLogic().getController().getExactHumidity();
 	}
 
-	@Override
+	//TODO:Greenhouse Api
+	/*@Override
 	public IGreenhouseProvider getProvider() {
 		return getMultiblockLogic().getController().getProvider();
 	}
@@ -229,5 +226,5 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public IGreenhouseLimits getLimits() {
 		return getMultiblockLogic().getController().getLimits();
-	}
+	}*/
 }

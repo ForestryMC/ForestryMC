@@ -15,8 +15,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.GreenhouseBlock;
 
 /**

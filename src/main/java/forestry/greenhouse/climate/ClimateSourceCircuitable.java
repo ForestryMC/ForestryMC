@@ -11,8 +11,8 @@
 package forestry.greenhouse.climate;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateSourceCircuitable;
-import forestry.api.climate.IClimateSourceOwner;
+import forestry.greenhouse.api.climate.IClimateSourceCircuitable;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.core.climate.ClimateSource;
 import forestry.core.climate.ClimateSourceType;
 

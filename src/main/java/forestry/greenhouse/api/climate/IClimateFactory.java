@@ -3,13 +3,17 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.climate;
 
-import java.util.Map;
+import forestry.api.greenhouse.IClimateHousing;
 
-public interface IClimateData {
+public interface IClimateFactory {
 
-	IClimateData addData(ClimateType type, String displayName, float value);
-
-	Map<String, Float> getData(ClimateType type);
+	/**
+	 * @param climatedRegion
+	 * 
+	 * @return Creates a climate container.
+	 */
+	IClimateContainer createContainer(IClimateHousing climatedRegion);
+	
 }

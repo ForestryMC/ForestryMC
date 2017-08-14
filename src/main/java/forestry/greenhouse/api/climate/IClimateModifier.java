@@ -3,12 +3,15 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.climate;
 
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.ImmutableClimateState;
 
 /**
  * This modifier is used by {@link IClimateContainer}s.

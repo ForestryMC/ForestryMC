@@ -31,8 +31,6 @@ import forestry.api.climate.ClimateType;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.core.CreativeTabForestry;
 import forestry.core.PluginCore;
 import forestry.core.circuits.CircuitLayout;
@@ -43,12 +41,16 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
+import forestry.greenhouse.api.climate.IGreenhouseClimateManager;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.IGreenhouseHelper;
 import forestry.greenhouse.blocks.BlockClimatiserType;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.camouflage.CamouflageAccess;
 import forestry.greenhouse.camouflage.CamouflageHandlerBlock;
 import forestry.greenhouse.circuits.CircuitClimateSource;
+import forestry.greenhouse.climate.GreenhouseClimateManager;
 import forestry.greenhouse.climate.modifiers.AltitudeModifier;
 import forestry.greenhouse.climate.modifiers.ClimateSourceModifier;
 import forestry.greenhouse.climate.modifiers.TimeModifier;
@@ -72,11 +74,6 @@ import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.greenhouse.description")
 public class PluginGreenhouse extends BlankForestryPlugin {
@@ -109,8 +106,9 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 
 	@Override
 	public void setupAPI() {
-		GreenhouseManager.greenhouseHelper = new GreenhouseHelper();
-		GreenhouseManager.greenhouseBlockManager = GreenhouseBlockManager.getInstance();
+		GreenhouseManager.helper = new GreenhouseHelper();
+		GreenhouseManager.blockManager = GreenhouseBlockManager.getInstance();
+		GreenhouseManager.climateManager = GreenhouseClimateManager.getInstance();
 		CamouflageManager.camouflageAccess = new CamouflageAccess();
 	}
 	
@@ -134,7 +132,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	@Override
 	public void doInit() {
 		super.doInit();
-		IGreenhouseHelper helper = GreenhouseManager.greenhouseHelper;
+		IGreenhouseHelper helper = GreenhouseManager.helper;
 
 		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
 		GameRegistry.registerTileEntity(TileFan.class, "forestry.GreenhouseFan");
@@ -152,10 +150,11 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 			helper.registerWindowGlass("glass" + dye.getName(), new ItemStack(Blocks.STAINED_GLASS, 1, dye.getMetadata()), "blocks/glass_" + dye.getName());
 		}
 
-		helper.registerModifier(new WeatherModifier());
-		helper.registerModifier(new TimeModifier());
-		helper.registerModifier(new AltitudeModifier());
-		helper.registerModifier(new ClimateSourceModifier());
+		IGreenhouseClimateManager climateSourceManager = GreenhouseClimateManager.getInstance();
+		climateSourceManager.registerModifier(new WeatherModifier());
+		climateSourceManager.registerModifier(new TimeModifier());
+		climateSourceManager.registerModifier(new AltitudeModifier());
+		climateSourceManager.registerModifier(new ClimateSourceModifier());
 
 		Circuits.greenhouseClimatiserTemperature1 = new CircuitClimateSource("climatiser.temperature.1", ClimateType.TEMPERATURE, 0.125F, 0.125F);
 		Circuits.greenhouseClimatiserTemperature2 = new CircuitClimateSource("climatiser.temperature.2", ClimateType.TEMPERATURE, 0.25F, 0.25F);
@@ -236,8 +235,8 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 			'#', OreDictUtil.INGOT_TIN,
 			'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
 
-		for (String glassName : GreenhouseManager.greenhouseHelper.getWindowGlasses()) {
-			ItemStack glassItem = GreenhouseManager.greenhouseHelper.getGlassItem(glassName);
+		for (String glassName : GreenhouseManager.helper.getWindowGlasses()) {
+			ItemStack glassItem = GreenhouseManager.helper.getGlassItem(glassName);
 			ItemStack window = blocks.window.getItem(glassName);
 			ItemStack roodWindow = blocks.roofWindow.getItem(glassName);
 			RecipeUtil.addRecipe("greenhouse_window_" + glassName, roodWindow,

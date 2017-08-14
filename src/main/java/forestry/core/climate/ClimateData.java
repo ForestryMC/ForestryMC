@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateData;
 
 public class ClimateData implements IClimateData {
 	private final Map<String, Float> temperatureData = new LinkedHashMap<>();

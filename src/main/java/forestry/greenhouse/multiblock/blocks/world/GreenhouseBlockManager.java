@@ -18,10 +18,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseBlockManager;
-import forestry.api.greenhouse.IGreenhouseChunk;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockManager;
+import forestry.greenhouse.api.greenhouse.IGreenhouseChunk;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.core.utils.World2ObjectMap;
 import forestry.greenhouse.multiblock.blocks.blank.BlankBlockHandler;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseChunk;

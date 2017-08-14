@@ -28,18 +28,18 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
-import forestry.api.climate.GreenhouseState;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateHousing;
-import forestry.api.greenhouse.IBlankBlock;
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.IGreenhouseLimits;
-import forestry.api.greenhouse.Position2D;
+import forestry.api.greenhouse.IClimateHousing;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.GreenhouseState;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.greenhouse.IBlankBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.greenhouse.multiblock.GreenhouseLimits;
 import forestry.greenhouse.multiblock.GreenhouseLimitsBuilder;
 import forestry.greenhouse.multiblock.blocks.GreenhouseException;
@@ -50,8 +50,8 @@ import forestry.greenhouse.network.packets.PacketGreenhouseData;
 
 public class GreenhouseProviderServer extends GreenhouseProvider {
 	private static final List<IGreenhouseBlockHandler> HANDLERS = new ArrayList<>();
-	private static final int TIME_BETWEEN_UPDATES = 100;
-	private static final int UPDATE_DELAY = 35;
+	private static final int TIME_BETWEEN_UPDATES = 25;
+	private static final int UPDATE_DELAY = 50;
 
 	private final Set<Long> unloadedChunks;
 
@@ -175,7 +175,8 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 	public void onBlockChange() {
 		long totalWorldTime = world.getTotalWorldTime();
 		if (totalWorldTime >= previousUpdateTick + TIME_BETWEEN_UPDATES) {
-			GreenhouseBlockManager.getInstance().scheduleUpdate(world, container.getParent().getCoordinates(), this, UPDATE_DELAY);
+			GreenhouseBlockManager blockManager = GreenhouseBlockManager.getInstance();
+			blockManager.scheduleUpdate(world, container.getParent().getCoordinates(), this, UPDATE_DELAY);
 			previousUpdateTick = totalWorldTime;
 		}
 	}

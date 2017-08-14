@@ -12,7 +12,7 @@ package forestry.greenhouse.multiblock.blocks.world;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 
 class NextTickEntry implements Comparable<NextTickEntry> {
 	private final IGreenhouseProvider provider;

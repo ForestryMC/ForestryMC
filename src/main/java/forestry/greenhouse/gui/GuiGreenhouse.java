@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateData;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;

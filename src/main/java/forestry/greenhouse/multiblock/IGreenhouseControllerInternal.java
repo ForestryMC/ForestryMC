@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -18,6 +19,9 @@ import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
 import forestry.core.owner.IOwnedTile;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 
 public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IOwnedTile, IStreamableGui {
 
@@ -35,4 +39,26 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	 * @return A Set with listener componets.
 	 */
 	Set<IGreenhouseComponent.Listener> getListenerComponents();
+
+	//TODO: Move back to api
+	/***************************************/
+	/* IClimateHousing */
+
+	/**
+	 * @return The climate container of this region.
+	 */
+	IClimateContainer getClimateContainer();
+
+	/* IGreenhouseHousing */
+	/**
+	 * @return the manager of this housing.
+	 */
+	IGreenhouseProvider getProvider();
+
+	/**
+	 * @return the maximal and minimal settings of this housing.
+	 */
+	@Nullable
+	IGreenhouseLimits getLimits();
+	/**************************************/
 }

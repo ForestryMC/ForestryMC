@@ -18,7 +18,7 @@ import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.greenhouse.network.packets.PacketGreenhouseData;

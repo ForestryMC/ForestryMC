@@ -27,19 +27,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.ClimateState;
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateContainerListener;
-import forestry.api.climate.IClimateData;
-import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateModifier;
-import forestry.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
-import forestry.api.greenhouse.GreenhouseManager;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
 import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainerListener;
+import forestry.greenhouse.api.climate.IClimateData;
+import forestry.api.greenhouse.IClimateHousing;
+import forestry.greenhouse.api.climate.IClimateModifier;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.climate.GreenhouseClimateManager;
 
 public class ClimateContainer implements IClimateContainer, IStreamable {
 	public static final float CLIMATE_CHANGE = 0.01F;
@@ -87,7 +87,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 			}else{
 				ImmutableClimateState oldState = state.toImmutable();
 				state = parent.getDefaultClimate().toMutable();
-				for(IClimateModifier modifier : GreenhouseManager.greenhouseHelper.getModifiers()){
+				for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
 					state = modifier.modifyTarget(this, state, oldState, modifierData).toMutable();
 				}
 				if(!state.equals(oldState)) {
@@ -255,7 +255,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	}
 	
 	@Override
-	public void addListaner(IClimateContainerListener listener) {
+	public void addListener(IClimateContainerListener listener) {
 		listeners.addListaner(listener);
 	}
 	
@@ -292,7 +292,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@SideOnly(Side.CLIENT)
 	public IClimateData getData() {
 		IClimateData data = new ClimateData();
-		for(IClimateModifier modifier : GreenhouseManager.greenhouseHelper.getModifiers()){
+		for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
 			modifier.addData(this, state, modifierData, data);
 		}
 		return data;

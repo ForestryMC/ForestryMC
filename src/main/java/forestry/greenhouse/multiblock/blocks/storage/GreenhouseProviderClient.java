@@ -18,11 +18,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.climate.GreenhouseState;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateHousing;
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.climate.GreenhouseState;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.api.greenhouse.IClimateHousing;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.network.PacketBufferForestry;
 import forestry.greenhouse.multiblock.GreenhouseLimits;

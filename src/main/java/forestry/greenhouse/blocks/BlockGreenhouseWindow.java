@@ -49,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.core.blocks.IBlockRotatable;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
@@ -197,7 +197,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		for (String glass : GreenhouseManager.greenhouseHelper.getWindowGlasses()) {
+		for (String glass : GreenhouseManager.helper.getWindowGlasses()) {
 			list.add(getItem(glass));
 		}
 	}

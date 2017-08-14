@@ -17,10 +17,10 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.api.climate.ImmutableClimateState;
-import forestry.api.greenhouse.IGreenhouseLimits;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;

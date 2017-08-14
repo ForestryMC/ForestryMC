@@ -18,10 +18,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.BlankClimateModifier;
+import forestry.greenhouse.api.climate.BlankClimateModifier;
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateData;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.core.utils.Translator;

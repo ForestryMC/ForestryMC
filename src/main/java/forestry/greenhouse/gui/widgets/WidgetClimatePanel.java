@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateData;
 import forestry.core.gui.tables.Table;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;

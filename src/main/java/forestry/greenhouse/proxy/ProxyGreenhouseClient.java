@@ -28,9 +28,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateState;
-import forestry.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;

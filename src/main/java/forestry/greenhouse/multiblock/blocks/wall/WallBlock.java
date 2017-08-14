@@ -16,15 +16,15 @@ import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateSource;
-import forestry.api.climate.IClimateSourceOwner;
-import forestry.api.core.ForestryAPI;
-import forestry.api.greenhouse.IBlankBlock;
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.IGreenhouseProvider;
-import forestry.api.greenhouse.IWallBlock;
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.IBlankBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IWallBlock;
+import forestry.greenhouse.api.greenhouse.Position2D;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.greenhouse.multiblock.blocks.GreenhouseBlock;
 
 public class WallBlock extends GreenhouseBlock<IBlankBlock> implements IWallBlock {
@@ -44,7 +44,7 @@ public class WallBlock extends GreenhouseBlock<IBlankBlock> implements IWallBloc
 	@Override
 	public void onCreate() {
 		IClimateContainer container = provider.getClimateContainer();
-		for (IClimateSourceOwner sourceOwner : ForestryAPI.climateManager.getSources(provider.getWorld(), new Position2D(pos))) {
+		for (IClimateSourceOwner sourceOwner : GreenhouseManager.climateManager.getSources(provider.getWorld(), new Position2D(pos))) {
 			IClimateSource source = sourceOwner.getClimateSource();
 			sources.add(source);
 			container.addClimateSource(source);

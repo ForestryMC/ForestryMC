@@ -15,26 +15,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.climate.IClimateModifier;
-import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
+import forestry.greenhouse.api.greenhouse.IGreenhouseHelper;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
-	private final Set<IClimateModifier> modifiers;
 	private List<IGreenhouseLogicFactory> factories = new ArrayList<>();
 	private Map<String, GreenhouseWindowGlass> windowGlasses = new HashMap<>();
-
-	public GreenhouseHelper() {
-		modifiers = new TreeSet<IClimateModifier>((firstModifier, secondModifier) -> firstModifier.getPriority() > secondModifier.getPriority() ? 1 : -1);
-	}
 
 	@Override
 	public void registerWindowGlass(String name, ItemStack item, String texture) {
@@ -76,16 +68,6 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 			logics.add(factory.createLogic(controller));
 		}
 		return logics;
-	}
-
-	@Override
-	public void registerModifier(IClimateModifier modifier) {
-		modifiers.add(modifier);
-	}
-
-	@Override
-	public Collection<IClimateModifier> getModifiers() {
-		return modifiers;
 	}
 
 	private final class GreenhouseWindowGlass {

@@ -49,7 +49,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflageHandler;
@@ -57,7 +57,7 @@ import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;

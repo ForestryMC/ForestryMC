@@ -25,7 +25,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.DefaultTextureGetter;
@@ -68,7 +68,7 @@ public class ModelGreenhouseWindow extends ModelBlockCustomCached<BlockGreenhous
 	@Override
 	protected IBakedModel bakeBlock(BlockGreenhouseWindow block, Key key, boolean inventory) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		String texture = GreenhouseManager.greenhouseHelper.getGlassTexture(key.glassName);
+		String texture = GreenhouseManager.helper.getGlassTexture(key.glassName);
 		textures.put("texture", texture);
 		textures.put("particle", texture);
 

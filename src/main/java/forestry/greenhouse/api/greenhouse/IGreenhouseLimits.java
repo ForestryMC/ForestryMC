@@ -3,7 +3,7 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.greenhouse;
 
 /**
  * The limits that a greenhouse has. Used in the {@link IGreenhouseProvider} to test if the greenhouse is tested.

@@ -3,15 +3,12 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.greenhouse;
 
-public interface IClimateFactory {
+import net.minecraft.util.math.BlockPos;
 
-	/**
-	 * @param climatedRegion
-	 * 
-	 * @return Creates a climate container.
-	 */
-	IClimateContainer createContainer(IClimateHousing climatedRegion);
+public interface IGreenhouseProviderListener {
+	
+	void onCheckPosition(BlockPos pos);
 	
 }

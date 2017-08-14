@@ -10,7 +10,7 @@ import java.util.Set;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateFactory;
+import forestry.greenhouse.api.climate.IClimateFactory;
 import forestry.api.climate.IClimateManager;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.ISimpleFarmLogic;

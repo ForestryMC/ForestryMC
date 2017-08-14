@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.api.climate.ClimateChange;
+import forestry.greenhouse.api.climate.ClimateChange;
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateContainer;
-import forestry.api.climate.IClimateHousing;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.api.greenhouse.IClimateHousing;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.IErrorLogic;

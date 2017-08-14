@@ -12,7 +12,7 @@ package forestry.greenhouse.multiblock;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.Position2D;
+import forestry.greenhouse.api.greenhouse.Position2D;
 
 public class GreenhouseLimitsBuilder {
 	public BlockPos.MutableBlockPos maximumCoordinates;

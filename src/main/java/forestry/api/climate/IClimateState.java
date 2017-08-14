@@ -14,7 +14,7 @@ import forestry.api.core.INbtWritable;
  * 
  * The range of the value of this two goes from 0.0F to 2.0F. And is oriented on the values of {@link Biome#getTemperature()} and {@link Biome#getRainfall()}.
  * 
- * Default inmplementations are: {@link ImmutableClimateState}, {@link ClimateState} and {@link ClimateChange}.
+ * Default inmplementations are: {@link ImmutableClimateState}, {@link ClimateState}.
  */
 public interface IClimateState extends INbtWritable {
 	

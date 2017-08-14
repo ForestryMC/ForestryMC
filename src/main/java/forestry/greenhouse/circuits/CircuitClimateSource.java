@@ -13,9 +13,9 @@ package forestry.greenhouse.circuits;
 import javax.annotation.Nullable;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateSource;
-import forestry.api.climate.IClimateSourceCircuitable;
-import forestry.api.climate.IClimateSourceOwner;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSourceCircuitable;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.core.circuits.Circuit;
 
 public class CircuitClimateSource extends Circuit {

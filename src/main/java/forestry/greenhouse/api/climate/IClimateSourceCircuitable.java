@@ -3,9 +3,10 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.climate;
 
 import forestry.api.circuits.ICircuit;
+import forestry.api.climate.ClimateType;
 
 public interface IClimateSourceCircuitable extends  IClimateSource {
 	/**

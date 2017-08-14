@@ -3,12 +3,16 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.climate;
+package forestry.greenhouse.api.climate;
 
 import javax.annotation.Nullable;
 
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.ImmutableClimateState;
+
 /**
- * A climate source is stored in a {@link IClimateSourceOwner}. It is used by the {@link IClimateSourceContainer}s to change the climate of a {@link IClimateContainer}. 
+ * A climate source is stored in a {@link IClimateSourceOwner}. It is used by the {@link IClimateSourceContainer}s to change the climate of a {@link IClimateContainer}.
  * One {@link IClimateSource} can only be used by one {@link IClimateSourceContainer} at the same time.
  * <p>
  * In forestry it is used in a part of a {@link IClimateModifier}.

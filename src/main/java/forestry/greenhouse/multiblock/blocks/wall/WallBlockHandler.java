@@ -21,13 +21,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.greenhouse.IBlankBlock;
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.IGreenhouseBlockStorage;
-import forestry.api.greenhouse.IGreenhouseProvider;
-import forestry.api.greenhouse.IGreenhouseProviderListener;
-import forestry.api.greenhouse.IWallBlock;
+import forestry.greenhouse.api.greenhouse.IBlankBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockStorage;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
+import forestry.greenhouse.api.greenhouse.IWallBlock;
 import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 public class WallBlockHandler implements IGreenhouseBlockHandler<IWallBlock, IBlankBlock> {

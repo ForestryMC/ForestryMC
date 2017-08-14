@@ -17,9 +17,9 @@ import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IGreenhouseBlock;
-import forestry.api.greenhouse.IGreenhouseChunk;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseChunk;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 
 public class GreenhouseChunk implements IGreenhouseChunk {
 

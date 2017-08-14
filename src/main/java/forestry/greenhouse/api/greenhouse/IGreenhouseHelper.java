@@ -3,13 +3,14 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.greenhouse;
 
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.climate.IClimateModifier;
+import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
 
 public interface IGreenhouseHelper {
@@ -25,9 +26,5 @@ public interface IGreenhouseHelper {
 	void registerLogic(IGreenhouseLogicFactory logicFactory);
 	
 	Collection<IGreenhouseLogic> createLogics(IGreenhouseController controller);
-	
-	void registerModifier(IClimateModifier modifier);
-	
-	Collection<IClimateModifier> getModifiers();
 
 }

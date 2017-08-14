@@ -13,9 +13,9 @@ package forestry.greenhouse.multiblock.blocks.blank;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.greenhouse.IBlankBlock;
-import forestry.api.greenhouse.IGreenhouseBlockHandler;
-import forestry.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IBlankBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.GreenhouseBlock;
 
 public class BlankBlock extends GreenhouseBlock<IBlankBlock> implements IBlankBlock {
