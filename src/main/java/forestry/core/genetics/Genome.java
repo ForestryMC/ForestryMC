@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import com.google.common.base.Objects;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -147,7 +148,8 @@ public abstract class Genome implements IGenome {
 		if (genomeNbt.hasNoTags()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
 			genomeNbt = new NBTTagCompound();
-			
+      
+      
 			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
 			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
 			genome.writeToNBT(genomeNbt);
