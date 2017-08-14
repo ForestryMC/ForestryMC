@@ -58,7 +58,7 @@ public class PluginHarvestCraft extends BlankForestryPlugin {
 	
 	@Nullable
 	private static ItemStack getItemStack(@Nonnull String itemName) {
-		ResourceLocation key = new ResourceLocation(HC, itemName);
+		ResourceLocation key = new ResourceLocation(HC, itemName.toLowerCase());
 		if (ForgeRegistries.ITEMS.containsKey(key)) {
 			return new ItemStack(ForgeRegistries.ITEMS.getValue(key),1);
 		} else {
@@ -66,7 +66,7 @@ public class PluginHarvestCraft extends BlankForestryPlugin {
 		}
 	}
 	private static Block getBlock(@Nonnull String blockName) {
-		ResourceLocation key = new ResourceLocation(HC, blockName);
+		ResourceLocation key = new ResourceLocation(HC, blockName.toLowerCase());
 		if (ForgeRegistries.BLOCKS.containsKey(key)) {
 			return ForgeRegistries.BLOCKS.getValue(key);
 		} else {
