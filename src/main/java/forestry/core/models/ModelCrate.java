@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
@@ -39,11 +37,12 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.items.ItemCrated;
-import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.ModelUtil;
 import forestry.storage.PluginStorage;
 
@@ -107,8 +106,16 @@ public class ModelCrate extends BlankModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
-			ResourceLocation itemName = ItemStackUtil.getItemNameFromRegistry(crated);
-			Preconditions.checkNotNull(itemName);
+			ResourceLocation itemName = crated.getRegistryName();
+			if(itemName == null){
+				IBakedModel baseCrateModel = cache.get("base");
+				if(baseCrateModel == null){
+					baseCrateModel = ModelUtil.getModel(new ItemStack(PluginStorage.getItems().crate, 1, 1));
+					baseCrateModel = ForgeHooksClient.handleCameraTransforms(baseCrateModel, TransformType.GROUND, false);
+				}
+				Log.error("Failed to load the model of the create item: {}, please report this to the authors of forestry.", itemName);
+				return baseCrateModel;
+			}
 			String crateUID = itemName.getResourcePath();
 			IBakedModel model = cache.get(crateUID);
 			if (model == null) {
