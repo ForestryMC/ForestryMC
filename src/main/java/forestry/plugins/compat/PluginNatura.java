@@ -209,9 +209,13 @@ public class PluginNatura extends BlankForestryPlugin {
 				try {
 					maxAge = (int)block.getClass().getDeclaredMethod("getMaxAge").invoke(block);
 					seedItem = block.getPickBlock(block.getBlockState().getBaseState(), null, null, null, null);
-				} catch (Exception _) {return;} // if this fails just ignore the error.
+				} catch (Exception ignored) {
+					return;
+				}
 				Log.info("[PluginNatura] Addding crop '{}'", itemStack);
-				if(seedItem == null) return;
+				if (seedItem.isEmpty()) {
+					return;
+				}
 
 				FarmRegistry.getInstance().registerFarmables("farmWheat",
 					new FarmableAgingCrop(
