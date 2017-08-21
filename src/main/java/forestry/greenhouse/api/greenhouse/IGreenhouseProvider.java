@@ -11,15 +11,16 @@ import java.util.Collection;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.IErrorState;
 import forestry.greenhouse.api.climate.GreenhouseState;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 /**
  * Can be used to test if a space is closed. Is used by the greenhouse.
  *
  */
-public interface IGreenhouseProvider {
+public interface IGreenhouseProvider extends  IErrorLogicSource {
 	
 	/**
 	 * @return the climate container of this provider.
@@ -48,11 +49,6 @@ public interface IGreenhouseProvider {
 	void clear(boolean chunkUnloading);
 	
 	/**
-	 * @return The last error that has coded that the provider is not closed.
-	 */
-	String getLastNotClosedError();
-	
-	/**
 	 * Called from the thread if a {@link IGreenhouseBlock} was modified by the player.
 	 */
 	void recreate();
@@ -74,7 +70,9 @@ public interface IGreenhouseProvider {
 	/**
 	 * @return The limits that a greenhouse has. Used to test if the greenhouse is tested.
 	 * At the test the provider stops if the currently tested position is out of this limits and marks the greenhouse as open.
+	 * Null if the provider is not created.
 	 */
+	@Nullable
 	IGreenhouseLimits getLimits();
 
 	/**
@@ -95,7 +93,7 @@ public interface IGreenhouseProvider {
 	/**
 	 * Test if the provider is closed.
 	 */
-	void checkPosition(BlockPos position) throws GreenhouseException;
+	IErrorState checkPosition(BlockPos position);
 
 	int getSize();
 	

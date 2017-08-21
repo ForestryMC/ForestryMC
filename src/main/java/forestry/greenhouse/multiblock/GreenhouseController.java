@@ -26,21 +26,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.GreenhouseState;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateContainerListener;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedTile;
-import forestry.greenhouse.api.greenhouse.GreenhouseManager;
-import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
-import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.api.core.IErrorLogic;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
-import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
-import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.Active;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
@@ -56,8 +48,16 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.api.climate.GreenhouseState;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateContainerListener;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
+import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
+import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.greenhouse.camouflage.CamouflageHandlerType;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderClient;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderServer;
@@ -168,6 +168,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 
 	@Override
+	public IErrorLogic getErrorLogic() {
+		return provider.getErrorLogic();
+	}
+
+	@Override
 	public ImmutableClimateState getDefaultClimate() {
 		return defaultState;
 	}
@@ -254,19 +259,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		limits = null;
-	}
-
-	@Override
-	public BlockPos getLastValidationErrorPosition() {
-		BlockPos pos = super.getLastValidationErrorPosition();
-		if (pos != null) {
-			return pos;
-		}
-		GreenhouseException exception = provider.getLastNotClosedException();
-		if (exception == null) {
-			return null;
-		}
-		return exception.pos;
 	}
 
 	@Override

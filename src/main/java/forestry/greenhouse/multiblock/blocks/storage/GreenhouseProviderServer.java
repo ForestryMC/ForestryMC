@@ -14,25 +14,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorState;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.api.multiblock.IGreenhouseController;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.GreenhouseState;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.greenhouse.IBlankBlock;
@@ -42,7 +43,6 @@ import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
 import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.greenhouse.multiblock.GreenhouseLimits;
 import forestry.greenhouse.multiblock.GreenhouseLimitsBuilder;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 import forestry.greenhouse.multiblock.blocks.blank.BlankBlockHandler;
 import forestry.greenhouse.multiblock.blocks.wall.WallBlockHandler;
 import forestry.greenhouse.multiblock.blocks.world.GreenhouseBlockManager;
@@ -58,7 +58,6 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 	private Position2D maxSize;
 	private Position2D minSize;
 	private boolean needReload;
-	private boolean needUpdate;
 	private long previousUpdateTick;
 
 	public GreenhouseProviderServer(World world, IClimateContainer container) {
@@ -119,6 +118,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 		} else {
 			data.writeBoolean(false);
 		}
+		getErrorLogic().writeData(data);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 	@Override
 	public void onUnloadChunk(long chunkPos) {
 		unloadedChunks.add(chunkPos);
-		lastNotClosedException = new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.unloaded"));
+		getErrorLogic().setCondition(true, EnumErrorCode.NOT_LOADED);
 		state = GreenhouseState.UNLOADED_CHUNK;
 	}
 
@@ -148,18 +148,19 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 		}
 	}
 
-	public void checkPosition(BlockPos position) throws GreenhouseException {
+	public IErrorState checkPosition(BlockPos position) {
 		if (maxSize.getX() < position.getX()
 			|| maxSize.getZ() < position.getZ()
 			|| minSize.getX() > position.getX()
 			|| minSize.getZ() > position.getZ()) {
-			throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.notclosed", position.getX(), position.getZ())).setPos(position);
+			return EnumErrorCode.NOT_CLOSED;
 		}
 
 		if (!world.isBlockLoaded(position)) {
 			unloadedChunks.add(ChunkPos.asLong(position.getX() >> 4, position.getZ() >> 4));
-			throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.space.unloaded", position.getX(), position.getZ()));
+			return EnumErrorCode.NOT_LOADED;
 		}
+		return null;
 	}
 
 	@Override
@@ -193,10 +194,6 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 		Stack<IGreenhouseBlock> blocksToCheck = new Stack();
 		blocksToCheck.add(BlankBlockHandler.getInstance().createBlock(storage, null, null, centerPos));
 		checkState(checkBlocks(blocksToCheck));
-		EntityPlayer player = world.getClosestPlayer(centerPos.getX(), centerPos.getY(), centerPos.getZ(), 100000.0D, false);
-		if (!world.isRemote && lastNotClosedException != null && player != null) {
-			player.sendMessage(new TextComponentString(lastNotClosedException.getMessage()));
-		}
 	}
 
 	private void checkState(GreenhouseState state) {
@@ -207,75 +204,63 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 	 * Check all internal blocks.
 	 */
 	private GreenhouseState checkBlocks(Collection<IGreenhouseBlock> blocks) {
-		try {
-			if (minSize == null || maxSize == null || minSize == Position2D.NULL_POSITION || maxSize == Position2D.NULL_POSITION) {
-				checkMinMax();
-			}
-			int greenhouseHeight = centerPos.getY();
-			int greenhouseDepth = centerPos.getY();
-			int height = 0;
-			int depth = 0;
-			int maximalHeight = ((IGreenhouseController) container.getParent()).getCenterCoordinates().getY() + limits.getHeight();
-			GreenhouseLimitsBuilder builder = new GreenhouseLimitsBuilder();
-			Stack<IGreenhouseBlock> blocksToCheck = new Stack();
-			blocksToCheck.addAll(blocks);
-			while (!blocksToCheck.isEmpty()) {
-				IGreenhouseBlock blockToCheck = blocksToCheck.pop();
-				if (blockToCheck != null) {
-					BlockPos position = blockToCheck.getPos();
-					IGreenhouseBlockHandler handler = blockToCheck.getHandler();
-					builder.recalculate(position);
-					List<IGreenhouseBlock> newBlocksToCheck = handler.checkNeighborBlocks(storage, blockToCheck);
-					blocksToCheck.addAll(newBlocksToCheck);
-					if (blockToCheck instanceof IBlankBlock) {
-						int positionHeight = getHeight(position, maximalHeight);
-						int positionDepth = getDepth(position);
-						if (positionHeight == -1) {
-							throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.roof.notclosed", position.getX(), position.getY(), position.getZ())).setPos(position);
-						}
-						if (positionHeight > greenhouseHeight) {
-							greenhouseHeight = positionHeight;
-						}
-						height += positionHeight - centerPos.getY();
-						if (positionDepth < greenhouseDepth) {
-							greenhouseDepth = positionDepth;
-						}
-						depth += centerPos.getY() - positionDepth;
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.clearErrors();
+		if (minSize == null || maxSize == null || minSize == Position2D.NULL_POSITION || maxSize == Position2D.NULL_POSITION) {
+			Position2D maxCoordinates = limits.getMaximumCoordinates();
+			maxSize = maxCoordinates.add(1, 1).add(centerPos.getX(), centerPos.getZ());
+
+			Position2D minCoordinates = limits.getMinimumCoordinates();
+			minSize = minCoordinates.add(-1, -1).add(centerPos.getX(), centerPos.getZ());
+		}
+		int greenhouseHeight = centerPos.getY();
+		int greenhouseDepth = centerPos.getY();
+		int height = 0;
+		int depth = 0;
+		int maximalHeight = ((IGreenhouseController) container.getParent()).getCenterCoordinates().getY() + limits.getHeight();
+		GreenhouseLimitsBuilder builder = new GreenhouseLimitsBuilder();
+		Stack<IGreenhouseBlock> blocksToCheck = new Stack();
+		blocksToCheck.addAll(blocks);
+		while (!blocksToCheck.isEmpty()) {
+			IGreenhouseBlock blockToCheck = blocksToCheck.pop();
+			if (blockToCheck != null) {
+				BlockPos position = blockToCheck.getPos();
+				IGreenhouseBlockHandler handler = blockToCheck.getHandler();
+				builder.recalculate(position);
+				List<IGreenhouseBlock> newBlocksToCheck = new LinkedList<>();
+				IErrorState errorState = handler.checkNeighborBlocks(storage, blockToCheck, newBlocksToCheck);
+				if(errorState != null){
+					errorLogic.setCondition(true, errorState);
+				}
+				blocksToCheck.addAll(newBlocksToCheck);
+				if (blockToCheck instanceof IBlankBlock) {
+					int positionHeight = getHeight(position, maximalHeight);
+					int positionDepth = getDepth(position);
+					if (positionHeight == -1) {
+						errorLogic.setCondition(true, EnumErrorCode.NOT_CLOSED);
+						//throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.roof.notclosed", position.getX(), position.getY(), position.getZ())).setPos(position);
 					}
+					if (positionHeight > greenhouseHeight) {
+						greenhouseHeight = positionHeight;
+					}
+					height += positionHeight - centerPos.getY();
+					if (positionDepth < greenhouseDepth) {
+						greenhouseDepth = positionDepth;
+					}
+					depth += centerPos.getY() - positionDepth;
 				}
 			}
-			this.size = height + depth + storage.getBlockCount();
-			lastNotClosedException = null;
-			usedLimits = builder.build(greenhouseHeight, greenhouseDepth);
-			return GreenhouseState.CLOSED;
-		} catch (GreenhouseException exception) {
-			lastNotClosedException = exception;
-			if (!unloadedChunks.isEmpty()) {
-				return GreenhouseState.UNLOADED_CHUNK;
-			}
+		}
+		if (!unloadedChunks.isEmpty()) {
+			errorLogic.setCondition(true, EnumErrorCode.NOT_LOADED);
+			return GreenhouseState.UNLOADED_CHUNK;
+		}
+		if(errorLogic.hasErrors()){
 			return GreenhouseState.OPEN;
 		}
-	}
-
-	private void checkMinMax() throws GreenhouseException {
-		if (limits == null) {
-			minSize = maxSize = null;
-			throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.edges"));
-		}
-		if (limits.getMaximumCoordinates() != null) {
-			Position2D edge = limits.getMaximumCoordinates();
-			maxSize = edge.add(1, 1).add(centerPos.getX(), centerPos.getZ());
-		} else {
-			maxSize = null;
-			throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.edge"));
-		}
-		if (limits.getMinimumCoordinates() != null) {
-			Position2D edge = limits.getMinimumCoordinates();
-			minSize = edge.add(-1, -1).add(centerPos.getX(), centerPos.getZ());
-		} else {
-			minSize = null;
-			throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.edge"));
-		}
+		this.size = height + depth + storage.getBlockCount();
+		usedLimits = builder.build(greenhouseHeight, greenhouseDepth);
+		return GreenhouseState.CLOSED;
 	}
 
 	public int getHeight(BlockPos pos, int maximalHeight) {

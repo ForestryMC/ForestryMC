@@ -5,14 +5,16 @@
  ******************************************************************************/
 package forestry.core.errors;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManagerForestry;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -80,7 +82,12 @@ public enum EnumErrorCode implements IErrorState {
 	// Farms
 	NO_FERTILIZER("no_fertilizer"), // Farms require fertilizer for function. Compost is insufficient.
 	NO_FARMLAND("no_farmland"), // Smooth sandstone, bricks or stone bricks create a platform the farm will build on.
-	NO_LIQUID_FARM("no_liquid") // Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
+	NO_LIQUID_FARM("no_liquid"), // Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
+
+	// Greenhouse
+	NOT_LOADED("not_loaded"), // One chunk of the greenhouse is not loaded.
+	NOT_CLOSED("not_closed"), // The greenhouse is not closed.
+	TOO_LARGE("too_large") // The greenhouse is too large.
 	;
 
 	private final String name;

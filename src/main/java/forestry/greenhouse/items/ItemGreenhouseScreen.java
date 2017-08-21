@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -42,6 +41,7 @@ import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
 public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
@@ -113,10 +113,15 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
+		BlockPos itemPos = getGreenhousePos(itemStack);
 		if (!player.isSneaking()) {
 			return EnumActionResult.PASS;
 		}
-		ItemStack itemStack = player.getHeldItem(hand);
+		return handleSneaking(world, pos, player, itemStack, itemPos);
+	}
+
+	private EnumActionResult handleSneaking(World world, BlockPos pos,EntityPlayer player, ItemStack itemStack, BlockPos itemPos){
 		IGreenhouseComponent component = MultiblockUtil.getComponent(world, pos, IGreenhouseComponent.class);
 		if (component != null) {
 			IGreenhouseController controller = component.getMultiblockLogic().getController();
@@ -131,7 +136,6 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 				player.sendStatusMessage(new TextComponentTranslation("for.message.greenhouse_screen.position"), true);
 			}
 		} else {
-			BlockPos itemPos = getGreenhousePos(itemStack);
 			if (itemPos == null) {
 				if (!world.isRemote) {
 					player.sendStatusMessage(new TextComponentTranslation("for.message.greenhouse_screen.fail"), true);
@@ -168,11 +172,11 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 2) {
-			return isValid(stack, Minecraft.getMinecraft().world) ? 1356406 : 12197655;
+			return isValid(stack, Minecraft.getMinecraft().world) ? 0x14B276 : 0xBA1F17;
 		} else if (tintIndex == 1) {
 			World world = Minecraft.getMinecraft().world;
 			if (!isValid(stack, world)) {
-				return 16777215;
+				return 0xFFFFFF;
 			}
 			BlockPos pos = getGreenhousePos(stack);
 			IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, pos, IGreenhouseComponent.class);
@@ -180,6 +184,6 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 			IClimateState state = container.getState();
 			return ClimateUtil.getColor(EnumTemperature.getFromValue(state.getTemperature()));
 		}
-		return 16777215;
+		return 0xFFFFFF;
 	}
 }

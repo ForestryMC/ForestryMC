@@ -293,7 +293,7 @@ public class ClimateUtil implements IClimateHelper {
 			case NONE:
 				return 0x011f4b;
 			default:
-				return 16777215;
+				return 0xFFFFFF;
 		}
 	}
 }

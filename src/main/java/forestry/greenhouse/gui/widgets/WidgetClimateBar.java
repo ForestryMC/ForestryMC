@@ -29,14 +29,14 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.greenhouse.gui.GuiGreenhouse;
 
-public class WidgetClimatePillar extends Widget {
+public class WidgetClimateBar extends Widget {
 
-	public static final int WIDTH = 23;
-	public static final int HEIGHT = 90;
+	public static final int WIDTH = 90;
+	public static final int HEIGHT = 23;
 
 	private final List<ClimateButton> buttons = new ArrayList<>();
 
-	public WidgetClimatePillar(WidgetManager manager, int xPos, int yPos) {
+	public WidgetClimateBar(WidgetManager manager, int xPos, int yPos) {
 		super(manager, xPos, yPos);
 		this.width = WIDTH;
 		this.height = HEIGHT;
@@ -60,7 +60,7 @@ public class WidgetClimatePillar extends Widget {
 					value = 0.5F;
 					break;
 			}
-			buttons.add(new ClimateButton(this, temp, value, xPos + 5, yPos + 5 + (i - 1) * 16));
+			buttons.add(new ClimateButton(this, temp, value, xPos + 5 + (i - 1) * 16, yPos + 5));
 		}
 	}
 
@@ -68,7 +68,7 @@ public class WidgetClimatePillar extends Widget {
 	public void draw(int startX, int startY) {
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 220, 25, width, height);
+		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 0, 202, width, height);
 		for (ClimateButton button : buttons) {
 			button.draw(startX, startY);
 		}
@@ -109,7 +109,7 @@ public class WidgetClimatePillar extends Widget {
 	}
 
 	private static class ClimateButton {
-		final WidgetClimatePillar parent;
+		final WidgetClimateBar parent;
 		final EnumTemperature temperature;
 		final float value;
 		protected final ToolTip toolTip = new ToolTip(250) {
@@ -123,7 +123,7 @@ public class WidgetClimatePillar extends Widget {
 		};
 		final int xPos, yPos;
 
-		public ClimateButton(WidgetClimatePillar parent, EnumTemperature temperature, float value, int xPos, int yPos) {
+		public ClimateButton(WidgetClimateBar parent, EnumTemperature temperature, float value, int xPos, int yPos) {
 			this.parent = parent;
 			this.temperature = temperature;
 			this.value = value;

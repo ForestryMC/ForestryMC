@@ -18,13 +18,14 @@ import java.util.Set;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
+import forestry.core.network.IStreamable;
 import forestry.greenhouse.api.climate.GreenhouseState;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
-import forestry.core.network.IStreamable;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 public abstract class GreenhouseProvider implements IGreenhouseProvider, IStreamable {
 
@@ -32,13 +33,14 @@ public abstract class GreenhouseProvider implements IGreenhouseProvider, IStream
 	protected final GreenhouseBlockStorage storage;
 	protected final World world;
 	protected final IClimateContainer container;
+	private final IErrorLogic errorLogic;
 
-	@Nullable
-	protected GreenhouseException lastNotClosedException;
 	protected BlockPos centerPos;
 	protected boolean ready;
 	protected GreenhouseState state;
+	@Nullable
 	protected IGreenhouseLimits limits;
+	@Nullable
 	protected IGreenhouseLimits usedLimits;
 	protected int size;
 
@@ -49,12 +51,14 @@ public abstract class GreenhouseProvider implements IGreenhouseProvider, IStream
 		this.container = container;
 		this.state = GreenhouseState.UNREADY;
 		this.storage = new GreenhouseBlockStorage(this, world);
+		this.errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
 	}
 
 	public abstract void create();
 
-	public GreenhouseException getLastNotClosedException() {
-		return lastNotClosedException;
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return errorLogic;
 	}
 
 	@Override
@@ -84,14 +88,6 @@ public abstract class GreenhouseProvider implements IGreenhouseProvider, IStream
 		storage.clearBlocks(chunkUnloading);
 		this.centerPos = BlockPos.ORIGIN;
 		ready = false;
-	}
-
-	@Override
-	public String getLastNotClosedError() {
-		if (lastNotClosedException == null) {
-			return null;
-		}
-		return lastNotClosedException.getMessage();
 	}
 
 	@Override

@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock.blocks.blank;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import forestry.api.core.IErrorState;
 import forestry.greenhouse.api.greenhouse.IBlankBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockStorage;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 public class BlankBlockHandler implements IGreenhouseBlockHandler<IBlankBlock, IBlankBlock> {
 
@@ -54,15 +53,17 @@ public class BlankBlockHandler implements IGreenhouseBlockHandler<IBlankBlock, I
 	}
 
 	@Override
-	public List<IGreenhouseBlock> checkNeighborBlocks(IGreenhouseBlockStorage storage, IBlankBlock blockToCheck) throws GreenhouseException {
-		List<IGreenhouseBlock> newBlocksToCheck = new LinkedList<>();
+	public IErrorState checkNeighborBlocks(IGreenhouseBlockStorage storage, IBlankBlock blockToCheck, List<IGreenhouseBlock> newBlocksToCheck) {
 		BlockPos position = blockToCheck.getPos();
 		if (storage.setBlock(position, blockToCheck)) {
 			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-				checkBlockFacing(storage, blockToCheck, position, facing, newBlocksToCheck);
+				IErrorState errorState = checkBlockFacing(storage, blockToCheck, position, facing, newBlocksToCheck);
+				if(errorState != null){
+					return errorState;
+				}
 			}
 		}
-		return newBlocksToCheck;
+		return null;
 	}
 
 	@Override
@@ -83,19 +84,23 @@ public class BlankBlockHandler implements IGreenhouseBlockHandler<IBlankBlock, I
 		return IBlankBlock.class;
 	}
 
-	private void checkBlockFacing(IGreenhouseBlockStorage storage, IBlankBlock blockToCheck, BlockPos rootPos, EnumFacing facing, List<IGreenhouseBlock> newBlocksToCheck) throws GreenhouseException {
+	private IErrorState checkBlockFacing(IGreenhouseBlockStorage storage, IBlankBlock blockToCheck, BlockPos rootPos, EnumFacing facing, List<IGreenhouseBlock> newBlocksToCheck) {
 		if (!blockToCheck.isFaceTested(facing)) {
 			BlockPos facingPosition = rootPos.offset(facing);
 			IGreenhouseProvider provider = storage.getProvider();
 
-			provider.checkPosition(facingPosition);
+			IErrorState errorState = provider.checkPosition(facingPosition);
+			if(errorState != null){
+				return errorState;
+			}
 
 			IGreenhouseBlock logicBlock = storage.getBlock(facingPosition);
 			for (IGreenhouseBlockHandler handler : provider.getHandlers()) {
-				if (handler.onCheckPosition(storage, blockToCheck, facingPosition, facing, logicBlock, newBlocksToCheck)) {
+				if(handler.onCheckPosition(storage, blockToCheck, facingPosition, facing, logicBlock, newBlocksToCheck)){
 					break;
 				}
 			}
 		}
+		return null;
 	}
 }

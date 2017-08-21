@@ -11,16 +11,15 @@
 package forestry.greenhouse.multiblock.blocks.client;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import forestry.api.core.IErrorState;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockStorage;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 public class ClientBlockHandler implements IGreenhouseBlockHandler<ClientBlock, ClientBlock> {
 
@@ -49,12 +48,12 @@ public class ClientBlockHandler implements IGreenhouseBlockHandler<ClientBlock, 
 	}
 
 	@Override
-	public List<IGreenhouseBlock> checkNeighborBlocks(IGreenhouseBlockStorage storage, ClientBlock blockToCheck) throws GreenhouseException {
-		return Collections.emptyList();
+	public IErrorState checkNeighborBlocks(IGreenhouseBlockStorage storage, ClientBlock blockToCheck, List newBlocks) {
+		return null;
 	}
 
 	@Override
-	public boolean onCheckPosition(IGreenhouseBlockStorage storage, ClientBlock rootBlock, BlockPos position, EnumFacing facing, IGreenhouseBlock block, List<IGreenhouseBlock> newBlocksToCheck) throws GreenhouseException {
+	public boolean onCheckPosition(IGreenhouseBlockStorage storage, ClientBlock rootBlock, BlockPos position, EnumFacing facing, IGreenhouseBlock block, List<IGreenhouseBlock> newBlocksToCheck) {
 		return false;
 	}
 

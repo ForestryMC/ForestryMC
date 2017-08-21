@@ -11,7 +11,7 @@ import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
+import forestry.api.core.IErrorState;
 
 public interface IGreenhouseBlockHandler<B extends IGreenhouseBlock, R extends IGreenhouseBlock> {
 	
@@ -20,10 +20,11 @@ public interface IGreenhouseBlockHandler<B extends IGreenhouseBlock, R extends I
 	B createBlock(IGreenhouseBlockStorage storage, @Nullable R root, @Nullable EnumFacing rootFacing, @Nullable BlockPos position);
 
 	B getBlock(IGreenhouseBlockStorage storage, BlockPos position);
+
+	@Nullable
+	IErrorState checkNeighborBlocks(IGreenhouseBlockStorage storage, B blockToCheck, List<IGreenhouseBlock> newBlocksToCheck);
 	
-	List<IGreenhouseBlock> checkNeighborBlocks(IGreenhouseBlockStorage storage, B blockToCheck) throws GreenhouseException;
-	
-	boolean onCheckPosition(IGreenhouseBlockStorage storage, R rootBlock, BlockPos position, EnumFacing facing, IGreenhouseBlock block, List<IGreenhouseBlock> newBlocksToCheck) throws GreenhouseException;
+	boolean onCheckPosition(IGreenhouseBlockStorage storage, R rootBlock, BlockPos position, EnumFacing facing, IGreenhouseBlock block, List<IGreenhouseBlock> newBlocksToCheck);
 	
 	Class<? extends B> getBlockClass();
 }

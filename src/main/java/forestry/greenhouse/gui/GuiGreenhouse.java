@@ -25,7 +25,7 @@ import forestry.core.gui.TextLayoutHelper;
 import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.gui.widgets.WidgetCamouflageTab;
 import forestry.greenhouse.gui.widgets.WidgetClimatePanel;
-import forestry.greenhouse.gui.widgets.WidgetClimatePillar;
+import forestry.greenhouse.gui.widgets.WidgetClimateBar;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.network.packets.PacketSelectClimateTargeted;
 import forestry.greenhouse.tiles.TileGreenhouse;
@@ -52,8 +52,8 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 		IClimateData data = container.getData();
 
 		//Add the camouflage tab
-		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 2 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
-		widgetManager.add(new WidgetClimatePillar(widgetManager, -WidgetClimatePillar.WIDTH, GUI_HEIGHT / 2 - WidgetClimatePillar.HEIGHT / 2));
+		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 4 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
+		widgetManager.add(new WidgetClimateBar(widgetManager, xSize / 3 + WidgetClimateBar.WIDTH / 3, -WidgetClimateBar.HEIGHT));
 		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, data));
 		widgetManager.add(humidityPanel = new WidgetClimatePanel(widgetManager, this, 102, 18, ClimateType.HUMIDITY, data));
 	}

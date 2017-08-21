@@ -11,7 +11,6 @@
 package forestry.greenhouse.multiblock.blocks.wall;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -21,6 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.core.IErrorState;
 import forestry.greenhouse.api.greenhouse.IBlankBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
@@ -28,7 +28,6 @@ import forestry.greenhouse.api.greenhouse.IGreenhouseBlockStorage;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
 import forestry.greenhouse.api.greenhouse.IWallBlock;
-import forestry.greenhouse.multiblock.blocks.GreenhouseException;
 
 public class WallBlockHandler implements IGreenhouseBlockHandler<IWallBlock, IBlankBlock> {
 
@@ -63,8 +62,8 @@ public class WallBlockHandler implements IGreenhouseBlockHandler<IWallBlock, IBl
 	}
 
 	@Override
-	public List<IGreenhouseBlock> checkNeighborBlocks(IGreenhouseBlockStorage storage, IWallBlock blockToCheck) throws GreenhouseException {
-		return Collections.emptyList();
+	public IErrorState checkNeighborBlocks(IGreenhouseBlockStorage storage, IWallBlock blockToCheck, List newBlocks) {
+		return null;
 	}
 
 	@Override
