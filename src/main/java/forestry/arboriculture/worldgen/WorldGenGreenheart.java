@@ -51,15 +51,17 @@ public class WorldGenGreenheart extends WorldGenTree {
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 0.5f + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 
-		// Add some smaller twigs below for flavour
-		for (int times = 0; times < height / 4; times++) {
-			int h = 10 + rand.nextInt(height - 10);
-			if (rand.nextBoolean() && h < height / 2) {
-				h = height / 2 + rand.nextInt(height / 2);
+		if (height > 10) {
+			// Add some smaller twigs below for flavour
+			for (int times = 0; times < height / 4; times++) {
+				int h = 10 + rand.nextInt(height - 10);
+				if (rand.nextBoolean() && h < height / 2) {
+					h = height / 2 + rand.nextInt(height / 2);
+				}
+				int x_off = -1 + rand.nextInt(3);
+				int y_off = -1 + rand.nextInt(3);
+				WorldGenHelper.generateSphere(world, startPos.add(x_off, h, y_off), 1 + rand.nextInt(1), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 			}
-			int x_off = -1 + rand.nextInt(3);
-			int y_off = -1 + rand.nextInt(3);
-			WorldGenHelper.generateSphere(world, new BlockPos(x_off, h, y_off), 1 + rand.nextInt(1), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 	}
 }
