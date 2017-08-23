@@ -55,12 +55,6 @@ public class FarmableSapling implements IFarmable {
 
     @Override
     public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-        if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-            IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
-            if (tree instanceof ITree) {
-                return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
-            }
-        }
         ItemStack copy = germling.copy();
         player.setHeldItem(EnumHand.MAIN_HAND, copy);
         EnumActionResult actionResult = copy.onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);

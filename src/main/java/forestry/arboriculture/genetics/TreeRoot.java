@@ -154,7 +154,6 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	@Nullable
 	public ITree getMember(ItemStack itemstack) {
-		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		if (!isMember(itemstack) || itemstack.getTagCompound() == null) {
 			return null;
 		}
