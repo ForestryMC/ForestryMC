@@ -97,6 +97,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 
 	/* INTERACTION */
 	public void initialize(ItemStack specimen) {
+		reset();
 		if (gameBoard.initialize(specimen)) {
 			status = Status.PLAYING;
 			bountyLevel = BOUNTY_MAX;
