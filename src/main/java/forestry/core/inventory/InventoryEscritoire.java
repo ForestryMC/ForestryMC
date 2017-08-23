@@ -12,11 +12,13 @@ package forestry.core.inventory;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
+import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public static final short SLOT_ANALYZE = 0;
@@ -79,8 +81,10 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}
 			}
-			if (!tile.getWorld().isRemote) {
-				tile.getGame().initialize(getStackInSlot(SLOT_ANALYZE));
+			World world = tile.getWorld();
+			if (world != null && !world.isRemote) {
+				EscritoireGame game = tile.getGame();
+				game.initialize(getStackInSlot(SLOT_ANALYZE));
 			}
 		}
 	}
