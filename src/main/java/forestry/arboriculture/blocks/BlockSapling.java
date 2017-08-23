@@ -152,7 +152,10 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	/* REMOVING */
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+		ItemStack drop = getDrop(world, pos);
+		if (!drop.isEmpty()) {
+			drops.add(drop);
+		}
 	}
 	
 	@Override
@@ -179,13 +182,21 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (world.isRemote) {
 			return;
 		}
-
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling != null && sapling.getTree() != null) {
-			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
-			ItemStackUtil.dropItemStackAsEntity(saplingStack, world, pos);
+		ItemStack drop = getDrop(world, pos);
+		if (!drop.isEmpty()) {
+			ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
 		}
+	}
 
+	private static ItemStack getDrop(IBlockAccess world, BlockPos pos) {
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+		if (sapling != null) {
+			ITree tree = sapling.getTree();
+			if (tree != null) {
+				return TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
+			}
+		}
+		return ItemStack.EMPTY;
 	}
 
 	/* GROWNING */
