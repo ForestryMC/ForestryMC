@@ -11,12 +11,16 @@
 package forestry.arboriculture.genetics.alleles;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
@@ -27,6 +31,7 @@ import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
@@ -34,6 +39,7 @@ import forestry.arboriculture.genetics.LeafProvider;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -194,6 +200,34 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public String getModID() {
 		return modID;
+	}
+
+	@Override
+	public float getResearchSuitability(ItemStack itemstack) {
+		if (itemstack.isEmpty()) {
+			return 0f;
+		}
+
+		List<IFruitFamily> suitableFruit = getSuitableFruit();
+		for (IFruitFamily fruitFamily : suitableFruit) {
+			Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
+			for (IFruitProvider fruitProvider : fruitProviders) {
+				Map<ItemStack, Float> products = fruitProvider.getProducts();
+				for (ItemStack stack : products.keySet()) {
+					if (stack.isItemEqual(itemstack)) {
+						return 1.0f;
+					}
+				}
+				Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
+				for (ItemStack stack : specialtyChances.keySet()) {
+					if (stack.isItemEqual(itemstack)) {
+						return 1.0f;
+					}
+				}
+			}
+		}
+
+		return super.getResearchSuitability(itemstack);
 	}
 
 	@Override

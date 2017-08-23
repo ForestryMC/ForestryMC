@@ -14,9 +14,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
@@ -26,6 +28,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
+import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
@@ -38,6 +41,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
@@ -75,6 +79,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	private static ITreekeepingMode activeTreekeepingMode;
 	public static final List<ITree> treeTemplates = new ArrayList<>();
 
+	private final Map<IFruitFamily, Collection<IFruitProvider>> providersForFamilies = new HashMap<>();
 	private final List<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
 	public TreeRoot() {
@@ -439,4 +444,18 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		}
 	}
 
+	@Override
+	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
+		if (providersForFamilies.isEmpty()) {
+			@SuppressWarnings("unchecked")
+			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.FRUITS);
+			for (IAlleleFruit alleleFruit : fruitAlleles) {
+				IFruitProvider fruitProvider = alleleFruit.getProvider();
+				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
+				fruitProviders.add(fruitProvider);
+			}
+		}
+
+		return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());
+	}
 }
