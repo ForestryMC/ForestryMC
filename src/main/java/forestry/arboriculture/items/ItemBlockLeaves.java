@@ -12,12 +12,10 @@ package forestry.arboriculture.items;
 
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.Translator;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
-	public ItemBlockLeaves(Block block) {
+	public ItemBlockLeaves(BlockAbstractLeaves block) {
 		super(block);
 	}
 

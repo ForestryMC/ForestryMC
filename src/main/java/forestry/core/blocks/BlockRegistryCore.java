@@ -29,7 +29,7 @@ public class BlockRegistryCore extends BlockRegistry {
 
 	public BlockRegistryCore() {
 		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
-		registerBlock(analyzer, new ItemBlockForestry(analyzer), "analyzer");
+		registerBlock(analyzer, new ItemBlockForestry<>(analyzer), "analyzer");
 
 		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
 		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
@@ -43,14 +43,14 @@ public class BlockRegistryCore extends BlockRegistry {
 		humus.setHarvestLevel("shovel", 0);
 
 		resources = new BlockResourceOre();
-		registerBlock(resources, new ItemBlockForestry(resources), "resources");
+		registerBlock(resources, new ItemBlockForestry<>(resources), "resources");
 		resources.setHarvestLevel("pickaxe", 1);
 		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
 		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
 		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 
 		BlockResourceStorage resourceStorage = new BlockResourceStorage();
-		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resource_storage");
+		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
 
 		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);

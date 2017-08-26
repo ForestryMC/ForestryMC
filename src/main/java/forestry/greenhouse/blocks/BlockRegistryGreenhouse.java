@@ -14,9 +14,9 @@ public class BlockRegistryGreenhouse extends BlockRegistry {
 	public BlockRegistryGreenhouse() {
 		greenhouseBlockMap = BlockGreenhouse.create();
 		for (BlockGreenhouse block : greenhouseBlockMap.values()) {
-			ItemBlock itemBlock = new ItemBlockForestry(block);
+			ItemBlock itemBlock = new ItemBlockForestry<>(block);
 			if (block instanceof BlockGreenhouseDoor) {
-				itemBlock = new ItemBlockGreenhouseDoor(block);
+				itemBlock = new ItemBlockGreenhouseDoor((BlockGreenhouseDoor) block);
 			}
 			registerBlock(block, itemBlock, "greenhouse." + block.getGreenhouseType());
 		}

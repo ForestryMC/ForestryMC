@@ -13,8 +13,8 @@ package forestry.apiculture.blocks;
 import java.util.Map;
 
 import forestry.api.core.Tabs;
-import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.apiculture.items.ItemBlockCandle;
+import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
@@ -33,23 +33,23 @@ public class BlockRegistryApiculture extends BlockRegistry {
 
 	public BlockRegistryApiculture() {
 		apiary = new BlockApiculture(BlockTypeApiculture.APIARY);
-		registerBlock(apiary, new ItemBlockForestry(apiary), "apiary");
+		registerBlock(apiary, new ItemBlockForestry<>(apiary), "apiary");
 
 		beeHouse = new BlockApiculture(BlockTypeApiculture.BEE_HOUSE);
-		registerBlock(beeHouse, new ItemBlockForestry(beeHouse), "bee_house");
+		registerBlock(beeHouse, new ItemBlockForestry<>(beeHouse), "bee_house");
 
 		beeChest = new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Material.WOOD);
-		registerBlock(beeChest, new ItemBlockForestry(beeChest), "bee_chest");
+		registerBlock(beeChest, new ItemBlockForestry<>(beeChest), "bee_chest");
 		beeChest.setCreativeTab(Tabs.tabApiculture);
 		beeChest.setHarvestLevel("axe", 0);
 
 		beehives = new BlockBeeHives();
-		registerBlock(beehives, new ItemBlockForestry(beehives), "beehives");
+		registerBlock(beehives, new ItemBlockForestry<>(beehives), "beehives");
 
 		candle = new BlockCandle();
 		registerBlock(candle, new ItemBlockCandle(candle), "candle");
 		stump = new BlockStump();
-		registerBlock(stump, new ItemBlockForestry(stump), "stump");
+		registerBlock(stump, new ItemBlockForestry<>(stump), "stump");
 		
 		beeCombs = BlockHoneyComb.create();
 		for(int i = 0;i < beeCombs.length;i++){
@@ -59,7 +59,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 
 		alvearyBlockMap = BlockAlveary.create();
 		for (BlockAlveary block : alvearyBlockMap.values()) {
-			registerBlock(block, new ItemBlockForestry(block), "alveary." + block.getAlvearyType());
+			registerBlock(block, new ItemBlockForestry<>(block), "alveary." + block.getAlvearyType());
 		}
 	}
 

@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 public class ItemBlockGreenhouseDoor extends ItemBlockForestry<BlockGreenhouseDoor> {
 
-	public ItemBlockGreenhouseDoor(Block block) {
+	public ItemBlockGreenhouseDoor(BlockGreenhouseDoor block) {
 		super(block);
 	}
 

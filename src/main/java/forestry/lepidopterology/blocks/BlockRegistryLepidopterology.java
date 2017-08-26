@@ -21,13 +21,13 @@ public class BlockRegistryLepidopterology extends BlockRegistry {
 
 	public BlockRegistryLepidopterology() {
 		butterflyChest = new BlockLepidopterology(BlockTypeLepidopterologyTesr.LEPICHEST);
-		registerBlock(butterflyChest, new ItemBlockForestry(butterflyChest), "butterfly_chest");
+		registerBlock(butterflyChest, new ItemBlockForestry<>(butterflyChest), "butterfly_chest");
 
 		ButterflyAlleles.registerCocoonAlleles();
 		cocoon = new BlockCocoon();
-		registerBlock(cocoon, new ItemBlockForestry(cocoon), "cocoon");
+		registerBlock(cocoon, new ItemBlockForestry<>(cocoon), "cocoon");
 
 		solidCocoon = new BlockSolidCocoon();
-		registerBlock(solidCocoon, new ItemBlockForestry(solidCocoon), "cocoon.solid");
+		registerBlock(solidCocoon, new ItemBlockForestry<>(solidCocoon), "cocoon.solid");
 	}
 }
