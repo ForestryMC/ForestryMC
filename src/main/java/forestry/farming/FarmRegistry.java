@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,10 +16,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmRegistry;
@@ -35,6 +34,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
+	private final Map<String, IFarmLogic> logics = new HashMap<String, IFarmLogic>();
 
 	static {
 		ForestryAPI.farmRegistry = INSTANCE;
@@ -42,6 +42,14 @@ public final class FarmRegistry implements IFarmRegistry {
 
 	public static FarmRegistry getInstance() {
 		return INSTANCE;
+	}
+	
+	public void registerFarmLogic(String identifier, IFarmLogic logic) {
+		logics.put(identifier, logic);
+	}
+	
+	public IFarmLogic getFarmLogic(String identifier) {
+		return logics.get(identifier);
 	}
 	
 	@Override

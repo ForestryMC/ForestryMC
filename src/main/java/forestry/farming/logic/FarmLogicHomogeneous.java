@@ -37,17 +37,17 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		this.farmables = new ArrayList<>(farmables);
 	}
 	
-	protected void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){
+	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){
 		soils.add(new Soil(resource, soilState, hasMetaData));
 	}
 
 	protected boolean isAcceptedSoil(IBlockState blockState) {
 		for(Soil soil : soils){
-			IBlockState soilState = soil.soilState;
+			IBlockState soilState = soil.getSoilState();
 			Block soilBlock = soilState.getBlock();
 			Block block = blockState.getBlock();
 			if(soilState.getBlock() == blockState.getBlock()){
-				if(!soil.hasMetaData || block.getMetaFromState(blockState) == soilBlock.getMetaFromState(soilState)){
+				if(!soil.hasMetaData() || block.getMetaFromState(blockState) == soilBlock.getMetaFromState(soilState)){
 					return true;
 				}
 			}
@@ -58,7 +58,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
 		for(Soil soil : soils){
-			ItemStack resource = soil.resource;
+			ItemStack resource = soil.getResource();
 			if(resource.isItemEqual(itemstack)){
 				return true;
 			}
@@ -95,7 +95,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for(Soil soil : soils){
 			NonNullList<ItemStack> resources = NonNullList.create();
-			resources.add(soil.resource);
+			resources.add(soil.getResource());
 			if (!farmHousing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
@@ -120,7 +120,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	
 				produce.addAll(BlockUtil.getBlockDrops(world, position));
 	
-				BlockUtil.setBlockWithPlaceSound(world, position, soil.soilState);
+				BlockUtil.setBlockWithPlaceSound(world, position, soil.getSoilState());
 				farmHousing.getFarmInventory().removeResources(resources);
 				return true;
 			}
@@ -130,16 +130,4 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	}
 
 	protected abstract boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent);
-	
-	private static class Soil{
-		protected final ItemStack resource;
-		protected final IBlockState soilState;
-		protected final boolean hasMetaData;
-		
-		public Soil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-			this.resource = resource;
-			this.soilState = soilState;
-			this.hasMetaData = hasMetaData;
-		}
-	}
 }

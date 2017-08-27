@@ -130,6 +130,11 @@ public class FarmLogicOrchard extends FarmLogic {
 	public String getName() {
 		return "Orchard";
 	}
+	
+	@Override
+	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+		// do nothing as soil is not managed by farm
+	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
 		Set<BlockPos> seen = new HashSet<>();

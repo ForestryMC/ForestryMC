@@ -73,6 +73,11 @@ public class FarmLogicCocoa extends FarmLogic {
 	public boolean isAcceptedWindfall(ItemStack stack) {
 		return false;
 	}
+	
+	@Override
+	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+		// do nothing as soil is not managed by farm
+	}
 
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
