@@ -12,12 +12,6 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.circuits.ISocketable;
-import forestry.core.inventory.ItemHandlerInventoryManipulator;
-import forestry.core.inventory.StandardStackFilters;
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.plugins.ForestryPluginUids;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -28,9 +22,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.IItemHandler;
+
+import net.minecraftforge.fml.common.Optional;
+
+import forestry.api.core.ForestryAPI;
+import forestry.core.circuits.ISocketable;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.StandardStackFilters;
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.plugins.ForestryPluginUids;
 
 public abstract class InventoryUtil {
 	/**
@@ -277,7 +280,7 @@ public abstract class InventoryUtil {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
-				if (ItemStackUtil.isCraftingEquivalent(stackInSlot, stackToRemove, oreDictOfStack, craftingTools)) {
+				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictOfStack, craftingTools)) {
 					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 
