@@ -90,7 +90,7 @@ public class MultiblockEventHandlerClient {
 			        GlStateManager.popMatrix();
 				}
 			}catch(Exception e){
-				Log.error("Failed to render the position of a multiblock exeption.", e);
+				Log.error("Failed to render the position of a multiblock exception.", e);
 			}
 		}
 	}

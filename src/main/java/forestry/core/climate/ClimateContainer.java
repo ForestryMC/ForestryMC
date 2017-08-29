@@ -62,7 +62,6 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.listeners = new ClimateContainerListeners();
 		this.sources = new HashSet<>();
 		this.delay = 20;
-		this.targetedState = parent.getDefaultClimate();
 		this.state = parent.getDefaultClimate().toMutable();
 		this.modifierData = new NBTTagCompound();
 		this.boundaryUp = ImmutableClimateState.MIN;
@@ -165,7 +164,9 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		state.writeToNBT(nbt);
-		nbt.setTag("Target", targetedState.writeToNBT(new NBTTagCompound()));
+		if(targetedState != null) {
+			nbt.setTag("Target", targetedState.writeToNBT(new NBTTagCompound()));
+		}
 		nbt.setTag("modifierData", modifierData);
 		return nbt;
 	}
@@ -173,7 +174,9 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		state.readFromNBT(nbt);
-		targetedState = new ImmutableClimateState(nbt.getCompoundTag("Target"));
+		if(nbt.hasKey("Target")) {
+			targetedState = new ImmutableClimateState(nbt.getCompoundTag("Target"));
+		}
 		modifierData = nbt.getCompoundTag("modifierData");
 	}
 	
@@ -183,6 +186,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	}
 	
 	@Override
+	@Nullable
 	public ImmutableClimateState getTargetedState() {
 		return targetedState;
 	}
@@ -234,8 +238,13 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		data.writeFloat(boundaryUp.getHumidity());
 		data.writeFloat(boundaryDown.getTemperature());
 		data.writeFloat(boundaryDown.getHumidity());
-		data.writeFloat(targetedState.getTemperature());
-		data.writeFloat(targetedState.getHumidity());
+		if(targetedState != null) {
+			data.writeBoolean(true);
+			data.writeFloat(targetedState.getTemperature());
+			data.writeFloat(targetedState.getHumidity());
+		}else{
+			data.writeBoolean(false);
+		}
 		data.writeCompoundTag(modifierData);
 	}
 
@@ -245,7 +254,11 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		state.setHumidity(data.readFloat());
 		boundaryUp = new ImmutableClimateState(data.readFloat(), data.readFloat());
 		boundaryDown = new ImmutableClimateState(data.readFloat(), data.readFloat());
-		targetedState = new ImmutableClimateState(data.readFloat(), data.readFloat());
+		if(data.readBoolean()) {
+			targetedState = new ImmutableClimateState(data.readFloat(), data.readFloat());
+		}else{
+			targetedState = null;
+		}
 		modifierData = data.readCompoundTag();
 	}
 	
@@ -276,7 +289,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		}
 		IClimateContainer container = (IClimateContainer) obj;
 		IClimateHousing parent = container.getParent();
-		if(parent == null || this.parent == null){
+		if(parent.getCoordinates() == null || this.parent.getCoordinates() == null){
 			return false;
 		}
 		return this.parent.getCoordinates().equals(parent.getCoordinates());

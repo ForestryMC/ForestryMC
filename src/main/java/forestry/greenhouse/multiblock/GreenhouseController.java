@@ -242,6 +242,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	protected void onMachinePaused() {
 		provider.clear(true);
+		provider.getStorage().removeProviderFromChunks();
 		this.centerPos = BlockPos.ORIGIN;
 	}
 
@@ -250,6 +251,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		super.onMachineDisassembled();
 
 		provider.clear(false);
+		provider.getStorage().removeProviderFromChunks();
 
 		this.centerPos = BlockPos.ORIGIN;
 
@@ -395,7 +397,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 		createDefaultState();
 		limits = createLimits();
-		climateContainer.setState(getDefaultClimate().toMutable());
+		if(climateContainer.getTargetedState() == null) {
+			ImmutableClimateState defaultClimate = getDefaultClimate();
+			climateContainer.setState(defaultClimate.toMutable());
+			climateContainer.setTargetedState(defaultClimate);
+		}
 
 		provider.init(centerPos, limits);
 		assembleTickCount = getTickCount();

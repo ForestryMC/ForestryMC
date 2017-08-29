@@ -108,6 +108,5 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public void setCenterCoordinates(BlockPos cordinates) {
-
 	}
 }

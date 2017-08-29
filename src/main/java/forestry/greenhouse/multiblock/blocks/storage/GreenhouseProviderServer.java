@@ -153,7 +153,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 			|| maxSize.getZ() < position.getZ()
 			|| minSize.getX() > position.getX()
 			|| minSize.getZ() > position.getZ()) {
-			return EnumErrorCode.NOT_CLOSED;
+			return EnumErrorCode.TOO_LARGE;
 		}
 
 		if (!world.isBlockLoaded(position)) {
@@ -256,6 +256,10 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 			return GreenhouseState.UNLOADED_CHUNK;
 		}
 		if(errorLogic.hasErrors()){
+			//Remove the state NOT_CLOSED if the logic has the state TOO_LARGE because the state NOT_CLOSED can be caused by the TOO_LARGE state
+			if(errorLogic.getErrorStates().contains(EnumErrorCode.TOO_LARGE)){
+				errorLogic.setCondition(false, EnumErrorCode.NOT_CLOSED);
+			}
 			return GreenhouseState.OPEN;
 		}
 		this.size = height + depth + storage.getBlockCount();

@@ -67,7 +67,12 @@ public class WidgetClimatePanel extends Widget {
 		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRenderer, xPos + width / 2 - textFieldLength / 2, yPos + 14, textFieldLength, 10);
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
-		textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
+		if(gui.container.getTargetedState() != null) {
+			textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
+		}else{
+			textField.setVisible(false);
+			textField.setEnabled(false);
+		}
 		table = new Table();
 		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
 			table.addValueEntry(entry.getKey(), StringUtil.floatAsPercent(entry.getValue()));

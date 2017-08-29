@@ -16,16 +16,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.api.climate.ImmutableClimateState;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.gui.widgets.WidgetCamouflageTab;
-import forestry.greenhouse.gui.widgets.WidgetClimatePanel;
 import forestry.greenhouse.gui.widgets.WidgetClimateBar;
+import forestry.greenhouse.gui.widgets.WidgetClimatePanel;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.network.packets.PacketSelectClimateTargeted;
 import forestry.greenhouse.tiles.TileGreenhouse;
@@ -53,17 +53,21 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
 		//Add the camouflage tab
 		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 4 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
-		widgetManager.add(new WidgetClimateBar(widgetManager, xSize / 3 + WidgetClimateBar.WIDTH / 3, -WidgetClimateBar.HEIGHT));
+		if(container.getTargetedState() != null) {
+			widgetManager.add(new WidgetClimateBar(widgetManager, xSize / 3 + WidgetClimateBar.WIDTH / 3, -WidgetClimateBar.HEIGHT));
+		}
 		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, data));
 		widgetManager.add(humidityPanel = new WidgetClimatePanel(widgetManager, this, 102, 18, ClimateType.HUMIDITY, data));
 	}
 
 	public void sendNetworkUpdate() {
-		BlockPos pos = controller.getCoordinates();
-		float temp = temperaturePanel.parseValue();
-		float hum = humidityPanel.parseValue();
-		setClimate(container, temp, hum);
-		NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, container.getTargetedState()));
+		if(container.getTargetedState() != null) {
+			BlockPos pos = controller.getCoordinates();
+			float temp = temperaturePanel.parseValue();
+			float hum = humidityPanel.parseValue();
+			setClimate(container, temp, hum);
+			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, container.getTargetedState()));
+		}
 	}
 
 	public void setClimate(IClimateContainer container, float temp, float hum) {

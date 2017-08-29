@@ -54,8 +54,12 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 		data.setTag("rangeUp", boundaryUp.writeToNBT(new NBTTagCompound()));
 		data.setTag("rangeDown", boundaryDown.writeToNBT(new NBTTagCompound()));
 
+		ImmutableClimateState targetedState = container.getTargetedState();
+		if(targetedState == null){
+			return newState;
+		}
 		int workedSources = 0;
-		ImmutableClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), container.getTargetedState());
+		ImmutableClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), targetedState);
 		ClimateChange changeState = new ClimateChange(data.getCompoundTag("change"));
 
 		for (IClimateSource source : container.getClimateSources()) {

@@ -86,8 +86,8 @@ public enum EnumErrorCode implements IErrorState {
 
 	// Greenhouse
 	NOT_LOADED("not_loaded"), // One chunk of the greenhouse is not loaded.
-	NOT_CLOSED("not_closed"), // The greenhouse is not closed.
-	TOO_LARGE("too_large") // The greenhouse is too large.
+	NOT_CLOSED("not_closed"), // The roof of the greenhouse is not closed.
+	TOO_LARGE("too_large") //The greenhouse is too large for its controller or it is not closed at a position.
 	;
 
 	private final String name;

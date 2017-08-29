@@ -96,15 +96,15 @@ public class GreenhouseEventHandler {
 				GlStateManager.glLineWidth(2.5F);
 				IGreenhouseLimits limits = provider.getUsedLimits();
 				if (limits != null) {
-					BlockPos offset = provider.getCenterPos();
 					Position2D minEdge = limits.getMinimumCoordinates();
 					Position2D maxEdge = limits.getMaximumCoordinates();
 					AxisAlignedBB greenhouseBB = new AxisAlignedBB(minEdge.getX(), limits.getDepth(), minEdge.getZ(), maxEdge.getX() + 1, limits.getHeight() + 1, maxEdge.getZ() + 1);
-					AxisAlignedBB testBlockBB = Block.FULL_BLOCK_AABB;
-					testBlockBB = testBlockBB.offset(offset);
-					RenderGlobal.drawSelectionBoundingBox(testBlockBB, 0.0F, 0.0F, 0.0F, 0.5F);
 					RenderGlobal.drawSelectionBoundingBox(greenhouseBB, 0.0F, 0.0F, 0.0F, 0.5F);
 				}
+				//Draw center position
+				BlockPos offset = provider.getCenterPos();
+				AxisAlignedBB testBlockBB = Block.FULL_BLOCK_AABB.offset(offset);
+				RenderGlobal.drawSelectionBoundingBox(testBlockBB, 0.0F, 0.0F, 0.0F, 0.5F);
 				GlStateManager.enableTexture2D();
 				GlStateManager.disableBlend();
 				GlStateManager.popMatrix();

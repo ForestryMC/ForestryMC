@@ -54,8 +54,9 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	Collection<IClimateContainerListener> getListeners();
 	
 	/**
-	 * @return the state that the container targets to get his climate state to.
+	 * @return only null if the controller never was assembled.
 	 */
+	@Nullable
 	ImmutableClimateState getTargetedState();
 	
 	void setTargetedState(ImmutableClimateState state);
