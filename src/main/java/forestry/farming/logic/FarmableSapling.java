@@ -10,31 +10,21 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.api.genetics.IIndividual;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.plugins.ForestryPluginUids;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class FarmableSapling implements IFarmable {
     protected final ItemStack germling;

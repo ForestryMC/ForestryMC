@@ -67,6 +67,26 @@ public abstract class PlayerUtil {
 		return player;
 	}
 
+	/**
+	 * Get a fake player for a given World and GameProfile.
+	 * Do not store references to the return value, to prevent worlds staying in memory.
+	 */
+	@Nullable
+	public static EntityPlayer getFakePlayer(World world, @Nullable GameProfile profile) {
+		if (profile == null || profile.getName() == null) {
+			if (world instanceof WorldServer) {
+				return FakePlayerFactory.getMinecraft((WorldServer) world);
+			} else {
+				return null;
+			}
+		}
+
+		if (world instanceof WorldServer) {
+			return FakePlayerFactory.get((WorldServer) world, profile);
+		}
+		return null;
+	}
+
 	public static void writeGameProfile(NBTTagCompound tagCompound, GameProfile profile) {
 		if (!StringUtils.isNullOrEmpty(profile.getName())) {
 			tagCompound.setString("Name", profile.getName());
