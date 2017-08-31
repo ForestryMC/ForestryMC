@@ -63,12 +63,8 @@ public class PacketCamouflageSelectionServer extends PacketCamouflageSelection i
 					break;
 				}
 				case TILE: {
-					if (tile instanceof IMultiblockComponent) {
-						IMultiblockController controller = ((IMultiblockComponent) tile).getMultiblockLogic().getController();
-
-						if (controller instanceof ICamouflageHandler) {
-							handler = (ICamouflageHandler) controller;
-						}
+					if (tile instanceof ICamouflageHandler) {
+						handler = (ICamouflageHandler) tile;
 					}
 					break;
 				}
