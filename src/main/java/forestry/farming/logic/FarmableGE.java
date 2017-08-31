@@ -53,18 +53,12 @@ public class FarmableGE implements IFarmable {
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 
-		germling = GeneticsUtil.convertToGeneticEquivalent(germling);
-		if (treeRoot.isMember(germling)) {
-			ITree tree = treeRoot.getMember(germling);
-			return treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
-		} else {
-			return false;
-		}
+		ITree tree = treeRoot.getMember(germling);
+		return tree != null && treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		return TreeManager.treeRoot.isMember(itemstack);
 	}
 

@@ -20,12 +20,12 @@ public class BlockRegistryMail extends BlockRegistry {
 
 	public BlockRegistryMail() {
 		mailbox = new BlockMail(BlockTypeMail.MAILBOX);
-		registerBlock(mailbox, new ItemBlockForestry(mailbox), "mailbox");
+		registerBlock(mailbox, new ItemBlockForestry<>(mailbox), "mailbox");
 
 		tradeStation = new BlockMail(BlockTypeMail.TRADE_STATION);
-		registerBlock(tradeStation, new ItemBlockForestry(tradeStation), "trade_station");
+		registerBlock(tradeStation, new ItemBlockForestry<>(tradeStation), "trade_station");
 
 		stampCollector = new BlockMail(BlockTypeMail.PHILATELIST);
-		registerBlock(stampCollector, new ItemBlockForestry(stampCollector), "stamp_collector");
+		registerBlock(stampCollector, new ItemBlockForestry<>(stampCollector), "stamp_collector");
 	}
 }

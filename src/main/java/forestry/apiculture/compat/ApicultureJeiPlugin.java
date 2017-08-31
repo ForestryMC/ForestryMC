@@ -21,7 +21,7 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
 		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
 			IAlleleSpecies species = Genome.getSpeciesDirectly(BeeManager.beeRoot, itemStack);
-			return species == null ? null : species.getUID();
+			return species == null ? ISubtypeRegistry.ISubtypeInterpreter.NONE : species.getUID();
 		};
 
 		subtypeRegistry.registerSubtypeInterpreter(items.beeDroneGE, beeSubtypeInterpreter);

@@ -18,7 +18,6 @@ import java.io.File;
 import forestry.plugins.compat.PluginNatura;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.common.Mod;

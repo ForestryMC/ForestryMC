@@ -12,6 +12,7 @@ import java.util.List;
 import com.mojang.authlib.GameProfile;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -101,4 +102,6 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	/* MUTATIONS */
 	@Override
 	List<ITreeMutation> getMutations(boolean shuffle);
+
+	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
 }

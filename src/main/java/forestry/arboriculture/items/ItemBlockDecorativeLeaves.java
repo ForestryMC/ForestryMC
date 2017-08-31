@@ -1,20 +1,17 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
-	public ItemBlockDecorativeLeaves(Block block) {
+	public ItemBlockDecorativeLeaves(BlockDecorativeLeaves block) {
 		super(block);
 	}
 

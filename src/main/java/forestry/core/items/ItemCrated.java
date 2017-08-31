@@ -25,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

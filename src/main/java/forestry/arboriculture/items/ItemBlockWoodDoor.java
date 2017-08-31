@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
 
-	public ItemBlockWoodDoor(Block block) {
+	public ItemBlockWoodDoor(BlockArbDoor block) {
 		super(block);
 	}
 

@@ -769,7 +769,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
-		EntityPlayer player = PlayerUtil.getPlayer(world, getOwnerHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
 		return player != null && inventory.plantGermling(germling, player, pos);
 	}
 

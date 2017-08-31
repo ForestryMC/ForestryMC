@@ -62,9 +62,9 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "net.darkhax.tesla:Tesla-${mcversion}:${tesla_version}"
-	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
-	runtime "mezz.jei:jei_${mcversion}:${jei_version}"
+	deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
+	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
+	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 }
 
@@ -157,12 +157,12 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 curseforge {
 	apiKey = project.hasProperty('curseforge_apikey') ? project.curseforge_apikey : '0'
 	project {
-		id = '59751'
+		id = curse_project_id
 		changelog = file('changelog.html')
 		changelogType = 'html'
 		releaseType = 'beta'
+		addGameVersion '1.12'
 	}
-	addGameVersion '1.12.1'
 }
 
 afterEvaluate {

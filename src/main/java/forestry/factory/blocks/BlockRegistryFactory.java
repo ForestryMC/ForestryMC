@@ -30,28 +30,28 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 	public BlockRegistryFactory() {
 		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
-		registerBlock(bottler, new ItemBlockForestry(bottler), "bottler");
+		registerBlock(bottler, new ItemBlockForestry<>(bottler), "bottler");
 
 		carpenter = new BlockFactoryTESR(BlockTypeFactoryTesr.CARPENTER);
-		registerBlock(carpenter, new ItemBlockForestry(carpenter), "carpenter");
+		registerBlock(carpenter, new ItemBlockForestry<>(carpenter), "carpenter");
 
 		centrifuge = new BlockFactoryTESR(BlockTypeFactoryTesr.CENTRIFUGE);
-		registerBlock(centrifuge, new ItemBlockForestry(centrifuge), "centrifuge");
+		registerBlock(centrifuge, new ItemBlockForestry<>(centrifuge), "centrifuge");
 
 		fermenter = new BlockFactoryTESR(BlockTypeFactoryTesr.FERMENTER);
-		registerBlock(fermenter, new ItemBlockForestry(fermenter), "fermenter");
+		registerBlock(fermenter, new ItemBlockForestry<>(fermenter), "fermenter");
 
 		moistener = new BlockFactoryTESR(BlockTypeFactoryTesr.MOISTENER);
-		registerBlock(moistener, new ItemBlockForestry(moistener), "moistener");
+		registerBlock(moistener, new ItemBlockForestry<>(moistener), "moistener");
 
 		squeezer = new BlockFactoryTESR(BlockTypeFactoryTesr.SQUEEZER);
-		registerBlock(squeezer, new ItemBlockForestry(squeezer), "squeezer");
+		registerBlock(squeezer, new ItemBlockForestry<>(squeezer), "squeezer");
 
 		still = new BlockFactoryTESR(BlockTypeFactoryTesr.STILL);
-		registerBlock(still, new ItemBlockForestry(still), "still");
+		registerBlock(still, new ItemBlockForestry<>(still), "still");
 
 		rainmaker = new BlockFactoryTESR(BlockTypeFactoryTesr.RAINMAKER);
-		registerBlock(rainmaker, new ItemBlockForestry(rainmaker), "rainmaker");
+		registerBlock(rainmaker, new ItemBlockForestry<>(rainmaker), "rainmaker");
 
 		fabricator = new BlockFactoryPlain(BlockTypeFactoryPlain.FABRICATOR);
 		registerBlock(fabricator, new ItemBlockNBT(fabricator), "fabricator");

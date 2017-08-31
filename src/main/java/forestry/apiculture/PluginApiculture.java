@@ -46,6 +46,8 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,7 +56,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -495,13 +496,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for(int i = 0;i < blocks.beeCombs.length;i++){
-			BlockHoneyComb block = blocks.beeCombs[i];
-			for(int m = 0;m < EnumHoneyComb.VALUES.length - i * 16;m++){
-				RecipeUtil.addRecipe("comb." + m, new ItemStack(block, 1, m),
+		for(int blockCount = 0;blockCount < blocks.beeCombs.length;blockCount++){
+			BlockHoneyComb block = blocks.beeCombs[blockCount];
+			for(int blockMeta = 0;blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16;blockMeta++){
+				int itemMeta = blockMeta + blockCount * 16;
+				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
 						"###", 
 						"###", 
-						"###", '#', items.beeComb.get(EnumHoneyComb.get(i * 16 + m), 1));
+						"###", '#', items.beeComb.get(EnumHoneyComb.get(itemMeta), 1));
 			}
 		}
 
