@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +20,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class FarmableSapling implements IFarmable {
     protected final ItemStack germling;

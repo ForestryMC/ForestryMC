@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateStates;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.network.IStreamable;
@@ -66,6 +65,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.modifierData = new NBTTagCompound();
 		this.boundaryUp = ClimateState.MIN;
 		this.boundaryDown = ClimateState.MIN;
+		this.targetedState = AbsentClimateState.INSTANCE;
 	}
 
 	public ClimateContainer(IClimateHousing parent, NBTTagCompound nbtTag) {
@@ -164,9 +164,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		state.writeToNBT(nbt);
-		if(targetedState != null) {
-			nbt.setTag("Target", targetedState.writeToNBT(new NBTTagCompound()));
-		}
+		nbt.setTag("Target", targetedState.writeToNBT(new NBTTagCompound()));
 		nbt.setTag("modifierData", modifierData);
 		return nbt;
 	}
@@ -174,9 +172,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		state = ForestryAPI.states.create(nbt);
-		if(nbt.hasKey("Target")) {
-			targetedState = new ClimateState(nbt.getCompoundTag("Target"), ClimateStateType.IMMUTABLE);
-		}
+		targetedState = ForestryAPI.states.create(nbt.getCompoundTag("Target"));
 		modifierData = nbt.getCompoundTag("modifierData");
 	}
 	
@@ -231,34 +227,19 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	
 	@Override
 	public void writeData(PacketBufferForestry data) {
-		data.writeFloat(state.getTemperature());
-		data.writeFloat(state.getHumidity());
-		data.writeFloat(boundaryUp.getTemperature());
-		data.writeFloat(boundaryUp.getHumidity());
-		data.writeFloat(boundaryDown.getTemperature());
-		data.writeFloat(boundaryDown.getHumidity());
-		if(targetedState.isPresent()) {
-			data.writeBoolean(true);
-			data.writeFloat(targetedState.getTemperature());
-			data.writeFloat(targetedState.getHumidity());
-		}else{
-			data.writeBoolean(false);
-		}
+		data.writeClimateState(state);
+		data.writeClimateState(boundaryUp);
+		data.writeClimateState(boundaryDown);
+		data.writeClimateState(targetedState);
 		data.writeCompoundTag(modifierData);
 	}
 
 	@Override
 	public void readData(PacketBufferForestry data) throws IOException {
-		state = state.setTemperature(data.readFloat());
-		state = state.setHumidity(data.readFloat());
-		IClimateStates states = ForestryAPI.states;
-		boundaryUp = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
-		boundaryDown = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
-		if(data.readBoolean()) {
-			targetedState = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
-		}else{
-			targetedState = states.absent();
-		}
+		state = data.readClimateState();
+		boundaryUp = data.readClimateState();
+		boundaryDown = data.readClimateState();
+		targetedState = data.readClimateState();
 		modifierData = data.readCompoundTag();
 	}
 	

@@ -15,10 +15,8 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.core.climate.ClimateState;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -45,21 +43,19 @@ public class PacketSelectClimateTargeted extends ForestryPacket implements IFore
 	@Override
 	protected void writeData(PacketBufferForestry data) throws IOException {
 		data.writeBlockPos(pos);
-		data.writeFloat(climateState.getTemperature());
-		data.writeFloat(climateState.getHumidity());
+		data.writeClimateState(climateState);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			float temperature = data.readFloat();
-			float humidity = data.readFloat();
+			IClimateState climateState = data.readClimateState();
 
 			IGreenhouseControllerInternal controller = MultiblockUtil.getController(player.world, pos, IGreenhouseComponent.class);
 			if (controller != null) {
 				IClimateContainer container = controller.getClimateContainer();
-				container.setTargetedState(new ClimateState(temperature, humidity, ClimateStateType.IMMUTABLE));
+				container.setTargetedState(climateState);
 			}
 		}
 	}

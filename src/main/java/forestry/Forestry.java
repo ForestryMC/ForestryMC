@@ -15,7 +15,6 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import forestry.plugins.compat.PluginNatura;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -34,6 +33,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
+import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -46,6 +46,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.compat.PluginNatura;
 
 /**
  * Forestry Minecraft Mod
@@ -75,6 +76,7 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
+		ForestryAPI.states = new ClimateStates();
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);
