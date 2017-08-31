@@ -17,7 +17,6 @@ import java.util.Set;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.climate.ClimateState;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -228,42 +227,6 @@ public class ClimateUtil implements IClimateHelper {
 				errorStates.add(EnumErrorCode.TOO_HUMID);
 			}
 		}
-	}
-	
-	public static boolean addHumidity(ClimateState state, IClimateState targetedState, float value){
-		float humidity = state.getHumidity();
-		float targetedHumidity = targetedState.getHumidity();
-		if(Float.isNaN(humidity)){
-			state.setHumidity(humidity = 0);
-		}
-		if (humidity != targetedHumidity) {
-			if (humidity > targetedHumidity) {
-				value=Math.min(value, humidity - targetedHumidity);
-			} else {
-				value=Math.min(value, targetedHumidity - humidity);
-			}
-			state.addHumidity(value);
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean addTemperature(ClimateState state, IClimateState targetedState, float value){
-		float temperature = state.getTemperature();
-		float targetedTemperature = targetedState.getTemperature();
-		if(Float.isNaN(temperature)){
-			state.setTemperature(temperature = 0);
-		}
-		if (temperature != targetedTemperature) {
-			if (temperature > targetedTemperature) {
-				value=Math.min(value, temperature - targetedTemperature);
-			} else {
-				value=Math.min(value, targetedTemperature - temperature);
-			}
-			state.addTemperature(value);
-			return true;
-		}
-		return false;
 	}
 	
 	public static float getTemperature(World world, BlockPos pos){

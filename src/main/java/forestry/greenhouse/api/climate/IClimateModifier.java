@@ -11,7 +11,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 
 /**
  * This modifier is used by {@link IClimateContainer}s.
@@ -27,14 +26,19 @@ public interface IClimateModifier {
 	 * @param data A {@link NBTTagCompound} that can be used to save custom data or to send it to the client to add it to the {@link IClimateData}.
 	 * @return a modify newState or the newState.
 	 */
-	IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data);
+	default IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data){
+		return newState;
+	}
 
 	@SideOnly(Side.CLIENT)
-	void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data);
+	default void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data){
+	}
 	
 	/**
 	 * @return The priority of this modifier. The modifier with the highest priority is called first and the modifier with the lowest at last.
 	 */
-	int getPriority();
+	default int getPriority() {
+		return 0;
+	}
 	
 }

@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 
 /**
  * A climate source is stored in a {@link IClimateSourceOwner}. It is used by the {@link IClimateSourceContainer}s to change the climate of a {@link IClimateContainer}.
@@ -40,7 +39,7 @@ public interface IClimateSource {
 	 * @param target the by the {@link IClimateContainer} targeted {@link IClimateState}.
 	 * 
 	 */
-	ClimateChange work(IClimateState state, ImmutableClimateState target);
+	IClimateState work(IClimateState state, IClimateState target);
 	
 	/**
 	 * @return true if source has changed the climate at the last work cicle.

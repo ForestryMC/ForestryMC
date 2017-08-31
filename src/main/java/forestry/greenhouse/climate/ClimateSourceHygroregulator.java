@@ -12,13 +12,13 @@ package forestry.greenhouse.climate;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.greenhouse.api.climate.ClimateChange;
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.IErrorLogic;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
+import forestry.core.climate.ClimateState;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.recipes.HygroregulatorRecipe;
@@ -60,7 +60,7 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 	}
 
 	@Override
-	public boolean canWork(IClimateState state, ImmutableClimateState target) {
+	public boolean canWork(IClimateState state, IClimateState target) {
 		createRecipe();
 		FilteredTank liquidTank = owner.getLiquidTank();
 		IErrorLogic errorLogic = owner.getErrorLogic();
@@ -73,13 +73,13 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 	}
 
 	@Override
-	protected void removeResources(IClimateState state, ImmutableClimateState target) {
+	protected void removeResources(IClimateState state, IClimateState target) {
 		FilteredTank liquidTank = owner.getLiquidTank();
 		liquidTank.drainInternal(currentRecipe.liquid.amount, true);
 	}
 
 	@Override
-	protected ClimateChange getChange(ClimateSourceType type, IClimateState state, ImmutableClimateState target) {
+	protected IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target) {
 		float temperature = 0.0F;
 		float humidity = 0.0F;
 		if (type.canChangeHumidity()) {
@@ -88,7 +88,7 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 		if (type.canChangeTemperature()) {
 			temperature += currentRecipe.tempChange * getChangeMultiplier(ClimateType.TEMPERATURE);
 		}
-		return new ClimateChange(temperature, humidity);
+		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
 	}
 
 	private void createRecipe() {

@@ -8,7 +8,7 @@ package forestry.greenhouse.api.climate;
 import forestry.api.circuits.ICircuit;
 import forestry.api.climate.ClimateType;
 
-public interface IClimateSourceCircuitable extends  IClimateSource {
+public interface IClimateSourceCircuitable extends IClimateSource {
 	/**
 	 * Called by the {@link IClimateSourceOwner} if its {@link ICircuit} changes.
 	 */

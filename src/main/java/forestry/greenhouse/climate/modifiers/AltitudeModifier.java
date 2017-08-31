@@ -17,21 +17,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.BlankClimateModifier;
 import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateState;
+import forestry.api.greenhouse.IClimateHousing;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateData;
-import forestry.api.greenhouse.IClimateHousing;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
-import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.IClimateModifier;
 
-public class AltitudeModifier extends BlankClimateModifier {
+public class AltitudeModifier implements IClimateModifier {
 
 	private static final float TEMPERATURE_CHANGE = 0.01F;
 
 	@Override
-	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data) {
+	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data) {
 		World world = container.getWorld();
 		IClimateHousing parent = container.getParent();
 		if (world.provider.isSurfaceWorld()) {

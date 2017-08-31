@@ -15,9 +15,10 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.core.climate.ClimateState;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -58,7 +59,7 @@ public class PacketSelectClimateTargeted extends ForestryPacket implements IFore
 			IGreenhouseControllerInternal controller = MultiblockUtil.getController(player.world, pos, IGreenhouseComponent.class);
 			if (controller != null) {
 				IClimateContainer container = controller.getClimateContainer();
-				container.setTargetedState(new ImmutableClimateState(temperature, humidity));
+				container.setTargetedState(new ClimateState(temperature, humidity, ClimateStateType.IMMUTABLE));
 			}
 		}
 	}

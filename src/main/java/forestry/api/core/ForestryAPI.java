@@ -10,6 +10,7 @@ import java.util.Set;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.climate.IClimateStates;
 import forestry.greenhouse.api.climate.IClimateFactory;
 import forestry.api.climate.IClimateManager;
 import forestry.api.farming.IFarmRegistry;
@@ -56,6 +57,8 @@ public class ForestryAPI {
 	 * @since 5.3.4
 	 */
 	public static IClimateFactory climateFactory;
+
+	public static IClimateStates states;
 
 	/**
 	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s

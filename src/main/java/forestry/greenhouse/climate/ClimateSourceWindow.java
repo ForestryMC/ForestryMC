@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.greenhouse.api.climate.ClimateChange;
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.ForestryAPI;
 import forestry.core.climate.ClimateSource;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
+import forestry.core.climate.ClimateState;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
 
@@ -47,16 +47,16 @@ public class ClimateSourceWindow extends ClimateSource<TileGreenhouseWindow> {
 	}
 
 	@Override
-	public boolean canWork(IClimateState state, ImmutableClimateState target) {
+	public boolean canWork(IClimateState state, IClimateState target) {
 		return owner.getMode() == WindowMode.OPEN;
 	}
 
 	@Override
-	protected void removeResources(IClimateState state, ImmutableClimateState target) {
+	protected void removeResources(IClimateState state, IClimateState target) {
 	}
 
 	@Override
-	protected ClimateChange getChange(ClimateSourceType type, IClimateState state, ImmutableClimateState target) {
+	protected IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target) {
 		float temperature = 0.0F;
 		float humidity = 0.0F;
 		if (type.canChangeHumidity()) {
@@ -73,7 +73,7 @@ public class ClimateSourceWindow extends ClimateSource<TileGreenhouseWindow> {
 				temperature += change;
 			}
 		}
-		return new ClimateChange(temperature, humidity);
+		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
 	}
 
 }

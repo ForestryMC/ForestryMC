@@ -15,8 +15,10 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.climate.IClimateState;
+import forestry.core.climate.ClimateState;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.TextLayoutHelper;
@@ -53,7 +55,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
 		//Add the camouflage tab
 		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 4 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
-		if(container.getTargetedState() != null) {
+		if(container.getTargetedState().isPresent()) {
 			widgetManager.add(new WidgetClimateBar(widgetManager, xSize / 3 + WidgetClimateBar.WIDTH / 3, -WidgetClimateBar.HEIGHT));
 		}
 		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE, data));
@@ -61,19 +63,20 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 	}
 
 	public void sendNetworkUpdate() {
-		if(container.getTargetedState() != null) {
+		IClimateState climateState = container.getTargetedState();
+		if(climateState.isPresent()) {
 			BlockPos pos = controller.getCoordinates();
 			float temp = temperaturePanel.parseValue();
 			float hum = humidityPanel.parseValue();
 			setClimate(container, temp, hum);
-			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, container.getTargetedState()));
+			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, climateState));
 		}
 	}
 
 	public void setClimate(IClimateContainer container, float temp, float hum) {
 		temperaturePanel.setValue(temp);
 		humidityPanel.setValue(hum);
-		container.setTargetedState(new ImmutableClimateState(temp, hum));
+		container.setTargetedState(new ClimateState(temp, hum, ClimateStateType.IMMUTABLE));
 	}
 
 	@Override

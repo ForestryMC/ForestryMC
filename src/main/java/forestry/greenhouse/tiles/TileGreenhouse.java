@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflageHandler;
@@ -192,7 +192,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 
 	@Override
-	public ImmutableClimateState getDefaultClimate() {
+	public IClimateState getDefaultClimate() {
 		return getMultiblockLogic().getController().getDefaultClimate();
 	}
 

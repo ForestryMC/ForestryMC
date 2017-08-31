@@ -16,15 +16,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.BlankClimateModifier;
 import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateState;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateData;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
-import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.IClimateModifier;
 
-public class WeatherModifier extends BlankClimateModifier {
+public class WeatherModifier implements IClimateModifier {
 
 	private static final int RAIN_TIME = 600;
 	private static final float RAIN_HUMIDITY_CHANGE = 0.15F;
@@ -32,7 +31,7 @@ public class WeatherModifier extends BlankClimateModifier {
 	private static final int SNOW_MODIFIER = 2;
 
 	@Override
-	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data) {
+	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data) {
 		World world = container.getWorld();
 		IClimateState defaultClimate = container.getParent().getDefaultClimate();
 		int rainTime = data.getInteger("raintime");

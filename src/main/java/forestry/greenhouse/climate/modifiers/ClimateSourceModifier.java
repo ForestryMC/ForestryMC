@@ -17,23 +17,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.BlankClimateModifier;
-import forestry.greenhouse.api.climate.ClimateChange;
-import forestry.api.climate.ClimateState;
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
-import forestry.api.greenhouse.IClimateHousing;
-import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.greenhouse.IClimateHousing;
+import forestry.core.climate.ClimateState;
 import forestry.core.config.Config;
 import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateModifier;
+import forestry.greenhouse.api.climate.IClimateSource;
 
-public class ClimateSourceModifier extends BlankClimateModifier {
+public class ClimateSourceModifier implements IClimateModifier {
 
 	@Override
-	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data) {
+	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data) {
 		Collection<IClimateSource> sources = container.getClimateSources();
 		if (sources.isEmpty()) {
 			data.removeTag("rangeUp");
@@ -54,17 +53,17 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 		data.setTag("rangeUp", boundaryUp.writeToNBT(new NBTTagCompound()));
 		data.setTag("rangeDown", boundaryDown.writeToNBT(new NBTTagCompound()));
 
-		ImmutableClimateState targetedState = container.getTargetedState();
-		if(targetedState == null){
+		IClimateState targetedState = container.getTargetedState();
+		if(!targetedState.isPresent()){
 			return newState;
 		}
 		int workedSources = 0;
-		ImmutableClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), targetedState);
-		ClimateChange changeState = new ClimateChange(data.getCompoundTag("change"));
+		IClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), targetedState);
+		IClimateState changeState = new ClimateState(data.getCompoundTag("change"), ClimateStateType.CHANGE);
 
 		for (IClimateSource source : container.getClimateSources()) {
-			ClimateChange state = source.work(oldState, target);
-			if (state != null) {
+			IClimateState state = source.work(oldState, target);
+			if (state.isPresent()) {
 				boolean hasChange = false;
 				double temperatureChange = state.getTemperature();
 				double humidityChange = state.getHumidity();
@@ -93,9 +92,9 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
-		IClimateState rangeDown = new ClimateState(nbtData.getCompoundTag("rangeDown"));
-		IClimateState rangeUp = new ClimateState(nbtData.getCompoundTag("rangeUp"));
-		IClimateState change = new ClimateState(nbtData.getCompoundTag("change"));
+		IClimateState rangeDown = new ClimateState(nbtData.getCompoundTag("rangeDown"), ClimateStateType.MUTABLE);
+		IClimateState rangeUp = new ClimateState(nbtData.getCompoundTag("rangeUp"), ClimateStateType.MUTABLE);
+		IClimateState change = new ClimateState(nbtData.getCompoundTag("change"), ClimateStateType.MUTABLE);
 
 		data.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getHumidity())
 			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getHumidity())
@@ -111,7 +110,7 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 		return -1;
 	}
 
-	private ImmutableClimateState getTargetOrBound(IClimateState climateState, IClimateState boundaryDown, IClimateState boundaryUp, IClimateState targetedState) {
+	private IClimateState getTargetOrBound(IClimateState climateState, IClimateState boundaryDown, IClimateState boundaryUp, IClimateState targetedState) {
 		float temperature = climateState.getTemperature();
 		float humidity = climateState.getHumidity();
 		float targetTemperature = targetedState.getTemperature();
@@ -130,6 +129,6 @@ public class ClimateSourceModifier extends BlankClimateModifier {
 		} else if (targetHumidity < humidity) {
 			humidity = Math.max(targetHumidity, humidityBoundaryDown);
 		}
-		return new ImmutableClimateState(temperature, humidity);
+		return new ClimateState(temperature, humidity, ClimateStateType.IMMUTABLE);
 	}
 }

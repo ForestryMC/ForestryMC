@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,10 +24,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.ClimateState;
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.climate.IClimateStates;
+import forestry.api.core.ForestryAPI;
+import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
@@ -36,7 +37,6 @@ import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateContainerListener;
 import forestry.greenhouse.api.climate.IClimateData;
-import forestry.api.greenhouse.IClimateHousing;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.greenhouse.climate.GreenhouseClimateManager;
@@ -48,8 +48,8 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	protected final ClimateContainerListeners listeners;
 	protected final Set<IClimateSource> sources;
 	private int delay;
-	protected ClimateState state;
-	protected ImmutableClimateState targetedState;
+	protected IClimateState state;
+	protected IClimateState targetedState;
 	protected IClimateState boundaryUp;
 	protected IClimateState boundaryDown;
 	private NBTTagCompound modifierData;
@@ -64,8 +64,8 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.delay = 20;
 		this.state = parent.getDefaultClimate().toMutable();
 		this.modifierData = new NBTTagCompound();
-		this.boundaryUp = ImmutableClimateState.MIN;
-		this.boundaryDown = ImmutableClimateState.MIN;
+		this.boundaryUp = ClimateState.MIN;
+		this.boundaryDown = ClimateState.MIN;
 	}
 
 	public ClimateContainer(IClimateHousing parent, NBTTagCompound nbtTag) {
@@ -84,7 +84,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 			if(!listeners.isClosed(this)) {
 				returnClimateToDefault();
 			}else{
-				ImmutableClimateState oldState = state.toImmutable();
+				IClimateState oldState = state.toImmutable();
 				state = parent.getDefaultClimate().toMutable();
 				for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
 					state = modifier.modifyTarget(this, state, oldState, modifierData).toMutable();
@@ -98,7 +98,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	}
 	
 	protected void returnClimateToDefault(){
-		ImmutableClimateState defaultState = parent.getDefaultClimate();
+		IClimateState defaultState = parent.getDefaultClimate();
 		float biomeTemperature = defaultState.getTemperature();
 		float biomeHumidity = defaultState.getHumidity();
 		float temperature = state.getTemperature();
@@ -147,8 +147,8 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		if(humidityBoundaryDown != 0){
 			humidityBoundaryDown/=sizeModifier;
 		}
-		boundaryUp = parent.getDefaultClimate().add(new ClimateState(temperatureBoundaryUp, humidityBoundaryUp));
-		boundaryDown = parent.getDefaultClimate().remove(new ClimateState(temperatureBoundaryDown, humidityBoundaryDown));
+		boundaryUp = parent.getDefaultClimate().add(new ClimateState(temperatureBoundaryUp, humidityBoundaryUp, ClimateStateType.MUTABLE));
+		boundaryDown = parent.getDefaultClimate().remove(new ClimateState(temperatureBoundaryDown, humidityBoundaryDown, ClimateStateType.MUTABLE));
 	}
 	
 	@Override
@@ -173,21 +173,20 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		state.readFromNBT(nbt);
+		state = ForestryAPI.states.create(nbt);
 		if(nbt.hasKey("Target")) {
-			targetedState = new ImmutableClimateState(nbt.getCompoundTag("Target"));
+			targetedState = new ClimateState(nbt.getCompoundTag("Target"), ClimateStateType.IMMUTABLE);
 		}
 		modifierData = nbt.getCompoundTag("modifierData");
 	}
 	
 	@Override
-	public void setTargetedState(ImmutableClimateState state) {
+	public void setTargetedState(IClimateState state) {
 		this.targetedState = state;
 	}
 	
 	@Override
-	@Nullable
-	public ImmutableClimateState getTargetedState() {
+	public IClimateState getTargetedState() {
 		return targetedState;
 	}
 
@@ -202,7 +201,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		return delay;
 	}
 
-	public void setState(ClimateState state) {
+	public void setState(IClimateState state) {
 		this.state = state;
 	}
 
@@ -238,7 +237,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		data.writeFloat(boundaryUp.getHumidity());
 		data.writeFloat(boundaryDown.getTemperature());
 		data.writeFloat(boundaryDown.getHumidity());
-		if(targetedState != null) {
+		if(targetedState.isPresent()) {
 			data.writeBoolean(true);
 			data.writeFloat(targetedState.getTemperature());
 			data.writeFloat(targetedState.getHumidity());
@@ -250,20 +249,21 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 
 	@Override
 	public void readData(PacketBufferForestry data) throws IOException {
-		state.setTemperature(data.readFloat());
-		state.setHumidity(data.readFloat());
-		boundaryUp = new ImmutableClimateState(data.readFloat(), data.readFloat());
-		boundaryDown = new ImmutableClimateState(data.readFloat(), data.readFloat());
+		state = state.setTemperature(data.readFloat());
+		state = state.setHumidity(data.readFloat());
+		IClimateStates states = ForestryAPI.states;
+		boundaryUp = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
+		boundaryDown = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
 		if(data.readBoolean()) {
-			targetedState = new ImmutableClimateState(data.readFloat(), data.readFloat());
+			targetedState = states.create(data.readFloat(), data.readFloat(), ClimateStateType.IMMUTABLE);
 		}else{
-			targetedState = null;
+			targetedState = states.absent();
 		}
 		modifierData = data.readCompoundTag();
 	}
 	
 	@Override
-	public ClimateState getState() {
+	public IClimateState getState() {
 		return state;
 	}
 	
@@ -300,7 +300,6 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		return parent.getCoordinates().hashCode();
 	}
 
-	@Nullable
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IClimateData getData() {

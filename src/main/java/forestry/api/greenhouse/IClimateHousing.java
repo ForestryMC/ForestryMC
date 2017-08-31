@@ -8,7 +8,7 @@ package forestry.api.greenhouse;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.climate.IClimateState;
 
 public interface IClimateHousing {
 	
@@ -22,7 +22,7 @@ public interface IClimateHousing {
 	/**
 	 * @return The default climate state. It is calculated out of all biomedata that this region contains.
 	 */
-	ImmutableClimateState getDefaultClimate();
+	IClimateState getDefaultClimate();
 	
 	/**
 	 * Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12

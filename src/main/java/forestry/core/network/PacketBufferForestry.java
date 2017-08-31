@@ -15,6 +15,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.climate.ClimateStateType;
+import forestry.api.climate.IClimateState;
+import forestry.core.climate.AbsentClimateState;
+import forestry.core.climate.ClimateState;
 import forestry.greenhouse.api.greenhouse.Position2D;
 
 import io.netty.buffer.ByteBuf;
@@ -175,5 +179,25 @@ public class PacketBufferForestry extends PacketBuffer {
 
 	public interface IStreamableFactory<T extends IStreamable> {
 		T create(PacketBufferForestry data) throws IOException;
+	}
+
+	public void writeClimateState(IClimateState climateState){
+		if(climateState.isPresent()) {
+			writeBoolean(true);
+			writeByte(climateState.getType().ordinal());
+			writeFloat(climateState.getTemperature());
+			writeFloat(climateState.getHumidity());
+		}else{
+			writeBoolean(false);
+		}
+	}
+
+	public IClimateState readClimateState(){
+		if(readBoolean()){
+			ClimateStateType type = ClimateStateType.values()[readByte()];
+			return new ClimateState(readFloat(), readFloat(), type);
+		}else{
+			return AbsentClimateState.INSTANCE;
+		}
 	}
 }

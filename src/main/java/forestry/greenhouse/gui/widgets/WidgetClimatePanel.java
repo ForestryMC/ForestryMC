@@ -23,13 +23,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateData;
+import forestry.api.climate.IClimateState;
 import forestry.core.gui.tables.Table;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.gui.GuiGreenhouse;
 
 public class WidgetClimatePanel extends Widget {
@@ -67,8 +68,9 @@ public class WidgetClimatePanel extends Widget {
 		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRenderer, xPos + width / 2 - textFieldLength / 2, yPos + 14, textFieldLength, 10);
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
-		if(gui.container.getTargetedState() != null) {
-			textField.setText(Float.toString(gui.container.getTargetedState().get(type)));
+		IClimateState climateState = gui.container.getTargetedState();
+		if(climateState.isPresent()) {
+			textField.setText(Float.toString(climateState.get(type)));
 		}else{
 			textField.setVisible(false);
 			textField.setEnabled(false);

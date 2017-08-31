@@ -17,13 +17,14 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.api.climate.ImmutableClimateState;
-import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
-import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
+import forestry.api.climate.IClimateState;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
+import forestry.core.climate.AbsentClimateState;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -81,8 +82,8 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public ImmutableClimateState getDefaultClimate() {
-		return null;
+	public IClimateState getDefaultClimate() {
+		return AbsentClimateState.INSTANCE;
 	}
 
 	@Override

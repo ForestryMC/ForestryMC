@@ -13,17 +13,15 @@ import forestry.api.core.INbtWritable;
  * A {@link IClimateState} is used to store and handle temperature and humidity.
  * 
  * The range of the value of this two goes from 0.0F to 2.0F. And is oriented on the values of {@link Biome#getTemperature()} and {@link Biome#getRainfall()}.
- * 
- * Default inmplementations are: {@link ImmutableClimateState}, {@link ClimateState}.
  */
 public interface IClimateState extends INbtWritable {
-	
+
 	float getTemperature();
 	
 	float getHumidity();
 	
 	IClimateState addTemperature(float temperature);
-	
+
 	IClimateState addHumidity(float humidity);
 	
 	IClimateState add(IClimateState state);
@@ -33,9 +31,19 @@ public interface IClimateState extends INbtWritable {
 	default float get(ClimateType type){
 		return type == ClimateType.HUMIDITY ? getHumidity() : getTemperature();
 	}
+
+	IClimateState toImmutable();
 	
-	ImmutableClimateState toImmutable();
-	
-	ClimateState toMutable();
+	IClimateState toMutable();
+
+	IClimateState toChange();
+
+	IClimateState setTemperature(float temperature);
+
+	IClimateState setHumidity(float humidity);
+
+	boolean isPresent();
+
+	ClimateStateType getType();
 	
 }

@@ -16,12 +16,10 @@ import net.minecraft.world.World;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
-import forestry.greenhouse.api.greenhouse.GreenhouseManager;
-import forestry.greenhouse.api.climate.ClimateChange;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.greenhouse.api.climate.IClimateSourceOwner;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 
 public abstract class ClimateSource<O extends IClimateSourceOwner> implements IClimateSource {
 	
@@ -133,17 +131,17 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	}
 	
 	@Override
-	public ClimateChange work(IClimateState state, ImmutableClimateState target) {
+	public IClimateState work(IClimateState state, IClimateState target) {
 		beforeWork();
 		ClimateSourceType validType = getValidType(state, target);
 		if(validType == null){
 			isNotValid();
 			isActive = false;
-			return ClimateChange.ORIGIN;
+			return AbsentClimateState.INSTANCE;
 		}
 		if(!canWork(state, target)){
 			isActive = false;
-			return ClimateChange.ORIGIN;
+			return AbsentClimateState.INSTANCE;
 		}
 		removeResources(state, target);
 		isActive = true;
@@ -163,14 +161,14 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	 * 
 	 * @return true if the source can work, false if it can not.
 	 */
-	protected abstract boolean canWork(IClimateState state, ImmutableClimateState target);
+	protected abstract boolean canWork(IClimateState state, IClimateState target);
 	
-	protected abstract void removeResources(IClimateState state, ImmutableClimateState target);
+	protected abstract void removeResources(IClimateState state, IClimateState target);
 	
-	protected abstract ClimateChange getChange(ClimateSourceType type, IClimateState state, ImmutableClimateState target);
+	protected abstract IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target);
 	
 	@Nullable
-	private ClimateSourceType getValidType(IClimateState state, ImmutableClimateState target){
+	private ClimateSourceType getValidType(IClimateState state, IClimateState target){
 		boolean canChangeHumidity = false;
 		boolean canChangeTemperature = false;
 		if(sourceType.canChangeHumidity()){

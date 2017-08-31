@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.greenhouse.api.climate;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.world.World;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.greenhouse.IClimateHousing;
@@ -54,14 +52,12 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	Collection<IClimateContainerListener> getListeners();
 	
 	/**
-	 * @return only null if the controller never was assembled.
+	 * @return only not present if the controller never was assembled.
 	 */
-	@Nullable
-	ImmutableClimateState getTargetedState();
+	IClimateState getTargetedState();
 	
-	void setTargetedState(ImmutableClimateState state);
+	void setTargetedState(IClimateState state);
 
-	@Nullable
 	@SideOnly(Side.CLIENT)
 	IClimateData getData();
 

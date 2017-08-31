@@ -26,7 +26,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.ImmutableClimateState;
+import forestry.api.climate.ClimateStateType;
+import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedTile;
@@ -39,6 +40,7 @@ import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.PluginCore;
 import forestry.core.climate.ClimateContainer;
+import forestry.core.climate.ClimateState;
 import forestry.core.config.Config;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
@@ -86,7 +88,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private ItemStack camouflage;
 	//Climate
 	private ClimateContainer climateContainer;
-	private ImmutableClimateState defaultState = ImmutableClimateState.MIN;
+	private IClimateState defaultState = ClimateState.MIN;
 	private BlockPos centerPos;
 	private int assembleTickCount;
 	@SideOnly(Side.CLIENT)
@@ -173,7 +175,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 
 	@Override
-	public ImmutableClimateState getDefaultClimate() {
+	public IClimateState getDefaultClimate() {
 		return defaultState;
 	}
 
@@ -397,8 +399,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 		createDefaultState();
 		limits = createLimits();
-		if(climateContainer.getTargetedState() == null) {
-			ImmutableClimateState defaultClimate = getDefaultClimate();
+		if(!climateContainer.getTargetedState().isPresent()) {
+			IClimateState defaultClimate = getDefaultClimate();
 			climateContainer.setState(defaultClimate.toMutable());
 			climateContainer.setTargetedState(defaultClimate);
 		}
@@ -467,7 +469,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				biomes++;
 			}
 		}
-		defaultState = new ImmutableClimateState((float) (temperature / biomes), (float) (humidity / biomes));
+		defaultState = new ClimateState((float) (temperature / biomes), (float) (humidity / biomes), ClimateStateType.IMMUTABLE);
 	}
 
 	/* RectangularMultiblockControllerBase */

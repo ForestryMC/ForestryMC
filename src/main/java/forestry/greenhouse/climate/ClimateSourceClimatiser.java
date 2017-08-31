@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.greenhouse.api.climate.ClimateChange;
+import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.api.greenhouse.IClimateHousing;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
 import forestry.api.core.IErrorLogic;
+import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
+import forestry.core.climate.ClimateState;
 import forestry.core.errors.EnumErrorCode;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileClimatiser;
 
@@ -49,7 +49,7 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 	}
 
 	@Override
-	public boolean canWork(IClimateState state, ImmutableClimateState target) {
+	public boolean canWork(IClimateState state, IClimateState target) {
 		IClimateHousing region = container.getParent();
 		if (region instanceof IGreenhouseControllerInternal) {
 			IGreenhouseControllerInternal controller = (IGreenhouseControllerInternal) region;
@@ -73,7 +73,7 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 	}
 
 	@Override
-	protected void removeResources(IClimateState state, ImmutableClimateState target) {
+	protected void removeResources(IClimateState state, IClimateState target) {
 		IClimateHousing region = container.getParent();
 		if (region instanceof IGreenhouseControllerInternal) {
 			IGreenhouseControllerInternal controller = (IGreenhouseControllerInternal) region;
@@ -85,7 +85,7 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 	}
 
 	@Override
-	protected ClimateChange getChange(ClimateSourceType type, IClimateState state, ImmutableClimateState target) {
+	protected IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target) {
 		float temperature = 0.0F;
 		float humidity = 0.0F;
 		if (type.canChangeHumidity()) {
@@ -94,7 +94,7 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 		if (type.canChangeTemperature()) {
 			temperature += getChange(ClimateType.TEMPERATURE);
 		}
-		return new ClimateChange(temperature, humidity);
+		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
 	}
 
 }

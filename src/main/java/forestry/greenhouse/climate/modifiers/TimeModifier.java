@@ -18,15 +18,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.BlankClimateModifier;
 import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateState;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateData;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.ImmutableClimateState;
-import forestry.core.utils.Translator;
+import forestry.greenhouse.api.climate.IClimateModifier;
 
-public class TimeModifier extends BlankClimateModifier {
+public class TimeModifier implements IClimateModifier {
 
 	private static final float TEMPERATURE_CHANGE = 0.01F;
 
@@ -47,7 +46,7 @@ public class TimeModifier extends BlankClimateModifier {
 	}
 
 	@Override
-	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, ImmutableClimateState oldState, NBTTagCompound data) {
+	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data) {
 		World world = container.getWorld();
 		float lightRatio = calculateLightRatio(world);
 		float temperatureChange = lightRatio * TEMPERATURE_CHANGE;
