@@ -32,11 +32,7 @@ public interface IClimateState extends INbtWritable {
 		return type == ClimateType.HUMIDITY ? getHumidity() : getTemperature();
 	}
 
-	IClimateState toImmutable();
-	
-	IClimateState toMutable();
-
-	IClimateState toChange();
+	IClimateState toState(ClimateStateType type);
 
 	IClimateState setTemperature(float temperature);
 

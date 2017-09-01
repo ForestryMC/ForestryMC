@@ -37,10 +37,10 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	}
 
 	public ClimateState(float temperature, float humidity, ClimateStateType type) {
-		addTemperature(temperature);
-		addHumidity(humidity);
 		this.type = type;
 		this.bounds = type.bounds;
+		addTemperature(temperature);
+		addHumidity(humidity);
 	}
 
 	public ClimateState(NBTTagCompound compound, ClimateStateType type) {
@@ -94,23 +94,13 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	}
 
 	@Override
-	public IClimateState toImmutable() {
-		return new ClimateState(this, ClimateStateType.IMMUTABLE);
-	}
-
-	@Override
-	public IClimateState toMutable() {
-		return new ClimateState(this, ClimateStateType.MUTABLE);
-	}
-
-	@Override
-	public IClimateState toChange() {
-		return new ClimateState(this, ClimateStateType.CHANGE);
+	public IClimateState toState(ClimateStateType type) {
+		return new ClimateState(this, type);
 	}
 
 	@Override
 	public IClimateState addTemperature(float temperature){
-		this.temperature=+ temperature;
+		this.temperature= bounds.apply(this.temperature + temperature);
 		if(!isPresent()){
 			return AbsentClimateState.INSTANCE;
 		}
@@ -119,7 +109,7 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	
 	@Override
 	public IClimateState addHumidity(float humidity){
-		this.humidity=+ humidity;
+		this.humidity= bounds.apply(this.humidity + humidity);
 		if(!isPresent()){
 			return AbsentClimateState.INSTANCE;
 		}

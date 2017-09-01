@@ -28,13 +28,13 @@ import forestry.core.gui.tables.Table;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.gui.GuiGreenhouse;
 
 public class WidgetClimatePanel extends Widget {
 
+	protected static final int TEXT_FIELD_LENGTH = 50;
 	protected static final Predicate<String> NUMBER_FILTER = text -> {
 		if (text == null) {
 			return false;
@@ -58,14 +58,13 @@ public class WidgetClimatePanel extends Widget {
 	private final Table table;
 	private final GuiTextField textField;
 
-	public WidgetClimatePanel(WidgetManager manager, GuiGreenhouse gui, int xPos, int yPos, ClimateType type, IClimateData data) {
+	public WidgetClimatePanel(WidgetManager manager, GuiGreenhouse gui, int xPos, int yPos, ClimateType type) {
 		super(manager, xPos, yPos);
 		this.width = 85;
 		this.height = 98;
 		this.type = type;
 		this.gui = gui;
-		int textFieldLength = 50;
-		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRenderer, xPos + width / 2 - textFieldLength / 2, yPos + 14, textFieldLength, 10);
+		textField = new GuiTextField(0, Minecraft.getMinecraft().fontRenderer, xPos + width / 2 - TEXT_FIELD_LENGTH / 2, yPos + 14, TEXT_FIELD_LENGTH, 10);
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
 		IClimateState climateState = gui.container.getTargetedState();
@@ -76,9 +75,6 @@ public class WidgetClimatePanel extends Widget {
 			textField.setEnabled(false);
 		}
 		table = new Table();
-		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
-			table.addValueEntry(entry.getKey(), StringUtil.floatAsPercent(entry.getValue()));
-		}
 	}
 
 	@Override
@@ -86,7 +82,7 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(gui.textureFile);
-		gui.drawTexturedModalRect(startX + textField.x - 2, startY + textField.y - 2, 204, 115, 52, 12);
+		gui.drawTexturedModalRect(startX + textField.x - 2, startY + textField.y - 2, 196, 50, 52, 12);
 
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		String title = Translator.translateToLocal("for.gui." + type.getName());
@@ -95,7 +91,27 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		textField.drawTextBox();
 
+		updateData();
 		table.draw(xPos + startX - 2, yPos + startY + 26, 14737632, false);
+	}
+
+	private int updateTimer = 0;
+
+	private void updateData(){
+		if(updateTimer > 0){
+			updateTimer--;
+			return;
+		}
+		updateTimer = 40;
+		table.clear();
+		IClimateData data = gui.container.getData();
+		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
+			float value = entry.getValue();
+			int percent = (int)(value * 100);
+			if(percent != 0) {
+				table.addValueEntry(entry.getKey(), percent + " %");
+			}
+		}
 	}
 
 	@Override

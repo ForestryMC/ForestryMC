@@ -17,12 +17,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
+import forestry.api.climate.ClimateStateType;
+import forestry.api.climate.IClimateState;
+import forestry.api.core.ForestryAPI;
+import forestry.core.climate.ClimateState;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
@@ -40,27 +44,8 @@ public class WidgetClimateBar extends Widget {
 		super(manager, xPos, yPos);
 		this.width = WIDTH;
 		this.height = HEIGHT;
-		for (int i = 1; i < 6; i++) {
-			EnumTemperature temp = EnumTemperature.VALUES[i];
-			float value;
-			switch (temp) {
-				case ICY:
-					value = 0.0F;
-					break;
-				case COLD:
-					value = 0.2F;
-					break;
-				case WARM:
-					value = 0.9F;
-					break;
-				case HOT:
-					value = 1.2F;
-					break;
-				default:
-					value = 0.5F;
-					break;
-			}
-			buttons.add(new ClimateButton(this, temp, value, xPos + 5 + (i - 1) * 16, yPos + 5));
+		for(EnumClimate climate : EnumClimate.values()){
+			buttons.add(new ClimateButton(this, climate, xPos + 5 + climate.ordinal() * 16, yPos + 5));
 		}
 	}
 
@@ -90,7 +75,9 @@ public class WidgetClimateBar extends Widget {
 		mouseY -= manager.gui.getGuiTop();
 		for (ClimateButton button : buttons) {
 			if (button.isMouseOver(mouseX, mouseY)) {
-				((GuiGreenhouse) manager.gui).temperaturePanel.setValue(button.value);
+				IClimateState climateState = button.climate.climateState;
+				((GuiGreenhouse) manager.gui).temperaturePanel.setValue(climateState.getTemperature());
+				((GuiGreenhouse) manager.gui).humidityPanel.setValue(climateState.getHumidity());
 			}
 		}
 	}
@@ -108,31 +95,49 @@ public class WidgetClimateBar extends Widget {
 		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 	}
 
-	private static class ClimateButton {
+	private enum EnumClimate {
+		ICY("habitats/snow", Biomes.ICE_PLAINS),
+		COLD("habitats/taiga", Biomes.TAIGA),
+		NORMAL("habitats/plains", Biomes.PLAINS),
+		WARM("habitats/jungle", Biomes.JUNGLE),
+		HOT("habitats/desert", Biomes.DESERT);
+		IClimateState climateState;
+		String spriteName;
+
+		EnumClimate(String spriteName, Biome biome) {
+			climateState = new ClimateState(biome.getTemperature(), biome.getRainfall(), ClimateStateType.IMMUTABLE);
+			this.spriteName = spriteName;
+		}
+
+		@SideOnly(Side.CLIENT)
+		public TextureAtlasSprite getSprite() {
+			return ForestryAPI.textureManager.getDefault(spriteName);
+		}
+	}
+
+	private class ClimateButton {
 		final WidgetClimateBar parent;
-		final EnumTemperature temperature;
-		final float value;
+		final EnumClimate climate;
 		protected final ToolTip toolTip = new ToolTip(250) {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public void refresh() {
 				toolTip.clear();
-				toolTip.add("T: " + AlleleManager.climateHelper.toDisplay(temperature));
-				toolTip.add("V: " + value);
+				toolTip.add("T: " + climate.climateState.getTemperature());
+				toolTip.add("H: " + climate.climateState.getHumidity());
 			}
 		};
 		final int xPos, yPos;
 
-		public ClimateButton(WidgetClimateBar parent, EnumTemperature temperature, float value, int xPos, int yPos) {
+		public ClimateButton(WidgetClimateBar parent, EnumClimate climate, int xPos, int yPos) {
 			this.parent = parent;
-			this.temperature = temperature;
-			this.value = value;
+			this.climate = climate;
 			this.xPos = xPos;
 			this.yPos = yPos;
 		}
 
 		public void draw(int startX, int startY) {
-			parent.drawSprite(temperature.getSprite(), startX + xPos, startY + yPos);
+			parent.drawSprite(climate.getSprite(), startX + xPos, startY + yPos);
 		}
 
 		public ToolTip getToolTip() {

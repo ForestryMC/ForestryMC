@@ -27,7 +27,7 @@ import forestry.greenhouse.api.climate.IClimateModifier;
 
 public class TimeModifier implements IClimateModifier {
 
-	private static final float TEMPERATURE_CHANGE = 0.01F;
+	private static final float TEMPERATURE_CHANGE = 0.1F;
 
 	public static float calculateLightRatio(World world) {
 		int lightValue = EnumSkyBlock.SKY.defaultLightValue - world.getSkylightSubtracted();

@@ -27,6 +27,11 @@ public class Table {
 		lines.add(new TableTitle(title));
 	}
 
+	public Table clear(){
+		lines.clear();
+		return this;
+	}
+
 	public Table addValueEntry(String textKey, String value) {
 		lines.add(new TableValueText(textKey + ": ", value));
 		return this;

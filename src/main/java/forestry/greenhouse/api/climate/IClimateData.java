@@ -13,5 +13,8 @@ public interface IClimateData {
 
 	IClimateData addData(ClimateType type, String displayName, float value);
 
+	/**
+	 * @return A map with all data that this object contains.
+	 */
 	Map<String, Float> getData(ClimateType type);
 }

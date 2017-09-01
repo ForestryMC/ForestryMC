@@ -61,7 +61,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.listeners = new ClimateContainerListeners();
 		this.sources = new HashSet<>();
 		this.delay = 20;
-		this.state = parent.getDefaultClimate().toMutable();
+		this.state = parent.getDefaultClimate().toState(ClimateStateType.MUTABLE);
 		this.modifierData = new NBTTagCompound();
 		this.boundaryUp = ClimateState.MIN;
 		this.boundaryDown = ClimateState.MIN;
@@ -84,11 +84,12 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 			if(!listeners.isClosed(this)) {
 				returnClimateToDefault();
 			}else{
-				IClimateState oldState = state.toImmutable();
-				state = parent.getDefaultClimate().toMutable();
+				IClimateState oldState = state.toState(ClimateStateType.IMMUTABLE);
+				state = parent.getDefaultClimate().toState(ClimateStateType.CHANGE);
 				for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
-					state = modifier.modifyTarget(this, state, oldState, modifierData).toMutable();
+					state = modifier.modifyTarget(this, state, oldState, modifierData).toState(ClimateStateType.CHANGE);
 				}
+				state = state.toState(ClimateStateType.MUTABLE);
 				if(!state.equals(oldState)) {
 					BlockPos coordinates = parent.getCoordinates();
 					NetworkUtil.sendNetworkPacket(new PacketUpdateClimate(coordinates, this), coordinates, parent.getWorldObj());

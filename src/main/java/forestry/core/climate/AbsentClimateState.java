@@ -21,17 +21,7 @@ public final class AbsentClimateState implements IClimateState {
 	}
 
 	@Override
-	public IClimateState toImmutable() {
-		return this;
-	}
-
-	@Override
-	public IClimateState toMutable() {
-		return this;
-	}
-
-	@Override
-	public IClimateState toChange() {
+	public IClimateState toState(ClimateStateType type) {
 		return this;
 	}
 
