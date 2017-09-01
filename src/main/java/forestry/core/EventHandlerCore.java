@@ -62,7 +62,16 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		EntityPlayer player = event.player;
+		syncBreedingTrackers(player);
+	}
 
+	@SubscribeEvent
+	public void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+		EntityPlayer player = event.player;
+		syncBreedingTrackers(player);
+	}
+
+	private static void syncBreedingTrackers(EntityPlayer player) {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
 		for (ISpeciesRoot speciesRoot : speciesRoots) {
