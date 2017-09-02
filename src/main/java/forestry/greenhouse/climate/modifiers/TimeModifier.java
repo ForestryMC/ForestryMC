@@ -27,11 +27,15 @@ import forestry.greenhouse.api.climate.IClimateModifier;
 
 public class TimeModifier implements IClimateModifier {
 
-	private static final float TEMPERATURE_CHANGE = 0.1F;
+	private static final float TEMPERATURE_CHANGE = 0.05F;
 
-	public static float calculateLightRatio(World world) {
+	private static float calculateLightRatio(World world) {
 		int lightValue = EnumSkyBlock.SKY.defaultLightValue - world.getSkylightSubtracted();
 		float sunAngle = world.getCelestialAngleRadians(1.0F);
+
+		if(!world.isDaytime()){
+			lightValue = EnumSkyBlock.SKY.defaultLightValue - lightValue;
+		}
 
 		if (sunAngle < (float) Math.PI) {
 			sunAngle -= sunAngle * 0.2F;
@@ -41,7 +45,7 @@ public class TimeModifier implements IClimateModifier {
 
 		lightValue = Math.round(lightValue * MathHelper.cos(sunAngle));
 
-		lightValue = MathHelper.clamp(lightValue, 0, 15);
+		lightValue = MathHelper.clamp(lightValue, -15, 15);
 		return lightValue / 15f;
 	}
 
