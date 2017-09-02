@@ -12,6 +12,13 @@ import net.minecraft.item.ItemStack;
 public interface IFarmRegistry {
 
 	/**
+	 * Registers farming logic in registry under given identifier
+	 * @param identifier Valid identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
+	 * @param logic corresponding instance of logic
+	 */
+	void registerFarmLogic(String identifier, IFarmLogic logic);
+	
+	/**
 	 * Can be used to add IFarmables to some of the vanilla farm logics.
 	 * <p>
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
