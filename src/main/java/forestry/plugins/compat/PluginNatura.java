@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import com.google.common.collect.Iterables;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -24,15 +22,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.oredict.OreDictionary;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
+
+import com.google.common.collect.Iterables;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.farming.IFarmLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
@@ -258,6 +257,17 @@ public class PluginNatura extends BlankForestryPlugin {
 			}
 			FuelManager.moistenerResource.put(crop, new MoistenerFuel(crop, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
 		});
+	}
+	
+	
+	/* 
+	 * Register soils required by Natura trees. Must run in postInit(), after core PluginFarming has registered FarmingLogic instances
+	 */
+	@Override
+	public void postInit() {
+		IFarmLogic farmArboreal = FarmRegistry.getInstance().getFarmLogic("farmArboreal");
+		farmArboreal.addSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
+	
 	}
 
 }

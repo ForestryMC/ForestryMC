@@ -26,6 +26,10 @@ public class CircuitFarmLogic extends Circuit {
 		super(uid);
 		this.logic = logic;
 	}
+	
+	public IFarmLogic getFarmLogic() {
+		return logic;
+	}
 
 	public CircuitFarmLogic setManual() {
 		isManual = true;

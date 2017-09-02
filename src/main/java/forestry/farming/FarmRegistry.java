@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,11 +35,20 @@ public final class FarmRegistry implements IFarmRegistry {
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
+	private final Map<String, IFarmLogic> logics = new HashMap<String, IFarmLogic>();
 
 	public static FarmRegistry getInstance() {
 		return INSTANCE;
 	}
 	
+	public void registerFarmLogic(String identifier, IFarmLogic logic) {
+		logics.put(identifier, logic);
+	}
+
+	public IFarmLogic getFarmLogic(String identifier) {
+		return logics.get(identifier);
+	}
+
 	@Override
 	public void registerFarmables(String identifier, IFarmable... farmablesArray) {
 		farmables.putAll(identifier, Arrays.asList(farmablesArray));

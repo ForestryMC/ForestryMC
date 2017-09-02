@@ -205,6 +205,13 @@ public class PluginFarming extends BlankForestryPlugin {
 		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", new FarmLogicCocoa()).setManual();
 
 		Circuits.farmOrchardManual = new CircuitFarmLogic("manualOrchard", new FarmLogicOrchard());
+
+		// Make Forestry farming logics accessible to plugins via FarmRegistry
+		FarmRegistry.getInstance().registerFarmLogic("farmArboreal",((CircuitFarmLogic)Circuits.farmArborealManaged).getFarmLogic());
+		FarmRegistry.getInstance().registerFarmLogic("farmShroom",((CircuitFarmLogic)Circuits.farmShroomManaged).getFarmLogic());
+		FarmRegistry.getInstance().registerFarmLogic("farmWheat",((CircuitFarmLogic)Circuits.farmCerealManaged).getFarmLogic());
+		FarmRegistry.getInstance().registerFarmLogic("farmVegetables",((CircuitFarmLogic)Circuits.farmVegetableManaged).getFarmLogic());
+		FarmRegistry.getInstance().registerFarmLogic("farmInfernal",((CircuitFarmLogic)Circuits.farmInfernalManaged).getFarmLogic());
 	}
 
 	@Override
