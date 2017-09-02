@@ -61,15 +61,10 @@ import forestry.greenhouse.multiblock.blocks.ChunkEvents;
 import forestry.greenhouse.multiblock.blocks.world.GreenhouseBlockManager;
 import forestry.greenhouse.network.PacketRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
-import forestry.greenhouse.tiles.TileDehumidifier;
-import forestry.greenhouse.tiles.TileFan;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
-import forestry.greenhouse.tiles.TileGreenhouseScreen;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
-import forestry.greenhouse.tiles.TileHeater;
-import forestry.greenhouse.tiles.TileHumidifier;
 import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -135,15 +130,10 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		IGreenhouseHelper helper = GreenhouseManager.helper;
 
 		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
-		GameRegistry.registerTileEntity(TileFan.class, "forestry.GreenhouseFan");
-		GameRegistry.registerTileEntity(TileHeater.class, "forestry.GreenhouseHeater");
-		GameRegistry.registerTileEntity(TileDehumidifier.class, "forestry.GreenhouseDryer");
-		GameRegistry.registerTileEntity(TileHumidifier.class, "forestry.GreenhouseSprinkler");
 		GameRegistry.registerTileEntity(TileHygroregulator.class, "forestry.ClimateSourceHygroregulator");
 		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
 		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
 		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.ClimateSourceWindow");
-		GameRegistry.registerTileEntity(TileGreenhouseScreen.class, "forestry.GreenhouseScreen");
 
 		helper.registerWindowGlass("glass", new ItemStack(Blocks.GLASS), "blocks/glass");
 		for (EnumDyeColor dye : EnumDyeColor.values()) {

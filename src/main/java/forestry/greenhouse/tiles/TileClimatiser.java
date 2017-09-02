@@ -26,7 +26,6 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.climate.ClimateType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
@@ -50,15 +49,24 @@ import forestry.greenhouse.gui.GuiClimatiser;
 import forestry.greenhouse.multiblock.GreenhouseController;
 import forestry.greenhouse.network.packets.PacketCamouflageSelectionServer;
 
-public abstract class TileClimatiser extends TileForestry implements IActivatable, IStreamableGui, IClimateSourceOwner, ICamouflagedTile, ICamouflageHandler, ISocketable {
+public class TileClimatiser extends TileForestry implements IActivatable, IStreamableGui, IClimateSourceOwner, ICamouflagedTile, ICamouflageHandler, ISocketable {
+
+	public static final ClimatiserDefinition HEATER = new ClimatiserDefinition(0.075F, 5F, ClimateSourceType.TEMPERATURE);
+	public static final ClimatiserDefinition FAN = new ClimatiserDefinition(-0.075F, 5F, ClimateSourceType.TEMPERATURE);
+	public static final ClimatiserDefinition HUMIDIFIER = new ClimatiserDefinition(0.075F, 5F, ClimateSourceType.HUMIDITY);
+	public static final ClimatiserDefinition DEHUMIDIFIER = new ClimatiserDefinition(-0.075F, 5F, ClimateSourceType.HUMIDITY);
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final ClimateSource source;
 	private ItemStack camouflageBlock;
 	private boolean active;
 
-	protected TileClimatiser(float change, float range, ClimateType type) {
-		this(new ClimateSourceClimatiser(type == ClimateType.HUMIDITY ? ClimateSourceType.HUMIDITY : ClimateSourceType.TEMPERATURE, change, range));
+	public TileClimatiser(ClimatiserDefinition definition) {
+		this(definition.change, definition.range, definition.type);
+	}
+
+	protected TileClimatiser(float change, float range, ClimateSourceType type) {
+		this(new ClimateSourceClimatiser(type, change, range));
 	}
 
 	protected TileClimatiser(ClimateSource source) {
@@ -261,5 +269,16 @@ public abstract class TileClimatiser extends TileForestry implements IActivatabl
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.GREENHOUSE_CLIMATISER;
+	}
+
+	public static class ClimatiserDefinition {
+		float change, range;
+		ClimateSourceType type;
+
+		public ClimatiserDefinition(float change, float range, ClimateSourceType type) {
+			this.change = change;
+			this.range = range;
+			this.type = type;
+		}
 	}
 }

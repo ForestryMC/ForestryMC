@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
@@ -35,8 +34,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.recipes.HygroregulatorRecipe;
 import forestry.core.tiles.ILiquidTankTile;
-import forestry.greenhouse.PluginGreenhouse;
-import forestry.greenhouse.blocks.BlockClimatiserType;
 import forestry.greenhouse.climate.ClimateSourceHygroregulator;
 import forestry.greenhouse.gui.ContainerHygroregulator;
 import forestry.greenhouse.gui.GuiHygroregulator;
@@ -149,12 +146,6 @@ public class TileHygroregulator extends TileClimatiser implements ILiquidTankTil
 
 	public HygroregulatorRecipe[] getRecipes() {
 		return recipes;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ItemStack getItemStack() {
-		return new ItemStack(PluginGreenhouse.getBlocks().climatiserBlock, 1, BlockClimatiserType.HYGRO.ordinal());
 	}
 
 }

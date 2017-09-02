@@ -5,19 +5,11 @@
  ******************************************************************************/
 package forestry.greenhouse.api.climate;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.circuits.ICircuit;
 import forestry.api.core.ILocatable;
 
 public interface IClimateSourceOwner extends ILocatable {
 	IClimateSource getClimateSource();
-
-	@SideOnly(Side.CLIENT)
-	ItemStack getItemStack();
 
 	boolean isActive();
 

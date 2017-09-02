@@ -79,7 +79,6 @@ import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
-import forestry.greenhouse.tiles.TileGreenhouseScreen;
 
 public class BlockGreenhouse extends BlockStructure implements ISpriteRegister, IBlockWithMeta, IColoredBlock, IBlockCamouflaged<BlockGreenhouse> {
 	public static final PropertyEnum<BlockGreenhouseType> TYPE = PropertyEnum.create("type", BlockGreenhouseType.class);
@@ -230,8 +229,6 @@ public class BlockGreenhouse extends BlockStructure implements ISpriteRegister, 
 				return new TileGreenhouseGearbox();
 			case CONTROL:
 				return new TileGreenhouseControl();
-			case SCREEN:
-				return new TileGreenhouseScreen();
 			default:
 				return new TileGreenhousePlain();
 		}

@@ -13,15 +13,11 @@ package forestry.greenhouse.tiles;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
@@ -47,12 +43,6 @@ public class TileGreenhouseWindow extends TileEntity implements IActivatable, IC
 	@Override
 	public IClimateSource getClimateSource() {
 		return source;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ItemStack getItemStack() {
-		return ((BlockGreenhouseWindow) getBlockType()).getItem(glass);
 	}
 
 	@Override
