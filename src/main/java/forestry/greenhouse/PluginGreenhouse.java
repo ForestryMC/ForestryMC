@@ -111,7 +111,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GreenhouseManager.climateManager = GreenhouseClimateManager.getInstance();
 		CamouflageManager.camouflageAccess = new CamouflageAccess();
 	}
-	
+
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryGreenhouse();
@@ -128,7 +128,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		ICircuitLayout layoutManaged = new CircuitLayout("greenhouse.climatiser", CircuitSocketType.GREENHOUSE_CLIMATISER);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
 	}
-	
+
 	@Override
 	public void doInit() {
 		super.doInit();
@@ -156,10 +156,10 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		climateSourceManager.registerModifier(new AltitudeModifier());
 		climateSourceManager.registerModifier(new ClimateSourceModifier());
 
-		Circuits.greenhouseClimatiserTemperature1 = new CircuitClimateSource("climatiser.temperature.1", ClimateType.TEMPERATURE, 0.125F, 0.125F);
-		Circuits.greenhouseClimatiserTemperature2 = new CircuitClimateSource("climatiser.temperature.2", ClimateType.TEMPERATURE, 0.25F, 0.25F);
-		Circuits.greenhouseClimatiserHumidity1 = new CircuitClimateSource("climatiser.humidity.1", ClimateType.HUMIDITY, 0.125F, 0.125F);
-		Circuits.greenhouseClimatiserHumidity2 = new CircuitClimateSource("climatiser.humidity.2", ClimateType.HUMIDITY, 0.25F, 0.25F);
+		Circuits.climatiserTemperature1 = new CircuitClimateSource("climatiser.temperature.1", ClimateType.TEMPERATURE, 0.125F, 0.125F);
+		Circuits.climatiserTemperature2 = new CircuitClimateSource("climatiser.temperature.2", ClimateType.TEMPERATURE, 0.25F, 0.25F);
+		Circuits.climatiserHumidity1 = new CircuitClimateSource("climatiser.humidity.1", ClimateType.HUMIDITY, 0.125F, 0.125F);
+		Circuits.climatiserHumidity2 = new CircuitClimateSource("climatiser.humidity.2", ClimateType.HUMIDITY, 0.25F, 0.25F);
 		proxy.inti();
 	}
 
@@ -257,10 +257,10 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.greenhouse.climatiser");
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.greenhouseClimatiserTemperature1);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.greenhouseClimatiserTemperature2);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.greenhouseClimatiserHumidity1);
-		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.greenhouseClimatiserHumidity2);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.climatiserTemperature1);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.climatiserTemperature2);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.climatiserHumidity1);
+		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.climatiserHumidity2);
 	}
 
 	@Override

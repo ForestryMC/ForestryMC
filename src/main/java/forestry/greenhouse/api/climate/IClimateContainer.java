@@ -18,44 +18,44 @@ import forestry.api.core.INbtWritable;
 import forestry.api.greenhouse.IClimateHousing;
 
 public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateSourceContainer {
-	
+
 	/**
 	 * @return The parent of this container.
 	 */
 	IClimateHousing getParent();
-	
+
 	/**
 	 * @return The current climate state.
 	 */
 	IClimateState getState();
-	
+
 	World getWorld();
-	
+
 	/**
 	 * Update the climate in a region.
 	 */
 	void updateClimate(int ticks);
-	
+
 	/**
 	 * Add a listener to this container.
 	 */
 	void addListener(IClimateContainerListener listener);
-	
+
 	/**
 	 * Remove a listener to this container.
 	 */
 	void removeListener(IClimateContainerListener listener);
-	
+
 	/**
 	 * All listeners of this container.
 	 */
 	Collection<IClimateContainerListener> getListeners();
-	
+
 	/**
 	 * @return only not present if the controller never was assembled.
 	 */
 	IClimateState getTargetedState();
-	
+
 	void setTargetedState(IClimateState state);
 
 	@SideOnly(Side.CLIENT)

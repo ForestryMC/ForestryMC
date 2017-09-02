@@ -68,9 +68,9 @@ public class WidgetClimatePanel extends Widget {
 		textField.setValidator(NUMBER_FILTER);
 		textField.setEnableBackgroundDrawing(false);
 		IClimateState climateState = gui.container.getTargetedState();
-		if(climateState.isPresent()) {
+		if (climateState.isPresent()) {
 			textField.setText(Float.toString(climateState.get(type)));
-		}else{
+		} else {
 			textField.setVisible(false);
 			textField.setEnabled(false);
 		}
@@ -97,8 +97,8 @@ public class WidgetClimatePanel extends Widget {
 
 	private int updateTimer = 0;
 
-	private void updateData(){
-		if(updateTimer > 0){
+	private void updateData() {
+		if (updateTimer > 0) {
 			updateTimer--;
 			return;
 		}
@@ -107,8 +107,8 @@ public class WidgetClimatePanel extends Widget {
 		IClimateData data = gui.container.getData();
 		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
 			float value = entry.getValue();
-			int percent = (int)(value * 100);
-			if(percent != 0) {
+			int percent = (int) (value * 100);
+			if (percent != 0) {
 				table.addValueEntry(entry.getKey(), percent + " %");
 			}
 		}

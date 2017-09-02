@@ -7,10 +7,10 @@ import java.util.Map;
 
 import net.minecraft.util.math.BlockPos;
 
-import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.greenhouse.api.climate.IClimateSourceOwner;
+import forestry.greenhouse.api.greenhouse.Position2D;
 
-public class ClimateSourceWorldManager{
+public class ClimateSourceWorldManager {
 
 	private final Map<Position2D, Map<Integer, IClimateSourceOwner>> owners;
 
@@ -18,14 +18,14 @@ public class ClimateSourceWorldManager{
 		this.owners = new HashMap<>();
 	}
 
-	public void addSource(IClimateSourceOwner owner){
+	public void addSource(IClimateSourceOwner owner) {
 		BlockPos pos = owner.getCoordinates();
 		Position2D position = new Position2D(pos);
 		Map<Integer, IClimateSourceOwner> positionedOwners = owners.computeIfAbsent(position, k -> new HashMap<>());
 		positionedOwners.put(pos.getY(), owner);
 	}
 
-	public void removeSource(IClimateSourceOwner owner){
+	public void removeSource(IClimateSourceOwner owner) {
 		BlockPos pos = owner.getCoordinates();
 		Position2D position = new Position2D(pos);
 		Map<Integer, IClimateSourceOwner> positionedOwners = owners.computeIfAbsent(position, k -> new HashMap<>());
@@ -34,7 +34,7 @@ public class ClimateSourceWorldManager{
 
 	public Collection<IClimateSourceOwner> getSources(Position2D position) {
 		Map<Integer, IClimateSourceOwner> positionedOwners = owners.get(position);
-		if(positionedOwners == null){
+		if (positionedOwners == null) {
 			return Collections.emptyList();
 		}
 		return positionedOwners.values();

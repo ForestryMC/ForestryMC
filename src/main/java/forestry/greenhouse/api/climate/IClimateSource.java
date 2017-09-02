@@ -17,40 +17,39 @@ import forestry.api.climate.IClimateState;
  * In forestry it is used in a part of a {@link IClimateModifier}.
  */
 public interface IClimateSource {
-	
+
 	/**
 	 * The owner of this source.
 	 */
 	@Nullable
 	IClimateSourceOwner getOwner();
-	
+
 	/**
 	 * The range of this source.
 	 */
 	float getBoundaryModifier(ClimateType type, boolean boundaryUp);
-	
+
 	/**
 	 * @return true if this source affects this sourceType of climate.
 	 */
 	boolean affectClimateType(ClimateType type);
-	
+
 	/**
-	 * @param state the {@link IClimateState} that the source has to work on.
+	 * @param state  the {@link IClimateState} that the source has to work on.
 	 * @param target the by the {@link IClimateContainer} targeted {@link IClimateState}.
-	 * 
 	 */
 	IClimateState work(IClimateState state, IClimateState target);
-	
+
 	/**
 	 * @return true if source has changed the climate at the last work cicle.
 	 */
 	boolean isActive();
-	
+
 	/**
 	 * Called if the source is added to a {@link IClimateContainer}.
 	 */
 	void onAdded(IClimateContainer container);
-	
+
 	/**
 	 * Called if the source is removed form a {@link IClimateContainer}.
 	 */

@@ -11,10 +11,10 @@
 package forestry.greenhouse.climate;
 
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateSourceCircuitable;
-import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.core.climate.ClimateSource;
 import forestry.core.climate.ClimateSourceType;
+import forestry.greenhouse.api.climate.IClimateSourceCircuitable;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 
 public abstract class ClimateSourceCircuitable<O extends IClimateSourceOwner> extends ClimateSource<O> implements IClimateSourceCircuitable {
 	protected float changeMultiplierTemperature = 1.0f;

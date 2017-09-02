@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import forestry.api.core.IErrorState;
 
 public interface IGreenhouseBlockHandler<B extends IGreenhouseBlock, R extends IGreenhouseBlock> {
-	
+
 	void onRemoveBlock(IGreenhouseBlockStorage storage, B blockToRemove);
 
 	B createBlock(IGreenhouseBlockStorage storage, @Nullable R root, @Nullable EnumFacing rootFacing, @Nullable BlockPos position);
@@ -23,8 +23,8 @@ public interface IGreenhouseBlockHandler<B extends IGreenhouseBlock, R extends I
 
 	@Nullable
 	IErrorState checkNeighborBlocks(IGreenhouseBlockStorage storage, B blockToCheck, List<IGreenhouseBlock> newBlocksToCheck);
-	
+
 	boolean onCheckPosition(IGreenhouseBlockStorage storage, R rootBlock, BlockPos position, EnumFacing facing, IGreenhouseBlock block, List<IGreenhouseBlock> newBlocksToCheck);
-	
+
 	Class<? extends B> getBlockClass();
 }

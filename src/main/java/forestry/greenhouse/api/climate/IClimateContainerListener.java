@@ -11,5 +11,5 @@ public interface IClimateContainerListener {
 	 * Test if the container is closed.
 	 */
 	boolean isClosed(IClimateContainer container);
-	
+
 }

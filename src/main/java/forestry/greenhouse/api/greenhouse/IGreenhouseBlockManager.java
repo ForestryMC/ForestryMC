@@ -13,17 +13,17 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 public interface IGreenhouseBlockManager {
-	
+
 	/**
 	 * @return the {@link IGreenhouseBlockHandler} that is used to handle blank blocks in the {@link IGreenhouseProvider}
 	 */
 	IGreenhouseBlockHandler<IBlankBlock, IBlankBlock> getBlankBlockHandler();
-	
+
 	/**
 	 * @return the {@link IGreenhouseBlockHandler} that is used to handle wall blocks in the {@link IGreenhouseProvider}
 	 */
 	IGreenhouseBlockHandler<IWallBlock, IBlankBlock> getWallBlockHandler();
-	
+
 	/**
 	 * Tries to get a {@link IGreenhouseBlock} from all managers that are located at the chunk of the pos.
 	 *
@@ -31,42 +31,41 @@ public interface IGreenhouseBlockManager {
 	 */
 	@Nullable
 	IGreenhouseBlock getBlock(World world, BlockPos pos);
-	
+
 	/**
-	 *
 	 * @return the chunk that is at this position.
 	 */
 	@Nullable
 	IGreenhouseChunk getChunk(World world, long chunkPos);
-	
+
 	/**
 	 * @return the chunk that is at this position or if there is no it creates one.
 	 */
 	IGreenhouseChunk getOrCreateChunk(World world, long chunkPos);
-	
+
 	/**
 	 * @return creates a chunk and add it at this position
 	 */
 	IGreenhouseChunk createChunk(World world, long chunkPos);
-	
-	default IGreenhouseChunk getChunk(World world, int xPos, int yPos){
+
+	default IGreenhouseChunk getChunk(World world, int xPos, int yPos) {
 		return getChunk(world, ChunkPos.asLong(xPos, yPos));
 	}
-	
-	default IGreenhouseChunk getOrCreateChunk(World world, int xPos, int yPos){
+
+	default IGreenhouseChunk getOrCreateChunk(World world, int xPos, int yPos) {
 		return getOrCreateChunk(world, ChunkPos.asLong(xPos, yPos));
 	}
-	
-	default IGreenhouseChunk createChunk(World world, int xPos, int yPos){
+
+	default IGreenhouseChunk createChunk(World world, int xPos, int yPos) {
 		return createChunk(world, ChunkPos.asLong(xPos, yPos));
 	}
-	
+
 	@Nullable
 	void markChunkDirty(World world, long pos);
-	
+
 	@Nullable
 	List<Long> getDirtyChunks(World world);
-	
+
 	@Nullable
 	void markBlockDirty(World world, BlockPos pos);
 

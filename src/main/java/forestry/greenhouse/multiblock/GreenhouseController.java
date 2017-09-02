@@ -399,7 +399,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 		createDefaultState();
 		limits = createLimits();
-		if(!climateContainer.getTargetedState().isPresent()) {
+		if (!climateContainer.getTargetedState().isPresent()) {
 			IClimateState defaultClimate = getDefaultClimate();
 			climateContainer.setState(defaultClimate.toState(ClimateStateType.MUTABLE));
 			climateContainer.setTargetedState(defaultClimate);

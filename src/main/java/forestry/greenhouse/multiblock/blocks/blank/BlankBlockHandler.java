@@ -58,7 +58,7 @@ public class BlankBlockHandler implements IGreenhouseBlockHandler<IBlankBlock, I
 		if (storage.setBlock(position, blockToCheck)) {
 			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 				IErrorState errorState = checkBlockFacing(storage, blockToCheck, position, facing, newBlocksToCheck);
-				if(errorState != null){
+				if (errorState != null) {
 					return errorState;
 				}
 			}
@@ -90,13 +90,13 @@ public class BlankBlockHandler implements IGreenhouseBlockHandler<IBlankBlock, I
 			IGreenhouseProvider provider = storage.getProvider();
 
 			IErrorState errorState = provider.checkPosition(facingPosition);
-			if(errorState != null){
+			if (errorState != null) {
 				return errorState;
 			}
 
 			IGreenhouseBlock logicBlock = storage.getBlock(facingPosition);
 			for (IGreenhouseBlockHandler handler : provider.getHandlers()) {
-				if(handler.onCheckPosition(storage, blockToCheck, facingPosition, facing, logicBlock, newBlocksToCheck)){
+				if (handler.onCheckPosition(storage, blockToCheck, facingPosition, facing, logicBlock, newBlocksToCheck)) {
 					break;
 				}
 			}

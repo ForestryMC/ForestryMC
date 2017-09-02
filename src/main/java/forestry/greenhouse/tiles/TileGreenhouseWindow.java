@@ -23,11 +23,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.greenhouse.api.climate.IClimateSource;
-import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.NetworkUtil;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.greenhouse.blocks.BlockGreenhouseWindow;
 import forestry.greenhouse.climate.ClimateSourceWindow;
 

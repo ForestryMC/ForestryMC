@@ -44,7 +44,7 @@ public class WidgetClimateBar extends Widget {
 		super(manager, xPos, yPos);
 		this.width = WIDTH;
 		this.height = HEIGHT;
-		for(EnumClimate climate : EnumClimate.values()){
+		for (EnumClimate climate : EnumClimate.values()) {
 			buttons.add(new ClimateButton(this, climate, xPos + 5 + climate.ordinal() * 16, yPos + 5));
 		}
 	}

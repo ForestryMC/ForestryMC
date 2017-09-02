@@ -121,7 +121,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 		return handleSneaking(world, pos, player, itemStack, itemPos);
 	}
 
-	private EnumActionResult handleSneaking(World world, BlockPos pos,EntityPlayer player, ItemStack itemStack, BlockPos itemPos){
+	private EnumActionResult handleSneaking(World world, BlockPos pos, EntityPlayer player, ItemStack itemStack, BlockPos itemPos) {
 		IGreenhouseComponent component = MultiblockUtil.getComponent(world, pos, IGreenhouseComponent.class);
 		if (component != null) {
 			IGreenhouseController controller = component.getMultiblockLogic().getController();

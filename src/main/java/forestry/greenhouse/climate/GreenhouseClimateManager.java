@@ -26,20 +26,20 @@ public class GreenhouseClimateManager implements IGreenhouseClimateManager {
 	private final Set<IClimateModifier> modifiers;
 
 	private GreenhouseClimateManager() {
-		managers = new World2ObjectMap(world->new ClimateSourceWorldManager());
+		managers = new World2ObjectMap(world -> new ClimateSourceWorldManager());
 		modifiers = new TreeSet<IClimateModifier>((firstModifier, secondModifier) -> firstModifier.getPriority() > secondModifier.getPriority() ? 1 : -1);
 	}
 
-	public static GreenhouseClimateManager getInstance(){
+	public static GreenhouseClimateManager getInstance() {
 		return INSTANCE;
 	}
 
 	@Override
 	public IClimateContainer getContainer(World world, BlockPos pos) {
 		IGreenhouseBlock logicBlock = GreenhouseBlockManager.getInstance().getBlock(world, pos);
-		if(logicBlock != null){
+		if (logicBlock != null) {
 			IGreenhouseProvider provider = logicBlock.getProvider();
-			if(!provider.isClosed()) {
+			if (!provider.isClosed()) {
 				return null;
 			}
 			return provider.getClimateContainer();
@@ -48,20 +48,20 @@ public class GreenhouseClimateManager implements IGreenhouseClimateManager {
 	}
 
 	@Override
-	public void addSource(IClimateSourceOwner owner){
+	public void addSource(IClimateSourceOwner owner) {
 		World world = owner.getWorldObj();
 		ClimateSourceWorldManager manager = managers.get(world);
-		if(manager == null){
+		if (manager == null) {
 			return;
 		}
 		manager.addSource(owner);
 	}
 
 	@Override
-	public void removeSource(IClimateSourceOwner owner){
+	public void removeSource(IClimateSourceOwner owner) {
 		World world = owner.getWorldObj();
 		ClimateSourceWorldManager manager = managers.get(world);
-		if(manager == null){
+		if (manager == null) {
 			return;
 		}
 		manager.removeSource(owner);
@@ -70,7 +70,7 @@ public class GreenhouseClimateManager implements IGreenhouseClimateManager {
 	@Override
 	public Collection<IClimateSourceOwner> getSources(World world, Position2D position) {
 		ClimateSourceWorldManager manager = managers.get(world);
-		if(manager == null){
+		if (manager == null) {
 			return Collections.emptyList();
 		}
 		return manager.getSources(position);

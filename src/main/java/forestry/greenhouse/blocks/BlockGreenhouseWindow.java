@@ -49,7 +49,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.core.blocks.IBlockRotatable;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
@@ -57,6 +56,7 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
 

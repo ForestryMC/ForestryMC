@@ -13,6 +13,11 @@ import forestry.api.farming.ISimpleFarmLogic;
 public class DummyFarmRegistry implements IFarmRegistry {
 
 	@Override
+	public void registerFarmLogic(String identifier, IFarmLogic logic) {
+
+	}
+
+	@Override
 	public void registerFarmables(String identifier, IFarmable... farmable) {
 	}
 

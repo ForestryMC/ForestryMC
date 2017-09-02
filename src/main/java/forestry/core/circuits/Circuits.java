@@ -33,8 +33,8 @@ public class Circuits {
 	public static ICircuit machineSpeedUpgrade1;
 	public static ICircuit machineSpeedUpgrade2;
 	public static ICircuit machineEfficiencyUpgrade1;
-	public static ICircuit greenhouseClimatiserTemperature1;
-	public static ICircuit greenhouseClimatiserTemperature2;
-	public static ICircuit greenhouseClimatiserHumidity1;
-	public static ICircuit greenhouseClimatiserHumidity2;
+	public static ICircuit climatiserTemperature1;
+	public static ICircuit climatiserTemperature2;
+	public static ICircuit climatiserHumidity1;
+	public static ICircuit climatiserHumidity2;
 }

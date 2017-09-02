@@ -54,7 +54,7 @@ public class ClimateSourceModifier implements IClimateModifier {
 		data.setTag("rangeDown", boundaryDown.writeToNBT(new NBTTagCompound()));
 
 		IClimateState targetedState = container.getTargetedState();
-		if(!targetedState.isPresent()){
+		if (!targetedState.isPresent()) {
 			return newState;
 		}
 		int workedSources = 0;

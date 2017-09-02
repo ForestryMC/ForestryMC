@@ -103,7 +103,9 @@ public class ModelCamouflageSprayCan extends BlankModel {
 			return PerspectiveMapWrapper.handlePerspective(originalModel, state, cameraTransformType);
 		}
 
-	}	@Override
+	}
+
+	@Override
 	protected ItemOverrideList createOverrides() {
 		return new SprayCanOverrideList();
 	}

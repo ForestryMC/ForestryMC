@@ -33,7 +33,7 @@ public class TimeModifier implements IClimateModifier {
 		int lightValue = EnumSkyBlock.SKY.defaultLightValue - world.getSkylightSubtracted();
 		float sunAngle = world.getCelestialAngleRadians(1.0F);
 
-		if(!world.isDaytime()){
+		if (!world.isDaytime()) {
 			lightValue = EnumSkyBlock.SKY.defaultLightValue - lightValue;
 		}
 

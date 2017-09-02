@@ -11,9 +11,8 @@ public interface IClimateFactory {
 
 	/**
 	 * @param climatedRegion
-	 * 
 	 * @return Creates a climate container.
 	 */
 	IClimateContainer createContainer(IClimateHousing climatedRegion);
-	
+
 }

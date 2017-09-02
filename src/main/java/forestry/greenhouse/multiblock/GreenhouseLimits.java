@@ -14,9 +14,9 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import forestry.core.network.PacketBufferForestry;
 import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
 import forestry.greenhouse.api.greenhouse.Position2D;
-import forestry.core.network.PacketBufferForestry;
 
 public class GreenhouseLimits implements IGreenhouseLimits {
 	private final Position2D maximumCoordinates;

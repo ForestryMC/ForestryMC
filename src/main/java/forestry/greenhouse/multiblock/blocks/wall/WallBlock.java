@@ -16,15 +16,15 @@ import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 
+import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.api.climate.IClimateSource;
+import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.api.greenhouse.IBlankBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlockHandler;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.api.greenhouse.IWallBlock;
 import forestry.greenhouse.api.greenhouse.Position2D;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateSource;
-import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.greenhouse.multiblock.blocks.GreenhouseBlock;
 
 public class WallBlock extends GreenhouseBlock<IBlankBlock> implements IWallBlock {

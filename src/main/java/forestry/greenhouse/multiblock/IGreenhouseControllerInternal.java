@@ -50,6 +50,7 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	IClimateContainer getClimateContainer();
 
 	/* IGreenhouseHousing */
+
 	/**
 	 * @return the manager of this housing.
 	 */

@@ -229,7 +229,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 				builder.recalculate(position);
 				List<IGreenhouseBlock> newBlocksToCheck = new LinkedList<>();
 				IErrorState errorState = handler.checkNeighborBlocks(storage, blockToCheck, newBlocksToCheck);
-				if(errorState != null){
+				if (errorState != null) {
 					errorLogic.setCondition(true, errorState);
 				}
 				blocksToCheck.addAll(newBlocksToCheck);
@@ -255,9 +255,9 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 			errorLogic.setCondition(true, EnumErrorCode.NOT_LOADED);
 			return GreenhouseState.UNLOADED_CHUNK;
 		}
-		if(errorLogic.hasErrors()){
+		if (errorLogic.hasErrors()) {
 			//Remove the state NOT_CLOSED if the logic has the state TOO_LARGE because the state NOT_CLOSED can be caused by the TOO_LARGE state
-			if(errorLogic.getErrorStates().contains(EnumErrorCode.TOO_LARGE)){
+			if (errorLogic.getErrorStates().contains(EnumErrorCode.TOO_LARGE)) {
 				errorLogic.setCondition(false, EnumErrorCode.NOT_CLOSED);
 			}
 			return GreenhouseState.OPEN;

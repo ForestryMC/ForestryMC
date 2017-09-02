@@ -10,15 +10,15 @@ import net.minecraft.util.EnumFacing;
 import forestry.greenhouse.api.climate.IClimateSource;
 
 public interface IWallBlock extends IGreenhouseBlock {
-	
+
 	void setRoot(IBlankBlock parent);
-	
+
 	void setRootFace(EnumFacing facing);
-	
+
 	void onCreate();
-	
+
 	void onRemove();
-	
+
 	void add(IClimateSource source);
-	
+
 }

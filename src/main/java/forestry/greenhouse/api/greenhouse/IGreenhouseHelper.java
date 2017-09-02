@@ -14,17 +14,17 @@ import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
 
 public interface IGreenhouseHelper {
-	
+
 	void registerWindowGlass(String name, ItemStack item, String texture);
-	
+
 	ItemStack getGlassItem(String name);
-	
+
 	String getGlassTexture(String name);
-	
+
 	Collection<String> getWindowGlasses();
-	
+
 	void registerLogic(IGreenhouseLogicFactory logicFactory);
-	
+
 	Collection<IGreenhouseLogic> createLogics(IGreenhouseController controller);
 
 }

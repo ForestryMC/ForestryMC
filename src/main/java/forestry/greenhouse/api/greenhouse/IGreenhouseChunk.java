@@ -18,17 +18,17 @@ public interface IGreenhouseChunk {
 	 * @return a {@link Collection} with all greenhouse managers of the greenhouses that are located in the world chunk on this chunk position.
 	 */
 	Collection<IGreenhouseProvider> getProviders();
-	
+
 	/**
 	 * Marks the manager, that has a {@link IGreenhouseBlock} on this position, as dirty.
 	 */
 	void markProviderDirty(BlockPos pos);
-	
+
 	/**
 	 * @return A {@link java.util.Collection} with all managers that were modified in the last tick.
 	 */
 	Collection<IGreenhouseProvider> getDirtyProviders();
-	
+
 	/**
 	 * Tries to get a {@link IGreenhouseBlock} from all managers that are located in this chunk.
 	 *
@@ -36,12 +36,12 @@ public interface IGreenhouseChunk {
 	 */
 	@Nullable
 	IGreenhouseBlock get(BlockPos pos);
-	
+
 	/**
 	 * Adds a manager to this chunk.
 	 */
 	void add(IGreenhouseProvider manager);
-	
+
 	/**
 	 * Removed a manager from this chunk.
 	 */

@@ -18,21 +18,20 @@ import forestry.greenhouse.api.climate.IClimateContainer;
 
 /**
  * Can be used to test if a space is closed. Is used by the greenhouse.
- *
  */
-public interface IGreenhouseProvider extends  IErrorLogicSource {
-	
+public interface IGreenhouseProvider extends IErrorLogicSource {
+
 	/**
 	 * @return the climate container of this provider.
 	 */
 	@Nullable
 	IClimateContainer getClimateContainer();
-	
+
 	/**
 	 * Adds a listener to this provider.
 	 */
 	void addListener(IGreenhouseProviderListener listener);
-	
+
 	/**
 	 * @return All listeners that this provider has.
 	 */
@@ -42,26 +41,26 @@ public interface IGreenhouseProvider extends  IErrorLogicSource {
 	 * @param centerPos The position at that the provider starts to test.
 	 */
 	void init(BlockPos centerPos, IGreenhouseLimits limits);
-	
+
 	/**
 	 * Invalidate and delete all {@link IGreenhouseBlock}s of this provider.
 	 */
 	void clear(boolean chunkUnloading);
-	
+
 	/**
 	 * Called from the thread if a {@link IGreenhouseBlock} was modified by the player.
 	 */
 	void recreate();
-	
+
 	void onUnloadChunk(long chunkPos);
-	
+
 	void onLoadChunk(long chunkPos);
-	
+
 	/**
 	 * @return True if the provider waits for a chunk to be loaded, before he can test if it is closed.
 	 */
 	boolean hasUnloadedChunks();
-	
+
 	/**
 	 * @return The position from that the provider tests if it is closed.
 	 */
@@ -82,21 +81,21 @@ public interface IGreenhouseProvider extends  IErrorLogicSource {
 	IGreenhouseLimits getUsedLimits();
 
 	GreenhouseState getState();
-	
+
 	World getWorld();
-	
+
 	/**
 	 * @return true if the space is closed.
 	 */
 	boolean isClosed();
-	
+
 	/**
 	 * Test if the provider is closed.
 	 */
 	IErrorState checkPosition(BlockPos position);
 
 	int getSize();
-	
+
 	/**
 	 * @return All {@link IGreenhouseBlockHandler}s that this provider uses.
 	 */

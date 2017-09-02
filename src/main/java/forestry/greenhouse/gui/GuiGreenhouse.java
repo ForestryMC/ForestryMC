@@ -52,7 +52,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
 		//Add the camouflage tab
 		widgetManager.add(new WidgetCamouflageTab(widgetManager, xSize / 4 - WidgetCamouflageTab.WIDTH / 2, -WidgetCamouflageTab.HEIGHT, controller, tile));
-		if(container.getTargetedState().isPresent()) {
+		if (container.getTargetedState().isPresent()) {
 			widgetManager.add(new WidgetClimateBar(widgetManager, xSize / 3 + WidgetClimateBar.WIDTH / 3, -WidgetClimateBar.HEIGHT));
 		}
 		widgetManager.add(temperaturePanel = new WidgetClimatePanel(widgetManager, this, 9, 18, ClimateType.TEMPERATURE));
@@ -61,7 +61,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 
 	public void sendNetworkUpdate() {
 		IClimateState climateState = container.getTargetedState();
-		if(climateState.isPresent()) {
+		if (climateState.isPresent()) {
 			BlockPos pos = controller.getCoordinates();
 			float temp = temperaturePanel.parseValue();
 			float hum = humidityPanel.parseValue();

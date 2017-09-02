@@ -8,7 +8,7 @@ package forestry.greenhouse.api.greenhouse;
 import net.minecraft.util.math.BlockPos;
 
 public interface IGreenhouseProviderListener {
-	
+
 	void onCheckPosition(BlockPos pos);
-	
+
 }

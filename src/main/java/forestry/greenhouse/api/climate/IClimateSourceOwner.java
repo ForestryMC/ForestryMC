@@ -15,12 +15,12 @@ import forestry.api.core.ILocatable;
 
 public interface IClimateSourceOwner extends ILocatable {
 	IClimateSource getClimateSource();
-	
+
 	@SideOnly(Side.CLIENT)
 	ItemStack getItemStack();
-	
+
 	boolean isActive();
-	
+
 	/**
 	 * @return true if this climate source owner can hold a {@link ICircuit}
 	 */
