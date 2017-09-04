@@ -20,5 +20,18 @@ public interface IHiveFrame {
 	 */
 	ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear);
 
+	/**
+	 * @param frame ItemStack containing the actual frame.
+	 * @return the {@link IBeeModifier} for this frame.
+	 * @since Forestry 5.5.1
+	 */
+	default IBeeModifier getBeeModifier(ItemStack frame) {
+		return getBeeModifier();
+	}
+
+	/**
+	 * @deprecated since Forestry 5.5.1. Use {@link #getBeeModifier(ItemStack)}
+	 */
+	@Deprecated
 	IBeeModifier getBeeModifier();
 }
