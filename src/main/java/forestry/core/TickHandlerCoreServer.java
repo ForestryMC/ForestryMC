@@ -12,18 +12,26 @@ package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -34,6 +42,7 @@ public class TickHandlerCoreServer {
 
 	private final WorldGenerator worldGenerator;
 	private final LinkedListMultimap<Integer, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
+	private final IntSet checkForRetrogen = new IntArraySet();
 
 	public TickHandlerCoreServer(WorldGenerator worldGenerator) {
 		this.worldGenerator = worldGenerator;
@@ -54,25 +63,47 @@ public class TickHandlerCoreServer {
 			}
 		}
 
-		if (Config.doRetrogen) {
-			World world = event.world;
+		if (Config.doRetrogen && event.world instanceof WorldServer) {
+			WorldServer world = (WorldServer) event.world;
 			int dimensionID = world.provider.getDimension();
-			List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
-
-			if (!chunkList.isEmpty()) {
-				ChunkCoords coords = chunkList.get(0);
-				chunkList.remove(0);
-
-				// This bit is from FML's GameRegistry.generateWorld where the seed is constructed.
-				long worldSeed = world.getSeed();
-				Random random = new Random(worldSeed);
-				long xSeed = random.nextLong() >> 2 + 1L;
-				long zSeed = random.nextLong() >> 2 + 1L;
-				random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
-				
-				worldGenerator.retroGen(random, coords.x, coords.z, world);
+			if (checkForRetrogen.contains(dimensionID)) {
+				List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
+				Iterator<ChunkCoords> iterator = chunkList.iterator();
+				while (iterator.hasNext()) {
+					ChunkCoords coords = iterator.next();
+					if (canDecorate(world, coords)) {
+						iterator.remove();
+						Random random = getRetrogenRandom(world, coords);
+						worldGenerator.retroGen(random, coords.x, coords.z, world);
+					}
+				}
+				checkForRetrogen.remove(dimensionID);
 			}
 		}
+	}
+
+	/**
+	 * This is from {@link GameRegistry#generateWorld(int, int, World, IChunkGenerator, IChunkProvider)} where the seed is constructed.
+ 	 */
+	private static Random getRetrogenRandom(World world, ChunkCoords coords) {
+		long worldSeed = world.getSeed();
+		Random random = new Random(worldSeed);
+		long xSeed = random.nextLong() >> 2 + 1L;
+		long zSeed = random.nextLong() >> 2 + 1L;
+		random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
+		return random;
+	}
+
+	private static boolean canDecorate(WorldServer server, ChunkCoords chunkCoords) {
+		ChunkProviderServer chunkProvider = server.getChunkProvider();
+		for	(int x = 0; x <= 1; x++) {
+			for (int z = 0; z <= 1; z++) {
+				if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@SubscribeEvent
@@ -94,6 +125,7 @@ public class TickHandlerCoreServer {
 				if (!tag.hasKey("retrogen") || Config.forceRetrogen) {
 					ChunkCoords coords = new ChunkCoords(event.getChunk());
 					chunkRegenList.put(coords.dimension, coords);
+					checkForRetrogen.add(coords.dimension);
 				}
 			}
 		}
