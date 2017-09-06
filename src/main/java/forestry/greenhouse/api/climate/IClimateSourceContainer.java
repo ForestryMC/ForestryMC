@@ -40,8 +40,13 @@ public interface IClimateSourceContainer {
 	IClimateState getBoundaryDown();
 
 	/**
-	 * Has to be called if any range of a {@link IClimateSource} changes. It calculates the range of all {@link IClimateSource}s together.
+	 * Calculates the range of all {@link IClimateSource}s together.
 	 */
 	void recalculateBoundaries(double sizeModifier);
+
+	/**
+	 * @return True if the container allows the {@link IClimateSource}s to work.
+	 */
+	boolean canWork();
 
 }

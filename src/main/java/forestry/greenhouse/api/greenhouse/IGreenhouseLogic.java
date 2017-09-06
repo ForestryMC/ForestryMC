@@ -3,13 +3,15 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.greenhouse.api.climate;
+package forestry.greenhouse.api.greenhouse;
 
-public interface IClimateContainerListener {
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 
-	/**
-	 * Test if the container is closed.
-	 */
-	boolean isClosed(IClimateContainer container);
+public interface IGreenhouseLogic extends INbtReadable, INbtWritable{
 
+	void work(int ticks);
+	
+	String getUID();
+	
 }

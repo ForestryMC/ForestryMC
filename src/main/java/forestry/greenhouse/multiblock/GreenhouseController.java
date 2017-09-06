@@ -33,13 +33,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
 import forestry.api.greenhouse.IGreenhouseListener;
-import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.Active;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.PluginCore;
-import forestry.core.climate.ClimateContainer;
 import forestry.core.climate.ClimateState;
 import forestry.core.config.Config;
 import forestry.core.multiblock.IMultiblockControllerInternal;
@@ -52,14 +50,15 @@ import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.api.climate.GreenhouseState;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateContainerListener;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.greenhouse.api.greenhouse.IGreenhouseLimits;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLogic;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProviderListener;
 import forestry.greenhouse.api.greenhouse.Position2D;
 import forestry.greenhouse.camouflage.CamouflageHandlerType;
+import forestry.greenhouse.climate.ClimateContainer;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProvider;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderClient;
 import forestry.greenhouse.multiblock.blocks.storage.GreenhouseProviderServer;
@@ -68,7 +67,7 @@ import forestry.greenhouse.network.packets.PacketCamouflageSelectionServer;
 import forestry.greenhouse.network.packets.PacketGreenhouseDataRequest;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
 
-public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, IClimateContainerListener, IGreenhouseProviderListener {
+public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, IGreenhouseProviderListener {
 
 	public static final String TYPE = "for.multiblock.greenhouse.type";
 	public static final int CENTER_HEIGHT = 3;
@@ -95,13 +94,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private boolean requestedData;
 
 	public GreenhouseController(World world) {
-		super(world, GreenhouseMultiblockSizeLimits.instance);
+		super(world, GreenhouseMultiblockSizeLimits.INSTANCE);
 
 		this.energyManager = new EnergyManager(200, 100000);
 
 		this.camouflage = getDefaultCamouflageBlock();
-		this.climateContainer = new ClimateContainer(this);
-		this.climateContainer.addListener(this);
+		this.climateContainer = new ClimateContainer(this, this::canWork);
 		this.centerPos = BlockPos.ORIGIN;
 		if (world.isRemote) {
 			provider = new GreenhouseProviderClient(world, climateContainer);
@@ -187,11 +185,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public IGreenhouseLimits getLimits() {
 		return limits;
-	}
-
-	@Override
-	public boolean isClosed(IClimateContainer container) {
-		return provider.isClosed();
 	}
 
 	/* IMultiblockControllerInternal */
@@ -281,9 +274,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				provider.create();
 			}
 		} else {
-			if (canWork()) {
-				climateContainer.updateClimate(tickCount);
-			}
+			climateContainer.updateClimate(tickCount);
 
 			for (Active activeComponent : activeComponents) {
 				activeComponent.updateServer(tickCount);
@@ -364,7 +355,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			IGreenhouseListener listener = listenerComponent.getGreenhouseListener();
 			canWork = listener.canWork(this, canWork);
 		}
-		return canWork;
+		return canWork && provider.isClosed();
 	}
 
 	@Override

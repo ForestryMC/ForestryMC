@@ -17,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.api.multiblock.IGreenhouseComponent;
-import forestry.core.climate.ClimateContainer;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -26,6 +25,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.greenhouse.api.climate.IClimateContainer;
+import forestry.greenhouse.climate.ClimateContainer;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
 public class PacketUpdateClimate extends ForestryPacket implements IForestryPacketClient {

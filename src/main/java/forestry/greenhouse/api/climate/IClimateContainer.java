@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.greenhouse.api.climate;
 
-import java.util.Collection;
-
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,21 +33,6 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	 * Update the climate in a region.
 	 */
 	void updateClimate(int ticks);
-
-	/**
-	 * Add a listener to this container.
-	 */
-	void addListener(IClimateContainerListener listener);
-
-	/**
-	 * Remove a listener to this container.
-	 */
-	void removeListener(IClimateContainerListener listener);
-
-	/**
-	 * All listeners of this container.
-	 */
-	Collection<IClimateContainerListener> getListeners();
 
 	/**
 	 * @return only not present if the controller never was assembled.

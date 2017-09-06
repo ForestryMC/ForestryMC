@@ -3,15 +3,12 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.greenhouse;
+package forestry.greenhouse.api.greenhouse;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
+import forestry.api.multiblock.IGreenhouseController;
 
-public interface IGreenhouseLogic extends INbtReadable, INbtWritable{
+public interface IGreenhouseLogicFactory {
 
-	void work(int ticks);
-	
-	String getUID();
+	IGreenhouseLogic createLogic(IGreenhouseController controller);
 	
 }

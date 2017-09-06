@@ -8,14 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.climate;
+package forestry.greenhouse.climate;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -29,23 +28,23 @@ import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.IClimateHousing;
+import forestry.core.climate.AbsentClimateState;
+import forestry.core.climate.ClimateData;
+import forestry.core.climate.ClimateState;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
 import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateContainerListener;
 import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
-import forestry.greenhouse.climate.GreenhouseClimateManager;
 
 public class ClimateContainer implements IClimateContainer, IStreamable {
-	public static final float CLIMATE_CHANGE = 0.01F;
 	
 	protected final IClimateHousing parent;
-	protected final ClimateContainerListeners listeners;
 	protected final Set<IClimateSource> sources;
+	protected final Supplier<Boolean> canWork;
 	private int delay;
 	protected IClimateState state;
 	protected IClimateState targetedState;
@@ -57,8 +56,11 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	 * Creates an empty region.
 	 */
 	public ClimateContainer(IClimateHousing parent) {
+		this(parent, () -> true);
+	}
+
+	public ClimateContainer(IClimateHousing parent, Supplier<Boolean> canWork) {
 		this.parent = parent;
-		this.listeners = new ClimateContainerListeners();
 		this.sources = new HashSet<>();
 		this.delay = 20;
 		this.state = parent.getDefaultClimate().toState(ClimateStateType.MUTABLE);
@@ -66,11 +68,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.boundaryUp = ClimateState.MIN;
 		this.boundaryDown = ClimateState.MIN;
 		this.targetedState = AbsentClimateState.INSTANCE;
-	}
-
-	public ClimateContainer(IClimateHousing parent, NBTTagCompound nbtTag) {
-		this(parent);
-		readFromNBT(nbtTag);
+		this.canWork = canWork;
 	}
 	
 	@Override
@@ -81,41 +79,15 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public void updateClimate(int ticks) {
 		if (ticks % getTickDelay() == 0) {
-			if(!listeners.isClosed(this)) {
-				returnClimateToDefault();
-			}else{
-				IClimateState oldState = state.toState(ClimateStateType.IMMUTABLE);
-				state = parent.getDefaultClimate().toState(ClimateStateType.CHANGE);
-				for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
-					state = modifier.modifyTarget(this, state, oldState, modifierData).toState(ClimateStateType.CHANGE);
-				}
-				state = state.toState(ClimateStateType.MUTABLE);
-				if(!state.equals(oldState)) {
-					BlockPos coordinates = parent.getCoordinates();
-					NetworkUtil.sendNetworkPacket(new PacketUpdateClimate(coordinates, this), coordinates, parent.getWorldObj());
-				}
+			IClimateState oldState = state.toState(ClimateStateType.IMMUTABLE);
+			state = parent.getDefaultClimate().toState(ClimateStateType.CHANGE);
+			for (IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()) {
+				state = modifier.modifyTarget(this, state, oldState, modifierData).toState(ClimateStateType.CHANGE);
 			}
-		}
-	}
-	
-	protected void returnClimateToDefault(){
-		IClimateState defaultState = parent.getDefaultClimate();
-		float biomeTemperature = defaultState.getTemperature();
-		float biomeHumidity = defaultState.getHumidity();
-		float temperature = state.getTemperature();
-		float humidity = state.getHumidity();
-		if (temperature != biomeTemperature) {
-			if (temperature > biomeTemperature) {
-				state.addTemperature(-Math.min(CLIMATE_CHANGE, temperature - biomeTemperature));
-			} else {
-				state.addTemperature(Math.min(CLIMATE_CHANGE, biomeTemperature - temperature));
-			}
-		}
-		if (humidity != biomeHumidity) {
-			if (humidity > biomeHumidity) {
-				state.addHumidity(-Math.min(CLIMATE_CHANGE, humidity - biomeHumidity));
-			} else {
-				state.addHumidity(Math.min(CLIMATE_CHANGE, biomeHumidity - humidity));
+			state = state.toState(ClimateStateType.MUTABLE);
+			if (!state.equals(oldState)) {
+				BlockPos coordinates = parent.getCoordinates();
+				NetworkUtil.sendNetworkPacket(new PacketUpdateClimate(coordinates, this), coordinates, parent.getWorldObj());
 			}
 		}
 	}
@@ -250,21 +222,6 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	}
 	
 	@Override
-	public void addListener(IClimateContainerListener listener) {
-		listeners.addListaner(listener);
-	}
-	
-	@Override
-	public void removeListener(IClimateContainerListener listener) {
-		listeners.removeListener(listener);
-	}
-	
-	@Override
-	public Collection<IClimateContainerListener> getListeners() {
-		return listeners.getListeners();
-	}
-	
-	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof IClimateContainer)){
 			return false;
@@ -291,32 +248,10 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		}
 		return data;
 	}
-	
-	private static final class ClimateContainerListeners implements IClimateContainerListener{
-		private List<IClimateContainerListener> listeners = new LinkedList<>();
 
-		@Override
-		public boolean isClosed(IClimateContainer container) {
-			for(IClimateContainerListener listener : listeners){
-				if(!listener.isClosed(container)){
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		public void addListaner(IClimateContainerListener listener) {
-			listeners.add(listener);
-		}
-		
-		public void removeListener(IClimateContainerListener listener) {
-			listeners.remove(listener);
-		}
-		
-		public Collection<IClimateContainerListener> getListeners() {
-			return listeners;
-		}
-		
+	@Override
+	public boolean canWork() {
+		return canWork.get();
 	}
 
 }

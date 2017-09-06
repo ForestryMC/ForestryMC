@@ -30,6 +30,7 @@ import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 
 public class ClimateSourceModifier implements IClimateModifier {
+	public static final float CLIMATE_CHANGE = 0.01F;
 
 	@Override
 	public IClimateState modifyTarget(IClimateContainer container, IClimateState newState, IClimateState oldState, NBTTagCompound data) {
@@ -42,48 +43,69 @@ public class ClimateSourceModifier implements IClimateModifier {
 		}
 		IClimateHousing housing = container.getParent();
 		double sizeModifier = housing.getSize() / Config.climateSourceRange;
-		double size = sizeModifier * 0.2D;
 		sizeModifier = Math.max(sizeModifier, 1.0D);
 
-		container.recalculateBoundaries(sizeModifier);
-
-		IClimateState boundaryUp = container.getBoundaryUp();
-		IClimateState boundaryDown = container.getBoundaryDown();
-
-		data.setTag("rangeUp", boundaryUp.writeToNBT(new NBTTagCompound()));
-		data.setTag("rangeDown", boundaryDown.writeToNBT(new NBTTagCompound()));
-
-		IClimateState targetedState = container.getTargetedState();
-		if (!targetedState.isPresent()) {
-			return newState;
-		}
-		int workedSources = 0;
-		IClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), targetedState);
 		IClimateState changeState = new ClimateState(data.getCompoundTag("change"), ClimateStateType.CHANGE);
-
-		for (IClimateSource source : container.getClimateSources()) {
-			IClimateState state = source.work(oldState, target);
-			if (state.isPresent()) {
-				boolean hasChange = false;
-				double temperatureChange = state.getTemperature();
-				double humidityChange = state.getHumidity();
-				if (temperatureChange != 0) {
-					temperatureChange /= sizeModifier;
-					hasChange = true;
-				}
-				if (humidityChange != 0) {
-					humidityChange /= sizeModifier;
-					hasChange = true;
-				}
-				if (hasChange) {
-					changeState = changeState.addTemperature((float) temperatureChange);
-					changeState = changeState.addHumidity((float) humidityChange);
-					workedSources++;
+		if (!container.canWork()) {
+			IClimateState defaultState = container.getParent().getDefaultClimate();
+			float defaultTemperature = defaultState.getTemperature();
+			float defaultHumidity = defaultState.getHumidity();
+			float temperature = changeState.getTemperature();
+			float humidity = changeState.getHumidity();
+			if (temperature != defaultTemperature) {
+				if (temperature > defaultTemperature) {
+					changeState = changeState.addTemperature((float) -Math.min(CLIMATE_CHANGE / sizeModifier, temperature - defaultTemperature));
+				} else {
+					changeState = changeState.addTemperature((float) Math.min(CLIMATE_CHANGE / sizeModifier, defaultTemperature - temperature));
 				}
 			}
-		}
-		if (workedSources == 0) {
-			return newState.add(changeState);
+			if (humidity != defaultHumidity) {
+				if (humidity > defaultHumidity) {
+					changeState = changeState.addHumidity((float) -Math.min(CLIMATE_CHANGE / sizeModifier, humidity - defaultHumidity));
+				} else {
+					changeState = changeState.addHumidity((float) Math.min(CLIMATE_CHANGE / sizeModifier, defaultHumidity - humidity));
+				}
+			}
+		} else {
+			container.recalculateBoundaries(sizeModifier);
+
+			IClimateState boundaryUp = container.getBoundaryUp();
+			IClimateState boundaryDown = container.getBoundaryDown();
+
+			data.setTag("rangeUp", boundaryUp.writeToNBT(new NBTTagCompound()));
+			data.setTag("rangeDown", boundaryDown.writeToNBT(new NBTTagCompound()));
+
+			IClimateState targetedState = container.getTargetedState();
+			if (!targetedState.isPresent()) {
+				return newState;
+			}
+			int workedSources = 0;
+			IClimateState target = getTargetOrBound(oldState, container.getBoundaryDown(), container.getBoundaryUp(), targetedState);
+
+			for (IClimateSource source : container.getClimateSources()) {
+				IClimateState state = source.work(oldState, target);
+				if (state.isPresent()) {
+					boolean hasChange = false;
+					double temperatureChange = state.getTemperature();
+					double humidityChange = state.getHumidity();
+					if (temperatureChange != 0) {
+						temperatureChange /= sizeModifier;
+						hasChange = true;
+					}
+					if (humidityChange != 0) {
+						humidityChange /= sizeModifier;
+						hasChange = true;
+					}
+					if (hasChange) {
+						changeState = changeState.addTemperature((float) temperatureChange);
+						changeState = changeState.addHumidity((float) humidityChange);
+						workedSources++;
+					}
+				}
+			}
+			if (workedSources == 0) {
+				return newState.add(changeState);
+			}
 		}
 		data.setTag("change", changeState.writeToNBT(new NBTTagCompound()));
 		return newState.add(changeState);

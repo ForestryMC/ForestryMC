@@ -9,8 +9,6 @@ import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
 
 public interface IGreenhouseHelper {

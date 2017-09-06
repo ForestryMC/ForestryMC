@@ -18,10 +18,10 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.greenhouse.IGreenhouseLogic;
-import forestry.api.greenhouse.IGreenhouseLogicFactory;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.greenhouse.api.greenhouse.IGreenhouseHelper;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLogic;
+import forestry.greenhouse.api.greenhouse.IGreenhouseLogicFactory;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 

@@ -13,10 +13,9 @@ package forestry.greenhouse.multiblock;
 import forestry.core.multiblock.IMultiblockSizeLimits;
 
 class GreenhouseMultiblockSizeLimits implements IMultiblockSizeLimits {
-	public static final GreenhouseMultiblockSizeLimits instance = new GreenhouseMultiblockSizeLimits();
+	public static final GreenhouseMultiblockSizeLimits INSTANCE = new GreenhouseMultiblockSizeLimits();
 
 	private GreenhouseMultiblockSizeLimits() {
-
 	}
 
 	@Override

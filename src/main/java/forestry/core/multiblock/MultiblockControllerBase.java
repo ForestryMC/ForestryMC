@@ -37,6 +37,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	// Ticks
 	private static final Random rand = new Random();
+	//TODO: Use TickHelper
 	private int tickCount = rand.nextInt(256);
 
 	// Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
