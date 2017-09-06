@@ -22,6 +22,7 @@ import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.utils.SlotUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 public class InventoryApiary extends InventoryBeeHousing implements IApiaryInventory {
 	public static final int SLOT_FRAMES_1 = 9;
@@ -47,14 +48,15 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 				super.isItemValidForSlot(slotIndex, itemStack);
 	}
 
-	public Collection<IHiveFrame> getFrames() {
-		Collection<IHiveFrame> hiveFrames = new ArrayList<>(SLOT_FRAMES_COUNT);
+	public Collection<Tuple<IHiveFrame, ItemStack>> getFrames() {
+		Collection<Tuple<IHiveFrame, ItemStack>> hiveFrames = new ArrayList<>(SLOT_FRAMES_COUNT);
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			ItemStack stackInSlot = getStackInSlot(i);
 			Item itemInSlot = stackInSlot.getItem();
 			if (itemInSlot instanceof IHiveFrame) {
-				hiveFrames.add((IHiveFrame) itemInSlot);
+				IHiveFrame frame = (IHiveFrame) itemInSlot;
+				hiveFrames.add(new Tuple<>(frame, stackInSlot.copy()));
 			}
 		}
 

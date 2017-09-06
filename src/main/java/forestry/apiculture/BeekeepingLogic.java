@@ -54,7 +54,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
+public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int totalBreedingTime = Constants.APIARY_BREEDING_TIME;
 
@@ -222,7 +222,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			errorLogic.setCondition(true, errorState);
 		}
 
-		boolean hasFlowers = hasFlowersCache.hasFlowers(queen, housing);
+		hasFlowersCache.update(queen, housing);
+		boolean hasFlowers = hasFlowersCache.hasFlowers();
 		boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);
 

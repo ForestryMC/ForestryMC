@@ -53,6 +53,11 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	}
 
 	@Override
+	public IBeeModifier getBeeModifier(ItemStack frame) {
+		return beeModifier;
+	}
+
+	@Override
 	public IBeeModifier getBeeModifier() {
 		return beeModifier;
 	}
