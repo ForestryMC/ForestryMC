@@ -102,12 +102,13 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntity tile = TileUtil.getTile(worldIn, pos, TileEntity.class);
-		if (tile instanceof IActivatable) {
-			state = state.withProperty(State.PROPERTY, ((IActivatable) tile).isActive() ? State.ON : State.OFF);
+	public IBlockState getActualState(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		IActivatable tile = TileUtil.getTile(worldIn, pos, IActivatable.class);
+		State state = State.OFF;
+		if (tile != null) {
+			state = tile.isActive() ? State.ON : State.OFF;
 		}
-		return super.getActualState(state, worldIn, pos);
+		return super.getActualState(blockState, worldIn, pos).withProperty(State.PROPERTY, state);
 	}
 
 	@Override
@@ -168,8 +169,7 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos).withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -19,6 +19,6 @@ public interface ICamouflageItemHandler {
 	boolean canHandle(ItemStack stack);
 
 	@SideOnly(Side.CLIENT)
-	Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile);
+	Pair<IBlockState, IBakedModel> getModel(ItemStack stack);
 
 }

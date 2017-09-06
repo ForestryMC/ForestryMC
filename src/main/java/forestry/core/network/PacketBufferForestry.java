@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.AbsentClimateState;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.greenhouse.api.greenhouse.Position2D;
 
 import io.netty.buffer.ByteBuf;
@@ -195,7 +195,7 @@ public class PacketBufferForestry extends PacketBuffer {
 	public IClimateState readClimateState(){
 		if(readBoolean()){
 			ClimateStateType type = ClimateStateType.values()[readByte()];
-			return new ClimateState(readFloat(), readFloat(), type);
+			return ClimateStates.of(readFloat(), readFloat(), type);
 		}else{
 			return AbsentClimateState.INSTANCE;
 		}

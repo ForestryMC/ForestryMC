@@ -1,7 +1,12 @@
 /*******************************************************************************
- * Copyright 2011-2014 SirSengir
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.climate;
 
@@ -15,7 +20,7 @@ import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateInfo;
 import forestry.api.climate.IClimateState;
 
-public class ClimateState implements IClimateState, IClimateInfo {
+class ClimateState implements IClimateState, IClimateInfo {
 
 	// The minimum climate state.
 	public static final ClimateState MIN = new ClimateState(0.0F, 0.0F, ClimateStateType.IMMUTABLE);
@@ -39,8 +44,8 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	public ClimateState(float temperature, float humidity, ClimateStateType type) {
 		this.type = type;
 		this.bounds = type.bounds;
-		addTemperature(temperature);
-		addHumidity(humidity);
+		this.temperature = bounds.apply(temperature);
+		this.humidity = bounds.apply(humidity);
 	}
 
 	public ClimateState(NBTTagCompound compound, ClimateStateType type) {
@@ -65,14 +70,14 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
-		this.temperature = compound.getFloat(TEMPERATURE_NBT_KEY);
-		this.humidity = compound.getFloat(HUMIDITY_NBT_KEY);
+		this.temperature = bounds.apply(compound.getFloat(TEMPERATURE_NBT_KEY));
+		this.humidity = bounds.apply(compound.getFloat(HUMIDITY_NBT_KEY));
 	}
 
 	@Override
 	public IClimateState setHumidity(float humidity) {
 		if(type == ClimateStateType.IMMUTABLE){
-			return new ClimateState(getTemperature(), humidity, ClimateStateType.IMMUTABLE);
+			return ClimateStates.immutableOf(getTemperature(), humidity);
 		}
 		this.humidity = bounds.apply(humidity);
 		if(!isPresent()){
@@ -84,7 +89,7 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	@Override
 	public IClimateState setTemperature(float temperature) {
 		if(type == ClimateStateType.IMMUTABLE){
-			return new ClimateState(temperature, getHumidity(), ClimateStateType.IMMUTABLE);
+			return ClimateStates.immutableOf(temperature, getHumidity());
 		}
 		this.temperature = bounds.apply(temperature);
 		if(!isPresent()){
@@ -100,7 +105,10 @@ public class ClimateState implements IClimateState, IClimateInfo {
 
 	@Override
 	public IClimateState addTemperature(float temperature){
-		this.temperature= bounds.apply(this.temperature + temperature);
+		if (type == ClimateStateType.IMMUTABLE) {
+			return ClimateStates.immutableOf(this.temperature + temperature, humidity);
+		}
+		this.temperature = bounds.apply(this.temperature + temperature);
 		if(!isPresent()){
 			return AbsentClimateState.INSTANCE;
 		}
@@ -109,6 +117,9 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	
 	@Override
 	public IClimateState addHumidity(float humidity){
+		if (type == ClimateStateType.IMMUTABLE) {
+			return ClimateStates.immutableOf(temperature, this.humidity + humidity);
+		}
 		this.humidity= bounds.apply(this.humidity + humidity);
 		if(!isPresent()){
 			return AbsentClimateState.INSTANCE;
@@ -118,6 +129,9 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	
 	@Override
 	public IClimateState add(IClimateState state){
+		if (type == ClimateStateType.IMMUTABLE) {
+			return ClimateStates.immutableOf(this.temperature + state.getTemperature(), this.humidity + state.getHumidity());
+		}
 		addTemperature(state.getTemperature());
 		addHumidity(state.getHumidity());
 		if(!isPresent()){
@@ -128,6 +142,9 @@ public class ClimateState implements IClimateState, IClimateInfo {
 	
 	@Override
 	public IClimateState remove(IClimateState state){
+		if (type == ClimateStateType.IMMUTABLE) {
+			return ClimateStates.immutableOf(this.temperature - state.getTemperature(), this.humidity - state.getHumidity());
+		}
 		addTemperature(-state.getTemperature());
 		addHumidity(-state.getHumidity());
 		if(!isPresent()){

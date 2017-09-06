@@ -21,7 +21,7 @@ import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.greenhouse.IClimateHousing;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
@@ -45,7 +45,7 @@ public class ClimateSourceModifier implements IClimateModifier {
 		double sizeModifier = housing.getSize() / Config.climateSourceRange;
 		sizeModifier = Math.max(sizeModifier, 1.0D);
 
-		IClimateState changeState = new ClimateState(data.getCompoundTag("change"), ClimateStateType.CHANGE);
+		IClimateState changeState = ClimateStates.INSTANCE.create(data.getCompoundTag("change"), ClimateStateType.CHANGE);
 		if (!container.canWork()) {
 			IClimateState defaultState = container.getParent().getDefaultClimate();
 			float defaultTemperature = defaultState.getTemperature();
@@ -114,9 +114,9 @@ public class ClimateSourceModifier implements IClimateModifier {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
-		IClimateState rangeDown = new ClimateState(nbtData.getCompoundTag("rangeDown"), ClimateStateType.MUTABLE);
-		IClimateState rangeUp = new ClimateState(nbtData.getCompoundTag("rangeUp"), ClimateStateType.MUTABLE);
-		IClimateState change = new ClimateState(nbtData.getCompoundTag("change"), ClimateStateType.MUTABLE);
+		IClimateState rangeDown = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("rangeDown"), ClimateStateType.MUTABLE);
+		IClimateState rangeUp = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("rangeUp"), ClimateStateType.MUTABLE);
+		IClimateState change = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("change"), ClimateStateType.MUTABLE);
 
 		data.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getHumidity())
 			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getHumidity())
@@ -137,20 +137,16 @@ public class ClimateSourceModifier implements IClimateModifier {
 		float humidity = climateState.getHumidity();
 		float targetTemperature = targetedState.getTemperature();
 		float targetHumidity = targetedState.getHumidity();
-		float humidityBoundaryUp = boundaryUp.getHumidity();
-		float humidityBoundaryDown = boundaryDown.getHumidity();
-		float temperatureBoundaryUp = boundaryUp.getTemperature();
-		float temperatureBoundaryDown = boundaryDown.getTemperature();
 		if (targetTemperature > temperature) {
-			temperature = Math.min(targetTemperature, temperatureBoundaryUp);
+			temperature = Math.min(targetTemperature, boundaryUp.getTemperature());
 		} else if (targetTemperature < temperature) {
-			temperature = Math.max(targetTemperature, temperatureBoundaryDown);
+			temperature = Math.max(targetTemperature, boundaryDown.getTemperature());
 		}
 		if (targetHumidity > humidity) {
-			humidity = Math.min(targetHumidity, humidityBoundaryUp);
+			humidity = Math.min(targetHumidity, boundaryUp.getHumidity());
 		} else if (targetHumidity < humidity) {
-			humidity = Math.max(targetHumidity, humidityBoundaryDown);
+			humidity = Math.max(targetHumidity, boundaryDown.getHumidity());
 		}
-		return new ClimateState(temperature, humidity, ClimateStateType.IMMUTABLE);
+		return ClimateStates.immutableOf(temperature, humidity);
 	}
 }

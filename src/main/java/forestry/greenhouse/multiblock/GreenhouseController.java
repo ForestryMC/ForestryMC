@@ -38,7 +38,7 @@ import forestry.api.multiblock.IGreenhouseComponent.Active;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.PluginCore;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
@@ -87,7 +87,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private ItemStack camouflage;
 	//Climate
 	private ClimateContainer climateContainer;
-	private IClimateState defaultState = ClimateState.MIN;
+	private IClimateState defaultState = ClimateStates.INSTANCE.min();
 	private BlockPos centerPos;
 	private int assembleTickCount;
 	@SideOnly(Side.CLIENT)
@@ -460,7 +460,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				biomes++;
 			}
 		}
-		defaultState = new ClimateState((float) (temperature / biomes), (float) (humidity / biomes), ClimateStateType.IMMUTABLE);
+		defaultState = ClimateStates.immutableOf((float) (temperature / biomes), (float) (humidity / biomes));
 	}
 
 	/* RectangularMultiblockControllerBase */

@@ -15,10 +15,9 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.TextLayoutHelper;
@@ -73,7 +72,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 	public void setClimate(IClimateContainer container, float temp, float hum) {
 		temperaturePanel.setValue(temp);
 		humidityPanel.setValue(hum);
-		container.setTargetedState(new ClimateState(temp, hum, ClimateStateType.IMMUTABLE));
+		container.setTargetedState(ClimateStates.immutableOf(temp, hum));
 	}
 
 	@Override

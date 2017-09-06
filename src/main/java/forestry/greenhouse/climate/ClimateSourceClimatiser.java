@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.IErrorLogic;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.errors.EnumErrorCode;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.api.climate.IClimateContainer;
@@ -94,7 +93,7 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 		if (type.canChangeTemperature()) {
 			temperature += getChange(ClimateType.TEMPERATURE);
 		}
-		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
+		return ClimateStates.changeOf(temperature, humidity);
 	}
 
 }

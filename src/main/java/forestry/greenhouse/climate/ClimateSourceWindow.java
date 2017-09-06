@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.greenhouse.climate;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.ForestryAPI;
 import forestry.core.climate.ClimateSource;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
 
@@ -73,7 +72,7 @@ public class ClimateSourceWindow extends ClimateSource<TileGreenhouseWindow> {
 				temperature += change;
 			}
 		}
-		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
+		return ClimateStates.changeOf(temperature, humidity);
 	}
 
 }

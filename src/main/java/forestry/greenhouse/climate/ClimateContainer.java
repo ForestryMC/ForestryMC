@@ -30,7 +30,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.AbsentClimateState;
 import forestry.core.climate.ClimateData;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
@@ -65,8 +65,8 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.delay = 20;
 		this.state = parent.getDefaultClimate().toState(ClimateStateType.MUTABLE);
 		this.modifierData = new NBTTagCompound();
-		this.boundaryUp = ClimateState.MIN;
-		this.boundaryDown = ClimateState.MIN;
+		this.boundaryUp = ClimateStates.INSTANCE.min();
+		this.boundaryDown = ClimateStates.INSTANCE.min();
 		this.targetedState = AbsentClimateState.INSTANCE;
 		this.canWork = canWork;
 	}
@@ -120,8 +120,8 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		if(humidityBoundaryDown != 0){
 			humidityBoundaryDown/=sizeModifier;
 		}
-		boundaryUp = parent.getDefaultClimate().add(new ClimateState(temperatureBoundaryUp, humidityBoundaryUp, ClimateStateType.MUTABLE));
-		boundaryDown = parent.getDefaultClimate().remove(new ClimateState(temperatureBoundaryDown, humidityBoundaryDown, ClimateStateType.MUTABLE));
+		boundaryUp = parent.getDefaultClimate().add(ClimateStates.of(temperatureBoundaryUp, humidityBoundaryUp));
+		boundaryDown = parent.getDefaultClimate().remove(ClimateStates.of(temperatureBoundaryDown, humidityBoundaryDown));
 	}
 	
 	@Override

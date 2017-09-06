@@ -46,6 +46,7 @@ import forestry.factory.tiles.TileStill;
 import forestry.factory.tiles.TileWorktable;
 import forestry.farming.tiles.TileFarm;
 import forestry.greenhouse.items.ItemCamouflageSprayCan;
+import forestry.greenhouse.tiles.TileClimatiser;
 import forestry.greenhouse.tiles.TileGreenhouse;
 import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.mail.items.ItemCatalogue;
@@ -87,6 +88,7 @@ public class GuiIdRegistry {
 				TileFarm.class,
 
 				TileGreenhouse.class,
+			TileClimatiser.class,
 				TileHygroregulator.class,
 
 				TileEngineBiogas.class,

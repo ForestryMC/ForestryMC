@@ -27,9 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
-import forestry.api.core.ICamouflagedTile;
 
 public class CamouflageHandlerBlock implements ICamouflageItemHandler {
 	@Override
@@ -45,8 +43,7 @@ public class CamouflageHandlerBlock implements ICamouflageItemHandler {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public Pair<IBlockState, IBakedModel> getModel(ItemStack stack, ICamouflageHandler camouflageHandler, ICamouflagedTile camouflageTile) {
-		Preconditions.checkNotNull(camouflageHandler);
+	public Pair<IBlockState, IBakedModel> getModel(ItemStack stack) {
 		Preconditions.checkArgument(!stack.isEmpty(), "Stack cannot be empty");
 
 		BlockRendererDispatcher rendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();

@@ -76,7 +76,7 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		ForestryAPI.states = new ClimateStates();
+		ForestryAPI.states = ClimateStates.INSTANCE;
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);

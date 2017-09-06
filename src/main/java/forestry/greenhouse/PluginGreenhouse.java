@@ -61,6 +61,7 @@ import forestry.greenhouse.multiblock.blocks.ChunkEvents;
 import forestry.greenhouse.multiblock.blocks.world.GreenhouseBlockManager;
 import forestry.greenhouse.network.PacketRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
+import forestry.greenhouse.tiles.TileClimatiser;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
@@ -134,6 +135,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
 		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
 		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.ClimateSourceWindow");
+		GameRegistry.registerTileEntity(TileClimatiser.class, "forestry.Climatiser");
 
 		helper.registerWindowGlass("glass", new ItemStack(Blocks.GLASS), "blocks/glass");
 		for (EnumDyeColor dye : EnumDyeColor.values()) {

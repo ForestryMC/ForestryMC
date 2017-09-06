@@ -12,13 +12,12 @@ package forestry.greenhouse.climate;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.IErrorLogic;
 import forestry.core.climate.ClimateSourceMode;
 import forestry.core.climate.ClimateSourceType;
-import forestry.core.climate.ClimateState;
+import forestry.core.climate.ClimateStates;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.recipes.HygroregulatorRecipe;
@@ -88,7 +87,7 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 		if (type.canChangeTemperature()) {
 			temperature += currentRecipe.tempChange * getChangeMultiplier(ClimateType.TEMPERATURE);
 		}
-		return new ClimateState(temperature, humidity, ClimateStateType.CHANGE);
+		return ClimateStates.changeOf(temperature, humidity);
 	}
 
 	private void createRecipe() {

@@ -19,7 +19,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
@@ -32,14 +31,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.CamouflageManager;
-import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
-import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelBaker;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockDefault;
-import forestry.core.tiles.TileUtil;
 import forestry.greenhouse.blocks.BlockGreenhouseSprite;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.IBlockCamouflaged;
@@ -80,30 +76,19 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 		IBlockAccess world = key.world;
 		BlockPos pos = key.pos;
 		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
-		addCamouflageModel(block, baker, layer, world, pos);
-		/*if (layer == BlockRenderLayer.CUTOUT || layer == null) {
-			for (int overlayLayer = 0; overlayLayer < block.getLayers(); overlayLayer++) {
-				addOverlaySprite(block, baker, world, pos, key.state, key.meta, overlayLayer);
-			}
-		}*/
-		IBakedModel model;
-		if (key.state != null) {
-			model = overlayModel.getModel(key.state);
-		} else {
-			model = overlayModel.getModel(key.itemStack, Minecraft.getMinecraft().world);
+		if (layer != BlockRenderLayer.CUTOUT) {
+			addCamouflageModel(block, baker, layer, world, pos);
 		}
-		baker.addBakedModelPost(key.state, model);
+		if (layer == BlockRenderLayer.CUTOUT || layer == null) {
+			IBakedModel model;
+			if (key.state != null) {
+				model = overlayModel.getModel(key.state);
+			} else {
+				model = overlayModel.getModel(key.itemStack, Minecraft.getMinecraft().world);
+			}
+			baker.addBakedModelPost(key.state, model);
+		}
 	}
-
-	/*private void addOverlaySprite(B block, IModelBaker baker, IBlockAccess world, BlockPos pos, IBlockState state, int meta, int layer) {
-		if (block.hasOverlaySprite(world, pos, meta, layer)) {
-			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
-			for (EnumFacing facing : EnumFacing.VALUES) {
-				sprite[facing.ordinal()] = block.getOverlaySprite(facing, state, meta, layer);
-			}
-			baker.addBlockModel(pos, sprite, OVERLAY_COLOR_INDEX + layer);
-		}
-	}*/
 
 	private void addCamouflageModel(B block, IModelBaker baker, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
 		if (world == null || pos == null) {
@@ -111,27 +96,20 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 
 			baker.addBlockModel(pos, defaultSprite, DEFAULT_COLOR_INDEX);
 			baker.setParticleSprite(defaultSprite);
-			ItemStack camouflageStack = GreenhouseController.createDefaultCamouflageBlock();
 		} else {
 			ItemStack camouflageStack = block.getCamouflageBlock(world, pos);
-			Block camouflageBlock = Block.getBlockFromItem(camouflageStack.getItem());
-			if (camouflageStack.isEmpty() || camouflageBlock == Blocks.AIR) {
+			if (camouflageStack.isEmpty()) {
 				camouflageStack = GreenhouseController.createDefaultCamouflageBlock();
 			}
+			Block camouflageBlock = Block.getBlockFromItem(camouflageStack.getItem());
 			ICamouflageItemHandler itemHandler = CamouflageManager.camouflageAccess.getHandler(camouflageStack);
 			if (itemHandler != null) {
-				ICamouflageHandler camouflageHandler = block.getCamouflageHandler(world, pos);
-				if (camouflageHandler != null) {
-					ICamouflagedTile camouflageTile = TileUtil.getTile(world, pos, ICamouflagedTile.class);
-					if (camouflageTile != null) {
-						Pair<IBlockState, IBakedModel> modelPair = itemHandler.getModel(camouflageStack, camouflageHandler, camouflageTile);
-						IBlockState blockState = modelPair.getLeft();
-						if (camouflageBlock.canRenderInLayer(blockState, layer)) {
-							IBakedModel bakedModel = modelPair.getRight();
-							baker.addBakedModel(blockState, bakedModel);
-							baker.setParticleSprite(bakedModel.getParticleTexture());
-						}
-					}
+				Pair<IBlockState, IBakedModel> modelPair = itemHandler.getModel(camouflageStack);
+				IBlockState blockState = modelPair.getLeft();
+				if (camouflageBlock.canRenderInLayer(blockState, layer)) {
+					IBakedModel bakedModel = modelPair.getRight();
+					baker.addBakedModel(blockState, bakedModel);
+					baker.setParticleSprite(bakedModel.getParticleTexture());
 				}
 			}
 		}
