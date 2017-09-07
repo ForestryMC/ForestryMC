@@ -16,6 +16,7 @@ import com.google.common.primitives.Floats;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -80,13 +81,19 @@ public class WidgetClimatePanel extends Widget {
 		}
 		ImmutableList.Builder builder = new ImmutableList.Builder();
 		int i = 0;
-		for (IClimateModifier modifier : GreenhouseManager.climateManager.getModifiers()) {
-			if (modifier.canModify(type)) {
-				int xOffset = i % 5 * WidgetClimateModifier.WIDTH;
-				int yOffset = i / 5 * WidgetClimateModifier.HEIGHT;
-				builder.add(new WidgetClimateModifier(this, xPos + xOffset - 2, yPos + yOffset + (height - WidgetClimateModifier.HEIGHT * 3 - 7), modifier));
-				i++;
+		int rowCount;
+		List<IClimateModifier> modifiers = GreenhouseManager.climateManager.getModifiers().stream().filter(v -> v.canModify(type)).collect(Collectors.toList());
+		for (IClimateModifier modifier : modifiers) {
+			int xOffset = i % 4 * WidgetClimateModifier.WIDTH;
+			int yOffset = i / 4 * WidgetClimateModifier.HEIGHT;
+			int rowStart = (i / 4) * 4;
+			rowCount = modifiers.size() - rowStart;
+			if (rowCount > 4) {
+				rowCount = 4;
 			}
+
+			builder.add(new WidgetClimateModifier(this, xPos + xOffset + width / 2 - rowCount / 2 * WidgetClimateModifier.WIDTH, yPos + yOffset + (height - WidgetClimateModifier.HEIGHT * 3 - 5), modifier));
+			i++;
 		}
 		this.modifiers = builder.build();
 	}
