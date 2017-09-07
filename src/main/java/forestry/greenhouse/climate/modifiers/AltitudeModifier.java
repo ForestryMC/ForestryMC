@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.climate.modifiers;
 
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -20,9 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.greenhouse.IClimateHousing;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 
 public class AltitudeModifier implements IClimateModifier {
@@ -45,8 +50,29 @@ public class AltitudeModifier implements IClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
-		data.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.altitude"), nbtData.getFloat("altitudeChange"));
+	public void addInformation(IClimateContainer container, NBTTagCompound nbtData, ClimateType type, List<String> lines) {
+		lines.add(Translator.translateToLocalFormatted("for.gui.modifier.altitude", StringUtil.floatAsPercent(nbtData.getFloat("altitudeChange"))));
 	}
 
+	@Override
+	public boolean canModify(ClimateType type) {
+		return type == ClimateType.TEMPERATURE;
+	}
+
+	@Override
+	public String getName() {
+		return Translator.translateToLocal("for.gui.modifier.altitude.title");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public TextureAtlasSprite getIcon() {
+		return TextureManagerForestry.getInstance().getDefault("habitats/hills");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTextureMap() {
+		return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
+	}
 }

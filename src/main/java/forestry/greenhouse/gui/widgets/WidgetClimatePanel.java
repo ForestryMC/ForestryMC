@@ -11,25 +11,29 @@
 package forestry.greenhouse.gui.widgets;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Floats;
 
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.text.TextFormatting;
 
 import org.lwjgl.input.Keyboard;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
-import forestry.core.gui.tables.Table;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.api.climate.IClimateData;
+import forestry.greenhouse.api.climate.IClimateModifier;
+import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.gui.GuiGreenhouse;
 
 public class WidgetClimatePanel extends Widget {
@@ -53,10 +57,10 @@ public class WidgetClimatePanel extends Widget {
 		Float value = Floats.tryParse(text);
 		return value != null && Floats.isFinite(value) && value >= 0.0F;
 	};
-	private final GuiGreenhouse gui;
+	public final GuiGreenhouse gui;
 	private final ClimateType type;
-	private final Table table;
 	private final GuiTextField textField;
+	private List<WidgetClimateModifier> modifiers;
 
 	public WidgetClimatePanel(WidgetManager manager, GuiGreenhouse gui, int xPos, int yPos, ClimateType type) {
 		super(manager, xPos, yPos);
@@ -74,7 +78,17 @@ public class WidgetClimatePanel extends Widget {
 			textField.setVisible(false);
 			textField.setEnabled(false);
 		}
-		table = new Table();
+		ImmutableList.Builder builder = new ImmutableList.Builder();
+		int i = 0;
+		for (IClimateModifier modifier : GreenhouseManager.climateManager.getModifiers()) {
+			if (modifier.canModify(type)) {
+				int xOffset = i % 5 * WidgetClimateModifier.WIDTH;
+				int yOffset = i / 5 * WidgetClimateModifier.HEIGHT;
+				builder.add(new WidgetClimateModifier(this, xPos + xOffset - 2, yPos + yOffset + (height - WidgetClimateModifier.HEIGHT * 3 - 7), modifier));
+				i++;
+			}
+		}
+		this.modifiers = builder.build();
 	}
 
 	@Override
@@ -91,27 +105,24 @@ public class WidgetClimatePanel extends Widget {
 		GlStateManager.color(1.0f, 1.0f, 1.0f);
 		textField.drawTextBox();
 
-		updateData();
-		table.draw(xPos + startX - 2, yPos + startY + 26, 14737632, false);
+		String modifiersTitle = Translator.translateToLocal("for.gui.modifier.title");
+		fontRenderer.drawStringWithShadow(TextFormatting.UNDERLINE + modifiersTitle, xPos + startX + width / 2 - fontRenderer.getStringWidth(modifiersTitle) / 2, yPos + startY + (height - WidgetClimateModifier.HEIGHT * 4), ColourProperties.INSTANCE.get("gui.greenhouse.modifiers.subheader"));
+
+		for (WidgetClimateModifier modifier : modifiers) {
+			modifier.draw(startX, startY);
+		}
 	}
 
-	private int updateTimer = 0;
-
-	private void updateData() {
-		if (updateTimer > 0) {
-			updateTimer--;
-			return;
-		}
-		updateTimer = 40;
-		table.clear();
-		IClimateData data = gui.container.getData();
-		for (Map.Entry<String, Float> entry : data.getData(type).entrySet()) {
-			float value = entry.getValue();
-			int percent = (int) (value * 100);
-			if (percent != 0) {
-				table.addValueEntry(entry.getKey(), percent + " %");
+	@Nullable
+	@Override
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		for (WidgetClimateModifier modifier : modifiers) {
+			ToolTip toolTip = modifier.getToolTip(mouseX, mouseY);
+			if (toolTip != null) {
+				return toolTip;
 			}
 		}
+		return null;
 	}
 
 	@Override
@@ -147,5 +158,9 @@ public class WidgetClimatePanel extends Widget {
 			return true;
 		}
 		return textField.textboxKeyTyped(typedChar, keyCode);
+	}
+
+	public ClimateType getType() {
+		return type;
 	}
 }

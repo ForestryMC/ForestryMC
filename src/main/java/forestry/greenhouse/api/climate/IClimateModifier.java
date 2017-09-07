@@ -5,11 +5,19 @@
  ******************************************************************************/
 package forestry.greenhouse.api.climate;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 
 /**
@@ -31,7 +39,11 @@ public interface IClimateModifier {
 	}
 
 	@SideOnly(Side.CLIENT)
-	default void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
+	default void addInformation(IClimateContainer container, NBTTagCompound nbtData, ClimateType type, List<String> lines) {
+	}
+
+	default boolean canModify(ClimateType type) {
+		return false;
 	}
 
 	/**
@@ -39,6 +51,27 @@ public interface IClimateModifier {
 	 */
 	default int getPriority() {
 		return 0;
+	}
+
+	String getName();
+
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	default TextureAtlasSprite getIcon() {
+		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	default ResourceLocation getTextureMap() {
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+	}
+
+	/**
+	 * @return the itemStack that represents this climate modifier. Used as an icon for the climate modifier if {@link #getIcon()} is null.
+	 */
+	@SideOnly(Side.CLIENT)
+	default ItemStack getIconItemStack() {
+		return ItemStack.EMPTY;
 	}
 
 }

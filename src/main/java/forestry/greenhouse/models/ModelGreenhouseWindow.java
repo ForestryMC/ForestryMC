@@ -67,10 +67,12 @@ public class ModelGreenhouseWindow extends ModelBlockCustomCached<BlockGreenhous
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-		TileGreenhouseWindow window = TileUtil.getTile(world, pos, TileGreenhouseWindow.class);
 		String glassName = "glass";
-		if (window != null) {
-			glassName = window.getGlass();
+		if (world != null && pos != null) {
+			TileGreenhouseWindow window = TileUtil.getTile(world, pos, TileGreenhouseWindow.class);
+			if (window != null) {
+				glassName = window.getGlass();
+			}
 		}
 		return new Key(glassName, state.getValue(State.PROPERTY) == State.ON, false, state.getValue(BlockGreenhouseWindow.FACING));
 	}

@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.util.ITooltipFlag;
@@ -29,6 +28,7 @@ import forestry.api.core.CamouflageManager;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflageItemHandler;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
@@ -72,12 +72,9 @@ public class WidgetCamouflageSlot extends Widget {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			TextureManager textureManager = minecraft.getTextureManager();
 			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			GlStateManager.enableRescaleNormal();
 			RenderHelper.enableGUIStandardItemLighting();
-			RenderItem renderItem = minecraft.getRenderItem();
-			renderItem.renderItemIntoGUI(camouflageBlock, startX + xPos, startY + yPos);
+			GuiUtil.drawItemStack(manager.gui, camouflageBlock, startX + xPos, startY + yPos);
 			RenderHelper.disableStandardItemLighting();
-			GlStateManager.disableRescaleNormal();
 		}
 	}
 

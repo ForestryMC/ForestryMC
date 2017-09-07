@@ -11,7 +11,9 @@
 package forestry.greenhouse.climate.modifiers;
 
 import java.util.Collection;
+import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,9 +25,10 @@ import forestry.api.climate.IClimateState;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 
@@ -113,18 +116,29 @@ public class ClimateSourceModifier implements IClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
+	public void addInformation(IClimateContainer container, NBTTagCompound nbtData, ClimateType type, List<String> lines) {
 		IClimateState rangeDown = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("rangeDown"), ClimateStateType.MUTABLE);
 		IClimateState rangeUp = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("rangeUp"), ClimateStateType.MUTABLE);
 		IClimateState change = ClimateStates.INSTANCE.create(nbtData.getCompoundTag("change"), ClimateStateType.MUTABLE);
+		if (type == ClimateType.HUMIDITY) {
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.range.up", StringUtil.floatAsPercent(rangeUp.getHumidity())));
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.range.down", StringUtil.floatAsPercent(rangeDown.getHumidity())));
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.change", StringUtil.floatAsPercent(change.getHumidity())));
+		} else {
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.range.up", StringUtil.floatAsPercent(rangeUp.getTemperature())));
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.range.down", StringUtil.floatAsPercent(rangeDown.getTemperature())));
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.sources.change", StringUtil.floatAsPercent(change.getTemperature())));
+		}
+	}
 
-		data.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getHumidity())
-			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getHumidity())
-			.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.sources.change"), change.getHumidity());
+	@Override
+	public boolean canModify(ClimateType type) {
+		return true;
+	}
 
-		data.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.range.up"), rangeUp.getTemperature())
-			.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.range.down"), rangeDown.getTemperature())
-			.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.sources.change"), change.getTemperature());
+	@Override
+	public String getName() {
+		return Translator.translateToLocal("for.gui.modifier.sources.title");
 	}
 
 	@Override
@@ -148,5 +162,11 @@ public class ClimateSourceModifier implements IClimateModifier {
 			humidity = Math.max(targetHumidity, boundaryDown.getHumidity());
 		}
 		return ClimateStates.immutableOf(temperature, humidity);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getIconItemStack() {
+		return PluginGreenhouse.getBlocks().window.getItem("glass");
 	}
 }

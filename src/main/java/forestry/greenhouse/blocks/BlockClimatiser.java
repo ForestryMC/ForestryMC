@@ -68,7 +68,10 @@ import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.models.ModelCamouflaged;
-import forestry.greenhouse.tiles.TileClimatiser;
+import forestry.greenhouse.tiles.TileDehumidifier;
+import forestry.greenhouse.tiles.TileFan;
+import forestry.greenhouse.tiles.TileHeater;
+import forestry.greenhouse.tiles.TileHumidifier;
 import forestry.greenhouse.tiles.TileHygroregulator;
 
 public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteRegister, IItemModelRegister, IColoredBlock, IBlockCamouflaged<BlockClimatiser>, ITileEntityProvider {
@@ -183,15 +186,15 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 		BlockClimatiserType type = BlockClimatiserType.VALUES[meta];
 		switch (type) {
 			case DEHUMIDIFIER:
-				return new TileClimatiser(TileClimatiser.DEHUMIDIFIER);
+				return new TileDehumidifier();
 			case HUMIDIFIER:
-				return new TileClimatiser(TileClimatiser.HUMIDIFIER);
+				return new TileHumidifier();
 			case HYGRO:
 				return new TileHygroregulator();
 			case FAN:
-				return new TileClimatiser(TileClimatiser.FAN);
+				return new TileFan();
 			case HEATER:
-				return new TileClimatiser(TileClimatiser.HEATER);
+				return new TileHeater();
 		}
 		return null;
 	}

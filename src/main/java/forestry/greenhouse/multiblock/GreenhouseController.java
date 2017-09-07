@@ -270,7 +270,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	protected boolean updateServer(int tickCount) {
 		if (provider.getState() == GreenhouseState.UNLOADED) {
-			if (assembleTickCount + 20 <= tickCount) {
+			if (assembleTickCount + 60 <= tickCount) {
 				provider.create();
 			}
 		} else {

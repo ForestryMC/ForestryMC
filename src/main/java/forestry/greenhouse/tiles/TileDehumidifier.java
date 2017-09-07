@@ -8,17 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.tables;
+package forestry.greenhouse.tiles;
 
-import net.minecraft.client.gui.FontRenderer;
+public class TileDehumidifier extends TileClimatiser {
 
-class TableEmptyLine extends TableEntry {
-	@Override
-	public void draw(FontRenderer fontRenderer, int x, int y, int lineWidth, int lineStart, int lineEnd, int rowTopY, int rowBottomY, int fontColor, boolean drawBackground) {
+	public TileDehumidifier() {
+		super(DEHUMIDIFIER);
 	}
-	
-	@Override
-	public int getLineWidth(FontRenderer fontRenderer) {
-		return 0;
-	}
+
 }

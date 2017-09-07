@@ -55,13 +55,14 @@ public class TextureManagerForestry implements ITextureManager {
 	public static void initDefaultSprites() {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
-				"misc/access.shared", "misc/energy", "misc/hint", "misc/humidity",  "misc/temperature",
+			"misc/access.shared", "misc/energy", "misc/hint",
 				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
 				"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
 				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
 				"errors/errored", "errors/unknown",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked", "slots/cocoon",
-				"mail/carrier.player", "mail/carrier.trader"};
+			"mail/carrier.player", "mail/carrier.trader",
+			"modifiers/rain"};
 		for (String identifier : defaultIconNames) {
 			ResourceLocation resourceLocation = getForestryGuiLocation(identifier);
 			INSTANCE.registerGuiSprite(resourceLocation);

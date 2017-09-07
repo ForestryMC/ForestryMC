@@ -8,19 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.tables;
+package forestry.greenhouse.tiles;
 
-import net.minecraft.client.gui.FontRenderer;
+public class TileHumidifier extends TileClimatiser {
 
-abstract class TableText extends TableEntry {
-	String text;
-	
-	public TableText(String text) {
-		this.text = text;
+	public TileHumidifier() {
+		super(HUMIDIFIER);
 	}
-	
-	@Override
-	public int getLineWidth(FontRenderer fontRenderer) {
-		return fontRenderer.getStringWidth(text);
-	}
+
 }

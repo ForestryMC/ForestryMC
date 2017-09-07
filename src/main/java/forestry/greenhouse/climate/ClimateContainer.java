@@ -13,6 +13,7 @@ package forestry.greenhouse.climate;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -29,14 +30,12 @@ import forestry.api.climate.IClimateState;
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.AbsentClimateState;
-import forestry.core.climate.ClimateData;
 import forestry.core.climate.ClimateStates;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
 import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 
@@ -241,12 +240,11 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IClimateData getData() {
-		IClimateData data = new ClimateData();
-		for(IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()){
-			modifier.addData(this, state, modifierData, data);
+	public void addModifierInformation(IClimateModifier modifier, ClimateType type, List<String> lines) {
+		if (!modifier.canModify(type)) {
+			return;
 		}
-		return data;
+		modifier.addInformation(this, modifierData, type, lines);
 	}
 
 	@Override

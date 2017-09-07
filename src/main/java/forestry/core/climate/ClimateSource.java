@@ -114,6 +114,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		World world = owner.getWorldObj();
 		if(!addedToManager && !world.isRemote) {
 			GreenhouseManager.climateManager.addSource(owner);
+			addedToManager = true;
 		}
 		
 	}
@@ -126,6 +127,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		World world = owner.getWorldObj();
 		if(addedToManager &&!world.isRemote) {
 			GreenhouseManager.climateManager.removeSource(owner);
+			addedToManager = false;
 		}
 		
 	}

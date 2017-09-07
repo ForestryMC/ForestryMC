@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.climate.modifiers;
 
+import java.util.List;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -20,9 +24,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 
 public class TimeModifier implements IClimateModifier {
@@ -60,8 +64,23 @@ public class TimeModifier implements IClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
-		data.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.time"), nbtData.getFloat("timeTemperatureChange"));
+	public void addInformation(IClimateContainer container, NBTTagCompound nbtData, ClimateType type, List<String> lines) {
+		lines.add(Translator.translateToLocalFormatted("for.gui.modifier.time", StringUtil.floatAsPercent(nbtData.getFloat("timeTemperatureChange"))));
 	}
 
+	@Override
+	public boolean canModify(ClimateType type) {
+		return type == ClimateType.TEMPERATURE;
+	}
+
+	@Override
+	public String getName() {
+		return Translator.translateToLocal("for.gui.modifier.time.title");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getIconItemStack() {
+		return new ItemStack(Items.CLOCK);
+	}
 }

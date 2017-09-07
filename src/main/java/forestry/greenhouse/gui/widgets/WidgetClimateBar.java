@@ -77,6 +77,7 @@ public class WidgetClimateBar extends Widget {
 				IClimateState climateState = button.climate.climateState;
 				((GuiGreenhouse) manager.gui).temperaturePanel.setValue(climateState.getTemperature());
 				((GuiGreenhouse) manager.gui).humidityPanel.setValue(climateState.getHumidity());
+				((GuiGreenhouse) manager.gui).sendNetworkUpdate();
 			}
 		}
 	}

@@ -65,7 +65,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 			float temp = temperaturePanel.parseValue();
 			float hum = humidityPanel.parseValue();
 			setClimate(container, temp, hum);
-			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, climateState));
+			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, container.getTargetedState()));
 		}
 	}
 

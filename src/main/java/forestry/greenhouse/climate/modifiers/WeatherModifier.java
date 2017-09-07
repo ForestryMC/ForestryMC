@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse.climate.modifiers;
 
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,9 +22,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateData;
 import forestry.greenhouse.api.climate.IClimateModifier;
 
 public class WeatherModifier implements IClimateModifier {
@@ -62,9 +67,34 @@ public class WeatherModifier implements IClimateModifier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addData(IClimateContainer container, IClimateState climateState, NBTTagCompound nbtData, IClimateData data) {
-		data.addData(ClimateType.HUMIDITY, Translator.translateToLocal("for.gui.modifier.rain"), nbtData.getFloat("rainHumidityChange"))
-			.addData(ClimateType.TEMPERATURE, Translator.translateToLocal("for.gui.modifier.rain"), nbtData.getFloat("rainTemperatureChange"));
+	public void addInformation(IClimateContainer container, NBTTagCompound nbtData, ClimateType type, List<String> lines) {
+		if (type == ClimateType.HUMIDITY) {
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.rain", StringUtil.floatAsPercent(nbtData.getFloat("rainHumidityChange"))));
+		} else {
+			lines.add(Translator.translateToLocalFormatted("for.gui.modifier.rain", StringUtil.floatAsPercent(nbtData.getFloat("rainTemperatureChange"))));
+		}
+	}
+
+	@Override
+	public boolean canModify(ClimateType type) {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return Translator.translateToLocal("for.gui.modifier.weather.title");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public TextureAtlasSprite getIcon() {
+		return TextureManagerForestry.getInstance().getDefault("modifiers/rain");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTextureMap() {
+		return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
 	}
 
 }

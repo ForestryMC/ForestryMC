@@ -5,11 +5,14 @@
  ******************************************************************************/
 package forestry.greenhouse.api.climate;
 
+import java.util.List;
+
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -42,6 +45,6 @@ public interface IClimateContainer extends INbtReadable, INbtWritable, IClimateS
 	void setTargetedState(IClimateState state);
 
 	@SideOnly(Side.CLIENT)
-	IClimateData getData();
+	void addModifierInformation(IClimateModifier modifier, ClimateType type, List<String> lines);
 
 }
