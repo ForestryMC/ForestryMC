@@ -85,9 +85,11 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// / APATITE
 		if (Config.generateApatiteOre) {
+			final int lowest = Math.round(world.getActualHeight() * 0.22f); // 56
+			final int range = Math.round(world.getActualHeight() * 0.72f); // 184
 			if (random.nextFloat() < 0.8f) {
 				int randPosX = x + random.nextInt(16);
-				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
+				int randPosY = random.nextInt(range) + lowest;
 				int randPosZ = y + random.nextInt(16);
 				apatiteGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
@@ -96,8 +98,10 @@ public class WorldGenerator implements IWorldGenerator {
 		// / COPPER
 		if (Config.generateCopperOre) {
 			for (int i = 0; i < 20; i++) {
+				final int lowest = Math.round(world.getActualHeight() / 8f); // 32
+				final int range = Math.round(world.getActualHeight() * 0.297f); // 76
 				int randPosX = x + random.nextInt(16);
-				int randPosY = random.nextInt(76) + 32;
+				int randPosY = random.nextInt(range) + lowest;
 				int randPosZ = y + random.nextInt(16);
 				copperGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
@@ -106,8 +110,10 @@ public class WorldGenerator implements IWorldGenerator {
 		// / TIN
 		if (Config.generateTinOre) {
 			for (int i = 0; i < 18; i++) {
+				final int lowest = Math.round(world.getActualHeight() / 16f); // 16
+				final int range = Math.round(world.getActualHeight() * 0.297f); // 76
 				int randPosX = x + random.nextInt(16);
-				int randPosY = random.nextInt(76) + 16;
+				int randPosY = random.nextInt(range) + lowest;
 				int randPosZ = y + random.nextInt(16);
 				tinGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
