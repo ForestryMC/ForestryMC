@@ -7,20 +7,8 @@ package forestry.api.climate;
 
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.ForestryAPI;
-
 public enum ClimateType {
 	TEMPERATURE, HUMIDITY;
-	
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getSprite() {
-		return ForestryAPI.textureManager.getDefault("misc/" + getName());
-	}
 	
 	public String getName(){
 		return name().toLowerCase(Locale.ENGLISH);

@@ -26,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,6 +40,7 @@ import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.ClimateUtil;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
@@ -85,7 +87,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 	public static boolean isValid(ItemStack stack, World world) {
 		BlockPos pos = getGreenhousePos(stack);
 		boolean isValid = true;
-		if (pos == null || !world.isBlockLoaded(pos)) {
+		if (pos == null || world == null || !world.isBlockLoaded(pos)) {
 			isValid = false;
 		} else {
 			IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, pos, IGreenhouseComponent.class);
@@ -165,7 +167,19 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 		super.addInformation(stack, world, tooltip, flag);
 		boolean previewModeActive = isPreviewModeActive(stack);
-		tooltip.add(Translator.translateToLocal(Translator.translateToLocal("for.greenhouse_screen.mode.name") + ": " + (previewModeActive ? "Active" : "Inactive")));
+		String previewMode = Translator.translateToLocal(previewModeActive ? "for.greenhouse_screen.mode.active" : "for.greenhouse_screen.mode.inactive");
+		tooltip.add(Translator.translateToLocal(Translator.translateToLocalFormatted("for.greenhouse_screen.mode", previewMode)));
+		boolean isValid = isValid(stack, world);
+		BlockPos pos = getGreenhousePos(stack);
+		String state = isValid ? Translator.translateToLocalFormatted("for.greenhouse_screen.state.linked", pos.getX(), pos.getY(), pos.getZ()) : Translator.translateToLocal("for.greenhouse_screen.state.fail");
+		tooltip.add(Translator.translateToLocalFormatted("for.greenhouse_screen.state", state));
+		if (!isValid) {
+			return;
+		}
+		IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, pos, IGreenhouseComponent.class);
+		IClimateState climateState = controller.getClimateContainer().getState();
+		tooltip.add(Translator.translateToLocalFormatted("for.greenhouse_screen.temperature", TextFormatting.GOLD + StringUtil.floatAsPercent(climateState.getTemperature())));
+		tooltip.add(Translator.translateToLocalFormatted("for.greenhouse_screen.humidity", TextFormatting.BLUE + StringUtil.floatAsPercent(climateState.getHumidity())));
 	}
 
 	@Override

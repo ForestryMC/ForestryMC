@@ -8,10 +8,19 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.climate;
+package forestry.greenhouse.climate;
 
 public enum ClimateSourceMode {
+	POSITIVE(1), NEGATIVE(0), NONE(2);
 
-	POSITIVE, NEGATIVE, NONE
+	private int opposite;
+
+	ClimateSourceMode(int opposite) {
+		this.opposite = opposite;
+	}
+
+	public ClimateSourceMode getOpposite() {
+		return values()[opposite];
+	}
 
 }

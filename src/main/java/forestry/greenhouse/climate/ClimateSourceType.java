@@ -8,11 +8,11 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.climate;
+package forestry.greenhouse.climate;
 
 import forestry.api.climate.ClimateType;
-import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.api.climate.IClimateState;
+import forestry.greenhouse.api.climate.IClimateSource;
 
 /**
  * The possible types of the {@link IClimateSource}. Which values the {@link IClimateSource} changes in a {@link IClimateState}.

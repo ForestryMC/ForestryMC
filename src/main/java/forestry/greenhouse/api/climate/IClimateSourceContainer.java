@@ -39,10 +39,12 @@ public interface IClimateSourceContainer {
 	 */
 	IClimateState getBoundaryDown();
 
+	double getSizeModifier();
+
 	/**
-	 * Calculates the range of all {@link IClimateSource}s together.
+	 * Calculates the up and down boundary and the size modifier.
 	 */
-	void recalculateBoundaries(double sizeModifier);
+	void recalculateBoundaries();
 
 	/**
 	 * @return True if the container allows the {@link IClimateSource}s to work.

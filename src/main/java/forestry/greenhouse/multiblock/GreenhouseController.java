@@ -26,7 +26,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -392,7 +391,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		limits = createLimits();
 		if (!climateContainer.getTargetedState().isPresent()) {
 			IClimateState defaultClimate = getDefaultClimate();
-			climateContainer.setState(defaultClimate.toState(ClimateStateType.MUTABLE));
+			climateContainer.setState(defaultClimate.copy());
 			climateContainer.setTargetedState(defaultClimate);
 		}
 
@@ -460,7 +459,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				biomes++;
 			}
 		}
-		defaultState = ClimateStates.immutableOf((float) (temperature / biomes), (float) (humidity / biomes));
+		defaultState = ClimateStates.of((float) (temperature / biomes), (float) (humidity / biomes));
 	}
 
 	/* RectangularMultiblockControllerBase */

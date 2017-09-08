@@ -116,6 +116,7 @@ public class TileGreenhouseWindow extends TileEntity implements IActivatable, IC
 		if (data.hasKey("Glass")) {
 			glass = data.getString("Glass");
 		}
+		source.readFromNBT(data);
 	}
 
 	@Override
@@ -126,19 +127,13 @@ public class TileGreenhouseWindow extends TileEntity implements IActivatable, IC
 		if (glass != null) {
 			data.setString("Glass", glass);
 		}
+		source.writeToNBT(data);
 		return super.writeToNBT(data);
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound data = super.getUpdateTag();
-		if (mode != null) {
-			data.setShort("mode", (short) mode.ordinal());
-		}
-		if (glass != null) {
-			data.setString("Glass", glass);
-		}
-		return data;
+		return writeToNBT(new NBTTagCompound());
 	}
 
 	@Override

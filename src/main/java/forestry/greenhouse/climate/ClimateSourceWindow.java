@@ -12,9 +12,6 @@ package forestry.greenhouse.climate;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.core.ForestryAPI;
-import forestry.core.climate.ClimateSource;
-import forestry.core.climate.ClimateSourceMode;
-import forestry.core.climate.ClimateSourceType;
 import forestry.core.climate.ClimateStates;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
@@ -46,16 +43,16 @@ public class ClimateSourceWindow extends ClimateSource<TileGreenhouseWindow> {
 	}
 
 	@Override
-	public boolean canWork(IClimateState state, IClimateState target) {
+	public boolean canWork(IClimateState currentState, ClimateSourceType oppositeType) {
 		return owner.getMode() == WindowMode.OPEN;
 	}
 
 	@Override
-	protected void removeResources(IClimateState state, IClimateState target) {
+	protected void removeResources(IClimateState currentState, ClimateSourceType oppositeType) {
 	}
 
 	@Override
-	protected IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target) {
+	protected IClimateState getChange(ClimateSourceType type, IClimateState target, IClimateState currentState) {
 		float temperature = 0.0F;
 		float humidity = 0.0F;
 		if (type.canChangeHumidity()) {
@@ -72,7 +69,7 @@ public class ClimateSourceWindow extends ClimateSource<TileGreenhouseWindow> {
 				temperature += change;
 			}
 		}
-		return ClimateStates.changeOf(temperature, humidity);
+		return ClimateStates.extendedOf(temperature, humidity);
 	}
 
 }

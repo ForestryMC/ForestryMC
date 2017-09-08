@@ -65,8 +65,8 @@ public class Config {
 	
 	//Greenhouse
 	public static int climateSourceRange = 36;
+	public static float climateSourceEnergyModifier = 1.5F;
 	public static int greenhouseSize = 4;
-	public static boolean showClimateTable = true;
 
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
@@ -258,8 +258,8 @@ public class Config {
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
 		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
+		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
 		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
-		showClimateTable = configCommon.getBooleanLocalized("tweaks.greenhouse", "table", showClimateTable);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);

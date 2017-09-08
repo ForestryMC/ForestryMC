@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 
 /**
  * A climate source is stored in a {@link IClimateSourceOwner}. It is used by the {@link IClimateSourceContainer}s to change the climate of a {@link IClimateContainer}.
@@ -16,7 +18,7 @@ import forestry.api.climate.IClimateState;
  * <p>
  * In forestry it is used in a part of a {@link IClimateModifier}.
  */
-public interface IClimateSource {
+public interface IClimateSource extends INbtWritable, INbtReadable {
 
 	/**
 	 * The owner of this source.
@@ -35,10 +37,10 @@ public interface IClimateSource {
 	boolean affectClimateType(ClimateType type);
 
 	/**
-	 * @param state  the {@link IClimateState} that the source has to work on.
-	 * @param target the by the {@link IClimateContainer} targeted {@link IClimateState}.
+	 * @param previousState  the {@link IClimateState} that the source has to work on.
+	 * @param targetState the by the {@link IClimateSourceContainer} targeted {@link IClimateState}.
 	 */
-	IClimateState work(IClimateState state, IClimateState target);
+	IClimateState work(IClimateState previousState, IClimateState targetState, IClimateState currentState, final double sizeModifier, final boolean canWork);
 
 	/**
 	 * @return true if source has changed the climate at the last work cicle.
@@ -54,5 +56,10 @@ public interface IClimateSource {
 	 * Called if the source is removed form a {@link IClimateContainer}.
 	 */
 	void onRemoved(IClimateContainer container);
+
+	/**
+	 * @return A copy of the current state of this source.
+	 */
+	IClimateState getState();
 
 }

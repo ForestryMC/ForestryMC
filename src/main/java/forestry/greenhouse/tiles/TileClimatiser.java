@@ -30,8 +30,6 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.circuits.ISocketable;
-import forestry.core.climate.ClimateSource;
-import forestry.core.climate.ClimateSourceType;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -43,7 +41,9 @@ import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.greenhouse.api.climate.IClimateSourceOwner;
 import forestry.greenhouse.blocks.BlockClimatiser;
 import forestry.greenhouse.camouflage.CamouflageHandlerType;
+import forestry.greenhouse.climate.ClimateSource;
 import forestry.greenhouse.climate.ClimateSourceClimatiser;
+import forestry.greenhouse.climate.ClimateSourceType;
 import forestry.greenhouse.gui.ContainerClimatiser;
 import forestry.greenhouse.gui.GuiClimatiser;
 import forestry.greenhouse.multiblock.GreenhouseController;
@@ -164,6 +164,8 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 				chipset.onLoad(this);
 			}
 		}
+
+		source.readFromNBT(data);
 	}
 
 	@Override
@@ -177,6 +179,8 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 		data.setBoolean("Active", active);
 
 		sockets.writeToNBT(data);
+
+		source.writeToNBT(data);
 		return data;
 	}
 

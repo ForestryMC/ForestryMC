@@ -15,54 +15,63 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateStates;
+import forestry.greenhouse.climate.modifiers.ClimateSourceModifier;
 
 public final class ClimateStates implements IClimateStates {
 
 	public static final ClimateStates INSTANCE = new ClimateStates();
+	public static final IClimateState ZERO = of(0.0F, 0.0F);
 
 	private ClimateStates() {
 	}
 
 	public static IClimateState of(float temperature, float humidity, ClimateStateType type) {
-		IClimateState state = INSTANCE.create(temperature, humidity, type);
-		if (!state.isPresent()) {
-			return INSTANCE.absent();
-		}
-		return state;
+		return INSTANCE.create(temperature, humidity, type);
 	}
 
 	public static IClimateState of(float temperature, float humidity) {
-		IClimateState state = INSTANCE.create(temperature, humidity, ClimateStateType.MUTABLE);
-		if (!state.isPresent()) {
-			return INSTANCE.absent();
-		}
-		return state;
+		return INSTANCE.create(temperature, humidity, ClimateStateType.DEFAULT);
 	}
 
-	public static IClimateState immutableOf(float temperature, float humidity) {
-		IClimateState state = INSTANCE.create(temperature, humidity, ClimateStateType.IMMUTABLE);
-		if (!state.isPresent()) {
-			return INSTANCE.absent();
-		}
-		return state;
+	public static IClimateState extendedOf(float temperature, float humidity) {
+		return INSTANCE.create(temperature, humidity, ClimateStateType.EXTENDED);
 	}
 
-	public static IClimateState changeOf(float temperature, float humidity) {
-		IClimateState state = INSTANCE.create(temperature, humidity, ClimateStateType.CHANGE);
-		if (!state.isPresent()) {
-			return INSTANCE.absent();
-		}
-		return state;
+	public static IClimateState extendedZero() {
+		return INSTANCE.create(ZERO, ClimateStateType.EXTENDED);
+	}
+
+	public static boolean isNearTarget(IClimateState state, IClimateState target) {
+		return target.getHumidity() - ClimateSourceModifier.CLIMATE_CHANGE < state.getHumidity()
+			&& target.getHumidity() + ClimateSourceModifier.CLIMATE_CHANGE > state.getHumidity()
+			&& target.getTemperature() - ClimateSourceModifier.CLIMATE_CHANGE < state.getTemperature()
+			&& target.getTemperature() + ClimateSourceModifier.CLIMATE_CHANGE > state.getTemperature();
+	}
+
+	public static boolean isZero(IClimateState state) {
+		return state.getHumidity() == ZERO.getHumidity() && state.getTemperature() == ZERO.getTemperature();
+	}
+
+	public static boolean isNearZero(IClimateState state) {
+		return isNearTarget(state, ZERO);
 	}
 
 	@Override
 	public IClimateState create(IClimateState climateState, ClimateStateType type) {
-		return new ClimateState(climateState, type);
+		IClimateState state = new ClimateState(climateState, type);
+		if (!state.isPresent()) {
+			return absent();
+		}
+		return state;
 	}
 
 	@Override
 	public IClimateState create(float temperature, float humidity, ClimateStateType type) {
-		return new ClimateState(temperature, humidity, type);
+		IClimateState state = new ClimateState(temperature, humidity, type);
+		if (!state.isPresent()) {
+			return absent();
+		}
+		return state;
 	}
 
 	@Override

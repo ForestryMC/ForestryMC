@@ -15,8 +15,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.IErrorLogic;
-import forestry.core.climate.ClimateSourceMode;
-import forestry.core.climate.ClimateSourceType;
 import forestry.core.climate.ClimateStates;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -59,7 +57,7 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 	}
 
 	@Override
-	public boolean canWork(IClimateState state, IClimateState target) {
+	public boolean canWork(IClimateState currentState, ClimateSourceType oppositeType) {
 		createRecipe();
 		FilteredTank liquidTank = owner.getLiquidTank();
 		IErrorLogic errorLogic = owner.getErrorLogic();
@@ -72,13 +70,13 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 	}
 
 	@Override
-	protected void removeResources(IClimateState state, IClimateState target) {
+	protected void removeResources(IClimateState currentState, ClimateSourceType oppositeType) {
 		FilteredTank liquidTank = owner.getLiquidTank();
 		liquidTank.drainInternal(currentRecipe.liquid.amount, true);
 	}
 
 	@Override
-	protected IClimateState getChange(ClimateSourceType type, IClimateState state, IClimateState target) {
+	protected IClimateState getChange(ClimateSourceType type, IClimateState target, IClimateState currentState) {
 		float temperature = 0.0F;
 		float humidity = 0.0F;
 		if (type.canChangeHumidity()) {
@@ -87,7 +85,7 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 		if (type.canChangeTemperature()) {
 			temperature += currentRecipe.tempChange * getChangeMultiplier(ClimateType.TEMPERATURE);
 		}
-		return ClimateStates.changeOf(temperature, humidity);
+		return ClimateStates.extendedOf(temperature, humidity);
 	}
 
 	private void createRecipe() {

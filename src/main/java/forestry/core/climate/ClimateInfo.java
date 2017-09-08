@@ -20,13 +20,13 @@ public class ClimateInfo implements IClimateInfo {
 	private final float humidity;
 
 	public ClimateInfo(float temperature, float humidity) {
-		this.temperature = ClimateStateType.IMMUTABLE.bounds.apply(temperature);
-		this.humidity = ClimateStateType.IMMUTABLE.bounds.apply(humidity);
+		this.temperature = ClimateStateType.DEFAULT.clamp(temperature);
+		this.humidity = ClimateStateType.DEFAULT.clamp(humidity);
 	}
 
 	public ClimateInfo(IClimateState climateState) {
-		this.temperature = climateState.toState(ClimateStateType.IMMUTABLE).getTemperature();
-		this.humidity = climateState.toState(ClimateStateType.IMMUTABLE).getHumidity();
+		this.temperature = climateState.copy(ClimateStateType.DEFAULT).getTemperature();
+		this.humidity = climateState.copy(ClimateStateType.DEFAULT).getHumidity();
 	}
 
 	@Override

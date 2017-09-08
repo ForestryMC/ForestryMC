@@ -72,7 +72,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 	public void setClimate(IClimateContainer container, float temp, float hum) {
 		temperaturePanel.setValue(temp);
 		humidityPanel.setValue(hum);
-		container.setTargetedState(ClimateStates.immutableOf(temp, hum));
+		container.setTargetedState(ClimateStates.of(temp, hum));
 	}
 
 	@Override

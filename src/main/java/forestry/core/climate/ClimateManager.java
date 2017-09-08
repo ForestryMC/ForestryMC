@@ -58,7 +58,7 @@ public class ClimateManager implements IClimateManager {
 
 	private IClimateState getBiomeState(Biome biome) {
 		if (!BIOME_STATES.containsKey(biome)) {
-			BIOME_STATES.put(biome, ClimateStates.immutableOf(biome.getTemperature(), biome.getRainfall()));
+			BIOME_STATES.put(biome, ClimateStates.of(biome.getTemperature(), biome.getRainfall()));
 		}
 		return BIOME_STATES.get(biome);
 	}

@@ -105,7 +105,7 @@ public class WidgetClimateBar extends Widget {
 		String spriteName;
 
 		EnumClimate(String spriteName, Biome biome) {
-			climateState = ClimateStates.immutableOf(biome.getTemperature(), biome.getRainfall());
+			climateState = ClimateStates.of(biome.getTemperature(), biome.getRainfall());
 			this.spriteName = spriteName;
 		}
 

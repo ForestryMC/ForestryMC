@@ -31,6 +31,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.IClimateHousing;
 import forestry.core.climate.AbsentClimateState;
 import forestry.core.climate.ClimateStates;
+import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketUpdateClimate;
@@ -49,6 +50,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	protected IClimateState targetedState;
 	protected IClimateState boundaryUp;
 	protected IClimateState boundaryDown;
+	protected double sizeModifier;
 	private NBTTagCompound modifierData;
 	
 	/**
@@ -62,12 +64,13 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.parent = parent;
 		this.sources = new HashSet<>();
 		this.delay = 20;
-		this.state = parent.getDefaultClimate().toState(ClimateStateType.MUTABLE);
+		this.state = parent.getDefaultClimate().copy();
 		this.modifierData = new NBTTagCompound();
 		this.boundaryUp = ClimateStates.INSTANCE.min();
 		this.boundaryDown = ClimateStates.INSTANCE.min();
 		this.targetedState = AbsentClimateState.INSTANCE;
 		this.canWork = canWork;
+		this.sizeModifier = 1.0D;
 	}
 	
 	@Override
@@ -78,21 +81,26 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	@Override
 	public void updateClimate(int ticks) {
 		if (ticks % getTickDelay() == 0) {
-			IClimateState oldState = state.toState(ClimateStateType.IMMUTABLE);
-			state = parent.getDefaultClimate().toState(ClimateStateType.CHANGE);
+			IClimateState oldState = state.copy(ClimateStateType.DEFAULT);
+			state = parent.getDefaultClimate().copy(ClimateStateType.EXTENDED);
 			for (IClimateModifier modifier : GreenhouseClimateManager.getInstance().getModifiers()) {
-				state = modifier.modifyTarget(this, state, oldState, modifierData).toState(ClimateStateType.CHANGE);
+				state = modifier.modifyTarget(this, state, oldState, modifierData).copy(ClimateStateType.EXTENDED);
 			}
-			state = state.toState(ClimateStateType.MUTABLE);
 			if (!state.equals(oldState)) {
 				BlockPos coordinates = parent.getCoordinates();
 				NetworkUtil.sendNetworkPacket(new PacketUpdateClimate(coordinates, this), coordinates, parent.getWorldObj());
 			}
 		}
 	}
-	
+
 	@Override
-	public void recalculateBoundaries(double sizeModifier){
+	public double getSizeModifier() {
+		return sizeModifier;
+	}
+
+	@Override
+	public void recalculateBoundaries() {
+		sizeModifier = Math.max(parent.getSize() / Config.climateSourceRange, 1.0D);
 		float temperatureBoundaryUp = 0.0F;
 		float humidityBoundaryUp = 0.0F;
 		float temperatureBoundaryDown = 0.0F;

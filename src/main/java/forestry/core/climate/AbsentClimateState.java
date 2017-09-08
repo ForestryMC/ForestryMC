@@ -31,17 +31,12 @@ public final class AbsentClimateState implements IClimateState {
 	}
 
 	@Override
-	public IClimateState toState(ClimateStateType type) {
+	public IClimateState copy(ClimateStateType type) {
 		return this;
 	}
 
 	@Override
-	public IClimateState setHumidity(float humidity) {
-		return this;
-	}
-
-	@Override
-	public IClimateState setTemperature(float temperature) {
+	public IClimateState copy() {
 		return this;
 	}
 
@@ -61,6 +56,11 @@ public final class AbsentClimateState implements IClimateState {
 	}
 
 	@Override
+	public IClimateState scale(double factor) {
+		return this;
+	}
+
+	@Override
 	public IClimateState remove(IClimateState state){
 		return this;
 	}
@@ -72,7 +72,7 @@ public final class AbsentClimateState implements IClimateState {
 
 	@Override
 	public ClimateStateType getType() {
-		return ClimateStateType.IMMUTABLE;
+		return ClimateStateType.DEFAULT;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public final class AbsentClimateState implements IClimateState {
 			return false;
 		}
 		IClimateState otherState = (IClimateState) obj;
-		return otherState.getTemperature() == Float.NaN && otherState.getHumidity() == Float.NaN;
+		return Float.isNaN(otherState.getTemperature()) && Float.isNaN(otherState.getHumidity());
 	}
 
 	@Override
