@@ -10,10 +10,9 @@ import java.util.List;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Get one with BeeManager.beeRoot.createBeekeepingLogic(IBeeHousing housing)
  * Save and load it to NBT using the INbtWritable methods.
  */
-public interface IBeekeepingLogic extends INbtWritable, INbtReadable, IStreamable {
+public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 
 	/* SERVER */
 
@@ -83,13 +82,11 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable, IStreamabl
 	 */
 	List<BlockPos> getFlowerPositions();
 
-	@Override
-	default void readData(PacketBufferForestry data) throws IOException {
+	default void readData(PacketBuffer data) throws IOException {
 
 	}
 
-	@Override
-	default void writeData(PacketBufferForestry data) {
+	default void writeData(PacketBuffer data) {
 
 	}
 }

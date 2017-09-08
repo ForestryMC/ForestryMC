@@ -38,8 +38,6 @@ import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import net.minecraft.client.Minecraft;
@@ -48,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -136,7 +135,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeData(PacketBufferForestry data) {
+	public void writeData(PacketBuffer data) {
 		data.writeBoolean(active);
 		if (active) {
 			data.writeItemStack(queenStack);
@@ -145,7 +144,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBuffer data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {

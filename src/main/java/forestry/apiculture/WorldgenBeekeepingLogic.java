@@ -18,12 +18,12 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.tiles.TileHive;
-import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,7 +58,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeData(PacketBufferForestry data) {
+	public void writeData(PacketBuffer data) {
 		data.writeBoolean(active);
 		if (active) {
 			hasFlowersCache.writeData(data);
@@ -66,7 +66,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBuffer data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {

@@ -24,14 +24,13 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.TickHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable {
+public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String NBT_KEY = "hasFlowerCache";
 	private static final String NBT_KEY_FLOWERS = "flowers";
 	private static final int FLOWER_CHECK_INTERVAL = 200;
@@ -157,8 +156,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 		return nbttagcompound;
 	}
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
+	public void writeData(PacketBuffer data) {
 		int size = flowerCoords.size();
 		data.writeVarInt(size);
 		if (size > 0) {
@@ -170,8 +168,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable 
 		}
 	}
 
-	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBuffer data) throws IOException {
 		flowerCoords.clear();
 
 		int size = data.readVarInt();
