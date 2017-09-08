@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import java.util.Collection;
+
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,4 +25,8 @@ public class GrowthRuleNone implements IFlowerGrowthRule {
 		return true;
 	}
 
+	@Override
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+		return true;
+	}
 }

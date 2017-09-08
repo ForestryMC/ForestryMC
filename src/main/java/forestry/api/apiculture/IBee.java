@@ -13,8 +13,10 @@ import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -85,7 +87,25 @@ public interface IBee extends IIndividualLiving {
 
 	List<IBee> spawnDrones(IBeeHousing housing);
 
+	/**
+	 * @deprecated since Forestry 5.5.4. Use {@link #plantFlowerRandom(IBeeHousing, List)}
+	 */
+	@Deprecated
 	void plantFlowerRandom(IBeeHousing housing);
+
+	/**
+	 * Plants a random flower from the given list near the housing
+	 * @param housing the location the bee is living
+	 * @param potentialFlowers the flowers to choose from
+	 * @return the position of the planted flower, or null of none were planted
+	 * @since Forestry 5.5.4
+	 */
+	@Nullable
+	default BlockPos plantFlowerRandom(IBeeHousing housing, List<IBlockState> potentialFlowers) {
+		//noinspection deprecation
+		plantFlowerRandom(housing);
+		return null;
+	}
 
 	@Nullable
 	IIndividual retrievePollen(IBeeHousing housing);

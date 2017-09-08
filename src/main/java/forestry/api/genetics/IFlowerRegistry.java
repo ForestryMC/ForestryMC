@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -59,8 +60,9 @@ public interface IFlowerRegistry {
 
 	/**
 	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
+	 * @since Forestry 5.5.4
 	 */
-	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos);
+	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<IBlockState> potentialFlowers);
 
 	/**
 	 * Gets an iterator over the area a bee can travel from its beeHousing.
@@ -96,4 +98,11 @@ public interface IFlowerRegistry {
 	 */
 	@Deprecated
 	boolean isAcceptedFlower(String flowerType, World world, BlockPos pos);
+
+	/**
+	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
+	 * @deprecated since Forestry 5.5.4. Use {@link #growFlower(String, World, IIndividual, BlockPos, Collection)}
+	 */
+	@Deprecated
+	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos);
 }

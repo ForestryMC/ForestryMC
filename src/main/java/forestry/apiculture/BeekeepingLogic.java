@@ -38,16 +38,16 @@ import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -136,7 +136,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeData(PacketBufferForestry data) {
+	public void writeData(PacketBuffer data) {
 		data.writeBoolean(active);
 		if (active) {
 			data.writeItemStack(queenStack);
@@ -145,7 +145,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBuffer data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
@@ -203,11 +203,13 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (this.queenStack != queenStack) {
 			if (!queenStack.isEmpty()) {
 				this.queen = BeeManager.beeRoot.getMember(queenStack);
+				if (this.queen != null) {
+					hasFlowersCache.onNewQueen(queen, housing);
+				}
 			} else {
 				this.queen = null;
 			}
 			this.queenStack = queenStack;
-			hasFlowersCache.clear();
 			queenCanWorkCache.clear();
 		}
 
@@ -251,9 +253,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void clearCachedValues() {
 		if (!housing.getWorldObj().isRemote) {
-			hasFlowersCache.clear();
 			queenCanWorkCache.clear();
 			canWork();
+			if (queen != null) {
+				hasFlowersCache.forceLookForFlowers(queen, housing);
+			}
 		}
 	}
 
@@ -273,14 +277,21 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			queenWorkCycleThrottle = 0;
 
 			doProduction(queen, housing, beeListener);
-			queen.plantFlowerRandom(housing);
+			World world = housing.getWorldObj();
+			List<IBlockState> flowers = hasFlowersCache.getFlowers(world);
+			if (flowers.size() < PluginApiculture.maxFlowersSpawnedPerHive) {
+				BlockPos blockPos = queen.plantFlowerRandom(housing, flowers);
+				if (blockPos != null) {
+					hasFlowersCache.addFlowerPos(blockPos);
+				}
+			}
 			pollenHandler.doPollination(queen, housing, beeListener);
 
 			// Age the queen
 			IBeeGenome mate = queen.getMate();
 			Preconditions.checkState(mate != null);
 			float lifespanModifier = beeModifier.getLifespanModifier(queen.getGenome(), mate, 1.0f);
-			queen.age(housing.getWorldObj(), lifespanModifier);
+			queen.age(world, lifespanModifier);
 
 			// Write the changed queen back into the item stack.
 			NBTTagCompound nbttagcompound = new NBTTagCompound();

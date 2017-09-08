@@ -151,6 +151,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	public static String beekeepingMode = "NORMAL";
 	public static final int ticksPerBeeWorkCycle = 550;
+	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
 
@@ -260,6 +261,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 		Log.debug("Beekeeping mode read from config: " + beekeepingMode);
 
 		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
+
+		maxFlowersSpawnedPerHive = config.getIntLocalized("beekeeping", "flowers.spawn", 20, 0, 1000);
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
 		parseBeeBlacklist(blacklist);
