@@ -12,13 +12,14 @@ package forestry.apiculture.flowers;
 
 import java.util.Collection;
 
-import forestry.api.genetics.IFlowerGrowthHelper;
-import forestry.api.genetics.IFlowerGrowthRule;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.IFlowerGrowthHelper;
+import forestry.api.genetics.IFlowerGrowthRule;
 
 public class GrowthRuleSnow implements IFlowerGrowthRule {
 
@@ -26,13 +27,13 @@ public class GrowthRuleSnow implements IFlowerGrowthRule {
 	@Deprecated
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
 		return isValidSpot(world, pos) &&
-				helper.plantRandomFlower(flowerType, world, pos);
+			helper.plantRandomFlower(flowerType, world, pos);
 	}
 
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&
-				helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
+			helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
 	}
 
 	private boolean isValidSpot(World world, BlockPos pos) {

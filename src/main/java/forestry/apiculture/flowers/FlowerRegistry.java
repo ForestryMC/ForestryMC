@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,9 +25,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
@@ -39,12 +47,6 @@ import forestry.api.genetics.IIndividual;
 import forestry.core.utils.BlockStateSet;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.WeightedCollection;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;

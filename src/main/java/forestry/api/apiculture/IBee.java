@@ -9,17 +9,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-import forestry.api.core.IErrorState;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IIndividualLiving;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IIndividualLiving;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -95,7 +97,8 @@ public interface IBee extends IIndividualLiving {
 
 	/**
 	 * Plants a random flower from the given list near the housing
-	 * @param housing the location the bee is living
+	 *
+	 * @param housing          the location the bee is living
 	 * @param potentialFlowers the flowers to choose from
 	 * @return the position of the planted flower, or null of none were planted
 	 * @since Forestry 5.5.4

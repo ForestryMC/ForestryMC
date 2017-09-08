@@ -17,21 +17,22 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.api.core.IBlockPosPredicate;
-import forestry.api.genetics.IFlowerProvider;
-import forestry.core.utils.TickHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
+import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IBlockPosPredicate;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.api.genetics.IFlowerProvider;
+import forestry.core.utils.TickHelper;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String NBT_KEY = "hasFlowerCache";
@@ -117,7 +118,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			IBeeGenome genome = queen.getGenome();
 			String flowerType = genome.getFlowerProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-					|| !this.flowerData.territory.equals(genome.getTerritory())) {
+				|| !this.flowerData.territory.equals(genome.getTerritory())) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();

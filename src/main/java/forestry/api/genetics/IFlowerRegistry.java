@@ -9,13 +9,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.IBlockPosPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IBlockPosPredicate;
 
 // See {@link forestry.api.apiculture.FlowerManager}.FlowerType___ for basic Forestry flower types.
 // Each IFlowerProvider has one flower type, and multiple IFlowerProviders may share one type.
@@ -101,6 +102,7 @@ public interface IFlowerRegistry {
 
 	/**
 	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
+	 *
 	 * @deprecated since Forestry 5.5.4. Use {@link #growFlower(String, World, IIndividual, BlockPos, Collection)}
 	 */
 	@Deprecated

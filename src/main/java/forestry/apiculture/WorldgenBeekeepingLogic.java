@@ -13,6 +13,16 @@ package forestry.apiculture;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
@@ -20,14 +30,6 @@ import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	private final TileHive housing;
