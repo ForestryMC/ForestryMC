@@ -116,10 +116,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public void clearCachedValues() {
-		if (!housing.getWorldObj().isRemote) {
-			hasFlowersCache.clear();
-			canWork();
-		}
+
 	}
 
 	/* CLIENT */

@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeMap;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
@@ -36,6 +38,7 @@ import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.BlockStateSet;
 import forestry.core.utils.VectUtil;
+import forestry.core.utils.WeightedCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -50,7 +53,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	private final HashMultimap<String, Flower> plantableFlowers;
 
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
-	private final Map<String, TreeMap<Double, Flower>> chances;
+	private final Map<String, WeightedCollection<Flower>> chances;
 
 	public FlowerRegistry() {
 		this.registeredRules = HashMultimap.create();
@@ -197,6 +200,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
+	@Deprecated
 	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
 		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
@@ -204,6 +208,23 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
 			if (rule.growFlower(this, flowerType, world, pos)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+		if (!this.growthRules.containsKey(flowerType)) {
+			return false;
+		}
+
+		List<IFlowerGrowthRule> growthRules = this.growthRules.get(flowerType);
+		Collections.shuffle(growthRules);
+		for (IFlowerGrowthRule rule : growthRules) {
+			if (rule.growFlower(this, flowerType, world, pos, potentialFlowers)) {
 				return true;
 			}
 		}
@@ -220,20 +241,18 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
+	@Nullable
 	public Flower getRandomPlantableFlower(String flowerType, Random rand) {
-		TreeMap<Double, Flower> chancesMap = getChancesMap(flowerType);
-		double maxKey = chancesMap.lastKey() + 1.0;
-		return chancesMap.get(chancesMap.lowerKey(rand.nextDouble() * maxKey));
+		WeightedCollection<Flower> chancesMap = getFlowerChances(flowerType);
+		return chancesMap.getRandom(rand);
 	}
 
-	private TreeMap<Double, Flower> getChancesMap(String flowerType) {
+	private WeightedCollection<Flower> getFlowerChances(String flowerType) {
 		if (!this.chances.containsKey(flowerType)) {
-			TreeMap<Double, Flower> flowerChances = new TreeMap<>();
-			double count = 0.0;
+			WeightedCollection<Flower> flowerChances = new WeightedCollection<>();
 			for (Flower flower : this.plantableFlowers.get(flowerType)) {
 				if (flower.isPlantable()) {
-					flowerChances.put(count, flower);
-					count += flower.getWeight();
+					flowerChances.put(flower.getWeight(), flower);
 				}
 			}
 			this.chances.put(flowerType, flowerChances);
@@ -253,7 +272,24 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	@Override
 	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
 		Flower flower = getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlockState(pos, flower.getBlockState());
+		return flower != null && world.setBlockState(pos, flower.getBlockState());
+	}
+
+	@Override
+	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+		WeightedCollection<Flower> chances = getFlowerChances(flowerType);
+		WeightedCollection<IBlockState> potentialChances = new WeightedCollection<>();
+
+		for (Map.Entry<Double, Flower> entry : chances.entrySet()) {
+			Flower flower = entry.getValue();
+			IBlockState blockState = flower.getBlockState();
+			if (potentialFlowers.contains(blockState)) {
+				potentialChances.put(entry.getKey(), blockState);
+			}
+		}
+
+		final IBlockState blockState = potentialChances.getRandom(world.rand);
+		return blockState != null && world.setBlockState(pos, blockState);
 	}
 
 	private static class AcceptedFlowerPredicate implements IBlockPosPredicate {

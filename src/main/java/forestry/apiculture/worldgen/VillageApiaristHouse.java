@@ -286,7 +286,9 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 						FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 						Flower flower = flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
-						setBlockState(world, flower.getBlockState(), j, i, k, box);
+						if (flower != null) {
+							setBlockState(world, flower.getBlockState(), j, i, k, box);
+						}
 					}
 				}
 			}

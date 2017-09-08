@@ -11,6 +11,7 @@
 package forestry.apiculture.flowers;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import forestry.api.genetics.IFlowerGrowthHelper;
@@ -30,6 +31,11 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
+		return growFlower(world, pos);
+	}
+
+	@Override
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
 		return growFlower(world, pos);
 	}
 

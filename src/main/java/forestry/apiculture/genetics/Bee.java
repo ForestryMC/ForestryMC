@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -735,7 +736,11 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public void plantFlowerRandom(IBeeHousing housing) {
+		plantFlowerRandom(housing, null);
+	}
 
+	@Override
+	public BlockPos plantFlowerRandom(IBeeHousing housing, @Nullable List<IBlockState> potentialFlowers) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
@@ -745,9 +750,8 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
-			return;
+			return null;
 		}
-
 		// Gather required info
 		IFlowerProvider provider = genome.getFlowerProvider();
 		Vec3i area = getArea(genome, beeModifier);
@@ -758,10 +762,18 @@ public class Bee extends IndividualLiving implements IBee {
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
 			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
 
-			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock)) {
-				break;
+			if (potentialFlowers != null) {
+				if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock, potentialFlowers)) {
+					return posBlock;
+				}
+			} else { // legacy
+				//noinspection deprecation
+				if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock)) {
+					return posBlock;
+				}
 			}
 		}
+		return null;
 	}
 
 	private static Vec3i getArea(IBeeGenome genome, IBeeModifier beeModifier) {
