@@ -12,5 +12,5 @@ public interface IClimateSourceCircuitable extends IClimateSource {
 	/**
 	 * Called by the {@link IClimateSourceOwner} if its {@link ICircuit} changes.
 	 */
-	void changeSourceConfig(ClimateType type, float changeChange, float rangeChange);
+	void changeSourceConfig(ClimateType type, float changeChange, float rangeChange, float energyChange);
 }

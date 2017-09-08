@@ -22,12 +22,14 @@ public class CircuitClimateSource extends Circuit {
 	private ClimateType type;
 	private float changeChange;
 	private float rangeChange;
+	private float energyChange;
 
-	public CircuitClimateSource(String uid, ClimateType type, float changeChange, float rangeChange) {
+	public CircuitClimateSource(String uid, ClimateType type, float changeChange, float rangeChange, float energyChange) {
 		super(uid);
 		this.type = type;
 		this.changeChange = changeChange;
 		this.rangeChange = rangeChange;
+		this.energyChange = energyChange;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class CircuitClimateSource extends Circuit {
 		if (!(source instanceof IClimateSourceCircuitable)) {
 			return;
 		}
-		((IClimateSourceCircuitable) source).changeSourceConfig(type, changeChange, rangeChange);
+		((IClimateSourceCircuitable) source).changeSourceConfig(type, changeChange, rangeChange, energyChange);
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class CircuitClimateSource extends Circuit {
 		if (!(source instanceof IClimateSourceCircuitable)) {
 			return;
 		}
-		((IClimateSourceCircuitable) source).changeSourceConfig(type, -changeChange, -rangeChange);
+		((IClimateSourceCircuitable) source).changeSourceConfig(type, -changeChange, -rangeChange, -energyChange);
 	}
 
 	@Override

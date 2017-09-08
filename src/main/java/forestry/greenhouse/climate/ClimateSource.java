@@ -230,7 +230,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 
 	@Override
 	public IClimateState getState() {
-		return state;
+		return state.copy();
 	}
 
 	protected void setState(IClimateState state) {

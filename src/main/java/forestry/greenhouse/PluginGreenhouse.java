@@ -154,10 +154,10 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		climateSourceManager.registerModifier(new AltitudeModifier());
 		climateSourceManager.registerModifier(new ClimateSourceModifier());
 
-		Circuits.climatiserTemperature1 = new CircuitClimateSource("climatiser.temperature.1", ClimateType.TEMPERATURE, 0.125F, 0.125F);
-		Circuits.climatiserTemperature2 = new CircuitClimateSource("climatiser.temperature.2", ClimateType.TEMPERATURE, 0.25F, 0.25F);
-		Circuits.climatiserHumidity1 = new CircuitClimateSource("climatiser.humidity.1", ClimateType.HUMIDITY, 0.125F, 0.125F);
-		Circuits.climatiserHumidity2 = new CircuitClimateSource("climatiser.humidity.2", ClimateType.HUMIDITY, 0.25F, 0.25F);
+		Circuits.climatiserTemperature1 = new CircuitClimateSource("climatiser.temperature.1", ClimateType.TEMPERATURE, 0.125F, 0.125F, 0.25F);
+		Circuits.climatiserTemperature2 = new CircuitClimateSource("climatiser.temperature.2", ClimateType.TEMPERATURE, 0.25F, 0.25F, 0.5F);
+		Circuits.climatiserHumidity1 = new CircuitClimateSource("climatiser.humidity.1", ClimateType.HUMIDITY, 0.125F, 0.125F, 0.25F);
+		Circuits.climatiserHumidity2 = new CircuitClimateSource("climatiser.humidity.2", ClimateType.HUMIDITY, 0.25F, 0.25F, 0.5F);
 		proxy.inti();
 	}
 
