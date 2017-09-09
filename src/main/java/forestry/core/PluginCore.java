@@ -30,14 +30,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;

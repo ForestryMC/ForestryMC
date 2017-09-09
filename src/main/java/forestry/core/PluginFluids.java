@@ -15,12 +15,15 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.ForestryAPI;
@@ -30,9 +33,11 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -125,5 +130,22 @@ public class PluginFluids extends BlankForestryPlugin {
 		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
 		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+	}
+
+	@Override
+	public void registerRecipes() {
+		for (EnumContainerType containerType : EnumContainerType.values()) {
+			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
+				continue;
+			}
+			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
+				"AAA",
+				"BEB",
+				"CCC",
+				'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
+				'B', Items.SUGAR,
+				'C', Items.WHEAT,
+				'E', Items.EGG);
+		}
 	}
 }
