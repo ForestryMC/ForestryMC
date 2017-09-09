@@ -1,0 +1,94 @@
+{
+  "pools": [
+    {
+      "name": "forestry_apiculture_items",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item",
+          "name": "forestry:candle",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 7,
+                "max": 12
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "forestry:bee_combs",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 20
+        },
+        {
+          "type": "item",
+          "name": "forestry:scoop",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "forestry:smoker",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "forestry_apiculture_bees",
+      "rolls": 3,
+      "entries": [
+        {
+          "type": "item",
+          "entryName": "bee_forest_princess",
+          "name": "forestry:bee_princess_ge",
+          "functions": [
+            {
+              "function": "set_species_nbt",
+              "speciesUid": "forestry.speciesForest"
+            }
+          ],
+          "weight": 6
+        },
+        {
+          "type": "item",
+          "entryName": "bee_common_drone",
+          "name": "forestry:bee_drone_ge",
+          "functions": [
+            {
+              "function": "set_species_nbt",
+              "speciesUid": "forestry.speciesCommon"
+            }
+          ],
+          "weight": 6
+        },
+        {
+          "type": "item",
+          "entryName": "bee_meadows_princess",
+          "name": "forestry:bee_princess_ge",
+          "functions": [
+            {
+              "function": "set_species_nbt",
+              "speciesUid": "forestry.speciesMeadows"
+            }
+          ],
+          "weight": 6
+        },
+        {
+          "type": "empty",
+          "weight": 3
+        }
+      ]
+    }
+  ]
+}

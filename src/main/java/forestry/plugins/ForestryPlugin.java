@@ -51,4 +51,9 @@ public @interface ForestryPlugin {
 	 */
 	String help() default "";
 
+	/**
+	 * @return The name of the loot table file, if any.
+	 */
+	String lootTable() default "";
+
 }

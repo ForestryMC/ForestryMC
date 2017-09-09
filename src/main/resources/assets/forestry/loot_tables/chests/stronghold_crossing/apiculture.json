@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "name": "forestry_apiculture_bees",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "entryName": "bee_steadfast_drone",
+          "name": "forestry:bee_drone_ge",
+          "functions": [
+            {
+              "function": "set_species_nbt",
+              "speciesUid": "forestry.speciesSteadfast"
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "weight": 9
+        }
+      ]
+    }
+  ]
+}

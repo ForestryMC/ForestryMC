@@ -134,7 +134,7 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description", lootTable = "apiculture")
 public class PluginApiculture extends BlankForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private static float secondPrincessChance = 0;

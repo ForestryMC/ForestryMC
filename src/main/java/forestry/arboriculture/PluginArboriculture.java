@@ -113,7 +113,7 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description", lootTable = "arboriculture")
 public class PluginArboriculture extends BlankForestryPlugin {
 
 	@SuppressWarnings("NullableProblems")

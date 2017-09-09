@@ -1,0 +1,19 @@
+{
+  "pools": [
+    {
+      "name": "forestry_storage_items",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "forestry:miner_bag",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "weight": 20
+        }
+      ]
+    }
+  ]
+}

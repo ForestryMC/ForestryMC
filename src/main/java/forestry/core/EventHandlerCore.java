@@ -12,6 +12,7 @@ package forestry.core;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -120,15 +121,19 @@ public class EventHandlerCore {
 			return;
 		}
 
-		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath());
-		URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
-		if (url != null) {
-			LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
-			if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
-				for (String poolName : PluginManager.getLootPoolNames()) {
-					LootPool pool = forestryChestAdditions.getPool(poolName);
-					if (pool != null) {
-						event.getTable().addPool(pool);
+		Set<String> lootPoolNames = PluginManager.getLootPoolNames();
+
+		for (String lootTableFile : PluginManager.getLootTableFiles()) {
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath() + "/" + lootTableFile);
+			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
+			if (url != null) {
+				LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
+				if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
+					for (String poolName : lootPoolNames) {
+						LootPool pool = forestryChestAdditions.getPool(poolName);
+						if (pool != null) {
+							event.getTable().addPool(pool);
+						}
 					}
 				}
 			}

@@ -75,7 +75,7 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.PluginStorage;
 
-@ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description", lootTable = "factory")
 public class PluginFactory extends BlankForestryPlugin {
 	@Nullable
 	private static BlockRegistryFactory blocks;

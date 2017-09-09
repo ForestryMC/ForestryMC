@@ -34,6 +34,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -324,6 +325,18 @@ public class PluginManager {
 			plugin.addLootPoolNames(lootPoolNames);
 		}
 		return lootPoolNames;
+	}
+
+	public static Set<String> getLootTableFiles() {
+		Set<String> lootTableNames = new HashSet<>();
+		for (IForestryPlugin plugin : loadedPlugins) {
+			ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
+			String lootTableFolder = info.lootTable();
+			if (!lootTableFolder.isEmpty()) {
+				lootTableNames.add(lootTableFolder);
+			}
+		}
+		return lootTableNames;
 	}
 
 	private static boolean isEnabled(Configuration config, IForestryPlugin plugin) {

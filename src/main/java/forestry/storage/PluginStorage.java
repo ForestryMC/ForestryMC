@@ -10,23 +10,39 @@
  ******************************************************************************/
 package forestry.storage;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
@@ -57,26 +73,8 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.items.ItemRegistryStorage;
 import forestry.storage.proxy.ProxyStorage;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-
-@ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description", lootTable = "storage")
 public class PluginStorage extends BlankForestryPlugin {
 
 	@SuppressWarnings("NullableProblems")
