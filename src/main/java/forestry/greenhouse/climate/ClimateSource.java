@@ -19,7 +19,6 @@ import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.ClimateStates;
-import forestry.core.utils.Log;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateSource;
 import forestry.greenhouse.api.climate.IClimateSourceOwner;
@@ -174,16 +173,12 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 				change = ClimateStates.extendedZero();
 			}
 		}
-		state.add(change.scale(1 / sizeModifier));
+		state = state.add(change.scale(1 / sizeModifier));
 		if (ClimateStates.isZero(state) || ClimateStates.isNearZero(state)) {
 			state = ClimateStates.extendedZero();
 		}
 		if (false) {
 			state = ClimateStates.extendedZero();
-		}
-		if (!state.isPresent()) {
-			state = ClimateStates.extendedZero();
-			Log.error("Failed to update a climate source. Please report this to the authors of the mod. Previous={}, Target={}, Current={}, Size={}", previousState, targetState, currentState, sizeModifier);
 		}
 		setState(state);
 		return change;
