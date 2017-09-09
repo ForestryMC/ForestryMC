@@ -26,8 +26,8 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 
 	protected static final int ENERGY_PER_OPERATION = 75;
 
-	public ClimateSourceClimatiser(ClimateSourceType type, float change, float range) {
-		super(change, range, type);
+	public ClimateSourceClimatiser(ClimateSourceType type, float change, float boundModifier) {
+		super(change, boundModifier, type);
 		if (type.canChangeTemperature()) {
 			setTemperatureMode(change > 0 ? ClimateSourceMode.POSITIVE : ClimateSourceMode.NEGATIVE);
 		} else {

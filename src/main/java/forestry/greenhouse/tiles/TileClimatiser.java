@@ -51,10 +51,10 @@ import forestry.greenhouse.network.packets.PacketCamouflageSelectionServer;
 
 public class TileClimatiser extends TileForestry implements IActivatable, IStreamableGui, IClimateSourceOwner, ICamouflagedTile, ICamouflageHandler, ISocketable {
 
-	public static final ClimatiserDefinition HEATER = new ClimatiserDefinition(0.075F, 5F, ClimateSourceType.TEMPERATURE);
-	public static final ClimatiserDefinition FAN = new ClimatiserDefinition(-0.075F, 5F, ClimateSourceType.TEMPERATURE);
-	public static final ClimatiserDefinition HUMIDIFIER = new ClimatiserDefinition(0.075F, 5F, ClimateSourceType.HUMIDITY);
-	public static final ClimatiserDefinition DEHUMIDIFIER = new ClimatiserDefinition(-0.075F, 5F, ClimateSourceType.HUMIDITY);
+	public static final ClimatiserDefinition HEATER = new ClimatiserDefinition(0.075F, 2.5F, ClimateSourceType.TEMPERATURE);
+	public static final ClimatiserDefinition FAN = new ClimatiserDefinition(-0.075F, 2.5F, ClimateSourceType.TEMPERATURE);
+	public static final ClimatiserDefinition HUMIDIFIER = new ClimatiserDefinition(0.075F, 2.5F, ClimateSourceType.HUMIDITY);
+	public static final ClimatiserDefinition DEHUMIDIFIER = new ClimatiserDefinition(-0.075F, 2.5F, ClimateSourceType.HUMIDITY);
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final ClimateSource source;
@@ -62,7 +62,7 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 	private boolean active;
 
 	public TileClimatiser(ClimatiserDefinition definition) {
-		this(definition.change, definition.range, definition.type);
+		this(definition.change, definition.boundModifier, definition.type);
 	}
 
 	protected TileClimatiser(float change, float range, ClimateSourceType type) {
@@ -276,12 +276,12 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 	}
 
 	public static class ClimatiserDefinition {
-		float change, range;
+		float change, boundModifier;
 		ClimateSourceType type;
 
-		public ClimatiserDefinition(float change, float range, ClimateSourceType type) {
+		public ClimatiserDefinition(float change, float boundModifier, ClimateSourceType type) {
 			this.change = change;
-			this.range = range;
+			this.boundModifier = boundModifier;
 			this.type = type;
 		}
 	}

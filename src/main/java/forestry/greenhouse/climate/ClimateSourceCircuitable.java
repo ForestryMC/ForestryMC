@@ -21,8 +21,8 @@ public abstract class ClimateSourceCircuitable<O extends IClimateSourceOwner> ex
 	protected float rangeMultiplierHumidity = 1.0f;
 	protected float energyChange = 1.0F;
 
-	public ClimateSourceCircuitable(float change, float range, ClimateSourceType sourceType) {
-		super(change, range, sourceType);
+	public ClimateSourceCircuitable(float change, float boundModifier, ClimateSourceType sourceType) {
+		super(change, boundModifier, sourceType);
 	}
 
 	@Override
@@ -48,14 +48,14 @@ public abstract class ClimateSourceCircuitable<O extends IClimateSourceOwner> ex
 	}
 
 	@Override
-	protected float getRange(ClimateType type) {
+	protected float getBoundModifier(ClimateType type) {
 		float rangeMultiplier;
 		if (type == ClimateType.TEMPERATURE) {
 			rangeMultiplier = rangeMultiplierTemperature;
 		} else {
 			rangeMultiplier = rangeMultiplierHumidity;
 		}
-		return super.getRange(type) * rangeMultiplier;
+		return super.getBoundModifier(type) * rangeMultiplier;
 	}
 
 	@Override

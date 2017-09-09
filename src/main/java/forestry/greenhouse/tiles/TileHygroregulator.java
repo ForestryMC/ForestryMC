@@ -47,7 +47,7 @@ public class TileHygroregulator extends TileClimatiser implements ILiquidTankTil
 	private final FilteredTank liquidTank;
 
 	public TileHygroregulator() {
-		super(new ClimateSourceHygroregulator(5F));
+		super(new ClimateSourceHygroregulator(2.5F));
 
 		setInternalInventory(new InventoryHygroregulator(this));
 

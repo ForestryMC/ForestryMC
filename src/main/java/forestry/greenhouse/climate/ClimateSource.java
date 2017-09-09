@@ -27,7 +27,7 @@ import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 
 public abstract class ClimateSource<O extends IClimateSourceOwner> implements IClimateSource {
 
-	protected final float range;
+	protected final float boundModifier;
 	protected final ClimateSourceType sourceType;
 	protected O owner;
 	private IClimateState state;
@@ -38,13 +38,13 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	protected boolean addedToManager;
 	protected boolean isActive;
 
-	public ClimateSource(float change, float range, ClimateSourceType sourceType) {
+	public ClimateSource(float change, float boundModifier, ClimateSourceType sourceType) {
 		this.change = change;
-		this.range = range;
+		this.boundModifier = boundModifier;
 		this.sourceType = sourceType;
 		this.temperatureMode = ClimateSourceMode.NONE;
 		this.humidityMode = ClimateSourceMode.NONE;
-		this.state = ClimateStates.INSTANCE.absent();
+		this.state = ClimateStates.extendedZero();
 	}
 	
 	public void setHumidityMode(ClimateSourceMode humidityMode) {
@@ -63,22 +63,22 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	public float getBoundaryModifier(ClimateType type, boolean boundaryUp) {
 		if(type == ClimateType.HUMIDITY){
 			if(humidityMode == ClimateSourceMode.POSITIVE && boundaryUp){
-				return getRange(ClimateType.HUMIDITY);
+				return getBoundModifier(ClimateType.HUMIDITY);
 			}else if(humidityMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
-				return getRange(ClimateType.HUMIDITY);
+				return getBoundModifier(ClimateType.HUMIDITY);
 			}
 		}else {
 			if(temperatureMode == ClimateSourceMode.POSITIVE && boundaryUp){
-				return getRange(ClimateType.TEMPERATURE);
+				return getBoundModifier(ClimateType.TEMPERATURE);
 			}else if(temperatureMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
-				return getRange(ClimateType.TEMPERATURE);
+				return getBoundModifier(ClimateType.TEMPERATURE);
 			}
 		}
 		return 0;
 	}
-	
-	protected float getRange(ClimateType type){
-		return range;
+
+	protected float getBoundModifier(ClimateType type) {
+		return boundModifier;
 	}
 	
 	protected float getChange(ClimateType type) {

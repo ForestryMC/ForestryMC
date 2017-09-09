@@ -25,8 +25,8 @@ public class ClimateSourceHygroregulator extends ClimateSourceCircuitable<TileHy
 
 	private HygroregulatorRecipe currentRecipe;
 
-	public ClimateSourceHygroregulator(float range) {
-		super(0.0F, range, ClimateSourceType.BOTH);
+	public ClimateSourceHygroregulator(float boundModifier) {
+		super(0.0F, boundModifier, ClimateSourceType.BOTH);
 	}
 
 	@Override
