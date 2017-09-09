@@ -13,6 +13,9 @@ package forestry.lepidopterology.genetics;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
+
+import net.minecraft.item.ItemStack;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -28,7 +31,6 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
-import net.minecraft.item.ItemStack;
 
 public enum MothDefinition implements IButterflyDefinition {
 	Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
@@ -44,7 +46,7 @@ public enum MothDefinition implements IButterflyDefinition {
 			AlleleHelper.getInstance().set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
 		}
 	},
-	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0) {
+	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0.0f) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.getInstance().set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);

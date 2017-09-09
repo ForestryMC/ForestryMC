@@ -16,7 +16,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.BiomeDictionary;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -28,16 +42,6 @@ import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlleleButterflySpecies extends AlleleSpecies
 		implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
@@ -164,7 +168,7 @@ public class AlleleButterflySpecies extends AlleleSpecies
 	/* OTHER */
 	@Override
 	public boolean isSecret() {
-		return rarity < 0.8f;
+		return rarity < 0.25f;
 	}
 
 	@Override
