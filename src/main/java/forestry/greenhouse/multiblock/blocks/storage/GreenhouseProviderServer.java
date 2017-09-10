@@ -50,8 +50,8 @@ import forestry.greenhouse.network.packets.PacketGreenhouseData;
 
 public class GreenhouseProviderServer extends GreenhouseProvider {
 	private static final List<IGreenhouseBlockHandler> HANDLERS = new ArrayList<>();
-	private static final int TIME_BETWEEN_UPDATES = 25;
-	private static final int UPDATE_DELAY = 50;
+	private static final int TIME_BETWEEN_UPDATES = 75;
+	private static final int UPDATE_DELAY = 150;
 
 	private final Set<Long> unloadedChunks;
 
@@ -231,6 +231,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 				IErrorState errorState = handler.checkNeighborBlocks(storage, blockToCheck, newBlocksToCheck);
 				if (errorState != null) {
 					errorLogic.setCondition(true, errorState);
+					break;
 				}
 				blocksToCheck.addAll(newBlocksToCheck);
 				if (blockToCheck instanceof IBlankBlock) {
@@ -239,6 +240,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 					if (positionHeight == -1) {
 						errorLogic.setCondition(true, EnumErrorCode.NOT_CLOSED);
 						//throw new GreenhouseException(Translator.translateToLocalFormatted("for.multiblock.greenhouse.error.roof.notclosed", position.getX(), position.getY(), position.getZ())).setPos(position);
+						break;
 					}
 					if (positionHeight > greenhouseHeight) {
 						greenhouseHeight = positionHeight;

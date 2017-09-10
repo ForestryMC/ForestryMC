@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.ForestryEvent;
 import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
@@ -103,6 +104,8 @@ public class Forestry {
 
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		Config.load(event.getSide());
+
+		MinecraftForge.EVENT_BUS.post(new ForestryEvent.PreInit(this, event));
 
 		PluginManager.runSetup(event);
 
