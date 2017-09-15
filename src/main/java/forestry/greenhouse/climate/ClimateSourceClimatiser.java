@@ -83,8 +83,8 @@ public class ClimateSourceClimatiser<O extends TileClimatiser> extends ClimateSo
 	}
 
 	protected float getEnergyModifier(IClimateState currentState, ClimateSourceType oppositeType) {
-		float change = oppositeType.canChangeTemperature() ? currentState.getTemperature() : oppositeType.canChangeHumidity() ? currentState.getHumidity() : 0.0F;
-		return 1.0F + change * Config.climateSourceEnergyModifier * energyChange;
+		float change = oppositeType == null ? 0.0F : oppositeType.canChangeTemperature() ? currentState.getTemperature() : oppositeType.canChangeHumidity() ? currentState.getHumidity() : 0.0F;
+		return (1.0F + change) * Config.climateSourceEnergyModifier * energyChange;
 	}
 
 	@Override
