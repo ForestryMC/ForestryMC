@@ -43,10 +43,12 @@ public class ClimateWorldManager{
 		IClimateState cacheState = stateCache.getIfPresent(pos);
 		if(cacheState == null){
 			IGreenhouseClimateManager climateSourceManager = GreenhouseManager.climateManager;
-			IClimateContainer container = climateSourceManager.getContainer(world, pos);
+			if(climateSourceManager != null) {
+				IClimateContainer container = climateSourceManager.getContainer(world, pos);
 
-			if (container != null) {
-				cacheState = container.getState();
+				if (container != null) {
+					cacheState = container.getState();
+				}
 			}
 			if(cacheState == null){
 				cacheState = parent.getBiomeState(world, pos);
