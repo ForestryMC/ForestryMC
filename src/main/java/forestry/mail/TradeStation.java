@@ -523,6 +523,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 					if (!pol.isItemEqual(req)) {
 						continue;
 					}
+					if (!ItemStack.areItemStackTagsEqual(req, pol)) {
+						continue;
+					}
 
 					if (req.stackSize >= pol.stackSize) {
 						req.stackSize -= pol.stackSize;
