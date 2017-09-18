@@ -157,13 +157,15 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 			} else if (ClimateStates.isNearTarget(currentState, targetState)) {
 				return change;
 			}
-			//If the state is not already zero, remove one change state from the state.
-			change = getChange(oppositeType, defaultState, currentState);
-			change = ClimateStates.INSTANCE.create(-change.getTemperature(), -change.getHumidity(), ClimateStateType.EXTENDED);
+			if(oppositeType != null) {
+				//If the state is not already zero, remove one change state from the state.
+				change = getChange(oppositeType, defaultState, currentState);
+				change = ClimateStates.INSTANCE.create(-change.getTemperature(), -change.getHumidity(), ClimateStateType.EXTENDED);
+			}
 		} else if (validType == null && oppositeType != null) {
 			//Remove the resources if the owner has enough resources and the state is not the default state.
 			removeResources(state, oppositeType);
-		} else {
+		} else if(validType != null){
 			change = getChange(validType, targetState, previousState);
 			IClimateState changedState = state.add(change.scale(1 / sizeModifier));
 			boolean couldWork = canWork(changedState, oppositeType);

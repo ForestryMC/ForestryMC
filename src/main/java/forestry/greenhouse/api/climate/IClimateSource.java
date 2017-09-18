@@ -43,7 +43,7 @@ public interface IClimateSource extends INbtWritable, INbtReadable {
 	IClimateState work(IClimateState previousState, IClimateState targetState, IClimateState currentState, final double sizeModifier, final boolean canWork);
 
 	/**
-	 * @return true if source has changed the climate at the last work cicle.
+	 * @return true if source has changed the climate at the last work circle.
 	 */
 	boolean isActive();
 
