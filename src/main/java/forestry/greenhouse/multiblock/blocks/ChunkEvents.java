@@ -34,7 +34,7 @@ public class ChunkEvents {
 			return;
 		}
 
-		if (GreenhouseBlockManager.getThread() == null || !GreenhouseBlockManager.getThread().isAlive()) {
+		if (GreenhouseBlockManager.getThread() == null) {
 			Thread climateThread = new Thread(new ChunkThread(false), "Forestry Greenhouse");
 			GreenhouseBlockManager.setThread(climateThread, false);
 			climateThread.start();
@@ -47,7 +47,7 @@ public class ChunkEvents {
 			return;
 		}
 
-		if (GreenhouseBlockManager.getClientThread() == null || !GreenhouseBlockManager.getClientThread().isAlive()) {
+		if (GreenhouseBlockManager.getClientThread() == null) {
 			Thread climateThread = new Thread(new ChunkThread(true), "Forestry Greenhouse Client");
 			GreenhouseBlockManager.setThread(climateThread, true);
 			climateThread.start();
