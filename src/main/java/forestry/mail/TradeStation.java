@@ -176,7 +176,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			return EnumStationState.INSUFFICIENT_PAPER;
 		}
 
-		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
+		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments(), false, false, true);
 
 		// Not a single match.
 		if (ordersToFillCount <= 0) {
@@ -521,6 +521,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 						continue;
 					}
 					if (!pol.isItemEqual(req)) {
+						continue;
+					}
+					if (!ItemStack.areItemStackTagsEqual(req, pol)) {
 						continue;
 					}
 
