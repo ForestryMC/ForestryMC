@@ -103,7 +103,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 				}
 
 				RenderManager rendermanager = minecraft.getRenderManager();
-				rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+				rendermanager.renderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 			}
 			GlStateManager.popMatrix();
 
