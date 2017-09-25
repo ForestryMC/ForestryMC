@@ -19,6 +19,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry.ItemStackHolder;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.collect.Iterables;
@@ -47,6 +50,7 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.farming.logic.FarmableSapling;
+import forestry.farming.logic.FarmableVanillaMushroom;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -56,6 +60,15 @@ public class PluginNatura extends BlankForestryPlugin {
 
 	public static final String modId = "natura";
 
+	@ObjectHolder("natura:nether_green_large_glowshroom")
+	private static final Block greenLargeGlowshroomBlock = null;
+	
+	@ObjectHolder("natura:nether_blue_large_glowshroom")
+	private static final Block blueLargeGlowshroomBlock = null;
+	
+	@ObjectHolder("natura:nether_purple_large_glowshroom")
+	private static final Block purpleLargeGlowshroomBlock = null;
+	
 	private static ArrayList<ItemStack> fruits = new ArrayList<>();
 	private static ArrayList<ItemStack> soups = new ArrayList<>();
 	private static ArrayList<ItemStack> berries = new ArrayList<>();
@@ -105,6 +118,34 @@ public class PluginNatura extends BlankForestryPlugin {
 						new ItemStack[] {}
 				));
 				return;
+			}
+			
+			
+			
+			if (itemName.matches("^.*nether_glowshroom\\d?$")) {
+								
+				complexConsumeSubItems(item, "shrooms", subItem -> {
+					
+					shrooms.add(subItem);
+					
+					// find large shroom block that matches subItem
+					final Block largeShroomBlock = 
+							subItem.getMetadata() == blueLargeGlowshroomBlock.damageDropped(blueLargeGlowshroomBlock.getDefaultState()) 
+										?	blueLargeGlowshroomBlock :subItem.getMetadata() == greenLargeGlowshroomBlock.damageDropped(greenLargeGlowshroomBlock.getDefaultState()) 
+										? greenLargeGlowshroomBlock : purpleLargeGlowshroomBlock;
+								
+					// block representing planted glowshroom
+					final Block smallShroomBlock = Block.getBlockFromItem(subItem.getItem());
+					
+					FarmRegistry.getInstance().registerFarmables("farmShroom", new FarmableVanillaMushroom(
+						subItem,
+						smallShroomBlock.getStateFromMeta(subItem.getMetadata()), 
+						largeShroomBlock
+					));
+					
+				});
+				
+				return;				
 			}
 
 			if(itemName.matches("^edibles|.*fruit_item|soups$")) {
@@ -156,6 +197,8 @@ public class PluginNatura extends BlankForestryPlugin {
 				});
 			}
 		});
+		
+		
 	}
 
 	private void consumeSubItems(Item item, String groupName, Collection<ItemStack> consumer) {
