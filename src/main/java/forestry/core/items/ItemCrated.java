@@ -99,7 +99,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}
-		int color = colors.getColorFromItemstack(contained, renderPass);
+		int color = colors.colorMultiplier(contained, renderPass);
 		if (color != -1) {
 			return color;
 		}

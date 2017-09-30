@@ -220,7 +220,7 @@ public class ModelManager implements IModelManager {
 		}
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			Item item = stack.getItem();
 			if (item instanceof IColoredItem) {
 				return ((IColoredItem) item).getColorFromItemstack(stack, tintIndex);

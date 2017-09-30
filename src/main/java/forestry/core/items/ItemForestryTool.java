@@ -60,7 +60,7 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack itemstack, IBlockState state) {
+	public float getDestroySpeed(ItemStack itemstack, IBlockState state) {
 		for (String type : getToolClasses(itemstack)) {
 			if (state.getBlock().isToolEffective(type, state)) {
 				return efficiencyOnProperMaterial;
@@ -68,9 +68,9 @@ public class ItemForestryTool extends ItemForestry {
 		}
 		if (this == PluginCore.getItems().bronzePickaxe) {
 			Material material = state.getMaterial();
-			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getStrVsBlock(itemstack, state) : this.efficiencyOnProperMaterial;
+			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
-		return super.getStrVsBlock(itemstack, state);
+		return super.getDestroySpeed(itemstack, state);
 	}
 
 	@Override

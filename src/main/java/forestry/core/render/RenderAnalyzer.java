@@ -77,7 +77,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		}
 		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
 
-		rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+		rendermanager.renderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();
 
 	}
