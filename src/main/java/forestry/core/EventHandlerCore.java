@@ -117,7 +117,8 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void lootLoad(LootTableLoadEvent event) {
-		if (!event.getName().getResourceDomain().equals("minecraft")) {
+		if (!event.getName().getResourceDomain().equals("minecraft")
+			&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
 			return;
 		}
 
