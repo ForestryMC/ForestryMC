@@ -14,7 +14,7 @@ import org.apache.commons.lang3.text.WordUtils;
  */
 public abstract class AlleleCategorized extends Allele {
 	protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
-		super(getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant);
+		super(modId, getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant);
 	}
 
 	private static String getUid(String modId, String category, String valueName) {

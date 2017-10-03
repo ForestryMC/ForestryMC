@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -51,7 +52,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafSpriteProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
-	private final String modID;
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 	private final ILeafProvider leafProvider;
 	private IGrowthProvider growthProvider = new ClimateGrowthProvider();
@@ -66,36 +66,22 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			IClassification branch,
 			String binomial,
 			String modID,
-			ILeafSpriteProvider leafSpriteProvider,
-			IGermlingModelProvider germlingModelProvider,
-			IWoodProvider woodProvider,
-			ITreeGenerator generator) {
-		this(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, new LeafProvider());
-	}
-	
-	public AlleleTreeSpecies(
-			String uid,
-			String unlocalizedName,
-			String authority,
-			String unlocalizedDescription,
-			boolean isDominant,
-			IClassification branch,
-			String binomial,
-			String modID,
 			ILeafSpriteProvider leafIconProvider,
 			IGermlingModelProvider germlingModelProvider,
 			IWoodProvider woodProvider,
 			ITreeGenerator generator,
-			ILeafProvider leafProvider) {
-		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
+			@Nullable ILeafProvider leafProvider) {
+		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.woodProvider = woodProvider;
 		this.leafSpriteProvider = leafIconProvider;
-		this.leafProvider = leafProvider;
-
-		this.modID = modID;
+		if (leafProvider == null) {
+			this.leafProvider = new LeafProvider();
+		} else {
+			this.leafProvider = leafProvider;
+		}
 	}
 
 	@Override
@@ -196,11 +182,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public ILeafProvider getLeafProvider() {
 		return leafProvider;
-	}
-	
-	@Override
-	public String getModID() {
-		return modID;
 	}
 
 	@Override

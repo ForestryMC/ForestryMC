@@ -26,15 +26,15 @@ import forestry.arboriculture.models.SpriteProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
+	@Deprecated
 	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, IWoodProvider woodProvider, ITreeGenerator generator) {
-		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator);
+		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, null);
 	}
 	
 	@Override
 	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, IWoodProvider woodProvider, ITreeGenerator generator, ILeafProvider leafProvider) {
 		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, leafSpriteProvider, germlingModelProvider, woodProvider, generator, leafProvider);
 	}
-
 
 	@Override
 	public ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {

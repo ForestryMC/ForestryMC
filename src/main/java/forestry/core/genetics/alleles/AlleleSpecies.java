@@ -51,14 +51,15 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	@Nullable
 	private Integer complexityOverride = null;
 
-	protected AlleleSpecies(String uid,
+	protected AlleleSpecies(String modId,
+							String uid,
 							String unlocalizedName,
 							String authority,
 							String unlocalizedDescription,
 							boolean isDominant,
 							IClassification branch,
 							String binomial) {
-		super(uid, unlocalizedName, isDominant);
+		super(modId, uid, unlocalizedName, isDominant);
 
 		this.branch = branch;
 		this.binomial = binomial;

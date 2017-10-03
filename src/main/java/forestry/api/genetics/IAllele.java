@@ -22,6 +22,14 @@ public interface IAllele {
 	String getUID();
 
 	/**
+	 * @return modId of the mod that created this allele
+	 * @since Forestry 5.6.0
+	 */
+	default String getModID() {
+		return "forestry";
+	}
+
+	/**
 	 * @return true if the allele is dominant, false otherwise.
 	 */
 	boolean isDominant();
