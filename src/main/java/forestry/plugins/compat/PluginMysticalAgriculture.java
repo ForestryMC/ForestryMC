@@ -125,13 +125,23 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 				"limestone",
 				"basalt",
 				"apatite",
+				"steeleaf",
+				"ironwood",
+				"knightmetal",
+				"fiery_ingot",
 				"meteoric_iron",
 				"desh",
+				"black_quartz",
 				"vinteum",
 				"chimerite",
 				"blue_topaz",
 				"moonstone",
 				"sunstone",
+				"aquamarine",
+				"starmetal",
+				"rock_crystal",
+				"ender_biotite",
+				"slate",
 				"ender_amethyst",
 				"draconium",
 				"yellorium",
@@ -146,6 +156,17 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 			for (String cropName : crops) {
 				ItemStack seeds = getItemStack(cropName + "_seeds");
 				Block block = getBlock(cropName + "_crop");
+				if (seeds != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
+				}
+				if (seeds != null && block != null) {
+					farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7));
+					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
+				}
+			}
+			for(int i = 1;i <= 5;i++){
+				ItemStack seeds = getItemStack("tier" + i + "_inferium_seeds");
+				Block block = getBlock("tier" + i + "_inferium_crop");
 				if (seeds != null) {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
