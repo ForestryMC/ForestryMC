@@ -51,8 +51,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private IJubilanceProvider jubilanceProvider;
 	private boolean nocturnal = false;
 
-	public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
-		super(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial);
+	public AlleleBeeSpecies(String modId, String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
+		super(modId, uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial);
 
 		beeModelProvider = DefaultBeeModelProvider.instance;
 		beeSpriteColourProvider = new DefaultBeeSpriteColourProvider(primaryColor, secondaryColor);

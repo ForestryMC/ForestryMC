@@ -14,6 +14,7 @@ public interface IBeeFactory {
 	 * Automatically registered with AlleleManager.alleleRegistry.registerAllele()
 	 * See IAlleleBeeSpeciesBuilder and IAlleleSpeciesBuilder for adding additional properties to the returned species.
 	 *
+	 * @param modId                  The modId of the mod that is creating the species
 	 * @param uid                    Unique Identifier for this species
 	 * @param dominant               Whether this species is genetically dominant (false means it is recessive)
 	 * @param authority              Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
@@ -24,8 +25,9 @@ public interface IBeeFactory {
 	 * @param primaryColor           The outline color of this species
 	 * @param secondaryColor         The body color of this species
 	 * @return a new bee species allele.
+	 * @since Forestry 5.6.0.
 	 */
-	IAlleleBeeSpeciesBuilder createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor);
+	IAlleleBeeSpeciesBuilder createSpecies(String modId, String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor);
 
 	/**
 	 * Creates a new bee branch.
@@ -36,4 +38,10 @@ public interface IBeeFactory {
 	 * @return a new bee branch
 	 */
 	IClassification createBranch(String uid, String scientific);
+
+	/**
+	 * @deprecated since Forestry 5.6.0. use {@link #createSpecies(String, String, boolean, String, String, String, IClassification, String, int, int)}
+	 */
+	@Deprecated
+	IAlleleBeeSpeciesBuilder createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor);
 }

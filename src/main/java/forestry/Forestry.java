@@ -59,8 +59,8 @@ import forestry.plugins.compat.PluginNatura;
 		name = Constants.MOD_NAME,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.12, 1.12.2]",
-		dependencies = "required-after:forge@[14.21.1.2395,);"
+		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
+		dependencies = "required-after:forge@[14.23.0.2500,);"
 				+ "after:jei@[4.7.8.91,);"
 				+ "after:" + PluginIC2.modId + ";"
 				+ "after:" + PluginNatura.modId + ";"

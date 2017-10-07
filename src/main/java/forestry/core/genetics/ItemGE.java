@@ -82,4 +82,11 @@ public abstract class ItemGE extends ItemForestry {
 			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 		}
 	}
+
+	@Nullable
+	@Override
+	public String getCreatorModId(ItemStack itemStack) {
+		IAlleleSpecies species = getSpecies(itemStack);
+		return species.getModID();
+	}
 }

@@ -46,7 +46,6 @@ import forestry.core.genetics.alleles.AlleleSpecies;
 public class AlleleButterflySpecies extends AlleleSpecies
 		implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
-	private final String modID;
 	private final Color serumColour;
 	private float rarity = 0.1f;
 	private float flightDistance = 5.0f;
@@ -60,10 +59,9 @@ public class AlleleButterflySpecies extends AlleleSpecies
 	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
 			String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
 			Color serumColour) {
-		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
+		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
 
-		this.modID = modID;
 		this.texture = texturePath;
 	}
 
@@ -210,10 +208,5 @@ public class AlleleButterflySpecies extends AlleleSpecies
 		String spriteName = getItemTexture();
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
 		textureMap.registerSprite(new ResourceLocation(spriteName));
-	}
-
-	@Override
-	public String getModID() {
-		return modID;
 	}
 }

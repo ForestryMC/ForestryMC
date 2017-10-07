@@ -994,12 +994,13 @@ public enum BeeDefinition implements IBeeDefinition {
 		String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
 		String species = "species" + WordUtils.capitalize(lowercaseName);
 
-		String uid = Constants.MOD_ID + '.' + species;
+		String modId = Constants.MOD_ID;
+		String uid = modId + '.' + species;
 		String description = "for.description." + species;
 		String name = "for.bees.species." + lowercaseName;
 
 		this.branch = branch;
-		IAlleleBeeSpeciesBuilder speciesBuilder = BeeManager.beeFactory.createSpecies(uid, dominant, "Sengir", name, description, branch.getBranch(), binomial, primary.getRGB(), secondary.getRGB());
+		IAlleleBeeSpeciesBuilder speciesBuilder = BeeManager.beeFactory.createSpecies(modId, uid, dominant, "Sengir", name, description, branch.getBranch(), binomial, primary.getRGB(), secondary.getRGB());
 		if (isSecret()) {
 			speciesBuilder.setIsSecret();
 		}
