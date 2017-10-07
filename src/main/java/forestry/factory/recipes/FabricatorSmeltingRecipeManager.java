@@ -16,14 +16,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.utils.ItemStackUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
 	public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
+	private static final Set<Fluid> recipeFluids = new HashSet<>();
 
 	@Nullable
 	public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
@@ -58,5 +62,17 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 	@Override
 	public Collection<IFabricatorSmeltingRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
+	}
+
+	public static Set<Fluid> getRecipeFluids() {
+		if (recipeFluids.isEmpty()) {
+			for (IFabricatorSmeltingRecipe recipe : recipes) {
+				FluidStack fluidStack = recipe.getProduct();
+				if (fluidStack != null) {
+					recipeFluids.add(fluidStack.getFluid());
+				}
+			}
+		}
+		return Collections.unmodifiableSet(recipeFluids);
 	}
 }

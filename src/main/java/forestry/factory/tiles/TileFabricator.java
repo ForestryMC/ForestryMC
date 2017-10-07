@@ -29,6 +29,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,7 +38,6 @@ import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
@@ -72,7 +72,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * Fluid.BUCKET_VOLUME, false, false).setFilters(Fluids.GLASS.getFluid());
+		moltenTank = new FilteredTank(8 * Fluid.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
 
 		tankManager = new TankManager(this, moltenTank);
 	}
