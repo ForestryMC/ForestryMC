@@ -12,12 +12,12 @@ package forestry.core.fluids;
 
 import javax.annotation.Nullable;
 
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -25,6 +25,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import forestry.core.utils.ItemStackUtil;
 
 public final class FluidHelper {
 
@@ -184,7 +186,7 @@ public final class FluidHelper {
 						if (!outputStack.isEmpty()) {
 							newStack.grow(outputStack.getCount());
 						}
-						if (isFillableContainerAndEmpty(newStack)) {
+						if (!isFillableContainer(newStack) || isFillableContainerAndEmpty(newStack)) {
 							inv.setInventorySlotContents(outputSlot, newStack);
 							inv.decrStackSize(inputSlot, 1);
 						}
@@ -198,6 +200,22 @@ public final class FluidHelper {
 		}
 
 		return FillStatus.NO_SPACE;
+	}
+
+	public static boolean isFillableContainer(ItemStack container) {
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		if (fluidHandler == null) {
+			return false;
+		}
+
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (properties.canFill()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isFillableContainerAndEmpty(ItemStack container) {
