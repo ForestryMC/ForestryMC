@@ -57,7 +57,7 @@ public abstract class CompatPlugin extends BlankForestryPlugin {
 		if (ForgeRegistries.BLOCKS.containsKey(key)) {
 			return ForgeRegistries.BLOCKS.getValue(key);
 		}
-		Log.error("Could not find block {}", key);
+		Log.debug("Could not find block {}", key);
 		return null;
 	}
 
@@ -67,7 +67,7 @@ public abstract class CompatPlugin extends BlankForestryPlugin {
 		if (ForgeRegistries.ITEMS.containsKey(key)) {
 			return ForgeRegistries.ITEMS.getValue(key);
 		}
-		Log.error("Could not find item {}", key);
+		Log.debug("Could not find item {}", key);
 		return null;
 	}
 
@@ -75,7 +75,7 @@ public abstract class CompatPlugin extends BlankForestryPlugin {
 	protected Fluid getFluid(String fluidName) {
 		Fluid fluid = FluidRegistry.getFluid(fluidName);
 		if (fluid == null) {
-			Log.error("Could not find fluid {}", fluidName);
+			Log.debug("Could not find fluid {}", fluidName);
 		}
 		return fluid;
 	}
