@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -127,12 +128,16 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Nullable
 	private static IFarmable getFarmableForBlock(World world, BlockPos position, Collection<IFarmable> farmables) {
 		IBlockState blockState = world.getBlockState(position);
-		for (IFarmable farmable : farmables) {
-			ICrop crop = farmable.getCropAt(world, position, blockState);
-			if (crop != null) {
-				return farmable;
+		
+		if (blockState.getBlock() != Blocks.AIR) {
+			for (IFarmable farmable : farmables) {
+				ICrop crop = farmable.getCropAt(world, position, blockState);
+				if (crop != null) {
+					return farmable;
+				}
 			}
 		}
+		
 		return null;
 	}
 
