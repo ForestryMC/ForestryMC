@@ -85,6 +85,9 @@ public class PluginNatura extends BlankForestryPlugin {
 
 	@SubscribeEvent
 	public void registerItems(RegistryEvent<Item> itemRegistryEvent) {
+		
+		final ItemStack[] potashApple = findPotashAppleInRegistry();
+		
 		ForgeRegistries.ITEMS.forEach(item -> {
 			final ResourceLocation registryName = item.getRegistryName();
 			if(!registryName.getResourceDomain().equals(modId)) return;
@@ -100,9 +103,18 @@ public class PluginNatura extends BlankForestryPlugin {
 						Fluids.BIOMASS
 				);
 
+				
+				ItemStack[] windfall = new ItemStack[]{};
+				
+				// add potash apple as windfall for darkwood (nether_sapling:2)
+				if (itemName.endsWith("nether_sapling")) {
+					windfall = potashApple;
+				}			
+			
 				FarmRegistry.getInstance().registerFarmables("farmArboreal", new FarmableSapling(
 						new ItemStack(item),
-						new ItemStack[] {}
+						windfall,
+						true						
 				));
 				return;
 			}
@@ -268,6 +280,26 @@ public class PluginNatura extends BlankForestryPlugin {
 		IFarmLogic farmArboreal = FarmRegistry.getInstance().getFarmLogic("farmArboreal");
 		farmArboreal.addSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
 	
+	}
+	
+	/*
+	 * Searches for potash apple in forge registry.
+	 * Returns array with single item for convenience or empty array if not found (would mean a bug or change in natura code/naming)
+	 */
+	private ItemStack[] findPotashAppleInRegistry() {
+		Item edibleItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, "edibles"));
+		if (edibleItem != null) {
+			NonNullList<ItemStack> edibleSubItems = NonNullList.create();
+			edibleItem.getSubItems(CreativeTabs.SEARCH, edibleSubItems);
+			for (ItemStack edibleSubItem : edibleSubItems) {
+				if (edibleSubItem.getUnlocalizedName().endsWith("potashapple")) {
+					return new ItemStack[]{edibleSubItem};
+					
+				}
+			}
+		}
+		
+		return new ItemStack[0];
 	}
 
 }
