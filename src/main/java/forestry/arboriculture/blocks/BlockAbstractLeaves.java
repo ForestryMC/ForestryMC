@@ -194,6 +194,9 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		if (ret != null) {
 			drops.addAll(ret);
 		} else {
+			if(!(world instanceof World)){
+				return;
+			}
 			// leaves not harvested, get drops normally
 			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
 		}
