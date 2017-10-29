@@ -39,7 +39,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends BlankForestryPlugin {
 
-	private static final String BoP = "BiomesOPlenty";
+	private static final String BoP = "biomesoplenty";
 
 	@Nullable
 	private static Block saplings;
