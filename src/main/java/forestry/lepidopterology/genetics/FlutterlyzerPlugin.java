@@ -14,6 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
@@ -30,13 +38,7 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.PluginLepidopterology;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.lepidopterology.ModuleLepidopterology;
 
 public class FlutterlyzerPlugin implements IAlyzerPlugin {
 	public static final FlutterlyzerPlugin INSTANCE = new FlutterlyzerPlugin();
@@ -45,7 +47,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 	private FlutterlyzerPlugin() {
 		NonNullList<ItemStack> butterflyList = NonNullList.create();
-		PluginLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
+		ModuleLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
 			iconStacks.put(species.getUID(), butterflyStack);
@@ -239,6 +241,22 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 			x = GuiAlyzer.COLUMN_0;
 			for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
+				Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
+				x += 18;
+				if (x > 148) {
+					x = GuiAlyzer.COLUMN_0;
+					textLayout.newLine();
+				}
+			}
+
+			textLayout.newLine();
+			textLayout.newLine();
+
+			textLayout.drawLine(Translator.translateToLocal("for.gui.loot.cocoon") + ":", GuiAlyzer.COLUMN_0);
+			textLayout.newLine();
+
+			x = GuiAlyzer.COLUMN_0;
+			for (ItemStack stack : butterfly.getGenome().getCocoon().getCocoonLoot().keySet()) {
 				Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
 				x += 18;
 				if (x > 148) {

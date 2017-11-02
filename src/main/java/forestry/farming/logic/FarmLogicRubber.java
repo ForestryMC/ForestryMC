@@ -27,7 +27,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 

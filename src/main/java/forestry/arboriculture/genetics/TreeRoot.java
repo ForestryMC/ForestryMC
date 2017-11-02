@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +23,25 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -45,8 +64,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.genetics.ISpeciesPlugin;
 import forestry.api.genetics.ISpeciesType;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockSapling;
@@ -57,20 +77,7 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public static final String UID = "rootTrees";
@@ -134,7 +141,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		if (stack.isEmpty()) {
 			return null;
 		}
-		ItemRegistryArboriculture items = PluginArboriculture.getItems();
+		ItemRegistryArboriculture items = ModuleArboriculture.getItems();
 
 		Item item = stack.getItem();
 		if (items.sapling == item) {
@@ -180,7 +187,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public ItemStack getMemberStack(IIndividual tree, ISpeciesType type) {
 		Preconditions.checkArgument(tree instanceof ITree, "individual is not a tree");
 		Preconditions.checkArgument(type instanceof EnumGermlingType, "type is not an EnumGermlingType");
-		ItemRegistryArboriculture items = PluginArboriculture.getItems();
+		ItemRegistryArboriculture items = ModuleArboriculture.getItems();
 
 		Item germlingItem;
 		switch ((EnumGermlingType) type) {
@@ -206,7 +213,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
-		BlockRegistryArboriculture blocks = PluginArboriculture.getBlocks();
+		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
 		IBlockState state = blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, tree.getGenome().getPrimary());
 		boolean placed = world.setBlockState(pos, state);
@@ -237,7 +244,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos) {
-		BlockRegistryArboriculture blocks = PluginArboriculture.getBlocks();
+		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
 		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
 		if (facing != null) {
@@ -424,6 +431,12 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return TreeAlyzerPlugin.INSTANCE;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ISpeciesPlugin getSpeciesPlugin() {
+		return TreePlugin.INSTANCE;
 	}
 
 	@Override

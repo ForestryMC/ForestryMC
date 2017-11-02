@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.google.common.base.Objects;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -163,30 +162,54 @@ public abstract class Genome implements IGenome {
 
 
 	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
+		//Handle old nbt format
+		if(genomeNBT.hasKey("Chromosomes")) {
+			NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
+			IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
 
-		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
+			String primarySpeciesUid = null;
+			String secondarySpeciesUid = null;
 
-		String primarySpeciesUid = null;
-		String secondarySpeciesUid = null;
+			for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
+				NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
+				byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
 
-		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
-			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
-			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
+				if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
+					IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
+					Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
+					chromosomes[chromosomeOrdinal] = chromosome;
 
-			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
-				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
-				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
-				chromosomes[chromosomeOrdinal] = chromosome;
+					if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
+						primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
+						secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
+					}
+				}
+			}
+			return chromosomes;
+		}else{
+			NBTTagCompound activeTag = genomeNBT.getCompoundTag("Active");
+			NBTTagCompound inactiveTag = genomeNBT.getCompoundTag("Inactive");
+			IChromosomeType[] karyotype = speciesRoot.getKaryotype();
+			IChromosome[] chromosomes = new IChromosome[karyotype.length];
 
-				if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
+			String primarySpeciesUid = null;
+			String secondarySpeciesUid = null;
+
+			for(int index = 0;index < chromosomes.length;index++){
+				IChromosomeType chromosomeType = karyotype[index];
+				String typeName = chromosomeType.getName();
+				String activeAllele = activeTag.getString(typeName);
+				String inactiveAllele = inactiveTag.getString(typeName);
+				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, activeAllele, inactiveAllele);
+				chromosomes[index] = chromosome;
+
+				if (index == speciesRoot.getSpeciesChromosomeType().ordinal()) {
 					primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
 					secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
 				}
 			}
+			return chromosomes;
 		}
-
-		return chromosomes;
 	}
 
 	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
@@ -196,7 +219,6 @@ public abstract class Genome implements IGenome {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < chromosomes.length; i++) {
 			if (chromosomes[i] != null) {

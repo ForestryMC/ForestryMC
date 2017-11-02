@@ -13,6 +13,23 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -32,20 +49,7 @@ import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.plugins.ForestryPluginUids;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.modules.ForestryModuleUids;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -213,7 +217,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) && !TreeManager.treeRoot.isMember(inputStack)) {
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 

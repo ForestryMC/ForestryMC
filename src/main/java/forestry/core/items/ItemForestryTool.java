@@ -29,7 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
@@ -52,7 +52,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public boolean canHarvestBlock(IBlockState block) {
-		if (this == PluginCore.getItems().bronzePickaxe) {
+		if (this == ModuleCore.getItems().bronzePickaxe) {
 			Material material = block.getMaterial();
 			return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
 		}
@@ -66,7 +66,7 @@ public class ItemForestryTool extends ItemForestry {
 				return efficiencyOnProperMaterial;
 			}
 		}
-		if (this == PluginCore.getItems().bronzePickaxe) {
+		if (this == ModuleCore.getItems().bronzePickaxe) {
 			Material material = state.getMaterial();
 			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
@@ -75,7 +75,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (this == PluginCore.getItems().bronzeShovel) {
+		if (this == ModuleCore.getItems().bronzeShovel) {
 			ItemStack heldItem = player.getHeldItem(hand);
 			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 				return EnumActionResult.FAIL;

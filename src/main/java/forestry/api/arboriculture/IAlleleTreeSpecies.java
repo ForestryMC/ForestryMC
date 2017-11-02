@@ -7,15 +7,18 @@ package forestry.api.arboriculture;
 
 import java.util.Collection;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+
+import net.minecraftforge.common.EnumPlantType;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleProperty;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAlleleTreeSpecies> {
 
@@ -36,11 +39,6 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	 * @return Tree generator for this species.
 	 */
 	ITreeGenerator getGenerator();
-
-	/**
-	 * @return The modid from the mod of the species.
-	 */
-	String getModID();
 	
 	/**
 	 * @return Float between 0 and 1 representing the rarity of the species, will affect spawn rate. If it's 0, it will not spawn.

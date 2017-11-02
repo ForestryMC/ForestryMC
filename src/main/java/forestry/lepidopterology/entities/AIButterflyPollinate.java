@@ -13,7 +13,7 @@ package forestry.lepidopterology.entities;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
 
@@ -26,7 +26,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 	 */
 	@Override
 	protected boolean canInteract() {
-		if (entity.cooldownPollination > 0 || !PluginLepidopterology.isPollinationAllowed()) {
+		if (entity.cooldownPollination > 0 || !ModuleLepidopterology.isPollinationAllowed()) {
 			return false;
 		}
 

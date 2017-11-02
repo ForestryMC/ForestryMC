@@ -11,11 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.
@@ -71,6 +74,9 @@ public interface ISpeciesRoot {
 	
 	@Nullable
 	<O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
+
+	@Nullable
+	<O extends Object, I extends IIndividual> I translateMember(O objectToTranslator);
 
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
@@ -161,6 +167,12 @@ public interface ISpeciesRoot {
 	List<? extends IMutation> getCombinations(IAllele other);
 
 	/**
+	 * @param other Allele to match mutations against.
+	 * @return All registered mutations the give allele is resolute of.
+	 */
+	List<? extends IMutation> getResultantMutations(IAllele other);
+
+	/**
 	 * @return all possible mutations that result from breeding two species
 	 * @since Forestry 3.7
 	 */
@@ -197,4 +209,19 @@ public interface ISpeciesRoot {
 	 * Plugin to add information for the handheld genetic analyzer.
 	 */
 	IAlyzerPlugin getAlyzerPlugin();
+
+	/**
+	 * A array with the size of 4. With the database tabs of this {@link IIndividual}.
+	 */
+	//IDatabaseTab[] getDatabaseTabs();
+
+	/**
+	 * Plugin to add information for the handheld genetic analyzer and the database.
+	 * @since 5.7
+	 */
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	default ISpeciesPlugin getSpeciesPlugin(){
+		return null;
+	}
 }

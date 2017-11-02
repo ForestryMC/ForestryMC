@@ -13,7 +13,7 @@ package forestry.energy.tiles;
 import java.io.IOException;
 
 import forestry.api.fuels.FuelManager;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
@@ -74,7 +74,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 				return i;
 			}
 
-			if (waste.getItem() != PluginCore.getItems().ash) {
+			if (waste.getItem() != ModuleCore.getItems().ash) {
 				continue;
 			}
 
@@ -180,7 +180,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			IInventoryAdapter inventory = getInternalInventory();
 			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
 			if (wasteStack.isEmpty()) {
-				inventory.setInventorySlotContents(wasteSlot, PluginCore.getItems().ash.getItemStack());
+				inventory.setInventorySlotContents(wasteSlot, ModuleCore.getItems().ash.getItemStack());
 			} else {
 				wasteStack.grow(1);
 			}

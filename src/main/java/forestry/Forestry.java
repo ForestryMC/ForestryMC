@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ForestryEvent;
 import forestry.core.EventHandlerCore;
+import forestry.core.advancements.AdvancementManager;
 import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -45,9 +46,11 @@ import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
-import forestry.plugins.PluginManager;
-import forestry.plugins.compat.PluginIC2;
-import forestry.plugins.compat.PluginNatura;
+import forestry.modules.ForestryModules;
+import forestry.modules.ModuleManager;
+import forestry.plugins.ForestryCompatPlugins;
+import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginNatura;
 
 /**
  * Forestry Minecraft Mod
@@ -81,6 +84,8 @@ public class Forestry {
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);
+		ModuleManager moduleManager = ModuleManager.getInstance();
+		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
 	}
 
 	@Nullable
@@ -107,19 +112,19 @@ public class Forestry {
 
 		MinecraftForge.EVENT_BUS.post(new ForestryEvent.PreInit(this, event));
 
-		PluginManager.runSetup(event);
+		ModuleManager.runSetup(event);
 
 		String gameMode = Config.gameMode;
 		Preconditions.checkState(gameMode != null);
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
-		PluginManager.runPreInit(event.getSide());
+		ModuleManager.runPreInit(event.getSide());
 
 	}
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		PluginManager.runRegisterBackpacksAndCrates();
+		ModuleManager.runRegisterBackpacksAndCrates();
 		Proxies.render.registerModels();
 	}
 
@@ -128,14 +133,15 @@ public class Forestry {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-		PluginManager.runInit();
+		ModuleManager.runInit();
 
 		Proxies.render.registerItemAndBlockColors();
+		AdvancementManager.registerTriggers();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		PluginManager.runPostInit();
+		ModuleManager.runPostInit();
 
 		// Register world generator
 		WorldGenerator worldGenerator = new WorldGenerator();
@@ -145,12 +151,12 @@ public class Forestry {
 		Proxies.common.registerTickHandlers(worldGenerator);
 
 		// Handle IMC messages.
-		PluginManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
+		ModuleManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		PluginManager.serverStarting(event.getServer());
+		ModuleManager.serverStarting(event.getServer());
 	}
 
 	@Nullable
@@ -160,6 +166,6 @@ public class Forestry {
 
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
-		PluginManager.processIMCMessages(event.getMessages());
+		ModuleManager.processIMCMessages(event.getMessages());
 	}
 }

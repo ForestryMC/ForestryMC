@@ -8,16 +8,19 @@ package forestry.api.lepidopterology;
 import java.util.Map;
 import java.util.Set;
 
-import forestry.api.genetics.IAlleleSpecies;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.BiomeDictionary;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.genetics.IAlleleSpecies;
 
 public interface IAlleleButterflySpecies extends IAlleleSpecies {
 
 	/**
-	 * @return the IBeeRoot
+	 * @return the IButterflyRoot
 	 */
 	@Override
 	IButterflyRoot getRoot();
@@ -59,15 +62,16 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
 	 */
 	boolean isNocturnal();
 
+	/**
+	 * @return The loot that drops if you kill a butterfly.
+	 */
 	Map<ItemStack, Float> getButterflyLoot();
 
+	/**
+	 * @return The loot that drops if you destroy a leaf that contains a caterpillar.
+	 */
 	Map<ItemStack, Float> getCaterpillarLoot();
 
 	@SideOnly(Side.CLIENT)
 	void registerSprites();
-
-	/**
-	 * @return The modid from the mod of the species.
-	 */
-	String getModID();
 }

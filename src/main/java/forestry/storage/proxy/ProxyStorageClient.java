@@ -1,11 +1,13 @@
 package forestry.storage.proxy;
 
-import forestry.core.models.ModelCrate;
-import forestry.core.models.ModelEntry;
-import forestry.core.models.ModelManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.models.ModelEntry;
+import forestry.core.models.ModelManager;
+import forestry.storage.models.ModelCrate;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)

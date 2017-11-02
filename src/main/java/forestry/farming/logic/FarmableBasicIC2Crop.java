@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.PluginIC2;
 
 import ic2.api.crops.ICropTile;
 

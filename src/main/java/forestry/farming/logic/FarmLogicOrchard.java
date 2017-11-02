@@ -34,7 +34,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.tiles.TileUtil;
 
 public class FarmLogicOrchard extends FarmLogic {
@@ -47,13 +47,13 @@ public class FarmLogicOrchard extends FarmLogic {
 		this.farmables = ForestryAPI.farmRegistry.getFarmables("farmOrchard");
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
-		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
+		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.AGRICRAFT) || ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT)) {
 		//			traversalBlocksBuilder.add(Blocks.FARMLAND);
 		//		}
-		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
+		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT)) {
 		//			traversalBlocksBuilder.add(Blocks.DIRT);
 		//		}
-		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.PLANTMEGAPACK)) {
+		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.PLANTMEGAPACK)) {
 		//			traversalBlocksBuilder.add(Blocks.WATER);
 		//		}
 		//
@@ -125,7 +125,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PluginCore.getItems().fruits);
+		return new ItemStack(ModuleCore.getItems().fruits);
 	}
 
 	@Override

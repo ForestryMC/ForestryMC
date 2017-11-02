@@ -32,17 +32,17 @@ public class ButterflySpawner implements ILeafTickHandler {
 
 		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
 		float rarity;
-		if (!PluginLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getUID())) {
+		if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getUID())) {
 			rarity = spawn.getGenome().getPrimary().getRarity();
 		} else {
-			rarity = PluginLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getUID());
+			rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getUID());
 		}
 
 		if (rand.nextFloat() >= rarity * 0.5f) {
 			return false;
 		}
 
-		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 

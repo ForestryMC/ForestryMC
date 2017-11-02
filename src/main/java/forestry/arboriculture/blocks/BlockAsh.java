@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 
 public class BlockAsh extends Block implements IStateMapperRegister, IItemModelRegister {
 
@@ -73,7 +73,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 		Random rand = world instanceof World ? ((World)world).rand : new Random();
 		int amount = state.getValue(AMOUNT) + 9 + rand.nextInt(1 + fortune);
 		drops.add(new ItemStack(Items.COAL, amount, 1));
-		drops.add(new ItemStack(PluginCore.getItems().ash, 1 + rand.nextInt(amount / 4)));
+		drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));
 		return drops;
 	}
 

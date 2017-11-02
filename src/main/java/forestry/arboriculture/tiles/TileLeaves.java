@@ -14,6 +14,21 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.EnumPlantType;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -38,7 +53,7 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
@@ -49,18 +64,6 @@ import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -139,7 +142,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (!checkedForConversionToDefaultLeaves) {
 			if (shouldConvertToDefaultLeaves()) {
-				IBlockState defaultLeaves = PluginArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				IBlockState defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
 				worldIn.setBlockState(getPos(), defaultLeaves);
 				return;
 			}

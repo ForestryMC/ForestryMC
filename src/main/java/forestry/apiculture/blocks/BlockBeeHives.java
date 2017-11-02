@@ -43,7 +43,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileUtil;
@@ -154,7 +154,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 		if (hiveName == null || hiveName.equals(HiveType.SWARM.getHiveUid())) {
 			return Collections.emptyList();
 		}
-		return PluginApiculture.getHiveRegistry().getDrops(hiveName);
+		return ModuleApiculture.getHiveRegistry().getDrops(hiveName);
 	}
 
 	@Nullable

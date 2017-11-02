@@ -19,6 +19,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +41,7 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
-import forestry.plugins.ForestryPluginUids;
+import forestry.modules.ForestryModuleUids;
 
 import ic2.api.energy.prefab.BasicSink;
 
@@ -68,7 +69,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 		setInternalInventory(new InventoryEngineElectric(this));
 		
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT2)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 		}
 	}

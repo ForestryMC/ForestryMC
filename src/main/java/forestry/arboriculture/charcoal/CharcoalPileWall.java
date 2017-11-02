@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.charcoal;
 
-import forestry.api.arboriculture.ICharcoalPileWall;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import forestry.api.arboriculture.ICharcoalPileWall;
 
 public class CharcoalPileWall implements ICharcoalPileWall {
 
@@ -46,13 +47,18 @@ public class CharcoalPileWall implements ICharcoalPileWall {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getDisplyItems() {
+	public NonNullList<ItemStack> getDisplayItems() {
 		if(block == Blocks.AIR){
 			return NonNullList.withSize(1, new ItemStack(blockState.getBlock(), 1, blockState.getBlock().getMetaFromState(blockState)));
 		}else if(blockState == Blocks.AIR.getDefaultState()){
 			return NonNullList.withSize(1, new ItemStack(block));
 		}
 		return NonNullList.create();
+	}
+
+	@Override
+	public NonNullList<ItemStack> getDisplyItems() {
+		return getDisplayItems();
 	}
 	
 }

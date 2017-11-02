@@ -42,7 +42,7 @@ import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
@@ -52,7 +52,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 	public static final String PREVIEW_KEY = "preview";
 
 	public ItemGreenhouseScreen() {
-		setCreativeTab(PluginGreenhouse.getGreenhouseTab());
+		setCreativeTab(ModuleGreenhouse.getGreenhouseTab());
 	}
 
 	public static boolean isPreviewModeActive(ItemStack itemStack) {

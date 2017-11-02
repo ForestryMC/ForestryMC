@@ -14,7 +14,16 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
@@ -25,7 +34,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IIndividualTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRoot;
@@ -34,14 +42,6 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class GeneticsUtil {
 
@@ -150,18 +150,15 @@ public class GeneticsUtil {
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		
-		if(TreeManager.treeRoot == null){
-			return null;
-		}
-		
-		IIndividualTranslator<IIndividual, IBlockState> leafTranslator = TreeManager.treeRoot.getTranslator(block);
-		if (leafTranslator == null) {
-			return null;
+
+		for(ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()){
+			IIndividual individual = root.translateMember(blockState);
+			if(individual != null){
+				return individual;
+			}
 		}
 
-		return leafTranslator.getIndividualFromObject(blockState);
+		return null;
 	}
 
 	@Nullable
@@ -170,22 +167,21 @@ public class GeneticsUtil {
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
-		
-		if(TreeManager.treeRoot == null){
-			return null;
+
+		for(ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()){
+			IIndividual individual = root.translateMember(itemStack);
+			if(individual != null){
+				return individual;
+			}
 		}
 
-		IIndividualTranslator<IIndividual, ItemStack> saplingTranslator = TreeManager.treeRoot.getTranslator(item);
-		if (saplingTranslator == null) {
-			return null;
-		}
-		return saplingTranslator.getIndividualFromObject(itemStack);
+		return null;
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
 		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
 			IIndividual individual = getGeneticEquivalent(foreign);
-			if (individual instanceof ITree) {
+			if (individual != null) {
 				ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
 				equivalent.setCount(foreign.getCount());
 				return equivalent;

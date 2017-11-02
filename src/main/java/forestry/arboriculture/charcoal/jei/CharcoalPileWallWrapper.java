@@ -5,15 +5,8 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.core.PluginCore;
-
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
-
-import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.core.ModuleCore;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -28,10 +21,10 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 	
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInputs(ItemStack.class, pileWall.getDisplyItems());
+		ingredients.setInputs(ItemStack.class, pileWall.getDisplayItems());
 		int amount = 9 + pileWall.getCharcoalAmount();
 		ItemStack charcoal = new ItemStack(Items.COAL, amount, 1);
-		ItemStack ash = new ItemStack(PluginCore.getItems().ash, amount / 4);
+		ItemStack ash = new ItemStack(ModuleCore.getItems().ash, amount / 4);
 		ImmutableList<ItemStack> outputs = ImmutableList.of(
 			charcoal,
 			ash

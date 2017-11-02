@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.config.Constants;
@@ -45,7 +45,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		this.ySize = 185;
 
 		NonNullList<ItemStack> beeList = NonNullList.create();
-		PluginApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
+		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
 			if (species != null) {

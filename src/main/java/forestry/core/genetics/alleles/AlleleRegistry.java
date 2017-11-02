@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import com.google.common.collect.HashMultimap;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +21,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.HashMultimap;
+import net.minecraft.item.ItemStack;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -32,10 +36,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
-import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
@@ -291,11 +294,11 @@ public class AlleleRegistry implements IAlleleRegistry {
 	/* RESEARCH */
 	@Override
 	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
-		return EnumNoteType.createSpeciesNoteStack(PluginCore.getItems().researchNote, researcher, species);
+		return EnumNoteType.createSpeciesNoteStack(ModuleCore.getItems().researchNote, researcher, species);
 	}
 
 	@Override
 	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
-		return EnumNoteType.createMutationNoteStack(PluginCore.getItems().researchNote, researcher, mutation);
+		return EnumNoteType.createMutationNoteStack(ModuleCore.getItems().researchNote, researcher, mutation);
 	}
 }

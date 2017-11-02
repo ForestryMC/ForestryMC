@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.Translator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,8 +17,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.Translator;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
@@ -62,7 +64,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
 		if (itemStack.getTagCompound() == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
+			return ModuleArboriculture.proxy.getFoliageColorBasic();
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();

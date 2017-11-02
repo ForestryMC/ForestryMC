@@ -31,7 +31,7 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.IModelManager;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.gui.ContainerCamouflageSprayCan;
 import forestry.greenhouse.gui.GuiCamouflageSprayCan;
 import forestry.greenhouse.inventory.ItemInventoryCamouflageSprayCan;
@@ -39,7 +39,7 @@ import forestry.greenhouse.inventory.ItemInventoryCamouflageSprayCan;
 public class ItemCamouflageSprayCan extends ItemWithGui {
 
 	public ItemCamouflageSprayCan() {
-		setCreativeTab(PluginGreenhouse.getGreenhouseTab());
+		setCreativeTab(ModuleGreenhouse.getGreenhouseTab());
 	}
 
 	@Override

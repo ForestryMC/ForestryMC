@@ -36,7 +36,7 @@ import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseComponent.Active;
 import forestry.api.multiblock.IGreenhouseComponent.Listener;
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.climate.ClimateStates;
 import forestry.core.config.Config;
 import forestry.core.multiblock.IMultiblockControllerInternal;
@@ -118,7 +118,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	 * The default camouflage block {@link ItemStack} for every greenhouse block.
 	 */
 	public static ItemStack createDefaultCamouflageBlock() {
-		return new ItemStack(PluginCore.getBlocks().ashBrick);
+		return new ItemStack(ModuleCore.getBlocks().ashBrick);
 	}
 
 	/* IClimateHousing */

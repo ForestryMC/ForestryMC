@@ -50,7 +50,7 @@ import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
@@ -215,6 +215,6 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 				}
 			}
 		}
-		return PluginArboriculture.proxy.getFoliageColorBasic();
+		return ModuleArboriculture.proxy.getFoliageColorBasic();
 	}
 }

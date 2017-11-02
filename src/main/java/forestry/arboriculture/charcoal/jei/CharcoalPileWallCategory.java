@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleCharcoal;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
@@ -63,7 +63,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		itemStackGroup.init(3, false, 104, 16);
 
 		itemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-		itemStackGroup.set(1, new ItemStack(PluginArboriculture.getBlocks().woodPile));
+		itemStackGroup.set(1, new ItemStack(ModuleCharcoal.getBlocks().woodPile));
 		itemStackGroup.set(2, ingredients.getOutputs(ItemStack.class).get(0));
 		itemStackGroup.set(3, ingredients.getOutputs(ItemStack.class).get(1));
 

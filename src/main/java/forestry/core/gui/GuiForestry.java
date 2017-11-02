@@ -214,11 +214,9 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		bindTexture(textureFile);
+		drawBackground();
 
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
 
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.disableLighting();
@@ -232,6 +230,14 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 		GlStateManager.popMatrix();
 
 		bindTexture(textureFile);
+	}
+
+	protected void drawBackground(){
+		bindTexture(textureFile);
+
+		int x = (width - xSize) / 2;
+		int y = (height - ySize) / 2;
+		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 	}
 
 	protected void drawWidgets() {
@@ -274,5 +280,9 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 	public List<Rectangle> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
+	}
+
+	public TextLayoutHelper getTextLayout() {
+		return textLayout;
 	}
 }

@@ -84,8 +84,6 @@ public class WidgetClimateBar extends Widget {
 
 	@Override
 	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
-		mouseX -= manager.gui.getGuiLeft();
-		mouseY -= manager.gui.getGuiTop();
 		return isMouseOver(mouseX, mouseY);
 	}
 

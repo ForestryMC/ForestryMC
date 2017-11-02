@@ -12,7 +12,7 @@ package forestry.farming.proxy;
 
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
-import forestry.farming.PluginFarming;
+import forestry.farming.ModuleFarming;
 import forestry.farming.models.ModelFarmBlock;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,6 +26,6 @@ public class ProxyFarmingClient extends ProxyFarming {
 	public void initializeModels() {
 		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
 				new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-				PluginFarming.getBlocks().farm));
+				ModuleFarming.getBlocks().farm));
 	}
 }

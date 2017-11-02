@@ -31,7 +31,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleCharcoal;
 
 public class BlockWoodPile extends Block implements IItemModelRegister, IStateMapperRegister {
 
@@ -135,7 +135,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				if(state.getValue(AGE) < 7){
 					world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
 				}else{
-					IBlockState ashState = PluginArboriculture.getBlocks().ash.getDefaultState();
+					IBlockState ashState = ModuleCharcoal.getBlocks().ash.getDefaultState();
 					world.setBlockState(pos, ashState.withProperty(BlockAsh.AMOUNT, Math.round(getCharcoalAmount(world, pos))), 2);
 				}
 			}
@@ -207,7 +207,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 			IBlockState state = world.getBlockState(testPos);
 			if(state.getBlock() == Blocks.AIR){
 				break;
-			}else if(state.getBlock() == this || state.getBlock() == PluginArboriculture.getBlocks().charcoal){
+			}else if(state.getBlock() == this || state.getBlock() == ModuleCharcoal.getBlocks().charcoal){
 				if(i == 15){
 					return getCharcoalFaceAmount(world, testPos, facing);
 				}

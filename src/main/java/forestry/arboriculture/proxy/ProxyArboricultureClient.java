@@ -42,7 +42,7 @@ import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
@@ -69,11 +69,11 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:leaves");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:leaves", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
-					new ModelLeaves(), PluginArboriculture.getBlocks().leaves);
+					new ModelLeaves(), ModuleArboriculture.getBlocks().leaves);
 			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 		}
 
-		for (BlockDecorativeLeaves leaves : PluginArboriculture.getBlocks().leavesDecorative) {
+		for (BlockDecorativeLeaves leaves : ModuleArboriculture.getBlocks().leavesDecorative) {
 			String resourceName = "forestry:leaves.decorative." + leaves.getBlockNumber();
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
 			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
@@ -82,7 +82,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
 		}
 
-		for (BlockDefaultLeaves leaves : PluginArboriculture.getBlocks().leavesDefault) {
+		for (BlockDefaultLeaves leaves : ModuleArboriculture.getBlocks().leavesDefault) {
 			String resourceName = "forestry:leaves.default." + leaves.getBlockNumber();
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
 			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
@@ -92,10 +92,10 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 
 		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
-		for (BlockArbSlab slab : PluginArboriculture.getBlocks().slabsDouble) {
+		for (BlockArbSlab slab : ModuleArboriculture.getBlocks().slabsDouble) {
 			registerWoodModel(slab, true);
 		}
-		for (BlockArbSlab slab : PluginArboriculture.getBlocks().slabsDoubleFireproof) {
+		for (BlockArbSlab slab : ModuleArboriculture.getBlocks().slabsDoubleFireproof) {
 			registerWoodModel(slab, true);
 		}
 	}

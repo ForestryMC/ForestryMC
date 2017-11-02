@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 
 public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
@@ -79,7 +79,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 
 				int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
 				if (amount > 0) {
-					drops.add(PluginCore.getItems().apatite.getItemStack(amount));
+					drops.add(ModuleCore.getItems().apatite.getItemStack(amount));
 				}
 				break;
 			}

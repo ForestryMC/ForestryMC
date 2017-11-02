@@ -40,7 +40,7 @@ import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.ModelBlockCustomCached;
 import forestry.core.render.TextureManagerForestry;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
 
 public class EventHandlerCore {
 
@@ -54,7 +54,7 @@ public class EventHandlerCore {
 			return;
 		}
 
-		for (IPickupHandler handler : PluginManager.pickupHandlers) {
+		for (IPickupHandler handler : ModuleManager.pickupHandlers) {
 			if (handler.onItemPickup(event.getEntityPlayer(), event.getItem())) {
 				event.setResult(Result.ALLOW);
 				return;
@@ -87,21 +87,21 @@ public class EventHandlerCore {
 	public void handleWorldLoad(WorldEvent.Load event) {
 		World world = event.getWorld();
 
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
+		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldLoad(world);
 		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldSave(WorldEvent.Save event) {
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
+		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldSave(event.getWorld());
 		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldUnload(WorldEvent.Unload event) {
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
+		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldUnload(event.getWorld());
 		}
 	}
@@ -122,9 +122,9 @@ public class EventHandlerCore {
 			return;
 		}
 
-		Set<String> lootPoolNames = PluginManager.getLootPoolNames();
+		Set<String> lootPoolNames = ModuleManager.getLootPoolNames();
 
-		for (String lootTableFile : PluginManager.getLootTableFiles()) {
+		for (String lootTableFile : ModuleManager.getLootTableFiles()) {
 			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath() + "/" + lootTableFile);
 			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
 			if (url != null) {

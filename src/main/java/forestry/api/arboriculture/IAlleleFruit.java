@@ -19,6 +19,4 @@ public interface IAlleleFruit extends IAlleleProperty<IAlleleFruit> {
 	@Nullable
 	String getModelName();
 
-	String getModID();
-
 }

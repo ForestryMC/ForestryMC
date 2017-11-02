@@ -232,7 +232,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			if (count > 0) {
 				EnumPostage postage = EnumPostage.values()[i];
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				mail.addStamps(PluginMail.getItems().stamps.get(stampDefinition, count));
+				mail.addStamps(ModuleMail.getItems().stamps.get(stampDefinition, count));
 			}
 		}
 
@@ -282,7 +282,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			orderFilledMessage = orderFilledMessage.replace("%SENDER", letter.getSender().getName());
 
 			confirm.setText(orderFilledMessage);
-			confirm.addStamps(PluginMail.getItems().stamps.get(EnumStampDefinition.P_1, 1));
+			confirm.addStamps(ModuleMail.getItems().stamps.get(EnumStampDefinition.P_1, 1));
 			confirm.writeToNBT(nbttagcompound);
 
 			ItemStack confirmstack = LetterProperties.createStampedLetterStack(confirm);

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
@@ -107,6 +108,25 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		return (IIndividualTranslator<I, O>) translators.get(translatorKey);
 	}
 
+	@Nullable
+	@Override
+	public <O, I extends IIndividual> I translateMember(O objectToTranslator) {
+		Object translatorKey = null;
+		if(objectToTranslator instanceof ItemStack){
+			translatorKey = ((ItemStack) objectToTranslator).getItem();
+		}else if(objectToTranslator instanceof IBlockState){
+			translatorKey = ((IBlockState) objectToTranslator).getBlock();
+		}
+		if(translatorKey == null){
+			return null;
+		}
+		IIndividualTranslator<I, O> translator = getTranslator(translatorKey);
+		if(translator == null){
+			return null;
+		}
+		return translator.getIndividualFromObject(objectToTranslator);
+	}
+
 	/* MUTATIONS */
 	@Override
 	public List<IMutation> getCombinations(IAllele other) {
@@ -118,6 +138,24 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		}
 
 		return combinations;
+	}
+
+	@Override
+	public List<? extends IMutation> getResultantMutations(IAllele other) {
+		List<IMutation> mutations = new ArrayList<>();
+		int speciesIndex = getSpeciesChromosomeType().ordinal();
+		for (IMutation mutation : getMutations(false)) {
+			IAllele[] template = mutation.getTemplate();
+			if(template == null || template.length <= speciesIndex){
+				continue;
+			}
+			IAllele speciesAllele = template[speciesIndex];
+			if (speciesAllele == other) {
+				mutations.add(mutation);
+			}
+		}
+
+		return mutations;
 	}
 
 	@Override

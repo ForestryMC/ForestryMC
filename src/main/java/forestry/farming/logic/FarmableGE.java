@@ -22,8 +22,7 @@ import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.core.utils.GeneticsUtil;
+import forestry.arboriculture.ModuleArboriculture;
 
 public class FarmableGE implements IFarmable {
 
@@ -35,7 +34,7 @@ public class FarmableGE implements IFarmable {
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		return PluginArboriculture.getBlocks().saplingGE == block;
+		return ModuleArboriculture.getBlocks().saplingGE == block;
 	}
 
 	@Override

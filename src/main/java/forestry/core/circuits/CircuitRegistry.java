@@ -24,7 +24,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
@@ -103,7 +103,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public boolean isChipset(ItemStack itemstack) {
-		return itemstack.getItem() == PluginCore.getItems().circuitboards;
+		return itemstack.getItem() == ModuleCore.getItems().circuitboards;
 	}
 
 	@Override

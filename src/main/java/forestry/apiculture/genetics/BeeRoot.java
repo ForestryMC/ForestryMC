@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,8 +19,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -40,18 +51,14 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesPlugin;
 import forestry.api.genetics.ISpeciesType;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.genetics.SpeciesRoot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
@@ -113,7 +120,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	public ItemStack getMemberStack(IIndividual individual, ISpeciesType type) {
 		Preconditions.checkArgument(individual instanceof IBee, "individual is not a bee");
 		Preconditions.checkArgument(type instanceof EnumBeeType, "type is not an EnumBeeType");
-		ItemRegistryApiculture apicultureItems = PluginApiculture.getItems();
+		ItemRegistryApiculture apicultureItems = ModuleApiculture.getItems();
 
 		IBee bee = (IBee) individual;
 		Item beeItem;
@@ -149,7 +156,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public EnumBeeType getType(ItemStack stack) {
 		Item item = stack.getItem();
-		ItemRegistryApiculture apicultureItems = PluginApiculture.getItems();
+		ItemRegistryApiculture apicultureItems = ModuleApiculture.getItems();
 
 		if (apicultureItems.beeDroneGE == item) {
 			return EnumBeeType.DRONE;
@@ -343,6 +350,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		tracker.setWorld(world);
 
 		return tracker;
+
 	}
 
 	@Override
@@ -373,5 +381,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return BeeAlyzerPlugin.INSTANCE;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ISpeciesPlugin getSpeciesPlugin() {
+		return BeePlugin.INSTANCE;
 	}
 }

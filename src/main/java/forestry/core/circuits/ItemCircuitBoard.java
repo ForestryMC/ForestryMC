@@ -30,7 +30,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.IModelManager;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 
@@ -95,7 +95,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = PluginCore.getItems().circuitboards.get(type);
+		ItemStack chipset = ModuleCore.getItems().circuitboards.get(type);
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		new CircuitBoard(type, layout, circuits).writeToNBT(nbttagcompound);
 		chipset.setTagCompound(nbttagcompound);

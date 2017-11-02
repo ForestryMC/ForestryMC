@@ -15,17 +15,18 @@ import java.util.Locale;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {
-		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
+		if (ModuleManager.getStage() != ModuleManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Item outside of REGISTER");
 		}
 

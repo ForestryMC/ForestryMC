@@ -20,9 +20,11 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,7 +47,7 @@ import forestry.core.tiles.TileBase;
 import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
-import forestry.plugins.ForestryPluginUids;
+import forestry.modules.ForestryModuleUids;
 
 import ic2.api.energy.prefab.BasicSource;
 
@@ -69,7 +71,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 		tankManager = new TankManager(this, resourceTank);
 		
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT2)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}
 	}

@@ -18,7 +18,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
@@ -45,7 +45,7 @@ public class CropPeat extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		drops.add(PluginCore.getItems().peat.getItemStack());
+		drops.add(ModuleCore.getItems().peat.getItemStack());
 
 		IBlockState blockState = world.getBlockState(pos);
 

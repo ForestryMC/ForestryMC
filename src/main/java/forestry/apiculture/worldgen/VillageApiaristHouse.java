@@ -26,6 +26,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -54,16 +55,16 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.arboriculture.PluginArboriculture;
-import forestry.core.PluginCore;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
-import forestry.plugins.ForestryPluginUids;
+import forestry.modules.ForestryModuleUids;
 
 public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
@@ -195,7 +196,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockState escritoireBlock = PluginCore.getBlocks().escritoire.getDefaultState().withProperty(BlockBase.FACING, EnumFacing.EAST);
+			IBlockState escritoireBlock = ModuleCore.getBlocks().escritoire.getDefaultState().withProperty(BlockBase.FACING, EnumFacing.EAST);
 			setBlockState(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
 
@@ -312,11 +313,11 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		}
 
 		IBlockState blockState = world.getBlockState(posNew);
-		if (PluginApiculture.getBlocks().beeHouse == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
+		if (ModuleApiculture.getBlocks().beeHouse == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
 			return;
 		}
 
-		IBlockState beeHouseDefaultState = PluginApiculture.getBlocks().beeHouse.getDefaultState();
+		IBlockState beeHouseDefaultState = ModuleApiculture.getBlocks().beeHouse.getDefaultState();
 		world.setBlockState(posNew, beeHouseDefaultState, Constants.FLAG_BLOCK_SYNC);
 
 		TileBeeHouse beeHouse = TileUtil.getTile(world, posNew, TileBeeHouse.class);
@@ -381,9 +382,9 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		ForgeRegistry<VillagerRegistry.VillagerProfession> registry = (ForgeRegistry<VillagerRegistry.VillagerProfession>) ForgeRegistries.VILLAGER_PROFESSIONS;
 
 		if (villagerCount <= 0) {
-			return registry.getID(PluginApiculture.villagerApiarist);
-		} else if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-			return registry.getID(PluginArboriculture.villagerArborist);
+			return registry.getID(ModuleApiculture.villagerApiarist);
+		} else if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+			return registry.getID(ModuleArboriculture.villagerArborist);
 		} else {
 			return currentVillagerProfession;
 		}
@@ -407,7 +408,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 			IWoodType woodType;
 			boolean fireproof;
 
-			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
+			if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
 				woodType = EnumForestryWoodType.getRandom(random);
 				fireproof = random.nextInt(4) == 0;
 			} else {

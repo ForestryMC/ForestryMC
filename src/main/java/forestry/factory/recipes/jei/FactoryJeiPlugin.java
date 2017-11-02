@@ -1,15 +1,23 @@
 package forestry.factory.recipes.jei;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
-import forestry.factory.PluginFactory;
+import forestry.factory.ModuleFactory;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.gui.GuiCarpenter;
@@ -39,7 +47,8 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeCategory;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
-import forestry.plugins.ForestryPluginUids;
+import forestry.modules.ForestryModuleUids;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
@@ -49,9 +58,6 @@ import mezz.jei.api.gui.BlankAdvancedGuiHandler;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @JEIPlugin
 @SideOnly(Side.CLIENT)
@@ -61,7 +67,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 	
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
-		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))){
 			return;
 		}
 		
@@ -85,7 +91,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 	public void register(IModRegistry registry) {
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 		
-		if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)){
+		if(!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))){
 			return;
 		}
 		jeiHelpers = registry.getJeiHelpers();
@@ -112,7 +118,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
 		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
-		BlockRegistryFactory blocks = PluginFactory.getBlocks();
+		BlockRegistryFactory blocks = ModuleFactory.getBlocks();
 		Preconditions.checkNotNull(blocks);
 
 		registry.addRecipeCatalyst(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);

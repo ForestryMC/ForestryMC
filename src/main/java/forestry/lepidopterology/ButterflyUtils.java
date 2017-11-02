@@ -1,12 +1,13 @@
 package forestry.lepidopterology;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class ButterflyUtils {
 	
@@ -17,7 +18,7 @@ public class ButterflyUtils {
 	}
 	
 	public static boolean spawnButterfly(IButterfly butterfly, World world, BlockPos pos){
-		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 
@@ -32,7 +33,7 @@ public class ButterflyUtils {
 	}
 	
 	public static boolean spawnButterflyWithoutCheck(IButterfly butterfly, World world, BlockPos pos){
-		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 

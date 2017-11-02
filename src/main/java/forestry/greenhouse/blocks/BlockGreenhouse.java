@@ -71,7 +71,7 @@ import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;
 import forestry.greenhouse.models.ModelCamouflaged;
@@ -88,7 +88,7 @@ public class BlockGreenhouse extends BlockStructure implements ISpriteRegister, 
 
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(PluginGreenhouse.getGreenhouseTab());
+		setCreativeTab(ModuleGreenhouse.getGreenhouseTab());
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockGreenhouseType.PLAIN));
 	}
 

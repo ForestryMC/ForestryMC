@@ -17,7 +17,7 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEngine;
-import forestry.energy.PluginEnergy;
+import forestry.energy.ModuleEnergy;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
 import forestry.energy.tiles.TileEngineElectric;
@@ -41,7 +41,7 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 
 	protected static IMachinePropertiesTesr<?> createEngineProperties(Class<? extends TileEngine> teClass, String name, String textureName) {
 		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
-		PluginEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
+		ModuleEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
 		return machinePropertiesEngine;
 	}
 

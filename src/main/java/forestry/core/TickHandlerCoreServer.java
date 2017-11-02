@@ -16,18 +16,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.IChunkGenerator;
+
 import net.minecraftforge.event.world.ChunkDataEvent;
+
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -36,7 +35,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.worldgen.WorldGenerator;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
+
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class TickHandlerCoreServer {
 
@@ -57,7 +59,7 @@ public class TickHandlerCoreServer {
 		if (Config.enableBackpackResupply) {
 			for (Object obj : event.world.playerEntities) {
 				EntityPlayer player = (EntityPlayer) obj;
-				for (IResupplyHandler handler : PluginManager.resupplyHandlers) {
+				for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
 					handler.resupply(player);
 				}
 			}
