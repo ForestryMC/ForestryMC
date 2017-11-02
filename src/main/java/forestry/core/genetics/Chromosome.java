@@ -38,17 +38,6 @@ public class Chromosome implements IChromosome {
 		return new Chromosome(primary, secondary);
 	}
 
-	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, IChromosomeType chromosomeType, String primaryUID, String secondaryUID) {
-		IAllele primary = AlleleManager.alleleRegistry.getAllele(primaryUID);
-		IAllele secondary = AlleleManager.alleleRegistry.getAllele(secondaryUID);
-
-		primary = validateAllele(primarySpeciesUid, chromosomeType, primary);
-		secondary = validateAllele(secondarySpeciesUid, chromosomeType, secondary);
-
-
-		return new Chromosome(primary, secondary);
-	}
-
 	private static IAllele validateAllele(@Nullable String speciesUid, IChromosomeType chromosomeType, @Nullable IAllele allele) {
 		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
 			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
@@ -123,16 +112,16 @@ public class Chromosome implements IChromosome {
 
 		IAllele choice1;
 		if (rand.nextBoolean()) {
-			choice1 = parent1.getActiveAllele();
+			choice1 = parent1.getPrimaryAllele();
 		} else {
-			choice1 = parent1.getInactiveAllele();
+			choice1 = parent1.getSecondaryAllele();
 		}
 
 		IAllele choice2;
 		if (rand.nextBoolean()) {
-			choice2 = parent2.getActiveAllele();
+			choice2 = parent2.getPrimaryAllele();
 		} else {
-			choice2 = parent2.getInactiveAllele();
+			choice2 = parent2.getSecondaryAllele();
 		}
 
 		if (rand.nextBoolean()) {

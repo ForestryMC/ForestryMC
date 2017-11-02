@@ -162,54 +162,28 @@ public abstract class Genome implements IGenome {
 
 
 	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
-		//Handle old nbt format
-		if(genomeNBT.hasKey("Chromosomes")) {
-			NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-			IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
+		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
+		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
 
-			String primarySpeciesUid = null;
-			String secondarySpeciesUid = null;
+		String primarySpeciesUid = null;
+		String secondarySpeciesUid = null;
 
-			for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
-				NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
-				byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
+		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
+			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
+			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
 
-				if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
-					IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
-					Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
-					chromosomes[chromosomeOrdinal] = chromosome;
+			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
+				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
+				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
+				chromosomes[chromosomeOrdinal] = chromosome;
 
-					if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
-						primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
-						secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
-					}
-				}
-			}
-			return chromosomes;
-		}else{
-			NBTTagCompound activeTag = genomeNBT.getCompoundTag("Active");
-			NBTTagCompound inactiveTag = genomeNBT.getCompoundTag("Inactive");
-			IChromosomeType[] karyotype = speciesRoot.getKaryotype();
-			IChromosome[] chromosomes = new IChromosome[karyotype.length];
-
-			String primarySpeciesUid = null;
-			String secondarySpeciesUid = null;
-
-			for(int index = 0;index < chromosomes.length;index++){
-				IChromosomeType chromosomeType = karyotype[index];
-				String typeName = chromosomeType.getName();
-				String activeAllele = activeTag.getString(typeName);
-				String inactiveAllele = inactiveTag.getString(typeName);
-				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, activeAllele, inactiveAllele);
-				chromosomes[index] = chromosome;
-
-				if (index == speciesRoot.getSpeciesChromosomeType().ordinal()) {
+				if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
 					primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
 					secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
 				}
 			}
-			return chromosomes;
 		}
+		return chromosomes;
 	}
 
 	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
