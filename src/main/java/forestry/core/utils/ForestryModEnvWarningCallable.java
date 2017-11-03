@@ -19,10 +19,10 @@ import java.util.Set;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
 
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
 import forestry.core.config.Constants;
-import forestry.plugins.ForestryPlugin;
-import forestry.plugins.IForestryPlugin;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
 
 /**
  * ICrashCallable for listing disabled modules for crash reports.
@@ -31,15 +31,15 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 	private final String disabledModulesMessage;
 
 	public static void register() {
-		Set<IForestryPlugin> configDisabledPlugins = PluginManager.configDisabledPlugins;
-		if (!configDisabledPlugins.isEmpty()) {
-			List<String> disabledPluginNames = new ArrayList<>();
-			for (IForestryPlugin plugin : configDisabledPlugins) {
-				ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
-				disabledPluginNames.add(info.name());
+		Set<IForestryModule> configDisabledModules = ModuleManager.configDisabledModules;
+		if (!configDisabledModules.isEmpty()) {
+			List<String> disabledModuleNames = new ArrayList<>();
+			for (IForestryModule module : configDisabledModules) {
+				ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+				disabledModuleNames.add(info.name());
 			}
 
-			String disabledModulesMessage = "Plugins have been disabled in the config: " + Joiner.on(", ").join(disabledPluginNames);
+			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(disabledModuleNames);
 			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
 			FMLCommonHandler.instance().registerCrashCallable(callable);
 		}

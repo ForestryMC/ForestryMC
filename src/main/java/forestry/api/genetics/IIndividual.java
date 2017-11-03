@@ -16,10 +16,19 @@ import forestry.api.core.INbtWritable;
  */
 public interface IIndividual extends INbtWritable {
 
+	/**
+	 * @return The uid of the active species of this individual.
+	 */
 	String getIdent();
 
+	/**
+	 * @return The display name of the active species of this individual.
+	 */
 	String getDisplayName();
 
+	/**
+	 * Adds some information about the individual to the list.
+	 */
 	void addTooltip(List<String> list);
 
 	/**
@@ -29,12 +38,24 @@ public interface IIndividual extends INbtWritable {
 	 */
 	boolean analyze();
 
+	/**
+	 * @return true if the IIndividual has been analyzed previously.
+	 */
 	boolean isAnalyzed();
 
+	/**
+	 * @return true if the active species of this individual has a effect.
+	 */
 	boolean hasEffect();
 
+	/**
+	 * @return true if the active species of this individual is secret.
+	 */
 	boolean isSecret();
 
+	/**
+	 * @return The genetic data of this individual.
+	 */
 	IGenome getGenome();
 
 	/**
@@ -49,6 +70,9 @@ public interface IIndividual extends INbtWritable {
 	 */
 	IIndividual copy();
 
+	/**
+	 * @return true if this individual has the same active and inactive species.
+	 */
 	boolean isPureBred(IChromosomeType chromosomeType);
 
 }

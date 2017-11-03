@@ -30,7 +30,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.farming.FarmRegistry;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
@@ -39,7 +39,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal() {
-		super(new ItemStack(Blocks.DIRT), PluginCore.getBlocks().humus.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmArboreal"));
+		super(new ItemStack(Blocks.DIRT), ModuleCore.getBlocks().humus.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmArboreal"));
 	}
 
 	@Override

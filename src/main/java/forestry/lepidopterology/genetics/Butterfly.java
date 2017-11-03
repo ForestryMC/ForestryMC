@@ -55,7 +55,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 	private static final Random rand = new Random();
@@ -365,11 +365,11 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			}
 		}
 
-		if (PluginLepidopterology.getSerumChance() > 0) {
-			if (rand.nextFloat() < PluginLepidopterology.getSerumChance() * metabolism) {
+		if (ModuleLepidopterology.getSerumChance() > 0) {
+			if (rand.nextFloat() < ModuleLepidopterology.getSerumChance() * metabolism) {
 				ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.SERUM);
-				if (PluginLepidopterology.getSecondSerumChance() > 0) {
-					if (rand.nextFloat() < PluginLepidopterology.getSecondSerumChance() * metabolism) {
+				if (ModuleLepidopterology.getSecondSerumChance() > 0) {
+					if (rand.nextFloat() < ModuleLepidopterology.getSecondSerumChance() * metabolism) {
 						stack.setCount(2);
 					}
 				}

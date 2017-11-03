@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 
@@ -34,7 +34,7 @@ public class TileGreenhousePlain extends TileGreenhouse {
 			if (getPos().equals(greenhouseController.getCenterCoordinates())) {
 				type = BlockGreenhouseType.BORDER_CENTER;
 			}
-			this.world.setBlockState(getPos(), PluginGreenhouse.getBlocks().greenhouseBlock.getDefaultState().withProperty(BlockGreenhouse.TYPE, type), 2);
+			this.world.setBlockState(getPos(), ModuleGreenhouse.getBlocks().greenhouseBlock.getDefaultState().withProperty(BlockGreenhouse.TYPE, type), 2);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class TileGreenhousePlain extends TileGreenhouse {
 		super.onMachineBroken();
 
 		// set border block state back to normal
-		this.world.setBlockState(getPos(), PluginGreenhouse.getBlocks().greenhouseBlock.getDefaultState().withProperty(BlockGreenhouse.TYPE, BlockGreenhouseType.PLAIN), 2);
+		this.world.setBlockState(getPos(), ModuleGreenhouse.getBlocks().greenhouseBlock.getDefaultState().withProperty(BlockGreenhouse.TYPE, BlockGreenhouseType.PLAIN), 2);
 	}
 
 	@Override

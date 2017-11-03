@@ -28,6 +28,7 @@ import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
+import forestry.database.tiles.TileDatabase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.energy.tiles.TileEngineBiogas;
@@ -76,6 +77,8 @@ public class GuiIdRegistry {
 				TileRaintank.class,
 				TileWorktable.class,
 
+				TileDatabase.class,
+
 				TileBottler.class,
 				TileCarpenter.class,
 				TileCentrifuge.class,
@@ -88,7 +91,7 @@ public class GuiIdRegistry {
 				TileFarm.class,
 
 				TileGreenhouse.class,
-			TileClimatiser.class,
+				TileClimatiser.class,
 				TileHygroregulator.class,
 
 				TileEngineBiogas.class,

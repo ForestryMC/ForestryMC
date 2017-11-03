@@ -5,12 +5,14 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ITextureManager;
 
 public interface IWoodProvider {
 	@SideOnly(Side.CLIENT)
@@ -29,11 +31,15 @@ public interface IWoodProvider {
 	
 	/**
 	 * The amount of charcoal dropped from a charcoal pile of this wood.
+	 * @deprecated Will be removed in 1.13
 	 */
+	@Deprecated
 	int getCarbonization();
 
 	/**
 	 * The chance that a pile has to drop a extra charcoal
+	 * @deprecated Will be removed in 1.13
 	 */
+	@Deprecated
 	float getCharcoalChance(int numberOfCharcoal);
 }

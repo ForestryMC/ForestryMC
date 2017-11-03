@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public interface IClimateManager {
 
 	/**
-	 * @deprecated Use {@link IClimateStates#create(float, float)}
+	 * @deprecated Use {@link IClimateStates#create(float, float, ClimateStateType)}
 	 */
 	@Deprecated
 	IClimateInfo createInfo(float temperature, float humidity);

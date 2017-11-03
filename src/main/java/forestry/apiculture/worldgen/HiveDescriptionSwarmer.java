@@ -19,7 +19,7 @@ import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
 import net.minecraft.block.state.IBlockState;
@@ -44,7 +44,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public IBlockState getBlockState() {
-		return PluginApiculture.getBlocks().beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
+		return ModuleApiculture.getBlocks().beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
 	}
 
 	@Override

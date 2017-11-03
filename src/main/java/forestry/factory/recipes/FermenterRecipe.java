@@ -92,6 +92,6 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 	@Override
 	public int compareTo(IFermenterRecipe o) {
-		return resource.isEmpty() ? 1 : 0;
+		return !resource.isEmpty() ? -1 : 1;
 	}
 }

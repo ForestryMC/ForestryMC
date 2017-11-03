@@ -17,17 +17,18 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {
-		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
+		if (ModuleManager.getStage() != ModuleManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 

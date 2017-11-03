@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.google.common.base.Objects;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
@@ -163,7 +162,6 @@ public abstract class Genome implements IGenome {
 
 
 	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
-
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
 		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
 
@@ -185,7 +183,6 @@ public abstract class Genome implements IGenome {
 				}
 			}
 		}
-
 		return chromosomes;
 	}
 
@@ -196,7 +193,6 @@ public abstract class Genome implements IGenome {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < chromosomes.length; i++) {
 			if (chromosomes[i] != null) {

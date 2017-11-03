@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
 
@@ -61,7 +61,7 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			IBlockState blockState = worldIn.getBlockState(pos);
 			Block block = blockState.getBlock();
-			IBlockState activatedState = PluginApiculture.getBlocks().candle.getStateFromMeta(block.getMetaFromState(blockState));
+			IBlockState activatedState = ModuleApiculture.getBlocks().candle.getStateFromMeta(block.getMetaFromState(blockState));
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
 			tc.setColour(16777215); // default to white

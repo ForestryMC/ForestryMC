@@ -33,7 +33,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public abstract class CocoonDecorator {
@@ -60,7 +60,7 @@ public abstract class CocoonDecorator {
 	}
 
 	public static boolean genCocoon(World world, Random rand, int chunkX, int chunkZ, IButterfly butterfly) {
-		if (butterfly.getGenome().getPrimary().getRarity() * PluginLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
+		if (butterfly.getGenome().getPrimary().getRarity() * ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
 			return false;
 		}
 
@@ -110,7 +110,7 @@ public abstract class CocoonDecorator {
 	}
 
 	private static boolean setCocoon(World world, BlockPos pos, IButterfly butterfly) {
-		Block cocoonBlock = PluginLepidopterology.getBlocks().solidCocoon;
+		Block cocoonBlock = ModuleLepidopterology.getBlocks().solidCocoon;
 		boolean placed = world.setBlockState(pos, cocoonBlock.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		if (!placed) {
 			return false;

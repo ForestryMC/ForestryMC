@@ -30,7 +30,7 @@ import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
 
 public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
@@ -43,7 +43,7 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if (stack != null && stack.getItem() == PluginApiculture.getItems().apiaristLegs) {
+		if (stack != null && stack.getItem() == ModuleApiculture.getItems().apiaristLegs) {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;

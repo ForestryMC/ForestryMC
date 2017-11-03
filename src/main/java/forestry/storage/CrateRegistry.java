@@ -16,15 +16,16 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import forestry.api.storage.ICrateRegistry;
-import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
+import forestry.storage.items.ItemCrated;
 
 public class CrateRegistry implements ICrateRegistry {
 
@@ -55,7 +56,7 @@ public class CrateRegistry implements ICrateRegistry {
 
 		ForgeRegistries.ITEMS.register(crate);
 		Proxies.common.registerItem(crate);
-		PluginStorage.registerCrate(crate);
+		ModuleCrates.registerCrate(crate);
 	}
 
 	@Override

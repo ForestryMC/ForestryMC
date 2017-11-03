@@ -35,6 +35,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.advancements.SpeciesDiscoveredTrigger;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.utils.NetworkUtil;
 
@@ -125,6 +126,10 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				writeToNBT(nbtTagCompound, discoveredSpecies, discoveredMutations, researchedMutations);
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
 				NetworkUtil.sendToPlayer(packet, player);
+
+				for(String species : discoveredSpecies) {
+					SpeciesDiscoveredTrigger.INSTANCE.trigger(( EntityPlayerMP)player, AlleleManager.alleleRegistry.getAllele(species));
+				}
 			}
 		}
 	}

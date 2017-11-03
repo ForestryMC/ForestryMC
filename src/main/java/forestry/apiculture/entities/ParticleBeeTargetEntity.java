@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 
 public class ParticleBeeTargetEntity extends Particle {
 	private final Vec3d origin;
@@ -24,7 +24,7 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(PluginApiculture.getBeeSprite());
+		setParticleTexture(ModuleApiculture.getBeeSprite());
 
 		this.origin = origin;
 		this.entity = entity;

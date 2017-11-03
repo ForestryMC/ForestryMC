@@ -16,7 +16,7 @@ import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.genetics.BreedingTracker;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
@@ -25,7 +25,7 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 	 * Required for creation from map storage
 	 */
 	public ArboristTracker(String s) {
-		super(s, PluginArboriculture.treekeepingMode);
+		super(s, ModuleArboriculture.treekeepingMode);
 	}
 
 	@Override

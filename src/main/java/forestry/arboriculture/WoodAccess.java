@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockWoodSlab;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
@@ -31,15 +42,6 @@ import forestry.arboriculture.blocks.BlockForestryPlanks;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
 import forestry.arboriculture.blocks.PropertyWoodType;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 public class WoodAccess implements IWoodAccess {
 	@Nullable
@@ -179,7 +181,7 @@ public class WoodAccess implements IWoodAccess {
 			IWoodType woodType = woodTyped.getWoodType(meta);
 			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
 			if (!(woodType instanceof EnumVanillaWoodType)) {
-				PluginArboriculture.proxy.registerWoodModel(woodTyped, true);
+				ModuleArboriculture.proxy.registerWoodModel(woodTyped, true);
 			}
 			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 		}
@@ -194,7 +196,7 @@ public class WoodAccess implements IWoodAccess {
 		IWoodType woodType = woodTyped.getWoodType(0);
 		ItemStack itemStack = new ItemStack(woodTyped);
 		if (!(woodType instanceof EnumVanillaWoodType)) {
-			PluginArboriculture.proxy.registerWoodModel(woodTyped, false);
+			ModuleArboriculture.proxy.registerWoodModel(woodTyped, false);
 		}
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 	}

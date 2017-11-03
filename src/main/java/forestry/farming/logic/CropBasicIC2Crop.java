@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.Optional;
 
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.PluginIC2;
 
 import ic2.api.crops.ICropTile;
 

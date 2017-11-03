@@ -20,7 +20,6 @@ import forestry.api.climate.IClimateState;
 import forestry.core.climate.ClimateStates;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.TextLayoutHelper;
 import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.gui.widgets.WidgetCamouflageTab;
@@ -80,10 +79,6 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse> {
 		if (!temperaturePanel.keyTyped(typedChar, keyCode) && !humidityPanel.keyTyped(typedChar, keyCode)) {
 			super.keyTyped(typedChar, keyCode);
 		}
-	}
-
-	TextLayoutHelper getTextLayout() {
-		return textLayout;
 	}
 
 	@Override

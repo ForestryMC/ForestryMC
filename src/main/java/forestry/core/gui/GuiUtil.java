@@ -30,12 +30,16 @@ import forestry.core.gui.tooltips.ToolTip;
 @SideOnly(Side.CLIENT)
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
+		drawItemStack(gui.getFontRenderer(), stack, xPos, yPos);
+	}
+
+	public static void drawItemStack(FontRenderer fontRenderer, ItemStack stack, int xPos, int yPos) {
 		FontRenderer font = null;
 		if (!stack.isEmpty()) {
 			font = stack.getItem().getFontRenderer(stack);
 		}
 		if (font == null) {
-			font = gui.getFontRenderer();
+			font = fontRenderer;
 		}
 
 		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();

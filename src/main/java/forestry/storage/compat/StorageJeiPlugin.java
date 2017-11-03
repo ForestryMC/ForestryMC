@@ -1,8 +1,8 @@
 package forestry.storage.compat;
 
 import forestry.core.utils.JeiUtil;
-import forestry.storage.PluginStorage;
-import forestry.storage.items.ItemRegistryStorage;
+import forestry.storage.ModuleBackpacks;
+import forestry.storage.items.ItemRegistryBackpacks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
@@ -11,7 +11,7 @@ import mezz.jei.api.JEIPlugin;
 public class StorageJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryStorage items = PluginStorage.getItems();
+		ItemRegistryBackpacks items = ModuleBackpacks.getItems();
 
 		JeiUtil.addDescription(registry, "minerBag",
 				items.minerBackpack,

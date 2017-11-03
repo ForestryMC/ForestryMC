@@ -17,14 +17,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 
 public class ParticleBeeExplore extends Particle {
 	private final Vec3d origin;
 
 	public ParticleBeeExplore(World world, Vec3d origin, BlockPos destination, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(PluginApiculture.getBeeSprite());
+		setParticleTexture(ModuleApiculture.getBeeSprite());
 		this.origin = origin;
 
 		this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;

@@ -14,10 +14,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.core.gui.GuiForestry;
 import net.minecraft.client.Minecraft;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.gui.GuiForestry;
 
 @SideOnly(Side.CLIENT)
 public class WidgetManager {
@@ -64,6 +66,12 @@ public class WidgetManager {
 		}
 	}
 
+	public void updateWidgets(int mouseX, int mouseY) {
+		for (Widget slot : widgets) {
+			slot.update(mouseX, mouseY);
+		}
+	}
+
 	public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
 		Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 		if (slot != null) {
@@ -74,7 +82,7 @@ public class WidgetManager {
 	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
 		boolean hasToStop = false;
 		for (Widget slot : widgets) {
-			hasToStop|=slot.handleMouseRelease(mouseX, mouseY, eventType);
+			hasToStop|=slot.handleMouseRelease(mouseX- gui.getGuiLeft(), mouseY - gui.getGuiTop(), eventType);
 		}
 		return hasToStop;
 	}

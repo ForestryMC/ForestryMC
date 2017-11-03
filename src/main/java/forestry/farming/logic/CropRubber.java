@@ -28,7 +28,7 @@ import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.PluginIC2;
 
 public class CropRubber extends CropDestroy {
 

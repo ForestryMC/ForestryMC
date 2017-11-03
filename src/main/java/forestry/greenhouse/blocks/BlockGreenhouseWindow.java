@@ -55,7 +55,7 @@ import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.tiles.TileGreenhouseWindow;
 import forestry.greenhouse.tiles.TileGreenhouseWindow.WindowMode;
@@ -72,7 +72,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(PluginGreenhouse.getGreenhouseTab());
+		setCreativeTab(ModuleGreenhouse.getGreenhouseTab());
 		setSoundType(SoundType.GLASS);
 		this.roofWindow = roofWindow;
 	}

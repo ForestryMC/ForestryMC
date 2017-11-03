@@ -27,11 +27,11 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
-import forestry.plugins.PluginManager;
+import forestry.modules.ModuleManager;
 
 public class WorldGenerator implements IWorldGenerator {
 	@Nullable
@@ -53,24 +53,24 @@ public class WorldGenerator implements IWorldGenerator {
 	@SubscribeEvent
 	public void populateChunk(PopulateChunkEvent.Post event) {
 		// / PLUGIN WORLD GENERATION
-		PluginManager.populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
+		ModuleManager.populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
 	}
 
 	@SubscribeEvent
 	public void decorateBiome(DecorateBiomeEvent.Post event) {
-		PluginManager.decorateBiome(event.getWorld(), event.getRand(), event.getPos());
+		ModuleManager.decorateBiome(event.getWorld(), event.getRand(), event.getPos());
 	}
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
-		PluginManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
+		ModuleManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
 		world.getChunkFromChunkCoords(chunkX, chunkZ).markDirty();
 	}
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
-			BlockResourceOre resourcesBlock = PluginCore.getBlocks().resources;
+			BlockResourceOre resourcesBlock = ModuleCore.getBlocks().resources;
 
 			IBlockState apatiteBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.APATITE.getMeta());
 			IBlockState copperBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.COPPER.getMeta());

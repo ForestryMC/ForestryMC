@@ -15,19 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.apiculture.IBeeHousingInventory;
-import forestry.api.apiculture.IBeeListener;
-import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IHiveFrame;
-import forestry.apiculture.ApiaryBeeListener;
-import forestry.apiculture.ApiaryBeeModifier;
-import forestry.apiculture.IApiary;
-import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.gui.ContainerMinecartBeehouse;
-import forestry.apiculture.gui.GuiBeeHousing;
-import forestry.apiculture.inventory.IApiaryInventory;
-import forestry.apiculture.inventory.InventoryApiary;
-import forestry.core.inventory.IInventoryAdapter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,8 +22,23 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.apiculture.IBeeHousingInventory;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IHiveFrame;
+import forestry.apiculture.ApiaryBeeListener;
+import forestry.apiculture.ApiaryBeeModifier;
+import forestry.apiculture.IApiary;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiBeeHousing;
+import forestry.apiculture.inventory.IApiaryInventory;
+import forestry.apiculture.inventory.InventoryApiary;
+import forestry.core.inventory.IInventoryAdapter;
 
 public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implements IApiary {
 
@@ -76,12 +78,12 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public IBlockState getDisplayTile() {
-		return PluginApiculture.getBlocks().apiary.getDefaultState();
+		return ModuleApiculture.getBlocks().apiary.getDefaultState();
 	}
 
 	@Override
 	public ItemStack getCartItem() {
-		return PluginApiculture.getItems().minecartBeehouse.getApiaryMinecart();
+		return ModuleApiculture.getItems().minecartBeehouse.getApiaryMinecart();
 	}
 
 	@Override

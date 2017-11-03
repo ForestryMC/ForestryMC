@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {
@@ -56,7 +56,7 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		public ItemStack getStack(int qty) {
-			return new ItemStack(PluginCore.getItems().fruits, qty, ordinal());
+			return new ItemStack(ModuleCore.getItems().fruits, qty, ordinal());
 		}
 
 		public String getOreDict() {

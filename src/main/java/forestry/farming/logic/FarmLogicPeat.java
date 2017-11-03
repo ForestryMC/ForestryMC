@@ -21,14 +21,14 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.core.PluginCore;
+import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-	private static final ItemStack bogEarth = PluginCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
+	private static final ItemStack bogEarth = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
 
 	public FarmLogicPeat() {
-		super(bogEarth, PluginCore.getBlocks().bogEarth.getDefaultState());
+		super(bogEarth, ModuleCore.getBlocks().bogEarth.getDefaultState());
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		return blockState.getBlock() == PluginCore.getBlocks().bogEarth;
+		return blockState.getBlock() == ModuleCore.getBlocks().bogEarth;
 	}
 
 	@Override
@@ -86,6 +86,6 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(PluginCore.getItems().peat);
+		return new ItemStack(ModuleCore.getItems().peat);
 	}
 }

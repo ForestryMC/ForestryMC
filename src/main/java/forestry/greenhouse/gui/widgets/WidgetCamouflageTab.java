@@ -90,7 +90,7 @@ public class WidgetCamouflageTab extends Widget {
 
 	@Override
 	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
-		return isMouseOver(mouseX - manager.gui.getGuiLeft(), mouseY - manager.gui.getGuiTop());
+		return isMouseOver(mouseX, mouseY);
 	}
 
 	@Nullable

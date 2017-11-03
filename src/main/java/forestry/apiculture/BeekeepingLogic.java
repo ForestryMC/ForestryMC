@@ -276,13 +276,13 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		// Work cycles are throttled, rather than occurring every game tick.
 		queenWorkCycleThrottle++;
-		if (queenWorkCycleThrottle >= PluginApiculture.ticksPerBeeWorkCycle) {
+		if (queenWorkCycleThrottle >= ModuleApiculture.ticksPerBeeWorkCycle) {
 			queenWorkCycleThrottle = 0;
 
 			doProduction(queen, housing, beeListener);
 			World world = housing.getWorldObj();
 			List<IBlockState> flowers = hasFlowersCache.getFlowers(world);
-			if (flowers.size() < PluginApiculture.maxFlowersSpawnedPerHive) {
+			if (flowers.size() < ModuleApiculture.maxFlowersSpawnedPerHive) {
 				BlockPos blockPos = queen.plantFlowerRandom(housing, flowers);
 				if (blockPos != null) {
 					hasFlowersCache.addFlowerPos(blockPos);
@@ -380,7 +380,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		princess.writeToNBT(nbttagcompound);
-		queenStack = new ItemStack(PluginApiculture.getItems().beeQueenGE);
+		queenStack = new ItemStack(ModuleApiculture.getItems().beeQueenGE);
 		queenStack.setTagCompound(nbttagcompound);
 
 		beeInventory.setQueen(queenStack);
@@ -410,7 +410,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
-			ItemStack convert = new ItemStack(PluginApiculture.getItems().beePrincessGE);
+			ItemStack convert = new ItemStack(ModuleApiculture.getItems().beePrincessGE);
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			queen.writeToNBT(nbttagcompound);
 			convert.setTagCompound(nbttagcompound);
@@ -433,7 +433,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
 
 		// Princess
-		boolean secondPrincess = world.rand.nextInt(10000) < PluginApiculture.getSecondPrincessChance() * 100;
+		boolean secondPrincess = world.rand.nextInt(10000) < ModuleApiculture.getSecondPrincessChance() * 100;
 		int count = secondPrincess ? 2 : 1;
 		while (count > 0) {
 			count--;

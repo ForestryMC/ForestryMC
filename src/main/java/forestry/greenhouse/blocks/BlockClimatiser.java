@@ -66,7 +66,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.models.ModelCamouflaged;
 import forestry.greenhouse.tiles.TileDehumidifier;
 import forestry.greenhouse.tiles.TileFan;
@@ -82,7 +82,7 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(PluginGreenhouse.getGreenhouseTab());
+		setCreativeTab(ModuleGreenhouse.getGreenhouseTab());
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockClimatiserType.HUMIDIFIER));
 	}
 

@@ -60,7 +60,7 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.genetics.Butterfly;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
@@ -108,7 +108,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		super(world);
 		setDefaults();
 		setIndividual(butterfly);
-		setHomePosAndDistance(homePos, PluginLepidopterology.maxDistance);
+		setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setState(state);
 		exhaustion = nbttagcompound.getInteger("EXH");
 		BlockPos home = new BlockPos(nbttagcompound.getInteger("homeX"), nbttagcompound.getInteger("homeY"), nbttagcompound.getInteger("homeZ"));
-		setHomePosAndDistance(home, PluginLepidopterology.maxDistance);
+		setHomePosAndDistance(home, ModuleLepidopterology.maxDistance);
 	}
 
 	public float getWingFlap(float partialTicktime) {

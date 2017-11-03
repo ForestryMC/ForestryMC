@@ -25,7 +25,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 import net.minecraft.block.Block;
@@ -104,7 +104,7 @@ public enum HiveDescription implements IHiveDescription {
 	private final IHiveGen hiveGen;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = PluginApiculture.getBlocks().beehives.getStateForType(hiveType);
+		this.blockState = ModuleApiculture.getBlocks().beehives.getStateForType(hiveType);
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;

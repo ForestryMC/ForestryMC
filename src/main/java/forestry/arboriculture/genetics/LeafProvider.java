@@ -1,11 +1,12 @@
 package forestry.arboriculture.genetics;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.genetics.IAllele;
-import forestry.arboriculture.PluginArboriculture;
-import net.minecraft.item.ItemStack;
+import forestry.arboriculture.ModuleArboriculture;
 
 public class LeafProvider implements ILeafProvider {
 	
@@ -25,7 +26,7 @@ public class LeafProvider implements ILeafProvider {
 		if(allele == null){
 			allele = TreeDefinition.Oak.getTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
 		}
-		return PluginArboriculture.getBlocks().getDecorativeLeaves(allele.getUID());
+		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getUID());
 	}
 
 }

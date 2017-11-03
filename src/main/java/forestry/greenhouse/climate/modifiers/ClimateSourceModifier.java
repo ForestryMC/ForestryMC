@@ -25,7 +25,7 @@ import forestry.api.climate.IClimateState;
 import forestry.core.climate.ClimateStates;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
@@ -127,6 +127,6 @@ public class ClimateSourceModifier implements IClimateModifier {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
-		return PluginGreenhouse.getBlocks().window.getItem("glass");
+		return ModuleGreenhouse.getBlocks().window.getItem("glass");
 	}
 }

@@ -28,12 +28,16 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesPlugin;
 import forestry.api.genetics.ISpeciesType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
@@ -50,7 +54,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.items.ItemButterflyGE;
@@ -103,7 +107,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return null;
 		}
 
-		ItemRegistryLepidopterology butterflyItems = PluginLepidopterology.getItems();
+		ItemRegistryLepidopterology butterflyItems = ModuleLepidopterology.getItems();
 		Preconditions.checkState(butterflyItems != null);
 
 		Item item = stack.getItem();
@@ -152,7 +156,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
 		Preconditions.checkArgument(type instanceof EnumFlutterType);
-		ItemRegistryLepidopterology items = PluginLepidopterology.getItems();
+		ItemRegistryLepidopterology items = ModuleLepidopterology.getItems();
 		Preconditions.checkState(items != null);
 
 		Item butterflyItem;
@@ -194,7 +198,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return BlockPos.ORIGIN;
 		}
 
-		BlockRegistryLepidopterology blocks = PluginLepidopterology.getBlocks();
+		BlockRegistryLepidopterology blocks = ModuleLepidopterology.getBlocks();
 
 		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
 		if(pos == BlockPos.ORIGIN){
@@ -362,5 +366,11 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return FlutterlyzerPlugin.INSTANCE;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ISpeciesPlugin getSpeciesPlugin() {
+		return ButterflyPlugin.INSTANCE;
 	}
 }

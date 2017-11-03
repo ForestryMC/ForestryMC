@@ -51,7 +51,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleSpeciesRegisterEvent;
 import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.models.ModelProviderFactory;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -1000,10 +1000,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	public boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos) {
 		if (owner == null && genome.matchesTemplateGenome()) {
 			String speciesUid = genome.getPrimary().getUID();
-			IBlockState defaultLeaves = PluginArboriculture.getBlocks().getDefaultLeaves(speciesUid);
+			IBlockState defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(speciesUid);
 			return world.setBlockState(pos, defaultLeaves);
 		} else {
-			IBlockState leaves = PluginArboriculture.getBlocks().leaves.getDefaultState();
+			IBlockState leaves = ModuleArboriculture.getBlocks().leaves.getDefaultState();
 			boolean placed = world.setBlockState(pos, leaves);
 			if (!placed) {
 				return false;

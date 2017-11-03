@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.core.ForestryAPI;
@@ -30,8 +33,7 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
-import forestry.plugins.ForestryPluginUids;
-import net.minecraft.util.math.Vec3i;
+import forestry.modules.ForestryModuleUids;
 
 public class AlleleHelper implements IAlleleHelper {
 
@@ -49,13 +51,13 @@ public class AlleleHelper implements IAlleleHelper {
 	}
 
 	public void init() {
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
 			createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Flowering.class, EnumBeeChromosome.FLOWERING);
 			createAlleles(EnumAllele.Territory.class, EnumBeeChromosome.TERRITORY);
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) || ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
 			createAlleles(EnumAllele.Speed.class,
 					EnumBeeChromosome.SPEED,
 					EnumButterflyChromosome.SPEED
@@ -76,7 +78,7 @@ public class AlleleHelper implements IAlleleHelper {
 			);
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
 			createAlleles(EnumAllele.Height.class, EnumTreeChromosome.HEIGHT);
 			createAlleles(EnumAllele.Saplings.class, EnumTreeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Yield.class, EnumTreeChromosome.YIELD);
@@ -85,7 +87,7 @@ public class AlleleHelper implements IAlleleHelper {
 			createAlleles(EnumAllele.Sappiness.class, EnumTreeChromosome.SAPPINESS);
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
 			createAlleles(EnumAllele.Size.class, EnumButterflyChromosome.SIZE);
 		}
 

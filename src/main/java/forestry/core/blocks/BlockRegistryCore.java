@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.blocks.properties.BlockAshStairs;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.OreDictUtil;
 

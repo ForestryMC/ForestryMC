@@ -3,7 +3,7 @@ package forestry.apiculture.compat;
 import com.google.common.base.Preconditions;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.genetics.Genome;
 import forestry.core.utils.JeiUtil;
@@ -16,7 +16,7 @@ import mezz.jei.api.JEIPlugin;
 public class ApicultureJeiPlugin implements IModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-		ItemRegistryApiculture items = PluginApiculture.getItems();
+		ItemRegistryApiculture items = ModuleApiculture.getItems();
 		Preconditions.checkNotNull(items);
 
 		ISubtypeRegistry.ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
@@ -31,7 +31,7 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		ItemRegistryApiculture items = PluginApiculture.getItems();
+		ItemRegistryApiculture items = ModuleApiculture.getItems();
 		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry, "frames",

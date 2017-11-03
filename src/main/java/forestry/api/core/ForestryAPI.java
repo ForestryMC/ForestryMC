@@ -7,14 +7,18 @@ package forestry.api.core;
 
 import java.util.Set;
 
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateStates;
-import forestry.greenhouse.api.climate.IClimateFactory;
 import forestry.api.climate.IClimateManager;
+import forestry.api.climate.IClimateStates;
 import forestry.api.farming.IFarmRegistry;
+import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
+import forestry.api.modules.IModuleContainer;
+import forestry.api.modules.IModuleManager;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.
@@ -51,17 +55,20 @@ public class ForestryAPI {
 	public static IModelManager modelManager;
 
 	public static IClimateManager climateManager;
-	
-	/**
-	 * A factory to create climate related things.
-	 * @since 5.3.4
-	 */
-	public static IClimateFactory climateFactory;
 
+	/**
+	 * Instance of the module manager of forestry.
+	 * This can be used to register {@link IModuleContainer}s in the constructor of your mod.
+	 */
+	public static IModuleManager moduleManager;
+
+	/**
+	 *
+	 */
 	public static IClimateStates states;
 
 	/**
-	 * A registry for register fertilizers, {@link IFarmabeles}s and {@link ISimpleFarmLogic}s
+	 * A registry for register fertilizers, {@link IFarmable}s and {@link ISimpleFarmLogic}s
 	 */
 	public static IFarmRegistry farmRegistry;
 	
@@ -76,10 +83,20 @@ public class ForestryAPI {
 	public static IForestryConstants forestryConstants;
 
 	/**
-	 * The currently enabled Forestry plugins.
+	 * The currently enabled Forestry modules.
 	 * Can be used to check if certain features are available, for example:
-	 * ForestryAPI.enabledPlugins.contains("APICULTURE")
+	 * ForestryAPI.enabledModules.contains(new ResourceLocation("forestry", "apiculture"))
 	 */
+	public static Set<ResourceLocation> enabledModules;
+
+	/**
+	 * The currently enabled Forestry modules.
+	 * Can be used to check if certain features are available, for example:
+	 * ForestryAPI.enabledPlugins.contains("forestry.apiculture")
+	 *
+	 * @deprecated Use {@link #enabledModules}
+	 */
+	@Deprecated
 	public static Set<String> enabledPlugins;
 
 	/**

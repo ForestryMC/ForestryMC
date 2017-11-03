@@ -24,6 +24,10 @@ public enum PacketIdServer implements IPacketId {
 	PIPETTE_CLICK,
 	CHIPSET_CLICK,
 	SOLDERING_IRON_CLICK,
+
+	//Database
+	INSERT_ITEM,
+	EXTRACT_ITEM,
 	
 	// Greenhouse
 	CAMOUFLAGE_SELECTION,

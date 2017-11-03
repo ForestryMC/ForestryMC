@@ -16,6 +16,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -27,7 +36,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IFruitFamily;
-import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.gui.GuiAlyzer;
@@ -35,13 +44,6 @@ import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.Translator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	public static final TreeAlyzerPlugin INSTANCE = new TreeAlyzerPlugin();
@@ -50,7 +52,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 	private TreeAlyzerPlugin() {
 		NonNullList<ItemStack> treeList = NonNullList.create();
-		PluginArboriculture.getItems().sapling.addCreativeItems(treeList, false);
+		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
 			iconStacks.put(species.getUID(), treeStack);

@@ -32,24 +32,24 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.config.Constants;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
-import forestry.plugins.ForestryPluginUids;
+import forestry.modules.ForestryModuleUids;
 
 public class CreativeTabForestry extends CreativeTabs {
 
 	static {
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
 			Tabs.tabAgriculture = new CreativeTabForestry(1, "agriculture");
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
 			Tabs.tabApiculture = new CreativeTabForestry(2, "apiculture");
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
 			Tabs.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
 		}
 
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
 			Tabs.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
 		}
 	}
@@ -81,7 +81,7 @@ public class CreativeTabForestry extends CreativeTabs {
 				break;
 		}
 		if (iconItem == null) {
-			iconItem = PluginCore.getItems().wrench;
+			iconItem = ModuleCore.getItems().wrench;
 		}
 		return new ItemStack(iconItem);
 	}

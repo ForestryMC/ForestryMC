@@ -27,7 +27,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
@@ -45,7 +45,7 @@ public abstract class HiveDecorator {
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
-		List<Hive> hives = PluginApiculture.getHiveRegistry().getHives();
+		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
 			decorateHivesDebug(world, rand, chunkX, chunkZ, hives);

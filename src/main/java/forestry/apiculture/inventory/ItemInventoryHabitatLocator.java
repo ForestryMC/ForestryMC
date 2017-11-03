@@ -10,22 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.core.IErrorSource;
-import forestry.api.core.IErrorState;
-import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.items.HabitatLocatorLogic;
-import forestry.apiculture.items.ItemHabitatLocator;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.inventory.ItemInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBee;
+import forestry.api.core.IErrorSource;
+import forestry.api.core.IErrorState;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.items.HabitatLocatorLogic;
+import forestry.apiculture.items.ItemHabitatLocator;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.inventory.ItemInventory;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
@@ -47,7 +49,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		Item item = itemstack.getItem();
-		return PluginApiculture.getItems().honeyDrop == item || PluginApiculture.getItems().honeydew == item;
+		return ModuleApiculture.getItems().honeyDrop == item || ModuleApiculture.getItems().honeydew == item;
 	}
 
 	@Override

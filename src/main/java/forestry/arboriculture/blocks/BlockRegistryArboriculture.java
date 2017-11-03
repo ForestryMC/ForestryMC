@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
@@ -70,12 +69,6 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
-	
-	public final BlockCharcoal charcoal;
-	public final BlockWoodPile woodPile;
-	public final BlockDecorativeWoodPile woodPileDecorative;
-	public final BlockAsh ash;
-	public final Block loam;
 
 	public final BlockArboriculture treeChest;
 
@@ -273,39 +266,6 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 				speciesToLeavesDecorative.put(speciesUid, new ItemStack(leaves, 1, meta));
 			}
 		}
-		
-		charcoal = new BlockCharcoal();
-		ItemBlockForestry itemBlockCharcoal = new ItemBlockForestry<BlockCharcoal>(charcoal) {
-			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
-				return 16000;
-			}
-		};
-		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
-		
-		woodPile = new BlockWoodPile();
-		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry<BlockWoodPile>(woodPile) {
-			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
-				return 1200;
-			}
-		};
-		registerBlock(woodPile, itemBlockWoodPile, "wood_pile");
-
-		woodPileDecorative = new BlockDecorativeWoodPile();
-		ItemBlockForestry itemBlockWoodPileDecorative = new ItemBlockForestry(woodPileDecorative) {
-			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
-				return 1200;
-			}
-		};
-		registerBlock(woodPileDecorative, itemBlockWoodPileDecorative, "wood_pile_decorative");
-
-		ash = new BlockAsh();
-		registerBlock(ash, new ItemBlockForestry(ash), "ash_block");
-
-		loam = new BlockLoam();
-		registerBlock(loam, new ItemBlockForestry<>(loam), "loam");
 
 		// Pods
 		AlleleFruits.registerAlleles();

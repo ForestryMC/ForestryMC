@@ -15,7 +15,7 @@ import java.util.List;
 
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.PluginLepidopterology;
+import forestry.lepidopterology.ModuleLepidopterology;
 
 public class AIButterflyMate extends AIButterflyInteract {
 	@Nullable
@@ -38,7 +38,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 
-		if (entity.world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+		if (entity.world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 

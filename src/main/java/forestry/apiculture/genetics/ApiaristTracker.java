@@ -19,7 +19,7 @@ import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
@@ -28,7 +28,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	 * Required for creation from map storage
 	 */
 	public ApiaristTracker(String s) {
-		super(s, PluginApiculture.beekeepingMode);
+		super(s, ModuleApiculture.beekeepingMode);
 	}
 
 	private int queensTotal = 0;

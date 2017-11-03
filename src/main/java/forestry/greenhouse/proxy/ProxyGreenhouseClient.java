@@ -33,7 +33,7 @@ import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.greenhouse.GreenhouseEventHandler;
-import forestry.greenhouse.PluginGreenhouse;
+import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.greenhouse.IGreenhouseBlock;
 import forestry.greenhouse.blocks.BlockClimatiser;
@@ -53,7 +53,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
 	@Override
 	public void initializeModels() {
-		BlockRegistryGreenhouse blocks = PluginGreenhouse.getBlocks();
+		BlockRegistryGreenhouse blocks = ModuleGreenhouse.getBlocks();
 		Preconditions.checkState(blocks != null);
 
 		ModelManager modelManager = ModelManager.getInstance();
@@ -76,13 +76,13 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse.window");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse_window", "inventory");
-			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouseWindow(), PluginGreenhouse.getBlocks().window);
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouseWindow(), ModuleGreenhouse.getBlocks().window);
 			modelManager.registerCustomBlockModel(blockModelIndex);
 		}
 		{
 			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:greenhouse.window_up");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:greenhouse_window_up", "inventory");
-			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouseWindow(), PluginGreenhouse.getBlocks().roofWindow);
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation, new ModelGreenhouseWindow(), ModuleGreenhouse.getBlocks().roofWindow);
 			modelManager.registerCustomBlockModel(blockModelIndex);
 		}
 		{

@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.render.ColourProperties;
 import net.minecraft.client.renderer.GlStateManager;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.render.ColourProperties;
 
 @SideOnly(Side.CLIENT)
 public class TextLayoutHelper {
@@ -37,8 +39,11 @@ public class TextLayoutHelper {
 		GlStateManager.pushMatrix();
 	}
 
-	public void startPage(int column0, int column1, int column2) {
+	public void startPage(int column0, int column1) {
+		startPage(column0, column1, 0);
+	}
 
+	public void startPage(int column0, int column1, int column2) {
 		this.column0 = column0;
 		this.column1 = column1;
 		this.column2 = column2;
@@ -85,11 +90,19 @@ public class TextLayoutHelper {
 	}
 
 	public void drawCenteredLine(String text, int x, int width, int color) {
-		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + line, color);
+		drawCenteredLine(text, x, 0, width, color);
+	}
+
+	public void drawCenteredLine(String text, int x, int y, int width, int color) {
+		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawLine(String text, int x, int color) {
-		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, color);
+		drawLine(text, x, 0, color);
+	}
+
+	public void drawLine(String text, int x, int y, int color) {
+		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawSplitLine(String text, int x, int maxWidth, int color) {
