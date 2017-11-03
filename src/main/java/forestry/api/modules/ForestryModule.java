@@ -3,13 +3,14 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.modules;
+package forestry.api.modules;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
  * Annotation to provide additional information on IForestryModules. This information will be available via the "/forestry module info {@link #moduleID()}" command ingame.
+ * Any class annotated by this and implementing {@link IForestryModule} will be loaded by the model manager of Forestry.
  *
  * @author Nedelosk
  */

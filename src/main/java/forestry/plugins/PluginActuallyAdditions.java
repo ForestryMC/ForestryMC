@@ -13,11 +13,11 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.farming.logic.FarmableAgingCrop;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
@@ -48,7 +49,6 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
-import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandModules;
 import forestry.core.commands.RootCommand;
@@ -75,7 +75,6 @@ import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
@@ -122,7 +121,8 @@ public class ModuleCore extends BlankForestryModule {
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = ClimateManager.getInstance();
-		ForestryAPI.climateFactory = new ClimateFactory();
+		//TODO: Greenhouse Api
+		//ForestryAPI.climateFactory = new ClimateFactory();
 	}
 
 	@Override

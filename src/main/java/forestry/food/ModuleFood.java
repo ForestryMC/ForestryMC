@@ -14,10 +14,10 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.food.items.ItemRegistryFood;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.food.description")

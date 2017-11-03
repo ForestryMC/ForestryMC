@@ -22,6 +22,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
@@ -30,7 +31,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableAgingCrop;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

@@ -52,6 +52,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -77,7 +78,6 @@ import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.tiles.TileCocoon;
 import forestry.lepidopterology.worldgen.CocoonDecorator;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")

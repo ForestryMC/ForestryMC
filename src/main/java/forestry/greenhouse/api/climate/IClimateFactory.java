@@ -9,6 +9,13 @@ import forestry.api.greenhouse.IClimateHousing;
 
 public interface IClimateFactory {
 
+	//Add this to the api
+	/**
+	 * A factory to create climate related things.
+	 * @since 5.3.4
+	 */
+	//public static IClimateFactory climateFactory;
+
 	/**
 	 * @param climatedRegion
 	 * @return Creates a climate container.

@@ -36,6 +36,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -50,7 +51,6 @@ import forestry.farming.FarmRegistry;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.farming.logic.FarmableSapling;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

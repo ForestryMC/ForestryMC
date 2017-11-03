@@ -3,11 +3,11 @@ package forestry.plugins;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import forestry.modules.ForestryModule;
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
+import forestry.api.modules.IModuleContainer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ForestryPluginUtil;
-import forestry.modules.IForestryModule;
-import forestry.modules.IModuleContainer;
 
 public class ForestryCompatPlugins implements IModuleContainer {
 	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";

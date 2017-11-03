@@ -26,6 +26,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
+import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.Circuits;
 import forestry.core.config.Config;
@@ -39,7 +40,6 @@ import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicExU;
 import forestry.farming.logic.FarmableAgingCrop;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

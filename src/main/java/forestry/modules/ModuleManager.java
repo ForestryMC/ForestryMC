@@ -46,6 +46,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
+import forestry.api.modules.IModuleContainer;
+import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
@@ -53,7 +57,7 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
 
-public class ModuleManager implements IModuleManager{
+public class ModuleManager implements IModuleManager {
 
 	private static final String CONFIG_CATEGORY = "modules";
 	private static ModuleManager ourInstance = new ModuleManager();
@@ -64,6 +68,7 @@ public class ModuleManager implements IModuleManager{
 
 	private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
 	private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
+	private static final Set<BlankForestryModule> internalModules = new LinkedHashSet<>();
 	private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
 	private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
 	public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
@@ -113,7 +118,7 @@ public class ModuleManager implements IModuleManager{
 		return ImmutableSet.copyOf(sortedModules.values());
 	}
 
-	private static void registerHandlers(IForestryModule module, Side side) {
+	private static void registerHandlers(BlankForestryModule module, Side side) {
 		Log.debug("Registering Handlers for Module: {}", module);
 
 		IPacketRegistry packetRegistry = module.getPacketRegistry();
@@ -256,6 +261,7 @@ public class ModuleManager implements IModuleManager{
 		}
 
 		loadedModules.addAll(sortedModules.values());
+		sortedModules.values().stream().filter((m)->m instanceof BlankForestryModule).forEach((IForestryModule m)->internalModules.add((BlankForestryModule) m));
 		unloadedModules.addAll(allModules);
 		unloadedModules.removeAll(sortedModules.values());
 
@@ -301,7 +307,10 @@ public class ModuleManager implements IModuleManager{
 		stage = Stage.PRE_INIT;
 		for (IForestryModule module : loadedModules) {
 			Log.debug("Pre-Init Start: {}", module);
-			registerHandlers(module, side);
+			if(module instanceof BlankForestryModule) {
+				BlankForestryModule moduleInternal = (BlankForestryModule) module;
+				registerHandlers(moduleInternal, side);
+			}
 			module.preInit();
 			if (getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
 				module.registerTriggers();
@@ -359,7 +368,7 @@ public class ModuleManager implements IModuleManager{
 
 	public static void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
 		for (FMLInterModComms.IMCMessage message : messages) {
-			for (IForestryModule module : loadedModules) {
+			for (BlankForestryModule module : internalModules) {
 				if (module.processIMCMessage(message)) {
 					break;
 				}
@@ -368,19 +377,19 @@ public class ModuleManager implements IModuleManager{
 	}
 
 	public static void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		for (IForestryModule module : loadedModules) {
+		for (BlankForestryModule module : internalModules) {
 			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
 	}
 
 	public static void decorateBiome(World world, Random rand, BlockPos pos) {
-		for (IForestryModule module : loadedModules) {
+		for (BlankForestryModule module : internalModules) {
 			module.decorateBiome(world, rand, pos);
 		}
 	}
 
 	public static void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		for (IForestryModule module : loadedModules) {
+		for (BlankForestryModule module : internalModules) {
 			module.populateChunkRetroGen(world, rand, chunkX, chunkZ);
 		}
 	}
@@ -388,7 +397,7 @@ public class ModuleManager implements IModuleManager{
 
 	public static List<ItemStack> getHiddenItems() {
 		List<ItemStack> hiddenItems = new ArrayList<>();
-		for (IForestryModule module : loadedModules) {
+		for (BlankForestryModule module : internalModules) {
 			module.getHiddenItems(hiddenItems);
 		}
 		return hiddenItems;

@@ -12,10 +12,10 @@ package forestry.plugins;
 
 import net.minecraftforge.fml.common.Optional;
 
+import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_STATEMENTS, name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")

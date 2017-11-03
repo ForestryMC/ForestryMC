@@ -41,6 +41,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
@@ -63,7 +64,6 @@ import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.storage.items.ItemRegistryBackpacks;
 

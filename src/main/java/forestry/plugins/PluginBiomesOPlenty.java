@@ -25,6 +25,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.ModuleCore;
@@ -32,7 +33,6 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

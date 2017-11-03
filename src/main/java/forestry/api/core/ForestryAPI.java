@@ -17,7 +17,8 @@ import forestry.api.climate.IClimateStates;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
-import forestry.greenhouse.api.climate.IClimateFactory;
+import forestry.api.modules.IModuleContainer;
+import forestry.api.modules.IModuleManager;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.
@@ -54,12 +55,12 @@ public class ForestryAPI {
 	public static IModelManager modelManager;
 
 	public static IClimateManager climateManager;
-	
+
 	/**
-	 * A factory to create climate related things.
-	 * @since 5.3.4
+	 * Instance of the module manager of forestry.
+	 * This can be used to register {@link IModuleContainer}s in the constructor of your mod.
 	 */
-	public static IClimateFactory climateFactory;
+	public static IModuleManager moduleManager;
 
 	/**
 	 *

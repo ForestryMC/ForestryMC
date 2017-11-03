@@ -32,6 +32,7 @@ import forestry.api.climate.ClimateType;
 import forestry.api.core.CamouflageManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.api.modules.ForestryModule;
 import forestry.core.CreativeTabForestry;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.CircuitLayout;
@@ -72,7 +73,6 @@ import forestry.greenhouse.tiles.TileHeater;
 import forestry.greenhouse.tiles.TileHumidifier;
 import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 // TODO: Buildcraft for 1.9

@@ -9,11 +9,11 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
+import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.farming.logic.FarmableDoubleCrop;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

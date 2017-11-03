@@ -19,9 +19,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Translator;
-import forestry.modules.ForestryModule;
-import forestry.modules.IForestryModule;
 import forestry.modules.ModuleManager;
 
 /**

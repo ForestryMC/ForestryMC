@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.blocks.BlockRegistryCharcoal;
 import forestry.arboriculture.charcoal.CharcoalPileWall;
 import forestry.core.ModuleCore;
@@ -17,7 +18,6 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")

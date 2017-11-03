@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemRegistryCore;
@@ -12,7 +13,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.database.blocks.BlockRegistryDatabase;
 import forestry.database.network.PacketRegistryDatabase;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.DATABASE, name = "Database", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.database.description")

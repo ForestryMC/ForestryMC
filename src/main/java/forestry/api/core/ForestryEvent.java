@@ -61,7 +61,10 @@ public abstract class ForestryEvent extends Event {
 
 	/**
 	 * Posted before forestry registers all items and blocks.
+	 *
+	 * @deprecated removed in 1.13
 	 */
+	@Deprecated
 	public static class PreInit extends ForestryEvent{
 		/**
 		 * The main mod instance for Forestry.

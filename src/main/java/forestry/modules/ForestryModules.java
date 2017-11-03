@@ -6,6 +6,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import forestry.Forestry;
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
+import forestry.api.modules.IModuleContainer;
 import forestry.core.config.Constants;
 
 public class ForestryModules implements IModuleContainer {

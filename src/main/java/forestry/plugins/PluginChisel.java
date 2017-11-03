@@ -14,11 +14,11 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
+import forestry.api.modules.ForestryModule;
 import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.CHISEL, name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.module.chisel.description")

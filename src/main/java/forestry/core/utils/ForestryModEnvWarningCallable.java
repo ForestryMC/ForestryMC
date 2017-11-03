@@ -19,9 +19,9 @@ import java.util.Set;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
 
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
 import forestry.core.config.Constants;
-import forestry.modules.ForestryModule;
-import forestry.modules.IForestryModule;
 import forestry.modules.ModuleManager;
 
 /**

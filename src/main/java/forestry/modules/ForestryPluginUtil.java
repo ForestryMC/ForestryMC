@@ -12,6 +12,8 @@ import net.minecraft.util.text.translation.I18n;
 
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Log;
 
 public class ForestryPluginUtil {
