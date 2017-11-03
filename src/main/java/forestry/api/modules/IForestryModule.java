@@ -75,18 +75,6 @@ public interface IForestryModule {
 	default void registerTriggers() {
 	}
 
-	/**
-	 * Can be used to register items to the backpack via the {@link forestry.api.storage.IBackpackInterface}.
-	 */
-	default void registerBackpackItems() {
-	}
-
-	/**
-	 * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
-	 */
-	default void registerCrates() {
-	}
-
 	default void doInit() {
 	}
 

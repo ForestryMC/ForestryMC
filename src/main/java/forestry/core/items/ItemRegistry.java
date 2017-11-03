@@ -22,11 +22,12 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
+import forestry.modules.InternalModuleHandler;
 import forestry.modules.ModuleManager;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {
-		if (ModuleManager.getStage() != ModuleManager.Stage.REGISTER) {
+		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Item outside of REGISTER");
 		}
 

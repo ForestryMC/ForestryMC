@@ -114,18 +114,19 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.post(new ForestryEvent.PreInit(this, event));
 
 		ModuleManager.runSetup(event);
+		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
 		Preconditions.checkState(gameMode != null);
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
-		ModuleManager.runPreInit(event.getSide());
+		ModuleManager.getInternalHandler().runPreInit(event.getSide());
 
 	}
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		ModuleManager.runRegisterBackpacksAndCrates();
+		ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 		Proxies.render.registerModels();
 	}
 
@@ -134,7 +135,7 @@ public class Forestry {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-		ModuleManager.runInit();
+		ModuleManager.getInternalHandler().runInit();
 
 		Proxies.render.registerItemAndBlockColors();
 		AdvancementManager.registerTriggers();
@@ -142,7 +143,7 @@ public class Forestry {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		ModuleManager.runPostInit();
+		ModuleManager.getInternalHandler().runPostInit();
 
 		// Register world generator
 		WorldGenerator worldGenerator = new WorldGenerator();
@@ -152,7 +153,7 @@ public class Forestry {
 		Proxies.common.registerTickHandlers(worldGenerator);
 
 		// Handle IMC messages.
-		ModuleManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
+		ModuleManager.getInternalHandler().processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
 	}
 
 	@EventHandler
@@ -167,6 +168,6 @@ public class Forestry {
 
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
-		ModuleManager.processIMCMessages(event.getMessages());
+		ModuleManager.getInternalHandler().processIMCMessages(event.getMessages());
 	}
 }

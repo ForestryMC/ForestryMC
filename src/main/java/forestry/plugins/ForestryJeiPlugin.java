@@ -23,7 +23,7 @@ public class ForestryJeiPlugin implements IModPlugin {
 	public void register(IModRegistry registry) {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IIngredientBlacklist ingredientBlacklist = jeiHelpers.getIngredientBlacklist();
-		List<ItemStack> hiddenItems = ModuleManager.getHiddenItems();
+		List<ItemStack> hiddenItems = ModuleManager.getInternalHandler().getHiddenItems();
 		for (ItemStack hiddenItem : hiddenItems) {
 			ingredientBlacklist.addIngredientToBlacklist(hiddenItem);
 		}

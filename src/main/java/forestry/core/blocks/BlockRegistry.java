@@ -24,11 +24,12 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.MigrationHelper;
+import forestry.modules.InternalModuleHandler;
 import forestry.modules.ModuleManager;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {
-		if (ModuleManager.getStage() != ModuleManager.Stage.REGISTER) {
+		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 

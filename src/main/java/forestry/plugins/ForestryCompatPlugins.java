@@ -1,5 +1,7 @@
 package forestry.plugins;
 
+import java.util.Collection;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -8,6 +10,7 @@ import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IModuleContainer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ForestryPluginUtil;
+import forestry.modules.ModuleManager;
 
 public class ForestryCompatPlugins implements IModuleContainer {
 	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
@@ -37,5 +40,10 @@ public class ForestryCompatPlugins implements IModuleContainer {
 		String comment = ForestryPluginUtil.getComment(module);
 		Property prop = getModulesConfig().get(CONFIG_CATEGORY, info.moduleID(), true, comment);
 		return prop.getBoolean();
+	}
+
+	@Override
+	public void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
+		ModuleManager.getInternalHandler().addModules(activeModules, unloadedModules);
 	}
 }

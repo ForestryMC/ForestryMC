@@ -25,39 +25,28 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.IChunkGenerator;
 
 import net.minecraftforge.common.config.Configuration;
 
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IModuleContainer;
-import forestry.api.modules.IModuleHandler;
 import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.config.Constants;
-import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
-import forestry.plugins.ForestryCompatPlugins;
 
 public class ModuleManager implements IModuleManager {
 
@@ -70,23 +59,10 @@ public class ModuleManager implements IModuleManager {
 
 	private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
 	private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
-	private static final Set<BlankForestryModule> internalModules = new LinkedHashSet<>();
-	private static final Set<IModuleHandler> internalHandles = new LinkedHashSet<>();
 	private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
 	private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
 	public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
-	private static Stage stage = Stage.SETUP;
-
-	public enum Stage {
-		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
-		SETUP_DISABLED, // setup fallback API to avoid crashes
-		REGISTER, // register basic blocks and items
-		PRE_INIT, // register handlers, triggers, definitions, and anything that depends on basic items
-		BACKPACKS_CRATES, // backpacks, crates
-		INIT, // anything that depends on PreInit stages, recipe registration
-		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
-		FINISHED
-	}
+	public static InternalModuleHandler internalHandler;
 
 	private ModuleManager() {
 	}
@@ -113,39 +89,8 @@ public class ModuleManager implements IModuleManager {
 		return moduleContainers.values();
 	}
 
-	public static Stage getStage() {
-		return stage;
-	}
-
 	public static Set<IForestryModule> getLoadedModules() {
 		return ImmutableSet.copyOf(sortedModules.values());
-	}
-
-	static void registerHandlers(BlankForestryModule module, Side side) {
-		Log.debug("Registering Handlers for Module: {}", module);
-
-		IPacketRegistry packetRegistry = module.getPacketRegistry();
-		if (packetRegistry != null) {
-			packetRegistry.registerPacketsServer();
-			if (side == Side.CLIENT) {
-				packetRegistry.registerPacketsClient();
-			}
-		}
-
-		IPickupHandler pickupHandler = module.getPickupHandler();
-		if (pickupHandler != null) {
-			pickupHandlers.add(pickupHandler);
-		}
-
-		ISaveEventHandler saveHandler = module.getSaveEventHandler();
-		if (saveHandler != null) {
-			saveEventHandlers.add(saveHandler);
-		}
-
-		IResupplyHandler resupplyHandler = module.getResupplyHandler();
-		if (resupplyHandler != null) {
-			resupplyHandlers.add(resupplyHandler);
-		}
 	}
 
 	private static IForestryModule getModuleCore(List<IForestryModule> forestryModules) {
@@ -251,22 +196,25 @@ public class ModuleManager implements IModuleManager {
 			if(config.hasChanged()){
 				config.save();
 			}
-			Collection<IForestryModule> containerModules = sortedModules.values().stream().filter(m -> {
+		}
+
+		loadedModules.addAll(sortedModules.values());
+		unloadedModules.addAll(allModules);
+		unloadedModules.removeAll(sortedModules.values());
+
+		for(IModuleContainer container : moduleContainers.values()){
+			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
 					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
 					return info.containerID().equals(container.getID());
 				}
 			).collect(Collectors.toList());
-			IModuleHandler handler = new ModuleHandler(containerModules, getInstance());
-			if(container instanceof ForestryModules || handler instanceof ForestryCompatPlugins){
-				internalHandles.add(handler);
-			}
-			container.onConfiguredModules(handler);
+			Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
+					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+					return info.containerID().equals(container.getID());
+				}
+			).collect(Collectors.toList());
+			container.onConfiguredModules(loadedModules, unloadedModules);
 		}
-
-		loadedModules.addAll(sortedModules.values());
-		sortedModules.values().stream().filter((m)->m instanceof BlankForestryModule).forEach((IForestryModule m)->internalModules.add((BlankForestryModule) m));
-		unloadedModules.addAll(allModules);
-		unloadedModules.removeAll(sortedModules.values());
 
 		ForestryAPI.enabledModules = new HashSet<>();
 		for (IForestryModule module : sortedModules.values()) {
@@ -278,51 +226,16 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void runSetup(FMLPreInitializationEvent event) {
-
 		ASMDataTable asmDataTable = event.getAsmData();
 		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules(asmDataTable);
 
-		stage = Stage.SETUP;
+		internalHandler = new InternalModuleHandler(getInstance());
 		configureModules(forestryModules);
-
-		for(IModuleHandler handler : internalHandles){
-			handler.runSetup();
-		}
 	}
 
-	public static void runPreInit(Side side) {
-		stage = Stage.PRE_INIT;
-		for(IModuleHandler handler : internalHandles){
-			handler.runPreInit();
-		}
-	}
-
-	public static void runRegisterBackpacksAndCrates() {
-		stage = Stage.BACKPACKS_CRATES;
-		for (IForestryModule module : loadedModules) {
-			if (getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.CRATE)) {
-				Log.debug("BackpacksAndCrates Start: {}", module);
-				module.registerBackpackItems();
-				module.registerCrates();
-				Log.debug("BackpacksAndCrates Complete: {}", module);
-			}
-		}
-	}
-
-	public static void runInit() {
-		stage = Stage.INIT;
-		for(IModuleHandler handler : internalHandles){
-			handler.runInit();
-		}
-	}
-
-	public static void runPostInit() {
-		stage = Stage.POST_INIT;
-		for(IModuleHandler handler : internalHandles){
-			handler.runPostInit();
-		}
-
-		stage = Stage.FINISHED;
+	public static InternalModuleHandler getInternalHandler() {
+		Preconditions.checkNotNull(internalHandler);
+		return internalHandler;
 	}
 
 	public static void serverStarting(MinecraftServer server) {
@@ -337,43 +250,6 @@ public class ModuleManager implements IModuleManager {
 				commandManager.registerCommand(command);
 			}
 		}
-	}
-
-	public static void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
-		for (FMLInterModComms.IMCMessage message : messages) {
-			for (BlankForestryModule module : internalModules) {
-				if (module.processIMCMessage(message)) {
-					break;
-				}
-			}
-		}
-	}
-
-	public static void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		for (BlankForestryModule module : internalModules) {
-			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
-		}
-	}
-
-	public static void decorateBiome(World world, Random rand, BlockPos pos) {
-		for (BlankForestryModule module : internalModules) {
-			module.decorateBiome(world, rand, pos);
-		}
-	}
-
-	public static void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		for (BlankForestryModule module : internalModules) {
-			module.populateChunkRetroGen(world, rand, chunkX, chunkZ);
-		}
-	}
-
-
-	public static List<ItemStack> getHiddenItems() {
-		List<ItemStack> hiddenItems = new ArrayList<>();
-		for (BlankForestryModule module : internalModules) {
-			module.getHiddenItems(hiddenItems);
-		}
-		return hiddenItems;
 	}
 
 

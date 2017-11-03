@@ -53,17 +53,17 @@ public class WorldGenerator implements IWorldGenerator {
 	@SubscribeEvent
 	public void populateChunk(PopulateChunkEvent.Post event) {
 		// / PLUGIN WORLD GENERATION
-		ModuleManager.populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
+		ModuleManager.getInternalHandler().populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
 	}
 
 	@SubscribeEvent
 	public void decorateBiome(DecorateBiomeEvent.Post event) {
-		ModuleManager.decorateBiome(event.getWorld(), event.getRand(), event.getPos());
+		ModuleManager.getInternalHandler().decorateBiome(event.getWorld(), event.getRand(), event.getPos());
 	}
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
-		ModuleManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
+		ModuleManager.getInternalHandler().populateChunkRetroGen(world, random, chunkX, chunkZ);
 		world.getChunkFromChunkCoords(chunkX, chunkZ).markDirty();
 	}
 
