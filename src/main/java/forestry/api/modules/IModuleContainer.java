@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import java.util.Collection;
-
 import net.minecraftforge.common.config.Configuration;
 
 public interface IModuleContainer {
@@ -26,9 +24,9 @@ public interface IModuleContainer {
 
 	/**
 	 * Called after configured the modules.
-	 *
-	 * @param modules All active modules
 	 */
-	default void onConfiguredModules(Collection<IForestryModule> modules){
+	default void onConfiguredModules(IModuleHandler handler){
 	}
+
+
 }

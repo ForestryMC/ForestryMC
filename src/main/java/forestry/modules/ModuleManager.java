@@ -49,6 +49,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IModuleContainer;
+import forestry.api.modules.IModuleHandler;
 import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
@@ -56,6 +57,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.plugins.ForestryCompatPlugins;
 
 public class ModuleManager implements IModuleManager {
 
@@ -69,6 +71,7 @@ public class ModuleManager implements IModuleManager {
 	private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
 	private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
 	private static final Set<BlankForestryModule> internalModules = new LinkedHashSet<>();
+	private static final Set<IModuleHandler> internalHandles = new LinkedHashSet<>();
 	private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
 	private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
 	public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
@@ -118,7 +121,7 @@ public class ModuleManager implements IModuleManager {
 		return ImmutableSet.copyOf(sortedModules.values());
 	}
 
-	private static void registerHandlers(BlankForestryModule module, Side side) {
+	static void registerHandlers(BlankForestryModule module, Side side) {
 		Log.debug("Registering Handlers for Module: {}", module);
 
 		IPacketRegistry packetRegistry = module.getPacketRegistry();
@@ -153,16 +156,6 @@ public class ModuleManager implements IModuleManager {
 			}
 		}
 		return null;
-	}
-
-	private static IForestryModule getCoreModule(List<IForestryModule> modules, String containerID) {
-		for (IForestryModule module : modules) {
-			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			if (info.coreModule()) {
-				return module;
-			}
-		}
-		throw new IllegalStateException("Could not find core module for the container " + containerID);
 	}
 
 	private static void configureModules(Map<String, List<IForestryModule>> modules) {
@@ -263,7 +256,11 @@ public class ModuleManager implements IModuleManager {
 					return info.containerID().equals(container.getID());
 				}
 			).collect(Collectors.toList());
-			container.onConfiguredModules(containerModules);
+			IModuleHandler handler = new ModuleHandler(containerModules, getInstance());
+			if(container instanceof ForestryModules || handler instanceof ForestryCompatPlugins){
+				internalHandles.add(handler);
+			}
+			container.onConfiguredModules(handler);
 		}
 
 		loadedModules.addAll(sortedModules.values());
@@ -288,40 +285,15 @@ public class ModuleManager implements IModuleManager {
 		stage = Stage.SETUP;
 		configureModules(forestryModules);
 
-		for (IForestryModule module : loadedModules) {
-			Log.debug("Setup API Start: {}", module);
-			module.setupAPI();
-			Log.debug("Setup API Complete: {}", module);
-		}
-
-		stage = Stage.SETUP_DISABLED;
-		for (IForestryModule module : unloadedModules) {
-			Log.debug("Disabled-Setup Start: {}", module);
-			module.disabledSetupAPI();
-			Log.debug("Disabled-Setup Complete: {}", module);
-		}
-
-		stage = Stage.REGISTER;
-		for (IForestryModule module : loadedModules) {
-			Log.debug("Register Items and Blocks Start: {}", module);
-			module.registerItemsAndBlocks();
-			Log.debug("Register Items and Blocks Complete: {}", module);
+		for(IModuleHandler handler : internalHandles){
+			handler.runSetup();
 		}
 	}
 
 	public static void runPreInit(Side side) {
 		stage = Stage.PRE_INIT;
-		for (IForestryModule module : loadedModules) {
-			Log.debug("Pre-Init Start: {}", module);
-			if(module instanceof BlankForestryModule) {
-				BlankForestryModule moduleInternal = (BlankForestryModule) module;
-				registerHandlers(moduleInternal, side);
-			}
-			module.preInit();
-			if (getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
-				module.registerTriggers();
-			}
-			Log.debug("Pre-Init Complete: {}", module);
+		for(IModuleHandler handler : internalHandles){
+			handler.runPreInit();
 		}
 	}
 
@@ -339,20 +311,15 @@ public class ModuleManager implements IModuleManager {
 
 	public static void runInit() {
 		stage = Stage.INIT;
-		for (IForestryModule module : loadedModules) {
-			Log.debug("Init Start: {}", module);
-			module.doInit();
-			module.registerRecipes();
-			Log.debug("Init Complete: {}", module);
+		for(IModuleHandler handler : internalHandles){
+			handler.runInit();
 		}
 	}
 
 	public static void runPostInit() {
 		stage = Stage.POST_INIT;
-		for (IForestryModule module : loadedModules) {
-			Log.debug("Post-Init Start: {}", module);
-			module.postInit();
-			Log.debug("Post-Init Complete: {}", module);
+		for(IModuleHandler handler : internalHandles){
+			handler.runPostInit();
 		}
 
 		stage = Stage.FINISHED;

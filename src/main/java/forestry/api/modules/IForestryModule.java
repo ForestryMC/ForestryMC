@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
  * Defines a Forestry module.
  * Any class implementing this interface and annotated by {@link ForestryModule} to be loaded by
  * the model manager of Forestry.
+ *
  */
 public interface IForestryModule {
 	default boolean isAvailable() {
@@ -40,22 +41,31 @@ public interface IForestryModule {
 	/**
 	 * Can be used to setup the api.
 	 * Will only be called if the module is active if not {@link #disabledSetupAPI()} will be called.
+	 *
+	 * Must be called by the mod that registers the container.
 	 */
 	default void setupAPI() {
 	}
 
 	/**
 	 * Called to setup the api if this module is disabled in the config or has missing dependencies.
+	 *
+	 * Must be called by the mod that registers the container.
 	 */
 	default void disabledSetupAPI() {
 	}
 
 	/**
 	 * Can be used to register items and blocks. Called before {@link #preInit()}.
+	 *
+	 * Must be called by the mod that registers the container.
 	 */
 	default void registerItemsAndBlocks() {
 	}
 
+	/**
+	 * Must be called by the mod that registers the container.
+	 */
 	default void preInit() {
 	}
 
