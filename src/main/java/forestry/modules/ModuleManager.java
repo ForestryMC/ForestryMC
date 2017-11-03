@@ -217,9 +217,13 @@ public class ModuleManager implements IModuleManager {
 		}
 
 		ForestryAPI.enabledModules = new HashSet<>();
+		ForestryAPI.enabledPlugins = new HashSet<>();
 		for (IForestryModule module : sortedModules.values()) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
+			if(module instanceof BlankForestryModule){
+				ForestryAPI.enabledPlugins.add(info.containerID() + "." + info.moduleID());
+			}
 		}
 
 		Locale.setDefault(locale);
