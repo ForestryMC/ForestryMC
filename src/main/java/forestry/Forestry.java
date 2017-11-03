@@ -85,6 +85,7 @@ public class Forestry {
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);
 		ModuleManager moduleManager = ModuleManager.getInstance();
+		ForestryAPI.moduleManager = moduleManager;
 		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
 	}
 
