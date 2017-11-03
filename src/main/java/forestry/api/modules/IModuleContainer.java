@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.modules;
 
+import java.util.Collection;
+
 import net.minecraftforge.common.config.Configuration;
 
 public interface IModuleContainer {
@@ -21,4 +23,12 @@ public interface IModuleContainer {
 	 * @return true if the module is enabled in the config file of this container.
 	 */
 	boolean isModuleEnabled(IForestryModule module);
+
+	/**
+	 * Called after configured the modules.
+	 *
+	 * @param modules All active modules
+	 */
+	default void onConfiguredModules(Collection<IForestryModule> modules){
+	}
 }

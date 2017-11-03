@@ -258,6 +258,12 @@ public class ModuleManager implements IModuleManager {
 			if(config.hasChanged()){
 				config.save();
 			}
+			Collection<IForestryModule> containerModules = sortedModules.values().stream().filter(m -> {
+					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+					return info.containerID().equals(container.getID());
+				}
+			).collect(Collectors.toList());
+			container.onConfiguredModules(containerModules);
 		}
 
 		loadedModules.addAll(sortedModules.values());
