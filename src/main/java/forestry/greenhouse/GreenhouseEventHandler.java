@@ -76,8 +76,8 @@ public class GreenhouseEventHandler {
 			}
 			for (BlockPos position : greenhousePositions) {
 				IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, position, IGreenhouseComponent.class);
-				if (controller == null || !controller.isAssembled()) {
-					return;
+				if(controller == null || !controller.isAssembled()){
+					continue;
 				}
 				IGreenhouseProvider provider = controller.getProvider();
 				position = controller.getCenterCoordinates();
@@ -94,6 +94,10 @@ public class GreenhouseEventHandler {
 				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				GlStateManager.disableTexture2D();
 				GlStateManager.glLineWidth(2.5F);
+				//Draw center position
+				BlockPos offset = provider.getCenterPos();
+				AxisAlignedBB testBlockBB = Block.FULL_BLOCK_AABB.offset(offset);
+				RenderGlobal.drawSelectionBoundingBox(testBlockBB, 0.0F, 0.0F, 0.0F, 0.5F);
 				IGreenhouseLimits limits = provider.getUsedLimits();
 				if (limits != null) {
 					Position2D minEdge = limits.getMinimumCoordinates();
@@ -101,10 +105,6 @@ public class GreenhouseEventHandler {
 					AxisAlignedBB greenhouseBB = new AxisAlignedBB(minEdge.getX(), limits.getDepth(), minEdge.getZ(), maxEdge.getX() + 1, limits.getHeight() + 1, maxEdge.getZ() + 1);
 					RenderGlobal.drawSelectionBoundingBox(greenhouseBB, 0.0F, 0.0F, 0.0F, 0.5F);
 				}
-				//Draw center position
-				BlockPos offset = provider.getCenterPos();
-				AxisAlignedBB testBlockBB = Block.FULL_BLOCK_AABB.offset(offset);
-				RenderGlobal.drawSelectionBoundingBox(testBlockBB, 0.0F, 0.0F, 0.0F, 0.5F);
 				GlStateManager.enableTexture2D();
 				GlStateManager.disableBlend();
 				GlStateManager.popMatrix();
@@ -128,7 +128,7 @@ public class GreenhouseEventHandler {
 			if (stack.isEmpty()) {
 				continue;
 			}
-			if (stack.getItem() != PluginGreenhouse.getItems().greenhouseScreen) {
+			if (stack.getItem() != ModuleGreenhouse.getItems().greenhouseScreen) {
 				continue;
 			}
 			if (ItemGreenhouseScreen.isPreviewModeActive(stack) && ItemGreenhouseScreen.isValid(stack, inventoryPlayer.player.world)) {
