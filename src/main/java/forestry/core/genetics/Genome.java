@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -28,12 +27,12 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.utils.Log;
 
 public abstract class Genome implements IGenome {
-	private static final String SLOT_TAG = "Slot";
+	public static final String GENOME_TAG = "Genome";
 
 	private final IChromosome[] chromosomes;
 
 	protected Genome(NBTTagCompound nbttagcompound) {
-		this.chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
+		this.chromosomes = GenomeSaveHandler.readTag(nbttagcompound, getSpeciesRoot());
 	}
 
 	protected Genome(IChromosome[] chromosomes) {
@@ -110,105 +109,72 @@ public abstract class Genome implements IGenome {
 	 */
 	@Nullable
 	public static IAlleleSpecies getSpeciesDirectly(ISpeciesRoot speciesRoot, ItemStack itemStack) {
+		return (IAlleleSpecies) getAlleleDirectly(speciesRoot.getSpeciesChromosomeType(), true, itemStack);
+	}
+
+	/**
+	 * Quickly gets the species without loading the whole genome. And without creating absent chromosomes.
+	 */
+	@Nullable
+	public static IAllele getAlleleDirectly(IChromosomeType chromosomeType, boolean active, ItemStack itemStack) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
 		}
 
-		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
+		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag(GENOME_TAG);
 		if (genomeNBT.hasNoTags()) {
 			return null;
 		}
-
-		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT.hasNoTags()) {
+		IChromosome chromosome = GenomeSaveHandler.getChromosomeDirectly(genomeNBT, chromosomeType);
+		if(chromosome == null){
 			return null;
 		}
-
-		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
-		Chromosome chromosome = Chromosome.create(null, null, speciesRoot.getSpeciesChromosomeType(), chromosomeNBT);
-
-		IAllele activeAllele = chromosome.getActiveAllele();
-		if (!(activeAllele instanceof IAlleleSpecies)) {
+		IAllele allele = active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
+		if(!chromosomeType.getAlleleClass().isInstance(allele)){
 			return null;
 		}
-
-		return (IAlleleSpecies) activeAllele;
+		return allele;
 	}
 
-	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+	public static IAllele getAllele(ItemStack itemStack, IChromosomeType chromosomeType, boolean active) {
+		IChromosome chromosome = getSpecificChromosome(itemStack, chromosomeType);
+		return active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
+	}
+
+	/**
+	 * Tries to load a specific chromosome and creates it if it is absent.
+	 */
+	private static IChromosome getSpecificChromosome(ItemStack itemStack, IChromosomeType chromosomeType) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			nbtTagCompound = new NBTTagCompound();
 			itemStack.setTagCompound(nbtTagCompound);
 		}
+		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag(GENOME_TAG);
 
-		NBTTagCompound genomeNbt = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNbt.hasNoTags()) {
+		if (genomeNBT.hasNoTags()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
-			genomeNbt = new NBTTagCompound();
-      
-      
+			genomeNBT = new NBTTagCompound();
+
+			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
 			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
 			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
-			genome.writeToNBT(genomeNbt);
-			nbtTagCompound.setTag("Genome", genomeNbt);
+			genome.writeToNBT(genomeNBT);
+			nbtTagCompound.setTag(GENOME_TAG, genomeNBT);
 		}
 
-		IChromosome[] chromosomes = getChromosomes(genomeNbt, speciesRoot);
-
-		return chromosomes[chromosomeType.ordinal()];
-	}
-
-
-	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
-		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
-
-		String primarySpeciesUid = null;
-		String secondarySpeciesUid = null;
-
-		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
-			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
-			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
-
-			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
-				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
-				Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, chromosomeNBT);
-				chromosomes[chromosomeOrdinal] = chromosome;
-
-				if (chromosomeOrdinal == speciesRoot.getSpeciesChromosomeType().ordinal()) {
-					primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
-					secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
-				}
-			}
-		}
-		return chromosomes;
-	}
-
-	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
-		IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
-		return chromosome.getActiveAllele();
+		return GenomeSaveHandler.getSpecificChromosome(genomeNBT, chromosomeType);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < chromosomes.length; i++) {
-			if (chromosomes[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte(SLOT_TAG, (byte) i);
-				chromosomes[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("Chromosomes", nbttaglist);
-		return nbttagcompound;
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
+		return GenomeSaveHandler.writeTag(this, tagCompound);
 	}
+
 
 	// / INFORMATION RETRIEVAL
 	@Override
-
 	public IChromosome[] getChromosomes() {
 		return Arrays.copyOf(chromosomes, chromosomes.length);
 	}

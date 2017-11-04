@@ -69,14 +69,37 @@ public interface ISpeciesRoot {
 	IIndividual getMember(ItemStack stack);
 
 	IIndividual getMember(NBTTagCompound compound);
-	
-	<O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
-	
-	@Nullable
-	<O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
 
+	//NBTTagCompound getNBTShareTag(ItemStack stack);
+
+	/**
+	 * @param translatorKey The key of the translator, by default it is the item or the block of the {@link ItemStack} or
+	 * 						{@link net.minecraft.block.state.IBlockState} that you want to translate with the translator.
+	 * @param translator A translator that should be used to translate the data.
+	 */
+	void registerTranslator(Object translatorKey, IIndividualTranslator translator);
+
+	/**
+	 * @param translatorKey The key of the translator, by default it is the item or the block of the {@link ItemStack} or
+	 * 						{@link net.minecraft.block.state.IBlockState} that you want to translate with the translator.
+	 */
 	@Nullable
-	<O extends Object, I extends IIndividual> I translateMember(O objectToTranslator);
+	IIndividualTranslator getTranslator(Object translatorKey);
+
+	/**
+	 * Translates {@link net.minecraft.block.state.IBlockState}s and {@link net.minecraft.item.ItemStack}s into genetic
+	 * data.
+	 */
+	@Nullable
+	<I extends IIndividual> I translateMember(Object objectToTranslator);
+
+	/**
+	 * Translates {@link net.minecraft.block.state.IBlockState}s and {@link net.minecraft.item.ItemStack}s into genetic
+	 * data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	ItemStack getGeneticEquivalent(Object objectToTranslator);
 
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
@@ -105,6 +128,10 @@ public interface ISpeciesRoot {
 	IGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* TEMPLATES */
+
+	IAlleleTemplateBuilder createTemplateBuilder();
+
+	IAlleleTemplateBuilder createTemplateBuilder(IAllele[] alleles);
 
 	/**
 	 * Registers a bee template using the UID of the first allele as identifier.
@@ -144,12 +171,14 @@ public interface ISpeciesRoot {
 	 */
 	IAllele[] getRandomTemplate(Random rand);
 
+	/**
+	 * @return A map with all genome templates arrays that where registered with {@link #registerTemplate(String, IAllele[])}.
+	 */
 	Map<String, IAllele[]> getGenomeTemplates();
 
 	List<? extends IIndividual> getIndividualTemplates();
 
 	/* MUTATIONS */
-
 	/**
 	 * Use to register mutations.
 	 */
@@ -209,11 +238,6 @@ public interface ISpeciesRoot {
 	 * Plugin to add information for the handheld genetic analyzer.
 	 */
 	IAlyzerPlugin getAlyzerPlugin();
-
-	/**
-	 * A array with the size of 4. With the database tabs of this {@link IIndividual}.
-	 */
-	//IDatabaseTab[] getDatabaseTabs();
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.

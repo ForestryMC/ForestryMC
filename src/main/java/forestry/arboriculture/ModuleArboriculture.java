@@ -505,6 +505,15 @@ public class ModuleArboriculture extends BlankForestryModule {
 				}
 				return null;
 			}
+
+			@Override
+			public ItemStack getGeneticEquivalent(ItemStack itemStack) {
+				IIndividual individual = getIndividualFromObject(itemStack);
+				if(individual == null){
+					return ItemStack.EMPTY;
+				}
+				return TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+			}
 		});
 
 		for (BlockDefaultLeaves leaves : getBlocks().leavesDefault) {

@@ -89,7 +89,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 			return (IAlleleBeeSpecies) species;
 		}
 
-		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, BeeManager.beeRoot);
+		return (IAlleleBeeSpecies) getAllele(itemStack, EnumBeeChromosome.SPECIES, true);
 	}
 
 	// / INFORMATION RETRIEVAL

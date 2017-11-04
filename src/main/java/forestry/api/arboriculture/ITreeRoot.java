@@ -17,8 +17,11 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleTemplateBuilder;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 
 public interface ITreeRoot extends ISpeciesRootPollinatable {
@@ -44,6 +47,12 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 
 	@Override
 	ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+
+	@Override
+	IAlleleTemplateBuilder<EnumTreeChromosome, IAlleleTreeSpecies> createTemplateBuilder();
+
+	@Override
+	IAlleleTemplateBuilder<EnumTreeChromosome, IAlleleTreeSpecies> createTemplateBuilder(IAllele[] alleles);
 
 	/**
 	 * @return {@link IArboristTracker} associated with the passed world.
@@ -106,4 +115,11 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	List<ITreeMutation> getMutations(boolean shuffle);
 
 	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
+
+	/**
+	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
+	 */
+	@Nullable
+	@Override
+	IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, final IIndividual pollen);
 }

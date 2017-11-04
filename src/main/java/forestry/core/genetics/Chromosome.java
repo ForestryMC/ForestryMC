@@ -29,15 +29,37 @@ public class Chromosome implements IChromosome {
 	private final IAllele secondary;
 
 	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, IChromosomeType chromosomeType, NBTTagCompound nbt) {
-		IAllele primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
-		IAllele secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
+		return create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, nbt.getString(UID0_TAG), nbt.getString(UID1_TAG));
+	}
 
+	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, IChromosomeType chromosomeType, String primaryUID, String secondaryUID) {
+		IAllele primary = AlleleManager.alleleRegistry.getAllele(primaryUID);
+		IAllele secondary = AlleleManager.alleleRegistry.getAllele(secondaryUID);
+		return create(primarySpeciesUid, secondarySpeciesUid, chromosomeType, primary, secondary);
+	}
+
+	public static Chromosome create(@Nullable String primarySpeciesUid, @Nullable String secondarySpeciesUid, IChromosomeType chromosomeType, @Nullable IAllele primary, @Nullable IAllele secondary) {
 		primary = validateAllele(primarySpeciesUid, chromosomeType, primary);
 		secondary = validateAllele(secondarySpeciesUid, chromosomeType, secondary);
 
 		return new Chromosome(primary, secondary);
 	}
 
+	@Nullable
+	public static IAllele getFirstAllele(NBTTagCompound chromosomeNBT){
+		String speciesUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
+		return AlleleManager.alleleRegistry.getAllele(speciesUid);
+	}
+
+	@Nullable
+	public static IAllele getSecondAllele(NBTTagCompound chromosomeNBT){
+		String speciesUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
+		return AlleleManager.alleleRegistry.getAllele(speciesUid);
+	}
+
+	/**
+	 * Checks if the allele is not null and valid for that type of chromosome.
+	 */
 	private static IAllele validateAllele(@Nullable String speciesUid, IChromosomeType chromosomeType, @Nullable IAllele allele) {
 		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
 			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();

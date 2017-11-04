@@ -7,6 +7,8 @@ package forestry.api.arboriculture;
 
 import java.util.Locale;
 
+import net.minecraftforge.common.EnumPlantType;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
@@ -14,7 +16,6 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRoot;
-import net.minecraftforge.common.EnumPlantType;
 
 public enum EnumTreeChromosome implements IChromosomeType {
 
@@ -22,46 +23,54 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits which {@link IFruitProvider}
 	 * will actually yield fruit with this species. - Native {@link EnumPlantType} for this tree. Combines with the PLANT chromosome.
 	 */
-	SPECIES(IAlleleTreeSpecies.class),
+	SPECIES(IAlleleTreeSpecies.class, "species", true),
 	/**
 	 * A float modifying the height of the tree. Taken into account at worldgen.
 	 */
-	HEIGHT(IAlleleFloat.class),
+	HEIGHT(IAlleleFloat.class, "height"),
 	/**
 	 * Chance for saplings.
 	 */
-	FERTILITY(IAlleleFloat.class),
+	FERTILITY(IAlleleFloat.class, "fertility"),
 	/**
 	 * {@link IFruitProvider}, determines if and what fruits are grown on the tree. Limited by the {@link IFruitFamily}s the species supports.
 	 */
-	FRUITS(IAlleleFruit.class),
+	FRUITS(IAlleleFruit.class, "fruit"),
 	/**
 	 * Chance for fruit leaves and/or drops.
 	 */
-	YIELD(IAlleleFloat.class),
+	YIELD(IAlleleFloat.class, "yield"),
 	/**
 	 * Determines the speed at which fruit will ripen on this tree.
 	 */
-	SAPPINESS(IAlleleFloat.class),
+	SAPPINESS(IAlleleFloat.class, "sappiness"),
 	/**
 	 * Leaf effect. Unused.
 	 */
-	EFFECT(IAlleleLeafEffect.class),
+	EFFECT(IAlleleLeafEffect.class, "effect"),
 	/**
 	 * Amount of random ticks which need to elapse before a sapling will grow into a tree.
 	 */
-	MATURATION(IAlleleInteger.class),
+	MATURATION(IAlleleInteger.class, "maturation"),
 
-	GIRTH(IAlleleInteger.class),
+	GIRTH(IAlleleInteger.class, "girth"),
 	/**
 	 * Determines if the tree can burn.
 	 */
-	FIREPROOF(IAlleleBoolean.class),;
+	FIREPROOF(IAlleleBoolean.class, "fireproof");
 
 	private final Class<? extends IAllele> alleleClass;
+	private final String shortName;
+	private final boolean neededOnClientSide;
 
-	EnumTreeChromosome(Class<? extends IAllele> alleleClass) {
+	EnumTreeChromosome(Class<? extends IAllele> alleleClass, String shortName) {
+		this(alleleClass, shortName, false);
+	}
+
+	EnumTreeChromosome(Class<? extends IAllele> alleleClass, String shortName, boolean neededOnClientSide) {
 		this.alleleClass = alleleClass;
+		this.shortName = shortName;
+		this.neededOnClientSide = neededOnClientSide;
 	}
 
 	@Override
@@ -72,6 +81,16 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
+	}
+
+	@Override
+	public String getShortName() {
+		return shortName;
+	}
+
+	@Override
+	public boolean isNeededOnClientSide() {
+		return neededOnClientSide;
 	}
 
 	@Override

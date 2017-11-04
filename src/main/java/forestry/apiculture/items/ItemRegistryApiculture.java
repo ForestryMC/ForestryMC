@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
@@ -17,8 +21,6 @@ import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemScoop;
 import forestry.core.utils.OreDictUtil;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeQueenGE;
@@ -57,6 +59,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		beeDroneGE = registerItem(new ItemBeeGE(EnumBeeType.DRONE), "bee_drone_ge");
 		beePrincessGE = registerItem(new ItemBeeGE(EnumBeeType.PRINCESS), "bee_princess_ge");
 		beeLarvaeGE = registerItem(new ItemBeeGE(EnumBeeType.LARVAE), "bee_larvae_ge");
+
 
 		habitatLocator = registerItem(new ItemHabitatLocator(), "habitat_locator");
 		imprinter = registerItem(new ItemImprinter(), "imprinter");

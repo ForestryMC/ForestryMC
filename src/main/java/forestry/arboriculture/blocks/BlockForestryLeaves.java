@@ -136,6 +136,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 			return;
 		}
 
+		IButterfly caterpillar = tile.getCaterpillar();
+
+		if(caterpillar != null){
+			drops.addAll(caterpillar.getCaterpillarDrop(tile, true, fortune));
+		}
+
 		ITree tree = tile.getTree();
 		if (tree == null) {
 			return;

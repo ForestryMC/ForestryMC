@@ -28,6 +28,7 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -39,6 +40,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IIndividualHandler;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesType;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.recipes.RecipeManagers;
@@ -47,6 +54,7 @@ import forestry.api.storage.StorageManager;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
+import forestry.core.capabilities.NullStorage;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.climate.ClimateManager;
@@ -55,6 +63,7 @@ import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.genetics.GeneticFactory;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
@@ -121,6 +130,29 @@ public class ModuleCore extends BlankForestryModule {
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = ClimateManager.getInstance();
+
+		AlleleManager.geneticFactory = new GeneticFactory();
+		CapabilityManager.INSTANCE.register(IIndividualHandler.class, new NullStorage<>(), () -> new IIndividualHandler() {
+			@Override
+			public IIndividual getIndividual() {
+				throw new UnsupportedOperationException("Cannot use default implementation");
+			}
+
+			@Override
+			public ISpeciesRoot getRoot() {
+				throw new UnsupportedOperationException("Cannot use default implementation");
+			}
+
+			@Override
+			public ISpeciesType getType() {
+				throw new UnsupportedOperationException("Cannot use default implementation");
+			}
+
+			@Override
+			public IAllele getAlleleDirectly(IChromosomeType type, boolean active) {
+				throw new UnsupportedOperationException("Cannot use default implementation");
+			}
+		});
 		//TODO: Greenhouse Api
 		//ForestryAPI.climateFactory = new ClimateFactory();
 	}

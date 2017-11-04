@@ -4,10 +4,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.database.tiles.TileDatabase;
 import forestry.core.utils.GeneticsUtil;
+import forestry.database.tiles.TileDatabase;
 
 public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	public InventoryDatabase(TileDatabase tile) {
@@ -21,11 +22,19 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 		if (speciesRoot == null) {
 			return false;
 		}
-		return true;
+
+		IIndividual individual = speciesRoot.getMember(itemStack);
+		return individual != null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotId, ItemStack itemStack) {
+		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
+		super.setInventorySlotContents(slotId, itemStack);
 	}
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
-		return super.canExtractItem(slotIndex, stack, side);
+		return true;
 	}
 }

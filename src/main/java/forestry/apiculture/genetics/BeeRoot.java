@@ -102,11 +102,6 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack stack) {
-		return getType(stack) != null;
-	}
-
-	@Override
 	public boolean isMember(ItemStack stack, ISpeciesType type) {
 		return getType(stack) == type;
 	}

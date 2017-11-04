@@ -95,11 +95,6 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return butterflySpeciesCount;
 	}
 
-	@Override
-	public boolean isMember(ItemStack stack) {
-		return getType(stack) != null;
-	}
-
 	@Nullable
 	@Override
 	public EnumFlutterType getType(ItemStack stack) {

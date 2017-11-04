@@ -28,17 +28,16 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleTemplateBuilder;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.genetics.alleles.AlleleTemplateBuilder;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
-	/* TRANSLATORS */
-	private final HashMap<Object, IIndividualTranslator<IIndividual, Object>> translators = new HashMap<>();
-	
 	/* RESEARCH */
 	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<>();
 
@@ -95,22 +94,26 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 	
 	/* TRANSLATORS */
+	private final HashMap<Object, IIndividualTranslator<IIndividual, Object>> translators = new HashMap<>();
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public <O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator) {
+	public void registerTranslator(Object translatorKey, IIndividualTranslator translator) {
 		if(!translators.containsKey(translatorKey)){
-			translators.put(translatorKey, (IIndividualTranslator<IIndividual, Object>) translator);
+			translators.put(translatorKey, translator);
 		}
 	}
 	
 	@Nullable
 	@Override
-	public <O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey) {
-		return (IIndividualTranslator<I, O>) translators.get(translatorKey);
+	public IIndividualTranslator getTranslator(Object translatorKey) {
+		return translators.get(translatorKey);
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Nullable
 	@Override
-	public <O, I extends IIndividual> I translateMember(O objectToTranslator) {
+	public <I extends IIndividual> I translateMember(Object objectToTranslator) {
 		Object translatorKey = null;
 		if(objectToTranslator instanceof ItemStack){
 			translatorKey = ((ItemStack) objectToTranslator).getItem();
@@ -120,11 +123,36 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		if(translatorKey == null){
 			return null;
 		}
-		IIndividualTranslator<I, O> translator = getTranslator(translatorKey);
+		IIndividualTranslator<I, Object> translator = getTranslator(translatorKey);
 		if(translator == null){
 			return null;
 		}
 		return translator.getIndividualFromObject(objectToTranslator);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
+	public ItemStack getGeneticEquivalent(Object objectToTranslator) {
+		Object translatorKey = null;
+		if(objectToTranslator instanceof ItemStack){
+			translatorKey = ((ItemStack) objectToTranslator).getItem();
+		}else if(objectToTranslator instanceof IBlockState){
+			translatorKey = ((IBlockState) objectToTranslator).getBlock();
+		}
+		if(translatorKey == null){
+			return ItemStack.EMPTY;
+		}
+		IIndividualTranslator translator = getTranslator(translatorKey);
+		if(translator == null){
+			return ItemStack.EMPTY;
+		}
+		return translator.getGeneticEquivalent(objectToTranslator);
+	}
+
+	/* MEMBERS */
+	@Override
+	public boolean isMember(ItemStack stack) {
+		return getType(stack) != null;
 	}
 
 	/* MUTATIONS */
@@ -210,5 +238,15 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		}
 
 		return chromosomes;
+	}
+
+	@Override
+	public IAlleleTemplateBuilder createTemplateBuilder() {
+		return new AlleleTemplateBuilder(this);
+	}
+
+	@Override
+	public IAlleleTemplateBuilder createTemplateBuilder(IAllele[] alleles) {
+		return new AlleleTemplateBuilder(this, alleles);
 	}
 }

@@ -6,7 +6,13 @@
 package forestry.api.genetics;
 
 /**
- * Species types, implemented by enums and compared with ==
+ * Species types, compared with ==
+ *
+ * Handled by a species handler.
  */
 public interface ISpeciesType {
+	/**
+	 * @return The lower cased name of this type.
+	 */
+	String getName();
 }

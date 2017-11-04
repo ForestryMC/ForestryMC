@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
@@ -42,9 +43,9 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -70,7 +71,17 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 	@Override
 	protected IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		return TreeGenome.getSpecies(itemStack);
+		return GeneticsUtil.getAlleleDirectly(itemStack, EnumTreeChromosome.SPECIES, true, IAlleleTreeSpecies.class);
+	}
+
+	@Override
+	public final ISpeciesRoot getRoot() {
+		return TreeManager.treeRoot;
+	}
+
+	@Override
+	public final EnumGermlingType getType() {
+		return type;
 	}
 
 	@Override
@@ -79,6 +90,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			return "Unknown";
 		}
 		IAlleleSpecies species = getSpecies(itemstack);
+		if (species == null) {
+			return "Unknown";
+		}
 
 		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
@@ -109,7 +123,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemstack(ItemStack itemstack, int renderPass) {
-		return TreeGenome.getSpecies(itemstack).getGermlingColour(type, renderPass);
+		return getSpecies(itemstack).getGermlingColour(type, renderPass);
 	}
 
 	/* MODELS */

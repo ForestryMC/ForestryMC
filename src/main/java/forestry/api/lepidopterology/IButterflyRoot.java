@@ -8,14 +8,17 @@ package forestry.api.lepidopterology;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleTemplateBuilder;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface IButterflyRoot extends ISpeciesRoot {
 
@@ -41,6 +44,12 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
 	@Override
 	IButterflyGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+
+	@Override
+	IAlleleTemplateBuilder<EnumButterflyChromosome, IAlleleButterflySpecies> createTemplateBuilder();
+
+	@Override
+	IAlleleTemplateBuilder<EnumButterflyChromosome, IAlleleButterflySpecies> createTemplateBuilder(IAllele[] alleles);
 
 	/* BUTTERFLY SPECIFIC */
 	@Override

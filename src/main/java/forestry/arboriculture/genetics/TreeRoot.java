@@ -120,11 +120,6 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack itemstack) {
-		return getType(itemstack) != null;
-	}
-
-	@Override
 	public boolean isMember(ItemStack stack, ISpeciesType type) {
 		return getType(stack) == type;
 	}

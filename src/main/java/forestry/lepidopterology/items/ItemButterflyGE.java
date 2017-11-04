@@ -43,13 +43,14 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -61,7 +62,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.genetics.ButterflyGenome;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
@@ -82,8 +83,18 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
-		return ButterflyGenome.getSpecies(itemStack);
+	protected IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
+		return GeneticsUtil.getAlleleDirectly(itemStack, EnumButterflyChromosome.SPECIES, true, IAlleleButterflySpecies.class);
+	}
+
+	@Override
+	public final ISpeciesRoot getRoot() {
+		return ButterflyManager.butterflyRoot;
+	}
+
+	@Override
+	public final ISpeciesType getType() {
+		return type;
 	}
 
 	@Override
@@ -193,10 +204,11 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				tagCompound.setInteger(NBT_AGE, 0);
 			}
 			int age = tagCompound.getInteger(NBT_AGE);
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
-			Preconditions.checkNotNull(individual);
-			IButterflyGenome genome = (IButterflyGenome) individual.getGenome();
-			return genome.getCocoon().getCocoonItemModel(age);
+			IAlleleButterflyCocoon cocoon = GeneticsUtil.getAlleleDirectly(itemstack, EnumButterflyChromosome.COCOON, true, IAlleleButterflyCocoon.class);
+			if(cocoon == null){
+				cocoon = ButterflyAlleles.cocoonDefault;
+			}
+			return cocoon.getCocoonItemModel(age);
 		}
 
 	}
@@ -298,14 +310,18 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		IButterfly individual = ButterflyManager.butterflyRoot.getMember(itemstack);
+		IAlleleSpecies species = getSpecies(itemstack);
+		if (species == null) {
+			return super.getItemStackDisplayName(itemstack);
+		}
+
 		String customKey = "for.butterflies.custom." + type.getName() + "."
-				+ individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
+				+ species.getUnlocalizedName().replace("butterflies.species.", "");
 		if (Translator.canTranslateToLocal(customKey)) {
 			return Translator.translateToLocal(customKey);
 		}
 		String grammar = Translator.translateToLocal("for.butterflies.grammar." + type.getName());
-		String speciesString = individual.getDisplayName();
+		String speciesString = species.getAlleleName();
 		String typeString = Translator.translateToLocal("for.butterflies.grammar." + type.getName() + ".type");
 		return grammar.replaceAll("%SPECIES", speciesString).replaceAll("%TYPE", typeString);
 	}

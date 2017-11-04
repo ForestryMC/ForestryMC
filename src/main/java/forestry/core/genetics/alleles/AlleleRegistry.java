@@ -22,8 +22,12 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
@@ -51,6 +55,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
 	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
 	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
+	private ForgeRegistry<IAllele> alleleForgeRegistry;
 
 	/*
 	 * Internal Set of all alleleHandlers, which trigger when an allele or branch is registered
@@ -140,6 +145,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 		// Animalia
 		getClassification("phylum.arthropoda").addMemberGroup(createAndRegisterClassification(EnumClassLevel.CLASS, "insecta", "Insecta"));
 
+		alleleForgeRegistry = (ForgeRegistry<IAllele>) new RegistryBuilder().setName(new ResourceLocation("forestry:alleles")).setMaxID(4096).setType(IAllele.class).create();
 	}
 
 	@Override
@@ -156,6 +162,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
 		addValidAlleleTypes(allele, chromosomeTypes);
 
+		alleleForgeRegistry.register(allele);
 		alleleMap.put(allele.getUID(), allele);
 		if (allele instanceof IAlleleSpecies) {
 			IClassification branch = ((IAlleleSpecies) allele).getBranch();
@@ -207,6 +214,18 @@ public class AlleleRegistry implements IAlleleRegistry {
 	@Override
 	public Collection<IChromosomeType> getChromosomeTypes(IAllele allele) {
 		return Collections.unmodifiableSet(typesByAllele.get(allele));
+	}
+
+	/* SAVE AND LOAD*/
+	@Override
+	public int getAlleleID(IAllele allele) {
+		return alleleForgeRegistry.getID(allele);
+	}
+
+	@Nullable
+	@Override
+	public IAllele getAlleleById(int id) {
+		return alleleForgeRegistry.getValue(id);
 	}
 
 	/* CLASSIFICATIONS */

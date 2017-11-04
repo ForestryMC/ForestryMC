@@ -53,7 +53,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 			return (IAlleleTreeSpecies) species;
 		}
 
-		return (IAlleleTreeSpecies) getActiveAllele(itemStack, EnumTreeChromosome.SPECIES, TreeManager.treeRoot);
+		return (IAlleleTreeSpecies) getAllele(itemStack, EnumTreeChromosome.SPECIES, true);
 	}
 
 	@Override

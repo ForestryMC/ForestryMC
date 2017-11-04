@@ -16,17 +16,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.commands.SubCommand;
-import forestry.core.commands.TemplateNotFoundException;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -34,6 +23,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.ISpeciesType;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.commands.SubCommand;
+import forestry.core.commands.TemplateNotFoundException;
 
 public class CommandBeeGive extends SubCommand {
 
@@ -45,7 +47,7 @@ public class CommandBeeGive extends SubCommand {
 		setPermLevel(PermLevel.ADMIN);
 
 		List<String> beeTypeStrings = new ArrayList<>();
-		for (EnumBeeType type : EnumBeeType.values()) {
+		for (ISpeciesType type : EnumBeeType.values()) {
 			beeTypeStrings.add(type.getName());
 		}
 
@@ -72,7 +74,7 @@ public class CommandBeeGive extends SubCommand {
 		}
 
 		IBeeGenome beeGenome = getBeeGenome(args[0]);
-		EnumBeeType beeType = getBeeType(args[1]);
+		ISpeciesType beeType = getBeeType(args[1]);
 		if (beeType == null) {
 			printHelp(sender);
 			return;
@@ -158,8 +160,8 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Nullable
-	private static EnumBeeType getBeeType(String beeTypeName) {
-		for (EnumBeeType beeType : EnumBeeType.values()) {
+	private static ISpeciesType getBeeType(String beeTypeName) {
+		for (ISpeciesType beeType : EnumBeeType.values()) {
 			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
 				return beeType;
 			}

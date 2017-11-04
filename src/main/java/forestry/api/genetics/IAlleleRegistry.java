@@ -9,9 +9,11 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IClassification.EnumClassLevel;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IClassification.EnumClassLevel;
 
 /**
  * Manages {@link ISpeciesRoot}, {@link IAllele}s, {@link IFruitFamily}s, {@link IClassification}, the blacklist and allows creation of research notes.
@@ -143,6 +145,13 @@ public interface IAlleleRegistry {
 	 * @since Forestry 5.0
 	 */
 	Collection<IChromosomeType> getChromosomeTypes(IAllele allele);
+
+	/* SAVE AND LOAD*/
+
+	int getAlleleID(IAllele allele);
+
+	@Nullable
+	IAllele getAlleleById(int id);
 
 	/* CLASSIFICATIONS */
 

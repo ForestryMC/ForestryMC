@@ -54,7 +54,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 			return (IAlleleButterflySpecies) species;
 		}
 
-		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
+		return (IAlleleButterflySpecies) getAllele(itemStack, EnumButterflyChromosome.SPECIES, true);
 	}
 
 	/* SPECIES */

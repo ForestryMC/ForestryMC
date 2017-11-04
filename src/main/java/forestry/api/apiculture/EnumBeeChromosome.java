@@ -26,60 +26,68 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleBeeSpecies}.
 	 */
-	SPECIES(IAlleleBeeSpecies.class),
+	SPECIES(IAlleleBeeSpecies.class, "species", true),
 	/**
 	 * (Production) Speed of the bee.
 	 */
-	SPEED(IAlleleFloat.class),
+	SPEED(IAlleleFloat.class, "speed"),
 	/**
 	 * Lifespan of the bee.
 	 */
-	LIFESPAN(IAlleleInteger.class),
+	LIFESPAN(IAlleleInteger.class, "lifespan"),
 	/**
 	 * Fertility of the bee. Determines number of offspring.
 	 */
-	FERTILITY(IAlleleInteger.class),
+	FERTILITY(IAlleleInteger.class, "fertility"),
 	/**
 	 * Temperature difference to its native supported one the bee can tolerate.
 	 */
-	TEMPERATURE_TOLERANCE(IAlleleTolerance.class),
+	TEMPERATURE_TOLERANCE(IAlleleTolerance.class, "tempTol"),
 	/**
 	 * If true, a naturally diurnal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
 	 */
-	NEVER_SLEEPS(IAlleleBoolean.class),
+	NEVER_SLEEPS(IAlleleBoolean.class, "nocturnal"),
 	/**
 	 * Humidity difference to its native supported one the bee can tolerate.
 	 */
-	HUMIDITY_TOLERANCE(IAlleleTolerance.class),
+	HUMIDITY_TOLERANCE(IAlleleTolerance.class, "humidTol"),
 	/**
 	 * If true the bee can work during rain.
 	 */
-	TOLERATES_RAIN(IAlleleBoolean.class),
+	TOLERATES_RAIN(IAlleleBoolean.class, "rainFlying"),
 	/**
 	 * If true, the bee can work without a clear view of the sky.
 	 */
-	CAVE_DWELLING(IAlleleBoolean.class),
+	CAVE_DWELLING(IAlleleBoolean.class, "caveDwell"),
 	/**
 	 * Contains the supported flower provider.
 	 */
-	FLOWER_PROVIDER(IAlleleFlowers.class),
+	FLOWER_PROVIDER(IAlleleFlowers.class, "flower"),
 	/**
 	 * Determines pollination speed.
 	 */
-	FLOWERING(IAlleleInteger.class),
+	FLOWERING(IAlleleInteger.class, "flowering"),
 	/**
 	 * Determines the size of the bee's territory.
 	 */
-	TERRITORY(IAlleleArea.class),
+	TERRITORY(IAlleleArea.class, "territory", true),
 	/**
 	 * Determines the bee's effect.
 	 */
-	EFFECT(IAlleleBeeEffect.class);
+	EFFECT(IAlleleBeeEffect.class, "effect", true);
 
 	private final Class<? extends IAllele> alleleClass;
+	private final String shortName;
+	private final boolean neededOnClientSide;
 
-	EnumBeeChromosome(Class<? extends IAllele> alleleClass) {
+	EnumBeeChromosome(Class<? extends IAllele> alleleClass, String shortName) {
+		this(alleleClass, shortName, false);
+	}
+
+	EnumBeeChromosome(Class<? extends IAllele> alleleClass, String shortName, boolean neededOnClientSide) {
 		this.alleleClass = alleleClass;
+		this.shortName = shortName;
+		this.neededOnClientSide = neededOnClientSide;
 	}
 
 	@Override
@@ -90,6 +98,16 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
+	}
+
+	@Override
+	public String getShortName() {
+		return shortName;
+	}
+
+	@Override
+	public boolean isNeededOnClientSide() {
+		return neededOnClientSide;
 	}
 
 	@Override

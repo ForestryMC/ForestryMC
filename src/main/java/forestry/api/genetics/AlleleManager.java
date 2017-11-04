@@ -23,4 +23,9 @@ public class AlleleManager {
 	 * Creates Forestry alleles.
 	 */
 	public static IAlleleFactory alleleFactory;
+
+	/**
+	 * Creates genetic helper classes.
+	 */
+	public static IGeneticFactory geneticFactory;
 }

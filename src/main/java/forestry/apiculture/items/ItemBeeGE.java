@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -35,11 +36,12 @@ import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.apiculture.genetics.BeeGenome;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
@@ -61,8 +63,13 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
-		return BeeGenome.getSpecies(itemStack);
+	protected IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		return GeneticsUtil.getAlleleDirectly(itemStack, EnumBeeChromosome.SPECIES, true, IAlleleBeeSpecies.class);
+	}
+
+	@Override
+	public final ISpeciesRoot getRoot() {
+		return BeeManager.beeRoot;
 	}
 
 	@Override
@@ -70,14 +77,17 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		if (itemstack.getTagCompound() == null) {
 			return super.getItemStackDisplayName(itemstack);
 		}
+		IAlleleSpecies species = getSpecies(itemstack);
+		if(species == null){
+			return super.getItemStackDisplayName(itemstack);
+		}
 
-		IBee individual = BeeManager.beeRoot.getMember(itemstack);
-		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return Translator.translateToLocal(customBeeKey);
 		}
 		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
-		String beeSpecies = individual.getDisplayName();
+		String beeSpecies = species.getAlleleName();
 		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
 		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
 	}
@@ -132,7 +142,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			}
 		}
 
-		IAlleleBeeSpecies species = BeeGenome.getSpecies(itemstack);
+		IAlleleBeeSpecies species = getSpecies(itemstack);
 		return species.getSpriteColour(tintIndex);
 	}
 
@@ -155,7 +165,10 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			if (!stack.hasTagCompound()) { // villager trade wildcard bees
 				return DefaultBeeModelProvider.instance.getModel(type);
 			}
-			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+			IAlleleBeeSpecies species = getSpecies(stack);
+			if(species == null){
+				return DefaultBeeModelProvider.instance.getModel(type);
+			}
 			return species.getModel(type);
 		}
 	}

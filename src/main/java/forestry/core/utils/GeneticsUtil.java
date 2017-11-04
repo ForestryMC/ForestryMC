@@ -25,21 +25,23 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IIndividualHandler;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.core.CoreCapabilities;
+import forestry.core.genetics.GenomeSaveHandler;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
@@ -178,15 +180,25 @@ public class GeneticsUtil {
 		return null;
 	}
 
+	private static ItemStack getEquivalent(ItemStack itemStack) {
+		for(ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()){
+			ItemStack item = root.getGeneticEquivalent(itemStack);
+			if(!item.isEmpty()){
+				return item;
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
 		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
-			IIndividual individual = getGeneticEquivalent(foreign);
-			if (individual != null) {
-				ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+			ItemStack equivalent = getEquivalent(foreign);
+			if(!equivalent.isEmpty()){
 				equivalent.setCount(foreign.getCount());
 				return equivalent;
 			}
 		}
+		foreign = GenomeSaveHandler.covert(foreign);
 		return foreign;
 	}
 
@@ -213,5 +225,24 @@ public class GeneticsUtil {
 
 		int otherAdvance = getGeneticAdvancement(mutationSpecies, exclude, speciesChromosome);
 		return otherAdvance > highest ? otherAdvance : highest;
+	}
+
+	@Nullable
+	public static <A> A getAlleleDirectly(ItemStack itemStack, IChromosomeType type, boolean active, Class<A> alleleClass){
+		if(!itemStack.hasCapability(CoreCapabilities.INDIVIDUAL_HANDLER, null)){
+			return null;
+		}
+		IIndividualHandler individualHandler = itemStack.getCapability(CoreCapabilities.INDIVIDUAL_HANDLER, null);
+		if(individualHandler == null){
+			return null;
+		}
+		IAllele allele = individualHandler.getAlleleDirectly(type, active);
+		if(allele == null){
+			return null;
+		}
+		if(alleleClass.isInstance(allele)){
+			return alleleClass.cast(allele);
+		}
+		return null;
 	}
 }
