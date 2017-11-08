@@ -47,7 +47,10 @@ public final class World2ObjectMap<O> {
 	}
 	
 	@Nullable
-	public O get(World world){
+	public O get(@Nullable World world){
+		if(world == null){
+			return null;
+		}
 		return delegate.get(getIndex(world));
 	}
 	
