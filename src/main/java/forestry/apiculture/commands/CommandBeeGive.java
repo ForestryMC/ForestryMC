@@ -31,7 +31,6 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesType;
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
@@ -47,7 +46,7 @@ public class CommandBeeGive extends SubCommand {
 		setPermLevel(PermLevel.ADMIN);
 
 		List<String> beeTypeStrings = new ArrayList<>();
-		for (ISpeciesType type : EnumBeeType.values()) {
+		for (EnumBeeType type : EnumBeeType.values()) {
 			beeTypeStrings.add(type.getName());
 		}
 
@@ -74,7 +73,7 @@ public class CommandBeeGive extends SubCommand {
 		}
 
 		IBeeGenome beeGenome = getBeeGenome(args[0]);
-		ISpeciesType beeType = getBeeType(args[1]);
+		EnumBeeType beeType = getBeeType(args[1]);
 		if (beeType == null) {
 			printHelp(sender);
 			return;
@@ -160,8 +159,8 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Nullable
-	private static ISpeciesType getBeeType(String beeTypeName) {
-		for (ISpeciesType beeType : EnumBeeType.values()) {
+	private static EnumBeeType getBeeType(String beeTypeName) {
+		for (EnumBeeType beeType : EnumBeeType.values()) {
 			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
 				return beeType;
 			}

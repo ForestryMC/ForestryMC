@@ -70,8 +70,6 @@ public interface ISpeciesRoot {
 
 	IIndividual getMember(NBTTagCompound compound);
 
-	//NBTTagCompound getNBTShareTag(ItemStack stack);
-
 	/**
 	 * @param translatorKey The key of the translator, by default it is the item or the block of the {@link ItemStack} or
 	 * 						{@link net.minecraft.block.state.IBlockState} that you want to translate with the translator.
