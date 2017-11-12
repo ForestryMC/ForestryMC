@@ -21,20 +21,4 @@ public interface IChromosomeType {
 
 	int ordinal();
 
-	/**
-	 * @return A short identifier used to save the alleles of the chromosome in the NBT data.
-	 * @since Forestry 5.8
-	 */
-	default String getShortName(){
-		return getName();
-	}
-
-	/**
-	 * @return True if the alleles of this chromosome are needed on the client side.
-	 * 	 * @since Forestry 5.8
-	 */
-	default boolean isNeededOnClientSide(){
-		return false;
-	}
-
 }

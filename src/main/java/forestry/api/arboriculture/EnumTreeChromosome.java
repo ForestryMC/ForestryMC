@@ -23,54 +23,46 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits which {@link IFruitProvider}
 	 * will actually yield fruit with this species. - Native {@link EnumPlantType} for this tree. Combines with the PLANT chromosome.
 	 */
-	SPECIES(IAlleleTreeSpecies.class, "species", true),
+	SPECIES(IAlleleTreeSpecies.class),
 	/**
 	 * A float modifying the height of the tree. Taken into account at worldgen.
 	 */
-	HEIGHT(IAlleleFloat.class, "height"),
+	HEIGHT(IAlleleFloat.class),
 	/**
 	 * Chance for saplings.
 	 */
-	FERTILITY(IAlleleFloat.class, "fertility"),
+	FERTILITY(IAlleleFloat.class),
 	/**
 	 * {@link IFruitProvider}, determines if and what fruits are grown on the tree. Limited by the {@link IFruitFamily}s the species supports.
 	 */
-	FRUITS(IAlleleFruit.class, "fruit"),
+	FRUITS(IAlleleFruit.class),
 	/**
 	 * Chance for fruit leaves and/or drops.
 	 */
-	YIELD(IAlleleFloat.class, "yield"),
+	YIELD(IAlleleFloat.class),
 	/**
 	 * Determines the speed at which fruit will ripen on this tree.
 	 */
-	SAPPINESS(IAlleleFloat.class, "sappiness"),
+	SAPPINESS(IAlleleFloat.class),
 	/**
 	 * Leaf effect. Unused.
 	 */
-	EFFECT(IAlleleLeafEffect.class, "effect"),
+	EFFECT(IAlleleLeafEffect.class),
 	/**
 	 * Amount of random ticks which need to elapse before a sapling will grow into a tree.
 	 */
-	MATURATION(IAlleleInteger.class, "maturation"),
+	MATURATION(IAlleleInteger.class),
 
-	GIRTH(IAlleleInteger.class, "girth"),
+	GIRTH(IAlleleInteger.class),
 	/**
 	 * Determines if the tree can burn.
 	 */
-	FIREPROOF(IAlleleBoolean.class, "fireproof");
+	FIREPROOF(IAlleleBoolean.class),;
 
 	private final Class<? extends IAllele> alleleClass;
-	private final String shortName;
-	private final boolean neededOnClientSide;
 
-	EnumTreeChromosome(Class<? extends IAllele> alleleClass, String shortName) {
-		this(alleleClass, shortName, false);
-	}
-
-	EnumTreeChromosome(Class<? extends IAllele> alleleClass, String shortName, boolean neededOnClientSide) {
+	EnumTreeChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
-		this.shortName = shortName;
-		this.neededOnClientSide = neededOnClientSide;
 	}
 
 	@Override
@@ -81,16 +73,6 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
-	}
-
-	@Override
-	public String getShortName() {
-		return shortName;
-	}
-
-	@Override
-	public boolean isNeededOnClientSide() {
-		return neededOnClientSide;
 	}
 
 	@Override

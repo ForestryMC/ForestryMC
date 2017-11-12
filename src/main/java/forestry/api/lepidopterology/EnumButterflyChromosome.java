@@ -20,70 +20,62 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleButterflySpecies}.
 	 */
-	SPECIES(IAlleleButterflySpecies.class, "species", true),
+	SPECIES(IAlleleButterflySpecies.class),
 	/**
 	 * Physical size.
 	 */
-	SIZE(IAlleleFloat.class, "size", true),
+	SIZE(IAlleleFloat.class),
 	/**
 	 * Flight speed.
 	 */
-	SPEED(IAlleleFloat.class, "speed"),
+	SPEED(IAlleleFloat.class),
 	/**
 	 * How long the butterfly can last without access to matching pollinatables.
 	 */
-	LIFESPAN(IAlleleInteger.class, "life"),
+	LIFESPAN(IAlleleInteger.class),
 	/**
 	 * Species with a higher metabolism have a higher appetite and may cause more damage to their environment.
 	 */
-	METABOLISM(IAlleleInteger.class, "metabolism"),
+	METABOLISM(IAlleleInteger.class),
 	/**
 	 * Determines likelyhood of caterpillars and length of caterpillar/pupation phase. Also: Number of max caterpillars after mating?
 	 */
-	FERTILITY(IAlleleInteger.class, "fertility"),
+	FERTILITY(IAlleleInteger.class),
 	/**
 	 * Not sure yet.
 	 */
-	TEMPERATURE_TOLERANCE(IAlleleTolerance.class, "tempTol"),
+	TEMPERATURE_TOLERANCE(IAlleleTolerance.class),
 	/**
 	 * Not sure yet.
 	 */
-	HUMIDITY_TOLERANCE(IAlleleTolerance.class, "humidTol"),
+	HUMIDITY_TOLERANCE(IAlleleTolerance.class),
 	/**
 	 * Only nocturnal butterflys/moths will fly at night. Allows daylight activity for naturally nocturnal species.
 	 */
-	NOCTURNAL(IAlleleBoolean.class, "nocturnal"),
+	NOCTURNAL(IAlleleBoolean.class),
 	/**
 	 * Only tolerant flyers will fly in the rain.
 	 */
-	TOLERANT_FLYER(IAlleleBoolean.class, "rainFlying"),
+	TOLERANT_FLYER(IAlleleBoolean.class),
 	/**
 	 * Fire resistance.
 	 */
-	FIRE_RESIST(IAlleleBoolean.class, "fireproof"),
+	FIRE_RESIST(IAlleleBoolean.class),
 	/**
 	 * Required flowers/leaves.
 	 */
-	FLOWER_PROVIDER(IAlleleFlowers.class, "flower"),
+	FLOWER_PROVIDER(IAlleleFlowers.class),
 	/**
 	 * Extra effect to surroundings. (?)
 	 */
-	EFFECT(IAlleleButterflyEffect.class, "effect"),
+	EFFECT(IAlleleButterflyEffect.class),
 
-	COCOON(IAlleleButterflyCocoon.class, "cocoon");
+	COCOON(IAlleleButterflyCocoon.class);
 
 	private final Class<? extends IAllele> alleleClass;
-	private final String shortName;
-	private final boolean neededOnClientSide;
 
-	EnumButterflyChromosome(Class<? extends IAllele> alleleClass, String shortName) {
-		this(alleleClass, shortName, false);
-	}
-
-	EnumButterflyChromosome(Class<? extends IAllele> alleleClass, String shortName, boolean neededOnClientSide) {
+	EnumButterflyChromosome(Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
-		this.shortName = shortName;
-		this.neededOnClientSide = neededOnClientSide;
 	}
 
 	@Override
@@ -94,16 +86,6 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
-	}
-
-	@Override
-	public String getShortName() {
-		return shortName;
-	}
-
-	@Override
-	public boolean isNeededOnClientSide() {
-		return neededOnClientSide;
 	}
 
 	@Override
