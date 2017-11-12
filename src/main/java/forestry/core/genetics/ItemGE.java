@@ -26,17 +26,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesType;
-import forestry.core.config.Config;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
 
@@ -96,19 +89,6 @@ public abstract class ItemGE extends ItemForestry {
 			}
 		} else {
 			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
-		}
-
-		if(Config.isDebug && GuiScreen.isAltKeyDown()){
-			IGenome genome = individual.getGenome();
-
-			for(int i = 0;i < genome.getSpeciesRoot().getKaryotype().length;i++){
-				IChromosome chromosome = genome.getChromosomes()[i];
-				IChromosomeType chromosomeType = genome.getSpeciesRoot().getKaryotype()[i];
-				IAllele primary = chromosome.getPrimaryAllele();
-				IAllele secondary = chromosome.getSecondaryAllele();
-				IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-				list.add(chromosomeType.getName() + ": P: " + primary.getAlleleName() + "(" + alleleRegistry.getAlleleID(primary) + "), S: " + secondary.getAlleleName() + "(" + alleleRegistry.getAlleleID(secondary) + ")");
-			}
 		}
 	}
 
