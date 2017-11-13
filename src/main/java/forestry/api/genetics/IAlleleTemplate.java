@@ -29,7 +29,7 @@ public interface IAlleleTemplate<T extends IChromosomeType, S extends IAlleleSpe
 	/**
 	 * @return A copy of this template with a copied allele array.
 	 */
-	IAlleleTemplate copy();
+	IAlleleTemplate<T, S> copy();
 
 	ISpeciesRoot getRoot();
 
