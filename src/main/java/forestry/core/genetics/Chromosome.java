@@ -47,14 +47,14 @@ public class Chromosome implements IChromosome {
 
 	@Nullable
 	public static IAllele getFirstAllele(NBTTagCompound chromosomeNBT){
-		String speciesUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
-		return AlleleManager.alleleRegistry.getAllele(speciesUid);
+		String alleleUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
+		return AlleleManager.alleleRegistry.getAllele(alleleUid);
 	}
 
 	@Nullable
 	public static IAllele getSecondAllele(NBTTagCompound chromosomeNBT){
-		String speciesUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
-		return AlleleManager.alleleRegistry.getAllele(speciesUid);
+		String alleleUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
+		return AlleleManager.alleleRegistry.getAllele(alleleUid);
 	}
 
 	/**

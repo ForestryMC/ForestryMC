@@ -41,7 +41,6 @@ import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.CoreCapabilities;
-import forestry.core.genetics.GenomeSaveHandler;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
@@ -198,7 +197,6 @@ public class GeneticsUtil {
 				return equivalent;
 			}
 		}
-		foreign = GenomeSaveHandler.covert(foreign);
 		return foreign;
 	}
 

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -71,33 +74,67 @@ public interface ISpeciesRoot {
 	IIndividual getMember(NBTTagCompound compound);
 
 	/**
-	 * @param translatorKey The key of the translator, by default it is the item or the block of the {@link ItemStack} or
-	 * 						{@link net.minecraft.block.state.IBlockState} that you want to translate with the translator.
+	 * @param translatorKey The key of the translator the block of {@link IBlockState} that you want to translate
+	 *                         with the translator.
 	 * @param translator A translator that should be used to translate the data.
+	 * @since Forestry 5.8
 	 */
-	void registerTranslator(Object translatorKey, IIndividualTranslator translator);
+	void registerTranslator(Block translatorKey, IBlockTranslator translator);
 
 	/**
-	 * @param translatorKey The key of the translator, by default it is the item or the block of the {@link ItemStack} or
-	 * 						{@link net.minecraft.block.state.IBlockState} that you want to translate with the translator.
+	 * @param translatorKey The key of the translator it is the item of the {@link ItemStack} that you want to translate
+	 *                      with the translator.
+	 * @param translator A translator that should be used to translate the data.
+	 * @since Forestry 5.8
+	 */
+	void registerTranslator(Item translatorKey, IItemTranslator translator);
+
+	/**
+	 * @param translatorKey The key of the translator, by default it is the item of the {@link ItemStack} that you want
+	 *                      to translate with the translator.
+	 *  @since Forestry 5.8
 	 */
 	@Nullable
-	IIndividualTranslator getTranslator(Object translatorKey);
+	IItemTranslator getTranslator(Item translatorKey);
 
 	/**
-	 * Translates {@link net.minecraft.block.state.IBlockState}s and {@link net.minecraft.item.ItemStack}s into genetic
-	 * data.
-	 */
-	@Nullable
-	<I extends IIndividual> I translateMember(Object objectToTranslator);
-
-	/**
-	 * Translates {@link net.minecraft.block.state.IBlockState}s and {@link net.minecraft.item.ItemStack}s into genetic
-	 * data.
+	 * @param translatorKey The key of the translator the block of the{@link IBlockState} that you want to translate
+	 *                      with the translator.
 	 *
 	 * @since Forestry 5.8
 	 */
-	ItemStack getGeneticEquivalent(Object objectToTranslator);
+	@Nullable
+	IBlockTranslator getTranslator(Block translatorKey);
+
+	/**
+	 * Translates {@link IBlockState}s into genetic data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	@Nullable
+	<I extends IIndividual> I translateMember(IBlockState objectToTranslate);
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	@Nullable
+	<I extends IIndividual> I translateMember(ItemStack objectToTranslate);
+
+	/**
+	 * Translates a {@link IBlockState}s into genetic data and returns a {@link ItemStack} that contains this data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	ItemStack getGeneticEquivalent(IBlockState objectToTranslate);
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data and returns a other {@link ItemStack} that contains this data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	ItemStack getGeneticEquivalent(ItemStack objectToTranslate);
 
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
@@ -239,7 +276,7 @@ public interface ISpeciesRoot {
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.
-	 * @since 5.7
+	 * @since Forestry 5.7
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)

@@ -15,10 +15,16 @@ public interface IChromosomeType {
 	 */
 	Class<? extends IAllele> getAlleleClass();
 
+	/**
+	 * @return Short identifier.
+	 */
 	String getName();
 
 	ISpeciesRoot getSpeciesRoot();
 
+	/**
+	 * @return The position of this chromosome type at a chromosome array.
+	 */
 	int ordinal();
 
 }

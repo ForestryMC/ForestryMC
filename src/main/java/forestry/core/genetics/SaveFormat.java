@@ -87,17 +87,17 @@ public enum SaveFormat {
 	BINARY {
 		private static final String DATA_TAG = "data";
 		private static final String VERSION_TAG = "version";
-		private static final String VERSION = "1.0.0";
+		private static final int VERSION = 1;
 
 		@Override
 		public NBTTagCompound writeTag(IGenome genome, NBTTagCompound tagCompound) {
 			ISpeciesRoot speciesRoot = genome.getSpeciesRoot();
 			IChromosome[] chromosomes = genome.getChromosomes();
-
+			
 			SimpleByteBuf byteBuf = new SimpleByteBuf();
 			byteBuf.writeChromosomes(chromosomes, speciesRoot);
 			tagCompound.setByteArray(DATA_TAG, byteBuf.toByteArray());
-			tagCompound.setString(VERSION_TAG, VERSION);
+			tagCompound.setInteger(VERSION_TAG, VERSION);
 
 			return tagCompound;
 		}

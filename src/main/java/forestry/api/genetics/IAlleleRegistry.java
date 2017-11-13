@@ -146,13 +146,6 @@ public interface IAlleleRegistry {
 	 */
 	Collection<IChromosomeType> getChromosomeTypes(IAllele allele);
 
-	/* SAVE AND LOAD*/
-
-	int getAlleleID(IAllele allele);
-
-	@Nullable
-	IAllele getAlleleById(int id);
-
 	/* CLASSIFICATIONS */
 
 	/**

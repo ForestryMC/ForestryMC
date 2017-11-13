@@ -23,16 +23,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTemplateBuilder;
+import forestry.api.genetics.IBlockTranslator;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IIndividualTranslator;
+import forestry.api.genetics.IItemTranslator;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.alleles.AlleleTemplateBuilder;
@@ -94,59 +97,73 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 	
 	/* TRANSLATORS */
-	private final HashMap<Object, IIndividualTranslator<IIndividual, Object>> translators = new HashMap<>();
+	private final HashMap<Block, IBlockTranslator> blockTranslators = new HashMap<>();
+	private final HashMap<Item, IItemTranslator> itemTranslators = new HashMap<>();
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void registerTranslator(Object translatorKey, IIndividualTranslator translator) {
-		if(!translators.containsKey(translatorKey)){
-			translators.put(translatorKey, translator);
-		}
-	}
-	
-	@Nullable
-	@Override
-	public IIndividualTranslator getTranslator(Object translatorKey) {
-		return translators.get(translatorKey);
+	public void registerTranslator(Block translatorKey, IBlockTranslator translator) {
+		blockTranslators.putIfAbsent(translatorKey, translator);
 	}
 
+	@Override
+	public void registerTranslator(Item translatorKey, IItemTranslator translator) {
+		itemTranslators.putIfAbsent(translatorKey, translator);
+	}
+
+	@Nullable
+	@Override
+	public IItemTranslator getTranslator(Item translatorKey) {
+		return itemTranslators.get(translatorKey);
+	}
+
+	@Nullable
+	@Override
+	public IBlockTranslator getTranslator(Block translatorKey) {
+		return blockTranslators.get(translatorKey);
+	}
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Nullable
 	@Override
-	public <I extends IIndividual> I translateMember(Object objectToTranslator) {
-		Object translatorKey = null;
-		if(objectToTranslator instanceof ItemStack){
-			translatorKey = ((ItemStack) objectToTranslator).getItem();
-		}else if(objectToTranslator instanceof IBlockState){
-			translatorKey = ((IBlockState) objectToTranslator).getBlock();
-		}
-		if(translatorKey == null){
-			return null;
-		}
-		IIndividualTranslator<I, Object> translator = getTranslator(translatorKey);
+	public <I extends IIndividual> I translateMember(IBlockState objectToTranslate) {
+		Block translatorKey = objectToTranslate.getBlock();
+		IBlockTranslator<I> translator = getTranslator(translatorKey);
 		if(translator == null){
 			return null;
 		}
-		return translator.getIndividualFromObject(objectToTranslator);
+		return translator.getIndividualFromObject(objectToTranslate);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Nullable
 	@Override
-	public ItemStack getGeneticEquivalent(Object objectToTranslator) {
-		Object translatorKey = null;
-		if(objectToTranslator instanceof ItemStack){
-			translatorKey = ((ItemStack) objectToTranslator).getItem();
-		}else if(objectToTranslator instanceof IBlockState){
-			translatorKey = ((IBlockState) objectToTranslator).getBlock();
+	public <I extends IIndividual> I translateMember(ItemStack objectToTranslate) {
+		Item translatorKey = objectToTranslate.getItem();
+		IItemTranslator<I> translator = getTranslator(translatorKey);
+		if(translator == null){
+			return null;
 		}
-		if(translatorKey == null){
-			return ItemStack.EMPTY;
-		}
-		IIndividualTranslator translator = getTranslator(translatorKey);
+		return translator.getIndividualFromObject(objectToTranslate);
+	}
+
+	@Override
+	public ItemStack getGeneticEquivalent(ItemStack objectToTranslate) {
+		Item translatorKey = objectToTranslate.getItem();
+		IItemTranslator translator = getTranslator(translatorKey);
 		if(translator == null){
 			return ItemStack.EMPTY;
 		}
-		return translator.getGeneticEquivalent(objectToTranslator);
+		return translator.getGeneticEquivalent(objectToTranslate);
+	}
+
+	@Override
+	public ItemStack getGeneticEquivalent(IBlockState objectToTranslate) {
+		Block translatorKey = objectToTranslate.getBlock();
+		IBlockTranslator translator = getTranslator(translatorKey);
+		if(translator == null){
+			return ItemStack.EMPTY;
+		}
+		return translator.getGeneticEquivalent(objectToTranslate);
 	}
 
 	/* MEMBERS */

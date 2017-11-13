@@ -40,11 +40,8 @@ public class AlleleTemplateBuilder<T extends Enum<T> & IChromosomeType, S extend
 		return this;
 	}
 
-	public AlleleTemplateBuilder<T, S> set(T chromosomeType, Object value) {
-		if(!(value instanceof IAlleleValue)){
-			throw new IllegalArgumentException("Value is the wrong type. Expected: " + chromosomeType + " Got: IAlleleValue");
-		}
-		AlleleHelper.getInstance().set(alleles, chromosomeType, (IAlleleValue)value);
+	public AlleleTemplateBuilder<T, S> set(T chromosomeType, IAlleleValue value) {
+		AlleleHelper.getInstance().set(alleles, chromosomeType, value);
 		return this;
 	}
 

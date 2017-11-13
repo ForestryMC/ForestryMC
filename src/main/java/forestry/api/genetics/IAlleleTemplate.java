@@ -2,6 +2,9 @@ package forestry.api.genetics;
 
 import javax.annotation.Nullable;
 
+/**
+ * Can be used to create {@link IGenome}s, {@link IIndividual}s or {@link IChromosome}s or get a allele.
+ */
 public interface IAlleleTemplate<T extends IChromosomeType, S extends IAlleleSpecies> {
 
 	/**
@@ -30,9 +33,21 @@ public interface IAlleleTemplate<T extends IChromosomeType, S extends IAlleleSpe
 
 	ISpeciesRoot getRoot();
 
-	IIndividual toIndividual(@Nullable IAlleleTemplate inactiveTemplate);
+	/**
+	 * Creates an individual with the help of the species root using
+	 * {@link ISpeciesRoot#templateAsIndividual(IAllele[], IAllele[])}.
+	 */
+	IIndividual toIndividual(@Nullable IAlleleTemplate<T, S> inactiveTemplate);
 
-	IGenome toGenome(@Nullable IAlleleTemplate inactiveTemplate);
+	/**
+	 * Creates a genome with the help of the species root using
+	 * {@link ISpeciesRoot#templateAsGenome(IAllele[], IAllele[])}.
+	 */
+	IGenome toGenome(@Nullable IAlleleTemplate<T, S> inactiveTemplate);
 
-	IChromosome[] toChromosomes(@Nullable IAlleleTemplate inactiveTemplate);
+	/**
+	 * Creates a chromosome array with the help of the species root using
+	 * {@link ISpeciesRoot#templateAsChromosomes(IAllele[], IAllele[])}.
+	 */
+	IChromosome[] toChromosomes(@Nullable IAlleleTemplate<T, S> inactiveTemplate);
 }

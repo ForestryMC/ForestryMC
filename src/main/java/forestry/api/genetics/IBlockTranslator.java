@@ -8,6 +8,7 @@ package forestry.api.genetics;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 
 /**
  * Translates blockStates into genetic data.
@@ -17,4 +18,8 @@ public interface IBlockTranslator<I extends IIndividual> extends IIndividualTran
 	@Nullable
 	@Override
 	I getIndividualFromObject(IBlockState blockState);
+
+	default ItemStack getGeneticEquivalent(IBlockState blockState){
+		return ItemStack.EMPTY;
+	}
 }

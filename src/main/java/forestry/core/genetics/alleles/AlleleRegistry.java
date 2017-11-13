@@ -44,9 +44,14 @@ import forestry.core.ModuleCore;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 
-public class AlleleRegistry implements IAlleleRegistry {
+public final class AlleleRegistry implements IAlleleRegistry {
 
+	private static final AlleleRegistry instance = new AlleleRegistry();
 	private static final int ALLELE_ARRAY_SIZE = 2048;
+
+	public static AlleleRegistry getInstance() {
+		return instance;
+	}
 
 	/* ALLELES */
 	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
@@ -61,6 +66,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 	 * Internal Set of all alleleHandlers, which trigger when an allele or branch is registered
 	 */
 	private final Set<IAlleleHandler> alleleHandlers = new HashSet<>();
+
+	private AlleleRegistry() {
+	}
 
 	/* SPECIES ROOT */
 	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<>(16);
@@ -217,13 +225,11 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	/* SAVE AND LOAD*/
-	@Override
 	public int getAlleleID(IAllele allele) {
 		return alleleForgeRegistry.getID(allele);
 	}
 
 	@Nullable
-	@Override
 	public IAllele getAlleleById(int id) {
 		return alleleForgeRegistry.getValue(id);
 	}

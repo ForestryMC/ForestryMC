@@ -54,23 +54,26 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 	}
 
 	@Override
-	public IChromosome[] toChromosomes(IAlleleTemplate inactiveTemplate) {
-		if(inactiveTemplate == null)
+	public IChromosome[] toChromosomes(IAlleleTemplate<T, S> inactiveTemplate) {
+		if(inactiveTemplate == null) {
 			return root.templateAsChromosomes(alleles);
+		}
 		return root.templateAsChromosomes(alleles, inactiveTemplate.alleles());
 	}
 
 	@Override
-	public IGenome toGenome(@Nullable IAlleleTemplate inactiveTemplate) {
-		if(inactiveTemplate == null)
+	public IGenome toGenome(@Nullable IAlleleTemplate<T, S> inactiveTemplate) {
+		if(inactiveTemplate == null) {
 			return root.templateAsGenome(alleles);
+		}
 		return root.templateAsGenome(alleles, inactiveTemplate.alleles());
 	}
 
 	@Override
-	public IIndividual toIndividual(IAlleleTemplate inactiveTemplate) {
-		if(inactiveTemplate == null)
+	public IIndividual toIndividual(IAlleleTemplate<T, S> inactiveTemplate) {
+		if(inactiveTemplate == null) {
 			return root.templateAsIndividual(alleles);
+		}
 		return root.templateAsIndividual(alleles, inactiveTemplate.alleles());
 	}
 }

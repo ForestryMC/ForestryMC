@@ -11,7 +11,10 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Translates {@link net.minecraft.block.state.IBlockState}s and {@link net.minecraft.item.ItemStack}s into genetic data.
+ *
+ * @deprecated Use a {@link IBlockTranslator} or a {@link IItemTranslator} to translate block states and item stacks.
  */
+@Deprecated
 public interface IIndividualTranslator<I extends IIndividual, O> {
 	@Nullable
 	I getIndividualFromObject(O objectToTranslate);

@@ -120,7 +120,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		ChipsetManager.circuitRegistry = new CircuitRegistry();
 
-		AlleleRegistry alleleRegistry = new AlleleRegistry();
+		AlleleRegistry alleleRegistry = AlleleRegistry.getInstance();
 		AlleleManager.alleleRegistry = alleleRegistry;
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
