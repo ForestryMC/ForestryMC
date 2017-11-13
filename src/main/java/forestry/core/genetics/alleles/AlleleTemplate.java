@@ -44,7 +44,7 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 		return Arrays.copyOf(alleles, alleles.length);
 	}
 
-	public AlleleTemplate copy(){
+	public AlleleTemplate<T, S> copy(){
 		return new AlleleTemplate(alleles(), root);
 	}
 
