@@ -16,6 +16,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTemplateBuilder;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 
 public interface IBeeRoot extends ISpeciesRoot {
@@ -48,6 +49,9 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	@Override
 	IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+
+	@Override
+	IBeeGenomeWrapper getWrapper(IGenome genome);
 
 	@Override
 	IAlleleTemplateBuilder<EnumBeeChromosome, IAlleleBeeSpecies> createTemplateBuilder();

@@ -132,11 +132,11 @@ public class TreeGenome extends Genome implements ITreeGenome {
 		for (int i = 0; i < chromosomes.length; i++) {
 			IChromosome chromosome = chromosomes[i];
 			String templateUid = template[i].getUID();
-			IAllele primaryAllele = chromosome.getPrimaryAllele();
+			IAllele primaryAllele = chromosome.getActiveAllele();
 			if (!primaryAllele.getUID().equals(templateUid)) {
 				return false;
 			}
-			IAllele secondaryAllele = chromosome.getSecondaryAllele();
+			IAllele secondaryAllele = chromosome.getInactiveAllele();
 			if (!secondaryAllele.getUID().equals(templateUid)) {
 				return false;
 			}

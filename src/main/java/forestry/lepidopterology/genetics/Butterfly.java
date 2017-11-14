@@ -50,7 +50,6 @@ import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.ClimateUtil;
@@ -260,7 +259,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = Chromosome.inheritChromosome(rand, parent1[i], parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(rand, parent2[i]);
 			}
 		}
 
@@ -269,7 +268,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Nullable
 	private static IChromosome[] mutateSpecies(World world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
-
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
@@ -279,14 +277,14 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAllele allele1;
 
 		if (rand.nextBoolean()) {
-			allele0 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;

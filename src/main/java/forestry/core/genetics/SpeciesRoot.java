@@ -238,7 +238,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		Chromosome[] chromosomes = new Chromosome[template.length];
 		for (int i = 0; i < template.length; i++) {
 			if (template[i] != null) {
-				chromosomes[i] = new Chromosome(template[i]);
+				chromosomes[i] = Chromosome.create(template[i]);
 			}
 		}
 
@@ -250,7 +250,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		Chromosome[] chromosomes = new Chromosome[templateActive.length];
 		for (int i = 0; i < templateActive.length; i++) {
 			if (templateActive[i] != null) {
-				chromosomes[i] = new Chromosome(templateActive[i], templateInactive[i]);
+				chromosomes[i] = Chromosome.create(templateActive[i], templateInactive[i]);
 			}
 		}
 

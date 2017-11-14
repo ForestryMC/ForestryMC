@@ -8,6 +8,7 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Chromosome;
+import forestry.core.genetics.ChromosomeInfo;
 import forestry.core.genetics.alleles.AlleleRegistry;
 
 /**
@@ -63,7 +64,8 @@ public class SimpleByteBuf {
 		AlleleRegistry alleleRegistry = AlleleRegistry.getInstance();
 		int id = alleleRegistry.getAlleleID(allele);
 		if(id < 0){
-			throw new IllegalArgumentException("Tried to write a allele that is unregistered or null.");
+			writeVarInt(0);
+			return;
 		}
 		writeVarInt(id);
 	}
@@ -114,8 +116,8 @@ public class SimpleByteBuf {
 				continue;
 			}
 			IChromosome chromosome = chromosomes[type.ordinal()];
-			writeAllele(chromosome.getPrimaryAllele());
-			writeAllele(chromosome.getSecondaryAllele());
+			writeAllele(chromosome.getActiveAllele());
+			writeAllele(chromosome.getInactiveAllele());
 		}
 	}
 
@@ -135,25 +137,66 @@ public class SimpleByteBuf {
 		String secondarySpeciesUid = null;
 
 		for (IChromosomeType type : chromosomeTypes) {
-			IAllele firstAllele = null;
-			IAllele secondAllele = null;
-
 			int index = type.ordinal();
 			int bit = (1 << chromosomeTypes.length - index - 1);
-			if ((bit & types) == bit) {
-				firstAllele = readAllele();
-				secondAllele = readAllele();
-			}
+			boolean isValid = (bit & types) == bit;
 
-			Chromosome chromosome = Chromosome.create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
+			Chromosome chromosome = readChromosome(type, isValid, primarySpeciesUid, secondarySpeciesUid);
 			chromosomes[index] = chromosome;
 
 			if (type == speciesRoot.getSpeciesChromosomeType()) {
-				primarySpeciesUid = chromosome.getPrimaryAllele().getUID();
-				secondarySpeciesUid = chromosome.getSecondaryAllele().getUID();
+				primarySpeciesUid = chromosome.getActiveAllele().getUID();
+				secondarySpeciesUid = chromosome.getInactiveAllele().getUID();
 			}
 		}
 		return chromosomes;
+	}
+
+	private Chromosome readChromosome(IChromosomeType type, boolean isValid, ChromosomeInfo info){
+		return readChromosome(type, isValid, info.activeSpeciesUid, info.inactiveSpeciesUid);
+	}
+
+	private Chromosome readChromosome(IChromosomeType type, boolean isValid, @Nullable String activeSpeciesUid, @Nullable String inactiveSpeciesUid){
+		IAllele firstAllele = null;
+		IAllele secondAllele = null;
+
+		if (isValid) {
+			firstAllele = readAllele();
+			secondAllele = readAllele();
+		}
+
+		return Chromosome.create(activeSpeciesUid, inactiveSpeciesUid, type, firstAllele, secondAllele);
+	}
+
+	/**
+	 * Reads a specific chromosome from the byte array without creating the whole chromosome array.
+	 */
+	public ChromosomeInfo readChromosome(IChromosomeType chromosomeType){
+		ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
+		IChromosomeType[] chromosomeTypes = speciesRoot.getKaryotype();
+		int types = readVarInt();
+
+		ChromosomeInfo info = new ChromosomeInfo(chromosomeType);
+
+		for (IChromosomeType type : chromosomeTypes) {
+			int index = type.ordinal();
+			int bit = (1 << chromosomeTypes.length - index - 1);
+			boolean isValid = (bit & types) == bit;
+			if(type == chromosomeType){
+				if(!isValid){
+					return info;
+				}
+				return info.setChromosome(readChromosome(type, true, info));
+			} else if(type == speciesRoot.getSpeciesChromosomeType()){
+				Chromosome chromosome = readChromosome(type, isValid, info);
+
+				info.setSpeciesInfo(chromosome.getActiveAllele().getUID(), chromosome.getInactiveAllele().getUID());
+			}else if(isValid){
+				readVarInt();
+				readVarInt();
+			}
+		}
+		return info;
 	}
 
 	/**

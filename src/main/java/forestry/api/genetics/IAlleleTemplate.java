@@ -31,6 +31,11 @@ public interface IAlleleTemplate<T extends IChromosomeType, S extends IAlleleSpe
 	 */
 	IAlleleTemplate<T, S> copy();
 
+	/**
+	 * Creates a new builder with the alleles that are contained in this template.
+	 */
+	IAlleleTemplateBuilder<T, S> createBuilder();
+
 	ISpeciesRoot getRoot();
 
 	/**

@@ -2,7 +2,7 @@ package forestry.api.genetics;
 
 /**
  * Can be used to create allele templates.
- * </p>
+ * <p>
  * You can get an instance of this from the species root with
  * {@link ISpeciesRoot#createTemplateBuilder()} or {@link ISpeciesRoot#createTemplateBuilder(IAllele[])}.
  */

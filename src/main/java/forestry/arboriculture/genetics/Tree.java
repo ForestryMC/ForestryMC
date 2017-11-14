@@ -33,6 +33,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,7 +54,6 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
-import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.Translator;
 
@@ -319,7 +319,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
 			}
 		}
 
@@ -337,14 +337,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;

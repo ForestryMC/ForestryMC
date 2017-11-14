@@ -32,7 +32,7 @@ public abstract class Genome implements IGenome {
 	private final IChromosome[] chromosomes;
 
 	protected Genome(NBTTagCompound nbttagcompound) {
-		this.chromosomes = GenomeSaveHandler.readTag(nbttagcompound, getSpeciesRoot());
+		this.chromosomes = GenomeSaveHandler.readTag(getSpeciesRoot(), nbttagcompound);
 	}
 
 	protected Genome(IChromosome[] chromosomes) {
@@ -56,17 +56,17 @@ public abstract class Genome implements IGenome {
 				throw new IllegalArgumentException(message);
 			}
 
-			IAllele primary = chromosome.getPrimaryAllele();
+			IAllele primary = chromosome.getActiveAllele();
 			if (primary == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing primary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+						"Missing active allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
-			IAllele secondary = chromosome.getSecondaryAllele();
+			IAllele secondary = chromosome.getInactiveAllele();
 			if (secondary == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing secondary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+						"Missing inaktive allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
@@ -126,11 +126,7 @@ public abstract class Genome implements IGenome {
 		if (genomeNBT.hasNoTags()) {
 			return null;
 		}
-		IChromosome chromosome = GenomeSaveHandler.getChromosomeDirectly(genomeNBT, chromosomeType);
-		if(chromosome == null){
-			return null;
-		}
-		IAllele allele = active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
+		IAllele allele = GenomeSaveHandler.getAlleleDirectly(genomeNBT, chromosomeType, active);
 		if(!chromosomeType.getAlleleClass().isInstance(allele)){
 			return null;
 		}
@@ -169,7 +165,7 @@ public abstract class Genome implements IGenome {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-		return GenomeSaveHandler.writeTag(this, tagCompound);
+		return GenomeSaveHandler.writeTag(chromosomes, getSpeciesRoot(), tagCompound);
 	}
 
 
@@ -180,13 +176,11 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Override
-
 	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
 	}
 
 	@Override
-
 	public IAllele getInactiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getInactiveAllele();
 	}
@@ -208,10 +202,10 @@ public abstract class Genome implements IGenome {
 				return false;
 			}
 
-			if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID())) {
+			if (!chromosome.getActiveAllele().getUID().equals(otherChromosome.getActiveAllele().getUID())) {
 				return false;
 			}
-			if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID())) {
+			if (!chromosome.getInactiveAllele().getUID().equals(otherChromosome.getInactiveAllele().getUID())) {
 				return false;
 			}
 		}
@@ -228,4 +222,6 @@ public abstract class Genome implements IGenome {
 		}
 		return toStringHelper.toString();
 	}
+
+
 }

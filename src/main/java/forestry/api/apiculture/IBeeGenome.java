@@ -5,46 +5,15 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
-import net.minecraft.util.math.Vec3i;
 
 /**
  * Only the default implementation is supported.
  *
  * @author SirSengir
+ *
+ * @apiNote Please use {@link forestry.api.genetics.ISpeciesRoot#getWrapper(IGenome)} to wrap this genome to pure
+ * instance of {@link IBeeGenomeWrapper}.
  */
-public interface IBeeGenome extends IGenome {
-
-	@Override
-	IAlleleBeeSpecies getPrimary();
-
-	@Override
-	IAlleleBeeSpecies getSecondary();
-
-	float getSpeed();
-
-	int getLifespan();
-
-	int getFertility();
-
-	EnumTolerance getToleranceTemp();
-
-	EnumTolerance getToleranceHumid();
-
-	boolean getNeverSleeps();
-
-	boolean getToleratesRain();
-
-	boolean getCaveDwelling();
-
-	IFlowerProvider getFlowerProvider();
-
-	int getFlowering();
-
-	Vec3i getTerritory();
-
-	IAlleleBeeEffect getEffect();
-
+public interface IBeeGenome extends IGenome, IBeeGenomeWrapper {
 }

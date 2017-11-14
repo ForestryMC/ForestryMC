@@ -29,13 +29,13 @@ public class AlleleTemplateBuilder<T extends Enum<T> & IChromosomeType, S extend
 	}
 
 	@Override
-	public IAlleleTemplateBuilder<T, S> setSpecies(S species) {
+	public AlleleTemplateBuilder<T, S> setSpecies(S species) {
 		AlleleHelper.getInstance().set(alleles, (T) root.getSpeciesChromosomeType(), species);
 		return this;
 	}
 
 	@Override
-	public IAlleleTemplateBuilder<T, S> set(T chromosomeType, IAllele allele){
+	public AlleleTemplateBuilder<T, S> set(T chromosomeType, IAllele allele){
 		AlleleHelper.getInstance().set(alleles, chromosomeType, allele);
 		return this;
 	}
@@ -46,19 +46,19 @@ public class AlleleTemplateBuilder<T extends Enum<T> & IChromosomeType, S extend
 	}
 
 	@Override
-	public IAlleleTemplateBuilder<T, S> set(T chromosomeType, boolean value) {
+	public AlleleTemplateBuilder<T, S> set(T chromosomeType, boolean value) {
 		AlleleHelper.getInstance().set(alleles, chromosomeType, value);
 		return this;
 	}
 
 	@Override
-	public IAlleleTemplateBuilder<T, S> set(T chromosomeType, int value) {
+	public AlleleTemplateBuilder<T, S> set(T chromosomeType, int value) {
 		AlleleHelper.getInstance().set(alleles, chromosomeType, value);
 		return this;
 	}
 
 	@Override
-	public IAlleleTemplateBuilder<T, S> set(T chromosomeType, float value) {
+	public AlleleTemplateBuilder<T, S> set(T chromosomeType, float value) {
 		AlleleHelper.getInstance().set(alleles, chromosomeType, value);
 		return this;
 	}

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTemplate;
+import forestry.api.genetics.IAlleleTemplateBuilder;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
@@ -17,7 +18,7 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 	public final IAllele[] alleles;
 	protected final ISpeciesRoot root;
 
-	public AlleleTemplate(IAllele[] alleles, ISpeciesRoot root) {
+	AlleleTemplate(IAllele[] alleles, ISpeciesRoot root) {
 		this.alleles = Arrays.copyOf(alleles, alleles.length);
 		this.root = root;
 	}
@@ -30,6 +31,7 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 		return alleles[chromosomeType.ordinal()];
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public S getSpecies() {
 		return (S) get((T)root.getSpeciesChromosomeType());
@@ -40,12 +42,20 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 		return alleles.length;
 	}
 
+	@Override
 	public IAllele[] alleles() {
 		return Arrays.copyOf(alleles, alleles.length);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
 	public AlleleTemplate<T, S> copy(){
 		return new AlleleTemplate(alleles(), root);
+	}
+
+	@Override
+	public IAlleleTemplateBuilder<T, S> createBuilder() {
+		return new AlleleTemplateBuilder<T, S>(root, alleles);
 	}
 
 	@Override
@@ -54,7 +64,7 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 	}
 
 	@Override
-	public IChromosome[] toChromosomes(IAlleleTemplate<T, S> inactiveTemplate) {
+	public IChromosome[] toChromosomes(@Nullable IAlleleTemplate<T, S> inactiveTemplate) {
 		if(inactiveTemplate == null) {
 			return root.templateAsChromosomes(alleles);
 		}
@@ -70,7 +80,7 @@ public class AlleleTemplate<T extends Enum<T> & IChromosomeType, S extends IAlle
 	}
 
 	@Override
-	public IIndividual toIndividual(IAlleleTemplate<T, S> inactiveTemplate) {
+	public IIndividual toIndividual(@Nullable IAlleleTemplate<T, S> inactiveTemplate) {
 		if(inactiveTemplate == null) {
 			return root.templateAsIndividual(alleles);
 		}

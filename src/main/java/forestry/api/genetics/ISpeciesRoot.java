@@ -162,10 +162,24 @@ public interface ISpeciesRoot {
 
 	IGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
-	/* TEMPLATES */
+	/**
+	 * @return A wrapped version of the genome.
+	 *
+	 * @since Forestry 5.8
+	 */
+	default IGenomeWrapper getWrapper(IGenome genome){
+		return null;
+	}
 
+	/* TEMPLATES */
+	/**
+	 * @since Forestry 5.8
+	 */
 	IAlleleTemplateBuilder createTemplateBuilder();
 
+	/**
+	 * @since Forestry 5.8
+	 */
 	IAlleleTemplateBuilder createTemplateBuilder(IAllele[] alleles);
 
 	/**

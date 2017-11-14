@@ -37,6 +37,7 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeGenomeWrapper;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -49,6 +50,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesPlugin;
@@ -221,6 +223,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
 		return new BeeGenome(templateAsChromosomes(templateActive, templateInactive));
+	}
+
+	@Override
+	public IBeeGenomeWrapper getWrapper(IGenome genome) {
+		return new BeeGenomeWrapper(genome);
 	}
 
 	@Override

@@ -6,7 +6,7 @@
 package forestry.api.genetics;
 
 /**
- * Called after Forestry has registered all his species alleles of a individual.
+ * Called after Forestry has registered all of his species alleles of a individual.
  */
 public class AlleleSpeciesRegisterEvent<A extends IAlleleSpecies> extends AlleleRegisterEvent<A> {
 
