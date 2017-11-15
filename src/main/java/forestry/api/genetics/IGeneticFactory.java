@@ -33,4 +33,8 @@ public interface IGeneticFactory {
 	 * @return A instance of {@link IChromosome}.
 	 */
 	IChromosome createChromosome(IAllele firstAllele, IAllele secondAllele);
+
+	IAlleleTemplateBuilder createTemplateBuilder(ISpeciesRoot root, IAllele[] alleles);
+
+	IAlleleTemplateBuilder createTemplateBuilder(ISpeciesRoot root);
 }

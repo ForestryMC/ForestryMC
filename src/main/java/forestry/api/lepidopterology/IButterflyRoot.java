@@ -18,6 +18,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTemplateBuilder;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 
 public interface IButterflyRoot extends ISpeciesRoot {
@@ -50,6 +51,9 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
 	@Override
 	IAlleleTemplateBuilder<EnumButterflyChromosome, IAlleleButterflySpecies> createTemplateBuilder(IAllele[] alleles);
+
+	@Override
+	IButterflyGenomeWrapper getWrapper(IGenome genome);
 
 	/* BUTTERFLY SPECIFIC */
 	@Override

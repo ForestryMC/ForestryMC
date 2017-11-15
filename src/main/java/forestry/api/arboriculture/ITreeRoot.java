@@ -20,6 +20,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTemplateBuilder;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
@@ -53,6 +54,9 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 
 	@Override
 	IAlleleTemplateBuilder<EnumTreeChromosome, IAlleleTreeSpecies> createTemplateBuilder(IAllele[] alleles);
+
+	@Override
+	ITreeGenomeWrapper getWrapper(IGenome genome);
 
 	/**
 	 * @return {@link IArboristTracker} associated with the passed world.

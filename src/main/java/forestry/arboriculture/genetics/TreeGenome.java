@@ -12,36 +12,35 @@ package forestry.arboriculture.genetics;
 
 import com.google.common.base.Preconditions;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.ITreeGenomeWrapper;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleFloat;
-import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
 
 public class TreeGenome extends Genome implements ITreeGenome {
-	@Nullable
-	private Boolean matchesTemplateCached;
+	private ITreeGenomeWrapper wrapper;
 
+	/* CONSTRUCTOR */
 	public TreeGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
+		this.wrapper = TreeManager.treeRoot.getWrapper(this);
 	}
 
 	public TreeGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
+		this.wrapper = TreeManager.treeRoot.getWrapper(this);
 	}
 
 	// NBT RETRIEVAL
@@ -58,58 +57,57 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public IAlleleTreeSpecies getPrimary() {
-		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES);
+		return wrapper.getPrimary();
 	}
 
 	@Override
 	public IAlleleTreeSpecies getSecondary() {
-		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
+		return wrapper.getSecondary();
 	}
-
 
 	@Override
 	public IFruitProvider getFruitProvider() {
-		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS)).getProvider();
+		return wrapper.getFruitProvider();
 	}
 
 	@Override
 	public float getHeight() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.HEIGHT)).getValue();
+		return wrapper.getHeight();
 	}
 
 	@Override
 	public float getFertility() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.FERTILITY)).getValue();
+		return wrapper.getFertility();
 	}
 
 	@Override
 	public float getYield() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.YIELD)).getValue();
+		return wrapper.getYield();
 	}
 
 	@Override
 	public float getSappiness() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.SAPPINESS)).getValue();
+		return wrapper.getSappiness();
 	}
 
 	@Override
 	public int getMaturationTime() {
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION)).getValue();
+		return wrapper.getMaturationTime();
 	}
 
 	@Override
 	public int getGirth() {
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
+		return wrapper.getGirth();
 	}
 
 	@Override
 	public IAlleleLeafEffect getEffect() {
-		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
+		return wrapper.getEffect();
 	}
 	
 	@Override
 	public ItemStack getDecorativeLeaves() {
-		return getPrimary().getLeafProvider().getDecorativeLeaves();
+		return wrapper.getDecorativeLeaves();
 	}
 
 	@Override
@@ -119,28 +117,21 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public boolean matchesTemplateGenome() {
-		if (matchesTemplateCached == null) {
-			matchesTemplateCached = calculateMatchesTemplateGenome();
-		}
-		return matchesTemplateCached;
+		return wrapper.matchesTemplateGenome();
 	}
 
-	private boolean calculateMatchesTemplateGenome() {
-		IAlleleTreeSpecies primary = getPrimary();
-		IAllele[] template = getSpeciesRoot().getTemplate(primary);
-		IChromosome[] chromosomes = getChromosomes();
-		for (int i = 0; i < chromosomes.length; i++) {
-			IChromosome chromosome = chromosomes[i];
-			String templateUid = template[i].getUID();
-			IAllele primaryAllele = chromosome.getActiveAllele();
-			if (!primaryAllele.getUID().equals(templateUid)) {
-				return false;
-			}
-			IAllele secondaryAllele = chromosome.getInactiveAllele();
-			if (!secondaryAllele.getUID().equals(templateUid)) {
-				return false;
-			}
-		}
-		return true;
+	@Override
+	public IGenome getGenome() {
+		return this;
+	}
+
+	@Override
+	public <A extends IAllele> A getActiveAllele(EnumTreeChromosome chromosomeType, Class<A> alleleClass) {
+		return wrapper.getActiveAllele(chromosomeType, alleleClass);
+	}
+
+	@Override
+	public <A extends IAllele> A getInactiveAllele(EnumTreeChromosome chromosomeType, Class<A> alleleClass) {
+		return wrapper.getInactiveAllele(chromosomeType, alleleClass);
 	}
 }

@@ -66,7 +66,7 @@ public abstract class Genome implements IGenome {
 			IAllele secondary = chromosome.getInactiveAllele();
 			if (secondary == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing inaktive allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+						"Missing inactive allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 

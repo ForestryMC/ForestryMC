@@ -50,12 +50,12 @@ public interface IChromosome extends INbtWritable {
 	IAllele getInactiveAllele();
 
 	/**
-	 * Crates a new chromosome out of the alleles of this chromosome and the other chromosome.
+	 * Creates a new chromosome out of the alleles of this chromosome and the other chromosome.
 	 *
 	 * It always uses one allele from this and one from the other chromosome to create the new chromosome.
 	 * It uses {@link Random#nextBoolean()} to decide which of the two alleles of one chromosome it should use.
 	 *
-	 * @param rand 				 The instance of random it should uses to figure out which of the two alleles if should
+	 * @param rand               The instance of random it should uses to figure out which of the two alleles if should
 	 *                           use.
 	 * @param otherChromosome    The other chromosome that this chromosome uses to create the new one.
 	 */

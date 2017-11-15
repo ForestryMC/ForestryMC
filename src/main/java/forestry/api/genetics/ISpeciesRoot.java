@@ -167,9 +167,7 @@ public interface ISpeciesRoot {
 	 *
 	 * @since Forestry 5.8
 	 */
-	default IGenomeWrapper getWrapper(IGenome genome){
-		return null;
-	}
+	IGenomeWrapper getWrapper(IGenome genome);
 
 	/* TEMPLATES */
 	/**

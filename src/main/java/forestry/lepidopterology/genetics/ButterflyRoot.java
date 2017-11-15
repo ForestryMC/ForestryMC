@@ -35,6 +35,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesPlugin;
@@ -45,6 +46,7 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyGenomeWrapper;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
@@ -180,6 +182,11 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		}
 		return stack;
 
+	}
+
+	@Override
+	public IButterflyGenomeWrapper getWrapper(IGenome genome) {
+		return new ButterflyGenomeWrapper(genome);
 	}
 
 	@Override
