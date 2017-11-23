@@ -24,6 +24,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.plugins.ForestryCompatPlugins;
 
 public class InternalModuleHandler {
 
@@ -91,7 +92,7 @@ public class InternalModuleHandler {
 			Log.debug("Pre-Init Start: {}", module);
 			registerHandlers(module, side);
 			module.preInit();
-			if (moduleManager.isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
+			if (moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
 				module.registerTriggers();
 			}
 			Log.debug("Pre-Init Complete: {}", module);

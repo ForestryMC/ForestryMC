@@ -42,6 +42,7 @@ import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.modules.ForestryModuleUids;
+import forestry.plugins.ForestryCompatPlugins;
 
 import ic2.api.energy.prefab.BasicSink;
 
@@ -69,7 +70,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 		setInternalInventory(new InventoryEngineElectric(this));
 		
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 		}
 	}
