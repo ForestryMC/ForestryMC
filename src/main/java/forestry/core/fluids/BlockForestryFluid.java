@@ -84,7 +84,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			int i = stateIn.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
-				if (rand.nextInt(64) == 0) {
+				if (getFluid().getViscosity(worldIn, pos) < 5000 && rand.nextInt(64) == 0) {
 					worldIn.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {

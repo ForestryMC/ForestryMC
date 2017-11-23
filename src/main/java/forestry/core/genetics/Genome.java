@@ -15,6 +15,7 @@ import com.google.common.base.MoreObjects;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
+import forestry.api.genetics.AlleleManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -109,7 +110,7 @@ public abstract class Genome implements IGenome {
 	 * We need this because the client uses the species for rendering.
 	 */
 	@Nullable
-	public static IAlleleSpecies getSpeciesDirectly(ISpeciesRoot speciesRoot, ItemStack itemStack) {
+	public static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
@@ -126,13 +127,11 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
-		Chromosome chromosome = Chromosome.create(null, null, speciesRoot.getSpeciesChromosomeType(), chromosomeNBT);
-
-		IAllele activeAllele = chromosome.getActiveAllele();
+		String speciesUid = chromosomeNBT.getString(Chromosome.UID0_TAG);
+		IAllele activeAllele = AlleleManager.alleleRegistry.getAllele(speciesUid);
 		if (!(activeAllele instanceof IAlleleSpecies)) {
 			return null;
 		}
-
 		return (IAlleleSpecies) activeAllele;
 	}
 
