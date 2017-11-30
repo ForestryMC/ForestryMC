@@ -84,7 +84,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
 		Preconditions.checkArgument(BeeManager.beeRoot.isMember(itemStack), "itemStack must be a bee");
 
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		IAlleleSpecies species = getSpeciesDirectly(BeeManager.beeRoot, itemStack);
 		if (species instanceof IAlleleBeeSpecies) {
 			return (IAlleleBeeSpecies) species;
 		}

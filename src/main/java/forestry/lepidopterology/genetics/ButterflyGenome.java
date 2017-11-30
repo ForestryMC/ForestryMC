@@ -49,7 +49,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
 		Preconditions.checkArgument(ButterflyManager.butterflyRoot.isMember(itemStack), "Must be a butterfly");
 
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		IAlleleSpecies species = getSpeciesDirectly(ButterflyManager.butterflyRoot, itemStack);
 		if (species instanceof IAlleleButterflySpecies) {
 			return (IAlleleButterflySpecies) species;
 		}

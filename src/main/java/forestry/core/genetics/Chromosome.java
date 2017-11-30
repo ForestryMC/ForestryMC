@@ -22,8 +22,8 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
 
 public class Chromosome implements IChromosome {
-	public static final String UID0_TAG = "UID0";
-	public static final String UID1_TAG = "UID1";
+	private static final String UID0_TAG = "UID0";
+	private static final String UID1_TAG = "UID1";
 
 	private final IAllele primary;
 	private final IAllele secondary;

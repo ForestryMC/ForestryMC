@@ -48,7 +48,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
 		Preconditions.checkArgument(TreeManager.treeRoot.isMember(itemStack), "ItemStack must be a tree");
 
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		IAlleleSpecies species = getSpeciesDirectly(TreeManager.treeRoot, itemStack);
 		if (species instanceof IAlleleTreeSpecies) {
 			return (IAlleleTreeSpecies) species;
 		}
