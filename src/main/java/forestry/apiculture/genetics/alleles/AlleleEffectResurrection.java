@@ -13,9 +13,12 @@ package forestry.apiculture.genetics.alleles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.dragon.phase.PhaseList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCaveSpider;
@@ -40,10 +43,18 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	public static class Resurrectable {
 		public final ItemStack res;
 		public final Class<? extends EntityLiving> risen;
+		public final Optional<Consumer<EntityLiving>> risenTransformer;
 
 		public Resurrectable(ItemStack res, Class<? extends EntityLiving> risen) {
 			this.res = res;
 			this.risen = risen;
+			this.risenTransformer = Optional.empty();
+		}
+
+		public <E extends EntityLiving> Resurrectable(ItemStack res, Class<E> risen, Consumer<E> risenTransformer) {
+			this.res = res;
+			this.risen = risen;
+			this.risenTransformer = Optional.of((Consumer<EntityLiving>) risenTransformer);
 		}
 	}
 
@@ -65,7 +76,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		list.add(new Resurrectable(new ItemStack(Items.STRING), EntityCaveSpider.class));
 		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), EntityCaveSpider.class));
 		list.add(new Resurrectable(new ItemStack(Items.GHAST_TEAR), EntityGhast.class));
-		list.add(new Resurrectable(new ItemStack(Blocks.DRAGON_EGG), EntityDragon.class));
+		list.add(new Resurrectable(new ItemStack(Blocks.DRAGON_EGG), EntityDragon.class, dragon -> dragon.getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN)));
 		return list;
 	}
 
@@ -98,17 +109,25 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		if (entity.isDead) {
 			return false;
 		}
+		
 		ItemStack contained = entity.getItem();
 		for (Resurrectable entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
-				EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);
+				EntityLiving spawnedEntity = EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);
+				if (spawnedEntity != null) {
+					entry.risenTransformer.ifPresent(transformer -> transformer.accept(spawnedEntity));
+				}
+				
 				contained.shrink(1);
+				
 				if (contained.getCount() <= 0) {
 					entity.setDead();
 				}
+				
 				return true;
 			}
 		}
+		
 		return false;
 	}
 }
