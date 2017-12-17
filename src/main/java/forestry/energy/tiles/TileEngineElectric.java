@@ -277,13 +277,12 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
-
-		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack)) {
+		if (!stack.isEmpty() && !ChipsetManager.circuitRegistry.isChipset(stack)) {
 			return;
 		}
 
 		//Dispose correctly of old chipsets
-		if (sockets.getStackInSlot(slot) != null) {
+		if (!sockets.getStackInSlot(slot).isEmpty()) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
 				if (chipset != null) {
@@ -293,7 +292,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 
 		sockets.setInventorySlotContents(slot, stack);
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return;
 		}
 
