@@ -85,13 +85,13 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 			return;
 		}
 
-		InventoryUtil.stowInInventory(socket, player.inventory, true);
 		// Not sufficient space in player's inventory. failed to stow.
-		if (!socket.isEmpty()) {
+		if (!InventoryUtil.stowInInventory(socket, player.inventory, false)) {
 			return;
 		}
 
 		tile.setSocket(slot, ItemStack.EMPTY);
+		InventoryUtil.stowInInventory(socket, player.inventory, true);
 		itemstack.damageItem(1, player);
 		player.updateHeldItem();
 
