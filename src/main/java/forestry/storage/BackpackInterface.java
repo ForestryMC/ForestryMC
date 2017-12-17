@@ -10,24 +10,27 @@
  ******************************************************************************/
 package forestry.storage;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.api.storage.IBackpackInterface;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class BackpackInterface implements IBackpackInterface {
 
@@ -77,7 +80,9 @@ public class BackpackInterface implements IBackpackInterface {
 		if (definition == null) {
 			throw new IllegalArgumentException("No backpack definition was registered for UID: " + backpackUid);
 		}
-		return new ItemBackpack(definition, type);
+		ItemBackpack backpack = new ItemBackpack(definition, type);
+		Proxies.common.registerItem(backpack);
+		return backpack;
 	}
 
 	@Override
@@ -89,7 +94,9 @@ public class BackpackInterface implements IBackpackInterface {
 		if (definition == null) {
 			throw new IllegalArgumentException("No backpack definition was registered for UID: " + backpackUid);
 		}
-		return new ItemBackpackNaturalist(speciesRoot, definition);
+		ItemBackpack backpack = new ItemBackpackNaturalist(speciesRoot, definition);
+		Proxies.common.registerItem(backpack);
+		return backpack;
 	}
 
 	@Override

@@ -10,20 +10,14 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.google.common.base.Preconditions;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.config.Constants;
-import forestry.core.items.IColoredItem;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.ModelUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -41,11 +35,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.IModelState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.config.Constants;
+import forestry.core.items.IColoredItem;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.ModelUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelManager implements IModelManager {
@@ -56,10 +62,10 @@ public class ModelManager implements IModelManager {
 	private final List<BlockModelEntry> customBlockModels = new ArrayList<>();
 	private final List<ModelEntry> customModels = new ArrayList<>();
 	/* ITEM AND BLOCK REGISTERS*/
-	private final List<IItemModelRegister> itemModelRegisters = new ArrayList<>();
-	private final List<IStateMapperRegister> stateMapperRegisters = new ArrayList<>();
-	private final List<IColoredBlock> blockColorList = new ArrayList<>();
-	private final List<IColoredItem> itemColorList = new ArrayList<>();
+	private final Set<IItemModelRegister> itemModelRegisters = new HashSet<>();
+	private final Set<IStateMapperRegister> stateMapperRegisters = new HashSet<>();
+	private final Set<IColoredBlock> blockColorList = new HashSet<>();
+	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
 	private IModelState defaultBlockState;
 	private IModelState defaultItemState;
