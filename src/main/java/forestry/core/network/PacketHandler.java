@@ -69,11 +69,13 @@ public class PacketHandler {
 	@SideOnly(Side.CLIENT)
 	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
 		if (!threadListener.isCallingFromMinecraftThread()) {
+			data.retain();
 			threadListener.addScheduledTask(() -> {
 				try {
 					EntityPlayer player = Minecraft.getMinecraft().player;
 					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
 					packet.onPacketData(data, player);
+					data.release();
 				} catch (IOException e) {
 					Log.error("Network Error", e);
 				}
@@ -83,9 +85,11 @@ public class PacketHandler {
 
 	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final EntityPlayerMP player, IThreadListener threadListener) {
 		if (!threadListener.isCallingFromMinecraftThread()) {
+			data.retain();
 			threadListener.addScheduledTask(() -> {
 				try {
 					packet.onPacketData(data, player);
+					data.release();
 				} catch (IOException e) {
 					Log.error("Network Error", e);
 				}
