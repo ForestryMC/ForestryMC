@@ -12,6 +12,7 @@ package forestry.core.blocks.properties;
 
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -28,6 +29,20 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("name", this.name)
+				.add("clazz", getValueClass())
+				.add("values", this.getAllowedValues())
+				.toString();
+	}
+
+	@Override
+	public final int hashCode() {
+		return 31 * getValueClass().hashCode() + this.name.hashCode();
 	}
 
 	@Override
