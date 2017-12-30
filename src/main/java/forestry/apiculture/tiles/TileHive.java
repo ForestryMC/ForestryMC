@@ -125,7 +125,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if(world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL) {
+						if(world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
 							List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
