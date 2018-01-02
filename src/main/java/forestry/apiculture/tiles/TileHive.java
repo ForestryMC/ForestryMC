@@ -65,6 +65,7 @@ import forestry.apiculture.blocks.BlockBeeHives;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.tiles.IActivatable;
