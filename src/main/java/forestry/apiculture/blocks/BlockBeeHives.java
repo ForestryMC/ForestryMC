@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -39,6 +40,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.IHiveTile;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.core.BiomeHelper;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
@@ -197,5 +199,30 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	public String getNameFromMeta(int meta) {
 		return HiveType.VALUES[meta].getName();
 	}
-
+	
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		if(!BiomeHelper.isBiomeHellish(world.getBiome(pos)))
+		{
+			return 5;
+		}
+		return 0;
+	}
+	
+	@Override
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		return !BiomeHelper.isBiomeHellish(world.getBiome(pos));
+	}
+	
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		if(!BiomeHelper.isBiomeHellish(world.getBiome(pos)))
+		{
+			return 5;
+		}
+		return 0;
+	}
 }

@@ -145,13 +145,7 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(World world, Random rand, BlockPos pos) {
-		if(isGoodBiome(world.getBiome(pos)))
-		{
-			Blocks.FIRE.setFireInfo(world.getBlockState(pos).getBlock(), 5, 5);
-		}
-
-	}
+	public void postGen(World world, Random rand, BlockPos pos) {}
 
 	protected static void postGenFlowers(World world, Random rand, BlockPos hivePos, List<IBlockState> flowerStates) {
 		int plantedCount = 0;
