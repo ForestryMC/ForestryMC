@@ -12,17 +12,19 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.common.capabilities.Capability;
+
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
-import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IActivatable, IAlvearyComponent.Climatiser {
 

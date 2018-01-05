@@ -16,8 +16,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.apiculture.WorldgenBeekeepingLogic;
-import forestry.core.utils.TickHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -61,18 +59,20 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.genetics.IAllele;
+import forestry.apiculture.WorldgenBeekeepingLogic;
 import forestry.apiculture.blocks.BlockBeeHives;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class TileHive extends TileEntity implements ITickable, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");

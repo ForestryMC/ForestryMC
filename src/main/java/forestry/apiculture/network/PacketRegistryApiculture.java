@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.network;
 
-import forestry.apiculture.network.packets.PacketActiveUpdate;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
@@ -21,8 +23,6 @@ import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRegistryApiculture implements IPacketRegistry {
 	@Override
@@ -34,7 +34,6 @@ public class PacketRegistryApiculture implements IPacketRegistry {
 	@SideOnly(Side.CLIENT)
 	public void registerPacketsClient() {
 		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse.Handler());
-		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate.Handler());
 		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeeLogicActive.Handler());
 		PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY.setPacketHandler(new PacketBeeLogicActiveEntity.Handler());
 		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer.Handler());

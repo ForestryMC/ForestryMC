@@ -13,6 +13,7 @@ package forestry.core.network;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
@@ -51,6 +52,7 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdClient.GUI_ENERGY.setPacketHandler(new PacketGuiEnergy.Handler());
 		PacketIdClient.SOCKET_UPDATE.setPacketHandler(new PacketSocketUpdate.Handler());
 		PacketIdClient.TILE_FORESTRY_UPDATE.setPacketHandler(new PacketTileStream.Handler());
+		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate.Handler());
 		PacketIdClient.ITEMSTACK_DISPLAY.setPacketHandler(new PacketItemStackDisplay.Handler());
 		PacketIdClient.FX_SIGNAL.setPacketHandler(new PacketFXSignal.Handler());
 		PacketIdClient.TANK_LEVEL_UPDATE.setPacketHandler(new PacketTankLevelUpdate.Handler());

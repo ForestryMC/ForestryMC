@@ -14,6 +14,17 @@ import javax.annotation.Nullable;
 import java.util.Map.Entry;
 import java.util.Stack;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
@@ -22,23 +33,14 @@ import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySwarmer;
 import forestry.apiculture.gui.GuiAlvearySwarmer;
 import forestry.apiculture.inventory.InventorySwarmer;
-import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
