@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import com.google.common.base.MoreObjects;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import com.google.common.base.Optional;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.core.blocks.properties.PropertyAllele;
 
 public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
+	private static final Map<String, IAlleleButterflyCocoon> namesMap = new HashMap<>();
 
 	public PropertyCocoon(String name) {
 		super(name);
@@ -30,16 +31,6 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	@Override
 	public Class<IAlleleButterflyCocoon> getValueClass() {
 		return IAlleleButterflyCocoon.class;
-	}
-
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleButterflyCocoon.class).add("values", this.getAllowedValues()).toString();
-	}
-
-	@Override
-	public int hashCode() {
-		return 31 * IAlleleTreeSpecies.class.hashCode() + this.name.hashCode();
 	}
 
 	@Override
@@ -58,4 +49,15 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 		return value.getCocoonName();
 	}
 
+	@Override
+	public Optional<IAlleleButterflyCocoon> parseValue(String value) {
+		if (namesMap.isEmpty()) {
+			List<IAlleleButterflyCocoon> allowedValues = getAllowedValues();
+			for (IAlleleButterflyCocoon allowedValue : allowedValues) {
+				String propertyName = getName(allowedValue);
+				namesMap.put(propertyName, allowedValue);
+			}
+		}
+		return Optional.fromNullable(namesMap.get(value));
+	}
 }
