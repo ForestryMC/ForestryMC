@@ -19,7 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.NetworkUtil;
 import forestry.greenhouse.api.climate.IClimateSource;
