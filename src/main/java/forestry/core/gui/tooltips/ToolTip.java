@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -62,6 +66,24 @@ public class ToolTip {
 			}
 		}
 		return changed;
+	}
+
+	public boolean add(ItemStack itemStack){
+		Minecraft minecraft = Minecraft.getMinecraft();
+		EntityPlayer player = minecraft.player;
+		ToolTip tip = new ToolTip();
+		if (!itemStack.isEmpty()) {
+			List<String> lines = itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+			for (int i = 0; i < lines.size(); i++) {
+				if(i == 0){
+					add(lines.get(i));
+					continue;
+				}
+				add(lines.get(i), TextFormatting.GRAY);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public List<String> getLines() {

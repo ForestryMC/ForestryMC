@@ -119,7 +119,7 @@ public class AlleleHelper implements IAlleleHelper {
 		alleleMaps.put(Boolean.class, booleans);
 	}
 
-	private IAllele get(Object value) {
+	IAllele get(Object value) {
 		Class<?> valueClass = value.getClass();
 		Map<?, ? extends IAllele> map = alleleMaps.get(valueClass);
 		if (map == null) {
@@ -159,6 +159,10 @@ public class AlleleHelper implements IAlleleHelper {
 
 	@Override
 	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, int value) {
+		set(alleles, chromosomeType, get(value));
+	}
+
+	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, float value) {
 		set(alleles, chromosomeType, get(value));
 	}
 

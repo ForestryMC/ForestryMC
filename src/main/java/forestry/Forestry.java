@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -41,6 +42,8 @@ import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.genetics.GenomeSaveHandler;
+import forestry.core.genetics.SaveFormat;
 import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
@@ -154,6 +157,11 @@ public class Forestry {
 
 		// Handle IMC messages.
 		ModuleManager.getInternalHandler().processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
+	}
+
+	@EventHandler
+	public void loadComplete(FMLLoadCompleteEvent event) {
+		GenomeSaveHandler.setWriteFormat(SaveFormat.BINARY);
 	}
 
 	@EventHandler

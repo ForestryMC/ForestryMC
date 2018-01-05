@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,13 +36,9 @@ public abstract class ItemStackWidgetBase extends Widget {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		Minecraft minecraft = Minecraft.getMinecraft();
-		EntityPlayer player = minecraft.player;
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
-		if (!itemStack.isEmpty()) {
-			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
-		}
+		tip.add(itemStack);
 		return tip;
 	}
 }

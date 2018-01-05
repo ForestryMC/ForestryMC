@@ -64,7 +64,6 @@ import forestry.api.genetics.IPollinatable;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.tiles.TileUtil;
@@ -580,7 +579,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
 			}
 		}
 
@@ -603,14 +602,14 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;

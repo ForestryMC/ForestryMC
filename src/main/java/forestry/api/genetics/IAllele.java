@@ -5,16 +5,22 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
 /**
  * An {@link IIndividual}'s {@link IGenome} is composed of {@link IChromosome}s consisting each of a primary and secondary {@link IAllele}.
  * <p>
  * {@link IAllele}s hold all information regarding an {@link IIndividual}'s traits, from species to size, temperature tolerances, etc.
  * <p>
- * Should be extended for different types of alleles. ISpeciesAllele, IBiomeAllele, etc.
+ * Should be extended for different types of alleles. IAlleleSpecies, IBiomeAllele, etc.
  *
  * @author SirSengir
  */
-public interface IAllele {
+public interface IAllele extends IForgeRegistryEntry<IAllele> {
 
 	/**
 	 * @return A unique string identifier for this allele.
@@ -55,4 +61,19 @@ public interface IAllele {
 	 */
 	String getUnlocalizedName();
 
+	@Override
+	default IAllele setRegistryName(ResourceLocation name) {
+		throw new IllegalStateException();
+	}
+
+	@Nullable
+	@Override
+	default ResourceLocation getRegistryName() {
+		return new ResourceLocation(getModID(), getUID());
+	}
+
+	@Override
+	default Class<IAllele> getRegistryType() {
+		return IAllele.class;
+	}
 }

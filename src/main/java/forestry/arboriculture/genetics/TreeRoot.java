@@ -51,6 +51,7 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.ITreeGenomeWrapper;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
@@ -61,6 +62,7 @@ import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
@@ -117,11 +119,6 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		}
 
 		return treeSpeciesCount;
-	}
-
-	@Override
-	public boolean isMember(ItemStack itemstack) {
-		return getType(itemstack) != null;
 	}
 
 	@Override
@@ -209,6 +206,11 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 		return treeStack;
 
+	}
+
+	@Override
+	public ITreeGenomeWrapper getWrapper(IGenome genome) {
+		return new TreeGenomeWrapper(genome);
 	}
 
 	@Override

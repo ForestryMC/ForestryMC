@@ -13,13 +13,19 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 /**
- * @author Nedelosk
- * @since 5.12.16
+ * A species root that provides helper functions for pollination.
  */
 public interface ISpeciesRootPollinatable extends ISpeciesRoot {
 
+	/**
+	 * Creates a {@link ICheckPollinatable} that can be used to check for pollination traits without altering the world
+	 * by changing vanilla leaves to forestry ones.
+	 */
 	ICheckPollinatable createPollinatable(IIndividual individual);
 
+	/**
+	 * Returns an IPollinatable that can be mated.
+	 */
 	@Nullable
 	IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, final IIndividual pollen);
 

@@ -16,10 +16,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Vector3f;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -31,17 +33,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.ModelStateComposition;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
+import net.minecraftforge.client.model.SimpleModelState;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.genetics.IAlleleFloat;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Constants;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.ModelUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankModel {
@@ -60,8 +69,8 @@ public class ModelButterflyItem extends BlankModel {
 		return new ButterflyItemOverrideList();
 	}
 
-	private IBakedModel bakeModel(IButterfly butterfly) {
-		ImmutableMap<String, String> textures = ImmutableMap.of("butterfly", butterfly.getGenome().getPrimary().getItemTexture());
+	private IBakedModel bakeModel(IAlleleButterflySpecies species, float size) {
+		ImmutableMap<String, String> textures = ImmutableMap.of("butterfly", species.getItemTexture());
 
 		if (modelButterfly == null) {
 			try {
@@ -75,7 +84,22 @@ public class ModelButterflyItem extends BlankModel {
 		}
 		IModel retexturedModel = modelButterfly.retexture(textures);
 		IBakedModel bakedModel = retexturedModel.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
-		return new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - butterfly.getSize() * 0.37F, -0.03125F, butterfly.getSize() * 1.5F);
+		float scale = 1F / 16F;
+		IModelState state = ModelUtil.loadModelState(new ResourceLocation(Constants.MOD_ID, "models/item/butterfly_ge"));
+		state = new ModelStateComposition(state, new SimpleModelState(getTransformations(size)));
+		return new PerspectiveMapWrapper(new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - size * 0.37F, -0.03125F + size * scale, size * 1.4F), state);
+	}
+
+	private static ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> getTransformations(float size){
+		float scale = 1F / 16F;
+		ImmutableMap.Builder builder = new ImmutableMap.Builder();
+		builder.put(ItemCameraTransforms.TransformType.FIXED,
+			new TRSRTransformation(new Vector3f(scale * 0.5F, scale - (size / 0.75F) * scale, scale * 1.25F), null, null, null));
+		builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
+			new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
+		builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND,
+			new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
+		return builder.build();
 	}
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {
@@ -85,13 +109,14 @@ public class ModelButterflyItem extends BlankModel {
 
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
-			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(stack);
-			Preconditions.checkNotNull(butterfly);
-			IAlleleButterflySpecies primary = butterfly.getGenome().getPrimary();
-			IBakedModel bakedModel = cache.getIfPresent(primary);
+			IAlleleButterflySpecies species = GeneticsUtil.getAlleleDirectly(stack, EnumButterflyChromosome.SPECIES, true, IAlleleButterflySpecies.class);
+			IAlleleFloat size = GeneticsUtil.getAlleleDirectly(stack, EnumButterflyChromosome.SIZE, true, IAlleleFloat.class);
+			Preconditions.checkNotNull(species);
+			Preconditions.checkNotNull(size);
+			IBakedModel bakedModel = cache.getIfPresent(species);
 			if (bakedModel == null) {
-				bakedModel = bakeModel(butterfly);
-				cache.put(primary, bakedModel);
+				bakedModel = bakeModel(species, size.getValue());
+				cache.put(species, bakedModel);
 			}
 			return bakedModel;
 		}

@@ -7,6 +7,8 @@ package forestry.api.arboriculture;
 
 import java.util.Locale;
 
+import net.minecraftforge.common.EnumPlantType;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
@@ -14,7 +16,6 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRoot;
-import net.minecraftforge.common.EnumPlantType;
 
 public enum EnumTreeChromosome implements IChromosomeType {
 

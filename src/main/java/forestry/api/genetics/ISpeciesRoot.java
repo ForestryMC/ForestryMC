@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -69,14 +72,69 @@ public interface ISpeciesRoot {
 	IIndividual getMember(ItemStack stack);
 
 	IIndividual getMember(NBTTagCompound compound);
-	
-	<O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
-	
-	@Nullable
-	<O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
 
+	/**
+	 * @param translatorKey The key of the translator the block of {@link IBlockState} that you want to translate
+	 *                         with the translator.
+	 * @param translator A translator that should be used to translate the data.
+	 * @since Forestry 5.8
+	 */
+	void registerTranslator(Block translatorKey, IBlockTranslator translator);
+
+	/**
+	 * @param translatorKey The key of the translator it is the item of the {@link ItemStack} that you want to translate
+	 *                      with the translator.
+	 * @param translator A translator that should be used to translate the data.
+	 * @since Forestry 5.8
+	 */
+	void registerTranslator(Item translatorKey, IItemTranslator translator);
+
+	/**
+	 * @param translatorKey The key of the translator, by default it is the item of the {@link ItemStack} that you want
+	 *                      to translate with the translator.
+	 *  @since Forestry 5.8
+	 */
 	@Nullable
-	<O extends Object, I extends IIndividual> I translateMember(O objectToTranslator);
+	IItemTranslator getTranslator(Item translatorKey);
+
+	/**
+	 * @param translatorKey The key of the translator the block of the{@link IBlockState} that you want to translate
+	 *                      with the translator.
+	 *
+	 * @since Forestry 5.8
+	 */
+	@Nullable
+	IBlockTranslator getTranslator(Block translatorKey);
+
+	/**
+	 * Translates {@link IBlockState}s into genetic data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	@Nullable
+	<I extends IIndividual> I translateMember(IBlockState objectToTranslate);
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	@Nullable
+	<I extends IIndividual> I translateMember(ItemStack objectToTranslate);
+
+	/**
+	 * Translates a {@link IBlockState}s into genetic data and returns a {@link ItemStack} that contains this data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	ItemStack getGeneticEquivalent(IBlockState objectToTranslate);
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data and returns a other {@link ItemStack} that contains this data.
+	 *
+	 * @since Forestry 5.8
+	 */
+	ItemStack getGeneticEquivalent(ItemStack objectToTranslate);
 
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
@@ -104,7 +162,23 @@ public interface ISpeciesRoot {
 
 	IGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
+	/**
+	 * @return A wrapped version of the genome.
+	 *
+	 * @since Forestry 5.8
+	 */
+	IGenomeWrapper getWrapper(IGenome genome);
+
 	/* TEMPLATES */
+	/**
+	 * @since Forestry 5.8
+	 */
+	IAlleleTemplateBuilder createTemplateBuilder();
+
+	/**
+	 * @since Forestry 5.8
+	 */
+	IAlleleTemplateBuilder createTemplateBuilder(IAllele[] alleles);
 
 	/**
 	 * Registers a bee template using the UID of the first allele as identifier.
@@ -144,12 +218,14 @@ public interface ISpeciesRoot {
 	 */
 	IAllele[] getRandomTemplate(Random rand);
 
+	/**
+	 * @return A map with all genome templates arrays that where registered with {@link #registerTemplate(String, IAllele[])}.
+	 */
 	Map<String, IAllele[]> getGenomeTemplates();
 
 	List<? extends IIndividual> getIndividualTemplates();
 
 	/* MUTATIONS */
-
 	/**
 	 * Use to register mutations.
 	 */
@@ -211,13 +287,8 @@ public interface ISpeciesRoot {
 	IAlyzerPlugin getAlyzerPlugin();
 
 	/**
-	 * A array with the size of 4. With the database tabs of this {@link IIndividual}.
-	 */
-	//IDatabaseTab[] getDatabaseTabs();
-
-	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.
-	 * @since 5.7
+	 * @since Forestry 5.7
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)

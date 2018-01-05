@@ -26,18 +26,15 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeGenomeWrapper;
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlleleFloat;
-import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
-import forestry.core.genetics.alleles.AlleleArea;
-import forestry.core.genetics.alleles.AlleleBoolean;
-import forestry.core.genetics.alleles.AlleleTolerance;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
@@ -70,14 +67,17 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	public static BeeGenome fromNBT(NBTTagCompound nbtTagCompound) {
 		return beeGenomeCache.getUnchecked(nbtTagCompound);
 	}
+	private IBeeGenomeWrapper wrapper;
 
 	/* CONSTRUCTOR */
 	private BeeGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
+		this.wrapper = BeeManager.beeRoot.getWrapper(this);
 	}
 
 	public BeeGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
+		this.wrapper = BeeManager.beeRoot.getWrapper(this);
 	}
 
 	// NBT RETRIEVAL
@@ -89,7 +89,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 			return (IAlleleBeeSpecies) species;
 		}
 
-		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, BeeManager.beeRoot);
+		return (IAlleleBeeSpecies) getAllele(itemStack, EnumBeeChromosome.SPECIES, true);
 	}
 
 	// / INFORMATION RETRIEVAL
@@ -105,66 +105,81 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	@Override
 	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(EnumBeeChromosome.SPEED)).getValue();
+		return wrapper.getSpeed();
 	}
 
 	@Override
 	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.LIFESPAN)).getValue();
+		return wrapper.getLifespan();
 	}
 
 	@Override
 	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FERTILITY)).getValue();
+		return wrapper.getFertility();
 	}
 
 	@Override
 	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE)).getValue();
+		return wrapper.getToleranceTemp();
 	}
 
 	@Override
 	public boolean getNeverSleeps() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NEVER_SLEEPS)).getValue();
+		return wrapper.getNeverSleeps();
 	}
 
 	@Override
 	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE)).getValue();
+		return wrapper.getToleranceHumid();
 	}
 
 	@Override
 	public boolean getToleratesRain() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERATES_RAIN)).getValue();
+		return wrapper.getToleratesRain();
 	}
 
 	@Override
 	public boolean getCaveDwelling() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue();
+		return wrapper.getCaveDwelling();
 	}
 
 	@Override
 	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(EnumBeeChromosome.FLOWER_PROVIDER)).getProvider();
+		return wrapper.getFlowerProvider();
 	}
 
 	@Override
 	public int getFlowering() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FLOWERING)).getValue();
+		return wrapper.getFlowering();
 	}
 
 	@Override
 	public Vec3i getTerritory() {
-		return ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
+		return wrapper.getTerritory();
 	}
 
 	@Override
 	public IAlleleBeeEffect getEffect() {
-		return (IAlleleBeeEffect) getActiveAllele(EnumBeeChromosome.EFFECT);
+		return wrapper.getEffect();
 	}
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
 		return BeeManager.beeRoot;
+	}
+
+	@Override
+	public IGenome getGenome() {
+		return this;
+	}
+
+	@Override
+	public <A extends IAllele> A getActiveAllele(EnumBeeChromosome chromosomeType, Class<A> alleleClass) {
+		return wrapper.getActiveAllele(chromosomeType, alleleClass);
+	}
+
+	@Override
+	public <A extends IAllele> A getInactiveAllele(EnumBeeChromosome chromosomeType, Class<A> alleleClass) {
+		return wrapper.getInactiveAllele(chromosomeType, alleleClass);
 	}
 }

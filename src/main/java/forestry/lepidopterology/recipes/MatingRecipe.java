@@ -21,10 +21,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ForgeHooks;
 
-import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Constants;
+
+import static forestry.api.lepidopterology.ButterflyManager.butterflyRoot;
 
 public class MatingRecipe implements IRecipe {
 
@@ -33,7 +34,7 @@ public class MatingRecipe implements IRecipe {
 	private ItemStack cached;
 
 	public MatingRecipe() {
-		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY);
+		unknown = butterflyRoot.getMemberStack(butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY);
 	}
 
 	@Override
@@ -44,11 +45,11 @@ public class MatingRecipe implements IRecipe {
 		int sera = 0;
 
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
+			if (butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
 				butterflies++;
-				mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
+				mated = butterflyRoot.isMated(crafting.getStackInSlot(i));
 				cached = crafting.getStackInSlot(i);
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
+			} else if (butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
 				sera++;
 			}
 		}
@@ -70,10 +71,10 @@ public class MatingRecipe implements IRecipe {
 		IButterfly butterfly = null;
 		IButterfly serum = null;
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
-				butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
-				serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
+			if (butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
+				butterfly = butterflyRoot.getMember(crafting.getStackInSlot(i));
+			} else if (butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
+				serum = butterflyRoot.getMember(crafting.getStackInSlot(i));
 			}
 		}
 		if (butterfly == null || serum == null) {
@@ -82,7 +83,7 @@ public class MatingRecipe implements IRecipe {
 
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);
-		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY);
+		return butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY);
 	}
 
 	@Override

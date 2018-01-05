@@ -16,4 +16,8 @@ public interface IItemTranslator<I extends IIndividual> extends IIndividualTrans
 	@Nullable
 	@Override
 	I getIndividualFromObject(ItemStack itemStack);
+
+	default ItemStack getGeneticEquivalent(ItemStack itemStack){
+		return ItemStack.EMPTY;
+	}
 }
