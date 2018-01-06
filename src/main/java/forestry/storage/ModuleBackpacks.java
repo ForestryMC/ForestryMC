@@ -376,7 +376,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
 			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
-			backpackAcceptedItemDefaults.put(BackpackManager.BUILDER_UID, getItemStrings(Arrays.asList(
+			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 					new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
 					new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
 			)));

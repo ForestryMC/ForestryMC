@@ -13,6 +13,8 @@ package forestry.core.config;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -149,7 +151,7 @@ public class LocalizedConfiguration extends Configuration {
 
 	public void addCategoryCommentLocalized(String category){
 		String langKey = "for.config." + category + '.' + "category_comment";
-		setCategoryComment(category, Translator.translateToLocal(langKey));
+		setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey),100));
 	}
 
 }
