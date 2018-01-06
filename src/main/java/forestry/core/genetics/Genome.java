@@ -258,7 +258,6 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Override
-
 	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
 		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
 	}

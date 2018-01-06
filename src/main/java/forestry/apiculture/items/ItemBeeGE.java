@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.core.config.Config;
@@ -54,10 +56,14 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 	}
 
+	@Nonnull
 	@Override
-	@Nullable
 	public IBee getIndividual(ItemStack itemstack) {
-		return BeeManager.beeRoot.getMember(itemstack);
+		IBee individual = BeeManager.beeRoot.getMember(itemstack);
+		if(individual == null){
+			individual = BeeDefinition.FOREST.getIndividual();
+		}
+		return individual;
 	}
 
 	@Override
@@ -71,7 +77,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		IBee individual = BeeManager.beeRoot.getMember(itemstack);
+		IBee individual = getIndividual(itemstack);
 		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return Translator.translateToLocal(customBeeKey);
@@ -90,7 +96,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = BeeManager.beeRoot.getMember(itemstack);
+			IBee individual = getIndividual(itemstack);
 			if (individual.isNatural()) {
 				list.add(TextFormatting.YELLOW + TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
 			} else {
