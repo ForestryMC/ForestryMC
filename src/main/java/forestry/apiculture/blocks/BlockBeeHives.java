@@ -203,26 +203,18 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
 	{
-		if(!BiomeHelper.isBiomeHellish(world.getBiome(pos)))
-		{
-			return 5;
-		}
-		return 0;
+		return 5;
 	}
 	
 	@Override
 	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
 	{
-		return !BiomeHelper.isBiomeHellish(world.getBiome(pos));
+		return true;
 	}
 	
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
 	{
-		if(!BiomeHelper.isBiomeHellish(world.getBiome(pos)))
-		{
-			return 5;
-		}
-		return 0;
+		return 5;
 	}
 }
