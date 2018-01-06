@@ -15,8 +15,11 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import net.minecraft.item.Item;
+
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +30,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -121,12 +125,15 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		ModuleManager.getInternalHandler().runPreInit(event.getSide());
+	}
 
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void registerItems(RegistryEvent<Item> event) {
+		ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 	}
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 		Proxies.render.registerModels();
 	}
 
