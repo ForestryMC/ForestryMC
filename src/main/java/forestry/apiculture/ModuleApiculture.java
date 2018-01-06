@@ -150,8 +150,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static HiveRegistry hiveRegistry;
 
 	public static String beekeepingMode = "NORMAL";
-	//TODO: Add to config
-	public static final int ticksPerBeeWorkCycle = 550;
+
+	public static int ticksPerBeeWorkCycle = 550;
+	
+	public static boolean hivesDamageOnPeaceful = false;
+	
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -265,6 +268,10 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
 		parseBeeBlacklist(blacklist);
+		
+		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
+		
+		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
 
 		config.save();
 
