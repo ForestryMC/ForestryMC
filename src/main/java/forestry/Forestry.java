@@ -128,7 +128,7 @@ public class Forestry {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void registerItems(RegistryEvent<Item> event) {
+	public void registerItems(RegistryEvent.Register<Item> event) {
 		ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 	}
 
