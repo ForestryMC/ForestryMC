@@ -55,7 +55,6 @@ import forestry.modules.ForestryModuleUids;
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
-	private static final int ENERGY_PER_WORK_CYCLE = Config.analyzerEnergyPerWork;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -235,7 +234,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			setEnergyPerWorkCycle(0);
 		} else {
 			setTicksPerWorkCycle(TIME_TO_ANALYZE);
-			setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
+			setEnergyPerWorkCycle(Config.analyzerEnergyPerWork);
 		}
 
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
