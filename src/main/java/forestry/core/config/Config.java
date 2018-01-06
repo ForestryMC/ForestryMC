@@ -93,9 +93,7 @@ public class Config {
 	// Customization
 	private static boolean craftingBronzeEnabled = true;
 
-	public static boolean craftingStampsEnabled = true;
-	public static final ArrayList<String> collectorStamps = new ArrayList<>();
-
+	// Farm
 	public static int farmSize = 2;
 	public static boolean squareFarms = false;
 	private static boolean enableExUtilEnderLily = true;
@@ -106,6 +104,12 @@ public class Config {
 	public static boolean mailAlertEnabled = true;
 	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
 	public static GuiMailboxInfo.YPosition mailAlertYPosition = GuiMailboxInfo.YPosition.TOP;
+
+	public static boolean craftingStampsEnabled = true;
+	public static final ArrayList<String> collectorStamps = new ArrayList<>();
+
+	// Fluids
+	public static boolean CapsuleFluidPickup = false;
 
 	// Gui tabs (Ledger)
 	public static int guiTabSpeed = 8;
@@ -256,6 +260,8 @@ public class Config {
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+
+		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks", "capsule", CapsuleFluidPickup);
 
 		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
 		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);

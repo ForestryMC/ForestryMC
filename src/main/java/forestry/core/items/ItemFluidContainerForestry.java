@@ -30,20 +30,26 @@ import net.minecraft.util.FoodStats;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemHandlerHelper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Translator;
@@ -177,18 +183,39 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
+		ItemStack heldItem = player.getHeldItem(handIn);
 		DrinkProperties drinkProperties = getDrinkProperties(heldItem);
 		if (drinkProperties != null) {
-			if (playerIn.canEat(false)) {
-				playerIn.setActiveHand(handIn);
+			if (player.canEat(false)) {
+				player.setActiveHand(handIn);
 				return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 			} else {
 				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 		} else {
-			return super.onItemRightClick(worldIn, playerIn, handIn);
+			if(Config.CapsuleFluidPickup) {
+				RayTraceResult target = this.rayTrace(world, player, true);
+				if (target.typeOfHit != RayTraceResult.Type.BLOCK) {
+					return ActionResult.newResult(EnumActionResult.PASS, heldItem);
+				}
+
+				ItemStack singleBucket = heldItem.copy();
+				singleBucket.setCount(1);
+
+				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, target.getBlockPos(), target.sideHit);
+				if (filledResult.isSuccess()) {
+					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
+
+					if (!player.capabilities.isCreativeMode) {
+						// Remove consumed empty container
+						heldItem.shrink(1);
+					}
+
+					return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
+				}
+			}
+			return super.onItemRightClick(world, player, handIn);
 		}
 	}
 

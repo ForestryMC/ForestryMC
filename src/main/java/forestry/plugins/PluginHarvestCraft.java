@@ -37,10 +37,8 @@ import forestry.modules.ForestryModuleUids;
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.HARVESTCRAFT, name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.module.harvestcraft.description")
 public class PluginHarvestCraft extends CompatPlugin {
 
-	private static final String HC = "harvestcraft";
-
 	public PluginHarvestCraft() {
-		super("HarvestCraft", HC);
+		super("HarvestCraft", "harvestcraft");
 	}
 
 	@Override
