@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public interface IErrorStateRegistry {
@@ -12,6 +13,7 @@ public interface IErrorStateRegistry {
 
 	void addAlias(IErrorState state, String name);
 
+	@Nullable
 	IErrorState getErrorState(short id);
 
 	IErrorState getErrorState(String name);

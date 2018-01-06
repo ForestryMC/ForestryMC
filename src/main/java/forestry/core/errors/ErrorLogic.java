@@ -10,20 +10,25 @@
  ******************************************************************************/
 package forestry.core.errors;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
+import net.minecraft.network.PacketBuffer;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
-import net.minecraft.network.PacketBuffer;
 
 public class ErrorLogic implements IErrorLogic {
 	private final Set<IErrorState> errorStates = new HashSet<>();
 
 	@Override
 	public final boolean setCondition(boolean condition, IErrorState errorState) {
+		if(errorState == null){
+			return false;
+		}
 		if (condition) {
 			errorStates.add(errorState);
 		} else {
@@ -68,7 +73,9 @@ public class ErrorLogic implements IErrorLogic {
 		for (int i = 0; i < errorStateCount; i++) {
 			short errorStateId = data.readShort();
 			IErrorState errorState = ForestryAPI.errorStateRegistry.getErrorState(errorStateId);
-			errorStates.add(errorState);
+			if(errorState != null) {
+				errorStates.add(errorState);
+			}
 		}
 	}
 }
