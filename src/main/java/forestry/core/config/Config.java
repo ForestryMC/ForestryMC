@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
+import forestry.apiculture.HiveConfig;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
@@ -211,6 +212,8 @@ public class Config {
 
 		generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
 		generateBeehivesDebug = configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
+
+		HiveConfig.parse(configCommon);
 
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);

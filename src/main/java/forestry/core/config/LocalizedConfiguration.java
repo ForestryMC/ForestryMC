@@ -13,9 +13,10 @@ package forestry.core.config;
 import java.io.File;
 import java.util.Arrays;
 
-import forestry.core.utils.Translator;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import forestry.core.utils.Translator;
 
 public class LocalizedConfiguration extends Configuration {
 
@@ -144,6 +145,11 @@ public class LocalizedConfiguration extends Configuration {
 			comment = Translator.translateToLocal(commentKey);
 		}
 		return getInt(name, category, defaultValue, minValue, maxValue, comment, langKey);
+	}
+
+	public void addCategoryCommentLocalized(String category){
+		String langKey = "for.config." + category + '.' + "category_comment";
+		setCategoryComment(category, Translator.translateToLocal(langKey));
 	}
 
 }

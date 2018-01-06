@@ -15,6 +15,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -25,16 +34,10 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.apiculture.HiveConfig;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 public enum HiveDescription implements IHiveDescription {
 
@@ -102,12 +105,14 @@ public enum HiveDescription implements IHiveDescription {
 	private final float genChance;
 	private final IBeeGenome beeGenome;
 	private final IHiveGen hiveGen;
+	private final IHiveRegistry.HiveType hiveType;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
 		this.blockState = ModuleApiculture.getBlocks().beehives.getStateForType(hiveType);
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;
+		this.hiveType = hiveType;
 	}
 
 	@Override
@@ -122,7 +127,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodBiome(Biome biome) {
-		return !BiomeHelper.isBiomeHellish(biome);
+		return !BiomeHelper.isBiomeHellish(biome) && !HiveConfig.isBlacklisted(hiveType, biome);
 	}
 
 	@Override
