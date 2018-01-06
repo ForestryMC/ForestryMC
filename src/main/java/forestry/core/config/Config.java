@@ -71,6 +71,7 @@ public class Config {
 
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
+	public static int analyzerEnergyPerWork = 20320;
 	public static float researchMutationBoostMultiplier = 1.5f;
 	public static float maxResearchMutationBoostPercent = 5.0f;
 
@@ -239,6 +240,7 @@ public class Config {
 		}
 
 		pollinateVanillaTrees = configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
+		analyzerEnergyPerWork = configCommon.getIntLocalized("genetics", "analyzerblock.energy.use", 20320, 0, 100000);
 		researchMutationBoostMultiplier = configCommon.getFloatLocalized("genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
 		maxResearchMutationBoostPercent = configCommon.getFloatLocalized("genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);
 

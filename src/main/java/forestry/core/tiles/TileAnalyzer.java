@@ -34,6 +34,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -54,7 +55,7 @@ import forestry.modules.ForestryModuleUids;
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
-	private static final int ENERGY_PER_WORK_CYCLE = 20320;
+	private static final int ENERGY_PER_WORK_CYCLE = Config.analyzerEnergyPerWork;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
