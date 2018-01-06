@@ -136,6 +136,32 @@ public abstract class Genome implements IGenome {
 		return (IAlleleSpecies) activeAllele;
 	}
 
+	/**
+	 *  Quickly gets the species without loading the whole genome.
+	 */
+	@Nullable
+	public static IAllele getSpeciesDirectly(ItemStack itemStack, IChromosomeType chromosomeType, boolean active) {
+		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+		if (nbtTagCompound == null) {
+			return null;
+		}
+
+		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
+		if (genomeNBT.hasNoTags()) {
+			return null;
+		}
+
+		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
+		if (chromosomesNBT.hasNoTags()) {
+			return null;
+		}
+
+		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
+		Chromosome chromosome = Chromosome.create(null, null, chromosomeType, chromosomeNBT);
+
+		return active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
+	}
+
 	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
@@ -184,6 +210,24 @@ public abstract class Genome implements IGenome {
 			}
 		}
 		return chromosomes;
+	}
+
+	public static IAllele getAllele(ItemStack itemStack, IChromosomeType type, boolean active){
+		IAllele allele = getSpeciesDirectly(itemStack, type, active);
+		if(allele == null){
+			IChromosome chromosome = getChromosome(itemStack, type, type.getSpeciesRoot());
+			allele = active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
+		}
+		return allele;
+	}
+
+	@Nullable
+	public static <A extends IAllele> A getAllele(ItemStack itemStack, IChromosomeType type, boolean active, Class<? extends A> alleleClass){
+		IAllele allele = getAllele(itemStack, type, active);
+		if(alleleClass.isInstance(allele)){
+			return alleleClass.cast(allele);
+		}
+		return null;
 	}
 
 	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
