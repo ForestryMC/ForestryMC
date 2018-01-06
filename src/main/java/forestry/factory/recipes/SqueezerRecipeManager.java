@@ -15,14 +15,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.datastructures.ItemStackMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerRecipeManager implements ISqueezerManager {
 
@@ -81,16 +83,8 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 			}
 		}
 
-		// First try to match a specific recipe (without OreDictionary)
 		for (ISqueezerRecipe recipe : recipes) {
 			if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
-				return recipe;
-			}
-		}
-
-		// If that fails - try again with OreDictionary support enabled
-		for (ISqueezerRecipe recipe : recipes) {
-			if (ItemStackUtil.containsSets(recipe.getResources(), items, true, false) > 0) {
 				return recipe;
 			}
 		}
