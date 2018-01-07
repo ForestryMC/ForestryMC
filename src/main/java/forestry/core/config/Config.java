@@ -79,11 +79,13 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
+	
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
+	
 	public static int[] oreDimensionBlacklistIDs = new int[0];
 	public static int[] treeDimensionBlacklistIDs = new int[0];
 	public static int[] hiveDimensionBlacklistIDs = new int[0];
@@ -252,10 +254,15 @@ public class Config {
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
 		
-		oreDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "ore", new int[0]);
-		hiveDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "hives", new int[0]);
-		treeDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "trees", new int[0]);
+		oreDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "oreDimensionBlacklist", new int[0]);
+		hiveDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "hivesDimensionBlacklist", new int[0]);
+		treeDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "treesDimensionBlacklist", new int[0]);
 		
+		Log.info(Arrays.toString(oreDimensionBlacklistIDs));
+		Log.info(Arrays.toString(hiveDimensionBlacklistIDs));
+		Log.info(Arrays.toString(treeDimensionBlacklistIDs));
+
+
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 		
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
