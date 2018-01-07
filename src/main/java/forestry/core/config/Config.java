@@ -84,6 +84,11 @@ public class Config {
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
+	public static int[] oreDimensionBlacklistIDs = new int[0];
+	public static int[] treeDimensionBlacklistIDs = new int[0];
+	public static int[] hiveDimensionBlacklistIDs = new int[0];
+
+
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -149,6 +154,33 @@ public class Config {
 
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
+	}
+	
+	public static boolean canGenerateOre(int dimensionID) {
+		for(int dimension: oreDimensionBlacklistIDs) {
+			if(dimension==dimensionID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean canGenerateHives(int dimensionID) {
+		for(int dimension: hiveDimensionBlacklistIDs) {
+			if(dimension==dimensionID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean canGenerateTrees(int dimensionID) {
+		for(int dimension: treeDimensionBlacklistIDs) {
+			if(dimension==dimensionID) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void load(Side side) {
@@ -219,7 +251,11 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-
+		
+		oreDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "ore", new int[0]);
+		hiveDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "hives", new int[0]);
+		treeDimensionBlacklistIDs = configCommon.getIntListLocalized("world.generate.dimensions", "trees", new int[0]);
+		
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 		
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
