@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.gui;
+package forestry.worktable.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,18 +24,18 @@ import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
+import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.factory.inventory.InventoryCraftingForestry;
-import forestry.factory.inventory.InventoryGhostCrafting;
-import forestry.factory.inventory.InventoryWorktable;
-import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
-import forestry.factory.network.packets.PacketWorktableRecipeRequest;
-import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
-import forestry.factory.recipes.MemorizedRecipe;
-import forestry.factory.recipes.RecipeMemory;
-import forestry.factory.tiles.TileWorktable;
+import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.inventory.InventoryWorktable;
+import forestry.worktable.network.packets.PacketWorktableMemoryUpdate;
+import forestry.worktable.network.packets.PacketWorktableRecipeRequest;
+import forestry.worktable.network.packets.PacketWorktableRecipeUpdate;
+import forestry.worktable.recipes.MemorizedRecipe;
+import forestry.worktable.recipes.RecipeMemory;
+import forestry.worktable.tiles.TileWorktable;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);

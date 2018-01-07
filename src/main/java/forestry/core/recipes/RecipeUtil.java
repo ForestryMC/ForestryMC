@@ -35,7 +35,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
-import forestry.factory.inventory.InventoryCraftingForestry;
+import forestry.worktable.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 	

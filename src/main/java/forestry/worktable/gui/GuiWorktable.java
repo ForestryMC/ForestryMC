@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.gui;
+package forestry.worktable.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,10 +20,10 @@ import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-import forestry.factory.gui.widgets.ClearWorktable;
-import forestry.factory.gui.widgets.MemorizedRecipeSlot;
-import forestry.factory.recipes.RecipeMemory;
-import forestry.factory.tiles.TileWorktable;
+import forestry.worktable.gui.widgets.ClearWorktable;
+import forestry.worktable.gui.widgets.MemorizedRecipeSlot;
+import forestry.worktable.recipes.RecipeMemory;
+import forestry.worktable.tiles.TileWorktable;
 
 public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private static final int SPACING = 18;

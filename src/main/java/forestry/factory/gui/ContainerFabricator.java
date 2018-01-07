@@ -23,8 +23,8 @@ import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryFabricator;
-import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.tiles.TileFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {

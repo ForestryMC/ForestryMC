@@ -48,7 +48,6 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.modules.ForestryModuleUids;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
@@ -56,7 +55,6 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.BlankAdvancedGuiHandler;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
 @JEIPlugin
@@ -130,16 +128,13 @@ public class FactoryJeiPlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
 		registry.addRecipeCatalyst(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
 		registry.addRecipeCatalyst(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
-		registry.addRecipeCatalyst(new ItemStack(blocks.worktable), VanillaRecipeCategoryUid.CRAFTING);
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
-		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
 		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler(), ForestryRecipeCategoryUid.CARPENTER);
 		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), ForestryRecipeCategoryUid.FABRICATOR);
 
 		JeiUtil.addDescription(registry,
-				blocks.raintank,
-				blocks.worktable
+				blocks.raintank
 		);
 	}
 

@@ -19,8 +19,8 @@ import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
-import forestry.factory.inventory.InventoryCraftingForestry;
-import forestry.factory.tiles.ICrafterWorktable;
+import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
 

@@ -1,23 +1,24 @@
-package forestry.factory.recipes.jei;
+package forestry.worktable.compat;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.recipes.RecipeUtil;
-import forestry.factory.gui.ContainerWorktable;
-import forestry.factory.inventory.InventoryCraftingForestry;
-import forestry.factory.recipes.MemorizedRecipe;
+import forestry.worktable.gui.ContainerWorktable;
+import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.recipes.MemorizedRecipe;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable> {

@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -93,6 +94,7 @@ public class ModuleManager implements IModuleManager {
 		return ImmutableSet.copyOf(sortedModules.values());
 	}
 
+	@Nullable
 	private static IForestryModule getModuleCore(List<IForestryModule> forestryModules) {
 		for (IForestryModule module : forestryModules) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
@@ -110,7 +112,7 @@ public class ModuleManager implements IModuleManager {
 		Set<ResourceLocation> toLoad = new HashSet<>();
 		Set<IForestryModule> modulesToLoad = new HashSet<>();
 
-		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values().stream().flatMap(x -> x.stream()).collect(Collectors.toList()));
+		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
 
 		for(IModuleContainer container : moduleContainers.values()){
 			String containerID = container.getID();
@@ -169,7 +171,7 @@ public class ModuleManager implements IModuleManager {
 					changed = true;
 					ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 					String moduleId = info.moduleID();
-					toLoad.remove(moduleId);
+					toLoad.remove(new ResourceLocation(moduleId));
 					Log.warning("Module {} is missing dependencies: {}", moduleId, dependencies);
 				}
 			}

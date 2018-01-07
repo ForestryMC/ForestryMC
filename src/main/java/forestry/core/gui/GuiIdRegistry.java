@@ -28,9 +28,9 @@ import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
-import forestry.database.tiles.TileDatabase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.database.tiles.TileDatabase;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
@@ -44,7 +44,6 @@ import forestry.factory.tiles.TileMoistener;
 import forestry.factory.tiles.TileRaintank;
 import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
-import forestry.factory.tiles.TileWorktable;
 import forestry.farming.tiles.TileFarm;
 import forestry.greenhouse.items.ItemCamouflageSprayCan;
 import forestry.greenhouse.tiles.TileClimatiser;
@@ -57,6 +56,7 @@ import forestry.mail.tiles.TileStampCollector;
 import forestry.mail.tiles.TileTrader;
 import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
+import forestry.worktable.tiles.TileWorktable;
 
 public class GuiIdRegistry {
 	private static final Map<Class<? extends IGuiHandlerForestry>, GuiId> classMap = new HashMap<>();

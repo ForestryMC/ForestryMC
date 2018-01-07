@@ -26,7 +26,6 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 	public final BlockFactoryPlain fabricator;
 	public final BlockFactoryPlain raintank;
-	public final BlockFactoryPlain worktable;
 
 	public BlockRegistryFactory() {
 		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
@@ -58,8 +57,5 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 		raintank = new BlockFactoryPlain(BlockTypeFactoryPlain.RAINTANK);
 		registerBlock(raintank, new ItemBlockNBT(raintank), "raintank");
-
-		worktable = new BlockFactoryPlain(BlockTypeFactoryPlain.WORKTABLE);
-		registerBlock(worktable, new ItemBlockNBT(worktable), "worktable");
 	}
 }

@@ -8,15 +8,11 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.recipes;
+package forestry.worktable.recipes;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.LinkedList;
-
-import forestry.api.core.INbtWritable;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -25,6 +21,10 @@ import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.INbtWritable;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 

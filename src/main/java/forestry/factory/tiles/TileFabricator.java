@@ -42,6 +42,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.items.ICraftingPlan;
@@ -53,7 +54,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.gui.GuiFabricator;
 import forestry.factory.inventory.InventoryFabricator;
-import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 

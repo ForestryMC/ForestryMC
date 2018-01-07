@@ -16,12 +16,10 @@ import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.factory.tiles.TileFabricator;
 import forestry.factory.tiles.TileRaintank;
-import forestry.factory.tiles.TileWorktable;
 
 public enum BlockTypeFactoryPlain implements IBlockType {
 	FABRICATOR(TileFabricator.class, "fabricator"),
-	RAINTANK(TileRaintank.class, "raintank"),
-	WORKTABLE(TileWorktable.class, "worktable");
+	RAINTANK(TileRaintank.class, "raintank");
 
 	public static final BlockTypeFactoryPlain[] VALUES = values();
 

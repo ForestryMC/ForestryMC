@@ -8,9 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.network.packets;
+package forestry.worktable.network.packets;
 
 import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -19,11 +22,9 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.factory.gui.ContainerWorktable;
-import forestry.factory.recipes.MemorizedRecipe;
-import forestry.factory.tiles.TileWorktable;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.BlockPos;
+import forestry.worktable.gui.ContainerWorktable;
+import forestry.worktable.recipes.MemorizedRecipe;
+import forestry.worktable.tiles.TileWorktable;
 
 /**
  * Used to sync the worktable crafting grid from Client to Server.

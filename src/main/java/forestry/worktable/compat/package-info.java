@@ -1,9 +1,10 @@
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.factory.gui.widgets;
+package forestry.worktable.compat;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
 import mcp.MethodsReturnNonnullByDefault;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;

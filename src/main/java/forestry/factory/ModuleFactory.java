@@ -233,7 +233,6 @@ public class ModuleFactory extends BlankForestryModule {
 
 		blocks.fabricator.init();
 		blocks.raintank.init();
-		blocks.worktable.init();
 
 		Circuits.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f);
 		Circuits.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f);
@@ -624,13 +623,5 @@ public class ModuleFactory extends BlankForestryModule {
 				'#', "blockGlass",
 				'X', "ingotIron",
 				'Y', coreItems.sturdyCasing);
-
-		RecipeUtil.addRecipe("worktable", blocks.worktable,
-				"B",
-				"W",
-				"C",
-				'B', Items.BOOK,
-				'W', "craftingTableWood",
-				'C', "chestWood");
 	}
 }

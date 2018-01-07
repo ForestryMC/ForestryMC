@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.tiles;
+package forestry.worktable.tiles;
 
 import com.google.common.base.Preconditions;
 
@@ -34,19 +34,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.factory.gui.ContainerWorktable;
-import forestry.factory.gui.GuiWorktable;
-import forestry.factory.inventory.InventoryCraftingForestry;
-import forestry.factory.inventory.InventoryGhostCrafting;
-import forestry.factory.inventory.InventoryWorktable;
-import forestry.factory.recipes.MemorizedRecipe;
-import forestry.factory.recipes.RecipeMemory;
+import forestry.worktable.gui.ContainerWorktable;
+import forestry.worktable.gui.GuiWorktable;
+import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.inventory.InventoryWorktable;
+import forestry.worktable.recipes.MemorizedRecipe;
+import forestry.worktable.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private RecipeMemory recipeMemory;
