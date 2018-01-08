@@ -55,6 +55,8 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
+		if(Config.blacklistedTreeDims.contains(world.provider.getDimension()))
+			return;
 		if (biomeCache.isEmpty()) {
 			generateBiomeCache(world, rand);
 		}
@@ -88,8 +90,6 @@ public class TreeDecorator {
 	@Nullable
 	private static BlockPos getValidPos(World world, int x, int z, ITree tree){
 		// get to the ground
-		if(Config.blacklistedTreeDims.contains(world.provider.getDimension()))
-			return null;
 		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
