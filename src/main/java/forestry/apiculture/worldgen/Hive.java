@@ -66,6 +66,9 @@ public final class Hive {
 	}
 
 	public boolean isValidLocation(World world, BlockPos pos) {
+		if(HiveConfig.isDimBlacklisted(world.provider.getDimension())) {
+			return false;
+		}
 		return hiveDescription.getHiveGen().isValidLocation(world, pos);
 	}
 
