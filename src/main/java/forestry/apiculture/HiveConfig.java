@@ -22,8 +22,13 @@ public class HiveConfig {
 	private final Set<BiomeDictionary.Type> blacklistedTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 
+	private static final Set<Integer> blacklistedDims = new HashSet<>();
+
 	public static void parse(LocalizedConfiguration config){
 		config.addCategoryCommentLocalized(CATEGORY);
+		for(int dimId : config.get("world.generate.beehives", "dimBlacklist", new int[0]).getIntList()){
+			blacklistedDims.add(dimId);
+		}
 		for(IHiveRegistry.HiveType type : IHiveRegistry.HiveType.values()){
 			String[] entries = config.get(CATEGORY, type.getName(), new String[0]).getStringList();
 			configs.put(type, new HiveConfig(entries));
@@ -55,5 +60,9 @@ public class HiveConfig {
 			return true;
 		}
 		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTypes::contains);
+	}
+	
+	public static boolean isDimBlacklisted(int dimId) {
+		return blacklistedDims.contains(dimId);
 	}
 }
