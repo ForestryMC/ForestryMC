@@ -45,6 +45,10 @@ public abstract class HiveDecorator {
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
+		if(!Config.canGenerateHives(world.provider.getDimension())) {
+			return;
+		}
+		
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {

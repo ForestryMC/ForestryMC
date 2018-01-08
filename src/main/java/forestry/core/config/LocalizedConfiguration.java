@@ -128,7 +128,16 @@ public class LocalizedConfiguration extends Configuration {
 		prop.setComment(comment + " [default: " + Arrays.toString(defaultValue) + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
 		return prop.getStringList();
 	}
-
+	
+	public int[] getIntListLocalized(String category, String name, int[] defaultValue) {
+		String langKey = "for.config." + category + '.' + name;
+		String commentKey = langKey + '.' + "comment";
+		String comment = "";
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
+		}
+		return super.get(name, category, defaultValue, comment).getIntList();
+	}
 	public float getFloatLocalized(String category, String name, float defaultValue, float minValue, float maxValue) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
