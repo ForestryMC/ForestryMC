@@ -40,6 +40,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.commands.TreeGenHelper;
+import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
 
 public class TreeDecorator {
@@ -87,6 +88,8 @@ public class TreeDecorator {
 	@Nullable
 	private static BlockPos getValidPos(World world, int x, int z, ITree tree){
 		// get to the ground
+		if(Config.blacklistedTreeDims.contains(world.provider.getDimension()))
+			return null;
 		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
