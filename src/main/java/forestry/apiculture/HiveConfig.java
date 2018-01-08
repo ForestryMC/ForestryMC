@@ -62,6 +62,7 @@ public class HiveConfig {
 		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTypes::contains);
 	}
 	
-	private static boolean isDimBlacklisted(int dimId) {
+	public static boolean isDimBlacklisted(int dimId) {
 		return blacklistedDims.contains(dimId);
+	}
 }
