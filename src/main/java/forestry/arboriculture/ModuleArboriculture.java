@@ -216,7 +216,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		ModuleCore.rootCommand.addChildCommand(new CommandTree());
 
 		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
-			ArboricultureFilterRule.init();
+			ArboricultureFilterRuleType.init();
 		}
 	}
 

@@ -14,6 +14,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
@@ -22,12 +23,10 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
 import forestry.sorting.AlleleFilter;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
-import forestry.sorting.network.packets.PacketFilterChangeGenome;
 import forestry.sorting.tiles.TileGeneticFilter;
 
 public class SpeciesWidget extends Widget implements ISelectableProvider<IAlleleSpecies> {
@@ -83,8 +82,9 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	@Override
 	public void onSelect(@Nullable IAlleleSpecies selectable) {
 		TileGeneticFilter filter = gui.getTile();
-		if (filter.setGenomeFilter(facing, index, active, selectable)) {
-			NetworkUtil.sendToServer(new PacketFilterChangeGenome(filter.getPos(), facing, (short) index, active, selectable));
+		IFilterLogic logic = filter.getLogic();
+		if (logic.setGenomeFilter(facing, index, active, selectable)) {
+			logic.sendToServer(facing, (short) index, active, selectable);
 		}
 		if (gui.selection.isSame(this)) {
 			gui.onModuleClick(this);

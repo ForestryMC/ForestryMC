@@ -1,25 +1,17 @@
 package forestry.api.genetics;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
 
-/**
- * @since 5.8
- */
-public interface IFilterRule extends IFilterLogic {
-	void addLogic(IFilterLogic logic);
+public interface IFilterRule {
+	boolean isValid(ItemStack itemStack, IFilterData data);
 
 	/**
-	 * @return A unique identifier for the rule.
+	 * If a root with this uid is registered, the filter will only get stack with individuals from this root.
 	 */
-	String getUID();
-
-	@SideOnly(Side.CLIENT)
-	TextureAtlasSprite getSprite();
-
-	@SideOnly(Side.CLIENT)
-	ResourceLocation getTextureMap();
+	@Nullable
+	default String getRootUID() {
+		return null;
+	}
 }

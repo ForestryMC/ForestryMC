@@ -142,8 +142,8 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		proxy.preInitializeRendering();
 
 		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
-			LepidopterologyFilterLogic.init();
 			LepidopterologyFilterRule.init();
+			LepidopterologyFilterRuleType.init();
 		}
 	}
 

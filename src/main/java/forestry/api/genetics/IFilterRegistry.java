@@ -3,6 +3,8 @@ package forestry.api.genetics;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+import forestry.api.core.ILocatable;
+
 /**
  * @since 5.8
  */
@@ -10,27 +12,29 @@ public interface IFilterRegistry {
 	/**
 	 * Registers a filter rule.
 	 */
-	void registerFilter(IFilterRule rule);
+	void registerFilter(IFilterRuleType rule);
 
-	Collection<IFilterRule> getRules();
+	Collection<IFilterRuleType> getRules();
 
-	IFilterRule getDefaultRule();
-
-	@Nullable
-	IFilterRule getRule(String uid);
+	IFilterRuleType getDefaultRule();
 
 	@Nullable
-	IFilterRule getRule(int id);
+	IFilterRuleType getRule(String uid);
 
-	int getId(IFilterRule rule);
+	@Nullable
+	IFilterRuleType getRule(int id);
 
-	default IFilterRule getRuleOrDefault(String uid){
-		IFilterRule rule = getRule(uid);
+	int getId(IFilterRuleType rule);
+
+	IFilterLogic createLogic(ILocatable locatable, IFilterLogic.INetworkHandler networkHandler);
+
+	default IFilterRuleType getRuleOrDefault(String uid){
+		IFilterRuleType rule = getRule(uid);
 		return rule != null ? rule : getDefaultRule();
 	}
 
-	default IFilterRule getRuleOrDefault(int id){
-		IFilterRule rule = getRule(id);
+	default IFilterRuleType getRuleOrDefault(int id){
+		IFilterRuleType rule = getRule(id);
 		return rule != null ? rule : getDefaultRule();
 	}
 }
