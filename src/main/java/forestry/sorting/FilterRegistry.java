@@ -28,7 +28,7 @@ public class FilterRegistry implements IFilterRegistry {
 
 	@Override
 	public IFilterRule getDefaultRule() {
-		return DefaultFilterRule.ITEM;
+		return DefaultFilterRule.CLOSED;
 	}
 
 	@Nullable
