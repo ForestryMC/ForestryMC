@@ -61,10 +61,9 @@ import forestry.energy.circuits.CircuitElectricEfficiency;
 import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
-import forestry.farming.logic.FarmableBasicIC2Crop;
+import forestry.farming.logic.farmables.FarmableBasicIC2Crop;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
 

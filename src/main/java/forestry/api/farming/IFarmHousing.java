@@ -5,11 +5,13 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import forestry.api.core.IErrorLogicSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.core.IErrorLogicSource;
 
 public interface IFarmHousing extends IErrorLogicSource {
 
@@ -33,9 +35,31 @@ public interface IFarmHousing extends IErrorLogicSource {
 	 * Will remove the appropriate germling from the farm's inventory.
 	 * It's up to the logic to only call this on a valid location.
 	 *
+	 * @deprecated TODO remove this method in 1.13
+	 *
 	 * @return true if planting was successful, false otherwise.
 	 */
+	@Deprecated
 	boolean plantGermling(IFarmable farmable, World world, BlockPos pos);
+
+	/**
+	 * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem.
+	 * Will remove the appropriate germling from the farm's inventory.
+	 * It's up to the logic to only call this on a valid location.
+	 *
+	 * @return true if planting was successful, false otherwise.
+	 */
+	default boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction){
+		return plantGermling(farmable, world, pos);
+	}
+
+	default boolean isValidPlatform(World world, BlockPos pos){
+		return false;
+	}
+
+	default boolean isSquare(){
+		return false;
+	}
 
 	/* INTERACTION WITH HATCHES */
 	IFarmInventory getFarmInventory();

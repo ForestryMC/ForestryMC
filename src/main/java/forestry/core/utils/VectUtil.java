@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.collect.AbstractIterator;
+
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.google.common.collect.AbstractIterator;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;

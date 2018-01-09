@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.FarmRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,23 +20,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.farming.FarmRegistry;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.ItemStackUtil;
-
-public class FarmLogicReeds extends FarmLogic {
-
+public class FarmLogicReeds extends FarmLogicSoil {
 	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmPoales");
-	private ArrayList<Soil> soils = new ArrayList<>();
 
 
 	public FarmLogicReeds() {
@@ -63,11 +48,6 @@ public class FarmLogicReeds extends FarmLogic {
 		} else {
 			return "Managed Reed Farm";
 		}
-	}
-
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		this.soils.add(new Soil(resource,soilState,hasMetaData));
 	}
 
 	@Override

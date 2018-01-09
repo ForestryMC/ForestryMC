@@ -27,6 +27,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.farming.logic.crops.CropRubber;
 import forestry.plugins.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
@@ -129,11 +130,6 @@ public class FarmLogicRubber extends FarmLogic {
 		}
 
 		return crops;
-	}
-
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		// do nothing as soil is not managed by farm
 	}
 	
 }

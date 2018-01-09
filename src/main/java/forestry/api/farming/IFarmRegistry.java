@@ -14,7 +14,7 @@ public interface IFarmRegistry {
 
 	/**
 	 * Registers farming logic in registry under given identifier
-	 * @param identifier Valid identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
+	 * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 * @param logic corresponding instance of logic
 	 */
 	void registerFarmLogic(String identifier, IFarmLogic logic);
@@ -22,7 +22,7 @@ public interface IFarmRegistry {
 	/**
 	 * Can be used to add IFarmables to some of the vanilla farm logics.
 	 * <p>
-	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
+	 * Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 */
 	void registerFarmables(String identifier, IFarmable... farmable);
 	

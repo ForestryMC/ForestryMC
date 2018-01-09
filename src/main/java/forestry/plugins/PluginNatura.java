@@ -48,8 +48,8 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
-import forestry.farming.logic.FarmableAgingCrop;
-import forestry.farming.logic.FarmableSapling;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -220,7 +220,7 @@ public class PluginNatura extends BlankForestryModule {
 					return;
 				}
 
-				FarmRegistry.getInstance().registerFarmables("farmWheat",
+				FarmRegistry.getInstance().registerFarmables("farmCrops",
 					new FarmableAgingCrop(
 						seedItem,
 						block,

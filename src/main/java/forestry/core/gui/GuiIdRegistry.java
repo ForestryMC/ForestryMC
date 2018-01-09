@@ -30,6 +30,7 @@ import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.cultivation.tiles.TilePlanter;
 import forestry.database.tiles.TileDatabase;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineElectric;
@@ -89,6 +90,8 @@ public class GuiIdRegistry {
 				TileStill.class,
 
 				TileFarm.class,
+
+				TilePlanter.class,
 
 				TileGreenhouse.class,
 				TileClimatiser.class,

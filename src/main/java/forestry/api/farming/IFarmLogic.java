@@ -13,6 +13,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,11 +36,17 @@ public interface IFarmLogic {
 	IFarmLogic setManual(boolean manual);
 
 	void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData);
-	
-	@SideOnly(Side.CLIENT)
-	ResourceLocation getTextureMap();
 
 	String getName();
+
+	/* GUI ONLY */
+
+	/**
+	 * @deprecated TODO remove this method in 1.13
+	 */
+	@Deprecated
+	@SideOnly(Side.CLIENT)
+	ResourceLocation getTextureMap();
 
 	/**
 	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.

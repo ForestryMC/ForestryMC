@@ -90,17 +90,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 			BlockPos soilPosition = position.down();
 			IBlockState soilState = world.getBlockState(soilPosition);
 			if (isAcceptedSoil(soilState)) {
-				return trySetCrop(world, farmHousing, position);
-			}
-		}
-
-		return false;
-	}
-
-	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position) {
-		for (IFarmable candidate : farmables) {
-			if (farmHousing.plantGermling(candidate, world, position)) {
-				return true;
+				return trySetCrop(world, farmHousing, position, direction);
 			}
 		}
 

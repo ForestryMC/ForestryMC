@@ -24,7 +24,6 @@ import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.core.fluids.FluidHelper;
@@ -32,10 +31,9 @@ import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
 
-public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
+public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventoryInternal {
 	public static final int SLOT_RESOURCES_1 = 0;
 	public static final int SLOT_RESOURCES_COUNT = 6;
 	public static final int SLOT_GERMLINGS_1 = 6;

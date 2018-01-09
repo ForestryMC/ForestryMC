@@ -145,17 +145,17 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 				BlockPos soilPosition = position.down();
 				IBlockState soilState = world.getBlockState(soilPosition);
 				if (isAcceptedSoil(soilState)) {
-					return plantSapling(world, farmHousing, position);
+					return plantSapling(world, farmHousing, position, direction);
 				}
 			}
 		}
 		return false;
 	}
 
-	private boolean plantSapling(World world, IFarmHousing farmHousing, BlockPos position) {
+	private boolean plantSapling(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
 		Collections.shuffle(farmables);
 		for (IFarmable candidate : farmables) {
-			if (farmHousing.plantGermling(candidate, world, position)) {
+			if (farmHousing.plantGermling(candidate, world, position, direction)) {
 				return true;
 			}
 		}

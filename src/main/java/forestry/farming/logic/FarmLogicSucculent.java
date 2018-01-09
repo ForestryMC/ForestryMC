@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
@@ -21,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -28,10 +28,8 @@ import forestry.api.farming.IFarmable;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.FarmRegistry;
 
-public class FarmLogicSucculent extends FarmLogic {
-	
+public class FarmLogicSucculent extends FarmLogicSoil {
 	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmSucculentes");
-	private ArrayList<Soil> soils = new ArrayList<>();
 	
 	public FarmLogicSucculent() {
 		addSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
@@ -49,11 +47,6 @@ public class FarmLogicSucculent extends FarmLogic {
 		} else {
 			return "Managed Succulent Farm";
 		}
-	}
-
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {		
-		this.soils.add(new Soil(resource,soilState,hasMetaData));
 	}
 	
 	@Override

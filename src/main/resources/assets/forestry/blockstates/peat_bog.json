@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:peat_bog" },
+		"facing=east": { "model": "forestry:peat_bog", "y": 90 },
+		"facing=south": { "model": "forestry:peat_bog", "y": 180 },
+		"facing=west": { "model": "forestry:peat_bog", "y": -90 }
+	}
+}

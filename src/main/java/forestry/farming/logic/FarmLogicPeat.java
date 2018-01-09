@@ -23,6 +23,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
+import forestry.farming.logic.crops.CropPeat;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 	private static final ItemStack bogEarth = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);

@@ -10,8 +10,7 @@ public class Circuits {
 	public static ICircuit energyElectricBoost2;
 	public static ICircuit farmArborealManaged;
 	public static ICircuit farmShroomManaged;
-	public static ICircuit farmCerealManaged;
-	public static ICircuit farmVegetableManaged;
+	public static ICircuit farmCropsManaged;
 	public static ICircuit farmPeatManaged;
 	public static ICircuit farmSucculentManaged;
 	public static ICircuit farmPoaleManaged;
@@ -19,8 +18,7 @@ public class Circuits {
 	public static ICircuit farmInfernalManaged;
 	public static ICircuit farmGourdManaged;
 	public static ICircuit farmShroomManual;
-	public static ICircuit farmCerealManual;
-	public static ICircuit farmVegetableManual;
+	public static ICircuit farmCropsManual;
 	public static ICircuit farmPeatManual;
 	public static ICircuit farmSucculentManual;
 	public static ICircuit farmPoalesManual;

@@ -22,7 +22,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.farming.logic.FarmableDoubleCrop;
+import forestry.farming.logic.farmables.FarmableDoubleCrop;
 import forestry.modules.ForestryModuleUids;
 
 @SuppressWarnings("unused")

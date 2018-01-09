@@ -36,6 +36,7 @@ import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.ModuleCore;
 import forestry.core.tiles.TileUtil;
+import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
@@ -105,7 +106,6 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-
 		if (!lastExtents.containsKey(pos)) {
 			lastExtents.put(pos, 0);
 		}
@@ -131,11 +131,6 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Override
 	public String getName() {
 		return "Orchard";
-	}
-	
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		// do nothing as soil is not managed by farm
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
@@ -235,7 +230,6 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Nullable
 	private ICrop getCrop(World world, BlockPos position) {
-
 		IFruitBearer fruitBearer = TileUtil.getTile(world, position, IFruitBearer.class);
 
 		if (fruitBearer != null) {

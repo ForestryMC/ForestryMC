@@ -38,7 +38,7 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicExU;
-import forestry.farming.logic.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 

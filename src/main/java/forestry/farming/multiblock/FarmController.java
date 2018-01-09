@@ -15,11 +15,9 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,7 +48,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
@@ -73,9 +70,10 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.TopDownBlockPosComparator;
 import forestry.core.utils.Translator;
 import forestry.farming.FarmHelper;
+import forestry.farming.FarmHelper.FarmWorkStatus;
+import forestry.farming.FarmHelper.Stage;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
@@ -83,32 +81,6 @@ import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
 
 public class FarmController extends RectangularMultiblockControllerBase implements IFarmControllerInternal, ILiquidTankTile {
-
-	private enum Stage {
-		CULTIVATE, HARVEST;
-
-		public Stage next() {
-			if (this == CULTIVATE) {
-				return HARVEST;
-			} else {
-				return CULTIVATE;
-			}
-		}
-	}
-
-	private static FarmDirection getLayoutDirection(FarmDirection farmSide) {
-		switch (farmSide) {
-			case NORTH:
-				return FarmDirection.WEST;
-			case WEST:
-				return FarmDirection.SOUTH;
-			case SOUTH:
-				return FarmDirection.EAST;
-			case EAST:
-				return FarmDirection.NORTH;
-		}
-		return null;
-	}
 
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
 	private int allowedExtent = 0;
@@ -473,11 +445,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			List<FarmTarget> farmTargets = targets.get(farmSide);
 
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = harvestTargets(world, farmTargets, logic, farmListeners);
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, farmTargets, logic, farmListeners);
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
-					pendingCrops.sort(TopDownICropComparator.INSTANCE);
+					pendingCrops.sort(FarmHelper.TopDownICropComparator.INSTANCE);
 					harvestProvider = logic;
 				}
 			} else if (stage == Stage.CULTIVATE) {
@@ -513,102 +485,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Set the maximum allowed extent.
 		allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * Config.farmSize + 1;
 
-		createTargets(world, targets, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest, min, max);
-		setExtents(world, targets);
-	}
-
-	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest, BlockPos minFarmCoord, BlockPos maxFarmCoord) {
-		for (FarmDirection farmSide : FarmDirection.values()) {
-
-			final int farmWidth;
-			if (farmSide == FarmDirection.NORTH || farmSide == FarmDirection.SOUTH) {
-				farmWidth = farmSizeEastWest;
-			} else {
-				farmWidth = farmSizeNorthSouth;
-			}
-
-			// targets extend sideways in a pinwheel pattern around the farm, so they need to go a little extra distance
-			final int targetMaxLimit = allowedExtent + farmWidth;
-
-			FarmDirection layoutDirection = getLayoutDirection(farmSide);
-
-			List<FarmTarget> farmSideTargets = new ArrayList<>();
-			targets.put(farmSide, farmSideTargets);
-
-			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(targetStart, farmSide, layoutDirection, minFarmCoord, maxFarmCoord);
-			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
-			BlockPos firstGroundPosition = getGroundPosition(world, firstLocation);
-			if (firstGroundPosition != null) {
-				int groundHeight = firstGroundPosition.getY();
-
-				for (int i = 0; i < allowedExtent; i++) {
-					targetLocation = targetLocation.offset(farmSide.getFacing());
-					BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
-
-					if (!world.isBlockLoaded(groundLocation)) {
-						break;
-					}
-
-					IBlockState blockState = world.getBlockState(groundLocation);
-					if (!FarmHelper.bricks.contains(blockState.getBlock())) {
-						break;
-					}
-
-					int targetLimit = targetMaxLimit;
-					if (!Config.squareFarms) {
-						targetLimit = targetMaxLimit - i - 1;
-					}
-
-					FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
-					farmSideTargets.add(target);
-				}
-			}
-		}
-	}
-
-	@Nullable
-	private static BlockPos getGroundPosition(World world, BlockPos targetPosition) {
-		if (!world.isBlockLoaded(targetPosition)) {
-			return null;
-		}
-
-		for (int yOffset = 2; yOffset > -4; yOffset--) {
-			BlockPos position = targetPosition.add(0, yOffset, 0);
-			IBlockState blockState = world.getBlockState(position);
-			if (FarmHelper.bricks.contains(blockState.getBlock())) {
-				return position;
-			}
-		}
-
-		return null;
-	}
-
-	private static boolean isCycleCanceledByListeners(IFarmLogic logic, FarmDirection direction, Iterable<IFarmListener> farmListeners) {
-		for (IFarmListener listener : farmListeners) {
-			if (listener.cancelTask(logic, direction)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static void setExtents(World world, Map<FarmDirection, List<FarmTarget>> targets) {
-		for (List<FarmTarget> targetsList : targets.values()) {
-			if (!targetsList.isEmpty()) {
-				BlockPos groundPosition = getGroundPosition(world, targetsList.get(0).getStart());
-
-				for (FarmTarget target : targetsList) {
-					target.setExtentAndYOffset(world, groundPosition);
-				}
-			}
-		}
-	}
-
-	private static class FarmWorkStatus {
-		public boolean didWork = false;
-		public boolean hasFarmland = false;
-		public boolean hasFertilizer = true;
-		public boolean hasLiquid = true;
+		FarmHelper.createTargets(world, this, targets, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest, min, max);
+		FarmHelper.setExtents(world, this, targets);
 	}
 
 	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
@@ -621,7 +499,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			}
 		}
 
-		if (hasFarmland && !isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = logic.getFertilizerConsumption();
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
@@ -639,7 +517,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 					continue;
 				}
 
-				if (cultivateTarget(world, this, target, logic, farmListeners)) {
+				if (FarmHelper.cultivateTarget(world, this, target, logic, farmListeners)) {
 					// Remove fertilizer and water
 					fertilizerManager.removeFertilizer(inventory, fertilizerConsumption);
 					removeLiquid(liquid);
@@ -650,41 +528,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		return farmWorkStatus;
-	}
-
-	private static boolean cultivateTarget(World world, IFarmHousing farmHousing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
-		if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
-			for (IFarmListener listener : farmListeners) {
-				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	private static Collection<ICrop> harvestTargets(World world, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		for (FarmTarget target : farmTargets) {
-			Collection<ICrop> harvested = harvestTarget(world, target, logic, farmListeners);
-			if (!harvested.isEmpty()) {
-				return harvested;
-			}
-		}
-
-		return Collections.emptyList();
-	}
-
-	private static Collection<ICrop> harvestTarget(World world, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
-		Collection<ICrop> harvested = logic.harvest(world, pos, target.getDirection(), target.getExtent());
-		if (!harvested.isEmpty()) {
-			// Let event handlers know.
-			for (IFarmListener listener : farmListeners) {
-				listener.hasScheduledHarvest(harvested, logic, pos, target.getDirection(), target.getExtent());
-			}
-		}
-		return harvested;
 	}
 
 	private boolean collectWindfall(IFarmLogic logic) {
@@ -835,22 +678,20 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return CircuitSocketType.FARM;
 	}
 
+	@Override
+	public boolean isValidPlatform(World world, BlockPos pos) {
+		IBlockState blockState = world.getBlockState(pos);
+		return FarmHelper.bricks.contains(blockState.getBlock());
+	}
+
+	@Override
+	public boolean isSquare() {
+		return Config.squareFarms;
+	}
+
 	// for debugging
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("stage", stage).add("logic", farmLogics.toString()).toString();
-	}
-
-	private static class TopDownICropComparator implements Comparator<ICrop> {
-		public static final TopDownICropComparator INSTANCE = new TopDownICropComparator();
-
-		private TopDownICropComparator() {
-
-		}
-
-		@Override
-		public int compare(ICrop o1, ICrop o2) {
-			return TopDownBlockPosComparator.INSTANCE.compare(o1.getPosition(), o2.getPosition());
-		}
 	}
 }

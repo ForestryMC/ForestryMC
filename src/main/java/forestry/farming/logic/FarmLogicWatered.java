@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -20,30 +17,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.BlockUtil;
-import forestry.farming.FarmHelper;
 
-public abstract class FarmLogicWatered extends FarmLogic {
-
-	
-	private final List<Soil> soils = new ArrayList<>();
-	
+public abstract class FarmLogicWatered extends FarmLogicSoil {
 	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
 	protected FarmLogicWatered(ItemStack resource, IBlockState ground) {
 		addSoil(resource,ground,false);
-	}
-	
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		soils.add(new Soil(resource,soilState,hasMetaData));
 	}
 
 	@Override
@@ -99,11 +88,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 			return true;
 		}
 
-		if (maintainCrops(world, farmHousing, pos.up(), direction, extent)) {
-			return true;
-		}
+		return maintainCrops(world, farmHousing, pos.up(), direction, extent);
 
-		return false;
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
@@ -119,8 +105,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				}
 	
 				BlockPos platformPosition = position.down();
-				IBlockState blockState = world.getBlockState(platformPosition);
-				if (!FarmHelper.bricks.contains(blockState.getBlock())) {
+				if (!farmHousing.isValidPlatform(world, platformPosition)) {
 					break;
 				}
 	
@@ -149,8 +134,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
 			BlockPos platformPosition = position.down();
-			IBlockState blockState = world.getBlockState(platformPosition);
-			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
+			if (!farmHousing.isValidPlatform(world, platformPosition)) {
 				break;
 			}
 

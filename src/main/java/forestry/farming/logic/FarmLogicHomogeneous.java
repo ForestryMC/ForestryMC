@@ -13,11 +13,7 @@ package forestry.farming.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
-import forestry.farming.FarmHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -25,9 +21,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class FarmLogicHomogeneous extends FarmLogic {
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 
-	private final List<Soil> soils = new ArrayList<>();
+public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 	protected final List<IFarmable> farmables;
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
@@ -35,10 +34,6 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	protected FarmLogicHomogeneous(ItemStack resource, IBlockState soilState, Collection<IFarmable> farmables) {
 		addSoil(resource, soilState, false);
 		this.farmables = new ArrayList<>(farmables);
-	}
-	
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){
-		soils.add(new Soil(resource, soilState, hasMetaData));
 	}
 
 	protected boolean isAcceptedSoil(IBlockState blockState) {
@@ -86,6 +81,26 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		return false;
 	}
 
+	protected boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction, boolean shuffle) {
+		for (IFarmable candidate : farmables) {
+			if (farmHousing.plantGermling(candidate, world, position, direction)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
+		for (IFarmable candidate : farmables) {
+			if (farmHousing.plantGermling(candidate, world, position, direction)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return maintainSoil(world, farmHousing, pos, direction, extent) ||
@@ -104,7 +119,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 				BlockPos position = translateWithOffset(pos, direction, i);
 				IBlockState soilState = world.getBlockState(position);
 	
-				if (FarmHelper.bricks.contains(soilState.getBlock())) {
+				if (farmHousing.isValidPlatform(world, pos)) {
 					break;
 				}
 	
@@ -113,8 +128,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 				}
 	
 				BlockPos platformPosition = position.down();
-				IBlockState platformState = world.getBlockState(platformPosition);
-				if (!FarmHelper.bricks.contains(platformState.getBlock())) {
+				if (!farmHousing.isValidPlatform(world, platformPosition)) {
 					break;
 				}
 	

@@ -118,6 +118,11 @@ public abstract class FarmLogic implements IFarmLogic {
 		}
 	}
 
+	@Override
+	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+		// do nothing as soil is not managed by farm
+	}
+
 	// for debugging
 	@Override
 	public String toString() {
