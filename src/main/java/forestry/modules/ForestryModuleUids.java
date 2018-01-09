@@ -18,6 +18,7 @@ public class ForestryModuleUids {
 	public static final String CRATE = "crates";
 	public static final String BACKPACKS = "backpacks";
 	public static final String DATABASE = "database";
+	public static final String SORTING = "sorting";
 
 	//Mod Plugins
 	public static final String BIOMES_O_PLENTY = "biomes.o.plenty";

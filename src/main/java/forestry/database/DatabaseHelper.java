@@ -1,7 +1,6 @@
 package forestry.database;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +43,6 @@ public class DatabaseHelper {
 
 	public static void update(String searchText, List<DatabaseItem> items, ArrayList<DatabaseItem> sorted){
 		sorted.clear();
-
 		sorted.ensureCapacity(items.size());
 
 		Pattern pattern;
@@ -84,7 +82,7 @@ public class DatabaseHelper {
 			}*/
 		}
 
-		Collections.sort(sorted, SORT_BY_NAME);
+		sorted.sort(SORT_BY_NAME);
 	}
 
 	//TODO: Add more filter options

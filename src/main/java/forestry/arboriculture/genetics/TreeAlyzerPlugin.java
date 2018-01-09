@@ -39,10 +39,12 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
+import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 public class TreeAlyzerPlugin implements IAlyzerPlugin {
@@ -129,7 +131,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage();
+			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			int speciesDominance0 = guiAlyzer.getColorCoding(tree.getGenome().getPrimary().isDominant());
 			int speciesDominance1 = guiAlyzer.getColorCoding(tree.getGenome().getSecondary().isDominant());
@@ -140,14 +142,14 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 			textLayout.newLine();
 
-			IAlleleTreeSpecies activeSpecies = (IAlleleTreeSpecies) tree.getGenome().getActiveAllele(EnumTreeChromosome.SPECIES);
-			IAlleleTreeSpecies inActiveSpecies = (IAlleleTreeSpecies) tree.getGenome().getInactiveAllele(EnumTreeChromosome.SPECIES);
+			String yes = Translator.translateToLocal("for.yes");
+			String no = Translator.translateToLocal("for.no");
 
-			int activeCarbonization = activeSpecies.getWoodProvider().getCarbonization();
-			int inactiveCarbonization = inActiveSpecies.getWoodProvider().getCarbonization();
-			textLayout.drawLine(Translator.translateToLocal("for.gui.carbonization"), GuiAlyzer.COLUMN_0);
-			guiAlyzer.drawLine(Integer.toString(activeCarbonization), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.SPECIES, false);
-			guiAlyzer.drawLine(Integer.toString(inactiveCarbonization), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.SPECIES, true);
+			String fireproofActive = StringUtil.readableBoolean(tree.getGenome().getFireproof(), yes, no);
+			String fireproofInactive = StringUtil.readableBoolean(((AlleleBoolean) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF)).getValue(), yes, no);
+
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.fireproof"), fireproofActive, fireproofInactive, tree, EnumTreeChromosome.FIREPROOF);
+
 			textLayout.newLine();
 
 			textLayout.drawLine(Translator.translateToLocal("for.gui.native"), GuiAlyzer.COLUMN_0);

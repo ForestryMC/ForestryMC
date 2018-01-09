@@ -11,7 +11,6 @@
 package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
-import java.awt.Rectangle;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,8 +43,12 @@ public abstract class Widget implements IToolTipProvider {
 		return height;
 	}
 
-	public Rectangle getRectangle(int startX, int startY){
-		return new Rectangle(startX + xPos, startY + yPos, width, height);
+	public int getX() {
+		return xPos;
+	}
+
+	public int getY() {
+		return yPos;
 	}
 
 	public abstract void draw(int startX, int startY);
