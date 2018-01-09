@@ -58,6 +58,8 @@ public class OreDictUtil {
 	public static final String CROP_CARROT = "cropCarrot";
 	public static final String SUGARCANE = "sugarcane";
 
+	public static final String FRUIT_FORESTRY = "fruitForestry";
+
 	public static final String PANE_GLASS = "paneGlass";
 	public static final String SAND = "sand";
 	public static final String DUST_REDSTONE = "dustRedstone";

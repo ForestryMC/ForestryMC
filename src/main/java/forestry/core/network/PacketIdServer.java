@@ -28,6 +28,10 @@ public enum PacketIdServer implements IPacketId {
 	//Database
 	INSERT_ITEM,
 	EXTRACT_ITEM,
+
+	// Sorting
+	FILTER_CHANGE_RULE,
+	FILTER_CHANGE_GENOME,
 	
 	// Greenhouse
 	CAMOUFLAGE_SELECTION,

@@ -1,0 +1,75 @@
+package forestry.sorting.network.packets;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
+import forestry.sorting.tiles.TileGeneticFilter;
+
+public class PacketFilterChangeGenome extends ForestryPacket implements IForestryPacketServer {
+	private final BlockPos pos;
+	private final EnumFacing facing;
+	private final short index;
+	private final boolean active;
+	@Nullable
+	private final IAllele allele;
+
+	public PacketFilterChangeGenome(BlockPos pos, EnumFacing facing, short index, boolean active, @Nullable IAllele allele) {
+		this.pos = pos;
+		this.facing = facing;
+		this.index = index;
+		this.active = active;
+		this.allele = allele;
+	}
+
+	@Override
+	protected void writeData(PacketBufferForestry data) throws IOException {
+		data.writeBlockPos(pos);
+		data.writeShort(facing.getIndex());
+		data.writeShort(index);
+		data.writeBoolean(active);
+		if (allele != null) {
+			data.writeBoolean(true);
+			data.writeString(allele.getUID());
+		} else {
+			data.writeBoolean(false);
+		}
+	}
+
+	@Override
+	public PacketIdServer getPacketId() {
+		return PacketIdServer.FILTER_CHANGE_GENOME;
+	}
+
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			EnumFacing facing = EnumFacing.getFront(data.readShort());
+			short index = data.readShort();
+			boolean active = data.readBoolean();
+			IAllele allele;
+			if (data.readBoolean()) {
+				allele = AlleleManager.alleleRegistry.getAllele(data.readString());
+			} else {
+				allele = null;
+			}
+			TileUtil.actOnTile(player.world, pos, TileGeneticFilter.class, tile -> {
+				if (tile.setGenomeFilter(facing, index, active, allele)) {
+					tile.sendToPlayers(player.getServerWorld(), player);
+				}
+			});
+		}
+	}
+}

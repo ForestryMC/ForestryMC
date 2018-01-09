@@ -133,6 +133,7 @@ import forestry.food.ModuleFood;
 import forestry.food.items.ItemRegistryFood;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleManager;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -231,6 +232,11 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
+
+		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+			ApicultureFilterRule.init();
+			ApicultureFilterLogic.init();
+		}
 	}
 
 	// TODO: Buildcraft for 1.9

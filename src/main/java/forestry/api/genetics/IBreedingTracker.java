@@ -5,9 +5,13 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.apiculture.IBeekeepingMode;
+import java.util.Collection;
+import java.util.Collections;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+
+import forestry.api.apiculture.IBeekeepingMode;
 
 /**
  * Keeps track of who bred, discovered, and researched which species in a world.
@@ -66,6 +70,13 @@ public interface IBreedingTracker {
 	 * @return true if the species has been bred.
 	 */
 	boolean isDiscovered(IAlleleSpecies species);
+
+	/**
+	 * @return A collection that contains the {@link IAllele#getUID()}s of all discovered species.
+	 */
+	default Collection<String> getDiscoveredSpecies(){
+		return Collections.emptyList();
+	}
 
 	/**
 	 * Register a successfully researched mutation.

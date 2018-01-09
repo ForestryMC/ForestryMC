@@ -236,6 +236,11 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	@Override
+	public Set<String> getDiscoveredSpecies() {
+		return discoveredSpecies;
+	}
+
+	@Override
 	public int getSpeciesBred() {
 		return discoveredSpecies.size();
 	}

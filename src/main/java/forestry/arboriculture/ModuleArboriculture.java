@@ -110,6 +110,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.VillagerTradeLists;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleManager;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -213,6 +214,10 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandTree());
+
+		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+			ArboricultureFilterRule.init();
+		}
 	}
 
 	@Override

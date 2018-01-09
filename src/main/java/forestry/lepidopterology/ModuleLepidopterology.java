@@ -79,6 +79,7 @@ import forestry.lepidopterology.tiles.TileCocoon;
 import forestry.lepidopterology.worldgen.CocoonDecorator;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleManager;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -137,10 +138,13 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
-		
-		
-		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+
 		proxy.preInitializeRendering();
+
+		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+			LepidopterologyFilterLogic.init();
+			LepidopterologyFilterRule.init();
+		}
 	}
 
 	@Override
@@ -154,6 +158,8 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		BlockRegistryLepidopterology blocks = getBlocks();
+
+		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
 
 		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 

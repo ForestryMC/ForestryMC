@@ -1,0 +1,41 @@
+{
+	"textures": {
+		"filter": "forestry:blocks/genetic_filter"
+	},
+	"elements": [ 	 
+		{
+			"from": [ 4, 4, 0 ],
+			"to": [ 12, 12, 1 ],
+			"faces": {
+				"down": { "uv": [ 2, 5.5, 6, 6 ], "texture": "#filter" },
+				"up": { "uv": [ 2, 2, 6, 2.5 ], "texture": "#filter" },
+				"north": { "uv": [ 2, 2, 6, 6 ], "texture": "#filter" },
+				"south": { "uv": [ 2, 2, 6, 6 ], "texture": "#filter" },
+				"west": { "uv": [ 2, 2, 2.5, 6 ], "texture": "#filter" },
+				"east": { "uv": [ 5.5, 2, 6, 6 ], "texture": "#filter" }
+			}
+		},
+		{
+			"from": [ 5, 5, 2 ],
+			"to": [ 11, 11, 5 ],
+			"faces": {
+				"down": { "uv": [ 2.5, 13, 4, 15.5 ], "texture": "#filter", "rotation": 90 },
+				"up": { "uv": [ 4, 15.5, 2.5, 13 ], "texture": "#filter", "rotation": 90 },
+				"west": { "uv": [ 2.5, 13, 4, 15.5 ], "texture": "#filter" },
+				"east": { "uv": [ 2.5, 13, 4, 15.5 ], "texture": "#filter" }
+			}
+		},
+		{
+			"from": [ 4.5, 4.5, 1 ],
+			"to": [ 11.5, 11.5, 2 ],
+			"faces": {
+				"down": { "uv": [ 5, 12, 11, 13 ], "texture": "#wool" },
+				"up": { "uv": [ 5, 3, 11, 4 ], "texture": "#wool" },
+				"north": { "uv": [ 5, 5, 11, 11 ], "texture": "#wool" },
+				"south": { "uv": [ 5, 5, 11, 11 ], "texture": "#wool" },
+				"west": { "uv": [ 3, 5, 4, 11 ], "texture": "#wool" },
+				"east": { "uv": [ 12, 5, 13, 11 ], "texture": "#wool" }
+			}
+		}
+	]
+}

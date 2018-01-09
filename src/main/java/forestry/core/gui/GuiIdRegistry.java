@@ -54,6 +54,7 @@ import forestry.mail.items.ItemLetter;
 import forestry.mail.tiles.TileMailbox;
 import forestry.mail.tiles.TileStampCollector;
 import forestry.mail.tiles.TileTrader;
+import forestry.sorting.tiles.TileGeneticFilter;
 import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
 import forestry.worktable.tiles.TileWorktable;
@@ -65,20 +66,25 @@ public class GuiIdRegistry {
 
 	static {
 		registerGuiHandlers(GuiType.Tile, Arrays.asList(
+				//Apiculture Module
 				TileAlveary.class,
 				TileAlvearyHygroregulator.class,
 				TileAlvearySieve.class,
 				TileApiary.class,
 				TileBeeHouse.class,
 
+				//Core Module
 				TileAnalyzer.class,
 				TileEscritoire.class,
 				TileNaturalistChest.class,
-				TileRaintank.class,
+
+				//Worktable Module
 				TileWorktable.class,
 
+				//Database Module
 				TileDatabase.class,
 
+				//Factory Module
 				TileBottler.class,
 				TileCarpenter.class,
 				TileCentrifuge.class,
@@ -87,18 +93,26 @@ public class GuiIdRegistry {
 				TileMoistener.class,
 				TileSqueezer.class,
 				TileStill.class,
+				TileRaintank.class,
 
+				//Farm Module
 				TileFarm.class,
 
+				//Sorting Module
+				TileGeneticFilter.class,
+
+				//Greenhouse Module
 				TileGreenhouse.class,
 				TileClimatiser.class,
 				TileHygroregulator.class,
 
+				//Power Module
 				TileEngineBiogas.class,
 				TileEngineElectric.class,
 				TileEnginePeat.class,
 				TileEuGenerator.class,
 
+				//Mail Module
 				TileMailbox.class,
 				TileStampCollector.class,
 				TileTrader.class
