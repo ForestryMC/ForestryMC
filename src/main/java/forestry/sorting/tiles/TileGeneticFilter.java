@@ -24,10 +24,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterRule;
-import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesType;
@@ -38,8 +37,8 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.sorting.AlleleFilter;
-import forestry.sorting.DefaultFilterRule;
 import forestry.sorting.FilterData;
+import forestry.sorting.FilterLogic;
 import forestry.sorting.gui.ContainerGeneticFilter;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.inventory.InventoryFilter;
@@ -48,15 +47,12 @@ import forestry.sorting.inventory.ItemHandlerFilter;
 public class TileGeneticFilter extends TileForestry implements IStreamableGui {
 	private static final int TRANSFER_DELAY = 5;
 
-	private IFilterRule[] filterRules = new IFilterRule[6];
-	private AlleleFilter[][] genomeFilter = new AlleleFilter[6][3];
+	private final FilterLogic logic;
 	private final AdjacentInventoryCache inventoryCache;
 
 	public TileGeneticFilter() {
-		for (int i = 0; i < filterRules.length; i++) {
-			filterRules[i] = AlleleManager.filterRegistry.getDefaultRule();
-		}
 		this.inventoryCache = new AdjacentInventoryCache(this, getTileCache());
+		this.logic = new FilterLogic(this, (logic1, server, player) -> sendToPlayers(server, player));
 		setInternalInventory(new InventoryFilter(this));
 	}
 
@@ -64,100 +60,30 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui {
 	public NBTTagCompound writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
 
-		for (int i = 0; i < filterRules.length; i++) {
-			data.setString("TypeFilter" + i, filterRules[i].getUID());
-		}
+		data.setTag("Logic", logic.writeToNBT(new NBTTagCompound()));
 
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				AlleleFilter filter = genomeFilter[i][j];
-				if (filter == null) {
-					continue;
-				}
-				if (filter.activeAllele != null) {
-					data.setString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getUID());
-				}
-				if (filter.inactiveAllele != null) {
-					data.setString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getUID());
-				}
-			}
-		}
 		return data;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		for (int i = 0; i < filterRules.length; i++) {
-			filterRules[i] = AlleleManager.filterRegistry.getRuleOrDefault(data.getString("TypeFilter" + i));
-		}
 
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				AlleleFilter filter = new AlleleFilter();
-				if (data.hasKey("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
-				}
-				if (data.hasKey("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
-				}
-				genomeFilter[i][j] = filter;
-			}
-		}
+		logic.readFromNBT(data.getCompoundTag("Logic"));
 	}
 
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
-		for (int i = 0; i < filterRules.length; i++) {
-			data.writeShort(AlleleManager.filterRegistry.getId(filterRules[i]));
-		}
-
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				AlleleFilter filter = genomeFilter[i][j];
-				if (filter == null) {
-					data.writeBoolean(false);
-					data.writeBoolean(false);
-					continue;
-				}
-				if (filter.activeAllele != null) {
-					data.writeBoolean(true);
-					data.writeString(filter.activeAllele.getUID());
-				} else {
-					data.writeBoolean(false);
-				}
-				if (filter.inactiveAllele != null) {
-					data.writeBoolean(true);
-					data.writeString(filter.inactiveAllele.getUID());
-				} else {
-					data.writeBoolean(false);
-				}
-			}
-		}
+		logic.writeGuiData(data);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void readGuiData(PacketBufferForestry data) throws IOException {
-		for (int i = 0; i < filterRules.length; i++) {
-			filterRules[i] = AlleleManager.filterRegistry.getRule(data.readShort());
-		}
-
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				AlleleFilter filter = new AlleleFilter();
-				if (data.readBoolean()) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.readString());
-				}
-				if (data.readBoolean()) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.readString());
-				}
-				genomeFilter[i][j] = filter;
-			}
-		}
+		logic.readGuiData(data);
 	}
 
-	public void sendToPlayers(WorldServer server, EntityPlayer entityPlayer) {
+	private void sendToPlayers(WorldServer server, EntityPlayer entityPlayer) {
 		for (EntityPlayer player : server.playerEntities) {
 			if (player != entityPlayer && player.openContainer instanceof ContainerGeneticFilter) {
 				if (((ContainerGeneticFilter) entityPlayer.openContainer).hasSameTile((ContainerGeneticFilter) player.openContainer)) {
@@ -235,86 +161,16 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui {
 	}
 
 	private boolean isValidFacing(EnumFacing facing, ItemStack itemStack, IFilterData filterData) {
-		if (inventoryCache.getAdjacentInventory(facing) == null) {
-			return false;
-		}
-		IFilterRule rule = getRule(facing);
-		if (rule == DefaultFilterRule.CLOSED) {
-			return false;
-		}
-		if (rule == DefaultFilterRule.ITEM && !filterData.isPresent()) {
-			return true;
-		}
-		String requiredRoot = rule.getRootUID();
-		if (requiredRoot != null && (!filterData.isPresent() || !filterData.getRoot().getUID().equals(requiredRoot))) {
-			return false;
-		}
-		if (rule == DefaultFilterRule.ANYTHING || rule.isValid(itemStack, filterData)) {
-			if (filterData.isPresent()) {
-				IIndividual ind = filterData.getIndividual();
-				IGenome genome = ind.getGenome();
-				IAllele active = genome.getPrimary();
-				IAllele inactive = genome.getSecondary();
-				if (!isValidGenome(facing, active.getUID(), inactive.getUID())) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
+		return inventoryCache.getAdjacentInventory(facing) != null && logic.isValid(facing, itemStack, filterData);
 	}
 
-	private boolean isValidGenome(EnumFacing orientation, String activeUID, String inactiveUID) {
-		AlleleFilter[] directionFilters = genomeFilter[orientation.ordinal()];
-
-		if (directionFilters == null) {
-			return true;
-		}
-
-		boolean foundFilter = false;
-		for (int i = 0; i < 3; i++) {
-			AlleleFilter filter = directionFilters[i];
-			if (filter != null && !filter.isEmpty()) {
-				foundFilter = true;
-				if (!filter.isEmpty() && filter.isValid(activeUID, inactiveUID)) {
-					return true;
-				}
-			}
-		}
-		return !foundFilter;
-	}
-
-	public IFilterRule getRule(EnumFacing facing) {
-		return filterRules[facing.ordinal()];
-	}
-
-	public boolean setRule(EnumFacing facing, IFilterRule rule) {
-		if (filterRules[facing.ordinal()] != rule) {
-			filterRules[facing.ordinal()] = rule;
-			return true;
-		}
-		return false;
+	public IFilterLogic getLogic() {
+		return logic;
 	}
 
 	@Nullable
 	public AlleleFilter getGenomeFilter(EnumFacing facing, int index) {
-		return genomeFilter[facing.ordinal()][index];
-	}
-
-	public boolean setGenomeFilter(EnumFacing facing, int index, boolean active, @Nullable IAllele allele) {
-		AlleleFilter filter = genomeFilter[facing.ordinal()][index];
-		if (filter == null) {
-			filter = genomeFilter[facing.ordinal()][index] = new AlleleFilter();
-		}
-		boolean set;
-		if (active) {
-			set = filter.activeAllele != allele;
-			filter.activeAllele = allele;
-		} else {
-			set = filter.inactiveAllele != allele;
-			filter.inactiveAllele = allele;
-		}
-		return set;
+		return logic.getGenomeFilter(facing, index);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -336,11 +192,14 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemHandlerFilter(this, facing));
 		}
+		if(capability == GeneticCapabilities.FILTER_LOGIC){
+			return GeneticCapabilities.FILTER_LOGIC.cast(logic);
+		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == GeneticCapabilities.FILTER_LOGIC || super.hasCapability(capability, facing);
 	}
 }

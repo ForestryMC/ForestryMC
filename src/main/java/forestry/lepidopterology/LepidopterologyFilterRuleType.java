@@ -1,8 +1,6 @@
-package forestry.sorting;
+package forestry.lepidopterology;
 
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -13,69 +11,63 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRule;
+import forestry.api.genetics.IFilterRuleType;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.core.render.TextureManagerForestry;
 
-public enum DefaultFilterRule implements IFilterRule {
-	CLOSED {
+public enum LepidopterologyFilterRuleType implements IFilterRuleType {
+	FLUTTER{
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return false;
+			return data.isPresent();
 		}
 	},
-	ANYTHING {
+	BUTTERFLY{
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return true;
+			return data.isPresent() && data.getType() == EnumFlutterType.BUTTERFLY;
 		}
 	},
-	ITEM {
+	SERUM{
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return !data.isPresent();
+			return data.isPresent() && data.getType() == EnumFlutterType.SERUM;
 		}
 	},
-	PURE_BREED,
-	NOCTURNAL,
-	PURE_NOCTURNAL,
-	FLYER,
-	PURE_FLYER,
-	CAVE,
-	PURE_CAVE,
-	/*FIREPROOF,
-	PURE_FIREPROOF*/;
+	CATERPILLAR{
+		@Override
+		public boolean isValid(ItemStack itemStack, IFilterData data) {
+			return data.isPresent() && data.getType() == EnumFlutterType.CATERPILLAR;
+		}
+	},
+	COCOON{
+		@Override
+		public boolean isValid(ItemStack itemStack, IFilterData data) {
+			return data.isPresent() && data.getType() == EnumFlutterType.COCOON;
+		}
+	};
 
 	private final String uid;
-	private final Set<IFilterLogic> logic;
 
-	DefaultFilterRule() {
-		this.uid = "forestry.default." + name().toLowerCase(Locale.ENGLISH);
-		this.logic = new HashSet<>();
+	LepidopterologyFilterRuleType() {
+		this.uid = "forestry.lepidopterology." + name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public static void init() {
-		for (DefaultFilterRule rule : values()) {
+		for (LepidopterologyFilterRuleType rule : values()) {
 			AlleleManager.filterRegistry.registerFilter(rule);
 		}
 	}
 
 	@Override
-	public boolean isValid(ItemStack itemStack, IFilterData data) {
-		for (IFilterLogic logic : logic) {
-			if (logic.isValid(itemStack, data)) {
-				return true;
-			}
-		}
-		return false;
+	public void addLogic(IFilterRule logic) {
 	}
 
 	@Override
-	public void addLogic(IFilterLogic logic) {
-		if (logic == this) {
-			throw new IllegalArgumentException();
-		}
-		this.logic.add(logic);
+	public boolean isContainer() {
+		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -91,8 +83,12 @@ public enum DefaultFilterRule implements IFilterRule {
 	}
 
 	@Override
+	public String getRootUID() {
+		return ButterflyManager.butterflyRoot.getUID();
+	}
+
+	@Override
 	public String getUID() {
 		return uid;
 	}
-
 }

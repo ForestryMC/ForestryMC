@@ -6,12 +6,16 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.capabilities.CapabilityManager;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IFilterLogic;
 import forestry.api.modules.ForestryModule;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.ModuleCore;
+import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
@@ -42,11 +46,15 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
+
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
+
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -56,7 +64,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		DefaultFilterRule.init();
+		DefaultFilterRuleType.init();
 	}
 
 	@Override

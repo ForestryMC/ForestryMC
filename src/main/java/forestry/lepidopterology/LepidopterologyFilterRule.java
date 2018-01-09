@@ -1,81 +1,69 @@
 package forestry.lepidopterology;
 
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRule;
+import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.core.render.TextureManagerForestry;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.sorting.DefaultFilterRuleType;
 
 public enum LepidopterologyFilterRule implements IFilterRule {
-	FLUTTER{
+	PURE_BREED(DefaultFilterRuleType.PURE_BREED){
 		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return data.isPresent();
+		protected boolean isValid(IButterfly butterfly) {
+			return butterfly.isPureBred(EnumButterflyChromosome.SPECIES);
 		}
 	},
-	BUTTERFLY{
+	NOCTURNAL(DefaultFilterRuleType.NOCTURNAL){
 		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return data.isPresent() && data.getType() == EnumFlutterType.BUTTERFLY;
+		protected boolean isValid(IButterfly butterfly) {
+			return butterfly.getGenome().getNocturnal();
 		}
 	},
-	SERUM{
+	PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL){
 		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return data.isPresent() && data.getType() == EnumFlutterType.SERUM;
+		protected boolean isValid(IButterfly butterfly) {
+			return butterfly.getGenome().getNocturnal() && butterfly.isPureBred(EnumButterflyChromosome.NOCTURNAL);
 		}
 	},
-	CATERPILLAR{
+	FLYER(DefaultFilterRuleType.FLYER){
 		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return data.isPresent() && data.getType() == EnumFlutterType.CATERPILLAR;
+		protected boolean isValid(IButterfly butterfly) {
+			return butterfly.getGenome().getTolerantFlyer();
 		}
 	},
-	COCOON{
+	PURE_FLYER(DefaultFilterRuleType.PURE_FLYER){
 		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return data.isPresent() && data.getType() == EnumFlutterType.COCOON;
+		protected boolean isValid(IButterfly butterfly) {
+			return butterfly.getGenome().getTolerantFlyer() && butterfly.isPureBred(EnumButterflyChromosome.TOLERANT_FLYER);
 		}
 	};
 
-	private final String uid;
-
-	LepidopterologyFilterRule() {
-		this.uid = "forestry.lepidopterology." + name().toLowerCase(Locale.ENGLISH);
+	LepidopterologyFilterRule(IFilterRuleType rule) {
+		rule.addLogic(this);
 	}
 
 	public static void init() {
-		for (LepidopterologyFilterRule rule : values()) {
-			AlleleManager.filterRegistry.registerFilter(rule);
+	}
+
+	@Override
+	public boolean isValid(ItemStack itemStack, IFilterData data) {
+		if(!data.isPresent()){
+			return false;
 		}
+		IIndividual individual = data.getIndividual();
+		if(!(individual instanceof IButterfly)){
+			return false;
+		}
+		return isValid((IButterfly) individual);
 	}
 
-	@Override
-	public void addLogic(IFilterLogic logic) {
-		throw new IllegalStateException();
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public TextureAtlasSprite getSprite() {
-		return TextureManagerForestry.getInstance().getDefault("analyzer/" + name().toLowerCase(Locale.ENGLISH));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public ResourceLocation getTextureMap() {
-		return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
+	protected boolean isValid(IButterfly butterfly){
+		return false;
 	}
 
 	@Override
@@ -83,8 +71,4 @@ public enum LepidopterologyFilterRule implements IFilterRule {
 		return ButterflyManager.butterflyRoot.getUID();
 	}
 
-	@Override
-	public String getUID() {
-		return uid;
-	}
 }

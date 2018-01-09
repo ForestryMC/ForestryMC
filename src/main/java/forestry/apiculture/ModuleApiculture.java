@@ -234,8 +234,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
 		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
-			ApicultureFilterLogic.init();
 		}
 	}
 

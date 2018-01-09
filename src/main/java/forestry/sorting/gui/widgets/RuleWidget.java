@@ -10,21 +10,20 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterRule;
+import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.IFilterRuleType;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
-import forestry.sorting.network.packets.PacketFilterChangeRule;
 import forestry.sorting.tiles.TileGeneticFilter;
 
-public class RuleWidget extends Widget implements ISelectableProvider<IFilterRule> {
-	private static final ImmutableSet<IFilterRule> ENTRIES = createEntries();
+public class RuleWidget extends Widget implements ISelectableProvider<IFilterRuleType> {
+	private static final ImmutableSet<IFilterRuleType> ENTRIES = createEntries();
 
 	private final EnumFacing facing;
 	private final GuiGeneticFilter gui;
@@ -39,7 +38,8 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	public void draw(int startX, int startY) {
 		int x = xPos + startX;
 		int y = yPos + startY;
-		IFilterRule rule = gui.getTile().getRule(facing);
+		IFilterLogic logic = gui.getTile().getLogic();
+		IFilterRuleType rule = logic.getRule(facing);
 		draw(manager.gui, rule, x, y);
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
@@ -49,12 +49,12 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	}
 
 	@Override
-	public Collection<IFilterRule> getEntries() {
+	public Collection<IFilterRuleType> getEntries() {
 		return ENTRIES;
 	}
 
 	@Override
-	public void draw(GuiForestry gui, IFilterRule selectable, int x, int y) {
+	public void draw(GuiForestry gui, IFilterRuleType selectable, int x, int y) {
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		textureManager.bindTexture(selectable.getTextureMap());
 
@@ -63,15 +63,16 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	}
 
 	@Override
-	public String getName(IFilterRule selectable) {
+	public String getName(IFilterRuleType selectable) {
 		return Translator.translateToLocal("for.gui.filter." + selectable.getUID());
 	}
 
 	@Override
-	public void onSelect(IFilterRule selectable) {
+	public void onSelect(IFilterRuleType selectable) {
 		TileGeneticFilter filter = gui.getTile();
-		if (filter.setRule(facing, selectable)) {
-			NetworkUtil.sendToServer(new PacketFilterChangeRule(filter, facing, selectable));
+		IFilterLogic logic = filter.getLogic();
+		if (logic.setRule(facing, selectable)) {
+			logic.sendToServer(facing, selectable);
 		}
 		if (gui.selection.isSame(this)) {
 			gui.onModuleClick(this);
@@ -91,15 +92,16 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		IFilterRule rule = gui.getTile().getRule(facing);
+		IFilterLogic logic = gui.getTile().getLogic();
+		IFilterRuleType rule = logic.getRule(facing);
 		ToolTip tooltip = new ToolTip();
 		tooltip.add(getName(rule));
 		return tooltip;
 	}
 
-	private static ImmutableSet<IFilterRule> createEntries() {
-		ImmutableSet.Builder<IFilterRule> entries = ImmutableSet.builder();
-		for (IFilterRule rule : AlleleManager.filterRegistry.getRules()) {
+	private static ImmutableSet<IFilterRuleType> createEntries() {
+		ImmutableSet.Builder<IFilterRuleType> entries = ImmutableSet.builder();
+		for (IFilterRuleType rule : AlleleManager.filterRegistry.getRules()) {
 			entries.add(rule);
 		}
 		return entries.build();
