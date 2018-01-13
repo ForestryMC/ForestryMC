@@ -94,20 +94,6 @@ public class BeekeepingMode implements IBeekeepingMode {
 	}
 
 	@Override
-	public boolean isOverworked(IBee queen, IBeeHousing housing) {
-		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-
-		float productionModifier = beeModifier.getProductionModifier(queen.getGenome(), 1f);
-		if (productionModifier > 16) {
-			if (housing.getWorldObj().rand.nextFloat() * 100 < 0.01 * (productionModifier * productionModifier - 100)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
 	public boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
@@ -159,6 +145,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		@Override
 		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+			if(this.speedModifier>16.0f)
+			{
+				return 16.0f;
+			}
 			return this.speedModifier;
 		}
 	}
