@@ -24,10 +24,8 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
-import forestry.sorting.AlleleFilter;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
-import forestry.sorting.tiles.TileGeneticFilter;
 
 public class SpeciesWidget extends Widget implements ISelectableProvider<IAlleleSpecies> {
 	private final static ImmutableMap<IAlleleSpecies, ItemStack> ITEMS = createEntries();
@@ -62,9 +60,9 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	public void draw(int startX, int startY) {
 		int x = xPos + startX;
 		int y = yPos + startY;
-		AlleleFilter filter = gui.getTile().getGenomeFilter(facing, index);
-		if (filter != null) {
-			IAlleleSpecies allele = (IAlleleSpecies) (active ? filter.activeAllele : filter.inactiveAllele);
+		IFilterLogic logic = gui.getLogic();
+		IAlleleSpecies allele = (IAlleleSpecies) logic.getGenomeFilter(facing, index, active);
+		if (allele != null) {
 			GuiUtil.drawItemStack(manager.gui, ITEMS.getOrDefault(allele, ItemStack.EMPTY), x, y);
 		}
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
@@ -81,8 +79,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 
 	@Override
 	public void onSelect(@Nullable IAlleleSpecies selectable) {
-		TileGeneticFilter filter = gui.getTile();
-		IFilterLogic logic = filter.getLogic();
+		IFilterLogic logic = gui.getLogic();
 		if (logic.setGenomeFilter(facing, index, active, selectable)) {
 			logic.sendToServer(facing, (short) index, active, selectable);
 		}
@@ -105,11 +102,8 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	@Nullable
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		AlleleFilter filter = gui.getTile().getGenomeFilter(facing, index);
-		if (filter == null) {
-			return null;
-		}
-		IAlleleSpecies allele = (IAlleleSpecies) (active ? filter.activeAllele : filter.inactiveAllele);
+		IFilterLogic logic = gui.getLogic();
+		IAlleleSpecies allele = (IAlleleSpecies) logic.getGenomeFilter(facing, index, active);
 		if (allele == null) {
 			return null;
 		}

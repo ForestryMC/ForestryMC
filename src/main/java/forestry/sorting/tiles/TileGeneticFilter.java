@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -36,7 +37,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.sorting.AlleleFilter;
 import forestry.sorting.FilterData;
 import forestry.sorting.FilterLogic;
 import forestry.sorting.gui.ContainerGeneticFilter;
@@ -44,7 +44,7 @@ import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.inventory.InventoryFilter;
 import forestry.sorting.inventory.ItemHandlerFilter;
 
-public class TileGeneticFilter extends TileForestry implements IStreamableGui {
+public class TileGeneticFilter extends TileForestry implements IStreamableGui, IFilterContainer {
 	private static final int TRANSFER_DELAY = 5;
 
 	private final FilterLogic logic;
@@ -168,9 +168,14 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui {
 		return logic;
 	}
 
-	@Nullable
-	public AlleleFilter getGenomeFilter(EnumFacing facing, int index) {
-		return logic.getGenomeFilter(facing, index);
+	@Override
+	public IInventory getBuffer() {
+		return this;
+	}
+
+	@Override
+	public TileEntity getTileEntity() {
+		return this;
 	}
 
 	@SideOnly(Side.CLIENT)

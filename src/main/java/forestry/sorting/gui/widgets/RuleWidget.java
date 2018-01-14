@@ -20,7 +20,6 @@ import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
-import forestry.sorting.tiles.TileGeneticFilter;
 
 public class RuleWidget extends Widget implements ISelectableProvider<IFilterRuleType> {
 	private static final ImmutableSet<IFilterRuleType> ENTRIES = createEntries();
@@ -38,7 +37,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	public void draw(int startX, int startY) {
 		int x = xPos + startX;
 		int y = yPos + startY;
-		IFilterLogic logic = gui.getTile().getLogic();
+		IFilterLogic logic = gui.getLogic();
 		IFilterRuleType rule = logic.getRule(facing);
 		draw(manager.gui, rule, x, y);
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
@@ -69,8 +68,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public void onSelect(IFilterRuleType selectable) {
-		TileGeneticFilter filter = gui.getTile();
-		IFilterLogic logic = filter.getLogic();
+		IFilterLogic logic = gui.getLogic();
 		if (logic.setRule(facing, selectable)) {
 			logic.sendToServer(facing, selectable);
 		}
@@ -92,7 +90,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		IFilterLogic logic = gui.getTile().getLogic();
+		IFilterLogic logic = gui.getLogic();
 		IFilterRuleType rule = logic.getRule(facing);
 		ToolTip tooltip = new ToolTip();
 		tooltip.add(getName(rule));

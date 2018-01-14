@@ -10,6 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.api.genetics.IFilterLogic;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiForestryTitled;
@@ -18,17 +19,17 @@ import forestry.core.gui.widgets.WidgetScrollBar;
 import forestry.sorting.gui.widgets.RuleWidget;
 import forestry.sorting.gui.widgets.SelectionWidget;
 import forestry.sorting.gui.widgets.SpeciesWidget;
-import forestry.sorting.tiles.TileGeneticFilter;
+import forestry.sorting.tiles.IFilterContainer;
 
 public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> {
 
-	private final TileGeneticFilter tile;
+	private final IFilterContainer tile;
 	private final WidgetScrollBar scrollBar;
 	public final SelectionWidget selection;
 	@Nullable
 	private GuiTextField searchField;
 
-	public GuiGeneticFilter(TileGeneticFilter tile, InventoryPlayer inventory) {
+	public GuiGeneticFilter(IFilterContainer tile, InventoryPlayer inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/filter.png", new ContainerGeneticFilter(tile, inventory), tile);
 		ySize = 222;
 		xSize = 212;
@@ -153,8 +154,11 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		addHintLedger("filter");
 	}
 
-
-	public TileGeneticFilter getTile() {
+	public IFilterContainer getContainer() {
 		return tile;
+	}
+
+	public IFilterLogic getLogic(){
+		return tile.getLogic();
 	}
 }
