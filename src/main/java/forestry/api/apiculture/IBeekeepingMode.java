@@ -39,13 +39,14 @@ public interface IBeekeepingMode {
 
 	/**		
 	 * @return true if the queen is being overworked in the bee housing (with chance). will trigger a negative effect.		
-     * @deprecated bees max out at 16x productivity instead of being overworked.
-     * TODO remove this method in 1.13
+	 * @deprecated bees max out at 16x productivity instead of being overworked.
+	 * TODO remove this method in 1.13
 	 */
 	@Deprecated
-	 default boolean isOverworked(IBee queen, IBeeHousing housing) {
+	default boolean isOverworked(IBee queen, IBeeHousing housing) {
 		return false;
-		}
+	}
+
 	/**
 	 * @return true if the genetic structure of the queen is breaking down during spawning of the offspring (with chance). will trigger a negative effect.
 	 */
