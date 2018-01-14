@@ -61,6 +61,10 @@ public interface IFarmHousing extends IErrorLogicSource {
 		return false;
 	}
 
+	default boolean canPlantSoil(boolean manual){
+		return true;
+	}
+
 	/* INTERACTION WITH HATCHES */
 	IFarmInventory getFarmInventory();
 

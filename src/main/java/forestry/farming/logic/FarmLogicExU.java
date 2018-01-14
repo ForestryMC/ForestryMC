@@ -10,12 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -23,22 +18,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmInstance;
 import forestry.core.utils.BlockUtil;
-import forestry.farming.FarmRegistry;
 
 public class FarmLogicExU extends FarmLogicHomogeneous {
 
 	private final String name;
 	private final Item iconItem;
 
-	public FarmLogicExU(String name, Item iconItem, Block soil, String farmablesKey) {
-		super(new ItemStack(soil), soil.getDefaultState(), FarmRegistry.getInstance().getFarmables(farmablesKey));
-		if (soil.equals(Blocks.REDSTONE_ORE)) {
-			super.addSoil(new ItemStack(Blocks.LIT_REDSTONE_ORE), Blocks.LIT_REDSTONE_ORE.getDefaultState(), false);
-		}
+	public FarmLogicExU(IFarmInstance instance, boolean isManual, String name, Item iconItem) {
+		super(instance, isManual);
 		this.name = name;
 		this.iconItem = iconItem;
 	}
@@ -66,25 +56,6 @@ public class FarmLogicExU extends FarmLogicHomogeneous {
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return NonNullList.create();
-	}
-
-	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable farmable : farmables) {
-				ICrop crop = farmable.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
-
-		}
-		return crops;
-
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -24,14 +23,14 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
-import forestry.farming.FarmRegistry;
 
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
-	public FarmLogicInfernal() {
-		super(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState(), FarmRegistry.getInstance().getFarmables("farmInfernal"));
+	public FarmLogicInfernal(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
 	}
 
 	@Override
@@ -64,8 +63,11 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
+			if (world.isAirBlock(pos)) {
+				continue;
+			}
 			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable farmable : farmables) {
+			for (IFarmable farmable : getFarmables()) {
 				ICrop crop = farmable.getCropAt(world, position, blockState);
 				if (crop != null) {
 					crops.push(crop);

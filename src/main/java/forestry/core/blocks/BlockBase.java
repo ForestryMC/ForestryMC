@@ -76,7 +76,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public final P blockType;
 
 	private final ParticleHelper.Callback particleCallback;
-	protected final BlockStateContainer blockState;
 
 	public BlockBase(P blockType, Material material) {
 		super(material);
@@ -88,9 +87,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.hasCustom = blockType instanceof IBlockTypeCustom;
 		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
 
-		this.blockState = this.createBlockState();
-		IBlockState state = this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
-		this.setDefaultState(state);
+		this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}

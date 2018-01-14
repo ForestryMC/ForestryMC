@@ -28,10 +28,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.ModuleCore;
@@ -40,12 +40,11 @@ import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
-	private final Collection<IFarmable> farmables;
 	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
-	public FarmLogicOrchard() {
-		this.farmables = ForestryAPI.farmRegistry.getFarmables("farmOrchard");
+	public FarmLogicOrchard(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.AGRICRAFT) || ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT)) {
@@ -64,8 +63,6 @@ public class FarmLogicOrchard extends FarmLogic {
 		//				traversalBlocksBuilder.add(grapeVine);
 		//			}
 		//		}
-
-		traversalBlocksBuilder.build();
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
 
@@ -209,7 +206,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			return true;
 		}
 
-		for (IFarmable farmable : farmables) {
+		for (IFarmable farmable : getFarmables()) {
 			if (farmable.isSaplingAt(world, position)) {
 				return true;
 			}
@@ -238,7 +235,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			}
 		} else {
 			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : farmables) {
+			for (IFarmable seed : getFarmables()) {
 				ICrop crop = seed.getCropAt(world, position, blockState);
 				if (crop != null) {
 					return crop;

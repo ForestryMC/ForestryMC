@@ -34,11 +34,16 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.farmables.FarmableCocoa;
 
 public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();
+
+	public FarmLogicCocoa(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
+	}
 
 	@Override
 	public ItemStack getIconItemStack() {

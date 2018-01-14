@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -22,18 +17,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.farming.FarmRegistry;
+import forestry.api.farming.IFarmInstance;
 
 public class FarmLogicReeds extends FarmLogicSoil {
-	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmPoales");
-
-
-	public FarmLogicReeds() {
-		addSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
-		addSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
+	public FarmLogicReeds(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
 	}
 
 	@Override
@@ -61,18 +50,12 @@ public class FarmLogicReeds extends FarmLogicSoil {
 	}
 
 	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
+	public boolean isAcceptedResource(ItemStack itemStack) {
 		if (isManual) {
 			return false;
 		}
 
-		for(Soil soil : soils){
-			ItemStack resource = soil.getResource();
-			if(resource.isItemEqual(itemstack)){
-				return true;
-			}
-		}
-		return false;
+		return super.isAcceptedResource(itemStack);
 
 	}
 
@@ -98,23 +81,6 @@ public class FarmLogicReeds extends FarmLogicSoil {
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
-	}
-
-	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : germlings) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
-		}
-		return crops;
 	}
 
 }

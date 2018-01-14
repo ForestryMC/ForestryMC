@@ -74,9 +74,9 @@ import forestry.core.utils.Translator;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmHelper.FarmWorkStatus;
 import forestry.farming.FarmHelper.Stage;
+import forestry.farming.FarmRegistry;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
-import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
 
@@ -630,7 +630,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void resetFarmLogic(FarmDirection direction) {
-		setFarmLogic(direction, new FarmLogicArboreal());
+		setFarmLogic(direction, FarmRegistry.getInstance().getFarm("farmArboreal").getLogic(false));
 	}
 
 	@Override

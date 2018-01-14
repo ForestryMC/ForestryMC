@@ -62,7 +62,7 @@ public class FarmableAgingCrop implements IFarmable {
 		}
 
 		IBlockState replantState = getReplantState(blockState);
-		return new CropDestroy(world, blockState, pos, replantState);
+		return new CropDestroy(world, blockState, pos, replantState, germling);
 	}
 
 	@Nullable

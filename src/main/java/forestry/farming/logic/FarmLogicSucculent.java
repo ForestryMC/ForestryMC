@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -22,19 +18,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmInstance;
 import forestry.core.utils.ItemStackUtil;
-import forestry.farming.FarmRegistry;
 
 public class FarmLogicSucculent extends FarmLogicSoil {
-	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmSucculentes");
-	
-	public FarmLogicSucculent() {
-		addSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
+	public FarmLogicSucculent(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
 	}
-	
+
 	@Override
 	public ItemStack getIconItemStack() {
 		return new ItemStack(Items.DYE, 1, 2);
@@ -48,7 +40,7 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 			return "Managed Succulent Farm";
 		}
 	}
-	
+
 	@Override
 	public int getFertilizerConsumption() {
 		return 10;
@@ -58,20 +50,14 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 	public int getWaterConsumption(float hydrationModifier) {
 		return 1;
 	}
-	
+
 	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
+	public boolean isAcceptedResource(ItemStack itemStack) {
 		if (isManual) {
 			return false;
 		}
 
-		for(Soil soil : soils){
-			ItemStack resource = soil.getResource();
-			if(resource.isItemEqual(itemstack)) {
-				return true;
-			}
-		}
-		return false;
+		return super.isAcceptedResource(itemStack);
 	}
 
 	@Override
@@ -96,23 +82,6 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
-	}
-
-	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : germlings) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
-		}
-		return crops;
 	}
 
 }

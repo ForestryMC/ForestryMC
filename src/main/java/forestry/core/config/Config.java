@@ -102,6 +102,11 @@ public class Config {
 	private static boolean enableExUtilRedOrchid = true;
 	private static boolean enableMagicalCropsSupport = true;
 
+	// Cultivation
+	public static int planterExtend = 4;
+	public static boolean ringFarms = false;
+	public static int ringSize = 4;
+
 	// Mail
 	public static boolean mailAlertEnabled = true;
 	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
@@ -265,6 +270,10 @@ public class Config {
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+
+		planterExtend = configCommon.getIntLocalized("tweaks.cultivation", "extend", planterExtend, 1, 15);
+		ringFarms = configCommon.getBooleanLocalized("tweaks.cultivation", "ring", ringFarms);
+		ringSize = configCommon.getIntLocalized("tweaks.cultivation", "ring_size", ringSize, 1, 8);
 
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks", "capsule", CapsuleFluidPickup);
 

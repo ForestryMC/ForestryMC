@@ -8,7 +8,9 @@ package forestry.api.farming;
 import net.minecraft.item.ItemStack;
 
 /**
- * A simple version of the IFarmLogic. 
+ * A simple version of the IFarmLogic.
+ *
+ * @apiNote TODO Remove this in 1.13
  */
 public interface ISimpleFarmLogic {
 
@@ -16,7 +18,11 @@ public interface ISimpleFarmLogic {
 	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.
 	 */
 	ItemStack getIconItemStack();
-	
+
+	/**
+	 * @deprecated Since 5.8
+	 */
+	@Deprecated
 	Iterable<IFarmable> getSeeds();
 
 	String getName();

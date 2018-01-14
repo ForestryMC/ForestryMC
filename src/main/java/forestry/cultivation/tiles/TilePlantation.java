@@ -2,11 +2,10 @@ package forestry.cultivation.tiles;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmLogic;
-
 public class TilePlantation extends TilePlanter {
-	public TilePlantation(IFarmLogic logic) {
-		super(logic);
+
+	public TilePlantation() {
+		super("farmRubber");
 	}
 
 	@Override

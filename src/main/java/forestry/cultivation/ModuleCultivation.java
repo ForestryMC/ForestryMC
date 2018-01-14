@@ -18,6 +18,7 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
+import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockRegistryCultivation;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -113,5 +114,10 @@ public class ModuleCultivation extends BlankForestryModule {
 			'G', OreDictUtil.BLOCK_GLASS,
 			'W', Items.NETHER_WART,
 			'A', blocks.arboretum);
+
+		for(BlockPlanter planter : getBlocks().getPlanters()){
+			RecipeUtil.addRecipe(planter.blockType.getName() + "_manual_managed", planter.get(true), "#  ", "   ", "   ", '#', planter.get(false));
+			RecipeUtil.addRecipe(planter.blockType.getName() + "_managed_manual", planter.get(false), "#  ", "   ", "   ", '#', planter.get(true));
+		}
 	}
 }

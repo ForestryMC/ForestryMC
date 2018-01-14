@@ -33,6 +33,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -64,12 +65,10 @@ import forestry.farming.multiblock.FarmHydrationManager;
 
 public abstract class TilePlanter extends TilePowered implements IFarmHousing, IClimatised, ILiquidTankTile, IOwnedTile, IStreamableGui {
 
-	private final static int ALLOWED_EXTENT = 4;
-
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
 	private final Stack<ItemStack> pendingProduce = new Stack<>();
 	private final List<ICrop> pendingCrops = new LinkedList<>();
-	private final IFarmLogic logic;
+	private final String identifier;
 
 	private final FarmHydrationManager hydrationManager;
 	private final FarmFertilizerManager fertilizerManager;
@@ -80,19 +79,23 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	private int platformHeight = -1;
 	private Stage stage = Stage.CULTIVATE;
+	private boolean isManual;
+	private IFarmLogic logic;
 	@Nullable
 	private Vec3i offset;
 	@Nullable
 	private Vec3i area;
 
-	public TilePlanter(String identifier) {
-		this(FarmRegistry.getInstance().getFarmLogic(identifier));
+	public void setManual(boolean manual) {
+		isManual = manual;
+		logic = FarmRegistry.getInstance().getFarm(identifier).getLogic(manual);
 	}
 
-	protected TilePlanter(IFarmLogic logic) {
+	protected TilePlanter(String identifier) {
 		super(150, 1500);
+		this.identifier = identifier;
+		setManual(false);
 		setInternalInventory(inventory = new InventoryPlanter(this));
-		this.logic = logic;
 		this.hydrationManager = new FarmHydrationManager(this);
 		this.fertilizerManager = new FarmFertilizerManager();
 
@@ -203,6 +206,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		tankManager.writeToNBT(data);
 		fertilizerManager.writeToNBT(data);
 		ownerHandler.writeToNBT(data);
+		data.setBoolean("isManual", isManual);
 		return data;
 	}
 
@@ -213,6 +217,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		tankManager.readFromNBT(data);
 		fertilizerManager.readFromNBT(data);
 		ownerHandler.readFromNBT(data);
+		setManual(data.getBoolean("isManual"));
 	}
 
 	@Override
@@ -231,8 +236,20 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	private void setUpFarmlandTargets() {
 		BlockPos targetStart = getCoords();
+		BlockPos minPos = pos;
+		BlockPos maxPos = pos;
+		int size = 1;
+		int extend = Config.planterExtend;
 
-		FarmHelper.createTargets(world, this, targets, targetStart, ALLOWED_EXTENT, 1, 1, pos, pos);
+		if(Config.ringFarms){
+			int ringSize = Config.ringSize;
+			minPos = pos.add(-ringSize, 0 , -ringSize);
+			maxPos = pos.add(ringSize, 0, ringSize);
+			size = 1 + ringSize * 2;
+			extend--;
+		}
+
+		FarmHelper.createTargets(world, this, targets, targetStart, extend, size, size, minPos, maxPos);
 		FarmHelper.setExtents(world, this, targets);
 	}
 
@@ -331,7 +348,11 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	@Override
 	public Vec3i getArea() {
 		if (area == null) {
-			area = new Vec3i(7 + ALLOWED_EXTENT * 2, 13, 7 + ALLOWED_EXTENT * 2);
+			int basisArea = 5;
+			if(Config.ringFarms){
+				basisArea = basisArea + 1 + Config.ringSize * 2;
+			}
+			area = new Vec3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
 		}
 		return area;
 	}
@@ -386,6 +407,11 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	@Override
 	public boolean isSquare() {
 		return true;
+	}
+
+	@Override
+	public boolean canPlantSoil(boolean manual) {
+		return !isManual;
 	}
 
 	@Override

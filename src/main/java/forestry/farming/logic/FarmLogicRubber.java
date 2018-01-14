@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmInstance;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.farming.logic.crops.CropRubber;
@@ -34,7 +35,8 @@ public class FarmLogicRubber extends FarmLogic {
 
 	private boolean active = true;
 
-	public FarmLogicRubber() {
+	public FarmLogicRubber(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
 		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
 			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
 			active = false;
@@ -131,5 +133,5 @@ public class FarmLogicRubber extends FarmLogic {
 
 		return crops;
 	}
-	
+
 }

@@ -30,8 +30,8 @@ import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
+import forestry.farming.FarmRegistry;
 import forestry.farming.gui.IFarmLedgerDelegate;
-import forestry.farming.logic.FarmLogicArboreal;
 
 public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
 	public static final FakeFarmController instance = new FakeFarmController();
@@ -87,7 +87,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public IFarmLogic getFarmLogic(FarmDirection direction) {
-		return new FarmLogicArboreal();
+		return FarmRegistry.getInstance().getFarm("farmArboreal").getLogic(false);
 	}
 
 	@Override

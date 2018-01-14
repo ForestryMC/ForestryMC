@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.farming.logic;
+package forestry.cultivation.items;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

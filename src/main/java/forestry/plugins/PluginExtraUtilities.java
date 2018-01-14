@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,8 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
+import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.Circuits;
@@ -61,17 +64,19 @@ public class PluginExtraUtilities extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		if (Config.isExUtilRedOrchidEnabled()) {
-			registerExPlant("Orchid", "redorchid", "Red Orchid", Blocks.REDSTONE_ORE, circuit -> Circuits.farmOrchidManaged = circuit);
+			registerExPlant("Orchid", "redorchid", "Red Orchid", circuit -> Circuits.farmOrchidManaged = circuit, Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE);
 		}
 
 		if (Config.isExUtilEnderLilyEnabled()) {
-			registerExPlant("Ender", "enderlilly", "Ender Lily", Blocks.END_STONE, circuit -> Circuits.farmEnderManaged = circuit);
+			registerExPlant("Ender", "enderlilly", "Ender Lily", circuit -> Circuits.farmEnderManaged = circuit, Blocks.END_STONE);
 		}
 	}
 
 	@Override
 	public void registerRecipes() {
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) return;
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+			return;
+		}
 		if(Circuits.farmEnderManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
 			ChipsetManager.solderManager.addRecipe(layoutManaged, ModuleCore.getItems().tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
@@ -82,22 +87,28 @@ public class PluginExtraUtilities extends BlankForestryModule {
 		}
 	}
 
-	private void registerExPlant(String id, String itemResourceName, String itemName, Block soil, Consumer<ICircuit> assignTo) {
+	private void registerExPlant(String id, String itemResourceName, String itemName, Consumer<ICircuit> assignTo, Block... soils) {
 		Block plantBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ExU, itemResourceName));
 		Item plantItem = Item.getItemFromBlock(plantBlock);
 		if(plantBlock == Blocks.AIR) {
 			Log.error("Could not find {} block.", itemName);
-		} else if (plantItem == null) {
+		} else if (plantItem == Items.AIR) {
 			Log.error("Could not find {} item.", itemName);
 		} else {
 			IProperty<Integer> growthProperty = BlockUtil.getProperty(plantBlock, "growth", Integer.class);
 			if (growthProperty == null) {
 				Log.error("Could not find the growth property of {}.", itemName);
 			} else {
+				IFarmRegistry registry = FarmRegistry.getInstance();
 				int harvestAge = Collections.max(growthProperty.getAllowedValues());
 				int replantAge = plantBlock.getDefaultState().getValue(growthProperty);
-				FarmRegistry.getInstance().registerFarmables(itemName, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, growthProperty, harvestAge, replantAge));
-				assignTo.accept(new CircuitFarmLogic("managed" + id, new FarmLogicExU("Managed " + itemName + " Farm", plantItem, soil, itemName)));
+				registry.registerFarmables(itemName, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, growthProperty, harvestAge, replantAge));
+
+				IFarmInstance instance = registry.registerLogic("farm" + id, (i, m) -> new FarmLogicExU(i, m, (m ? "Manual " : "Managed ") + itemName + " Farm", plantItem), itemName);
+				for(Block soil : soils) {
+					instance.registerSoil(new ItemStack(soil), soil.getDefaultState());
+				}
+				assignTo.accept(new CircuitFarmLogic("managed" + id, instance, false));
 			}
 		}
 	}

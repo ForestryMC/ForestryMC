@@ -34,6 +34,7 @@ public class CropBasicIC2Crop extends Crop {
 
 	/**
 	 * Check if there is an instance of ICropTile.
+	 *
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if there is an IC2 crop and false otherwise.
 	 */
@@ -44,6 +45,7 @@ public class CropBasicIC2Crop extends Crop {
 
 	/**
 	 * Check if an IC2 crop is ready to be harvested.
+	 *
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if crop size is optimal for harvest and false otherwise.
 	 */
@@ -64,6 +66,7 @@ public class CropBasicIC2Crop extends Crop {
 	/**
 	 * This function takes care of everything related to the harvesting of the
 	 * crop meaning it will calculate the drops and also do setSizeAfterHarvest().
+	 *
 	 * @param tileEntity tile entity to be checked.
 	 * @return list containing the drops.
 	 */

@@ -31,6 +31,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
+import forestry.api.farming.IFarmInstance;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.modules.ForestryModule;
@@ -116,7 +117,9 @@ public class PluginIC2 extends BlankForestryModule {
 		rubber = IC2Items.getItem("crafting", "rubber");
 		fertilizer = IC2Items.getItem("crop_res","fertilizer");
 
-		Circuits.farmRubberManual = new CircuitFarmLogic("manualRubber", new FarmLogicRubber());
+		IFarmInstance rubberFarm = FarmRegistry.getInstance().registerLogic("farmRubber", FarmLogicRubber::new);
+
+		Circuits.farmRubberManual = new CircuitFarmLogic("manualRubber", rubberFarm, true);
 
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin", CircuitSocketType.ELECTRIC_ENGINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);

@@ -77,11 +77,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	@Override
 	@Nullable
 	public ICircuitLayout getLayout(String uid) {
-		if (layoutMap.containsKey(uid)) {
-			return layoutMap.get(uid);
-		} else {
-			return null;
-		}
+		return layoutMap.getOrDefault(uid, null);
 	}
 
 	/* CIRCUITS */

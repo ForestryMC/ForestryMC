@@ -1,20 +1,23 @@
 package forestry.farming.logic;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
-public abstract class FarmLogicSoil extends FarmLogic {
-	protected final Set<Soil> soils = new HashSet<>();
+import forestry.api.farming.IFarmInstance;
 
-	public FarmLogicSoil() {
+public abstract class FarmLogicSoil extends FarmLogic {
+
+	public FarmLogicSoil(IFarmInstance instance, boolean isManual) {
+		super(instance, isManual);
+	}
+
+	protected boolean isAcceptedSoil(IBlockState blockState) {
+		return instance.isAcceptedSoil(blockState);
 	}
 
 	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		soils.add(new Soil(resource,soilState,hasMetaData));
+	public boolean isAcceptedResource(ItemStack itemStack) {
+		return instance.isAcceptedResource(itemStack);
 	}
 
 }
