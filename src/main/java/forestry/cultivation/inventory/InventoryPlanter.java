@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.cultivation.IPlanterHousing;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
@@ -21,9 +20,9 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.cultivation.tiles.TilePlanter;
 import forestry.farming.multiblock.IFarmInventoryInternal;
 
 public class InventoryPlanter extends InventoryAdapterRestricted implements IFarmInventoryInternal {
@@ -43,14 +42,14 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 
 	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 
-	private final IPlanterHousing housing;
+	private final TilePlanter housing;
 
 	private final IInventory resourcesInventory;
 	private final IInventory germlingsInventory;
 	private final IInventory productInventory;
 	private final IInventory fertilizerInventory;
 
-	public InventoryPlanter(IPlanterHousing housing) {
+	public InventoryPlanter(TilePlanter housing) {
 		super(SLOT_COUNT, "Items");
 		this.housing = housing;
 
@@ -70,7 +69,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && ((ILiquidTankTile) housing).getTankManager().canFillFluidType(fluid);
+			return fluid != null && housing.getTankManager().canFillFluidType(fluid);
 		}
 		return false;
 	}
