@@ -12,13 +12,17 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.common.model.IModelState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 /**
  * A model baker to make custom models
+ *
+ * @deprecated TODO Remove in 1.13: Not needed in the api
  */
+@Deprecated
 @SideOnly(Side.CLIENT)
 public interface IModelBaker {
 
