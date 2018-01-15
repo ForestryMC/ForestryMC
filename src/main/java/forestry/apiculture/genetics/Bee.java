@@ -476,11 +476,6 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 
-		// All work and no play makes queen a dull girl.
-		if (mode.isOverworked(this, housing)) {
-			setIsNatural(false);
-		}
-
 		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		IBeeModifier beeModeModifier = mode.getBeeModifier();
 

@@ -40,6 +40,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.commands.TreeGenHelper;
+import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
 
 public class TreeDecorator {
@@ -54,6 +55,8 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
+		if(Config.blacklistedTreeDims.contains(world.provider.getDimension()))
+			return;
 		if (biomeCache.isEmpty()) {
 			generateBiomeCache(world, rand);
 		}
