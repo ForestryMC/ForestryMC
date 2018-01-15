@@ -119,7 +119,7 @@ public class WidgetDatabaseSlot extends Widget {
 		}
 		if(mouseButton == 1){
 			flags |= PacketExtractItem.HALF;
-		}else if(mouseButton == 2){
+		}else if(mouseButton == 2 && manager.minecraft.player.capabilities.isCreativeMode){
 			flags |= PacketExtractItem.CLONE;
 		}
 		NetworkUtil.sendToServer(new PacketExtractItem(item.invIndex, flags));
