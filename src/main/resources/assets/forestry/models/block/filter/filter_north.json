@@ -1,0 +1,6 @@
+{
+	"parent": "forestry:block/filter/filter_side",
+	"textures": {
+		"wool": "blocks/wool_colored_red"
+	}
+}

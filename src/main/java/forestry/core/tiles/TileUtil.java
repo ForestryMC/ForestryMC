@@ -24,6 +24,8 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -120,5 +122,14 @@ public abstract class TileUtil {
 		}
 
 		return null;
+	}
+
+	@Nullable
+	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing){
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity == null || !tileEntity.hasCapability(capability, facing)){
+			return null;
+		}
+		return tileEntity.getCapability(capability, facing);
 	}
 }
