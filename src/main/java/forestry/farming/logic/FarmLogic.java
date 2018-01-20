@@ -65,19 +65,27 @@ public abstract class FarmLogic implements IFarmLogic {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			if (world.isAirBlock(position)) {
-				continue;
-			}
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : getFarmables()) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
+			ICrop crop = getCrop(world, position);
+			if(crop != null){
+				crops.push(crop);
 			}
 		}
 		return crops;
+	}
+
+	@Nullable
+	protected ICrop getCrop(World world, BlockPos position){
+		if (world.isAirBlock(position)) {
+			return null;
+		}
+		IBlockState blockState = world.getBlockState(position);
+		for (IFarmable seed : getFarmables()) {
+			ICrop crop = seed.getCropAt(world, position, blockState);
+			if (crop != null) {
+				return crop;
+			}
+		}
+		return null;
 	}
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);

@@ -1,5 +1,7 @@
 package forestry.cultivation.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -7,8 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.blocks.BlockBase;
+import forestry.core.render.ParticleRender;
 import forestry.cultivation.tiles.TilePlanter;
 
 public class BlockPlanter extends BlockBase<BlockTypePlanter> {
@@ -36,6 +37,16 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, MANUAL);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if(blockType == BlockTypePlanter.FARM_ENDER){
+			for (int i = 0; i < 3; ++i) {
+				ParticleRender.addPortalFx(worldIn, pos, rand);
+			}
+		}
 	}
 
 	@Override
@@ -63,6 +74,11 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(MANUAL) ? 1 : 0;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		ModelLoader.setCustomStateMapper(this, new PlanterStateMapper());
@@ -87,16 +103,10 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	public static boolean isManual(ItemStack stack){
-		NBTTagCompound tagCompound = stack.getTagCompound();
-		if(tagCompound != null){
-			return tagCompound.getBoolean("Manual");
-		}
-		return false;
+		return stack.getMetadata() == 1;
 	}
 
 	public ItemStack get(boolean isManual){
-		ItemStack stack = new ItemStack(this);
-		stack.setTagInfo("Manual", new NBTTagByte((byte) (isManual ? 1 : 0)));
-		return stack;
+		return new ItemStack(this, 1, isManual ? 1 : 0);
 	}
 }

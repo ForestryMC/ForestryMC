@@ -65,6 +65,7 @@ import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCocoa;
 import forestry.farming.logic.FarmLogicCrops;
+import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmLogicGourd;
 import forestry.farming.logic.FarmLogicInfernal;
 import forestry.farming.logic.FarmLogicMushroom;
@@ -73,6 +74,7 @@ import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicReeds;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableChorus;
 import forestry.farming.logic.farmables.FarmableGE;
 import forestry.farming.logic.farmables.FarmableGourd;
 import forestry.farming.logic.farmables.FarmableStacked;
@@ -153,6 +155,8 @@ public class ModuleFarming extends BlankForestryModule {
 
 		registry.registerFarmables("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
+		registry.registerFarmables("farmEnder", FarmableChorus.INSTANCE);
+
 		//Forestry fertilizer
 		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 
@@ -198,6 +202,7 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmInstance orchardFarm = registry.registerLogic("farmOrchard", FarmLogicOrchard::new);
 		IFarmInstance gourdFarm = registry.registerLogic("farmGourd", FarmLogicGourd::new);
 		IFarmInstance cocoaFarm = registry.registerLogic("farmCocoa", FarmLogicCocoa::new);
+		IFarmInstance enderFarm = registry.registerLogic("farmEnder", FarmLogicEnder::new);
 
 		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
 		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);
@@ -225,16 +230,24 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmOrchardManaged = new CircuitFarmLogic("managedOrchard", orchardFarm, false);
 		Circuits.farmOrchardManual = new CircuitFarmLogic("manualOrchard", orchardFarm, true);
 
+		Circuits.farmSucculentManaged = new CircuitFarmLogic("managedSucculent", succulentFarm, false);
 		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", succulentFarm, true);
 		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
 
-		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true).setManual();
+		Circuits.farmPoalesManaged = new CircuitFarmLogic("managedPoales", poalesFarm, false);
+		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true);
 		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
 		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
 
-		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true).setManual();
+		Circuits.farmGourdManaged = new CircuitFarmLogic("managedGourd", gourdFarm, false);
+		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true);
 
-		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true).setManual();
+		Circuits.farmCocoaManaged = new CircuitFarmLogic("managedCocoa", cocoaFarm, false);
+		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
+
+		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
+		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, false);
+		enderFarm.registerSoil(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState());
 	}
 
 	@Override
@@ -302,20 +315,28 @@ public class ModuleFarming extends BlankForestryModule {
 			return;
 		}
 
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmArborealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPeatManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
 		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
 		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
 		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmOrchardManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPeatManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmSucculentManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmGourdManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
 	}
 
 	@Override

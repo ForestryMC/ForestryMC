@@ -2,14 +2,14 @@ package forestry.cultivation.blocks;
 
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.MachineProperties;
-import forestry.core.tiles.TileForestry;
 import forestry.cultivation.tiles.TileArboretum;
 import forestry.cultivation.tiles.TileBog;
 import forestry.cultivation.tiles.TileFarmCrops;
+import forestry.cultivation.tiles.TileFarmEnder;
 import forestry.cultivation.tiles.TileFarmGourd;
 import forestry.cultivation.tiles.TileFarmMushroom;
 import forestry.cultivation.tiles.TileFarmNether;
+import forestry.cultivation.tiles.TilePlanter;
 
 public enum BlockTypePlanter implements IBlockTypeCustom {
 	ARBORETUM(TileArboretum.class, "arboretum"),
@@ -17,6 +17,7 @@ public enum BlockTypePlanter implements IBlockTypeCustom {
 	FARM_MUSHROOM(TileFarmMushroom.class, "farm_mushroom"),
 	FARM_GOURD(TileFarmGourd.class, "farm_gourd"),
 	FARM_NETHER(TileFarmNether.class, "farm_nether"),
+	FARM_ENDER(TileFarmEnder.class, "farm_ender"),
 	PEAT_POG(TileBog.class, "peat_bog"),
 
 	//TODO Add ic2 integration
@@ -24,8 +25,8 @@ public enum BlockTypePlanter implements IBlockTypeCustom {
 
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypePlanter(Class<T> teClass, String name) {
-		this.machineProperties = new MachineProperties<>(teClass, name);
+	BlockTypePlanter(Class<? extends TilePlanter> teClass, String name) {
+		this.machineProperties = new PlanterProperties<>(teClass, name);
 	}
 
 	@Override

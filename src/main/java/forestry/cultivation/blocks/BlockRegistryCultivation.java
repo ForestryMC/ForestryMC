@@ -14,6 +14,7 @@ public class BlockRegistryCultivation extends BlockRegistry {
 	public final BlockPlanter farmMushroom;
 	public final BlockPlanter farmGourd;
 	public final BlockPlanter farmNether;
+	public final BlockPlanter farmEnder;
 	public final BlockPlanter peatBog;
 	/*public final BlockPlanter plantation;*/
 
@@ -37,6 +38,10 @@ public class BlockRegistryCultivation extends BlockRegistry {
 		farmNether = new BlockPlanter(BlockTypePlanter.FARM_NETHER);
 		registerBlock(farmNether, new ItemBlockPlanter(farmNether), "farm_nether");
 		planters.add(farmNether);
+
+		farmEnder = new BlockPlanter(BlockTypePlanter.FARM_ENDER);
+		registerBlock(farmEnder, new ItemBlockPlanter(farmEnder), "farm_ender");
+		planters.add(farmEnder);
 
 		peatBog = new BlockPlanter(BlockTypePlanter.PEAT_POG);
 		registerBlock(peatBog, new ItemBlockPlanter(peatBog), "peat_bog");

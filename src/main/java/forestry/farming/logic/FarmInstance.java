@@ -1,9 +1,11 @@
 package forestry.farming.logic;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -13,23 +15,35 @@ import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
+import forestry.farming.FarmRegistry;
 
 public final class FarmInstance implements IFarmInstance {
 	private final Set<ISoil> soils = new HashSet<>();
-	private final Collection<IFarmable> farmables;
+	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
 	private final String identifier;
 
-	public FarmInstance(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, Collection<IFarmable> farmables) {
+	@Nullable
+	private Collection<IFarmable> farmables;
+
+	public FarmInstance(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
 		this.identifier = identifier;
-		this.farmables = farmables;
+		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.manualLogic = logicFactory.apply(this, true);
 		this.managedLogic = logicFactory.apply(this, false);
 	}
 
 	@Override
+	public void registerFarmables(String identifier) {
+		farmablesIdentifiers.add(identifier);
+	}
+
+	@Override
 	public Collection<IFarmable> getFarmables() {
+		if(farmables == null){
+			farmables = farmablesIdentifiers.stream().map(FarmRegistry.getInstance()::getFarmables).flatMap(Collection::stream).collect(Collectors.toSet());
+		}
 		return farmables;
 	}
 

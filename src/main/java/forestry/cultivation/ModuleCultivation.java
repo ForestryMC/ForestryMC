@@ -6,8 +6,6 @@ import com.google.common.collect.ImmutableSet;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.api.modules.ForestryModule;
@@ -53,6 +51,7 @@ public class ModuleCultivation extends BlankForestryModule {
 		blocks.farmMushroom.init();
 		blocks.farmNether.init();
 		blocks.farmGourd.init();
+		blocks.farmEnder.init();
 		//blocks.plantation.init();
 		blocks.peatBog.init();
 	}
@@ -85,39 +84,49 @@ public class ModuleCultivation extends BlankForestryModule {
 			"TCT",
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
-			'T', coreItems.tubes.get(EnumElectronTube.COPPER, 1),
+			'T', coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1),
 			'C', coreItems.sturdyCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_mushroom", blocks.farmMushroom,
-			"BGR",
-			"GAG",
-			"RGB",
+			"GTG",
+			"TCT",
+			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
-			'B', Blocks.BROWN_MUSHROOM,
-			'R', Blocks.RED_MUSHROOM,
-			'A', blocks.arboretum);
+			'T', coreItems.tubes.get(EnumElectronTube.APATITE, 1),
+			'C', coreItems.sturdyCasing,
+			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_gourd", blocks.farmGourd,
-			"MGP",
-			"GAG",
-			"PGM",
+			"GTG",
+			"TCT",
+			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
-			'M', Blocks.MELON_BLOCK,
-			'P', Blocks.PUMPKIN,
-			'A', blocks.arboretum);
+			'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1),
+			'C', coreItems.sturdyCasing,
+			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_nether", blocks.farmNether,
-			"WGW",
-			"GAG",
-			"WGW",
+			"GTG",
+			"TCT",
+			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
-			'W', Items.NETHER_WART,
-			'A', blocks.arboretum);
+			'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1),
+			'C', coreItems.sturdyCasing,
+			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
+
+		RecipeUtil.addRecipe("farm_ender", blocks.farmEnder,
+			"GTG",
+			"TCT",
+			"GBG",
+			'G', OreDictUtil.BLOCK_GLASS,
+			'T', coreItems.tubes.get(EnumElectronTube.ENDER, 1),
+			'C', coreItems.sturdyCasing,
+			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		for(BlockPlanter planter : getBlocks().getPlanters()){
-			RecipeUtil.addRecipe(planter.blockType.getName() + "_manual_managed", planter.get(true), "#  ", "   ", "   ", '#', planter.get(false));
-			RecipeUtil.addRecipe(planter.blockType.getName() + "_managed_manual", planter.get(false), "#  ", "   ", "   ", '#', planter.get(true));
+			RecipeUtil.addShapelessRecipe(planter.blockType.getName() + "_manual_managed", planter.get(true), planter.get(false));
+			RecipeUtil.addShapelessRecipe(planter.blockType.getName() + "_managed_manual", planter.get(false), planter.get(true));
 		}
 	}
 }

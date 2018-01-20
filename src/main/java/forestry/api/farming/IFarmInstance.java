@@ -14,6 +14,8 @@ public interface IFarmInstance {
 		registerSoil(resource, soilState, false);
 	}
 
+	void registerFarmables(String identifier);
+
 	void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData);
 
 	boolean isAcceptedSoil(IBlockState blockState);

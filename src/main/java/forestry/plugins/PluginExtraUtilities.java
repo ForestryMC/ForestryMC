@@ -68,7 +68,7 @@ public class PluginExtraUtilities extends BlankForestryModule {
 		}
 
 		if (Config.isExUtilEnderLilyEnabled()) {
-			registerExPlant("Ender", "enderlilly", "Ender Lily", circuit -> Circuits.farmEnderManaged = circuit, Blocks.END_STONE);
+			registerExPlant("Ender", "enderlilly", "Ender Lily", circuit -> Circuits.farmEnderManaged = circuit);
 		}
 	}
 
@@ -76,10 +76,6 @@ public class PluginExtraUtilities extends BlankForestryModule {
 	public void registerRecipes() {
 		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
 			return;
-		}
-		if(Circuits.farmEnderManaged != null) {
-			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			ChipsetManager.solderManager.addRecipe(layoutManaged, ModuleCore.getItems().tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 		}
 		if(Circuits.farmOrchidManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
@@ -99,16 +95,20 @@ public class PluginExtraUtilities extends BlankForestryModule {
 			if (growthProperty == null) {
 				Log.error("Could not find the growth property of {}.", itemName);
 			} else {
+				String identifier = "farm" + id;
 				IFarmRegistry registry = FarmRegistry.getInstance();
 				int harvestAge = Collections.max(growthProperty.getAllowedValues());
 				int replantAge = plantBlock.getDefaultState().getValue(growthProperty);
-				registry.registerFarmables(itemName, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, growthProperty, harvestAge, replantAge));
+				registry.registerFarmables(identifier, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, growthProperty, harvestAge, replantAge));
 
-				IFarmInstance instance = registry.registerLogic("farm" + id, (i, m) -> new FarmLogicExU(i, m, (m ? "Manual " : "Managed ") + itemName + " Farm", plantItem), itemName);
-				for(Block soil : soils) {
-					instance.registerSoil(new ItemStack(soil), soil.getDefaultState());
+				IFarmInstance instance = registry.getFarm(identifier);
+				if(instance == null) {
+					instance = registry.registerLogic(identifier, (i, m) -> new FarmLogicExU(i, m, (m ? "Manual " : "Managed ") + itemName + " Farm", plantItem), itemName);
+					for (Block soil : soils) {
+						instance.registerSoil(new ItemStack(soil), soil.getDefaultState());
+					}
+					assignTo.accept(new CircuitFarmLogic("managed" + id, instance, false));
 				}
-				assignTo.accept(new CircuitFarmLogic("managed" + id, instance, false));
 			}
 		}
 	}

@@ -36,15 +36,18 @@ import forestry.api.farming.IFarmable;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
+	@Nullable
 	private List<IFarmable> farmables;
 
 	public FarmLogicArboreal(IFarmInstance instance, boolean isManual) {
 		super(instance, isManual);
-		this.farmables = new ArrayList<>(instance.getFarmables());
 	}
 
 	@Override
 	public List<IFarmable> getFarmables() {
+		if(farmables == null){
+			this.farmables = new ArrayList<>(instance.getFarmables());
+		}
 		return farmables;
 	}
 

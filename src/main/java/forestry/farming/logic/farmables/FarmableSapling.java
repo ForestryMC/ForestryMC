@@ -60,8 +60,8 @@ public class FarmableSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == this.saplingBlock;
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+		return blockState.getBlock() == this.saplingBlock;
 	}
 
 	@Override

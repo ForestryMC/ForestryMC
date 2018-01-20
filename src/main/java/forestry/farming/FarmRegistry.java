@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 
@@ -41,7 +40,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
-	private final Map<String, IFarmLogic> logics = new HashMap<>();
 	private final Map<String, IFarmInstance> farmInstances = new HashMap<>();
 
 	public static FarmRegistry getInstance() {
@@ -51,7 +49,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	@Override
 	@Deprecated
 	public void registerLogic(String identifier, IFarmLogic logic) {
-		logics.put(identifier, logic);
 	}
 
 	@Override
@@ -103,8 +100,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	public IFarmInstance registerLogic(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
 		Set<String> fIdentifiers = new HashSet<>(Arrays.asList(farmablesIdentifiers));
 		fIdentifiers.add(identifier);
-		Collection<IFarmable> farmablesSet = fIdentifiers.stream().map(farmables::get).flatMap(Collection::stream).collect(Collectors.toSet());
-		IFarmInstance instance = new FarmInstance(identifier, logicFactory, farmablesSet);
+		IFarmInstance instance = new FarmInstance(identifier, logicFactory, fIdentifiers);
 		farmInstances.put(identifier, instance);
 		return instance;
 	}

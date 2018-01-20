@@ -28,14 +28,8 @@ import forestry.farming.logic.crops.CropDestroy;
 public class FarmableGE implements IFarmable {
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-
-		if (world.isAirBlock(pos)) {
-			return false;
-		}
-
-		Block block = world.getBlockState(pos).getBlock();
-		return ModuleArboriculture.getBlocks().saplingGE == block;
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+		return ModuleArboriculture.getBlocks().saplingGE == blockState.getBlock();
 	}
 
 	@Override

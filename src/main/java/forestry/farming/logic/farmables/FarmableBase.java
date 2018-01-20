@@ -25,8 +25,7 @@ public abstract class FarmableBase implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
 		return blockState.getBlock() == plantedState.getBlock() && blockState != matureState;
 	}
 

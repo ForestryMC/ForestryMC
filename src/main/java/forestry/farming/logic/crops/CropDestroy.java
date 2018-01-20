@@ -70,6 +70,8 @@ public class CropDestroy extends Crop {
 					}
 					removedSeed = true;
 				}
+			}else{
+				dropIterator.remove();
 			}
 		}
 

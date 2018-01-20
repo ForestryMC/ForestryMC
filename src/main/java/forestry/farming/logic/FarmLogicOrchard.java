@@ -137,7 +137,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position)) {
+		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
 			return crops;
 		}
 
@@ -184,11 +184,11 @@ public class FarmLogicOrchard extends FarmLogic {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}
-					if (isFruitBearer(world, candidate)) {
+					if (isFruitBearer(world, candidate, blockState)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 
-						ICrop crop = getCrop(world, candidate);
+						ICrop crop = getCropAt(world, candidate);
 						if (crop != null) {
 							crops.push(crop);
 						}
@@ -200,14 +200,14 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, BlockPos position) {
+	private boolean isFruitBearer(World world, BlockPos position, IBlockState blockState) {
 		IFruitBearer tile = TileUtil.getTile(world, position, IFruitBearer.class);
 		if (tile != null) {
 			return true;
 		}
 
 		for (IFarmable farmable : getFarmables()) {
-			if (farmable.isSaplingAt(world, position)) {
+			if (farmable.isSaplingAt(world, position, blockState)) {
 				return true;
 			}
 		}
@@ -226,7 +226,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Nullable
-	private ICrop getCrop(World world, BlockPos position) {
+	private ICrop getCropAt(World world, BlockPos position) {
 		IFruitBearer fruitBearer = TileUtil.getTile(world, position, IFruitBearer.class);
 
 		if (fruitBearer != null) {
@@ -234,13 +234,7 @@ public class FarmLogicOrchard extends FarmLogic {
 				return new CropFruit(world, position);
 			}
 		} else {
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : getFarmables()) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					return crop;
-				}
-			}
+			return getCrop(world, position);
 		}
 		return null;
 	}

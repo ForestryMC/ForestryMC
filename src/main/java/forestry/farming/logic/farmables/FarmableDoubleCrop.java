@@ -17,8 +17,7 @@ public class FarmableDoubleCrop extends FarmableBase {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
 		return blockState.getBlock() == plantedState.getBlock() && blockState != topMatureState;
 	}
 

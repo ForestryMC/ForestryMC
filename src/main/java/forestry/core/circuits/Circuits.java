@@ -15,11 +15,12 @@ public class Circuits {
 	public static ICircuit farmCropsManaged;
 	public static ICircuit farmPeatManaged;
 	public static ICircuit farmSucculentManaged;
-	public static ICircuit farmPoaleManaged;
+	public static ICircuit farmPoalesManaged;
 	public static ICircuit farmInfernalManaged;
 	public static ICircuit farmEnderManaged;
 	public static ICircuit farmOrchidManaged;
 	public static ICircuit farmGourdManaged;
+	public static ICircuit farmCocoaManaged;
 
 
 	public static ICircuit farmArborealManual;

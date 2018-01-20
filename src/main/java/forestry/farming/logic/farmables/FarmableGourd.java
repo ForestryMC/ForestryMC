@@ -35,8 +35,7 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
 		return blockState.getBlock() == stem;
 	}
 

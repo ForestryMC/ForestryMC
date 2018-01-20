@@ -37,8 +37,8 @@ public class FarmableRusticSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == germlingBlock;
+	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+		return blockState.getBlock() == germlingBlock;
 	}
 
 	@Override

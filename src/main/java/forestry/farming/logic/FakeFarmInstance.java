@@ -19,6 +19,10 @@ public class FakeFarmInstance implements IFarmInstance {
 	}
 
 	@Override
+	public void registerFarmables(String identifier) {
+	}
+
+	@Override
 	public void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
 	}
 
