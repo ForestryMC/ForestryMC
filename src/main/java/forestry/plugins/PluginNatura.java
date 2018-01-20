@@ -266,7 +266,7 @@ public class PluginNatura extends BlankForestryModule {
 	 */
 	@Override
 	public void postInit() {
-		IFarmProperties farmArboreal = FarmRegistry.getInstance().getFarm("managedArboreal");
+		IFarmProperties farmArboreal = FarmRegistry.getInstance().getProperties("managedArboreal");
 		if(farmArboreal != null) {
 			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
 		}

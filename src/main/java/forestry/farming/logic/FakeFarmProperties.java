@@ -37,11 +37,6 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return "farmFake";
-	}
-
-	@Override
 	public Collection<ISoil> getSoils() {
 		return Collections.emptySet();
 	}

@@ -88,7 +88,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	public void setManual(boolean manual) {
 		isManual = manual;
-		logic = FarmRegistry.getInstance().getFarm(identifier).getLogic(manual);
+		logic = FarmRegistry.getInstance().getProperties(identifier).getLogic(manual);
 	}
 
 	protected TilePlanter(String identifier) {

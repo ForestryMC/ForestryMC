@@ -64,7 +64,7 @@ public interface IFarmLogic {
 	}
 
 	/**
-	 * Use {@link IFarmRegistry#getFarm(String)} to get the soil container for the farm logic and register the soil
+	 * Use {@link IFarmRegistry#getProperties(String)} to get the {@link IFarmProperties} for the farm logic and register the soil
 	 * with {@link IFarmProperties#registerSoil(ItemStack, IBlockState, boolean)}.
 	 */
 	@Deprecated
@@ -78,7 +78,6 @@ public interface IFarmLogic {
 	String getName();
 
 	/* GUI ONLY */
-
 	/**
 	 * @deprecated No longer needed because mc always uses the same map for blocks and items.
 	 * TODO remove this method in 1.13

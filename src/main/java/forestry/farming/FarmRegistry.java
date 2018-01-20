@@ -88,23 +88,23 @@ public final class FarmRegistry implements IFarmRegistry {
 	}
 
 	@Override
-	public IFarmProperties registerLogic(IFarmProperties farmInstance) {
-		farmInstances.put(farmInstance.getIdentifier(), farmInstance);
+	public IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance) {
+		farmInstances.put(identifier, farmInstance);
 		return farmInstance;
 	}
 
 	@Override
 	public IFarmProperties registerLogic(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
-		Set<String> fIdentifiers = new HashSet<>(Arrays.asList(farmablesIdentifiers));
-		fIdentifiers.add(identifier);
-		IFarmProperties instance = new FarmProperties(identifier, logicFactory, fIdentifiers);
+		Set<String> identifiers = new HashSet<>(Arrays.asList(farmablesIdentifiers));
+		identifiers.add(identifier);
+		IFarmProperties instance = new FarmProperties(logicFactory, identifiers);
 		farmInstances.put(identifier, instance);
 		return instance;
 	}
 
 	@Override
 	@Nullable
-	public IFarmProperties getFarm(String identifier) {
+	public IFarmProperties getProperties(String identifier) {
 		return farmInstances.get(identifier);
 	}
 

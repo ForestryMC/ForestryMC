@@ -33,8 +33,7 @@ public class DummyFarmRegistry implements IFarmRegistry {
 	}
 
 	@Override
-	public IFarmProperties registerLogic(IFarmProperties farmInstance) {
-		//Dummy-Implementation
+	public IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance) {
 		return null;
 	}
 
@@ -69,7 +68,7 @@ public class DummyFarmRegistry implements IFarmRegistry {
 
 	@Nullable
 	@Override
-	public IFarmProperties getFarm(String identifier) {
+	public IFarmProperties getProperties(String identifier) {
 		//Dummy-Implementation
 		return null;
 	}

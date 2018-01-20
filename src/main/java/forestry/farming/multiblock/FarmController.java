@@ -630,7 +630,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void resetFarmLogic(FarmDirection direction) {
-		setFarmLogic(direction, FarmRegistry.getInstance().getFarm("farmArboreal").getLogic(false));
+		setFarmLogic(direction, FarmRegistry.getInstance().getProperties("farmArboreal").getLogic(false));
 	}
 
 	@Override

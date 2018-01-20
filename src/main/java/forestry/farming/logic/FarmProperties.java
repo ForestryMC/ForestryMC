@@ -22,13 +22,11 @@ public final class FarmProperties implements IFarmProperties {
 	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
-	private final String identifier;
 
 	@Nullable
 	private Collection<IFarmable> farmables;
 
-	public FarmProperties(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
-		this.identifier = identifier;
+	public FarmProperties(BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
 		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.manualLogic = logicFactory.apply(this, true);
 		this.managedLogic = logicFactory.apply(this, false);
@@ -85,10 +83,5 @@ public final class FarmProperties implements IFarmProperties {
 	@Override
 	public Collection<ISoil> getSoils() {
 		return soils;
-	}
-
-	@Override
-	public String getIdentifier() {
-		return identifier;
 	}
 }

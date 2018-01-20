@@ -87,7 +87,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public IFarmLogic getFarmLogic(FarmDirection direction) {
-		return FarmRegistry.getInstance().getFarm("farmArboreal").getLogic(false);
+		return FarmRegistry.getInstance().getProperties("farmArboreal").getLogic(false);
 	}
 
 	@Override

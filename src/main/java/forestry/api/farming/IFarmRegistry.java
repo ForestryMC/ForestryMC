@@ -19,7 +19,7 @@ public interface IFarmRegistry {
 	 * @param logic corresponding instance of logic
 	 *
 	 * @deprecated Since Forestry 5.8. Use {@link #registerLogic(String, BiFunction, String...)} or
-	 *             {@link #registerLogic(IFarmProperties)}.
+	 *             {@link #registerLogic(String, IFarmProperties)}.
 	 */
 	@Deprecated
 	void registerLogic(String identifier, IFarmLogic logic);
@@ -28,7 +28,7 @@ public interface IFarmRegistry {
 	 * Registers farming logic in registry
 	 * @since Forestry 5.8
 	 */
-	IFarmProperties registerLogic(IFarmProperties farmInstance);
+	IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance);
 
 	/**
 	 * Registers farming logic in registry under given identifier
@@ -91,13 +91,9 @@ public interface IFarmRegistry {
 	IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic);
 
 	/**
-	 *
-	 * @param identifier
-	 * @return
-	 *
 	 * @since Forestry 5.8
 	 */
 	@Nullable
-	IFarmProperties getFarm(String identifier);
+	IFarmProperties getProperties(String identifier);
 	
 }
