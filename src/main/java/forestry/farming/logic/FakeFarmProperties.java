@@ -6,15 +6,15 @@ import java.util.Collections;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
 
-public class FakeFarmInstance implements IFarmInstance {
+public class FakeFarmProperties implements IFarmProperties {
 	private final IFarmLogic logic;
 
-	public FakeFarmInstance(IFarmLogic logic) {
+	public FakeFarmProperties(IFarmLogic logic) {
 		this.logic = logic;
 	}
 

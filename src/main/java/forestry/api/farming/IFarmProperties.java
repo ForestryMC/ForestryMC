@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @since Forestry 5.8
  */
-public interface IFarmInstance {
+public interface IFarmProperties {
 
 	default void registerSoil(ItemStack resource, IBlockState soilState){
 		registerSoil(resource, soilState, false);

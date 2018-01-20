@@ -21,14 +21,14 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.farming.logic.crops.CropPeat;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-	public FarmLogicPeat(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicPeat(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override

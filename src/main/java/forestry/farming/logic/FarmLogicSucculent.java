@@ -19,12 +19,12 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.ItemStackUtil;
 
 public class FarmLogicSucculent extends FarmLogicSoil {
-	public FarmLogicSucculent(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicSucculent(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override

@@ -19,14 +19,14 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 
 public class FarmLogicCrops extends FarmLogicWatered {
 
-	public FarmLogicCrops(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicCrops(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override

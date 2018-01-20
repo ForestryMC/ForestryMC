@@ -7,12 +7,12 @@ import java.util.function.BiFunction;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
-import forestry.farming.logic.FakeFarmInstance;
+import forestry.farming.logic.FakeFarmProperties;
 
 public class DummyFarmRegistry implements IFarmRegistry {
 
@@ -33,27 +33,27 @@ public class DummyFarmRegistry implements IFarmRegistry {
 	}
 
 	@Override
-	public IFarmInstance registerLogic(IFarmInstance farmInstance) {
+	public IFarmProperties registerLogic(IFarmProperties farmInstance) {
 		//Dummy-Implementation
 		return null;
 	}
 
 	@Override
-	public IFarmInstance registerLogic(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
+	public IFarmProperties registerLogic(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
 		//Dummy-Implementation
 		return null;
 	}
 
 	@Nullable
 	@Override
-	public IFarmLogic createCropLogic(IFarmInstance instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic) {
+	public IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic) {
 		//Dummy-Implementation
 		return null;
 	}
 
 	@Override
-	public IFarmInstance createFakeInstance(IFarmLogic logic) {
-		return new FakeFarmInstance(logic);
+	public IFarmProperties createFakeInstance(IFarmLogic logic) {
+		return new FakeFarmProperties(logic);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class DummyFarmRegistry implements IFarmRegistry {
 
 	@Nullable
 	@Override
-	public IFarmInstance getFarm(String identifier) {
+	public IFarmProperties getFarm(String identifier) {
 		//Dummy-Implementation
 		return null;
 	}

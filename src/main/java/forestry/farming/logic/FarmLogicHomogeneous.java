@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
@@ -26,8 +26,8 @@ import forestry.core.utils.BlockUtil;
 public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
-	public FarmLogicHomogeneous(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicHomogeneous(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
@@ -62,14 +62,11 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		if(isManual){
-
-		}
 		return maintainSoil(world, farmHousing, pos, direction, extent) || maintainGermlings(world, farmHousing, pos.up(), direction, extent);
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		if(!farmHousing.canPlantSoil(isManual)){
+		if (!farmHousing.canPlantSoil(isManual)) {
 			return false;
 		}
 

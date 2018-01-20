@@ -45,7 +45,7 @@ public interface IFarmLogic {
 	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
 
 	/**
-	 * @deprecated Since Forestry 5.8 logic instances are created at the constructor of the {@link IFarmInstance} and
+	 * @deprecated Since Forestry 5.8 logic instances are created at the constructor of the {@link IFarmProperties} and
 	 * have a immutable manual state. TODO Remove this method in 1.13
 	 */
 	@Deprecated
@@ -56,16 +56,16 @@ public interface IFarmLogic {
 	/**
 	 * @since Forestry 5.8
 	 *
-	 * @return Returns the {@link IFarmInstance} that created this logic. Returns a fake instance from
+	 * @return Returns the {@link IFarmProperties} that created this logic. Returns a fake instance from
 	 * {@link IFarmRegistry#createFakeInstance(IFarmLogic)} if the logic is older that Forestry 5.8.
 	 */
-	default IFarmInstance getInstance(){
+	default IFarmProperties getInstance(){
 		return ForestryAPI.farmRegistry.createFakeInstance(this);
 	}
 
 	/**
 	 * Use {@link IFarmRegistry#getFarm(String)} to get the soil container for the farm logic and register the soil
-	 * with {@link IFarmInstance#registerSoil(ItemStack, IBlockState, boolean)}.
+	 * with {@link IFarmProperties#registerSoil(ItemStack, IBlockState, boolean)}.
 	 */
 	@Deprecated
 	default void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){

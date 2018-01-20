@@ -16,12 +16,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 
-	public FarmLogicMushroom(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override

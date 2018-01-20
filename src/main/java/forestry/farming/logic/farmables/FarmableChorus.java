@@ -58,7 +58,7 @@ public class FarmableChorus implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		if(!canPlace(world, pos)){
+		if (!canPlace(world, pos)) {
 			return false;
 		}
 		return BlockUtil.setBlockWithPlaceSound(world, pos, Blocks.CHORUS_FLOWER.getDefaultState());

@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.modules.ForestryModule;
@@ -266,7 +266,7 @@ public class PluginNatura extends BlankForestryModule {
 	 */
 	@Override
 	public void postInit() {
-		IFarmInstance farmArboreal = FarmRegistry.getInstance().getFarm("managedArboreal");
+		IFarmProperties farmArboreal = FarmRegistry.getInstance().getFarm("managedArboreal");
 		if(farmArboreal != null) {
 			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
 		}

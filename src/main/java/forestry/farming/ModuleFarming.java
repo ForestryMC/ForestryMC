@@ -43,7 +43,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
@@ -192,17 +192,17 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
 
-		IFarmInstance arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
-		IFarmInstance cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
-		IFarmInstance mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
-		IFarmInstance succulentFarm = registry.registerLogic("farmSucculent", FarmLogicSucculent::new);
-		IFarmInstance peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
-		IFarmInstance infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
-		IFarmInstance poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
-		IFarmInstance orchardFarm = registry.registerLogic("farmOrchard", FarmLogicOrchard::new);
-		IFarmInstance gourdFarm = registry.registerLogic("farmGourd", FarmLogicGourd::new);
-		IFarmInstance cocoaFarm = registry.registerLogic("farmCocoa", FarmLogicCocoa::new);
-		IFarmInstance enderFarm = registry.registerLogic("farmEnder", FarmLogicEnder::new);
+		IFarmProperties arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
+		IFarmProperties cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
+		IFarmProperties mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
+		IFarmProperties succulentFarm = registry.registerLogic("farmSucculent", FarmLogicSucculent::new);
+		IFarmProperties peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
+		IFarmProperties infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
+		IFarmProperties poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
+		IFarmProperties orchardFarm = registry.registerLogic("farmOrchard", FarmLogicOrchard::new);
+		IFarmProperties gourdFarm = registry.registerLogic("farmGourd", FarmLogicGourd::new);
+		IFarmProperties cocoaFarm = registry.registerLogic("farmCocoa", FarmLogicCocoa::new);
+		IFarmProperties enderFarm = registry.registerLogic("farmEnder", FarmLogicEnder::new);
 
 		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
 		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);

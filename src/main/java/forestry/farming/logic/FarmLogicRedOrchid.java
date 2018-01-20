@@ -11,7 +11,6 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -19,28 +18,27 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.BlockUtil;
+import forestry.plugins.PluginExtraUtilities;
 
-public class FarmLogicExU extends FarmLogicHomogeneous {
+public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
-	private final String name;
-	private final Item iconItem;
-
-	public FarmLogicExU(IFarmInstance instance, boolean isManual, String name, Item iconItem) {
-		super(instance, isManual);
-		this.name = name;
-		this.iconItem = iconItem;
+	public FarmLogicRedOrchid(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		if (isManual) {
+			return "Manual Orchid Farm";
+		}
+		return "Managed Orchid Farm";
 	}
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(iconItem);
+		return PluginExtraUtilities.orchidStack;
 	}
 
 	@Override
@@ -78,5 +76,4 @@ public class FarmLogicExU extends FarmLogicHomogeneous {
 
 		return false;
 	}
-
 }

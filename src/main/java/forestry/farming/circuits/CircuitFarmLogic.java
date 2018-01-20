@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit {
@@ -23,7 +23,7 @@ public class CircuitFarmLogic extends Circuit {
 	private final IFarmLogic logic;
 	private boolean isManual = false;
 
-	public CircuitFarmLogic(String uid, IFarmInstance instance, boolean manual) {
+	public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
 		super(uid);
 		this.logic = instance.getLogic(manual);
 	}

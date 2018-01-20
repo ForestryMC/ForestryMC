@@ -11,13 +11,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
 import forestry.farming.FarmRegistry;
 
-public final class FarmInstance implements IFarmInstance {
+public final class FarmProperties implements IFarmProperties {
 	private final Set<ISoil> soils = new HashSet<>();
 	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
@@ -27,7 +27,7 @@ public final class FarmInstance implements IFarmInstance {
 	@Nullable
 	private Collection<IFarmable> farmables;
 
-	public FarmInstance(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
+	public FarmProperties(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
 		this.identifier = identifier;
 		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.manualLogic = logicFactory.apply(this, true);
@@ -41,7 +41,7 @@ public final class FarmInstance implements IFarmInstance {
 
 	@Override
 	public Collection<IFarmable> getFarmables() {
-		if(farmables == null){
+		if (farmables == null) {
 			farmables = farmablesIdentifiers.stream().map(FarmRegistry.getInstance()::getFarmables).flatMap(Collection::stream).collect(Collectors.toSet());
 		}
 		return farmables;

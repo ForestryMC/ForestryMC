@@ -18,11 +18,11 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicReeds extends FarmLogicSoil {
-	public FarmLogicReeds(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicReeds(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override

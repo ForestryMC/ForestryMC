@@ -31,28 +31,28 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
 import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
-	protected final IFarmInstance instance;
+	protected final IFarmProperties properties;
 	protected final boolean isManual;
 
-	public FarmLogic(IFarmInstance instance, boolean isManual) {
-		this.instance = instance;
+	public FarmLogic(IFarmProperties properties, boolean isManual) {
+		this.properties = properties;
 		this.isManual = isManual;
 	}
 
 	protected Collection<IFarmable> getFarmables() {
-		return instance.getFarmables();
+		return properties.getFarmables();
 	}
 
 	protected Collection<ISoil> getSoils() {
-		return instance.getSoils();
+		return properties.getSoils();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
 			ICrop crop = getCrop(world, position);
-			if(crop != null){
+			if (crop != null) {
 				crops.push(crop);
 			}
 		}
@@ -74,7 +74,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Nullable
-	protected ICrop getCrop(World world, BlockPos position){
+	protected ICrop getCrop(World world, BlockPos position) {
 		if (world.isAirBlock(position)) {
 			return null;
 		}

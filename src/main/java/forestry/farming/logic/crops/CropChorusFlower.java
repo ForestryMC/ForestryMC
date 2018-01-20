@@ -14,7 +14,7 @@ import forestry.core.utils.NetworkUtil;
 
 public class CropChorusFlower extends Crop {
 	private static final IBlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.getDefaultState();
-	
+
 	public CropChorusFlower(World world, BlockPos position) {
 		super(world, position);
 	}

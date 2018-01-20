@@ -19,7 +19,7 @@ public interface IFarmRegistry {
 	 * @param logic corresponding instance of logic
 	 *
 	 * @deprecated Since Forestry 5.8. Use {@link #registerLogic(String, BiFunction, String...)} or
-	 *             {@link #registerLogic(IFarmInstance)}.
+	 *             {@link #registerLogic(IFarmProperties)}.
 	 */
 	@Deprecated
 	void registerLogic(String identifier, IFarmLogic logic);
@@ -28,7 +28,7 @@ public interface IFarmRegistry {
 	 * Registers farming logic in registry
 	 * @since Forestry 5.8
 	 */
-	IFarmInstance registerLogic(IFarmInstance farmInstance);
+	IFarmProperties registerLogic(IFarmProperties farmInstance);
 
 	/**
 	 * Registers farming logic in registry under given identifier
@@ -38,7 +38,7 @@ public interface IFarmRegistry {
 	 * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 * @since Forestry 5.8
 	 */
-	IFarmInstance registerLogic(String identifier, BiFunction<IFarmInstance, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers);
+	IFarmProperties registerLogic(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers);
 
 	/**
 	 * Can be used to add IFarmables to some of the vanilla farm logics.
@@ -54,7 +54,7 @@ public interface IFarmRegistry {
 	 *
 	 * @return Null if the farming plugin is not active.
 	 *
-	 * @deprecated Since Forestry 5.8. Use {@link #createCropLogic(IFarmInstance, boolean, ISimpleFarmLogic)} instead.
+	 * @deprecated Since Forestry 5.8. Use {@link #createCropLogic(IFarmProperties, boolean, ISimpleFarmLogic)} instead.
 	 */
 	@Nullable
 	@Deprecated
@@ -74,13 +74,13 @@ public interface IFarmRegistry {
 	int getFertilizeValue(ItemStack itemStack);
 
 	/**
-	 * Returns a fake {@link IFarmInstance} that returns the given logic at {@link IFarmInstance#getLogic(boolean)}.
+	 * Returns a fake {@link IFarmProperties} that returns the given logic at {@link IFarmProperties#getLogic(boolean)}.
 	 *
 	 * @since Forestry 5.8
 	 * @deprecated Only for backwards comparability.
 	 */
 	@Deprecated
-	IFarmInstance createFakeInstance(IFarmLogic logic);
+	IFarmProperties createFakeInstance(IFarmLogic logic);
 
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.
@@ -88,7 +88,7 @@ public interface IFarmRegistry {
 	 * @return Null if the farming plugin is not active.
 	 */
 	@Nullable
-	IFarmLogic createCropLogic(IFarmInstance instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic);
+	IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic);
 
 	/**
 	 *
@@ -98,6 +98,6 @@ public interface IFarmRegistry {
 	 * @since Forestry 5.8
 	 */
 	@Nullable
-	IFarmInstance getFarm(String identifier);
+	IFarmProperties getFarm(String identifier);
 	
 }

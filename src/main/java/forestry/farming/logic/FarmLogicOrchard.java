@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.ModuleCore;
@@ -43,8 +43,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
-	public FarmLogicOrchard(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicOrchard(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.AGRICRAFT) || ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT)) {

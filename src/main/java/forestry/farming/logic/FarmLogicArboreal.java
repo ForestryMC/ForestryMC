@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
@@ -39,14 +39,14 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Nullable
 	private List<IFarmable> farmables;
 
-	public FarmLogicArboreal(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicArboreal(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
 	public List<IFarmable> getFarmables() {
-		if(farmables == null){
-			this.farmables = new ArrayList<>(instance.getFarmables());
+		if (farmables == null) {
+			this.farmables = new ArrayList<>(properties.getFarmables());
 		}
 		return farmables;
 	}

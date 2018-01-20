@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmInstance;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
@@ -31,8 +31,8 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	private static final Set<EnumFacing> VALID_DIRECTIONS = ImmutableSet.of(EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST);
 	private final IFarmable chorusFarmable;
 
-	public FarmLogicEnder(IFarmInstance instance, boolean isManual) {
-		super(instance, isManual);
+	public FarmLogicEnder(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 		chorusFarmable = FarmableChorus.INSTANCE;
 	}
 
@@ -85,12 +85,12 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	private Collection<ICrop> harvestBlocks(World world, BlockPos position) {
-		if(world.isAirBlock(position)){
+		if (world.isAirBlock(position)) {
 			return Collections.emptySet();
 		}
 
 		ICrop crop = getCrop(world, position);
-		if(crop != null){
+		if (crop != null) {
 			return Collections.singleton(crop);
 		}
 
@@ -98,30 +98,30 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		Stack<ICrop> plants = new Stack<>();
 		harvestBlock(world, position, EnumFacing.DOWN, plants, crops);
 		//Remove all flowers before remove all plants
-		if(!crops.isEmpty()) {
+		if (!crops.isEmpty()) {
 			return crops;
 		}
 		return plants;
 	}
 
-	private boolean harvestBlock(World world, BlockPos pos, EnumFacing from, Stack<ICrop> plants, Stack<ICrop> flowers){
+	private boolean harvestBlock(World world, BlockPos pos, EnumFacing from, Stack<ICrop> plants, Stack<ICrop> flowers) {
 		IBlockState blockState = world.getBlockState(pos);
-		if(blockState.getBlock() == Blocks.CHORUS_FLOWER){
+		if (blockState.getBlock() == Blocks.CHORUS_FLOWER) {
 			ICrop crop = chorusFarmable.getCropAt(world, pos, blockState);
-			if(crop != null){
+			if (crop != null) {
 				flowers.push(crop);
 				return false;
 			}
 			return false;
-		}else if(blockState.getBlock() == Blocks.CHORUS_PLANT){
+		} else if (blockState.getBlock() == Blocks.CHORUS_PLANT) {
 			boolean canHarvest = true;
-			for(EnumFacing facing : VALID_DIRECTIONS) {
-				if(facing == from){
+			for (EnumFacing facing : VALID_DIRECTIONS) {
+				if (facing == from) {
 					continue;
 				}
 				canHarvest &= harvestBlock(world, pos.offset(facing), facing.getOpposite(), plants, flowers);
 			}
-			if(canHarvest){
+			if (canHarvest) {
 				plants.push(new CropDestroy(world, Blocks.CHORUS_PLANT.getDefaultState(), pos, null));
 			}
 			return canHarvest;
@@ -144,7 +144,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 				continue;
 			}
 
-			if(trySetCrop(world, farmHousing, position, direction)){
+			if (trySetCrop(world, farmHousing, position, direction)) {
 				return true;
 			}
 		}
