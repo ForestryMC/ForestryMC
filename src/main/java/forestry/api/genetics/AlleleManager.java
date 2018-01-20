@@ -23,4 +23,9 @@ public class AlleleManager {
 	 * Creates Forestry alleles.
 	 */
 	public static IAlleleFactory alleleFactory;
+
+	/**
+	 * @since 5.8
+	 */
+	public static IFilterRegistry filterRegistry;
 }

@@ -17,11 +17,13 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.core.tiles.TileUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.items.IItemHandler;
+
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.core.tiles.TileUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -56,6 +58,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		cache.addListener(this);
 	}
 
+	@Nullable
 	public IItemHandler getAdjacentInventory(EnumFacing side) {
 		checkChanged();
 		return sides[side.ordinal()];

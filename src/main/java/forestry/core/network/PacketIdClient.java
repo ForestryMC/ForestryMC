@@ -68,6 +68,9 @@ public enum PacketIdClient implements IPacketId {
 	UPDATE_CLIMATE,
 	CAMOUFLAGE_SELECTION,
 
+	// Sorting
+	GUI_UPDATE_FILTER,
+
 	// JEI
 	RECIPE_TRANSFER_UPDATE;
 

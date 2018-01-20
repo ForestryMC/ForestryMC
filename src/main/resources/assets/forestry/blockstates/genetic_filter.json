@@ -1,0 +1,23 @@
+{
+    "multipart": [
+        {   "apply": { "model": "forestry:filter/filter_center" }},
+        {   "when": { "north": "true" },
+            "apply": { "model": "forestry:filter/filter_north" }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "forestry:filter/filter_east", "y": 90 }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "forestry:filter/filter_south", "y": 180 }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "forestry:filter/filter_west", "y": 270 }
+        },
+        {   "when": { "up": "true" },
+            "apply": { "model": "forestry:filter/filter_up", "x": -90 }
+        },
+        {   "when": { "down": "true" },
+            "apply": { "model": "forestry:filter/filter_down", "x": 90 }
+        }
+    ]
+}

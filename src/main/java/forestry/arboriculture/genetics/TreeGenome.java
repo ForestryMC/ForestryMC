@@ -25,6 +25,7 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
@@ -100,6 +101,11 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	@Override
 	public int getGirth() {
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
+	}
+
+	@Override
+	public boolean getFireproof() {
+		return ((IAlleleBoolean) getActiveAllele(EnumTreeChromosome.FIREPROOF)).getValue();
 	}
 
 	@Override

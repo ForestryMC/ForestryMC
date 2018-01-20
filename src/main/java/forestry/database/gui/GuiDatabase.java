@@ -13,8 +13,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.input.Keyboard;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiForestry;
@@ -36,6 +34,7 @@ import forestry.database.gui.widgets.WidgetDatabaseSelectedItem;
 import forestry.database.gui.widgets.WidgetDatabaseSlot;
 import forestry.database.gui.widgets.WidgetDatabaseTabs;
 import forestry.database.tiles.TileDatabase;
+import org.lwjgl.input.Keyboard;
 
 public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlotChangeWatcher, IScrollable {
 

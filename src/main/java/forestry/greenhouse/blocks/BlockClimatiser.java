@@ -132,7 +132,6 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 		if (tile != null) {
 			if (TileUtil.isUsableByPlayer(player, tile)) {
 
-				ItemStack heldItem = player.getHeldItem(hand);
 				if (!player.isSneaking()) {
 					if (FluidUtil.interactWithFluidHandler(player, hand, world, pos, facing)) {
 						return true;
