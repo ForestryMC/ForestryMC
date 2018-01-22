@@ -3,6 +3,7 @@ package forestry.cultivation.tiles;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class TileFarmNether extends TilePlanter {
 	public TileFarmNether() {
@@ -10,32 +11,32 @@ public class TileFarmNether extends TilePlanter {
 	}
 
 	@Override
-	public ItemStack[] createGermlingStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createGermlingStacks() {
+		return createList(
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART)
-		};
+		);
 	}
 
 	@Override
-	public ItemStack[] createResourceStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createResourceStacks() {
+		return createList(
 			new ItemStack(Blocks.SOUL_SAND),
 			new ItemStack(Blocks.SOUL_SAND),
 			new ItemStack(Blocks.SOUL_SAND),
 			new ItemStack(Blocks.SOUL_SAND)
-		};
+		);
 	}
 
 	@Override
-	public ItemStack[] createProductionStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createProductionStacks() {
+		return createList(
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.NETHER_WART)
-		};
+		);
 	}
 }

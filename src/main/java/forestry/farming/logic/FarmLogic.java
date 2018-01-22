@@ -35,6 +35,7 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISoil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
@@ -53,6 +54,12 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected Collection<ISoil> getSoils() {
 		return properties.getSoils();
+	}
+
+	@Override
+	public String getName() {
+		String unformatted = isManual ? "for.farm.grammar.manual" : "for.farm.grammar.managed";
+		return Translator.translateToLocalFormatted(unformatted, Translator.translateToLocal(getUnlocalizedName()));
 	}
 
 	@Override

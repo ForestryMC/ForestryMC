@@ -33,6 +33,16 @@ public class CircuitFarmLogic extends Circuit {
 		this.logic = logic;
 	}
 
+	@Override
+	public String getUnlocalizedName() {
+		return logic.getUnlocalizedName();
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return logic.getName();
+	}
+
 	/**
 	 * @deprecated TODO: Remove this method in 1.13
 	 */

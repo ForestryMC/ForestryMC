@@ -145,13 +145,13 @@ public final class FarmRegistry implements IFarmRegistry {
 		for(String entry : fertilizerList){
 			String[] spited = entry.split(";");
 			if(spited.length < 2){
-				Log.error("Foretsry failed to parse a entry of the fertilizer config.");
+				Log.error("Forestry failed to parse a entry of the fertilizer config.");
 				continue;
 			}
 			String itemName = spited[0];
 			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
 			if(fertilizerItem == null || fertilizerItem.isEmpty()){
-				Log.error("Foretsry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
+				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
 				continue;
 			}
 			String value = spited[1];

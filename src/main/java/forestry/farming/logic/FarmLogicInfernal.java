@@ -34,8 +34,8 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public String getName() {
-		return "Managed Infernal Farm";
+	public String getUnlocalizedName() {
+		return "for.farm.infernal";
 	}
 
 	@Override

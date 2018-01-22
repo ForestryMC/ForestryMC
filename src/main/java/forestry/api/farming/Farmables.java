@@ -5,14 +5,16 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 
+//TODO: Remove this class in 1.13
+@Deprecated
 public class Farmables {
 	/**
 	 * Can be used to add IFarmables to some of the vanilla farm logics.

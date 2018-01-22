@@ -2,6 +2,7 @@ package forestry.cultivation.tiles;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class TileFarmGourd extends TilePlanter {
 	public TileFarmGourd() {
@@ -9,22 +10,22 @@ public class TileFarmGourd extends TilePlanter {
 	}
 
 	@Override
-	public ItemStack[] createGermlingStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createGermlingStacks() {
+		return NonNullList.create();
 	}
 
 	@Override
-	public ItemStack[] createResourceStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createResourceStacks() {
+		return NonNullList.create();
 	}
 
 	@Override
-	public ItemStack[] createProductionStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createProductionStacks() {
+		return createList(
 			new ItemStack(Blocks.MELON_BLOCK),
 			new ItemStack(Blocks.PUMPKIN),
 			new ItemStack(Blocks.PUMPKIN),
 			new ItemStack(Blocks.MELON_BLOCK)
-		};
+		);
 	}
 }

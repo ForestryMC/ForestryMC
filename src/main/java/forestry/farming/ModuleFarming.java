@@ -246,7 +246,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
 
 		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
-		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, false);
+		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, true);
 		enderFarm.registerSoil(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState());
 	}
 

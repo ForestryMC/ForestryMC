@@ -90,12 +90,7 @@ public class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Crop Farm";
-		} else {
-			return "Managed Crop Farm";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.crops";
 	}
-
 }

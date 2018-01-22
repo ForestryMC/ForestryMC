@@ -49,8 +49,8 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Rubber Plantation";
+	public String getUnlocalizedName() {
+		return "for.farm.rubber";
 	}
 
 	@Override

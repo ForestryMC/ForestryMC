@@ -37,7 +37,7 @@ public abstract class Circuit implements ICircuit {
 
 	@Override
 	public void addTooltip(List<String> list) {
-		list.add(Translator.translateToLocal(getUnlocalizedName()));
+		list.add(getLocalizedName());
 
 		int i = 1;
 		while (true) {

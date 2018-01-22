@@ -23,14 +23,9 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 	public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 	}
-
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Shroom Farm";
-		} else {
-			return "Managed Shroom Farm";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.shroom";
 	}
 
 	@Override

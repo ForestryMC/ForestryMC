@@ -33,12 +33,8 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Succulent Farm";
-		} else {
-			return "Managed Succulent Farm";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.succulent";
 	}
 
 	@Override

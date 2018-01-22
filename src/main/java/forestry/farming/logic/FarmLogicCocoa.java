@@ -51,8 +51,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Cocoa Plantation";
+	public String getUnlocalizedName() {
+		return "for.farm.cocoa";
 	}
 
 	@Override

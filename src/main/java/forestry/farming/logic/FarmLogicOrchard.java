@@ -126,8 +126,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Orchard";
+	public String getUnlocalizedName() {
+		return "for.farm.orchard";
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {

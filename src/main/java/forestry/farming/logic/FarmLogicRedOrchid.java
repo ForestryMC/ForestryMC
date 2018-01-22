@@ -29,11 +29,8 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Orchid Farm";
-		}
-		return "Managed Orchid Farm";
+	public String getUnlocalizedName() {
+		return "for.farm.orchid";
 	}
 
 	@Override

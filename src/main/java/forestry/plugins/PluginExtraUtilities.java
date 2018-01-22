@@ -64,6 +64,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 			orchidFarm.registerSoil(new ItemStack(Blocks.LIT_REDSTONE_ORE), Blocks.LIT_REDSTONE_ORE.getDefaultState());
 
 			Circuits.farmOrchidManaged = new CircuitFarmLogic("managedOrchid", orchidFarm, false);
+			Circuits.farmOrchidManual = new CircuitFarmLogic("manualOrchid", orchidFarm, true);
 
 			orchidStack = new ItemStack(item);
 		}
@@ -83,10 +84,12 @@ public class PluginExtraUtilities extends CompatPlugin {
 	public void registerRecipes() {
 		if(Circuits.farmOrchidManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			if(layoutManaged == null){
+			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+			if(layoutManaged == null || layoutManual == null){
 				return;
 			}
 			ChipsetManager.solderManager.addRecipe(layoutManaged, ModuleCore.getItems().tubes.get(EnumElectronTube.ORCHID, 1), Circuits.farmOrchidManaged);
+			ChipsetManager.solderManager.addRecipe(layoutManual, ModuleCore.getItems().tubes.get(EnumElectronTube.ORCHID, 1), Circuits.farmOrchidManual);
 		}
 	}
 

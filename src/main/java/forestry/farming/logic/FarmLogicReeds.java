@@ -31,12 +31,8 @@ public class FarmLogicReeds extends FarmLogicSoil {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Reed Farm";
-		} else {
-			return "Managed Reed Farm";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.reed";
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public class Config {
 
 	// Cultivation
 	public static int planterExtend = 4;
-	public static boolean ringFarms = false;
+	public static boolean ringFarms = true;
 	public static int ringSize = 4;
 
 	// Mail

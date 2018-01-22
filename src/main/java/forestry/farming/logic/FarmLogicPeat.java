@@ -37,12 +37,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Peat Bog";
-		} else {
-			return "Managed Peat Bog";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.peat";
 	}
 
 	@Override

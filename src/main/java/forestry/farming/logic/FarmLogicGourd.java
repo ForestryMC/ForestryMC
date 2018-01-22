@@ -32,8 +32,8 @@ public class FarmLogicGourd extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Gourd Farm";
+	public String getUnlocalizedName() {
+		return "for.farm.gourd";
 	}
 
 	@Override

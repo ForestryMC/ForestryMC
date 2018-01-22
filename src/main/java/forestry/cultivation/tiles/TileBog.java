@@ -1,6 +1,7 @@
 package forestry.cultivation.tiles;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import forestry.core.ModuleCore;
 
@@ -10,27 +11,27 @@ public class TileBog extends TilePlanter {
 	}
 
 	@Override
-	public ItemStack[] createGermlingStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createGermlingStacks() {
+		return NonNullList.create();
 	}
 
 	@Override
-	public ItemStack[] createResourceStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createResourceStacks() {
+		return createList(
 			new ItemStack(ModuleCore.getBlocks().bogEarth),
 			new ItemStack(ModuleCore.getBlocks().bogEarth),
 			new ItemStack(ModuleCore.getBlocks().bogEarth),
 			new ItemStack(ModuleCore.getBlocks().bogEarth)
-		};
+		);
 	}
 
 	@Override
-	public ItemStack[] createProductionStacks() {
-		return new ItemStack[]{
+	public NonNullList<ItemStack> createProductionStacks() {
+		return createList(
 			new ItemStack(ModuleCore.getItems().peat),
 			new ItemStack(ModuleCore.getItems().peat),
 			new ItemStack(ModuleCore.getItems().peat),
 			new ItemStack(ModuleCore.getItems().peat)
-		};
+		);
 	}
 }

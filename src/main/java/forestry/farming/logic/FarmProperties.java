@@ -40,7 +40,10 @@ public final class FarmProperties implements IFarmProperties {
 	@Override
 	public Collection<IFarmable> getFarmables() {
 		if (farmables == null) {
-			farmables = farmablesIdentifiers.stream().map(FarmRegistry.getInstance()::getFarmables).flatMap(Collection::stream).collect(Collectors.toSet());
+			farmables = farmablesIdentifiers.stream()
+				.map(FarmRegistry.getInstance()::getFarmables)
+				.flatMap(Collection::stream)
+				.collect(Collectors.toSet());
 		}
 		return farmables;
 	}
@@ -55,6 +58,7 @@ public final class FarmProperties implements IFarmProperties {
 		soils.add(new Soil(resource, soilState, hasMetaData));
 	}
 
+	@Override
 	public boolean isAcceptedSoil(IBlockState ground) {
 		for (ISoil soil : soils) {
 			IBlockState soilState = soil.getSoilState();

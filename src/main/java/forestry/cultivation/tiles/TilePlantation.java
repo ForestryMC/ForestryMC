@@ -1,6 +1,7 @@
 package forestry.cultivation.tiles;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class TilePlantation extends TilePlanter {
 
@@ -9,17 +10,17 @@ public class TilePlantation extends TilePlanter {
 	}
 
 	@Override
-	public ItemStack[] createGermlingStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createGermlingStacks() {
+		return NonNullList.create();
 	}
 
 	@Override
-	public ItemStack[] createResourceStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createResourceStacks() {
+		return NonNullList.create();
 	}
 
 	@Override
-	public ItemStack[] createProductionStacks() {
-		return new ItemStack[0];
+	public NonNullList<ItemStack> createProductionStacks() {
+		return NonNullList.create();
 	}
 }

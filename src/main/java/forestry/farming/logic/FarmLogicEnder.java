@@ -37,8 +37,8 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public String getName() {
-		return "Manual Ender Farm";
+	public String getUnlocalizedName() {
+		return "for.farm.ender";
 	}
 
 	@Override

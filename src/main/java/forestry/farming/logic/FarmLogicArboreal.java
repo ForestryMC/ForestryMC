@@ -52,8 +52,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public String getName() {
-		return "Managed Arboretum";
+	public String getUnlocalizedName() {
+		return "for.farm.arboretum";
 	}
 
 	@Override

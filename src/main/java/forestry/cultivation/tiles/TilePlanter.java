@@ -501,10 +501,14 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return tankManager;
 	}
 
-	public abstract ItemStack[] createGermlingStacks();
+	protected NonNullList<ItemStack> createList(ItemStack... stacks){
+		return NonNullList.from(ItemStack.EMPTY, stacks);
+	}
 
-	public abstract ItemStack[] createResourceStacks();
+	public abstract NonNullList<ItemStack> createGermlingStacks();
 
-	public abstract ItemStack[] createProductionStacks();
+	public abstract NonNullList<ItemStack> createResourceStacks();
+
+	public abstract NonNullList<ItemStack> createProductionStacks();
 
 }
