@@ -30,7 +30,6 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		if (!slot.getHasStack()) {
 			super.draw(startX, startY);
 		}
-		GlStateManager.pushMatrix();
 		GlStateManager.disableLighting();
 		GlStateManager.disableDepth();
 		GlStateManager.enableBlend();
@@ -50,7 +49,6 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		GlStateManager.disableBlend();
 		GlStateManager.enableDepth();
 		GlStateManager.enableLighting();
-		GlStateManager.popMatrix();
 	}
 
 	private String getDirectionString(){
