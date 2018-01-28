@@ -67,7 +67,7 @@ public class FarmLogicSlot extends Widget {
 		public void refresh() {
 			toolTip.clear();
 			toolTip.add(getLogic().getName());
-			toolTip.add("Fertilizer: " + (int)(getLogic().getFertilizerConsumption() * Config.fertilizerModifier));
+			toolTip.add("Fertilizer: " + Math.round(getLogic().getFertilizerConsumption() * Config.fertilizerModifier));
 			toolTip.add("Water: " + getLogic().getWaterConsumption(farmController.getFarmLedgerDelegate().getHydrationModifier()));
 		}
 	};
