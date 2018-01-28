@@ -12,15 +12,13 @@ package forestry.database.inventory;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
-import forestry.api.core.ForestryAPI;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.database.tiles.TileDatabase;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase> {
 	public static final int SLOT_ENERGY = 0;
@@ -34,7 +32,7 @@ public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase
 			return false;
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 
 			Item item = itemstack.getItem();

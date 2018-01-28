@@ -12,6 +12,8 @@ import java.util.Set;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.api.book.IForesterBook;
+
 /**
  * Defines a Forestry module.
  * Any class implementing this interface and annotated by {@link ForestryModule} to be loaded by
@@ -88,6 +90,10 @@ public interface IForestryModule {
 	}
 
 	default void postInit(){
+	}
+
+	default void registerBookEntries(IForesterBook book){
+
 	}
 
 	@Nullable

@@ -21,7 +21,6 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -33,23 +32,24 @@ import forestry.core.config.Constants;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class CreativeTabForestry extends CreativeTabs {
 
 	static {
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			Tabs.tabAgriculture = new CreativeTabForestry(1, "agriculture");
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			Tabs.tabApiculture = new CreativeTabForestry(2, "apiculture");
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			Tabs.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			Tabs.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
 		}
 	}

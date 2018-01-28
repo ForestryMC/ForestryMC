@@ -22,13 +22,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.items.ItemRegistryCrates;
 import forestry.storage.models.ModelCrate;
@@ -77,7 +77,7 @@ public class ModuleCrates extends BlankForestryModule {
 		ItemRegistryCrates items = getItems();
 
 		// / CARPENTER
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CRATES
 			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
 				" # ", "# #", " # ", '#', "logWood");

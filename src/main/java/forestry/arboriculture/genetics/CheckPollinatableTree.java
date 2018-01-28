@@ -15,6 +15,8 @@ import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import net.minecraftforge.common.EnumPlantType;
 
+import forestry.apiculture.ModuleApiculture;
+
 public class CheckPollinatableTree implements ICheckPollinatable {
 	private final ITree tree;
 
@@ -36,7 +38,7 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 	public boolean canMateWith(IIndividual pollen) {
 		return pollen instanceof ITree &&
 				tree.getMate() == null &&
-				!tree.isGeneticEqual(pollen);
+				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
 	}
 
 	@Override

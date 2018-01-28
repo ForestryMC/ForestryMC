@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.SidedProxy;
 
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IForesterBook;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -39,6 +41,11 @@ public class ModuleEnergy extends BlankForestryModule {
 	@Nullable
 	public static BlockRegistryEnergy blocks;
 
+	public static BlockRegistryEnergy getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
+
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryEnergy();
@@ -46,7 +53,7 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryEnergy blocks = getBlocks();
 		blocks.peatEngine.init();
 		blocks.biogasEngine.init();
 
@@ -57,7 +64,7 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryEnergy blocks = getBlocks();
 
 		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
 				"###",
@@ -87,6 +94,17 @@ public class ModuleEnergy extends BlankForestryModule {
 					'Y', Items.CLOCK,
 					'Z', "gearCopper",
 					'V', Blocks.PISTON);
+		}
+	}
+
+	@Override
+	public void registerBookEntries(IForesterBook book) {
+		BlockRegistryEnergy blocks = getBlocks();
+		IBookCategory category = book.addCategory("core")
+			.addEntry("peat_engine", new ItemStack(blocks.peatEngine))
+			.addEntry("biogas_engine", new ItemStack(blocks.biogasEngine));
+		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+			category.addEntry("clockwork_engine", new ItemStack(blocks.clockworkEngine));
 		}
 	}
 }

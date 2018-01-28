@@ -18,14 +18,12 @@ import java.util.Map;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
@@ -35,11 +33,11 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.config.Constants;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;
@@ -82,7 +80,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 			return 0f;
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			Item item = itemstack.getItem();
 			if (beeItems.honeyDrop == item) {
