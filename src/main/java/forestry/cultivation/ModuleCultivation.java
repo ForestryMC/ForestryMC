@@ -67,7 +67,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_crops", blocks.farmCrops,
@@ -76,7 +76,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.BRONZE, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("peat_bog", blocks.peatBog,
@@ -85,7 +85,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_mushroom", blocks.farmMushroom,
@@ -94,7 +94,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.APATITE, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_gourd", blocks.farmGourd,
@@ -103,7 +103,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_nether", blocks.farmNether,
@@ -112,7 +112,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		RecipeUtil.addRecipe("farm_ender", blocks.farmEnder,
@@ -121,7 +121,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			"GBG",
 			'G', OreDictUtil.BLOCK_GLASS,
 			'T', coreItems.tubes.get(EnumElectronTube.ENDER, 1),
-			'C', coreItems.sturdyCasing,
+			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
 		for(BlockPlanter planter : getBlocks().getPlanters()){

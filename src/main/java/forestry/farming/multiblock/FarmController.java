@@ -501,7 +501,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
-			final int fertilizerConsumption = logic.getFertilizerConsumption();
+			final int fertilizerConsumption = (int)(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
 			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
 
@@ -558,7 +558,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			}
 		}
 
-		final int fertilizerConsumption = provider.getFertilizerConsumption();
+		final int fertilizerConsumption = (int)(provider.getFertilizerConsumption() * Config.fertilizerModifier);
 
 		IErrorLogic errorLogic = getErrorLogic();
 

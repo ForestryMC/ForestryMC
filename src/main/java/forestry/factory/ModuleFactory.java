@@ -328,7 +328,13 @@ public class ModuleFactory extends BlankForestryModule {
 				"XXX",
 				'#', new ItemStack(Items.REPEATER, 1, 0),
 				'X', new ItemStack(Blocks.REDSTONE_ORE, 1, 0)});
-
+		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.flexibleCasing.getItemStack(), new Object[]{
+			"#E#",
+			"B B",
+			"#E#",
+			'#', OreDictUtil.INGOT_BRONZE,
+			'B', OreDictUtil.SLIMEBALL,
+			'E', "gemEmerald"});
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 

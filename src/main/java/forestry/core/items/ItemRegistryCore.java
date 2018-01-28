@@ -55,6 +55,7 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry sturdyCasing;
 	public final ItemForestry hardenedCasing;
 	public final ItemForestry impregnatedCasing;
+	public final ItemForestry flexibleCasing;
 	public final ItemStack gearBronze;
 	public final ItemStack gearCopper;
 	public final ItemStack gearTin;
@@ -110,6 +111,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		sturdyCasing = registerItem(new ItemForestry(), "sturdy_machine");
 		hardenedCasing = registerItem(new ItemForestry(), "hardened_machine");
 		impregnatedCasing = registerItem(new ItemForestry(), "impregnated_casing");
+		flexibleCasing = registerItem(new ItemForestry(), "flexible_casing");
 
 		craftingMaterial = registerItem(new ItemCraftingMaterial(), "crafting_material");
 

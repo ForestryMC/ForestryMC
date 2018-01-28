@@ -257,7 +257,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	}
 
 	private boolean cullCrop(ICrop crop) {
-		final int fertilizerConsumption = logic.getFertilizerConsumption();
+		final int fertilizerConsumption = (int)(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -314,7 +314,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, Collections.emptySet())) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
-			final int fertilizerConsumption = logic.getFertilizerConsumption();
+			final int fertilizerConsumption = (int)(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
 			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
 

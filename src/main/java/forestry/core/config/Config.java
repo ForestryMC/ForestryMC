@@ -99,6 +99,7 @@ public class Config {
 
 	// Farm
 	public static int farmSize = 2;
+	public static float fertilizerModifier = 1.0F;
 	public static boolean squareFarms = false;
 	private static boolean enableExUtilEnderLily = true;
 	private static boolean enableExUtilRedOrchid = true;
@@ -275,6 +276,7 @@ public class Config {
 		}
 
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
+		fertilizerModifier = configCommon.getFloatLocalized("tweaks.farms", "fertilizer", fertilizerModifier, 0.1F, 5.0F);
 		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
