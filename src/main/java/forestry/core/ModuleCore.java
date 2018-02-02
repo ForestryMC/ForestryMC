@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -73,8 +72,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
-import forestry.core.utils.IMCUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;

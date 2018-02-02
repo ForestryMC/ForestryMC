@@ -70,7 +70,6 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.HiveConfig;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
