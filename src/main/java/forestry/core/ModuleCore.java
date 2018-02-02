@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -31,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,6 +73,8 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
+import forestry.core.utils.IMCUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;
@@ -461,6 +464,18 @@ public class ModuleCore extends BlankForestryModule {
 		return new PacketRegistryCore();
 	}
 
+	@Override
+	public boolean processIMCMessage(IMCMessage message) {
+		if (message.key.equals("blacklist-ores-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				Config.blacklistOreDim(dim);
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();

@@ -29,6 +29,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -950,6 +951,12 @@ public class ModuleApiculture extends BlankForestryModule {
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
 			Log.warning(messageString);
+			return true;
+		} else if (message.key.equals("blacklist-hives-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				HiveConfig.addBlacklistedDim(dim);
+			}
 			return true;
 		}
 

@@ -70,6 +70,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.HiveConfig;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
@@ -538,6 +539,12 @@ public class ModuleArboriculture extends BlankForestryModule {
 				validFences.add(block);
 			} else {
 				IMCUtil.logInvalidIMCMessage(message);
+			}
+			return true;
+		} else if (message.key.equals("blacklist-trees-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				Config.blacklistTreeDim(dim);
 			}
 			return true;
 		}

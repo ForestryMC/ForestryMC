@@ -152,6 +152,14 @@ public class Config {
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
 	}
+	
+	public static void blacklistTreeDim(int dimID) {
+		blacklistedTreeDims.add(dimID);
+	}
+	
+	public static void blacklistOreDim(int dimID) {
+		blacklistedOreDims.add(dimID);
+	}
 
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
