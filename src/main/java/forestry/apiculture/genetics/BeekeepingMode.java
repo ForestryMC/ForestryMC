@@ -26,6 +26,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
+import forestry.apiculture.ModuleApiculture;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -84,6 +85,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 		}
 
 		if (queen.isNatural()) {
+			return false;
+		}
+		
+		if(!ModuleApiculture.ignobleDecay) {
 			return false;
 		}
 

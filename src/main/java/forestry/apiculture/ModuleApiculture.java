@@ -156,6 +156,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	
 	public static boolean hivesDamageOnPeaceful = false;
 	
+	public static boolean ignobleDecay = true;
+	
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -278,6 +280,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 		
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
+		
+		ignobleDecay = config.getBooleanLocalized("beekeeping", "ignoble.decay", true);
+		
+		
 
 		config.save();
 
