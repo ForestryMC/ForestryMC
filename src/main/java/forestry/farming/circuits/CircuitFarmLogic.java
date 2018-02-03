@@ -28,6 +28,7 @@ public class CircuitFarmLogic extends Circuit {
 		this.logic = instance.getLogic(manual);
 	}
 
+	@SuppressWarnings("unused")
 	public CircuitFarmLogic(String uid, IFarmLogic logic) {
 		super(uid);
 		this.logic = logic;

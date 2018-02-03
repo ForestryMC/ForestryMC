@@ -311,6 +311,11 @@ public class ModuleFarming extends BlankForestryModule {
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
 		ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedCereal", Circuits.farmCropsManaged);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualCereal", Circuits.farmCropsManual);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedVegetable", Circuits.farmCropsManaged);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualVegetable", Circuits.farmCropsManual);
+
 		if(layoutManaged == null || layoutManual == null){
 			return;
 		}
