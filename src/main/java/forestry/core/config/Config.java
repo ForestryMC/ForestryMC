@@ -179,16 +179,16 @@ public class Config {
 	
 	public static boolean isValidOreDim(int dimID) {		//blacklist has priority
 		if(blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
-			return whitelistedOreDims.contains(dimID);
+			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
-		return false;
+		return true;
 	}
 	
 	public static boolean isValidTreeDim(int dimID) { 		//blacklist has priority
 		if(blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
-			return whitelistedTreeDims.contains(dimID);
+			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
 		}
-		return false;
+		return true;
 	}
 
 	public static void load(Side side) {
