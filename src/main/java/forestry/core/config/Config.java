@@ -181,14 +181,14 @@ public class Config {
 		if(blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
 			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
-		return true;
+		return false;
 	}
 	
 	public static boolean isValidTreeDim(int dimID) { 		//blacklist has priority
 		if(blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
 			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
 		}
-		return true;
+		return false;
 	}
 
 	public static void load(Side side) {

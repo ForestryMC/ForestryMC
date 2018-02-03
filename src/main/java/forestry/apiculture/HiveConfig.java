@@ -71,7 +71,7 @@ public class HiveConfig {
 		if(blacklistedDims.isEmpty() || !blacklistedDims.contains(dimId)) {
 			return whitelistedDims.isEmpty() || whitelistedDims.contains(dimId);
 		}
-		return true;
+		return false;
 	}
 	
 	public static void addBlacklistedDim(int dimId) {
