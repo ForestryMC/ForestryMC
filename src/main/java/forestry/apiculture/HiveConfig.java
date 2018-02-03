@@ -23,11 +23,16 @@ public class HiveConfig {
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 
 	private static final Set<Integer> blacklistedDims = new HashSet<>();
+	
+	private static final Set<Integer> whitelistedDims = new HashSet<>();
 
 	public static void parse(LocalizedConfiguration config){
 		config.addCategoryCommentLocalized(CATEGORY);
 		for(int dimId : config.get("world.generate.beehives", "dimBlacklist", new int[0]).getIntList()){
 			blacklistedDims.add(dimId);
+		}
+		for(int dimId : config.get("world.generate.beehives", "dimWhitelist", new int[0]).getIntList()) {
+			whitelistedDims.add(dimId);
 		}
 		for(IHiveRegistry.HiveType type : IHiveRegistry.HiveType.values()){
 			String[] entries = config.get(CATEGORY, type.getName(), new String[0]).getStringList();
@@ -62,11 +67,18 @@ public class HiveConfig {
 		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTypes::contains);
 	}
 	
-	public static boolean isDimBlacklisted(int dimId) {
-		return blacklistedDims.contains(dimId);
+	public static boolean isDimAllowed(int dimId) {		//blacklist has priority
+		if(blacklistedDims.isEmpty() || !blacklistedDims.contains(dimId)) {
+			return whitelistedDims.contains(dimId);
+		}
+		return false;
 	}
 	
 	public static void addBlacklistedDim(int dimId) {
 		blacklistedDims.add(dimId);
+	}
+	
+	public static void addWhitelistedDim(int dimId) {
+		whitelistedDims.add(dimId);
 	}
 }
