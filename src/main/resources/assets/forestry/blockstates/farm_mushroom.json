@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:farm_mushroom" },
+		"facing=east": { "model": "forestry:farm_mushroom", "y": 90 },
+		"facing=south": { "model": "forestry:farm_mushroom", "y": 180 },
+		"facing=west": { "model": "forestry:farm_mushroom", "y": -90 }
+	}
+}

@@ -1,14 +1,16 @@
 package forestry.farming.logic;
 
-import forestry.api.farming.ISimpleFarmLogic;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.ISimpleFarmLogic;
 
 public class FarmLogicSimple extends FarmLogicCrops {
 
-	protected final ISimpleFarmLogic simpleLogic;
-	
-	public FarmLogicSimple(ISimpleFarmLogic simpleLogic) {
-		super(simpleLogic.getSeeds());
+	private final ISimpleFarmLogic simpleLogic;
+
+	public FarmLogicSimple(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleLogic) {
+		super(instance, isManual);
 		this.simpleLogic = simpleLogic;
 	}
 

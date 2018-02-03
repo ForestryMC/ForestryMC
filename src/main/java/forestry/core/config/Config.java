@@ -99,10 +99,16 @@ public class Config {
 
 	// Farm
 	public static int farmSize = 2;
+	public static float fertilizerModifier = 1.0F;
 	public static boolean squareFarms = false;
 	private static boolean enableExUtilEnderLily = true;
 	private static boolean enableExUtilRedOrchid = true;
 	private static boolean enableMagicalCropsSupport = true;
+
+	// Cultivation
+	public static int planterExtend = 4;
+	public static boolean ringFarms = true;
+	public static int ringSize = 4;
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
@@ -278,10 +284,15 @@ public class Config {
 		}
 
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
+		fertilizerModifier = configCommon.getFloatLocalized("tweaks.farms", "fertilizer", fertilizerModifier, 0.1F, 5.0F);
 		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
 		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
 		enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
 		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+
+		planterExtend = configCommon.getIntLocalized("tweaks.cultivation", "extend", planterExtend, 1, 15);
+		ringFarms = configCommon.getBooleanLocalized("tweaks.cultivation", "ring", ringFarms);
+		ringSize = configCommon.getIntLocalized("tweaks.cultivation", "ring_size", ringSize, 1, 8);
 
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks", "capsule", CapsuleFluidPickup);
 

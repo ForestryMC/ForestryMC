@@ -20,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -40,8 +41,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,6 +55,8 @@ import forestry.api.core.ISpriteRegister;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.circuits.ISocketable;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
 import forestry.core.render.MachineParticleCallback;
 import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleHelper;
@@ -70,7 +76,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public final P blockType;
 
 	private final ParticleHelper.Callback particleCallback;
-	protected final BlockStateContainer blockState;
 
 	public BlockBase(P blockType, Material material) {
 		super(material);
@@ -82,9 +87,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.hasCustom = blockType instanceof IBlockTypeCustom;
 		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
 
-		this.blockState = this.createBlockState();
-		IBlockState state = this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
-		this.setDefaultState(state);
+		this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}
@@ -210,6 +213,22 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 			InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
 		}
 		super.breakBlock(world, pos, state);
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (world.isRemote) {
+			return;
+		}
+
+		if (placer instanceof EntityPlayer) {
+			TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
+				IOwnerHandler ownerHandler = tile.getOwnerHandler();
+				EntityPlayer player = (EntityPlayer) placer;
+				GameProfile gameProfile = player.getGameProfile();
+				ownerHandler.setOwner(gameProfile);
+			});
+		}
 	}
 
 	public void init() {

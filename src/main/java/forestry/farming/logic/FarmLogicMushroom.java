@@ -15,23 +15,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 
-	public FarmLogicMushroom() {
-		super(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState(), ForestryAPI.farmRegistry.getFarmables("farmShroom"));
-		addSoil(new ItemStack(Blocks.DIRT, 1, 2), Blocks.DIRT.getStateFromMeta(2), true);
+	public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
-
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Shroom Farm";
-		} else {
-			return "Managed Shroom Farm";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.shroom";
 	}
 
 	@Override

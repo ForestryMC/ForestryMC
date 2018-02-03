@@ -25,15 +25,18 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.farming.logic.crops.CropRubber;
 import forestry.plugins.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 
 	private boolean active = true;
 
-	public FarmLogicRubber() {
+	public FarmLogicRubber(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
 			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
 			active = false;
@@ -46,8 +49,8 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Rubber Plantation";
+	public String getUnlocalizedName() {
+		return "for.farm.rubber";
 	}
 
 	@Override
@@ -131,9 +134,4 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		// do nothing as soil is not managed by farm
-	}
-	
 }

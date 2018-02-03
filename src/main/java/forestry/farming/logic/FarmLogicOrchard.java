@@ -28,23 +28,23 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.ModuleCore;
 import forestry.core.tiles.TileUtil;
+import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
-	private final Collection<IFarmable> farmables;
 	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
-	public FarmLogicOrchard() {
-		this.farmables = ForestryAPI.farmRegistry.getFarmables("farmOrchard");
+	public FarmLogicOrchard(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		//		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.AGRICRAFT) || ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.INDUSTRIALCRAFT)) {
@@ -63,8 +63,6 @@ public class FarmLogicOrchard extends FarmLogic {
 		//				traversalBlocksBuilder.add(grapeVine);
 		//			}
 		//		}
-
-		traversalBlocksBuilder.build();
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
 
@@ -105,7 +103,6 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-
 		if (!lastExtents.containsKey(pos)) {
 			lastExtents.put(pos, 0);
 		}
@@ -129,13 +126,8 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Orchard";
-	}
-	
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		// do nothing as soil is not managed by farm
+	public String getUnlocalizedName() {
+		return "for.farm.orchard";
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
@@ -145,7 +137,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position)) {
+		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
 			return crops;
 		}
 
@@ -192,11 +184,11 @@ public class FarmLogicOrchard extends FarmLogic {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}
-					if (isFruitBearer(world, candidate)) {
+					if (isFruitBearer(world, candidate, blockState)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 
-						ICrop crop = getCrop(world, candidate);
+						ICrop crop = getCropAt(world, candidate);
 						if (crop != null) {
 							crops.push(crop);
 						}
@@ -208,14 +200,14 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, BlockPos position) {
+	private boolean isFruitBearer(World world, BlockPos position, IBlockState blockState) {
 		IFruitBearer tile = TileUtil.getTile(world, position, IFruitBearer.class);
 		if (tile != null) {
 			return true;
 		}
 
-		for (IFarmable farmable : farmables) {
-			if (farmable.isSaplingAt(world, position)) {
+		for (IFarmable farmable : getFarmables()) {
+			if (farmable.isSaplingAt(world, position, blockState)) {
 				return true;
 			}
 		}
@@ -234,8 +226,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Nullable
-	private ICrop getCrop(World world, BlockPos position) {
-
+	private ICrop getCropAt(World world, BlockPos position) {
 		IFruitBearer fruitBearer = TileUtil.getTile(world, position, IFruitBearer.class);
 
 		if (fruitBearer != null) {
@@ -243,13 +234,7 @@ public class FarmLogicOrchard extends FarmLogic {
 				return new CropFruit(world, position);
 			}
 		} else {
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : farmables) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					return crop;
-				}
-			}
+			return getCrop(world, position);
 		}
 		return null;
 	}

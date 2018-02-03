@@ -10,45 +10,19 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Stack;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.FarmRegistry;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.farming.FarmRegistry;
+import forestry.api.farming.IFarmProperties;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.ItemStackUtil;
-
-public class FarmLogicReeds extends FarmLogic {
-
-	private final Collection<IFarmable> germlings = FarmRegistry.getInstance().getFarmables("farmPoales");
-	private ArrayList<Soil> soils = new ArrayList<>();
-
-
-	public FarmLogicReeds() {
-		addSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
-		addSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
+public class FarmLogicReeds extends FarmLogicSoil {
+	public FarmLogicReeds(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
@@ -57,17 +31,8 @@ public class FarmLogicReeds extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Reed Farm";
-		} else {
-			return "Managed Reed Farm";
-		}
-	}
-
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		this.soils.add(new Soil(resource,soilState,hasMetaData));
+	public String getUnlocalizedName() {
+		return "for.farm.reed";
 	}
 
 	@Override
@@ -81,18 +46,12 @@ public class FarmLogicReeds extends FarmLogic {
 	}
 
 	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
+	public boolean isAcceptedResource(ItemStack itemStack) {
 		if (isManual) {
 			return false;
 		}
 
-		for(Soil soil : soils){
-			ItemStack resource = soil.getResource();
-			if(resource.isItemEqual(itemstack)){
-				return true;
-			}
-		}
-		return false;
+		return super.isAcceptedResource(itemStack);
 
 	}
 
@@ -118,23 +77,6 @@ public class FarmLogicReeds extends FarmLogic {
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
-	}
-
-	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : germlings) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
-		}
-		return crops;
 	}
 
 }
