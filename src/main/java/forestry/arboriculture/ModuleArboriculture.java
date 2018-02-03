@@ -540,6 +540,12 @@ public class ModuleArboriculture extends BlankForestryModule {
 				IMCUtil.logInvalidIMCMessage(message);
 			}
 			return true;
+		} else if (message.key.equals("blacklist-trees-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				Config.blacklistTreeDim(dim);
+			}
+			return true;
 		}
 		return false;
 	}

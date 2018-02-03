@@ -65,4 +65,8 @@ public class HiveConfig {
 	public static boolean isDimBlacklisted(int dimId) {
 		return blacklistedDims.contains(dimId);
 	}
+	
+	public static void addBlacklistedDim(int dimId) {
+		blacklistedDims.add(dimId);
+	}
 }

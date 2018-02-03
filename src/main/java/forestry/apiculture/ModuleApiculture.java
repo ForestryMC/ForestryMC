@@ -951,6 +951,12 @@ public class ModuleApiculture extends BlankForestryModule {
 			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
 			Log.warning(messageString);
 			return true;
+		} else if (message.key.equals("blacklist-hives-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				HiveConfig.addBlacklistedDim(dim);
+			}
+			return true;
 		}
 
 		return false;

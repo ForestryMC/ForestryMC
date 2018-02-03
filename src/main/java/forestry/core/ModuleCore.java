@@ -31,7 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -461,6 +461,18 @@ public class ModuleCore extends BlankForestryModule {
 		return new PacketRegistryCore();
 	}
 
+	@Override
+	public boolean processIMCMessage(IMCMessage message) {
+		if (message.key.equals("blacklist-ores-dimension")) {
+			int[] dims = message.getNBTValue().getIntArray("dimensions");
+			for(int dim : dims) {
+				Config.blacklistOreDim(dim);
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
