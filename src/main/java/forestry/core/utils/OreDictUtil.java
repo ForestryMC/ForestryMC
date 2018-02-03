@@ -78,4 +78,6 @@ public class OreDictUtil {
 	public static final String DYE_YELLOW = "dyeYellow";
 	public static final String DYE_BLUE = "dyeBlue";
 	public static final String DYE_RED = "dyeRed";
+
+	public static final String SLIMEBALL = "slimeball";
 }

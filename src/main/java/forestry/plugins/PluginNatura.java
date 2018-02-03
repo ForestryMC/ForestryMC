@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.modules.ForestryModule;
@@ -48,8 +48,8 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
-import forestry.farming.logic.FarmableAgingCrop;
-import forestry.farming.logic.FarmableSapling;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -220,7 +220,7 @@ public class PluginNatura extends BlankForestryModule {
 					return;
 				}
 
-				FarmRegistry.getInstance().registerFarmables("farmWheat",
+				FarmRegistry.getInstance().registerFarmables("farmCrops",
 					new FarmableAgingCrop(
 						seedItem,
 						block,
@@ -266,8 +266,10 @@ public class PluginNatura extends BlankForestryModule {
 	 */
 	@Override
 	public void postInit() {
-		IFarmLogic farmArboreal = FarmRegistry.getInstance().getFarmLogic("farmArboreal");
-		farmArboreal.addSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
+		IFarmProperties farmArboreal = FarmRegistry.getInstance().getProperties("managedArboreal");
+		if(farmArboreal != null) {
+			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState(), false);
+		}
 	
 	}
 

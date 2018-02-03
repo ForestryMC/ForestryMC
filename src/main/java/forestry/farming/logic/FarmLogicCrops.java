@@ -10,39 +10,28 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 
-public abstract class FarmLogicCrops extends FarmLogicWatered {
-	private final Iterable<IFarmable> seeds;
+public class FarmLogicCrops extends FarmLogicWatered {
 
-	protected FarmLogicCrops(Iterable<IFarmable> seeds) {
-		super(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
-
-		this.seeds = seeds;
-	}
-
-	@Override
-	public boolean isAcceptedGround(IBlockState blockState) {
-		return super.isAcceptedGround(blockState) || blockState.getBlock() == Blocks.FARMLAND;
+	public FarmLogicCrops(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
 	public boolean isAcceptedGermling(ItemStack itemstack) {
-		for (IFarmable germling : seeds) {
+		for (IFarmable germling : getFarmables()) {
 			if (germling.isGermling(itemstack)) {
 				return true;
 			}
@@ -52,7 +41,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	@Override
 	public boolean isAcceptedWindfall(ItemStack itemstack) {
-		for (IFarmable germling : seeds) {
+		for (IFarmable germling : getFarmables()) {
 			if (germling.isWindfall(itemstack)) {
 				return true;
 			}
@@ -77,17 +66,17 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 			}
 
 			IBlockState groundState = world.getBlockState(position.down());
-			if (isAcceptedGround(groundState)) {
-				return trySetCrop(world, farmHousing, position);
+			if (isAcceptedSoil(groundState)) {
+				return trySetCrop(world, farmHousing, position, direction);
 			}
 		}
 
 		return false;
 	}
 
-	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position) {
-		for (IFarmable candidate : seeds) {
-			if (farmHousing.plantGermling(candidate, world, position)) {
+	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
+		for (IFarmable candidate : getFarmables()) {
+			if (farmHousing.plantGermling(candidate, world, position, direction)) {
 				return true;
 			}
 		}
@@ -96,20 +85,12 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			IBlockState blockState = world.getBlockState(position);
-			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
-		}
-		return crops;
+	public ItemStack getIconItemStack() {
+		return new ItemStack(Items.WHEAT);
 	}
 
+	@Override
+	public String getUnlocalizedName() {
+		return "for.farm.crops";
+	}
 }

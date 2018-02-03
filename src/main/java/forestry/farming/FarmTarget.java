@@ -12,11 +12,11 @@ package forestry.farming;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
 
 public class FarmTarget {
 
@@ -49,7 +49,7 @@ public class FarmTarget {
 		return direction;
 	}
 
-	public void setExtentAndYOffset(World world, @Nullable BlockPos platformPosition) {
+	public void setExtentAndYOffset(World world, @Nullable BlockPos platformPosition, IFarmHousing housing) {
 		if (platformPosition == null) {
 			extent = 0;
 			return;
@@ -60,8 +60,7 @@ public class FarmTarget {
 			if (!world.isBlockLoaded(position)) {
 				break;
 			}
-			IBlockState blockState = world.getBlockState(position);
-			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
+			if (!housing.isValidPlatform(world, position)) {
 				break;
 			}
 			position.move(getDirection().getFacing());

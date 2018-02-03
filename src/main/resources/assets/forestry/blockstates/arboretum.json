@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:arboretum" },
+		"facing=east": { "model": "forestry:arboretum", "y": 90 },
+		"facing=south": { "model": "forestry:arboretum", "y": 180 },
+		"facing=west": { "model": "forestry:arboretum", "y": -90 }
+	}
+}

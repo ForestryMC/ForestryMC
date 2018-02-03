@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit {
@@ -22,15 +23,39 @@ public class CircuitFarmLogic extends Circuit {
 	private final IFarmLogic logic;
 	private boolean isManual = false;
 
+	public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
+		super(uid);
+		this.logic = instance.getLogic(manual);
+	}
+
+	@SuppressWarnings("unused")
 	public CircuitFarmLogic(String uid, IFarmLogic logic) {
 		super(uid);
 		this.logic = logic;
 	}
-	
+
+	@Override
+	public String getUnlocalizedName() {
+		return logic.getUnlocalizedName();
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return logic.getName();
+	}
+
+	/**
+	 * @deprecated TODO: Remove this method in 1.13
+	 */
+	@Deprecated
 	public IFarmLogic getFarmLogic() {
 		return logic;
 	}
 
+	/**
+	 * @deprecated TODO: Remove this method in 1.13
+	 */
+	@Deprecated
 	public CircuitFarmLogic setManual() {
 		isManual = true;
 		return this;

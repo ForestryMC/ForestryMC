@@ -19,6 +19,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockBeetroot;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -42,9 +43,12 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
+import forestry.core.blocks.BlockBogEarth;
+import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
 import forestry.core.config.Config;
@@ -59,8 +63,9 @@ import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
-import forestry.farming.logic.FarmLogicCereal;
 import forestry.farming.logic.FarmLogicCocoa;
+import forestry.farming.logic.FarmLogicCrops;
+import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmLogicGourd;
 import forestry.farming.logic.FarmLogicInfernal;
 import forestry.farming.logic.FarmLogicMushroom;
@@ -68,13 +73,13 @@ import forestry.farming.logic.FarmLogicOrchard;
 import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicReeds;
 import forestry.farming.logic.FarmLogicSucculent;
-import forestry.farming.logic.FarmLogicVegetable;
-import forestry.farming.logic.FarmableAgingCrop;
-import forestry.farming.logic.FarmableGE;
-import forestry.farming.logic.FarmableGourd;
-import forestry.farming.logic.FarmableStacked;
-import forestry.farming.logic.FarmableVanillaMushroom;
-import forestry.farming.logic.FarmableVanillaSapling;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableChorus;
+import forestry.farming.logic.farmables.FarmableGE;
+import forestry.farming.logic.farmables.FarmableGourd;
+import forestry.farming.logic.farmables.FarmableStacked;
+import forestry.farming.logic.farmables.FarmableVanillaMushroom;
+import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.tiles.TileFarmControl;
@@ -129,7 +134,7 @@ public class ModuleFarming extends BlankForestryModule {
 			registry.registerFarmables("farmArboreal", new FarmableGE());
 		}
 
-		registry.registerFarmables("farmOrchard",
+		registry.registerFarmables("farmCrops",
 				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7, 0),
@@ -141,8 +146,6 @@ public class ModuleFarming extends BlankForestryModule {
 		IBlockState plantedRedMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
 		registry.registerFarmables("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
-		registry.registerFarmables("farmWheat", new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7));
-
 		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
 		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
 
@@ -152,9 +155,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		registry.registerFarmables("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
-		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7));
-		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7));
-		registry.registerFarmables("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
+		registry.registerFarmables("farmEnder", FarmableChorus.INSTANCE);
 
 		//Forestry fertilizer
 		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
@@ -188,30 +189,65 @@ public class ModuleFarming extends BlankForestryModule {
 		GameRegistry.registerTileEntity(TileFarmValve.class, "forestry.FarmValve");
 		GameRegistry.registerTileEntity(TileFarmControl.class, "forestry.FarmControl");
 
-		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", new FarmLogicArboreal());
-		Circuits.farmShroomManaged = new CircuitFarmLogic("managedShroom", new FarmLogicMushroom());
-		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", new FarmLogicPeat());
-		Circuits.farmCerealManaged = new CircuitFarmLogic("managedCereal", new FarmLogicCereal());
-		Circuits.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", new FarmLogicVegetable());
-		Circuits.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", new FarmLogicInfernal());
+		IFarmRegistry registry = FarmRegistry.getInstance();
+		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
 
-		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", new FarmLogicPeat()).setManual();
-		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", new FarmLogicMushroom()).setManual();
-		Circuits.farmCerealManual = new CircuitFarmLogic("manualCereal", new FarmLogicCereal()).setManual();
-		Circuits.farmVegetableManual = new CircuitFarmLogic("manualVegetable", new FarmLogicVegetable()).setManual();
-		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", new FarmLogicSucculent()).setManual();
-		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", new FarmLogicReeds()).setManual();
-		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", new FarmLogicGourd()).setManual();
-		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", new FarmLogicCocoa()).setManual();
+		IFarmProperties arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
+		IFarmProperties cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
+		IFarmProperties mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
+		IFarmProperties succulentFarm = registry.registerLogic("farmSucculent", FarmLogicSucculent::new);
+		IFarmProperties peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
+		IFarmProperties infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
+		IFarmProperties poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
+		IFarmProperties orchardFarm = registry.registerLogic("farmOrchard", FarmLogicOrchard::new);
+		IFarmProperties gourdFarm = registry.registerLogic("farmGourd", FarmLogicGourd::new);
+		IFarmProperties cocoaFarm = registry.registerLogic("farmCocoa", FarmLogicCocoa::new);
+		IFarmProperties enderFarm = registry.registerLogic("farmEnder", FarmLogicEnder::new);
 
-		Circuits.farmOrchardManual = new CircuitFarmLogic("manualOrchard", new FarmLogicOrchard());
+		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
+		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);
+		arborealFarm.registerSoil(new ItemStack(Blocks.DIRT), coreBlocks.humus.getDefaultState());
+		arborealFarm.registerSoil(new ItemStack(coreBlocks.humus), coreBlocks.humus.getDefaultState());
 
-		// Make Forestry farming logics accessible to plugins via FarmRegistry
-		FarmRegistry.getInstance().registerFarmLogic("farmArboreal",((CircuitFarmLogic)Circuits.farmArborealManaged).getFarmLogic());
-		FarmRegistry.getInstance().registerFarmLogic("farmShroom",((CircuitFarmLogic)Circuits.farmShroomManaged).getFarmLogic());
-		FarmRegistry.getInstance().registerFarmLogic("farmWheat",((CircuitFarmLogic)Circuits.farmCerealManaged).getFarmLogic());
-		FarmRegistry.getInstance().registerFarmLogic("farmVegetables",((CircuitFarmLogic)Circuits.farmVegetableManaged).getFarmLogic());
-		FarmRegistry.getInstance().registerFarmLogic("farmInfernal",((CircuitFarmLogic)Circuits.farmInfernalManaged).getFarmLogic());
+		Circuits.farmShroomManaged = new CircuitFarmLogic("managedShroom", mushroomFarm, false);
+		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
+		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
+		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
+			Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+
+		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
+		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
+		peatFarm.registerSoil(coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1), coreBlocks.bogEarth.getDefaultState());
+
+		Circuits.farmCropsManaged = new CircuitFarmLogic("managedCrops", cropsFarm, false);
+		Circuits.farmCropsManual = new CircuitFarmLogic("manualCrops", cropsFarm, true);
+		cropsFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
+
+		Circuits.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", infernalFarm, false);
+		Circuits.farmInfernalManual = new CircuitFarmLogic("manualInfernal", infernalFarm, true);
+		infernalFarm.registerSoil(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState());
+
+		Circuits.farmOrchardManaged = new CircuitFarmLogic("managedOrchard", orchardFarm, false);
+		Circuits.farmOrchardManual = new CircuitFarmLogic("manualOrchard", orchardFarm, true);
+
+		Circuits.farmSucculentManaged = new CircuitFarmLogic("managedSucculent", succulentFarm, false);
+		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", succulentFarm, true);
+		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
+
+		Circuits.farmPoalesManaged = new CircuitFarmLogic("managedPoales", poalesFarm, false);
+		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true);
+		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
+		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
+
+		Circuits.farmGourdManaged = new CircuitFarmLogic("managedGourd", gourdFarm, false);
+		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true);
+
+		Circuits.farmCocoaManaged = new CircuitFarmLogic("managedCocoa", cocoaFarm, false);
+		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
+
+		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
+		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, true);
+		enderFarm.registerSoil(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState());
 	}
 
 	@Override
@@ -275,22 +311,37 @@ public class ModuleFarming extends BlankForestryModule {
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
 		ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmArborealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPeatManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCerealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.IRON, 1), Circuits.farmVegetableManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedCereal", Circuits.farmCropsManaged);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualCereal", Circuits.farmCropsManual);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedVegetable", Circuits.farmCropsManaged);
+		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualVegetable", Circuits.farmCropsManual);
 
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmOrchardManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPeatManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCerealManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.IRON, 1), Circuits.farmVegetableManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmSucculentManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmGourdManual);
+		if(layoutManaged == null || layoutManual == null){
+			return;
+		}
+
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
+
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
 	}
 
 	@Override

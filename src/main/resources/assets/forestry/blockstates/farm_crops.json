@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:farm_crops" },
+		"facing=east": { "model": "forestry:farm_crops", "y": 90 },
+		"facing=south": { "model": "forestry:farm_crops", "y": 180 },
+		"facing=west": { "model": "forestry:farm_crops", "y": -90 }
+	}
+}

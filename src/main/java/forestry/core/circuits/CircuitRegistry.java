@@ -30,6 +30,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy", CircuitSocketType.NONE);
 	private static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<>();
+	private final Map<String, ICircuit> deprecatedCircuits = new LinkedHashMap<>();
 	private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<>();
 	private final Map<String, ICircuit> circuitMap = new LinkedHashMap<>();
 
@@ -75,13 +76,14 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
+	public void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement) {
+		deprecatedCircuits.put(deprecatedCircuit, replacement);
+	}
+
+	@Override
 	@Nullable
 	public ICircuitLayout getLayout(String uid) {
-		if (layoutMap.containsKey(uid)) {
-			return layoutMap.get(uid);
-		} else {
-			return null;
-		}
+		return layoutMap.getOrDefault(uid, null);
 	}
 
 	/* CIRCUITS */
@@ -98,6 +100,9 @@ public class CircuitRegistry implements ICircuitRegistry {
 	@Override
 	@Nullable
 	public ICircuit getCircuit(String uid) {
+		if(deprecatedCircuits.containsKey(uid)){
+			return deprecatedCircuits.get(uid);
+		}
 		return circuitMap.get(uid);
 	}
 

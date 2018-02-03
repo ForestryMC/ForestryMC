@@ -13,47 +13,87 @@ package forestry.farming.logic;
 import com.google.common.base.Predicate;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.ISoil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
-	protected boolean isManual;
+	protected final IFarmProperties properties;
+	protected final boolean isManual;
+
+	public FarmLogic(IFarmProperties properties, boolean isManual) {
+		this.properties = properties;
+		this.isManual = isManual;
+	}
+
+	protected Collection<IFarmable> getFarmables() {
+		return properties.getFarmables();
+	}
+
+	protected Collection<ISoil> getSoils() {
+		return properties.getSoils();
+	}
+
+	@Override
+	public String getName() {
+		String unformatted = isManual ? "for.farm.grammar.manual" : "for.farm.grammar.managed";
+		return Translator.translateToLocalFormatted(unformatted, Translator.translateToLocal(getUnlocalizedName()));
+	}
 
 	@Override
 	public FarmLogic setManual(boolean flag) {
-		isManual = flag;
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public ResourceLocation getTextureMap() {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+		Stack<ICrop> crops = new Stack<>();
+		for (int i = 0; i < extent; i++) {
+			BlockPos position = translateWithOffset(pos.up(), direction, i);
+			ICrop crop = getCrop(world, position);
+			if (crop != null) {
+				crops.push(crop);
+			}
+		}
+		return crops;
 	}
 
-	@Override
-	public abstract ItemStack getIconItemStack();
+	@Nullable
+	protected ICrop getCrop(World world, BlockPos position) {
+		if (world.isAirBlock(position)) {
+			return null;
+		}
+		IBlockState blockState = world.getBlockState(position);
+		for (IFarmable seed : getFarmables()) {
+			ICrop crop = seed.getCropAt(world, position, blockState);
+			if (crop != null) {
+				return crop;
+			}
+		}
+		return null;
+	}
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 
@@ -96,6 +136,12 @@ public abstract class FarmLogic implements IFarmLogic {
 		return stacks;
 	}
 
+	// for debugging
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 	private static class EntitySelectorFarm implements Predicate<EntityItem> {
 		private final FarmLogic farmLogic;
 
@@ -112,15 +158,9 @@ public abstract class FarmLogic implements IFarmLogic {
 			if (entity.getEntityData().getBoolean("PreventRemoteMovement")) {
 				return false;
 			}
-			
+
 			ItemStack contained = entity.getItem();
 			return farmLogic.isAcceptedGermling(contained) || farmLogic.isAcceptedWindfall(contained);
 		}
-	}
-
-	// for debugging
-	@Override
-	public String toString() {
-		return getName();
 	}
 }

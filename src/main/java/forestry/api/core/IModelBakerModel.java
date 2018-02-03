@@ -15,6 +15,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * @deprecated TODO Remove in 1.13: Not needed in the api
+ */
+@Deprecated
 @SideOnly(Side.CLIENT)
 public interface IModelBakerModel extends IBakedModel {
 

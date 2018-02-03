@@ -21,23 +21,14 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
+import forestry.farming.logic.crops.CropPeat;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-	private static final ItemStack bogEarth = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
-
-	public FarmLogicPeat() {
-		super(bogEarth, ModuleCore.getBlocks().bogEarth.getDefaultState());
-	}
-
-	@Override
-	public boolean isAcceptedGround(IBlockState blockState) {
-		if (super.isAcceptedGround(blockState)) {
-			return true;
-		}
-
-		return blockState.getBlock() == ModuleCore.getBlocks().bogEarth;
+	public FarmLogicPeat(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
 	}
 
 	@Override
@@ -46,12 +37,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Peat Bog";
-		} else {
-			return "Managed Peat Bog";
-		}
+	public String getUnlocalizedName() {
+		return "for.farm.peat";
 	}
 
 	@Override

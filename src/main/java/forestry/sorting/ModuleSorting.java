@@ -107,5 +107,6 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		GameRegistry.registerTileEntity(TileGeneticFilter.class, "forestry.GeneticFilter");
+		((FilterRegistry)AlleleManager.filterRegistry).init();
 	}
 }

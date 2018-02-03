@@ -6,7 +6,7 @@
 package forestry.api.climate;
 
 /**
- * @deprecated Use IClimateState
+ * @deprecated TODO: Remove in 1.13,  Use IClimateState
  */
 @Deprecated
 public interface IClimateInfo {

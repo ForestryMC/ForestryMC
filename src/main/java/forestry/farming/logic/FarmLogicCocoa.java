@@ -34,10 +34,16 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
+import forestry.farming.logic.farmables.FarmableCocoa;
 
 public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();
+
+	public FarmLogicCocoa(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
+	}
 
 	@Override
 	public ItemStack getIconItemStack() {
@@ -45,8 +51,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
-	public String getName() {
-		return "Cocoa Plantation";
+	public String getUnlocalizedName() {
+		return "for.farm.cocoa";
 	}
 
 	@Override
@@ -73,11 +79,6 @@ public class FarmLogicCocoa extends FarmLogic {
 	public boolean isAcceptedWindfall(ItemStack stack) {
 		return false;
 	}
-	
-	@Override
-	public void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
-		// do nothing as soil is not managed by farm
-	}
 
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
@@ -88,7 +89,6 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-
 		if (!lastExtentsCultivation.containsKey(pos)) {
 			lastExtentsCultivation.put(pos, 0);
 		}
@@ -99,7 +99,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		}
 
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
-		boolean result = tryPlantingCocoa(world, farmHousing, position);
+		boolean result = tryPlantingCocoa(world, farmHousing, position, direction);
 
 		lastExtent++;
 		lastExtentsCultivation.put(pos, lastExtent);
@@ -128,14 +128,14 @@ public class FarmLogicCocoa extends FarmLogic {
 		return crops;
 	}
 
-	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position) {
+	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
 		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
 		IBlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 				BlockPos candidate = new BlockPos(current.getX() + direction.getFrontOffsetX(), current.getY(), current.getZ() + direction.getFrontOffsetZ());
 				if (world.isAirBlock(candidate)) {
-					return farmHousing.plantGermling(cocoa, world, candidate);
+					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
 				}
 			}
 

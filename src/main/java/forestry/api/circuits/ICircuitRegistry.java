@@ -18,6 +18,8 @@ public interface ICircuitRegistry {
 
 	void registerCircuit(ICircuit circuit);
 
+	void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement);
+
 	@Nullable
 	ICircuit getCircuit(String uid);
 

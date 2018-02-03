@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.farming.multiblock.IFarmControllerInternal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.config.Config;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.farming.multiblock.IFarmControllerInternal;
 
 public class FarmLogicSlot extends Widget {
 
@@ -65,7 +67,7 @@ public class FarmLogicSlot extends Widget {
 		public void refresh() {
 			toolTip.clear();
 			toolTip.add(getLogic().getName());
-			toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
+			toolTip.add("Fertilizer: " + Math.round(getLogic().getFertilizerConsumption() * Config.fertilizerModifier));
 			toolTip.add("Water: " + getLogic().getWaterConsumption(farmController.getFarmLedgerDelegate().getHydrationModifier()));
 		}
 	};

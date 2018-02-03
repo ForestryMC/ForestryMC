@@ -1,0 +1,57 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"particle": "forestry:blocks/peat_bog_particle",
+		"texture": "forestry:blocks/peat_bog"
+	},
+	"elements": [ 	 
+		{
+			"__comment": "base",
+			"from": [ 0, 0, 0 ],
+			"to": [ 16, 4, 16 ],
+			"faces": {
+				"down": { "uv": [ 4, 4, 8, 8 ], "texture": "#texture", "cullface": "down" },
+				"up": { "uv": [ 0, 4, 4, 8 ], "texture": "#texture" },
+				"north": { "uv": [ 8, 4, 12, 5 ], "texture": "#texture", "cullface": "north" },
+				"south": { "uv": [ 8, 6, 12, 7 ], "texture": "#texture", "cullface": "south" },
+				"west": { "uv": [ 8, 7, 12, 8 ], "texture": "#texture", "cullface": "west" },
+				"east": { "uv": [ 8, 5, 12, 6 ], "texture": "#texture", "cullface": "east" }
+			}
+		},
+		{
+			"__comment": "ceiling",
+			"from": [ 0, 12, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 4, 0, 8, 4 ], "texture": "#texture" },
+				"up": { "uv": [ 0, 0, 4, 4 ], "texture": "#texture", "cullface": "up" },
+				"north": { "uv": [ 8, 0, 12, 1 ], "texture": "#texture", "cullface": "north" },
+				"south": { "uv": [ 8, 2, 12, 3 ], "texture": "#texture", "cullface": "south" },
+				"west": { "uv": [ 8, 3, 12, 4 ], "texture": "#texture", "cullface": "west" },
+				"east": { "uv": [ 8, 1, 12, 2 ], "texture": "#texture", "cullface": "east" }
+			}
+		},
+		{
+			"__comment": "terrarium",
+			"from": [ 2, 4, 2 ],
+			"to": [ 14, 12, 14 ],
+			"faces": {
+				"north": { "uv": [ 0, 13.5, 3, 15.5 ], "texture": "#texture" },
+				"south": { "uv": [ 6, 13.5, 9, 15.5 ], "texture": "#texture" },
+				"west": { "uv": [ 9, 13.5, 12, 15.5 ], "texture": "#texture" },
+				"east": { "uv": [ 3, 13.5, 6, 15.5 ], "texture": "#texture" }
+			}
+		},
+		{
+			"__comment": "showcase",
+			"from": [ 4, 4, 4 ],
+			"to": [ 12, 12, 12 ],
+			"faces": {
+				"north": { "uv": [ 6, 10, 8, 12 ], "texture": "#texture" },
+				"south": { "uv": [ 10, 10, 12, 12 ], "texture": "#texture" },
+				"west": { "uv": [ 12, 10, 14, 12 ], "texture": "#texture" },
+				"east": { "uv": [ 8, 10, 10, 12 ], "texture": "#texture" }
+			}
+		}
+	]
+}
