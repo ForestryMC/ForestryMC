@@ -283,8 +283,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
 		
-		ignobleDecayInAlveary = config.getBooleanLocalized("beekeeping", "alveary.decay", true);
-		
 		decayChance = config.getFloatLocalized("beekeeping", "decay.chance", 0.02f, 0.0f, 1.0f);
 		
 		
