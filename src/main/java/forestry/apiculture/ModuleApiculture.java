@@ -904,6 +904,10 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
 	}
+	
+	public static void setAlvearyDecay(boolean decay) {
+		ignobleDecayInAlveary = decay;
+	}
 
 	private static void parseBeeBlacklist(String[] items) {
 		for (String item : items) {
