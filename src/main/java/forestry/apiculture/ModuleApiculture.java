@@ -156,7 +156,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	
 	public static boolean hivesDamageOnPeaceful = false;
 	
-	public static boolean ignobleDecay = true;
+	public static boolean ignobleDecayInAlveary = true;
+	
+	public static float decayChance = 0.02f;
 	
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
@@ -281,7 +283,9 @@ public class ModuleApiculture extends BlankForestryModule {
 		
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
 		
-		ignobleDecay = config.getBooleanLocalized("beekeeping", "ignoble.decay", true);
+		ignobleDecayInAlveary = config.getBooleanLocalized("beekeeping", "alveary.decay", true);
+		
+		decayChance = config.getFloatLocalized("beekeeping", "decay.chance", 0.02f, 0.0f, 1.0f);
 		
 		
 

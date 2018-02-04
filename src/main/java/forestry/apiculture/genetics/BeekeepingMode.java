@@ -27,6 +27,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.multiblock.TileAlveary;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -88,14 +89,14 @@ public class BeekeepingMode implements IBeekeepingMode {
 			return false;
 		}
 		
-		if(!ModuleApiculture.ignobleDecay) {
+		if(housing instanceof TileAlveary && !ModuleApiculture.ignobleDecayInAlveary) {
 			return false;
 		}
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
-				rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
+				rand.nextFloat() < ModuleApiculture.decayChance * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
 	}
 
 	@Override
