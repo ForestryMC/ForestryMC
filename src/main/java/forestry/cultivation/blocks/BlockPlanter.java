@@ -52,7 +52,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		int facing = meta & 7;
-		return getDefaultState().withProperty(FACING, EnumFacing.fromAngle(facing)).withProperty(MANUAL, (meta & 8) == 8);
+		return getDefaultState().withProperty(FACING, EnumFacing.fromAngle(facing)).withProperty(MANUAL, (meta & 1) == 1);
 	}
 
 	@Override
