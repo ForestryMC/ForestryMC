@@ -32,6 +32,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleManager;
 
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.HARVESTCRAFT, name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.module.harvestcraft.description")
@@ -340,23 +341,25 @@ public class PluginHarvestCraft extends CompatPlugin {
 
 		for (String nutName : nuts) {
 			ItemStack nut = getItemStack(nutName + "item");
-			Block nutBlock = getBlock("pam" + nutName);
+			Block nutBlock = getBlock("pam" + nutName);			
 			if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING)) && nutBlock != null) {
-				farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(ItemStack.EMPTY, nutBlock, fruitAGE, 2, 0));
+					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(ItemStack.EMPTY, nutBlock, fruitAGE, 2, 0));
 			}
 			if (nut != null) {
 				RecipeManagers.squeezerManager.addRecipe(20, nut, Fluids.SEED_OIL.getFluid(15 * seedamount));
 			}
 		}
-
-		ItemStack hcHoneyItem = getItemStack("honeyitem");
-		if (hcHoneyItem != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
-		}
-
-		ItemStack hcBeeswaxItem = getItemStack("beeswaxitem");
-		if (hcBeeswaxItem != null) {
-			RecipeUtil.addRecipe("pam_wax_capsule", ModuleFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
+			
+		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
+			ItemStack hcHoneyItem = getItemStack("honeyitem");
+			if (hcHoneyItem != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
+			}
+	
+			ItemStack hcBeeswaxItem = getItemStack("beeswaxitem");
+			if (hcBeeswaxItem != null) {
+				RecipeUtil.addRecipe("pam_wax_capsule", ModuleFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);
+			}
 		}
 	}
 
