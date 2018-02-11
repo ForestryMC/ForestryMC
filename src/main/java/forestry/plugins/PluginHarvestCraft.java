@@ -341,9 +341,9 @@ public class PluginHarvestCraft extends CompatPlugin {
 
 		for (String nutName : nuts) {
 			ItemStack nut = getItemStack(nutName + "item");
-			Block nutBlock = getBlock("pam" + nutName);			
+			Block nutBlock = getBlock("pam" + nutName);
 			if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING)) && nutBlock != null) {
-					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(ItemStack.EMPTY, nutBlock, fruitAGE, 2, 0));
+				farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(ItemStack.EMPTY, nutBlock, fruitAGE, 2, 0));
 			}
 			if (nut != null) {
 				RecipeManagers.squeezerManager.addRecipe(20, nut, Fluids.SEED_OIL.getFluid(15 * seedamount));
