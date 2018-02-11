@@ -47,8 +47,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
-import forestry.apiculture.HiveConfig;
-import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
@@ -61,7 +59,6 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
-import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
@@ -361,6 +358,8 @@ public class ModuleFarming extends BlankForestryModule {
 		EnumFarmBlockType.registerSprites();
 	}
 	
+	/* Only add your fertilizers here if they require sufficient setup/ are non renewable or add a low 
+	 * fertilizer value. This should be considered carefully*/
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-fertilizer")) {
