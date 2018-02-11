@@ -350,7 +350,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 			}
 		}
 			
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
+		if(ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
 			ItemStack hcHoneyItem = getItemStack("honeyitem");
 			if (hcHoneyItem != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
