@@ -68,7 +68,7 @@ public class WorldGenerator implements IWorldGenerator {
 	}
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
-		if(Config.blacklistedOreDims.contains(world.provider.getDimension()))
+		if(!Config.isValidOreDim(world.provider.getDimension()))
 			return;
 
 		if (apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
