@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import net.minecraft.util.math.AxisAlignedBB;
+
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -17,7 +19,6 @@ import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 	APIARIST_CHEST(TileApiaristChest.class, "api_chest", "apiaristchest", TileNaturalistChest.chestBoundingBox);
