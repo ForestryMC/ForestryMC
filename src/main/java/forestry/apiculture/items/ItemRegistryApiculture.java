@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
@@ -17,8 +23,6 @@ import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemScoop;
 import forestry.core.utils.OreDictUtil;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeQueenGE;
@@ -100,5 +104,8 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		scoop.setHarvestLevel("scoop", 3);
 
 		smoker = registerItem(new ItemSmoker(), "smoker");
+
+		// register some common oreDict names for our recipes
+		OreDictionary.registerOre(OreDictUtil.BLOCK_WOOL, new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 	}
 }

@@ -477,7 +477,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		RecipeUtil.addRecipe("scoop", items.scoop,
 				"#X#", "###", " # ",
 				'#', OreDictUtil.STICK_WOOD,
-				'X', Blocks.WOOL);
+				'X', OreDictUtil.BLOCK_WOOL);
 		RecipeUtil.addRecipe("smoker", items.smoker,
 				"LS#",
 				"LF#",
