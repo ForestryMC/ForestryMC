@@ -27,6 +27,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -463,6 +466,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public GuiContainer getGui(EntityPlayer player, int data) {
 		return new GuiPlanter(this, player.inventory);
