@@ -208,14 +208,18 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	}
 
 	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		dropBlockAsItem(worldIn, pos, state, 0);
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
-		String glass = "glass";
+		List<ItemStack> ret = new java.util.ArrayList<>();
 		TileGreenhouseWindow window = TileUtil.getTile(world, pos, TileGreenhouseWindow.class);
 		if (window != null) {
-			glass = window.getGlass();
+			ret.add(getItem(window.getGlass()));
 		}
-		ret.add(getItem(glass));
 		return ret;
 	}
 
