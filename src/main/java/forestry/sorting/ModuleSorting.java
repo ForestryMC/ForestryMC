@@ -14,7 +14,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.modules.ForestryModule;
 import forestry.apiculture.ModuleApiculture;
-import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
@@ -77,7 +76,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'D', OreDictUtil.GEM_DIAMOND,
 				'W', OreDictUtil.PLANK_WOOD,
 				'G', OreDictUtil.BLOCK_GLASS,
-				'B', ModuleCore.getItems().gearBronze,
+				'B', OreDictUtil.GEAR_BRONZE,
 				'P', ModuleApiculture.getItems().propolis);
 		}
 		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) {
@@ -88,7 +87,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'D', OreDictUtil.GEM_DIAMOND,
 				'W', OreDictUtil.PLANK_WOOD,
 				'G', OreDictUtil.BLOCK_GLASS,
-				'B', ModuleCore.getItems().gearBronze,
+				'B', OreDictUtil.GEAR_BRONZE,
 				'F', OreDictUtil.FRUIT_FORESTRY);
 		}
 		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY)) {
@@ -99,7 +98,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'D', OreDictUtil.GEM_DIAMOND,
 				'W', OreDictUtil.PLANK_WOOD,
 				'G', OreDictUtil.BLOCK_GLASS,
-				'B', ModuleCore.getItems().gearBronze,
+				'B', OreDictUtil.GEAR_BRONZE,
 				'F', ModuleLepidopterology.getItems().caterpillarGE);
 		}
 	}
