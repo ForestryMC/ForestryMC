@@ -58,9 +58,9 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		if(state.getValue(MANUAL)){
-			return state.getValue(FACING).ordinal();
+			return 8 + state.getValue(FACING).ordinal();
 		}
-		return 8 + state.getValue(FACING).ordinal();
+		return state.getValue(FACING).ordinal();
 	}
 
 	@Override
