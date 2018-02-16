@@ -207,7 +207,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 		if (worldIn != null && pos != null) {
 			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 			if (leaves != null) {
-				if (tintIndex == 0) {
+				if (tintIndex == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
 					EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 					return leaves.getFoliageColour(thePlayer);
 				} else {

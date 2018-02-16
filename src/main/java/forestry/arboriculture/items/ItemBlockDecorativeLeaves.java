@@ -1,14 +1,17 @@
 package forestry.arboriculture.items;
 
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(BlockDecorativeLeaves block) {
@@ -33,7 +36,7 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (renderPass == 0) {
+		if (renderPass == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
 			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
 		} else {
 			IFruitProvider fruitProvider = genome.getFruitProvider();

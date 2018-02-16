@@ -194,7 +194,7 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		}
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (tintIndex == 0) {
+		if (tintIndex == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
 			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
 		} else {
 			IFruitProvider fruitProvider = genome.getFruitProvider();

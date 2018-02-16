@@ -13,8 +13,23 @@ package forestry.arboriculture.models;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+
+import net.minecraftforge.common.property.IExtendedBlockState;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.core.IModelBaker;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeRoot;
@@ -24,17 +39,6 @@ import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
@@ -125,10 +129,10 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	@Override
 	protected void bakeBlock(BlockForestryLeaves block, Key key, IModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
-		baker.addBlockModel(null, key.leafSprite, 0);
+		baker.addBlockModel(null, key.leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
 		if (key.fruitSprite != null) {
-			baker.addBlockModel(null, key.fruitSprite, 1);
+			baker.addBlockModel(null, key.fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
 		}
 
 		// Set the particle sprite

@@ -109,10 +109,10 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		if(!Proxies.render.fancyGraphicsEnabled()){
-			TreeDefinition treeDefinition = state.getValue(getVariant());
-			return !TreeDefinition.Willow.equals(treeDefinition);
+			return true;
 		}
-		return false;
+		TreeDefinition treeDefinition = state.getValue(getVariant());
+		return !TreeDefinition.Willow.equals(treeDefinition);
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		TreeDefinition treeDefinition = state.getValue(getVariant());
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (tintIndex == 0) {
+		if (tintIndex == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
 			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
 		} else {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
