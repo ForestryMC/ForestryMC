@@ -63,6 +63,9 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
+			if(!world.isBlockLoaded(position)){
+				break;
+			}
 			if (world.isAirBlock(pos)) {
 				continue;
 			}
@@ -84,6 +87,10 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	protected boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
+			if(!world.isBlockLoaded(position)){
+				break;
+			}
+
 			IBlockState blockState = world.getBlockState(position);
 			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
 				continue;

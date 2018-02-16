@@ -85,7 +85,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	private Collection<ICrop> harvestBlocks(World world, BlockPos position) {
-		if (world.isAirBlock(position)) {
+		if (!world.isBlockLoaded(position) || world.isAirBlock(position)) {
 			return Collections.emptySet();
 		}
 

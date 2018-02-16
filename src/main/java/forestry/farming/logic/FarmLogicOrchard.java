@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -134,6 +135,10 @@ public class FarmLogicOrchard extends FarmLogic {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
+		if(!world.isBlockLoaded(position)){
+			return Collections.emptyList();
+		}
+
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
@@ -174,7 +179,7 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (seen.contains(candidate)) {
 						continue;
 					}
-					if (world.isAirBlock(candidate)) {
+					if (!world.isBlockLoaded(candidate) || world.isAirBlock(candidate)) {
 						continue;
 					}
 

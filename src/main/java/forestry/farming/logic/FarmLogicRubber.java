@@ -119,6 +119,10 @@ public class FarmLogicRubber extends FarmLogic {
 		for (int j = 0; j < 10; j++) {
 			BlockPos candidate = position.add(0, j, 0);
 
+			if(!world.isBlockLoaded(candidate)){
+				return crops;
+			}
+
 			IBlockState blockState = world.getBlockState(candidate);
 			Block block = blockState.getBlock();
 			if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {

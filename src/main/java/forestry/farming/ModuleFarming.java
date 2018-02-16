@@ -195,7 +195,7 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmProperties arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
 		IFarmProperties cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
 		IFarmProperties mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
-		IFarmProperties succulentFarm = registry.registerLogic("farmSucculent", FarmLogicSucculent::new);
+		IFarmProperties succulentFarm = registry.registerLogic("farmSucculentes", FarmLogicSucculent::new);
 		IFarmProperties peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
 		IFarmProperties infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
 		IFarmProperties poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
