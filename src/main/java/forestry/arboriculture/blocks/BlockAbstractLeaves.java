@@ -109,7 +109,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 
 	/* RENDERING */
 	@Override
-	public final boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(IBlockState state) {
 		return !Proxies.render.fancyGraphicsEnabled();
 	}
 

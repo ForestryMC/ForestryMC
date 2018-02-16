@@ -31,6 +31,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.proxy.Proxies;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -155,15 +156,6 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		for (IBlockState state : blockState.getValidStates()) {
-			int meta = getMetaFromState(state);
-			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
-		}
-	}
-
-	@Override
 	protected ITree getTree(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		TreeDefinition treeDefinition = getTreeDefinition(blockState);
@@ -171,6 +163,25 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 			return treeDefinition.getIndividual();
 		} else {
 			return null;
+		}
+	}
+
+	/* RENDERING */
+	@Override
+	public final boolean isOpaqueCube(IBlockState state) {
+		if(!Proxies.render.fancyGraphicsEnabled()){
+			TreeDefinition treeDefinition = state.getValue(getVariant());
+			return !TreeDefinition.Willow.equals(treeDefinition);
+		}
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		for (IBlockState state : blockState.getValidStates()) {
+			int meta = getMetaFromState(state);
+			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
 		}
 	}
 
