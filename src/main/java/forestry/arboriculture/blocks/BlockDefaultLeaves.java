@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
@@ -194,11 +195,11 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		}
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (tintIndex == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
-			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
-		} else {
+		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
 			return fruitProvider.getDecorativeColor();
 		}
+		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		return spriteProvider.getColor(false);
 	}
 }

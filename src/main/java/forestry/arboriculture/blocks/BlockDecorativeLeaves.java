@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -109,10 +110,10 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		if(!Proxies.render.fancyGraphicsEnabled()){
-			return true;
+			TreeDefinition treeDefinition = state.getValue(getVariant());
+			return !TreeDefinition.Willow.equals(treeDefinition);
 		}
-		TreeDefinition treeDefinition = state.getValue(getVariant());
-		return !TreeDefinition.Willow.equals(treeDefinition);
+		return false;
 	}
 
 	@Override
@@ -214,11 +215,11 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 		TreeDefinition treeDefinition = state.getValue(getVariant());
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (tintIndex == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
-			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
-		} else {
+		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
 			return fruitProvider.getDecorativeColor();
 		}
+		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		return spriteProvider.getColor(false);
 	}
 }

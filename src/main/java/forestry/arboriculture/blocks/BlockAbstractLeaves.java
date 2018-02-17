@@ -43,8 +43,8 @@ import forestry.core.utils.BlockUtil;
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
  */
 public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemModelRegister, IColoredBlock {
-	public static final int FOLIAGE_COLOR_INDEX = 1;
-	public static final int FRUIT_COLOR_INDEX = 0;
+	public static final int FOLIAGE_COLOR_INDEX = 0;
+	public static final int FRUIT_COLOR_INDEX = 2;
 
 	@Nullable
 	protected abstract ITree getTree(IBlockAccess world, BlockPos pos);

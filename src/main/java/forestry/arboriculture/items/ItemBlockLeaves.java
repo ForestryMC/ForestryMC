@@ -70,11 +70,11 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		TileLeaves tileLeaves = new TileLeaves();
 		tileLeaves.readFromNBT(itemStack.getTagCompound());
 
-		if (renderPass == BlockAbstractLeaves.FOLIAGE_COLOR_INDEX) {
+		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
+			return tileLeaves.getFruitColour();
+		}else {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			return tileLeaves.getFoliageColour(player);
-		} else {
-			return tileLeaves.getFruitColour();
 		}
 	}
 
