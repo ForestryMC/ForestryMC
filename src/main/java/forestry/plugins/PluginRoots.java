@@ -57,8 +57,7 @@ public class PluginRoots extends CompatPlugin {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
 			}
 			if (seed != null && block != null) {
-				farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7));
-				farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
+				farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
 			}
 		}
 	}

@@ -222,6 +222,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmCropsManaged = new CircuitFarmLogic("managedCrops", cropsFarm, false);
 		Circuits.farmCropsManual = new CircuitFarmLogic("manualCrops", cropsFarm, true);
 		cropsFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
+		cocoaFarm.registerFarmables("farmWheat");
 
 		Circuits.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", infernalFarm, false);
 		Circuits.farmInfernalManual = new CircuitFarmLogic("manualInfernal", infernalFarm, true);
