@@ -33,6 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,6 +58,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
@@ -355,5 +357,22 @@ public class ModuleFarming extends BlankForestryModule {
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		EnumFarmBlockType.registerSprites();
+	}
+	
+	/* Only add your fertilizers here if they require sufficient setup/ are non renewable or add a low 
+	 * fertilizer value. This should be considered carefully*/
+	@Override
+	public boolean processIMCMessage(IMCMessage message) {
+		if (message.key.equals("add-fertilizer")) {
+			ItemStack value = message.getItemStackValue();
+			int fertilizerValue = Integer.parseInt(message.getStringValue());
+			if (value != null) {
+				ForestryAPI.farmRegistry.registerFertilizer(value, fertilizerValue);
+			} else {
+				IMCUtil.logInvalidIMCMessage(message);
+			}
+			return true;
+		}  
+		return false;
 	}
 }
