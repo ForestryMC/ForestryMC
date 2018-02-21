@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Set;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -22,19 +24,23 @@ import net.minecraft.world.storage.loot.LootTable;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.registries.IForgeRegistry;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.ApiaristAI;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.models.ModelBlockCached;
@@ -137,6 +143,18 @@ public class EventHandlerCore {
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void handleVillagerAI(EntityJoinWorldEvent event) {
+		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfessions = ForgeRegistries.VILLAGER_PROFESSIONS;
+		Entity entity = event.getEntity();
+		if((entity instanceof EntityVillager)) {
+			EntityVillager villager = (EntityVillager) event.getEntity();
+			if(villagerProfessions.getKey(villager.getProfessionForge()).toString().equals(Constants.ID_VILLAGER_APIARIST)) {
+				villager.tasks.addTask(6, new ApiaristAI(villager, villager.getAIMoveSpeed()));	
 			}
 		}
 	}
