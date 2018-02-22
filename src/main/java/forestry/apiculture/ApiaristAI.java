@@ -97,6 +97,12 @@ public class ApiaristAI extends EntityAIMoveToBlock{
             		}
             	}
             }
+            //add remaining bees to villager inventory
+            for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
+            	if(stack.getItem() instanceof ItemBeeGE) {
+            		stack.shrink(InventoryUtil.addStack(villager.getVillagerInventory(), stack, true));
+            	}
+            }
         }
             this.runDelay = 10;
     }
