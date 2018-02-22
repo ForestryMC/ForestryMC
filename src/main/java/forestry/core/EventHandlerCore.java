@@ -55,7 +55,6 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
-
 		if (event.isCanceled() || event.getResult() == Result.ALLOW) {
 			return;
 		}
@@ -80,7 +79,7 @@ public class EventHandlerCore {
 		syncBreedingTrackers(player);
 	}
 
-	private static void syncBreedingTrackers(EntityPlayer player) {
+	private void syncBreedingTrackers(EntityPlayer player) {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
 		for (ISpeciesRoot speciesRoot : speciesRoots) {
@@ -148,7 +147,7 @@ public class EventHandlerCore {
 	}
 	
 	@SubscribeEvent
-	public static void handleVillagerAI(EntityJoinWorldEvent event) {
+	public void handleVillagerAI(EntityJoinWorldEvent event) {	//won't register if villager not registered
 		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfessions = ForgeRegistries.VILLAGER_PROFESSIONS;
 		Entity entity = event.getEntity();
 		if((entity instanceof EntityVillager)) {

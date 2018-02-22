@@ -42,11 +42,11 @@ public class ApiaristAI extends EntityAIMoveToBlock{
         super.updateTask();
         this.villager.getLookHelper().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.villager.getVerticalFaceSpeed());
 
-        if (this.getIsAboveDestination())
+        if (this.villager.getDistanceSqToCenter(this.destinationBlock) > 4.0D)
         {
             World world = this.villager.world;
             BlockPos blockpos = this.destinationBlock;
-            if(!(world.getBlockState(blockpos).getBlock() instanceof BlockApiculture) || !(TileUtil.getTile(world, blockpos) instanceof TileBeeHouse)) {
+            if(!(TileUtil.getTile(world, blockpos) instanceof TileBeeHouse)) {
             	return;
             }
         	TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world,blockpos);
@@ -140,7 +140,10 @@ public class ApiaristAI extends EntityAIMoveToBlock{
 					EnumBeeType type = ((ItemBeeGE)inventory.getStackInSlot(i).getItem()).getType();
 					if(type==EnumBeeType.PRINCESS) foundPrincess = true;
 					if(type==EnumBeeType.DRONE) foundDrone = true;
-					if(foundDrone && foundPrincess) return true;
+					if(foundDrone && foundPrincess) {
+						System.out.println("Found bees!");
+						return true;
+					}
 				}
 			}
 			return false;
