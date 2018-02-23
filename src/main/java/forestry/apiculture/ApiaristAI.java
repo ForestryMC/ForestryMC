@@ -51,60 +51,51 @@ public class ApiaristAI extends EntityAIMoveToBlock{
             }
         	TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world,blockpos);
 			InventoryBeeHousing inventory = (InventoryBeeHousing) beeHouse.getBeeInventory();
-            //fill princess slot from beehouse inventory
-            if(inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
-            	for(int i = inventory.SLOT_PRODUCT_1 ; i < inventory.SLOT_PRODUCT_COUNT ; i++) {
-    				if(inventory.getStackInSlot(i)!=ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() instanceof ItemBeeGE) {
-    					if(((ItemBeeGE)inventory.getStackInSlot(i).getItem()).getType()==EnumBeeType.PRINCESS) {
-    						inventory.setQueen(inventory.getStackInSlot(i).copy());
-    						inventory.setInventorySlotContents(i, ItemStack.EMPTY);
-    						break;
-    					}
-    				}
-    			}
-            }
-            //fill drones from beehouse inventory (these stack so more work needed)
-            for(int i = inventory.SLOT_PRODUCT_1 ; i < inventory.SLOT_PRODUCT_COUNT ; i++) {
-            	if(inventory.getStackInSlot(i)!=ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() instanceof ItemBeeGE) {
-					if(((ItemBeeGE)inventory.getStackInSlot(i).getItem()).getType()==EnumBeeType.DRONE) {
-						if(inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty()) {
-							inventory.setDrone(inventory.getStackInSlot(i).copy());
-							inventory.setInventorySlotContents(i, ItemStack.EMPTY);
-						} else {
-							int added = InventoryUtil.addStack(inventory, inventory.getStackInSlot(i), inventory.SLOT_DRONE, 1, true);
-							inventory.decrStackSize(i, added);
-						}
-					}
-				}
-            }
-            //fill princess from villager inventory if possible
-            if(inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
-            	for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
-            		if((stack.getItem() instanceof ItemBeeGE) && ((ItemBeeGE)stack.getItem()).getType()==EnumBeeType.PRINCESS) {
-            			inventory.setQueen(stack.copy());
-            			stack.setCount(0);
-            			break;
-            		}
-            	}
-            }
-            //fill drones from villager inventory if possible
-            if(inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty()) {
-            	for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
-            		if((stack.getItem() instanceof ItemBeeGE) && ((ItemBeeGE)stack.getItem()).getType()==EnumBeeType.DRONE) {
-            			int added = InventoryUtil.addStack(inventory, stack, inventory.SLOT_DRONE, 1, true);
-						stack.shrink(added);
-            			break;
-            		}
-            	}
-            }
-            //add remaining bees to villager inventory
-            for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
+            
+			//fill slots from inside bee house
+        	for(ItemStack stack : InventoryUtil.getStacks(inventory, inventory.SLOT_PRODUCT_1, inventory.SLOT_PRODUCT_COUNT)) {
+        		if(stack!=ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
+        			EnumBeeType type = ((ItemBeeGE)stack.getItem()).getType();
+        			if(inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty() && type==EnumBeeType.PRINCESS) {
+        				inventory.setQueen(stack.copy());
+						stack.setCount(0);
+        			} else if(type==EnumBeeType.DRONE) {
+        				InventoryUtil.addStack(inventory, stack, inventory.SLOT_DRONE, 1, true);
+        			}
+        		}
+        	
+        	}
+			
+        	
+        	//fill slots from villager inventory
+        	if(inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty() || inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
+        		boolean hasPrincess = false;
+        		boolean hasDrone = false;
+        		for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
+        			if(hasPrincess && hasDrone) {
+        				break;
+        			}
+        			if(stack!=ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
+            			EnumBeeType type = ((ItemBeeGE)stack.getItem()).getType();
+            			if(type==EnumBeeType.DRONE && inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty()) {
+            				InventoryUtil.addStack(inventory, stack, inventory.SLOT_DRONE, 1, true);
+            				hasDrone = true;
+            			} else if(type==EnumBeeType.PRINCESS && inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
+            				InventoryUtil.addStack(inventory, stack, inventory.SLOT_QUEEN, 1, true);
+            				hasPrincess = true;
+            			}
+        			}
+        		}
+        	}
+            
+        	//add remaining bees to villager inventory
+            for(ItemStack stack : InventoryUtil.getStacks(inventory, inventory.SLOT_PRODUCT_1, inventory.SLOT_PRODUCT_COUNT)) {
             	if(stack.getItem() instanceof ItemBeeGE) {
-            		stack.shrink(InventoryUtil.addStack(villager.getVillagerInventory(), stack, true));
+            		InventoryUtil.addStack(villager.getVillagerInventory(), stack, true);
             	}
             }
         }
-            this.runDelay = 10;
+            this.runDelay = 20;
     }
 	
 	public boolean hasBeeType(EnumBeeType type) {
@@ -141,9 +132,9 @@ public class ApiaristAI extends EntityAIMoveToBlock{
 			boolean foundPrincess = hasPrincess;
 			boolean foundDrone = hasDrone;
 			if(foundDrone && foundPrincess) return true;
-			for(int i = inventory.SLOT_PRODUCT_1 ; i < inventory.SLOT_PRODUCT_COUNT ; i++) {
-				if(inventory.getStackInSlot(i)!=ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() instanceof ItemBeeGE) {
-					EnumBeeType type = ((ItemBeeGE)inventory.getStackInSlot(i).getItem()).getType();
+			for(ItemStack stack : InventoryUtil.getStacks(inventory, inventory.SLOT_PRODUCT_1, inventory.SLOT_PRODUCT_COUNT)) {
+				if(stack!=ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
+					EnumBeeType type = ((ItemBeeGE)stack.getItem()).getType();
 					if(type==EnumBeeType.PRINCESS) foundPrincess = true;
 					if(type==EnumBeeType.DRONE) foundDrone = true;
 					if(foundDrone && foundPrincess) {
