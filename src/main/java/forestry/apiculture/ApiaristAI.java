@@ -19,12 +19,12 @@ public class ApiaristAI extends EntityAIMoveToBlock{
 	private final EntityVillager villager;
 	private boolean hasDrone;
 	private boolean hasPrincess;
-	private InventoryBasic inventory;
+	private InventoryBasic villagerInventory;
 	
 	public ApiaristAI(EntityVillager villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
-		inventory = villager.getVillagerInventory();
+		villagerInventory = villager.getVillagerInventory();
 	}
 	
 	@Override
@@ -69,20 +69,20 @@ public class ApiaristAI extends EntityAIMoveToBlock{
         	
         	//fill slots from villager inventory
         	if(inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty() || inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
-        		boolean hasPrincess = false;
-        		boolean hasDrone = false;
-        		for(ItemStack stack : InventoryUtil.getStacks(villager.getVillagerInventory())) {
-        			if(hasPrincess && hasDrone) {
+        		boolean princessAdded = false;
+        		boolean droneAdded = false;
+        		for(ItemStack stack : InventoryUtil.getStacks(villagerInventory)) {
+        			if(princessAdded && droneAdded) {
         				break;
         			}
         			if(stack!=ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
             			EnumBeeType type = ((ItemBeeGE)stack.getItem()).getType();
             			if(type==EnumBeeType.DRONE && inventory.getStackInSlot(inventory.SLOT_DRONE).isEmpty()) {
             				InventoryUtil.addStack(inventory, stack, inventory.SLOT_DRONE, 1, true);
-            				hasDrone = true;
+            				droneAdded = true;
             			} else if(type==EnumBeeType.PRINCESS && inventory.getStackInSlot(inventory.SLOT_QUEEN).isEmpty()) {
             				InventoryUtil.addStack(inventory, stack, inventory.SLOT_QUEEN, 1, true);
-            				hasPrincess = true;
+            				princessAdded = true;
             			}
         			}
         		}
@@ -91,7 +91,7 @@ public class ApiaristAI extends EntityAIMoveToBlock{
         	//add remaining bees to villager inventory
             for(ItemStack stack : InventoryUtil.getStacks(inventory, inventory.SLOT_PRODUCT_1, inventory.SLOT_PRODUCT_COUNT)) {
             	if(stack.getItem() instanceof ItemBeeGE) {
-            		InventoryUtil.addStack(villager.getVillagerInventory(), stack, true);
+            		InventoryUtil.addStack(villagerInventory, stack, true);
             	}
             }
         }
@@ -99,12 +99,12 @@ public class ApiaristAI extends EntityAIMoveToBlock{
     }
 	
 	public boolean hasBeeType(EnumBeeType type) {
-		if(inventory.isEmpty()) {
+		if(villagerInventory.isEmpty()) {
 			return false;
 		}
-		for(int i=0 ; i<inventory.getSizeInventory();i++) {
-			if(!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).getItem() instanceof ItemBeeGE) {
-				if(((ItemBeeGE)inventory.getStackInSlot(i).getItem()).getType()==type) {
+		for(ItemStack stack : InventoryUtil.getStacks(villagerInventory)) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
+				if(((ItemBeeGE)stack.getItem()).getType()==type) {
 					return true;
 				}
 			}
