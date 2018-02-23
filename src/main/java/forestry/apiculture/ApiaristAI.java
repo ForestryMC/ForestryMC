@@ -147,7 +147,6 @@ public class ApiaristAI extends EntityAIMoveToBlock{
 					if(type==EnumBeeType.PRINCESS) foundPrincess = true;
 					if(type==EnumBeeType.DRONE) foundDrone = true;
 					if(foundDrone && foundPrincess) {
-						System.out.println("Found bees!");
 						return true;
 					}
 				}
