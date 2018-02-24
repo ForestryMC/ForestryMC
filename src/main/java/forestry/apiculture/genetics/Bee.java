@@ -729,6 +729,50 @@ public class Bee extends IndividualLiving implements IBee {
 		return false;
 	}
 
+	public void selfPollinate(IBeeHousing housing) {
+		
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
+
+		int chance = (int) (genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
+
+		World world = housing.getWorldObj();
+		Random random = world.rand;
+
+		// Correct speed
+		if (random.nextInt(100) >= chance) {
+			return;
+		}
+		
+		Vec3i area = getArea(genome, beeModifier);
+		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		BlockPos housingPos = housing.getCoordinates();
+		
+		for (int i = 0; i < 10; i++) {
+
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
+			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
+
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock);
+			if (checkPollinatable == null) {
+				continue;
+			}
+
+			if (!genome.getFlowerProvider().isAcceptedPollinatable(world, checkPollinatable)) {
+				continue;
+			}
+			if (!checkPollinatable.canMateWith(checkPollinatable.getPollen())) {
+				continue;
+			}
+
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock, Config.pollinateVanillaTrees);
+
+			if (realPollinatable != null) {
+				realPollinatable.mateWith(realPollinatable.getPollen());
+				return;
+			}
+		}
+	}
+	
 	@Override
 	public void plantFlowerRandom(IBeeHousing housing) {
 		plantFlowerRandom(housing, null);

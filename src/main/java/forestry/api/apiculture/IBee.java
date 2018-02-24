@@ -114,5 +114,10 @@ public interface IBee extends IIndividualLiving {
 	IIndividual retrievePollen(IBeeHousing housing);
 
 	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
+	
+	//TODO - implement fully in 1.13
+	default void selfPollinate(IBeeHousing housing) {
+		return;
+	}
 
 }
