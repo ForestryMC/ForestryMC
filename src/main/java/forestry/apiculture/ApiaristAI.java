@@ -55,7 +55,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		this.villager.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
+		this.villager.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY(), this.destinationBlock.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 
 		if (this.villager.getDistanceSqToCenter(this.destinationBlock) < 2.0D) {
 			World world = this.villager.world;
@@ -69,7 +69,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 
 			//fill slots from inside bee house
 			for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT)) {
-				if (stack != ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
+				if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
 					EnumBeeType type = ((ItemBeeGE) stack.getItem()).getType();
 					if (inventory.getStackInSlot(SLOT_QUEEN).isEmpty() && type == EnumBeeType.PRINCESS) {
 						inventory.setQueen(stack.copy());
@@ -149,7 +149,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 				return true;
 			}
 			for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT)) {
-				if (stack != ItemStack.EMPTY && stack.getItem() instanceof ItemBeeGE) {
+				if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
 					EnumBeeType type = ((ItemBeeGE) stack.getItem()).getType();
 					if (type == EnumBeeType.PRINCESS) {
 						foundPrincess = true;
