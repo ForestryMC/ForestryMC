@@ -79,7 +79,7 @@ public class EventHandlerCore {
 		syncBreedingTrackers(player);
 	}
 
-	private void syncBreedingTrackers(EntityPlayer player) {
+	private static void syncBreedingTrackers(EntityPlayer player) {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
 		for (ISpeciesRoot speciesRoot : speciesRoots) {
@@ -148,11 +148,12 @@ public class EventHandlerCore {
 	
 	@SubscribeEvent
 	public void handleVillagerAI(EntityJoinWorldEvent event) {	//won't register if villager not registered
-		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfessions = ForgeRegistries.VILLAGER_PROFESSIONS;
+		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfs = ForgeRegistries.VILLAGER_PROFESSIONS;
 		Entity entity = event.getEntity();
 		if((entity instanceof EntityVillager)) {
 			EntityVillager villager = (EntityVillager) event.getEntity();
-			if(villagerProfessions.getKey(villager.getProfessionForge()).toString().equals(Constants.ID_VILLAGER_APIARIST)) {
+			ResourceLocation villagerProf = villagerProfs.getKey(villager.getProfessionForge());
+			if(villagerProf.toString().equals(Constants.ID_VILLAGER_APIARIST)) {
 				villager.tasks.addTask(6, new ApiaristAI(villager, villager.getAIMoveSpeed()));	
 			}
 		}
