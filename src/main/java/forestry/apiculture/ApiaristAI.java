@@ -57,7 +57,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 		super.updateTask();
 		this.villager.getLookHelper().setLookPosition(this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, this.destinationBlock.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 
-		if (this.villager.getDistanceSqToCenter(this.destinationBlock) > 2.0D) {
+		if (this.villager.getDistanceSqToCenter(this.destinationBlock) < 2.0D) {
 			World world = this.villager.world;
 			BlockPos blockpos = this.destinationBlock;
 
