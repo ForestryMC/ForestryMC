@@ -50,7 +50,6 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
@@ -570,11 +569,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 				if (queen.pollinateRandom(beeHousing, pollen) || attemptedPollinations >= MAX_POLLINATION_ATTEMPTS) {
 					pollen = null;
 				}
-			}
-			
-			//Other things may implement IBee
-			if(ModuleApiculture.doSelfPollination) {
-				queen.selfPollinate(beeHousing);
 			}
 		}
 	}
