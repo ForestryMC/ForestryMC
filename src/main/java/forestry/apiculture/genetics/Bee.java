@@ -61,6 +61,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -715,7 +716,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 			if (!checkPollinatable.canMateWith(pollen)) {
-				if(checkPollinatable.canMateWith(checkPollinatable.getPollen())) {
+				if (checkPollinatable.canMateWith(checkPollinatable.getPollen()) && ModuleApiculture.doSelfPollination) {
 					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock, Config.pollinateVanillaTrees);
 
 					if (realPollinatable != null) {
@@ -735,7 +736,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		return false;
 	}
-	
+
 	@Override
 	public void plantFlowerRandom(IBeeHousing housing) {
 		plantFlowerRandom(housing, null);
