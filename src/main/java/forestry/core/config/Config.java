@@ -63,7 +63,7 @@ public class Config {
 
 	//Humus
 	public static int humusDegradeDelimiter = 3;
-	
+
 	//Greenhouse
 	public static int climateSourceRange = 36;
 	public static float climateSourceEnergyModifier = 1.5F;
@@ -155,37 +155,39 @@ public class Config {
 		return enableExUtilEnderLily;
 	}
 
-	public static boolean isExUtilRedOrchidEnabled() { return enableExUtilRedOrchid; }
+	public static boolean isExUtilRedOrchidEnabled() {
+		return enableExUtilRedOrchid;
+	}
 
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
 	}
-	
+
 	public static void blacklistTreeDim(int dimID) {
 		blacklistedTreeDims.add(dimID);
 	}
-	
+
 	public static void whitelistTreeDim(int dimID) {
 		whitelistedTreeDims.add(dimID);
 	}
-	
+
 	public static void blacklistOreDim(int dimID) {
 		blacklistedOreDims.add(dimID);
 	}
-	
+
 	public static void whitelistOreDim(int dimID) {
 		whitelistedOreDims.add(dimID);
 	}
-	
-	public static boolean isValidOreDim(int dimID) {		//blacklist has priority
-		if(blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
+
+	public static boolean isValidOreDim(int dimID) {        //blacklist has priority
+		if (blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
 			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
 		return false;
 	}
-	
-	public static boolean isValidTreeDim(int dimID) { 		//blacklist has priority
-		if(blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
+
+	public static boolean isValidTreeDim(int dimID) {        //blacklist has priority
+		if (blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
 			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
 		}
 		return false;
@@ -259,24 +261,24 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for(int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
- 			blacklistedOreDims.add(dimId);
+		for (int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
+			blacklistedOreDims.add(dimId);
 		}
-		for(int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
+		for (int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
 			whitelistedOreDims.add(dimId);
 		}
-		
+
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
-		
+
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-		for(int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()){
-			 			blacklistedTreeDims.add(dimId);
+		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
+			blacklistedTreeDims.add(dimId);
 		}
-		for(int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()){
- 			whitelistedTreeDims.add(dimId);
-}
-			 	
-		
+		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
+			whitelistedTreeDims.add(dimId);
+		}
+
+
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
 

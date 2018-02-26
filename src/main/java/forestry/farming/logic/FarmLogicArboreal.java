@@ -116,7 +116,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
 			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
-				if(!world.isBlockLoaded(candidate)){
+				if (!world.isBlockLoaded(candidate)) {
 					return crops;
 				}
 

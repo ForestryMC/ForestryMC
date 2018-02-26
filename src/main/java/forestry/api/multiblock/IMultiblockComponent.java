@@ -8,6 +8,7 @@ package forestry.api.multiblock;
 import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.util.math.BlockPos;
 
 /**

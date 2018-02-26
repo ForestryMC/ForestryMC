@@ -215,7 +215,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IBee bee = BeeManager.beeRoot.getMember(itemStack);
-			if (bee	== null) {
+			if (bee == null) {
 				return;
 			}
 

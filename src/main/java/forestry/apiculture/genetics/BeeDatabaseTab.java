@@ -74,14 +74,14 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 		String no = Translator.translateToLocal("for.no");
 
 		String diurnal, nocturnal;
-		if(active) {
+		if (active) {
 			if (bee.getGenome().getNeverSleeps()) {
 				nocturnal = diurnal = yes;
 			} else {
 				nocturnal = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 				diurnal = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 			}
-		}else {
+		} else {
 			if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
 				nocturnal = diurnal = yes;
 			} else {

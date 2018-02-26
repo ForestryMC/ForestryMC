@@ -3,6 +3,7 @@ package forestry.storage.compat;
 import forestry.core.utils.JeiUtil;
 import forestry.storage.ModuleBackpacks;
 import forestry.storage.items.ItemRegistryBackpacks;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;

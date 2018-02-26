@@ -6,6 +6,7 @@
 package forestry.api.fuels;
 
 import com.google.common.base.Preconditions;
+
 import net.minecraft.item.ItemStack;
 
 public class MoistenerFuel {

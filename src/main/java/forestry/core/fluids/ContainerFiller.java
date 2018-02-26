@@ -3,8 +3,10 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 
 import forestry.core.utils.ItemStackUtil;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;

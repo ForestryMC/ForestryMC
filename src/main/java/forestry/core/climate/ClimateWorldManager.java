@@ -27,7 +27,7 @@ import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IGreenhouseClimateManager;
 import forestry.greenhouse.api.climate.IClimateSourceOwner;
 
-public class ClimateWorldManager{
+public class ClimateWorldManager {
 
 	private final Cache<BlockPos, IClimateState> stateCache;
 	private final ClimateManager parent;
@@ -38,24 +38,24 @@ public class ClimateWorldManager{
 		this.parent = parent;
 		this.owners = new HashMap<>();
 	}
-	
+
 	public IClimateState getClimateState(World world, BlockPos pos) {
 		IClimateState cacheState = stateCache.getIfPresent(pos);
-		if(cacheState == null){
+		if (cacheState == null) {
 			IGreenhouseClimateManager climateSourceManager = GreenhouseManager.climateManager;
-			if(climateSourceManager != null) {
+			if (climateSourceManager != null) {
 				IClimateContainer container = climateSourceManager.getContainer(world, pos);
 
 				if (container != null) {
 					cacheState = container.getState();
 				}
 			}
-			if(cacheState == null){
+			if (cacheState == null) {
 				cacheState = parent.getBiomeState(world, pos);
 			}
 			stateCache.put(pos, cacheState);
 		}
 		return cacheState;
 	}
-	
+
 }

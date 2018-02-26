@@ -23,6 +23,7 @@ import forestry.core.errors.FakeErrorLogic;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.FakeOwnerHandler;
 import forestry.core.owner.IOwnerHandler;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -134,12 +135,12 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	public String getLastValidationError() {
 		return null;
 	}
-	
+
 	@Override
 	public BlockPos getLastValidationErrorPosition() {
 		return null;
 	}
-	
+
 	@Override
 
 	public Collection<IMultiblockComponent> getComponents() {

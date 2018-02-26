@@ -11,6 +11,7 @@
 package forestry.core.blocks;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.circuits.ISocketable;
@@ -18,6 +19,7 @@ import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

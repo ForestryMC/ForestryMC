@@ -11,13 +11,12 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.greenhouse.IGreenhouseHousing;
 
 public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler {
-	
+
 	/**
-	 *
 	 * @return the position of the block at the top of the greenhouse structure that shows the state of the greenhouse.
 	 */
 	BlockPos getCenterCoordinates();
 
 	void setCenterCoordinates(BlockPos coordinates);
-	
+
 }

@@ -69,9 +69,9 @@ public interface ISpeciesRoot {
 	IIndividual getMember(ItemStack stack);
 
 	IIndividual getMember(NBTTagCompound compound);
-	
+
 	<O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
-	
+
 	@Nullable
 	<O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
 
@@ -217,11 +217,12 @@ public interface ISpeciesRoot {
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.
+	 *
 	 * @since 5.7
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)
-	default ISpeciesPlugin getSpeciesPlugin(){
+	default ISpeciesPlugin getSpeciesPlugin() {
 		return null;
 	}
 }

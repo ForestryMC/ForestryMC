@@ -34,34 +34,35 @@ public interface ISpeciesPlugin<I extends IIndividual> {
 
 
 	/* ALYZER */
+
 	/**
 	 * Creates the first page of the alyzer.
 	 *
-	 * @param gui A instance of the alyzer gui.
+	 * @param gui           A instance of the alyzer gui.
 	 * @param elementHelper A helper to create the gui elements.
-	 * @param individual The individual that is currently in the alyzer slot.
+	 * @param individual    The individual that is currently in the alyzer slot.
 	 */
-	default void createFirstPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual){
+	default void createFirstPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual) {
 	}
 
 	/**
 	 * Creates the second page of the alyzer.
 	 *
-	 * @param gui A instance of the alyzer gui.
+	 * @param gui           A instance of the alyzer gui.
 	 * @param elementHelper A helper to create the gui elements.
-	 * @param individual The individual that is currently in the alyzer slot.
+	 * @param individual    The individual that is currently in the alyzer slot.
 	 */
-	default void createSecondPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual){
+	default void createSecondPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual) {
 	}
 
 	/**
 	 * Creates the third page of the alyzer. This page is usually used to display the products of the individual.
 	 *
-	 * @param gui A instance of the alyzer gui.
+	 * @param gui           A instance of the alyzer gui.
 	 * @param elementHelper A helper to create the gui elements.
-	 * @param individual The individual that is currently in the alyzer slot.
+	 * @param individual    The individual that is currently in the alyzer slot.
 	 */
-	default void createThirdPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual){
+	default void createThirdPage(GuiScreen gui, IGuiElementHelper elementHelper, I individual) {
 	}
 
 	/**
@@ -70,15 +71,15 @@ public interface ISpeciesPlugin<I extends IIndividual> {
 	List<String> getHints();
 
 	/* DATABASE */
+
 	/**
 	 * Provides a instance of a {@link IDatabaseTab} that is used to display information about the species of a individual in the
 	 * database.
 	 *
 	 * @param active True if this tab is used to display the active species of the individual.
-	 *
 	 * @return null if this plugin does not support the database.
 	 */
-	default IDatabaseTab<I> getSpeciesTab(boolean active){
+	default IDatabaseTab<I> getSpeciesTab(boolean active) {
 		return null;
 	}
 
@@ -87,7 +88,7 @@ public interface ISpeciesPlugin<I extends IIndividual> {
 	 * If this is Null forestry uses the default mutation tab to display the products.
 	 */
 	@Nullable
-	default IDatabaseTab<I> getProductsTab(){
+	default IDatabaseTab<I> getProductsTab() {
 		return null;
 	}
 
@@ -96,7 +97,7 @@ public interface ISpeciesPlugin<I extends IIndividual> {
 	 * If this is Null forestry uses the default mutation tab to display the mutations.
 	 */
 	@Nullable
-	default IDatabaseTab<I> getMutationTab(){
+	default IDatabaseTab<I> getMutationTab() {
 		return null;
 	}
 

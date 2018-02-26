@@ -98,7 +98,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
-		if(!world.isBlockLoaded(position)){
+		if (!world.isBlockLoaded(position)) {
 			return false;
 		}
 		IBlockState blockState = world.getBlockState(position);

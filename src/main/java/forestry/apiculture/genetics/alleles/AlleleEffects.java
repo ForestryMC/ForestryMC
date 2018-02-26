@@ -6,6 +6,7 @@ import java.util.List;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.genetics.AlleleManager;
+
 import net.minecraft.init.MobEffects;
 
 public class AlleleEffects {

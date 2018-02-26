@@ -72,7 +72,7 @@ public abstract class TileUtil {
 		}
 	}
 
-	public interface ITileGetResult<T, R>  {
+	public interface ITileGetResult<T, R> {
 		@Nullable
 		R getResult(T tile);
 	}
@@ -89,7 +89,7 @@ public abstract class TileUtil {
 		return null;
 	}
 
-	public interface ITileAction<T>  {
+	public interface ITileAction<T> {
 		void actOnTile(T tile);
 	}
 
@@ -125,9 +125,9 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing){
+	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity == null || !tileEntity.hasCapability(capability, facing)){
+		if (tileEntity == null || !tileEntity.hasCapability(capability, facing)) {
 			return null;
 		}
 		return tileEntity.getCapability(capability, facing);

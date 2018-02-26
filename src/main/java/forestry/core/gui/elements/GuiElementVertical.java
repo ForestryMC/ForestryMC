@@ -28,7 +28,7 @@ public class GuiElementVertical extends GuiElementLayout {
 
 	@Override
 	public int getWidth() {
-		if(width > 0){
+		if (width > 0) {
 			return width;
 		}
 		int width = 0;

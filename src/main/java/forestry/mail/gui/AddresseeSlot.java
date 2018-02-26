@@ -18,6 +18,7 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
+
 import net.minecraft.client.renderer.GlStateManager;
 
 public class AddresseeSlot extends Widget {

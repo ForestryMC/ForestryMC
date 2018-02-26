@@ -13,18 +13,18 @@ package forestry.mail.triggers;
 // TODO: Buildcraft for 1.9
 public class TriggerHasMail {//extends Trigger {
 
-//	public TriggerHasMail() {
-//		super("mail.hasMail", "hasMail");
-//	}
-//
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof IMailContainer)) {
-//			return false;
-//		}
-//
-//		return ((IMailContainer) tile).hasMail();
-//	}
+	//	public TriggerHasMail() {
+	//		super("mail.hasMail", "hasMail");
+	//	}
+	//
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//
+	//		if (!(tile instanceof IMailContainer)) {
+	//			return false;
+	//		}
+	//
+	//		return ((IMailContainer) tile).hasMail();
+	//	}
 
 }

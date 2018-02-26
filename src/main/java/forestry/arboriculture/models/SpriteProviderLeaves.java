@@ -14,6 +14,7 @@ import java.awt.Color;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
+
 import net.minecraft.util.ResourceLocation;
 
 public class SpriteProviderLeaves implements ILeafSpriteProvider {

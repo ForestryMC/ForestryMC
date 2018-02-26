@@ -12,6 +12,7 @@ package forestry.apiculture.worldgen;
 
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.core.utils.BlockUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

@@ -67,9 +67,7 @@ public class SpeciesDiscoveredTrigger implements ICriterionTrigger<SpeciesDiscov
 
 		if (allele == null) {
 			throw new JsonSyntaxException("Unknown allele '" + uid + "'");
-		}
-		else
-		{
+		} else {
 			return new Instance(allele);
 		}
 	}
@@ -85,14 +83,12 @@ public class SpeciesDiscoveredTrigger implements ICriterionTrigger<SpeciesDiscov
 	public static class Instance extends AbstractCriterionInstance {
 		private final IAllele allele;
 
-		public Instance(IAllele allele)
-		{
+		public Instance(IAllele allele) {
 			super(ID);
 			this.allele = allele;
 		}
 
-		public boolean test(IAllele allele)
-		{
+		public boolean test(IAllele allele) {
 			return this.allele == allele;
 		}
 	}

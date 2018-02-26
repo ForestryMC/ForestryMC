@@ -31,7 +31,7 @@ public class ContainerGeneticFilter extends ContainerTile<TileEntity> {
 		}
 
 		IInventory buffer = container.getBuffer();
-		if(buffer != null) {
+		if (buffer != null) {
 			for (int x = 0; x < 6; x++) {
 				addSlotToContainer(new SlotFilterFacing(buffer, x, 8, 18 + x * 18));
 			}

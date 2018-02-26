@@ -17,6 +17,7 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileMill;
 import forestry.factory.inventory.InventoryRainmaker;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;

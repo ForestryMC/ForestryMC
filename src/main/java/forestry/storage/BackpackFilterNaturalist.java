@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
+
 import net.minecraft.item.ItemStack;
 
 public class BackpackFilterNaturalist implements Predicate<ItemStack> {

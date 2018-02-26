@@ -13,6 +13,7 @@ package forestry.apiculture.gui;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
+
 import net.minecraft.inventory.Container;
 
 public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends GuiForestryTitled<C> {

@@ -76,7 +76,7 @@ public class GreenhouseEventHandler {
 			}
 			for (BlockPos position : greenhousePositions) {
 				IGreenhouseControllerInternal controller = MultiblockUtil.getController(world, position, IGreenhouseComponent.class);
-				if(controller == null || !controller.isAssembled()){
+				if (controller == null || !controller.isAssembled()) {
 					continue;
 				}
 				IGreenhouseProvider provider = controller.getProvider();

@@ -50,7 +50,7 @@ public class ButterflyPlugin implements ISpeciesPlugin<IButterfly> {
 
 	@Override
 	public IDatabaseTab getSpeciesTab(boolean active) {
-		if(active){
+		if (active) {
 			return ACTIVE;
 		}
 		return INACTIVE;
@@ -64,7 +64,7 @@ public class ButterflyPlugin implements ISpeciesPlugin<IButterfly> {
 
 	@Override
 	public ItemStack getTabDatabaseIconItem(EnumDatabaseTab tab) {
-		switch (tab){
+		switch (tab) {
 			case ACTIVE_SPECIES:
 				return ButterflyDefinition.BlueWing.getMemberStack(EnumFlutterType.BUTTERFLY);
 			case PRODUCTS:

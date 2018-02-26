@@ -107,24 +107,24 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		fruits.add(family);
 		return this;
 	}
-	
+
 	@Override
 	public IAlleleTreeSpeciesBuilder setRarity(float rarity) {
 		this.rarity = rarity;
 		return this;
 	}
-	
+
 	@Override
 	public float getRarity() {
 		return rarity;
 	}
-	
+
 	@Override
 	public IAlleleTreeSpeciesBuilder setGrowthProvider(IGrowthProvider growthProvider) {
 		this.growthProvider = growthProvider;
 		return this;
 	}
-	
+
 	@Override
 	public IGrowthProvider getGrowthProvider() {
 		return growthProvider;

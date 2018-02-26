@@ -43,8 +43,8 @@ public class WidgetDatabaseTabs extends Widget {
 	}
 
 	public void drawTabs(int startX, int startY) {
-		for(int tabIndex = 0;tabIndex < TABS.length;tabIndex++) {
-			if(tabIndex == selectedTab){
+		for (int tabIndex = 0; tabIndex < TABS.length; tabIndex++) {
+			if (tabIndex == selectedTab) {
 				continue;
 			}
 			EnumDatabaseTab tab = TABS[tabIndex];
@@ -56,9 +56,9 @@ public class WidgetDatabaseTabs extends Widget {
 		}
 	}
 
-	public void drawSelectedTab(int startX, int startY){
+	public void drawSelectedTab(int startX, int startY) {
 		//Check if a tab is selected
-		if(selectedTab < 0){
+		if (selectedTab < 0) {
 			return;
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -81,13 +81,13 @@ public class WidgetDatabaseTabs extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		GuiForestry gui = manager.gui;
 		//set the mouse position relative to the gui
-		mouseX-=gui.getGuiLeft();
-		mouseY-=gui.getGuiTop();
+		mouseX -= gui.getGuiLeft();
+		mouseY -= gui.getGuiTop();
 		int mouseOverTab = getMouseOverTab(mouseX, mouseY);
-		if(mouseOverTab < 0){
+		if (mouseOverTab < 0) {
 			return;
 		}
-		if(selectedTab != mouseOverTab) {
+		if (selectedTab != mouseOverTab) {
 			selectedTab = parent.onTabChange(TABS[mouseOverTab]);
 		}
 	}
@@ -99,17 +99,17 @@ public class WidgetDatabaseTabs extends Widget {
 	}
 
 	@Nullable
-	public int getMouseOverTab(int mouseX, int mouseY){
+	public int getMouseOverTab(int mouseX, int mouseY) {
 		//set the mouse position relative to the widget
-		mouseX-=xPos;
-		mouseY-=yPos;
-		if(mouseY < 0 || mouseY > height){
+		mouseX -= xPos;
+		mouseY -= yPos;
+		if (mouseY < 0 || mouseY > height) {
 			return -1;
 		}
 		int x = 0;
-		for(int tabIndex = 0;tabIndex < TABS.length;tabIndex++){
-			if(mouseX < x || mouseX > x + GUI_TAB.width){
-				x+= spacing + GUI_TAB.width;
+		for (int tabIndex = 0; tabIndex < TABS.length; tabIndex++) {
+			if (mouseX < x || mouseX > x + GUI_TAB.width) {
+				x += spacing + GUI_TAB.width;
 				continue;
 			}
 			return tabIndex;
@@ -121,7 +121,7 @@ public class WidgetDatabaseTabs extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		int mouseOverTab = getMouseOverTab(mouseX, mouseY);
-		if(mouseOverTab < 0){
+		if (mouseOverTab < 0) {
 			return null;
 		}
 		EnumDatabaseTab tab = TABS[mouseOverTab];

@@ -228,7 +228,7 @@ public abstract class BlockUtil {
 	private static boolean isVecInsideXYBounds(@Nullable Vec3d vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.y >= minY && vec.y <= maxY;
 	}
-	
+
 	/* CHUNKS */
 
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
@@ -250,9 +250,9 @@ public abstract class BlockUtil {
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 		IBlockState blockState = world.getBlockState(newPos);
 
-		while (!BlockUtil.canReplace(blockState, world, newPos)){
+		while (!BlockUtil.canReplace(blockState, world, newPos)) {
 			newPos.move(EnumFacing.UP);
-			if(newPos.getY() > topPos.getY()){
+			if (newPos.getY() > topPos.getY()) {
 				return null;
 			}
 			blockState = world.getBlockState(newPos);

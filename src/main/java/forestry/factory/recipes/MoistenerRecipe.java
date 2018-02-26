@@ -11,6 +11,7 @@
 package forestry.factory.recipes;
 
 import forestry.api.recipes.IMoistenerRecipe;
+
 import net.minecraft.item.ItemStack;
 
 public class MoistenerRecipe implements IMoistenerRecipe {

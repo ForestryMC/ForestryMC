@@ -11,9 +11,12 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.recipes.ISqueezerRecipe;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerRecipe implements ISqueezerRecipe {

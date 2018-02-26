@@ -56,7 +56,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if(!world.isBlockLoaded(position)){
+			if (!world.isBlockLoaded(position)) {
 				return crops;
 			}
 			IBlockState blockState = world.getBlockState(position);

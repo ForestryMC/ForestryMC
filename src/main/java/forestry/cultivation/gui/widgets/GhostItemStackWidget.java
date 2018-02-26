@@ -20,6 +20,7 @@ import forestry.cultivation.inventory.InventoryPlanter;
 
 public class GhostItemStackWidget extends ItemStackWidget {
 	private final Slot slot;
+
 	public GhostItemStackWidget(WidgetManager widgetManager, int xPos, int yPos, ItemStack itemStack, Slot slot) {
 		super(widgetManager, xPos, yPos, itemStack);
 		this.slot = slot;
@@ -35,7 +36,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		GlStateManager.enableBlend();
 
 		String directionString = getDirectionString();
-		if (!directionString.isEmpty()){
+		if (!directionString.isEmpty()) {
 			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
 			fontRenderer.drawStringWithShadow(getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
@@ -51,8 +52,8 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		GlStateManager.enableLighting();
 	}
 
-	private String getDirectionString(){
-		if(slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 || slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT){
+	private String getDirectionString() {
+		if (slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 || slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT) {
 			return "";
 		}
 		int index = slot.getSlotIndex() % 4;

@@ -30,7 +30,7 @@ public interface IInvSlot {
 	 */
 	ItemStack getStackInSlot();
 
-//    void setStackInSlot(ItemStack stack);
+	//    void setStackInSlot(ItemStack stack);
 
 	int getIndex();
 

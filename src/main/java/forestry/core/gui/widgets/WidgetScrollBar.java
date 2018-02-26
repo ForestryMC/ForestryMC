@@ -54,7 +54,7 @@ public class WidgetScrollBar extends Widget {
 		slider = new WidgetSlider(manager, xPos + offset, yPos + offset, sliderTexture);
 	}
 
-	public void setParameters(IScrollable listener, int minValue, int maxValue, int step){
+	public void setParameters(IScrollable listener, int minValue, int maxValue, int step) {
 		this.listener = listener;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
@@ -77,16 +77,16 @@ public class WidgetScrollBar extends Widget {
 
 	public int setValue(int value) {
 		currentValue = MathHelper.clamp(value, minValue, maxValue);
-		if(listener != null){
+		if (listener != null) {
 			listener.onScroll(currentValue);
 		}
 		int offset;
-		if(value >= maxValue){
+		if (value >= maxValue) {
 			offset = height - slider.height;
-		}else if(value <= minValue){
+		} else if (value <= minValue) {
 			offset = 0;
-		}else{
-			offset = (int)(((float)(currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
+		} else {
+			offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
 		}
 		slider.setOffset(0, offset);
 		return currentValue;
@@ -94,11 +94,11 @@ public class WidgetScrollBar extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		if(!isVisible()) {
+		if (!isVisible()) {
 			return;
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		if(background.isPresent()){
+		if (background.isPresent()) {
 			background.get().draw(startX + xPos, startY + yPos);
 		}
 		slider.draw(startX, startY);
@@ -106,12 +106,12 @@ public class WidgetScrollBar extends Widget {
 
 	@Override
 	public void update(int mouseX, int mouseY) {
-		if(!isVisible()) {
+		if (!isVisible()) {
 			return;
 		}
 		boolean mouseDown = Mouse.isButtonDown(0);
 
-		if(listener == null || listener.isFocused(mouseX, mouseY)) {
+		if (listener == null || listener.isFocused(mouseX, mouseY)) {
 			int wheel = Mouse.getDWheel();
 			if (wheel > 0) {
 				setValue(currentValue - step);
@@ -125,7 +125,7 @@ public class WidgetScrollBar extends Widget {
 		//the position of the mouse relative to the position of the widget
 		int y = mouseY - yPos;
 
-		if(!mouseDown && wasClicked){
+		if (!mouseDown && wasClicked) {
 			wasClicked = false;
 		}
 
@@ -137,33 +137,33 @@ public class WidgetScrollBar extends Widget {
 		//clicked on the slider and scrolling
 		if (this.isScrolling) {
 			float range = maxValue - minValue;
-			float value = (float)(y - initialMouseClickY) / (float)(height - slider.height);
+			float value = (float) (y - initialMouseClickY) / (float) (height - slider.height);
 			value *= range;
-			if(value < (float) step / 2f){
+			if (value < (float) step / 2f) {
 				setValue(minValue);
-			}else if(value > maxValue - ((float) step / 2f)){
+			} else if (value > maxValue - ((float) step / 2f)) {
 				setValue(maxValue);
-			}else {
+			} else {
 				setValue((int) (minValue + (float) step * Math.round(value)));
 			}
 		}
 		//clicked on the slider
-		else if(slider.isMouseOver(mouseX, mouseY)){
-			if(mouseDown){
+		else if (slider.isMouseOver(mouseX, mouseY)) {
+			if (mouseDown) {
 				isScrolling = true;
 				initialMouseClickY = y - slider.getYOffset();
 			}
 		}
 		//clicked on the bar but not on the slider
-		else if(mouseDown && !wasClicked && isMouseOver(mouseX, mouseY)){
+		else if (mouseDown && !wasClicked && isMouseOver(mouseX, mouseY)) {
 			float range = maxValue - minValue;
-			float value = (float)(y - slider.height / 2) / (float)(height - slider.height);
+			float value = (float) (y - slider.height / 2) / (float) (height - slider.height);
 			value *= range;
-			if(value < (float) step / 2f){
+			if (value < (float) step / 2f) {
 				setValue(minValue);
-			}else if(value > maxValue - ((float) step / 2f)){
+			} else if (value > maxValue - ((float) step / 2f)) {
 				setValue(maxValue);
-			}else {
+			} else {
 				setValue((int) (minValue + (float) step * Math.round(value)));
 			}
 			wasClicked = true;

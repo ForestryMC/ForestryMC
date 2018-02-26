@@ -14,6 +14,7 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.tiles.TileCentrifuge;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 

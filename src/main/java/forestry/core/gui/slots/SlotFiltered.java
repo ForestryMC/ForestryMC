@@ -14,9 +14,11 @@ import javax.annotation.Nullable;
 
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -12,6 +12,7 @@ package forestry.apiculture.blocks;
 
 import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
+
 import net.minecraft.block.material.Material;
 
 public class BlockApiculture extends BlockBase<BlockTypeApiculture> {

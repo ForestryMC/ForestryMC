@@ -26,6 +26,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -307,14 +308,14 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	/* ITRIGGERPROVIDER */
 	// TODO: BuildCraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(FactoryTriggers.lowResource25);
-//		res.add(FactoryTriggers.lowResource10);
-//		return res;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+	//		res.add(FactoryTriggers.lowResource25);
+	//		res.add(FactoryTriggers.lowResource10);
+	//		return res;
+	//	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

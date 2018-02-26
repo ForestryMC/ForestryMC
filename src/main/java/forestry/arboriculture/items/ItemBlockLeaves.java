@@ -72,7 +72,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();
-		}else {
+		} else {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			return tileLeaves.getFoliageColour(player);
 		}

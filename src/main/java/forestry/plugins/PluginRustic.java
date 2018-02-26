@@ -28,12 +28,12 @@ public class PluginRustic extends CompatPlugin {
 	@Override
 	public void registerRecipes() {
 		ImmutableList<String> fruits = ImmutableList.of(
-			"tomato",
-			"chili_pepper"
+				"tomato",
+				"chili_pepper"
 		);
 		ImmutableList<String> crops = ImmutableList.of(
-			"tomato",
-			"chili"
+				"tomato",
+				"chili"
 		);
 		PropertyInteger cropAge = PropertyInteger.create("age", 0, 3);
 		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");

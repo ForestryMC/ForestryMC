@@ -18,7 +18,7 @@ import forestry.worktable.gui.ContainerWorktable;
 
 public class InventoryCraftingForestry extends InventoryCrafting {
 	private final Container eventHandlerIn;
-	
+
 	public InventoryCraftingForestry(ContainerWorktable containerWorktable) {
 		this(containerWorktable, 3, 3);
 	}
@@ -26,12 +26,12 @@ public class InventoryCraftingForestry extends InventoryCrafting {
 	public InventoryCraftingForestry() {
 		this(ContainerDummy.instance, 3, 3);
 	}
-	
+
 	private InventoryCraftingForestry(Container eventHandlerIn, int width, int height) {
 		super(eventHandlerIn, width, height);
 		this.eventHandlerIn = eventHandlerIn;
 	}
-	
+
 	public InventoryCraftingForestry copy() {
 		InventoryCraftingForestry copy = new InventoryCraftingForestry(this.eventHandlerIn, getWidth(), getHeight());
 		for (int slot = 0; slot < getSizeInventory(); slot++) {

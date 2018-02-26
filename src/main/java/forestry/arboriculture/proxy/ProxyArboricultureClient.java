@@ -146,8 +146,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 
 	private void retextureItemModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
-									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
-									IWoodItemMeshDefinition woodDefinition) {
+			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, ItemStack itemStack,
+			IWoodItemMeshDefinition woodDefinition) {
 		if (woodKind != WoodBlockKind.DOOR) {
 			ResourceLocation defaultModelLocation = woodDefinition.getDefaultModelLocation(itemStack);
 			IModel basicItemModel = ModelLoaderRegistry.getModelOrMissing(defaultModelLocation);
@@ -158,8 +158,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 
 	private void retexturBlockModel(IRegistry<ModelResourceLocation, IBakedModel> registry,
-									ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
-									IWoodStateMapper woodMapper) {
+			ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, IBlockState blockState,
+			IWoodStateMapper woodMapper) {
 		ModelResourceLocation defaultModelResourceLocation = woodMapper.getDefaultModelResourceLocation(blockState);
 		IModel basicModel = ModelLoaderRegistry.getModelOrMissing(defaultModelResourceLocation);
 		if (basicModel instanceof MultipartModel) {

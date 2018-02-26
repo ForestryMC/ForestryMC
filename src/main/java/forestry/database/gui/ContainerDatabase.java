@@ -35,18 +35,18 @@ public class ContainerDatabase extends ContainerTile<TileDatabase> implements IG
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
-		if(primary == SELECT_ID){
+		if (primary == SELECT_ID) {
 			tile.analyzeSpecimen(secondary);
 		}
 	}
 
-	public void sendContainerToListeners(){
-		for(IContainerListener listener : listeners){
+	public void sendContainerToListeners() {
+		for (IContainerListener listener : listeners) {
 			listener.sendAllContents(this, getInventory());
 		}
 	}
 
-	public IItemHandler getItemHandler(){
+	public IItemHandler getItemHandler() {
 		return new InvWrapper(tile.getInternalInventory());
 	}
 }

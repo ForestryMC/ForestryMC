@@ -18,46 +18,46 @@ public class TriggerLowSoil extends Trigger {
 	private final int threshold;
 
 	public TriggerLowSoil(int threshold) {
-//		super("lowSoil." + threshold, "lowSoil");
+		//		super("lowSoil." + threshold, "lowSoil");
 		this.threshold = threshold;
 	}
 
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " < " + threshold;
-//	}
-//
-//	@Override
-//	public int maxParameters() {
-//		return 1;
-//	}
-//
-//	/**
-//	 * Return true if the tile given in parameter activates the trigger, given
-//	 * the parameters.
-//	 */
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//		IStatementParameter parameter = null;
-//		if (parameters.length > 0) {
-//			parameter = parameters[0];
-//		}
-//
-//		if (!(tile instanceof TileFarmHatch)) {
-//			return false;
-//		}
-//
-//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-//		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
-//		IFarmInventory farmInventory = farmController.getFarmInventory();
-//
-//		if (parameter == null || parameter.getItemStack() == null) {
-//			IInventory resourcesInventory = farmInventory.getResourcesInventory();
-//			return InventoryUtil.containsPercent(resourcesInventory, threshold);
-//		} else {
-//			ItemStack filter = parameter.getItemStack().copy();
-//			filter.setCount(threshold);
-//			return farmInventory.hasResources(new ItemStack[]{filter});
-//		}
-//	}
+	//	@Override
+	//	public String getDescription() {
+	//		return super.getDescription() + " < " + threshold;
+	//	}
+	//
+	//	@Override
+	//	public int maxParameters() {
+	//		return 1;
+	//	}
+	//
+	//	/**
+	//	 * Return true if the tile given in parameter activates the trigger, given
+	//	 * the parameters.
+	//	 */
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//		IStatementParameter parameter = null;
+	//		if (parameters.length > 0) {
+	//			parameter = parameters[0];
+	//		}
+	//
+	//		if (!(tile instanceof TileFarmHatch)) {
+	//			return false;
+	//		}
+	//
+	//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+	//		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
+	//		IFarmInventory farmInventory = farmController.getFarmInventory();
+	//
+	//		if (parameter == null || parameter.getItemStack() == null) {
+	//			IInventory resourcesInventory = farmInventory.getResourcesInventory();
+	//			return InventoryUtil.containsPercent(resourcesInventory, threshold);
+	//		} else {
+	//			ItemStack filter = parameter.getItemStack().copy();
+	//			filter.setCount(threshold);
+	//			return farmInventory.hasResources(new ItemStack[]{filter});
+	//		}
+	//	}
 }

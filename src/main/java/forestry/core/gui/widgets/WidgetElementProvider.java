@@ -7,7 +7,7 @@ import java.util.List;
 import forestry.core.gui.elements.GuiElementScrollable;
 import forestry.core.gui.tooltips.ToolTip;
 
-public class WidgetElementProvider extends Widget implements IScrollable{
+public class WidgetElementProvider extends Widget implements IScrollable {
 	protected GuiElementScrollable scrollable;
 
 	public WidgetElementProvider(WidgetManager manager, int xPos, int yPos, int width, int height, GuiElementScrollable scrollable) {
@@ -25,10 +25,10 @@ public class WidgetElementProvider extends Widget implements IScrollable{
 	@Nullable
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		mouseX-=xPos;
-		mouseY-=yPos;
+		mouseX -= xPos;
+		mouseY -= yPos;
 		List<String> tooltip = scrollable.getToolTip(mouseX, mouseY);
-		if(tooltip.isEmpty()){
+		if (tooltip.isEmpty()) {
 			return null;
 		}
 		ToolTip toolTip = new ToolTip();
@@ -38,8 +38,8 @@ public class WidgetElementProvider extends Widget implements IScrollable{
 
 	@Override
 	public boolean isFocused(int mouseX, int mouseY) {
-		mouseX-=xPos;
-		mouseY-=yPos;
+		mouseX -= xPos;
+		mouseY -= yPos;
 		return scrollable.isFocused(mouseX, mouseY);
 	}
 

@@ -8,6 +8,7 @@ package forestry.api.apiculture;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
+
 import net.minecraft.util.math.Vec3i;
 
 /**

@@ -5,8 +5,10 @@ import java.util.Set;
 
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.core.utils.ItemStackUtil;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.oredict.OreDictionary;
 
 public class BackpackFilter implements IBackpackFilterConfigurable {

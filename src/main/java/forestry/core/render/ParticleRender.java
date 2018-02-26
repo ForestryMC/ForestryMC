@@ -159,27 +159,27 @@ public class ParticleRender {
 		}
 	}
 
-	public static void addPortalFx(World world, BlockPos pos, Random rand){
+	public static void addPortalFx(World world, BlockPos pos, Random rand) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
 		int j = rand.nextInt(2) * 2 - 1;
 		int k = rand.nextInt(2) * 2 - 1;
-		double xPos = (double)pos.getX() + 0.5D + 0.25D * (double)j;
-		double yPos = (double)((float)pos.getY() + rand.nextFloat());
-		double zPos = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
-		double xSpeed = (double)(rand.nextFloat() * (float)j);
-		double ySpeed = ((double)rand.nextFloat() - 0.5D) * 0.125D;
-		double zSpeed = (double)(rand.nextFloat() * (float)k);
+		double xPos = (double) pos.getX() + 0.5D + 0.25D * (double) j;
+		double yPos = (double) ((float) pos.getY() + rand.nextFloat());
+		double zPos = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+		double xSpeed = (double) (rand.nextFloat() * (float) j);
+		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
+		double zSpeed = (double) (rand.nextFloat() * (float) k);
 		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
 		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.PORTAL.getParticleID(), xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
-		if(particle != null){
+		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}
 	}
-	
-	public static void addEntityBiodustFX(World world, double x, double y, double z){
+
+	public static void addEntityBiodustFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}

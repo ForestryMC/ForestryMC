@@ -39,16 +39,16 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	 * @return Tree generator for this species.
 	 */
 	ITreeGenerator getGenerator();
-	
+
 	/**
 	 * @return Float between 0 and 1 representing the rarity of the species, will affect spawn rate. If it's 0, it will not spawn.
 	 */
 	float getRarity();
 
 	IWoodProvider getWoodProvider();
-	
+
 	ILeafProvider getLeafProvider();
-	
+
 	IGrowthProvider getGrowthProvider();
 
 	/* MODELS AND OVERRIDES */

@@ -40,7 +40,7 @@ public class TileDatabase extends TileBase implements IOwnedTile {
 	public TileDatabase() {
 		setInternalInventory(new InventoryDatabase(this));
 		analyzerInventory = new InventoryDatabaseAnalyzer(this);
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			selectedSlot = -1;
 		}
 	}
@@ -92,7 +92,7 @@ public class TileDatabase extends TileBase implements IOwnedTile {
 
 	//Called by the container on the server side
 	public ItemStack analyzeSpecimen(int selectedDatabaseSlot) {
-		if(selectedDatabaseSlot < 0){
+		if (selectedDatabaseSlot < 0) {
 			return ItemStack.EMPTY;
 		}
 		ItemStack specimen = getStackInSlot(selectedDatabaseSlot);

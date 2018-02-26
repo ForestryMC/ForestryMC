@@ -91,11 +91,11 @@ public class ModelButterflyItem extends BlankModel {
 		float scale = 1F / 16F;
 		ImmutableMap.Builder<ItemCameraTransforms.TransformType, TRSRTransformation> builder = ImmutableMap.builder();
 		builder.put(ItemCameraTransforms.TransformType.FIXED,
-			new TRSRTransformation(new Vector3f(scale * 0.5F, scale - (size / 0.75F) * scale, scale * 1.25F), null, null, null));
+				new TRSRTransformation(new Vector3f(scale * 0.5F, scale - (size / 0.75F) * scale, scale * 1.25F), null, null, null));
 		builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
-			new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
+				new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
 		builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND,
-			new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
+				new TRSRTransformation(new Vector3f(0, scale - (size / 1F) * scale, 0), null, null, null));
 		return builder.build();
 	}
 

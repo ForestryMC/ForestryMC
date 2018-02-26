@@ -18,7 +18,7 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 	public CharcoalPileWallWrapper(ICharcoalPileWall pileWall) {
 		this.pileWall = pileWall;
 	}
-	
+
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, pileWall.getDisplayItems());
@@ -26,8 +26,8 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 		ItemStack charcoal = new ItemStack(Items.COAL, amount, 1);
 		ItemStack ash = new ItemStack(ModuleCore.getItems().ash, amount / 4);
 		ImmutableList<ItemStack> outputs = ImmutableList.of(
-			charcoal,
-			ash
+				charcoal,
+				ash
 		);
 		ingredients.setOutputs(ItemStack.class, outputs);
 	}

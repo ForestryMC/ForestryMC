@@ -103,7 +103,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
 
 	@Override

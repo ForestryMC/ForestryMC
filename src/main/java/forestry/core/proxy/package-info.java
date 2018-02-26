@@ -6,4 +6,5 @@ package forestry.core.proxy;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import forestry.core.utils.FieldsAreNonnullByDefault;
+
 import mcp.MethodsReturnNonnullByDefault;

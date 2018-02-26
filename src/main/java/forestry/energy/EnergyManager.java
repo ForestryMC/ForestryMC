@@ -12,10 +12,13 @@ import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.compat.tesla.TeslaHolderWrapper;
 import forestry.energy.compat.tesla.TeslaProducerWrapper;
+
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
 import net.darkhax.tesla.api.ITeslaProducer;
+
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;

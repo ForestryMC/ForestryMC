@@ -119,7 +119,7 @@ public class FarmLogicRubber extends FarmLogic {
 		for (int j = 0; j < 10; j++) {
 			BlockPos candidate = position.add(0, j, 0);
 
-			if(!world.isBlockLoaded(candidate)){
+			if (!world.isBlockLoaded(candidate)) {
 				return crops;
 			}
 

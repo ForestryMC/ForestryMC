@@ -18,6 +18,7 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 import forestry.mail.gui.ContainerLetter;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketLetterTextSet extends ForestryPacket implements IForestryPacketServer {

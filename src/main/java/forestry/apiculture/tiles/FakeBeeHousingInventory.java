@@ -1,6 +1,7 @@
 package forestry.apiculture.tiles;
 
 import forestry.api.apiculture.IBeeHousingInventory;
+
 import net.minecraft.item.ItemStack;
 
 public class FakeBeeHousingInventory implements IBeeHousingInventory {

@@ -12,7 +12,9 @@ package forestry.core.network.packets;
 
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
+
 import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

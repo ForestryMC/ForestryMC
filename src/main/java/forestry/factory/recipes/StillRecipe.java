@@ -11,7 +11,9 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.recipes.IStillRecipe;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipe implements IStillRecipe {

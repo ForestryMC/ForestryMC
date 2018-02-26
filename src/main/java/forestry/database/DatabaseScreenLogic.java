@@ -23,15 +23,15 @@ public class DatabaseScreenLogic {
 	public IDatabaseTab selectedTab;
 	public IDatabaseTab[] tabs = new IDatabaseTab[4];
 
-	public ScreenState onTabChange(IDatabaseTab selectedTab){
+	public ScreenState onTabChange(IDatabaseTab selectedTab) {
 		//Check if a individual is selected and analyzed
-		if(individual == null){
+		if (individual == null) {
 			return ScreenState.NO_INDIVIDUAL;
-		}else if(!individual.isAnalyzed()){
+		} else if (!individual.isAnalyzed()) {
 			return ScreenState.NOT_ANALYZED;
 		}
 
-		if(this.selectedTab == selectedTab){
+		if (this.selectedTab == selectedTab) {
 			return ScreenState.SUCCESS;
 		}
 
@@ -39,7 +39,7 @@ public class DatabaseScreenLogic {
 		return ScreenState.SUCCESS;
 	}
 
-	public ScreenState onItemChange(ItemStack itemStack){
+	public ScreenState onItemChange(ItemStack itemStack) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
 
 		// No individual, abort
@@ -49,27 +49,27 @@ public class DatabaseScreenLogic {
 		IIndividual individual = speciesRoot.getMember(itemStack);
 
 		//Check if a individual is selected and analyzed
-		if(individual == null){
+		if (individual == null) {
 			this.individual = null;
 			this.itemStack = ItemStack.EMPTY;
 			return ScreenState.NO_INDIVIDUAL;
-		}else if(!individual.isAnalyzed()){
+		} else if (!individual.isAnalyzed()) {
 			this.individual = null;
 			this.itemStack = ItemStack.EMPTY;
 			return ScreenState.NOT_ANALYZED;
 		}
 		this.individual = individual;
 		this.itemStack = itemStack;
-		if(speciesRoot != this.speciesRoot){
+		if (speciesRoot != this.speciesRoot) {
 			IDatabaseTab[] tabs = getTabs(speciesRoot);
-			if(tabs == null){
+			if (tabs == null) {
 				this.tabs = new IDatabaseTab[4];
 				return ScreenState.NO_PLUGIN;
 			}
 			this.tabs = tabs;
 			//Select the first tab
 			onTabChange(tabs[0]);
-		}else{
+		} else {
 			//Update the gui
 			onTabChange(selectedTab);
 		}
@@ -77,25 +77,25 @@ public class DatabaseScreenLogic {
 		return ScreenState.SUCCESS;
 	}
 
-	private IDatabaseTab[] getTabs(ISpeciesRoot speciesRoot){
+	private IDatabaseTab[] getTabs(ISpeciesRoot speciesRoot) {
 		ISpeciesPlugin databasePlugin = speciesRoot.getSpeciesPlugin();
-		if(databasePlugin == null){
+		if (databasePlugin == null) {
 			//no plugin ofr this species
 			return null;
 		}
 		this.databasePlugin = databasePlugin;
 		IDatabaseTab[] tabs = new IDatabaseTab[4];
 		IDatabaseTab speciesTab = databasePlugin.getSpeciesTab(true);
-		if(speciesTab == null){
+		if (speciesTab == null) {
 			//the plugin does not support the database
 			return null;
 		}
 		IDatabaseTab productsTab = databasePlugin.getProductsTab();
 		IDatabaseTab mutationTab = databasePlugin.getMutationTab();
-		if(productsTab == null){
+		if (productsTab == null) {
 			productsTab = DatabaseTab.PRODUCTS;
 		}
-		if(mutationTab == null){
+		if (mutationTab == null) {
 			mutationTab = DatabaseTab.MUTATIONS;
 		}
 		tabs[0] = speciesTab;
@@ -105,7 +105,7 @@ public class DatabaseScreenLogic {
 		return tabs;
 	}
 
-	public enum ScreenState{
+	public enum ScreenState {
 		NO_INDIVIDUAL,
 		//The individual is not analyzed
 		NOT_ANALYZED,

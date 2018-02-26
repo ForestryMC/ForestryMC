@@ -6,4 +6,5 @@ package forestry.core.inventory;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import forestry.core.utils.FieldsAreNonnullByDefault;
+
 import mcp.MethodsReturnNonnullByDefault;

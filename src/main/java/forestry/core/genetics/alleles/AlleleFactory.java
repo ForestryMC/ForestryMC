@@ -20,6 +20,7 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.apiculture.genetics.alleles.AlleleFlowers;
+
 import net.minecraft.util.math.Vec3i;
 
 public class AlleleFactory implements IAlleleFactory {

@@ -41,6 +41,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -171,9 +172,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (nbttagcompound.hasKey("PLN")) {
 			NBTTagCompound pollenNBT = nbttagcompound.getCompoundTag("PLN");
 			ISpeciesRoot root;
-			if(pollenNBT.hasKey("Root")){
+			if (pollenNBT.hasKey("Root")) {
 				root = AlleleManager.alleleRegistry.getSpeciesRoot(pollenNBT.getString("Root"));
-			}else{
+			} else {
 				root = TreeManager.treeRoot;
 			}
 			pollen = root.getMember(pollenNBT);
@@ -231,9 +232,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		float weight = 0.0f;
 		double distanceToHome = getHomePosition().distanceSq(pos);
-		
-		if(!isWithinHomeDistanceFromPosition(distanceToHome)){
-			
+
+		if (!isWithinHomeDistanceFromPosition(distanceToHome)) {
+
 			weight -= 7.5f + 0.005 * (distanceToHome / 4);
 		}
 
@@ -276,10 +277,10 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		weight += world.getLightBrightness(pos);
 		return weight;
 	}
-	
-    private boolean isWithinHomeDistanceFromPosition(double distanceToHome) {
-        return distanceToHome < this.getMaximumHomeDistance() * this.getMaximumHomeDistance();
-    }
+
+	private boolean isWithinHomeDistanceFromPosition(double distanceToHome) {
+		return distanceToHome < this.getMaximumHomeDistance() * this.getMaximumHomeDistance();
+	}
 
 	private int getFluidDepth(BlockPos pos) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);

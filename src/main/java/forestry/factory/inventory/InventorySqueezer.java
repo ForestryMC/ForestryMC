@@ -17,10 +17,12 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.tiles.TileSqueezer;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {

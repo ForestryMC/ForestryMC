@@ -124,8 +124,8 @@ public class GeneticsUtil {
 		}
 		return nursery;
 	}
-	
-	public static boolean canCreateNursery(World world, BlockPos pos){
+
+	public static boolean canCreateNursery(World world, BlockPos pos) {
 		IIndividual pollen = GeneticsUtil.getPollen(world, pos);
 		return pollen != null && pollen instanceof ITree;
 	}
@@ -151,9 +151,9 @@ public class GeneticsUtil {
 
 		IBlockState blockState = world.getBlockState(pos);
 
-		for(ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()){
+		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
 			IIndividual individual = root.translateMember(blockState);
-			if(individual != null){
+			if (individual != null) {
 				return individual;
 			}
 		}
@@ -168,9 +168,9 @@ public class GeneticsUtil {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
 
-		for(ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()){
+		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
 			IIndividual individual = root.translateMember(itemStack);
-			if(individual != null){
+			if (individual != null) {
 				return individual;
 			}
 		}

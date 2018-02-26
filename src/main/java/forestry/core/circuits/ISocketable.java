@@ -11,6 +11,7 @@
 package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuitSocketType;
+
 import net.minecraft.item.ItemStack;
 
 public interface ISocketable {

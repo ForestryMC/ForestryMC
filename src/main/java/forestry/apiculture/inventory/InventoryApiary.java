@@ -20,6 +20,7 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.utils.SlotUtil;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;

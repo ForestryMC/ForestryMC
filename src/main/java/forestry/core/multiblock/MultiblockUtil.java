@@ -57,28 +57,28 @@ public class MultiblockUtil {
 		}
 		return neighborParts;
 	}
-	
+
 	@Nullable
-	public static <C extends IMultiblockComponent> C getComponent(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+	public static <C extends IMultiblockComponent> C getComponent(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
 		return TileUtil.getTile(world, pos, componentClass);
 	}
-	
+
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
 		C component = getComponent(world, pos, componentClass);
-		if(component == null){
+		if (component == null) {
 			return null;
 		}
 		return (L) component.getMultiblockLogic();
 	}
-	
+
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockAccess world, BlockPos pos, Class<C> componentClass){
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
 		L logic = getLogic(world, pos, componentClass);
-		if(logic == null || !logic.isConnected()){
+		if (logic == null || !logic.isConnected()) {
 			return null;
 		}
 		return (M) logic.getController();
 	}
-	
+
 }

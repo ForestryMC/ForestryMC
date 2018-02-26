@@ -177,15 +177,15 @@ public class ModelManager implements IModelManager {
 			}
 		}
 	}
-	
+
 	public IModelState getDefaultBlockState() {
 		return defaultBlockState;
 	}
-	
+
 	public IModelState getDefaultItemState() {
 		return defaultItemState;
 	}
-	
+
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
 		if (index.addStateMapper) {
@@ -197,7 +197,7 @@ public class ModelManager implements IModelManager {
 	public void registerCustomModel(ModelEntry index) {
 		customModels.add(index);
 	}
-	
+
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
@@ -211,7 +211,7 @@ public class ModelManager implements IModelManager {
 		for (final ModelEntry entry : customModels) {
 			registry.putObject(entry.modelLocation, entry.model);
 		}
-		
+
 		//load default item and block model states
 		defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
 		defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));

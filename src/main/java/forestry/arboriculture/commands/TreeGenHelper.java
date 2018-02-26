@@ -20,6 +20,7 @@ import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.WorldGenBase;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -40,7 +41,7 @@ public final class TreeGenHelper {
 		} else {
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
 		}
-		if(pos == null){
+		if (pos == null) {
 			return false;
 		}
 
@@ -54,7 +55,7 @@ public final class TreeGenHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
 		WorldGenerator gen = tree.getTreeGenerator(world, pos, true);
 

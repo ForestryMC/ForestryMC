@@ -29,66 +29,66 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public final class World2ObjectMap<O> {
 	private static final Set<World2ObjectMap> MAPS = new HashSet<>();
-	
+
 	private final Map<Integer, O> delegate;
 	private final Factory factory;
 	@Nullable
 	private final Listener listener;
-	
+
 	public World2ObjectMap(Factory factory) {
 		this(factory, null);
 	}
-	
+
 	public World2ObjectMap(Factory factory, @Nullable Listener listener) {
 		this.delegate = new HashMap<>();
 		MAPS.add(this);
 		this.factory = factory;
 		this.listener = listener;
 	}
-	
+
 	@Nullable
-	public O get(@Nullable World world){
-		if(world == null){
+	public O get(@Nullable World world) {
+		if (world == null) {
 			return null;
 		}
 		return delegate.get(getIndex(world));
 	}
-	
-	public Collection<O> values(){
+
+	public Collection<O> values() {
 		return delegate.values();
 	}
-	
-	private int getIndex(World world){
+
+	private int getIndex(World world) {
 		return Integer.hashCode(world.provider.getDimension()) + Boolean.hashCode(world.isRemote);
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload event) {
 		World world = event.getWorld();
-		for(World2ObjectMap map : MAPS){
+		for (World2ObjectMap map : MAPS) {
 			map.delegate.remove(map.getIndex(world));
-			if(map.listener != null) {
+			if (map.listener != null) {
 				map.listener.onWorldStateChange(world, false, event);
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load event) {
 		World world = event.getWorld();
-		for(World2ObjectMap map : MAPS){
+		for (World2ObjectMap map : MAPS) {
 			map.delegate.put(map.getIndex(world), map.factory.createValue(world));
-			if(map.listener != null) {
+			if (map.listener != null) {
 				map.listener.onWorldStateChange(world, false, event);
 			}
 		}
 	}
-	
-	public interface Factory<O>{
+
+	public interface Factory<O> {
 		O createValue(World world);
 	}
-	
-	public interface Listener{
+
+	public interface Listener {
 		/**
 		 * @param event A WorldEvent.Unload or WorldEvent.Load event
 		 */

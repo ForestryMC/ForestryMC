@@ -13,6 +13,7 @@ package forestry.mail.inventory;
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.mail.tiles.TileStampCollector;
+
 import net.minecraft.item.ItemStack;
 
 public class InventoryStampCollector extends InventoryAdapterTile<TileStampCollector> {

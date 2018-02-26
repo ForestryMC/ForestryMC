@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
 import forestry.api.arboriculture.EnumVanillaWoodType;
 
 public class PropertyVanillaWoodType extends PropertyWoodType<EnumVanillaWoodType> {

@@ -17,20 +17,20 @@ import forestry.api.core.INbtWritable;
 public interface IClimateState extends INbtWritable {
 
 	float getTemperature();
-	
+
 	float getHumidity();
-	
+
 	IClimateState addTemperature(float temperature);
 
 	IClimateState addHumidity(float humidity);
-	
+
 	IClimateState add(IClimateState state);
 
 	IClimateState scale(double factor);
 
 	IClimateState remove(IClimateState state);
-	
-	default float get(ClimateType type){
+
+	default float get(ClimateType type) {
 		return type == ClimateType.HUMIDITY ? getHumidity() : getTemperature();
 	}
 
@@ -41,5 +41,5 @@ public interface IClimateState extends INbtWritable {
 	boolean isPresent();
 
 	ClimateStateType getType();
-	
+
 }

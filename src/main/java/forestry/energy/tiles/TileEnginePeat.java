@@ -26,6 +26,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -33,8 +34,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -302,14 +305,14 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	/* ITriggerProvider */
 	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(FactoryTriggers.lowFuel25);
-//		res.add(FactoryTriggers.lowFuel10);
-//		return res;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+	//		res.add(FactoryTriggers.lowFuel25);
+	//		res.add(FactoryTriggers.lowFuel10);
+	//		return res;
+	//	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

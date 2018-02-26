@@ -207,7 +207,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
 		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
-		
+
 		fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
@@ -464,7 +464,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = Integer.toString(fertility) + " x";
-		
+
 		int stringWidth = fontRenderer.getStringWidth(fertilityString);
 
 		bindTexture(textureFile);

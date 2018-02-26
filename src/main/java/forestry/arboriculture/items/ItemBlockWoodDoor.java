@@ -1,6 +1,7 @@
 package forestry.arboriculture.items;
 
 import forestry.arboriculture.blocks.BlockArbDoor;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -52,7 +53,7 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
 			}
 		}
 	}
-	
+
 	@Override
 	public int getItemBurnTime(ItemStack itemStack) {
 		if (getBlock().isFireproof()) {

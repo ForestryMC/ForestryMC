@@ -132,7 +132,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (rand.nextInt(24) != 0) {
 			return false;
 		}
-		
+
 		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getItem());
 		if (butterfly == null) {
 			return false;
@@ -162,25 +162,25 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
-		case CATERPILLAR:
-			manager.registerItemModel(item, 0, "caterpillar");
-			break;
-		case BUTTERFLY:
-			manager.registerItemModel(item, 0, "butterflyGE");
-			break;
-		case COCOON:
-			manager.registerItemModel(item, new CocoonMeshDefinition());
-			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleButterflyCocoon) {
-					for (int age = 0; age < 3; age++) {
-						ModelBakery.registerItemVariants(this,
-								((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+			case CATERPILLAR:
+				manager.registerItemModel(item, 0, "caterpillar");
+				break;
+			case BUTTERFLY:
+				manager.registerItemModel(item, 0, "butterflyGE");
+				break;
+			case COCOON:
+				manager.registerItemModel(item, new CocoonMeshDefinition());
+				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+					if (allele instanceof IAlleleButterflyCocoon) {
+						for (int age = 0; age < 3; age++) {
+							ModelBakery.registerItemVariants(this,
+									((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+						}
 					}
 				}
-			}
-			break;
-		default:
-			manager.registerItemModel(item, 0, "liquids/jar");
+				break;
+			default:
+				manager.registerItemModel(item, 0, "liquids/jar");
 		}
 	}
 
@@ -189,7 +189,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
 			Preconditions.checkNotNull(tagCompound);
-			if(!tagCompound.hasKey(NBT_AGE)){
+			if (!tagCompound.hasKey(NBT_AGE)) {
 				tagCompound.setInteger(NBT_AGE, 0);
 			}
 			int age = tagCompound.getInteger(NBT_AGE);
@@ -250,30 +250,30 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return EnumActionResult.PASS;
 		}
 	}
-	
-	public static void setAge(ItemStack cocoon, int age){
-		if(cocoon.isEmpty()){
+
+	public static void setAge(ItemStack cocoon, int age) {
+		if (cocoon.isEmpty()) {
 			return;
 		}
 		if (ButterflyManager.butterflyRoot.getType(cocoon) != EnumFlutterType.COCOON) {
 			return;
 		}
 		NBTTagCompound tagCompound = cocoon.getTagCompound();
-		if(tagCompound == null){
+		if (tagCompound == null) {
 			cocoon.setTagCompound(tagCompound = new NBTTagCompound());
 		}
 		tagCompound.setInteger(NBT_AGE, age);
 	}
-	
-	public static int getAge(ItemStack cocoon){
-		if(cocoon.isEmpty()){
+
+	public static int getAge(ItemStack cocoon) {
+		if (cocoon.isEmpty()) {
 			return 0;
 		}
 		if (ButterflyManager.butterflyRoot.getType(cocoon) != EnumFlutterType.COCOON) {
 			return 0;
 		}
 		NBTTagCompound tagCompound = cocoon.getTagCompound();
-		if(tagCompound == null){
+		if (tagCompound == null) {
 			return 0;
 		}
 		return tagCompound.getInteger(NBT_AGE);

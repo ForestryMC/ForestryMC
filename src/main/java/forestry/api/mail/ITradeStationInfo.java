@@ -6,6 +6,7 @@
 package forestry.api.mail;
 
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 

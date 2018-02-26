@@ -857,7 +857,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE).setRarity(0.0025F).setTemperature(EnumTemperature.WARM)
-			.setHumidity(EnumHumidity.DAMP);
+					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -883,7 +883,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);;
+					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+			;
 		}
 
 		@Override
@@ -1056,7 +1057,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	public final String getUID() {
 		return species.getUID();
 	}
-	
+
 	public final String getUnlocalizedName() {
 		return species.getUnlocalizedName();
 	}

@@ -15,8 +15,8 @@ import net.minecraftforge.client.model.IModel;
 
 public enum WoodBlockKind {
 	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
-	
-	public String getName(){
+
+	public String getName() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 

@@ -11,6 +11,7 @@
 package forestry.core.gui.slots;
 
 import forestry.core.tiles.IFilterSlotDelegate;
+
 import net.minecraft.inventory.IInventory;
 
 /**

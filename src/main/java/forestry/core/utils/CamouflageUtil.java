@@ -11,11 +11,13 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
+
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +47,7 @@ public class CamouflageUtil {
 	}
 
 	public static ItemStack getCamouflageBlock(@Nullable IBlockAccess world, @Nullable BlockPos pos) {
-		if(world == null || pos == null){
+		if (world == null || pos == null) {
 			return ItemStack.EMPTY;
 		}
 		TileEntity tile = TileUtil.getTile(world, pos, TileEntity.class);
@@ -57,7 +59,7 @@ public class CamouflageUtil {
 				ICamouflageHandler tileHandler = (ICamouflageHandler) tile;
 				ItemStack tileCamouflageStack = tileHandler.getCamouflageBlock();
 				ItemStack defaultCamouflageStack = tileHandler.getDefaultCamouflageBlock();
-				if(!ItemStackUtil.isIdenticalItem(tileCamouflageStack, defaultCamouflageStack)){
+				if (!ItemStackUtil.isIdenticalItem(tileCamouflageStack, defaultCamouflageStack)) {
 					camouflageStack = tileCamouflageStack;
 				}
 			}

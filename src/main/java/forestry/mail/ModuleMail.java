@@ -90,10 +90,10 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		MailTriggers.initialize();
-//	}
+	//	@Override
+	//	public void registerTriggers() {
+	//		MailTriggers.initialize();
+	//	}
 
 	@Override
 	public void doInit() {

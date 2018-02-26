@@ -12,6 +12,7 @@ package forestry.energy.gui;
 
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
+
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {

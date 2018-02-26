@@ -137,7 +137,7 @@ public abstract class Genome implements IGenome {
 	}
 
 	/**
-	 *  Quickly gets the species without loading the whole genome.
+	 * Quickly gets the species without loading the whole genome.
 	 */
 	@Nullable
 	public static IAllele getSpeciesDirectly(ItemStack itemStack, IChromosomeType chromosomeType, boolean active) {
@@ -173,8 +173,8 @@ public abstract class Genome implements IGenome {
 		if (genomeNbt.hasNoTags()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
 			genomeNbt = new NBTTagCompound();
-      
-      
+
+
 			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
 			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
 			genome.writeToNBT(genomeNbt);
@@ -212,9 +212,9 @@ public abstract class Genome implements IGenome {
 		return chromosomes;
 	}
 
-	public static IAllele getAllele(ItemStack itemStack, IChromosomeType type, boolean active){
+	public static IAllele getAllele(ItemStack itemStack, IChromosomeType type, boolean active) {
 		IAllele allele = getSpeciesDirectly(itemStack, type, active);
-		if(allele == null){
+		if (allele == null) {
 			IChromosome chromosome = getChromosome(itemStack, type, type.getSpeciesRoot());
 			allele = active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
 		}
@@ -222,9 +222,9 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Nullable
-	public static <A extends IAllele> A getAllele(ItemStack itemStack, IChromosomeType type, boolean active, Class<? extends A> alleleClass){
+	public static <A extends IAllele> A getAllele(ItemStack itemStack, IChromosomeType type, boolean active, Class<? extends A> alleleClass) {
 		IAllele allele = getAllele(itemStack, type, active);
-		if(alleleClass.isInstance(allele)){
+		if (alleleClass.isInstance(allele)) {
 			return alleleClass.cast(allele);
 		}
 		return null;

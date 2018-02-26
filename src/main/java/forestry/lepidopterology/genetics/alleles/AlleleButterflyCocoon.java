@@ -18,6 +18,7 @@ import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.lepidopterology.blocks.PropertyCocoon;
+
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;

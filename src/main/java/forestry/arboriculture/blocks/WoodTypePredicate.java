@@ -3,6 +3,7 @@ package forestry.arboriculture.blocks;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+
 import forestry.api.arboriculture.IWoodType;
 
 public class WoodTypePredicate implements Predicate<IWoodType> {

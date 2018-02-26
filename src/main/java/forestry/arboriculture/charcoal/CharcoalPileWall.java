@@ -23,24 +23,24 @@ public class CharcoalPileWall implements ICharcoalPileWall {
 	private final IBlockState blockState;
 	private final Block block;
 	private final int charcoalAmount;
-	
+
 	public CharcoalPileWall(IBlockState blockState, int charcoalAmount) {
 		this.blockState = blockState;
 		this.block = Blocks.AIR;
 		this.charcoalAmount = charcoalAmount;
 	}
-	
+
 	public CharcoalPileWall(Block block, int charcoalAmount) {
 		this.blockState = Blocks.AIR.getDefaultState();
 		this.block = block;
 		this.charcoalAmount = charcoalAmount;
 	}
-	
+
 	@Override
 	public int getCharcoalAmount() {
 		return charcoalAmount;
 	}
-	
+
 	@Override
 	public boolean matches(IBlockState state) {
 		return block == state.getBlock() || blockState == state;
@@ -48,9 +48,9 @@ public class CharcoalPileWall implements ICharcoalPileWall {
 
 	@Override
 	public NonNullList<ItemStack> getDisplayItems() {
-		if(block == Blocks.AIR){
+		if (block == Blocks.AIR) {
 			return NonNullList.withSize(1, new ItemStack(blockState.getBlock(), 1, blockState.getBlock().getMetaFromState(blockState)));
-		}else if(blockState == Blocks.AIR.getDefaultState()){
+		} else if (blockState == Blocks.AIR.getDefaultState()) {
 			return NonNullList.withSize(1, new ItemStack(block));
 		}
 		return NonNullList.create();
@@ -60,5 +60,5 @@ public class CharcoalPileWall implements ICharcoalPileWall {
 	public NonNullList<ItemStack> getDisplyItems() {
 		return getDisplayItems();
 	}
-	
+
 }

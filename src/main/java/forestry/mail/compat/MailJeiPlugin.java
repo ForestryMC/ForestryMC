@@ -3,6 +3,7 @@ package forestry.mail.compat;
 import forestry.core.utils.JeiUtil;
 import forestry.mail.ModuleMail;
 import forestry.mail.blocks.BlockRegistryMail;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;

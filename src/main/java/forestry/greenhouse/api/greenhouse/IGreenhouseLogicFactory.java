@@ -10,5 +10,5 @@ import forestry.api.multiblock.IGreenhouseController;
 public interface IGreenhouseLogicFactory {
 
 	IGreenhouseLogic createLogic(IGreenhouseController controller);
-	
+
 }

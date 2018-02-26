@@ -13,30 +13,30 @@ public class TileArboretum extends TilePlanter {
 	@Override
 	public NonNullList<ItemStack> createGermlingStacks() {
 		return createList(
-			new ItemStack(Blocks.SAPLING),
-			new ItemStack(Blocks.SAPLING, 1, 2),
-			new ItemStack(Blocks.SAPLING, 1, 2),
-			new ItemStack(Blocks.SAPLING)
+				new ItemStack(Blocks.SAPLING),
+				new ItemStack(Blocks.SAPLING, 1, 2),
+				new ItemStack(Blocks.SAPLING, 1, 2),
+				new ItemStack(Blocks.SAPLING)
 		);
 	}
 
 	@Override
 	public NonNullList<ItemStack> createResourceStacks() {
 		return createList(
-			new ItemStack(Blocks.DIRT),
-			new ItemStack(Blocks.DIRT),
-			new ItemStack(Blocks.DIRT),
-			new ItemStack(Blocks.DIRT)
+				new ItemStack(Blocks.DIRT),
+				new ItemStack(Blocks.DIRT),
+				new ItemStack(Blocks.DIRT),
+				new ItemStack(Blocks.DIRT)
 		);
 	}
 
 	@Override
 	public NonNullList<ItemStack> createProductionStacks() {
 		return createList(
-			new ItemStack(Blocks.LOG),
-			new ItemStack(Items.APPLE),
-			new ItemStack(Items.APPLE),
-			new ItemStack(Blocks.LOG)
+				new ItemStack(Blocks.LOG),
+				new ItemStack(Items.APPLE),
+				new ItemStack(Items.APPLE),
+				new ItemStack(Blocks.LOG)
 		);
 	}
 }

@@ -62,7 +62,7 @@ public enum PacketIdClient implements IPacketId {
 	TRADING_ADDRESS_RESPONSE,
 	LETTER_INFO_RESPONSE,
 	POBOX_INFO_RESPONSE,
-	
+
 	// Greenhouse
 	GREENHOUSE_DATA,
 	UPDATE_CLIMATE,

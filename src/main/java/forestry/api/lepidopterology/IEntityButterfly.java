@@ -8,6 +8,7 @@ package forestry.api.lepidopterology;
 import javax.annotation.Nullable;
 
 import forestry.api.genetics.IIndividual;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.passive.IAnimals;
 

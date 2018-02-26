@@ -37,30 +37,30 @@ public class PluginBuildCraftStatements extends BlankForestryModule {//implement
 	public void doInit() {
 		// Add custom trigger handler
 		// TODO: Buildcraft for 1.9
-//		StatementManager.registerTriggerProvider(this);
+		//		StatementManager.registerTriggerProvider(this);
 	}
 
 	/* ITriggerProvider */
 
 	// TODO: Buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		TileEntity tile = container.getTile();
-//		if (tile instanceof ITriggerProvider) {
-//			return ((ITriggerProvider) tile).getInternalTriggers(container);
-//		}
-//
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		if (tile instanceof ITriggerProvider) {
-//			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
-//		}
-//
-//		return null;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+	//		TileEntity tile = container.getTile();
+	//		if (tile instanceof ITriggerProvider) {
+	//			return ((ITriggerProvider) tile).getInternalTriggers(container);
+	//		}
+	//
+	//		return null;
+	//	}
+	//
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		if (tile instanceof ITriggerProvider) {
+	//			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
+	//		}
+	//
+	//		return null;
+	//	}
 }

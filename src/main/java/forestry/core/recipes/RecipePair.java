@@ -18,26 +18,26 @@ import forestry.api.recipes.IForestryRecipe;
 import forestry.core.utils.InventoryUtil;
 
 public class RecipePair<R extends IForestryRecipe> {
-	
+
 	public static final RecipePair EMPTY = new RecipePair(null, null);
-	
+
 	@Nullable
 	private final R recipe;
 	private final NonNullList<String> oreDictEntries;
-	
+
 	public RecipePair(R recipe, String[][] oreDictEntries) {
 		this.recipe = recipe;
 		this.oreDictEntries = InventoryUtil.getOreDictAsList(oreDictEntries);
 	}
-	
-	public boolean isEmpty(){
+
+	public boolean isEmpty() {
 		return recipe == null;
 	}
-	
+
 	public R getRecipe() {
 		return recipe;
 	}
-	
+
 	public NonNullList<String> getOreDictEntries() {
 		return oreDictEntries;
 	}

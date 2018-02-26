@@ -38,7 +38,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
-	
+
 	// TODO use json recipes
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
@@ -78,12 +78,12 @@ public abstract class RecipeUtil {
 		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
-		
+
 		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
 		if (expectedOutput.isEmpty()) {
 			return null;
 		}
-		
+
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
@@ -98,7 +98,7 @@ public abstract class RecipeUtil {
 				}
 			}
 		}
-		
+
 		if (recipe.matches(crafting, world)) {
 			ItemStack output = recipe.getCraftingResult(crafting);
 			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
@@ -108,7 +108,7 @@ public abstract class RecipeUtil {
 
 		return null;
 	}
-	
+
 	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy) {

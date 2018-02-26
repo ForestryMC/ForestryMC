@@ -128,7 +128,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		
+
 		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
 			registry.registerFarmables("farmArboreal", new FarmableGE());
@@ -213,7 +213,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
 		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
 		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
-			Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+				Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
@@ -233,12 +233,12 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmSucculentManaged = new CircuitFarmLogic("managedSucculent", succulentFarm, false);
 		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", succulentFarm, true);
-		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
+		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
 
 		Circuits.farmPoalesManaged = new CircuitFarmLogic("managedPoales", poalesFarm, false);
 		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
+		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
+		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(), false);
 
 		Circuits.farmGourdManaged = new CircuitFarmLogic("managedGourd", gourdFarm, false);
 		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true);
@@ -317,7 +317,7 @@ public class ModuleFarming extends BlankForestryModule {
 		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedVegetable", Circuits.farmCropsManaged);
 		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualVegetable", Circuits.farmCropsManual);
 
-		if(layoutManaged == null || layoutManual == null){
+		if (layoutManaged == null || layoutManual == null) {
 			return;
 		}
 

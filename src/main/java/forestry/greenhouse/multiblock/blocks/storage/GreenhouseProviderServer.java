@@ -150,9 +150,9 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 
 	public IErrorState checkPosition(BlockPos position) {
 		if (maxSize.getX() < position.getX()
-			|| maxSize.getZ() < position.getZ()
-			|| minSize.getX() > position.getX()
-			|| minSize.getZ() > position.getZ()) {
+				|| maxSize.getZ() < position.getZ()
+				|| minSize.getX() > position.getX()
+				|| minSize.getZ() > position.getZ()) {
 			return EnumErrorCode.TOO_LARGE;
 		}
 

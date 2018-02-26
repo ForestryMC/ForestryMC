@@ -82,7 +82,7 @@ public interface IGuiElementHelper {
 	/**
 	 * Adds a text element with the height 12.
 	 */
-	void addText(String text,GuiElementAlignment align, int color);
+	void addText(String text, GuiElementAlignment align, int color);
 
 	/**
 	 * Adds a text element.

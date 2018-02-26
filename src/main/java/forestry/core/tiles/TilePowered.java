@@ -22,9 +22,12 @@ import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.common.capabilities.Capability;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -89,7 +92,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	// TODO: buildcraft for 1.9
-//	@Override
+	//	@Override
 	public abstract boolean hasWork();
 
 	@Override

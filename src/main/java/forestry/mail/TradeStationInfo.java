@@ -11,10 +11,12 @@
 package forestry.mail;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 

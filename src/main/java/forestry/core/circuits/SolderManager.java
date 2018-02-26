@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
+
 import net.minecraft.item.ItemStack;
 
 public class SolderManager implements ISolderManager {

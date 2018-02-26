@@ -12,7 +12,7 @@ import net.minecraft.world.biome.Biome;
 public interface IGrowthProvider {
 
 	boolean canSpawn(ITree tree, World world, BlockPos pos);
-	
+
 	boolean isBiomeValid(ITree tree, Biome biome);
-	
+
 }

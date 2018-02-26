@@ -214,7 +214,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 					}
 
-					if(!world.isBlockLoaded(candidate)){
+					if (!world.isBlockLoaded(candidate)) {
 						continue;
 					}
 

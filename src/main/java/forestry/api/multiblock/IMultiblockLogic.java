@@ -6,6 +6,7 @@
 package forestry.api.multiblock;
 
 import forestry.api.core.INbtWritable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 

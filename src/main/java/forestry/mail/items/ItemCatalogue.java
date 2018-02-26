@@ -13,10 +13,12 @@ package forestry.mail.items;
 import forestry.core.items.ItemWithGui;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.GuiCatalogue;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

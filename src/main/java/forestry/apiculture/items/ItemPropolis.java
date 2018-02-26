@@ -12,6 +12,7 @@ package forestry.apiculture.items;
 
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemOverlay;
+
 import net.minecraft.item.ItemStack;
 
 public class ItemPropolis extends ItemOverlay {

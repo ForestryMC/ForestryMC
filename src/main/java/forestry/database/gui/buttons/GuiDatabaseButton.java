@@ -18,13 +18,13 @@ public class GuiDatabaseButton<V> extends GuiBetterButton {
 
 	public void setValue(V value) {
 		this.value = value;
-		if(value instanceof String){
+		if (value instanceof String) {
 			setLabel((String) value);
 		}
 		type.onValueChange(this);
 	}
 
-	public void onPressed(){
+	public void onPressed() {
 		type.onPressed(this);
 	}
 

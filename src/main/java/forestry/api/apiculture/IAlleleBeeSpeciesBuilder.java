@@ -6,6 +6,7 @@
 package forestry.api.apiculture;
 
 import forestry.api.genetics.IAlleleSpeciesBuilder;
+
 import net.minecraft.item.ItemStack;
 
 public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {

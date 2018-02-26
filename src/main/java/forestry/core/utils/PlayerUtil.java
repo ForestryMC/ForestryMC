@@ -14,12 +14,14 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
 import net.minecraftforge.common.util.FakePlayerFactory;
 
 public abstract class PlayerUtil {

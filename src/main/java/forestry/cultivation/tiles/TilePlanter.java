@@ -247,9 +247,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		int size = 1;
 		int extend = Config.planterExtend;
 
-		if(Config.ringFarms){
+		if (Config.ringFarms) {
 			int ringSize = Config.ringSize;
-			minPos = pos.add(-ringSize, 0 , -ringSize);
+			minPos = pos.add(-ringSize, 0, -ringSize);
 			maxPos = pos.add(ringSize, 0, ringSize);
 			size = 1 + ringSize * 2;
 			extend--;
@@ -355,7 +355,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	public Vec3i getArea() {
 		if (area == null) {
 			int basisArea = 5;
-			if(Config.ringFarms){
+			if (Config.ringFarms) {
 				basisArea = basisArea + 1 + Config.ringSize * 2;
 			}
 			area = new Vec3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
@@ -523,7 +523,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return super.getCapability(capability, facing);
 	}
 
-	protected NonNullList<ItemStack> createList(ItemStack... stacks){
+	protected NonNullList<ItemStack> createList(ItemStack... stacks) {
 		return NonNullList.from(ItemStack.EMPTY, stacks);
 	}
 

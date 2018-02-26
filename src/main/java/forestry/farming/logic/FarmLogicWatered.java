@@ -78,7 +78,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 			for (int i = 0; i < extent; i++) {
 				BlockPos position = translateWithOffset(pos, direction, i);
-				if(!world.isBlockLoaded(position)){
+				if (!world.isBlockLoaded(position)) {
 					break;
 				}
 
@@ -116,7 +116,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
-			if(!world.isBlockLoaded(position)){
+			if (!world.isBlockLoaded(position)) {
 				break;
 			}
 

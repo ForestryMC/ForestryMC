@@ -14,7 +14,7 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 	interface Listener extends IGreenhouseComponent {
 		IGreenhouseListener getGreenhouseListener();
 	}
-	
+
 	interface Active extends IGreenhouseComponent {
 		void updateServer(int tickCount);
 

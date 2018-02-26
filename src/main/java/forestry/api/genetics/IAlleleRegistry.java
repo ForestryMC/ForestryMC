@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IClassification.EnumClassLevel;
+
 import net.minecraft.item.ItemStack;
 
 /**
@@ -112,6 +114,7 @@ public interface IAlleleRegistry {
 	/**
 	 * Add more valid chromosome types for an allele.
 	 * Used by addons that create new chromosome types beyond bees, trees, and butterflies.
+	 *
 	 * @since Forestry 5.3.1
 	 */
 	void addValidAlleleTypes(IAllele allele, IChromosomeType... chromosomeTypes);
@@ -207,7 +210,7 @@ public interface IAlleleRegistry {
 	 * @param handler IAlleleHandler to register.
 	 */
 	void registerAlleleHandler(IAlleleHandler handler);
-	
+
 	/* BLACKLIST */
 
 	/**

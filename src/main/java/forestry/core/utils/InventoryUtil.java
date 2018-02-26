@@ -89,40 +89,40 @@ public abstract class InventoryUtil {
 	//TODO Buildcraft for 1.9
 	@Optional.Method(modid = "BuildCraftAPI|transport")
 	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-//		IInventory invClone = new InventoryCopy(source);
-//		ItemStack stackToMove = removeOneItem(invClone);
-//		if (stackToMove == null) {
-//			return false;
-//		}
-//		if (stackToMove.stackSize <= 0) {
-//			return false;
-//		}
-//
-//		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
-//		boolean foundPipe = false;
-//		for (EnumFacing side : directions) {
-//			TileEntity tile = tileCache.getTileOnSide(side);
-//			if (tile instanceof IPipeTile) {
-//				IPipeTile pipe = (IPipeTile) tile;
-//				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-//					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
-//					foundPipe = true;
-//				}
-//			}
-//		}
-//
-//		if (!foundPipe) {
-//			return false;
-//		}
-//
-//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
-//		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
-//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
-//			if (removeOneItem(source, stackToMove) != null) {
-//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
-//				return true;
-//			}
-//		}
+		//		IInventory invClone = new InventoryCopy(source);
+		//		ItemStack stackToMove = removeOneItem(invClone);
+		//		if (stackToMove == null) {
+		//			return false;
+		//		}
+		//		if (stackToMove.stackSize <= 0) {
+		//			return false;
+		//		}
+		//
+		//		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
+		//		boolean foundPipe = false;
+		//		for (EnumFacing side : directions) {
+		//			TileEntity tile = tileCache.getTileOnSide(side);
+		//			if (tile instanceof IPipeTile) {
+		//				IPipeTile pipe = (IPipeTile) tile;
+		//				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
+		//					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
+		//					foundPipe = true;
+		//				}
+		//			}
+		//		}
+		//
+		//		if (!foundPipe) {
+		//			return false;
+		//		}
+		//
+		//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
+		//		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
+		//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
+		//			if (removeOneItem(source, stackToMove) != null) {
+		//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
+		//				return true;
+		//			}
+		//		}
 		return false;
 	}
 
@@ -144,7 +144,7 @@ public abstract class InventoryUtil {
 			return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
 		}
 	}
-	
+
 	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
@@ -155,24 +155,24 @@ public abstract class InventoryUtil {
 			return ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) >= count;
 		}
 	}
-	
+
 	public static boolean deleteExactSet(IInventory inventory, NonNullList<ItemStack> required) {
 		NonNullList<ItemStack> offered = getStacks(inventory);
 		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(required);
 		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(offered);
-		
+
 		for (ItemStack req : condensedRequired) {
 			if (!containsExactStack(req, condensedOffered)) {
 				return false;
 			}
 		}
-		
+
 		for (ItemStack itemStack : condensedRequired) {
 			deleteExactStack(inventory, itemStack);
 		}
 		return true;
 	}
-	
+
 	private static boolean containsExactStack(ItemStack req, NonNullList<ItemStack> condensedOffered) {
 		for (ItemStack offer : condensedOffered) {
 			if (offer.getCount() >= req.getCount() && ItemStackUtil.areItemStacksEqualIgnoreCount(req, offer)) {
@@ -181,7 +181,7 @@ public abstract class InventoryUtil {
 		}
 		return false;
 	}
-	
+
 	private static void deleteExactStack(IInventory inventory, ItemStack itemStack) {
 		int count = itemStack.getCount();
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
@@ -225,7 +225,7 @@ public abstract class InventoryUtil {
 		}
 		return removed;
 	}
-	
+
 	@Nullable
 	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
 		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
@@ -277,8 +277,8 @@ public abstract class InventoryUtil {
 		}
 		return ItemStack.EMPTY;
 	}
-	
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove,  @Nullable String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
@@ -356,10 +356,10 @@ public abstract class InventoryUtil {
 		}
 		return result;
 	}
-	
+
 	public static NonNullList<String> getOreDictAsList(String[][] oreDicts) {
 		NonNullList<String> result = NonNullList.withSize(9, "");
-		if(oreDicts == null || oreDicts.length == 0){
+		if (oreDicts == null || oreDicts.length == 0) {
 			return result;
 		}
 		for (int i = 0; i < oreDicts.length; i++) {

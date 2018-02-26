@@ -28,9 +28,10 @@ public interface IWoodProvider {
 	 * @return A stack of wood from the tree to craft wood pile's or other things.
 	 */
 	ItemStack getWoodStack();
-	
+
 	/**
 	 * The amount of charcoal dropped from a charcoal pile of this wood.
+	 *
 	 * @deprecated Will be removed in 1.13
 	 */
 	@Deprecated
@@ -38,6 +39,7 @@ public interface IWoodProvider {
 
 	/**
 	 * The chance that a pile has to drop a extra charcoal
+	 *
 	 * @deprecated Will be removed in 1.13
 	 */
 	@Deprecated

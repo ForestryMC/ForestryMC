@@ -15,7 +15,9 @@ import forestry.core.models.ModelManager;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

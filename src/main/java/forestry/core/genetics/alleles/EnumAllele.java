@@ -5,6 +5,7 @@ import java.util.Locale;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
+
 import net.minecraft.util.math.Vec3i;
 
 public class EnumAllele {

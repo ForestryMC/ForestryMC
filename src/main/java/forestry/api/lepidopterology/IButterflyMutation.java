@@ -8,6 +8,7 @@ package forestry.api.lepidopterology;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
+
 import net.minecraft.world.World;
 
 public interface IButterflyMutation extends IMutation {

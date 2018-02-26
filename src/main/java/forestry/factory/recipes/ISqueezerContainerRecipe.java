@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 
 import forestry.api.recipes.ISqueezerRecipe;
+
 import net.minecraft.item.ItemStack;
 
 public interface ISqueezerContainerRecipe {

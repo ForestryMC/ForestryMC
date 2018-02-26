@@ -109,7 +109,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		if (entity.isDead) {
 			return false;
 		}
-		
+
 		ItemStack contained = entity.getItem();
 		for (Resurrectable entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
@@ -117,17 +117,17 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 				if (spawnedEntity != null) {
 					entry.risenTransformer.ifPresent(transformer -> transformer.accept(spawnedEntity));
 				}
-				
+
 				contained.shrink(1);
-				
+
 				if (contained.getCount() <= 0) {
 					entity.setDead();
 				}
-				
+
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

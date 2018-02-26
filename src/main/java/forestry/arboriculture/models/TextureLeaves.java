@@ -16,9 +16,11 @@ import java.util.Map;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.config.Constants;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

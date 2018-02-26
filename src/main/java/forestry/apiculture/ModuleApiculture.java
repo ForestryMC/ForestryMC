@@ -153,9 +153,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static String beekeepingMode = "NORMAL";
 
 	public static int ticksPerBeeWorkCycle = 550;
-	
+
 	public static boolean hivesDamageOnPeaceful = false;
-	
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -233,17 +233,17 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
 	}
 
 	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		ApicultureTriggers.initialize();
-//	}
+	//	@Override
+	//	public void registerTriggers() {
+	//		ApicultureTriggers.initialize();
+	//	}
 
 	@Override
 	public void doInit() {
@@ -274,9 +274,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
 		parseBeeBlacklist(blacklist);
-		
+
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
-		
+
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
 
 		config.save();
@@ -510,9 +510,9 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for(int blockCount = 0;blockCount < blocks.beeCombs.length;blockCount++){
+		for (int blockCount = 0; blockCount < blocks.beeCombs.length; blockCount++) {
 			BlockHoneyComb block = blocks.beeCombs[blockCount];
-			for(int blockMeta = 0;blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16;blockMeta++){
+			for (int blockMeta = 0; blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16; blockMeta++) {
 				int itemMeta = blockMeta + blockCount * 16;
 				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
 						"###",
@@ -915,7 +915,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if(!world.provider.getDimensionType().equals(DimensionType.THE_END)) return;
+		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
+			return;
+		}
 		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
@@ -953,7 +955,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			return true;
 		} else if (message.key.equals("blacklist-hives-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;

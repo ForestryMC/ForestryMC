@@ -9,8 +9,8 @@ import java.util.Locale;
 
 public enum ClimateType {
 	TEMPERATURE, HUMIDITY;
-	
-	public String getName(){
+
+	public String getName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

@@ -13,6 +13,7 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.network.packets.PacketErrorUpdate;
@@ -22,9 +23,11 @@ import forestry.core.tiles.IPowerHandler;
 import forestry.core.tiles.TilePowered;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

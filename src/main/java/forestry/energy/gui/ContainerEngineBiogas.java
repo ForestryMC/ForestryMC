@@ -15,6 +15,7 @@ import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
+
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {

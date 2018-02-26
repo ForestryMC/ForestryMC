@@ -12,22 +12,22 @@ package forestry.apiculture.trigger;
 
 public class TriggerMissingQueen {//extends Trigger {
 
-//	public TriggerMissingQueen() {
-//		super("missingQueen");
-//	}
+	//	public TriggerMissingQueen() {
+	//		super("missingQueen");
+	//	}
 
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	// TODO: buildcraft for 1.9
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof IErrorLogicSource)) {
-//			return false;
-//		}
-//
-//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
-//	}
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//
+	//		if (!(tile instanceof IErrorLogicSource)) {
+	//			return false;
+	//		}
+	//
+	//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+	//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
+	//	}
 }

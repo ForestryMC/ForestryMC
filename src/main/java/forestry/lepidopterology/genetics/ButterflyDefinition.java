@@ -13,6 +13,7 @@ package forestry.lepidopterology.genetics;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleSpeciesRegisterEvent;
@@ -30,6 +31,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.utils.StringUtil;
+
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -323,7 +325,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 	}
-	
+
 	public static void preInit() {
 		// just used to initialize the enums
 	}

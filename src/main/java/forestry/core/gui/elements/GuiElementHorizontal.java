@@ -28,7 +28,7 @@ public class GuiElementHorizontal extends GuiElementLayout {
 
 	@Override
 	public int getHeight() {
-		if(height > 0){
+		if (height > 0) {
 			return height;
 		}
 		int height = 0;

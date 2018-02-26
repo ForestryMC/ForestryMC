@@ -15,6 +15,7 @@ import java.util.List;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+
 import net.minecraft.entity.player.EntityPlayer;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {

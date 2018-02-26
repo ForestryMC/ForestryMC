@@ -178,7 +178,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
-		
+
 		if (Config.generateTrees) {
 			MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
 		}
@@ -215,7 +215,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandTree());
 
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)) {
 			ArboricultureFilterRuleType.init();
 		}
 	}
@@ -426,7 +426,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PLUM.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PAPAYA.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.DATES.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
-			
+
 			RecipeUtil.addFermenterRecipes(new ItemStack(items.sapling, 1, OreDictionary.WILDCARD_VALUE), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
@@ -542,7 +542,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			return true;
 		} else if (message.key.equals("blacklist-trees-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistTreeDim(dim);
 			}
 			return true;

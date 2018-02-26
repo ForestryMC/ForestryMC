@@ -24,9 +24,9 @@ public interface IGuiElementFactory {
 	IGuiElementHelper createHelper(IGuiElementLayout element);
 
 	/* GENETIC*/
+
 	/**
-	 * @param  dominant True if you want the dominant color and false if you want the recessive color.
-	 *
+	 * @param dominant True if you want the dominant color and false if you want the recessive color.
 	 * @return The color code that forestry uses to show if a allele is dominant (true) or recessive (false).
 	 */
 	int getColorCoding(boolean dominant);
