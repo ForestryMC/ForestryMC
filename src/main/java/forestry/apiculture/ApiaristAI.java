@@ -55,7 +55,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		BlockPos housePos = this.destinationBlock.north();
+		BlockPos housePos = this.destinationBlock.north().up();
 		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 
 		if (this.villager.getDistanceSqToCenter(housePos) < 2.0D) {
@@ -127,7 +127,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 	}
 
 	protected boolean shouldMoveTo(World world, BlockPos pos) {
-		pos = pos.north();
+		pos = pos.north().up();
 		Block block = world.getBlockState(pos).getBlock();
 		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse) {
 			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, pos);
