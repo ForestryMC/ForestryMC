@@ -28,11 +28,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBeeLogicActive extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos tilePos;
-	private final BeekeepingLogic beekeepingLogic;
+	private final IBeekeepingLogic beekeepingLogic;
 
 	public PacketBeeLogicActive(IBeeHousing tile) {
 		this.tilePos = tile.getCoordinates();
-		this.beekeepingLogic = (BeekeepingLogic) tile.getBeekeepingLogic();
+		this.beekeepingLogic = tile.getBeekeepingLogic();
 	}
 
 	@Override
@@ -55,9 +55,7 @@ public class PacketBeeLogicActive extends ForestryPacket implements IForestryPac
 			IBeeHousing beeHousing = TileUtil.getTile(player.world, tilePos, IBeeHousing.class);
 			if (beeHousing != null) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-				if (beekeepingLogic instanceof BeekeepingLogic) {
-					((BeekeepingLogic) beekeepingLogic).readData(data);
-				}
+				beekeepingLogic.readData(data);
 			}
 		}
 	}

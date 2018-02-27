@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IApiaristTracker;
@@ -42,6 +43,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,10 +53,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
+public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int totalBreedingTime = Constants.APIARY_BREEDING_TIME;
 
@@ -222,7 +225,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			errorLogic.setCondition(true, errorState);
 		}
 
-		boolean hasFlowers = hasFlowersCache.hasFlowers(queen, housing);
+		hasFlowersCache.update(queen, housing);
+		boolean hasFlowers = hasFlowersCache.hasFlowers();
 		boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);
 
