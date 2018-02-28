@@ -53,6 +53,7 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.apiculture.ModuleApiculture;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
@@ -309,7 +310,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			ITree tree = getTree();
 			return tree != null &&
 					tree.getMate() == null &&
-					!tree.isGeneticEqual(individual);
+					(ModuleApiculture.doSelfPollination ||!tree.isGeneticEqual(individual));
 		}
 		return false;
 	}

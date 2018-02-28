@@ -716,13 +716,6 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 			if (!checkPollinatable.canMateWith(pollen)) {
-				if (checkPollinatable.canMateWith(checkPollinatable.getPollen()) && ModuleApiculture.doSelfPollination) {
-					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock, Config.pollinateVanillaTrees);
-
-					if (realPollinatable != null) {
-						realPollinatable.mateWith(realPollinatable.getPollen());
-					}
-				}
 				continue;
 			}
 
