@@ -35,7 +35,9 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.registries.IForgeRegistry;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
@@ -123,7 +125,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void lootLoad(LootTableLoadEvent event) {
 		if (!event.getName().getResourceDomain().equals("minecraft")
-			&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
+				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
 			return;
 		}
 
@@ -145,16 +147,16 @@ public class EventHandlerCore {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
-	public void handleVillagerAI(EntityJoinWorldEvent event) {	//won't register if villager not registered
+	public void handleVillagerAI(EntityJoinWorldEvent event) {
 		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfs = ForgeRegistries.VILLAGER_PROFESSIONS;
 		Entity entity = event.getEntity();
-		if((entity instanceof EntityVillager)) {
+		if ((entity instanceof EntityVillager)) {
 			EntityVillager villager = (EntityVillager) event.getEntity();
 			ResourceLocation villagerProf = villagerProfs.getKey(villager.getProfessionForge());
-			if(villagerProf.toString().equals(Constants.ID_VILLAGER_APIARIST)) {
-				villager.tasks.addTask(6, new ApiaristAI(villager, villager.getAIMoveSpeed()));	
+			if (villagerProf.toString().equals(Constants.ID_VILLAGER_APIARIST)) {
+				villager.tasks.addTask(6, new ApiaristAI(villager, 0.6));
 			}
 		}
 	}

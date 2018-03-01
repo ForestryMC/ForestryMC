@@ -58,7 +58,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 		BlockPos housePos = this.destinationBlock.north().up();
 		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 
-		if (this.villager.getDistanceSqToCenter(housePos) < 2.0D) {
+		if (this.getIsAboveDestination()) {
 			World world = this.villager.world;
 
 			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, housePos);
