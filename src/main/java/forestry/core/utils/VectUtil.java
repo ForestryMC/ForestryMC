@@ -58,16 +58,11 @@ public final class VectUtil {
 		}
 	}
 
-	public static Iterable<BlockPos.MutableBlockPos> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
+	public static Iterator<BlockPos.MutableBlockPos> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
 		final BlockPos minPos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
 		final BlockPos maxPos = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
 
-		return new Iterable<BlockPos.MutableBlockPos>() {
-			@Override
-			public Iterator<BlockPos.MutableBlockPos> iterator() {
-				return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
-			}
-		};
+		return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
 	}
 
 	private static class MutableBlockPosSpiralIterator extends AbstractIterator<BlockPos.MutableBlockPos> {

@@ -30,6 +30,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.TickHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -52,14 +53,12 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable {
-	private static final Random rand = new Random();
-
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	@Nonnull
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 
-	private int tickCount = rand.nextInt(256);
+	private final TickHelper tickHelper = new TickHelper();
 	private boolean needsNetworkUpdate = false;
 
 	protected AdjacentTileCache getTileCache() {
@@ -85,7 +84,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	// / UPDATING
 	@Override
 	public final void update() {
-		tickCount++;
+		tickHelper.onTick();
 
 		if (!worldObj.isRemote) {
 			updateServerSide();
@@ -106,7 +105,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	protected final boolean updateOnInterval(int tickInterval) {
-		return tickCount % tickInterval == 0;
+		return tickHelper.updateOnInterval(tickInterval);
 	}
 
 	// / SAVING & LOADING
