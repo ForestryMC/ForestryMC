@@ -15,6 +15,7 @@ import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
 import forestry.core.utils.VectUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -66,32 +68,30 @@ public class ParticleRender {
 
 		int color = genome.getPrimary().getSpriteColour(0);
 
-		if (!flowerPositions.isEmpty()) {
-			int randomInt = world.rand.nextInt(100);
+		int randomInt = world.rand.nextInt(100);
 
-			if (housing instanceof IHiveTile) {
-				if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
-					List<EntityLivingBase> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, EntityLivingBase.class);
-					if (!entitiesInRange.isEmpty()) {
-						EntityLivingBase entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
-						Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
-						effectRenderer.addEffect(particle);
-						return;
-					}
+		if (housing instanceof IHiveTile) {
+			if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
+				List<EntityLivingBase> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, EntityLivingBase.class);
+				if (!entitiesInRange.isEmpty()) {
+					EntityLivingBase entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
+					Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
+					effectRenderer.addEffect(particle);
+					return;
 				}
 			}
+		}
 
-			if (randomInt < 75) {
-				BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
-				Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
-				effectRenderer.addEffect(particle);
-			} else {
-				Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
-				Vec3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-				BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
-				Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
-				effectRenderer.addEffect(particle);
-			}
+		if (randomInt < 75 && !flowerPositions.isEmpty()) {
+			BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
+			Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
+			effectRenderer.addEffect(particle);
+		} else {
+			Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
+			Vec3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+			BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
+			Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
+			effectRenderer.addEffect(particle);
 		}
 	}
 

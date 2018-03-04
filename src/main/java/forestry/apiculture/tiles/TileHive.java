@@ -60,6 +60,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.genetics.IAllele;
 import forestry.apiculture.BeekeepingLogic;
+import forestry.apiculture.WorldgenBeekeepingLogic;
 import forestry.apiculture.blocks.BlockBeeHives;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
@@ -72,15 +73,17 @@ import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class TileHive extends TileEntity implements ITickable, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
 
 	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
 	private final HiveBeeHousingInventory inventory;
-	private final BeekeepingLogic beeLogic;
+	private final WorldgenBeekeepingLogic beeLogic;
 	private final IErrorLogic errorLogic;
 	private final Predicate<EntityLivingBase> beeTargetPredicate;
+	private final TickHelper tickHelper = new TickHelper();
 
 	@Nullable
 	private IBee containedBee = null;
@@ -96,7 +99,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	public TileHive() {
 		inventory = new HiveBeeHousingInventory(this);
-		beeLogic = new BeekeepingLogic(this);
+		beeLogic = new WorldgenBeekeepingLogic(this);
 		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
 		beeTargetPredicate = new BeeTargetPredicate(this);
 	}
@@ -106,12 +109,13 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		if (Config.generateBeehivesDebug) {
 			return;
 		}
+		tickHelper.onTick();
 
 		if (world.isRemote) {
-			if (!updatedLight && world.getWorldTime() % 100 == 0) {
+			if (!updatedLight && tickHelper.updateOnInterval(100)) {
 				updatedLight = world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
 			}
-			if (active && world.rand.nextInt(4) == 0) {
+			if (active && tickHelper.updateOnInterval(4)) {
 				if (beeLogic.canDoBeeFX()) {
 					beeLogic.doBeeFX();
 				}
@@ -119,7 +123,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		} else {
 			boolean canWork = beeLogic.canWork(); // must be called every tick to stay updated
 
-			if (world.rand.nextInt(angry ? 10 : 200) == 0) {
+			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
 						if(world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL) {
