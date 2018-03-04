@@ -6,6 +6,7 @@
 package forestry.api.apiculture;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,18 +16,22 @@ import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 
 /**
  * Stores beekeeping logic for bee housings.
  * Get one with BeeManager.beeRoot.createBeekeepingLogic(IBeeHousing housing)
  * Save and load it to NBT using the INbtWritable methods.
  */
-public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
+public interface IBeekeepingLogic extends INbtWritable, INbtReadable, IStreamable {
 
 	/* SERVER */
 
 	/**
 	 * Checks that the bees can work, setting error conditions on the housing where needed
+	 *
 	 * @return true if no errors are present and doWork should be called
 	 */
 	boolean canWork();
@@ -77,4 +82,14 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 */
 	@Nonnull
 	List<BlockPos> getFlowerPositions();
+
+	@Override
+	default void writeData(DataOutputStreamForestry data) throws IOException {
+
+	}
+
+	@Override
+	default void readData(DataInputStreamForestry data) throws IOException {
+
+	}
 }
