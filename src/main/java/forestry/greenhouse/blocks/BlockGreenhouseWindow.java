@@ -224,11 +224,6 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
 		if (drops.isEmpty()) {
@@ -240,7 +235,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	@Override
