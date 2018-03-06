@@ -22,6 +22,9 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
@@ -82,6 +85,7 @@ import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
+import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -153,9 +157,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static String beekeepingMode = "NORMAL";
 
 	public static int ticksPerBeeWorkCycle = 550;
-	
+
 	public static boolean hivesDamageOnPeaceful = false;
-	
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -233,17 +237,17 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
 	}
 
 	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		ApicultureTriggers.initialize();
-//	}
+	//	@Override
+	//	public void registerTriggers() {
+	//		ApicultureTriggers.initialize();
+	//	}
 
 	@Override
 	public void doInit() {
@@ -274,9 +278,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
 		parseBeeBlacklist(blacklist);
-		
+
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
-		
+
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
 
 		config.save();
@@ -406,6 +410,28 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
+
+		//Flower Pots
+		IBlockState flowerPot = Blocks.FLOWER_POT.getBlockState().getBaseState();
+		PropertyEnum<BlockFlowerPot.EnumFlowerType> CONTENTS = BlockFlowerPot.CONTENTS;
+		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
+
+		for (BlockFlowerPot.EnumFlowerType flowerType : BlockFlowerPot.EnumFlowerType.values()) {
+			if (flowerType.ordinal() == 0) {        //0 is empty flowerpot
+				continue;
+			} else if (flowerType.ordinal() < 11) {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), standardTypes);
+
+			} else if (flowerType.ordinal() == 17 || flowerType.ordinal() == 18) {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
+
+			} else if (flowerType.ordinal() == 21) {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
+			}
+		}
+
+		//test
+		flowerRegistry.registerAcceptableFlower(Blocks.PLANKS.getBlockState().getBaseState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.OAK), FlowerManager.FlowerTypeVanilla);
 	}
 
 	@Override
@@ -510,9 +536,9 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for(int blockCount = 0;blockCount < blocks.beeCombs.length;blockCount++){
+		for (int blockCount = 0; blockCount < blocks.beeCombs.length; blockCount++) {
 			BlockHoneyComb block = blocks.beeCombs[blockCount];
-			for(int blockMeta = 0;blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16;blockMeta++){
+			for (int blockMeta = 0; blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16; blockMeta++) {
 				int itemMeta = blockMeta + blockCount * 16;
 				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
 						"###",
@@ -915,7 +941,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if(!world.provider.getDimensionType().equals(DimensionType.THE_END)) return;
+		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
+			return;
+		}
 		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
@@ -953,7 +981,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			return true;
 		} else if (message.key.equals("blacklist-hives-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;

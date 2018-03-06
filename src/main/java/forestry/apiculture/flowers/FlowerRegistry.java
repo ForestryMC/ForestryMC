@@ -311,6 +311,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		public boolean test(World world, BlockPos blockPos) {
 			if (world.isBlockLoaded(blockPos)) {
 				IBlockState blockState = world.getBlockState(blockPos);
+				blockState = blockState.getBlock().getActualState(blockState, world, blockPos);
 				if (!blockState.getBlock().isAir(blockState, world, blockPos)) {
 					for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 						if (acceptableRule.isAcceptableFlower(blockState, world, blockPos, flowerType)) {
