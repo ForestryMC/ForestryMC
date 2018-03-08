@@ -995,7 +995,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				return false;
 			}
 		}
-		
+
 		return false;
 	}
 
