@@ -24,8 +24,8 @@ public class BlockRegistryCharcoal extends BlockRegistry {
 				return 16000;
 			}
 		};
-		OreDictionary.registerOre(OreDictUtil.BLOCK_CHARCOAL, itemBlockCharcoal);
 		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
+		OreDictionary.registerOre(OreDictUtil.BLOCK_CHARCOAL, itemBlockCharcoal);
 
 		woodPile = new BlockWoodPile();
 		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry<BlockWoodPile>(woodPile) {
