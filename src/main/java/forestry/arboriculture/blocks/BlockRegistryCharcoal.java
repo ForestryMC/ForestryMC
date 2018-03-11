@@ -3,8 +3,11 @@ package forestry.arboriculture.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryCharcoal extends BlockRegistry {
 	public final BlockCharcoal charcoal;
@@ -21,6 +24,7 @@ public class BlockRegistryCharcoal extends BlockRegistry {
 				return 16000;
 			}
 		};
+		OreDictionary.registerOre(OreDictUtil.BLOCK_CHARCOAL, itemBlockCharcoal);
 		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
 
 		woodPile = new BlockWoodPile();
