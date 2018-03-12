@@ -45,7 +45,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.runDelay < 0) {
+		if (this.runDelay <= 0) {
 			this.hasDrone = hasBeeType(EnumBeeType.DRONE);
 			this.hasPrincess = hasBeeType(EnumBeeType.PRINCESS);
 		}
