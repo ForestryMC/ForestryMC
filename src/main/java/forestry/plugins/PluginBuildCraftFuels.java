@@ -30,21 +30,21 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 		return "Compatible BuildCraftAPI|fuels version not found";
 	}
 
-//	@Optional.Method(modid = "BuildCraftAPI|fuels")
-//	@Override
-//	public void doInit() {
-//		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
+	//	@Optional.Method(modid = "BuildCraftAPI|fuels")
+	//	@Override
+	//	public void doInit() {
+	//		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
 	//		ICoolant waterCoolant = coolantManager.getCoolant(FluidRegistry.WATER);
-//		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
-//
-//		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
-//
-//		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
-//		if (ethanol != null) {
-//			int ethanolPower = 40;
-//			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
-//			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
-//		}
-//	}
+	//		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
+	//
+	//		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
+	//
+	//		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
+	//		if (ethanol != null) {
+	//			int ethanolPower = 40;
+	//			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
+	//			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
+	//		}
+	//	}
 
 }

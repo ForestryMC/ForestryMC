@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
  * Defines a Forestry module.
  * Any class implementing this interface and annotated by {@link ForestryModule} to be loaded by
  * the model manager of Forestry.
- *
  */
 public interface IForestryModule {
 	default boolean isAvailable() {
@@ -34,7 +33,7 @@ public interface IForestryModule {
 	/**
 	 * The ForestryModule.moduleID()s of any other modules this module depends on.
 	 */
-	default Set<ResourceLocation> getDependencyUids(){
+	default Set<ResourceLocation> getDependencyUids() {
 		return Collections.emptySet();
 	}
 
@@ -81,17 +80,17 @@ public interface IForestryModule {
 	/**
 	 * Can be used to register recipes. Called after {@link #doInit()}.
 	 */
-	default void registerRecipes(){
+	default void registerRecipes() {
 	}
 
-	default void addLootPoolNames(Set<String> lootPoolNames){
+	default void addLootPoolNames(Set<String> lootPoolNames) {
 	}
 
-	default void postInit(){
+	default void postInit() {
 	}
 
 	@Nullable
-	default ICommand[] getConsoleCommands(){
+	default ICommand[] getConsoleCommands() {
 		return null;
 	}
 }

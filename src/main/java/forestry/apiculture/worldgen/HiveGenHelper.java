@@ -12,6 +12,7 @@ package forestry.apiculture.worldgen;
 
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.apiculture.hives.IHiveGenHelper;
+
 import net.minecraft.block.Block;
 
 public class HiveGenHelper implements IHiveGenHelper {

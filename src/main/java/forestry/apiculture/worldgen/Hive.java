@@ -20,6 +20,7 @@ import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.HiveConfig;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,7 +68,7 @@ public final class Hive {
 	}
 
 	public boolean isValidLocation(World world, BlockPos pos) {
-		if(!HiveConfig.isDimAllowed(world.provider.getDimension())) {
+		if (!HiveConfig.isDimAllowed(world.provider.getDimension())) {
 			return false;
 		}
 		return hiveDescription.getHiveGen().isValidLocation(world, pos);

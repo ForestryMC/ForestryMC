@@ -66,16 +66,16 @@ public class ModelCrate extends BlankModel {
 	public ItemOverrideList createOverrides() {
 		return new CrateOverrideList();
 	}
-	
+
 	@Nullable
-	private static IBakedModel getCustomContentModel(ItemCrated crateItem){
+	private static IBakedModel getCustomContentModel(ItemCrated crateItem) {
 		ResourceLocation registryName = crateItem.getRegistryName();
 		String containedName = registryName.getResourcePath().replace("crated.", "");
 		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
 		IModel model;
-		try{
+		try {
 			model = ModelLoaderRegistry.getModel(location);
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 		return model.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
@@ -89,7 +89,7 @@ public class ModelCrate extends BlankModel {
 		ItemStack contained = crateItem.getContained();
 		if (!contained.isEmpty()) {
 			IBakedModel containedModel = getCustomContentModel(crateItem);
-			if(containedModel == null){
+			if (containedModel == null) {
 				containedModel = ModelUtil.getModel(contained);
 			}
 			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
@@ -111,9 +111,9 @@ public class ModelCrate extends BlankModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 			ItemCrated crated = (ItemCrated) stack.getItem();
 			ResourceLocation itemName = crated.getRegistryName();
-			if(itemName == null){
+			if (itemName == null) {
 				IBakedModel baseCrateModel = cache.get("base");
-				if(baseCrateModel == null){
+				if (baseCrateModel == null) {
 					baseCrateModel = ModelUtil.getModel(new ItemStack(ModuleCrates.getItems().crate, 1, 1));
 					baseCrateModel = ForgeHooksClient.handleCameraTransforms(baseCrateModel, TransformType.GROUND, false);
 				}
@@ -126,7 +126,7 @@ public class ModelCrate extends BlankModel {
 				//Fastest list with a unknown quad size
 				List<BakedQuad> list = new LinkedList<>();
 				IBakedModel baseCrateModel = cache.get("base");
-				if(baseCrateModel == null){
+				if (baseCrateModel == null) {
 					baseCrateModel = ModelUtil.getModel(new ItemStack(ModuleCrates.getItems().crate, 1, 1));
 					baseCrateModel = ForgeHooksClient.handleCameraTransforms(baseCrateModel, TransformType.GROUND, false);
 				}
@@ -144,7 +144,7 @@ public class ModelCrate extends BlankModel {
 		}
 
 	}
-	
+
 	public static class BakedCrateModel extends BlankModel implements IBakedModel {
 		private final BakedCrateModel other;
 		private final boolean gui;

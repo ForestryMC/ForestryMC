@@ -13,7 +13,7 @@ public class DatabaseItem {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof DatabaseItem)){
+		if (!(obj instanceof DatabaseItem)) {
 			return false;
 		}
 		return ((DatabaseItem) obj).invIndex == invIndex && ((DatabaseItem) obj).itemStack.isEmpty() == itemStack.isEmpty();

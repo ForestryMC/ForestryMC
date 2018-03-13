@@ -6,8 +6,11 @@ import java.util.List;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
 import mezz.jei.api.ingredients.IIngredients;
+
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 

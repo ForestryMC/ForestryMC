@@ -74,7 +74,7 @@ public interface IBreedingTracker {
 	/**
 	 * @return A collection that contains the {@link IAllele#getUID()}s of all discovered species.
 	 */
-	default Collection<String> getDiscoveredSpecies(){
+	default Collection<String> getDiscoveredSpecies() {
 		return Collections.emptyList();
 	}
 

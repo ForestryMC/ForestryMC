@@ -21,7 +21,7 @@ public enum EnumHumidity {
 	DAMP("Damp");
 
 	public static final EnumHumidity[] VALUES = values();
-	
+
 	public final String name;
 
 	EnumHumidity(String name) {

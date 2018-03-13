@@ -7,6 +7,7 @@ package forestry.api.apiculture;
 
 import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

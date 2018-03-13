@@ -23,6 +23,7 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 	public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 	}
+
 	@Override
 	public String getUnlocalizedName() {
 		return "for.farm.shroom";

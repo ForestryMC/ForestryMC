@@ -15,9 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ForwardingList;
+
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
@@ -31,6 +34,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
+
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

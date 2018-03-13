@@ -15,10 +15,12 @@ import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

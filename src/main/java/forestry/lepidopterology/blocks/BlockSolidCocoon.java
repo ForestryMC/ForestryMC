@@ -126,12 +126,12 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 			worldIn.setBlockToAir(pos);
 		}
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
-	
+
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		return BlockCocoon.BOUNDING_BOX;

@@ -13,6 +13,7 @@ package forestry.core.gui;
 import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
+
 import net.minecraft.inventory.Container;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {

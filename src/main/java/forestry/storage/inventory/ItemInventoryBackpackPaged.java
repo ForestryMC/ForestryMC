@@ -13,6 +13,7 @@ package forestry.storage.inventory;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IPagedInventory;
 import forestry.storage.items.ItemBackpackNaturalist;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

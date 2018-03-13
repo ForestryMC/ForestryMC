@@ -60,7 +60,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	@Override
 	public IBee getIndividual(ItemStack itemstack) {
 		IBee individual = BeeManager.beeRoot.getMember(itemstack);
-		if(individual == null){
+		if (individual == null) {
 			individual = BeeDefinition.FOREST.getIndividual();
 		}
 		return individual;
@@ -103,7 +103,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 				list.add(TextFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
 			}
 		}
-		
+
 		super.addInformation(itemstack, world, list, flag);
 	}
 

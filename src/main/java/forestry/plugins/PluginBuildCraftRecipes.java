@@ -37,6 +37,6 @@ public class PluginBuildCraftRecipes extends BlankForestryModule {
 	public void registerRecipes() {
 		// Add recipe for ethanol
 		// TODO: Buildcraft for 1.9
-//		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.BIO_ETHANOL.getFluid(1), 100, 1);
+		//		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.BIO_ETHANOL.getFluid(1), 100, 1);
 	}
 }

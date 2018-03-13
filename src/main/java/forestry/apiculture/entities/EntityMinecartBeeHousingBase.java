@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -37,6 +38,7 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;

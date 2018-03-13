@@ -25,21 +25,21 @@ public class PluginRoots extends CompatPlugin {
 	@Override
 	public void registerRecipes() {
 		ImmutableList<String> crops = ImmutableList.of(
-			"moonglow",
-			"terra_moss",
-			"aubergine"
+				"moonglow",
+				"terra_moss",
+				"aubergine"
 		);
 
 		ImmutableList<String> seeds = ImmutableList.of(
-			"moontinged_seed",
-			"terra_moss_spore",
-			"aubergine_seeds"
+				"moontinged_seed",
+				"terra_moss_spore",
+				"aubergine_seeds"
 		);
 
 		ImmutableList<String> fruits = ImmutableList.of(
-			"moonglow_leaf",
-			"terra_moss_ball",
-			"aubergine_item"
+				"moonglow_leaf",
+				"terra_moss_ball",
+				"aubergine_item"
 		);
 
 		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;

@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -286,7 +287,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		// / WRENCH
 		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-		
+
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
@@ -431,22 +432,22 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))){
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 
 		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
-			"A#A",
-			"# #",
-			"A#A",
-			'#', Items.BRICK,
-			'A', OreDictUtil.DUST_ASH);
+				"A#A",
+				"# #",
+				"A#A",
+				'#', Items.BRICK,
+				'A', OreDictUtil.DUST_ASH);
 		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
-			true,
-			"#  ",
-			"## ",
-			"###",
-			'#', Items.BRICK);
+				true,
+				"#  ",
+				"## ",
+				"###",
+				'#', Items.BRICK);
 
 		// alternate recipes
 		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
@@ -465,14 +466,14 @@ public class ModuleCore extends BlankForestryModule {
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("blacklist-ores-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistOreDim(dim);
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();

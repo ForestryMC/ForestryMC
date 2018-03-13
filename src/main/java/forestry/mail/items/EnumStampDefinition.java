@@ -16,6 +16,7 @@ import java.util.Map;
 
 import forestry.api.mail.EnumPostage;
 import forestry.core.items.ItemOverlay;
+
 import net.minecraft.init.Items;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {

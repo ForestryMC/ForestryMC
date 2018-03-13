@@ -82,7 +82,7 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
-	
+
 	/**
 	 * @param tile If it null its render the item else it render the tile entity.
 	 */

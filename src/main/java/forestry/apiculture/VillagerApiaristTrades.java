@@ -6,6 +6,7 @@ import java.util.Random;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.items.ItemHoneyComb;
+
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;

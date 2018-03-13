@@ -17,7 +17,7 @@ public interface IDatabaseTab<I extends IIndividual> {
 	/**
 	 * Creates the gui elements that are displayed if this tab is selected in the database.
 	 *
-	 * @param individual The individual that is currently in the database selected.
+	 * @param individual    The individual that is currently in the database selected.
 	 * @param elementHelper A helper to create the gui elements.
 	 */
 	void createElements(IGuiElementHelper elementHelper, I individual, ItemStack itemStack);
@@ -31,7 +31,7 @@ public interface IDatabaseTab<I extends IIndividual> {
 	 * Can be used to give the tab a custom tooltip.
 	 */
 	@Nullable
-	default String getTooltip(I individual){
+	default String getTooltip(I individual) {
 		return null;
 	}
 }

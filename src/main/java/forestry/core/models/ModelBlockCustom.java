@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -95,7 +98,7 @@ public abstract class ModelBlockCustom<B extends Block, K> implements IBakedMode
 		return (itemModel != null || blockModel != null) &&
 				(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
 	}
-	
+
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		if (blockModel != null) {

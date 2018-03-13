@@ -67,7 +67,7 @@ public class GuiElementHelper implements IGuiElementHelper {
 	@Override
 	public void addMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
 		IGuiElement element = factory().createMutation(x, y, width, height, mutation, species, breedingTracker);
-		if(element == null){
+		if (element == null) {
 			return;
 		}
 		add(element);
@@ -76,7 +76,7 @@ public class GuiElementHelper implements IGuiElementHelper {
 	@Override
 	public void addMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		IGuiElement element = factory().createMutationResultant(x, y, width, height, mutation, breedingTracker);
-		if(element == null){
+		if (element == null) {
 			return;
 		}
 		add(element);
@@ -86,7 +86,7 @@ public class GuiElementHelper implements IGuiElementHelper {
 		add(centerElement(factory().createFertilityInfo(fertilityAllele, x, texOffset)));
 	}
 
-	public void addToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleSpecies species, String text){
+	public void addToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleSpecies species, String text) {
 		add(centerElement(factory().createToleranceInfo(toleranceAllele, species, text)));
 	}
 

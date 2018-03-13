@@ -18,31 +18,31 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum LepidopterologyFilterRuleType implements IFilterRuleType {
-	FLUTTER{
+	FLUTTER {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent();
 		}
 	},
-	BUTTERFLY{
+	BUTTERFLY {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.BUTTERFLY;
 		}
 	},
-	SERUM{
+	SERUM {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.SERUM;
 		}
 	},
-	CATERPILLAR{
+	CATERPILLAR {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.CATERPILLAR;
 		}
 	},
-	COCOON{
+	COCOON {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.COCOON;

@@ -240,7 +240,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			drop.set(itemStack);
 		}
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack dropStack = drop.get();

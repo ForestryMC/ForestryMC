@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe> {

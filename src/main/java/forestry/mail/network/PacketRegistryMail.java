@@ -19,6 +19,7 @@ import forestry.mail.network.packets.PacketLetterTextSet;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -15,6 +15,7 @@ import java.util.List;
 
 import forestry.core.utils.Translator;
 import forestry.farming.models.EnumFarmBlockTexture;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -46,15 +47,15 @@ public class ItemBlockFarm extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if(GuiScreen.isShiftKeyDown()){
+		if (GuiScreen.isShiftKeyDown()) {
 			tooltip.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
 			if (stack.getTagCompound() == null) {
 				return;
 			}
 			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
 
-			tooltip.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " "+ texture.getName());
-		}else{
+			tooltip.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " " + texture.getName());
+		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}

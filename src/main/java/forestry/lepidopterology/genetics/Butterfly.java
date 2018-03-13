@@ -129,18 +129,18 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public IButterflyGenome getMate() {
 		return mate;
 	}
-	
+
 	@Override
-	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
 		World world = nursery.getWorldObj();
 
 		Set<IErrorState> errorStates = new HashSet<>();
 		// / Night or darkness requires nocturnal species
 		boolean isDaytime = world.isDaytime();
-		if(!isActiveThisTime(isDaytime)){
-			if(isDaytime){
+		if (!isActiveThisTime(isDaytime)) {
+			if (isDaytime) {
 				errorStates.add(EnumErrorCode.NOT_NIGHT);
-			}else{
+			} else {
 				errorStates.add(EnumErrorCode.NOT_DAY);
 			}
 		}
@@ -157,9 +157,9 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		return errorStates;
 	}
-	
+
 	@Override
-	public Set<IErrorState> getCanGrow(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+	public Set<IErrorState> getCanGrow(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
 		World world = nursery.getWorldObj();
 
 		Set<IErrorState> errorStates = new HashSet<>();

@@ -9,23 +9,23 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
 
-public interface IGreenhouseHousing extends IErrorLogicSource, IClimateHousing{
-	
+public interface IGreenhouseHousing extends IErrorLogicSource, IClimateHousing {
+
 	/**
 	 * @return The current tempreture as an enum.
 	 */
 	EnumTemperature getTemperature();
-	
+
 	/**
 	 * @return The current humidity as an enum.
 	 */
 	EnumHumidity getHumidity();
-	
+
 	/**
 	 * @return The current tempreture as an float. Range: 0.0F ~ 2.0F
 	 */
 	float getExactTemperature();
-	
+
 	/**
 	 * @return The current humidity as an float. Range: 0.0F ~ 2.0F
 	 */

@@ -52,19 +52,19 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 			}
 
 			Container container = player.openContainer;
-			if(!(container instanceof ContainerDatabase)){
+			if (!(container instanceof ContainerDatabase)) {
 				return;
 			}
 
 			IItemHandler itemHandler = ((ContainerDatabase) container).getItemHandler();
-			if(itemHandler == null){
+			if (itemHandler == null) {
 				return;
 			}
 
 			//Get the item on that position
 			ItemStack itemStack = itemHandler.extractItem(invIndex, 64, true);
 			//Test if we there is an item on this position
-			if(itemStack.isEmpty()){
+			if (itemStack.isEmpty()) {
 				return;
 			}
 			//Get the max count of this stack
@@ -72,13 +72,13 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 			//Get the count of the stack
 			int itemCount = itemStack.getCount();
 
-			if((flags & CLONE) == CLONE){
+			if ((flags & CLONE) == CLONE) {
 				//Clone the item with the maximal count
 				ItemStack extracted = itemStack.copy();
 				extracted.setCount(maxItemCount);
 				player.inventory.setItemStack(extracted);
 
-				if(container instanceof ContainerDatabase){
+				if (container instanceof ContainerDatabase) {
 					((ContainerDatabase) container).sendContainerToListeners();
 				}
 				return;
@@ -93,7 +93,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 
 			//Simulate an item extraction
 			ItemStack extracted = itemHandler.extractItem(invIndex, count, true);
-			if(!extracted.isEmpty()) {
+			if (!extracted.isEmpty()) {
 				if ((flags & SHIFT) == SHIFT) {
 					IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 					//Test if the player has enough space
@@ -105,7 +105,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 						//Give the item to the player into the first valid slot
 						ItemHandlerHelper.insertItem(playerInv, extracted, false);
 					}
-				}else{
+				} else {
 					//Extract the item
 					extracted = itemHandler.extractItem(invIndex, count, false);
 
@@ -114,7 +114,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 					player.updateHeldItem();
 				}
 
-				if(container instanceof ContainerDatabase){
+				if (container instanceof ContainerDatabase) {
 					((ContainerDatabase) container).sendContainerToListeners();
 				}
 			}

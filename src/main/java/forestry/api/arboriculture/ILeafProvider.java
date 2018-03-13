@@ -8,9 +8,9 @@ package forestry.api.arboriculture;
 import net.minecraft.item.ItemStack;
 
 public interface ILeafProvider {
-	
+
 	void init(IAlleleTreeSpecies treeSpecies);
 
 	ItemStack getDecorativeLeaves();
-	
+
 }

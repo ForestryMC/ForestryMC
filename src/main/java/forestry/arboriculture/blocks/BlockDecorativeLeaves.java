@@ -109,7 +109,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		if(!Proxies.render.fancyGraphicsEnabled()){
+		if (!Proxies.render.fancyGraphicsEnabled()) {
 			TreeDefinition treeDefinition = state.getValue(getVariant());
 			return !TreeDefinition.Willow.equals(treeDefinition);
 		}
@@ -167,7 +167,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
 
 	@Override

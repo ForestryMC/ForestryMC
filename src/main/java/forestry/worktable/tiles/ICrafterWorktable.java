@@ -16,7 +16,7 @@ public interface ICrafterWorktable {
 	boolean onCraftingStart(EntityPlayer player);
 
 	void onCraftingComplete(EntityPlayer player);
-	
+
 	@Nullable
 	IRecipe getRecipeUsed();
 }

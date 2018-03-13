@@ -37,8 +37,8 @@ public interface IClimateSource extends INbtWritable, INbtReadable {
 	boolean affectClimateType(ClimateType type);
 
 	/**
-	 * @param previousState  the {@link IClimateState} that the source has to work on.
-	 * @param targetState the by the {@link IClimateSourceContainer} targeted {@link IClimateState}.
+	 * @param previousState the {@link IClimateState} that the source has to work on.
+	 * @param targetState   the by the {@link IClimateSourceContainer} targeted {@link IClimateState}.
 	 */
 	IClimateState work(IClimateState previousState, IClimateState targetState, IClimateState currentState, final double sizeModifier, final boolean canWork);
 

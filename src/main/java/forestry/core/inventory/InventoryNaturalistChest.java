@@ -12,6 +12,7 @@ package forestry.core.inventory;
 
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 

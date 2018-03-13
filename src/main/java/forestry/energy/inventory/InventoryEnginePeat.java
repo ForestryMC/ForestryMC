@@ -14,6 +14,7 @@ import forestry.api.fuels.FuelManager;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.energy.tiles.TileEnginePeat;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 

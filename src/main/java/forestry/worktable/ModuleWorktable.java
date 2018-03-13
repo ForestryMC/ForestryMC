@@ -48,11 +48,11 @@ public class ModuleWorktable extends BlankForestryModule {
 		BlockRegistryWorktable blocks = getBlocks();
 
 		RecipeUtil.addRecipe("worktable", blocks.worktable,
-			"B",
-			"W",
-			"C",
-			'B', Items.BOOK,
-			'W', "craftingTableWood",
-			'C', "chestWood");
+				"B",
+				"W",
+				"C",
+				'B', Items.BOOK,
+				'W', "craftingTableWood",
+				'C', "chestWood");
 	}
 }

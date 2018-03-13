@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.PlayerUtil;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, INbtReadable {

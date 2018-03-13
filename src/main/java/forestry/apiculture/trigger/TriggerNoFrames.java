@@ -12,26 +12,26 @@ package forestry.apiculture.trigger;
 
 public class TriggerNoFrames {//extends Trigger {
 
-//	public TriggerNoFrames() {
-//		super("noFrames");
-//	}
+	//	public TriggerNoFrames() {
+	//		super("noFrames");
+	//	}
 
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	// TODO: buildcraft for 1.9
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof TileApiary)) {
-//			return false;
-//		}
-//
-//		TileApiary apiary = (TileApiary) tile;
-//
-//		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
-//
-//		return inventory.getFrames().isEmpty();
-//	}
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//
+	//		if (!(tile instanceof TileApiary)) {
+	//			return false;
+	//		}
+	//
+	//		TileApiary apiary = (TileApiary) tile;
+	//
+	//		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
+	//
+	//		return inventory.getFrames().isEmpty();
+	//	}
 
 }

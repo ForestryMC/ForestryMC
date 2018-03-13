@@ -127,8 +127,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
 				NetworkUtil.sendToPlayer(packet, player);
 
-				for(String species : discoveredSpecies) {
-					SpeciesDiscoveredTrigger.INSTANCE.trigger(( EntityPlayerMP)player, AlleleManager.alleleRegistry.getAllele(species));
+				for (String species : discoveredSpecies) {
+					SpeciesDiscoveredTrigger.INSTANCE.trigger((EntityPlayerMP) player, AlleleManager.alleleRegistry.getAllele(species));
 				}
 			}
 		}

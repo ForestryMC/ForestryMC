@@ -27,7 +27,7 @@ public class PlanterStateMapper extends ForestryStateMapper {
 			if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
 				continue;
 			}
-			for(boolean manual : new boolean[]{false, true}) {
+			for (boolean manual : new boolean[]{false, true}) {
 				IBlockState state = block.getDefaultState().withProperty(BlockBase.FACING, facing).withProperty(BlockPlanter.MANUAL, manual);
 				LinkedHashMap<IProperty<?>, Comparable<?>> properties = Maps.newLinkedHashMap(state.getProperties());
 				properties.remove(BlockPlanter.MANUAL);

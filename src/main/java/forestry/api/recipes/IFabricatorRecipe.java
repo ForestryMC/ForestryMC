@@ -7,6 +7,7 @@ package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
@@ -21,7 +22,7 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	 * Each inner list represents one slot's accepted ItemStacks
 	 */
 	NonNullList<NonNullList<ItemStack>> getIngredients();
-	
+
 	NonNullList<String> getOreDicts();
 
 	/**

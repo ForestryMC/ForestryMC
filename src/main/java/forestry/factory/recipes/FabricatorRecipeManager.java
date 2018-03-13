@@ -29,7 +29,7 @@ import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
-	
+
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override

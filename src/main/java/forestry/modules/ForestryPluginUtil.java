@@ -24,9 +24,9 @@ public class ForestryPluginUtil {
 	public static Map<String, List<IForestryModule>> getForestryModules(ASMDataTable asmDataTable) {
 		List<IForestryModule> instances = getInstances(asmDataTable, ForestryModule.class, IForestryModule.class);
 		Map<String, List<IForestryModule>> modules = new LinkedHashMap<>();
-		for(IForestryModule module : instances){
+		for (IForestryModule module : instances) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			modules.computeIfAbsent(info.containerID(), k-> new ArrayList<>()).add(module);
+			modules.computeIfAbsent(info.containerID(), k -> new ArrayList<>()).add(module);
 		}
 		return modules;
 	}
@@ -37,14 +37,14 @@ public class ForestryPluginUtil {
 
 		String comment = I18n.translateToLocal(info.unlocalizedDescription());
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
-		if(!dependencies.isEmpty()){
+		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();
 
 			StringBuilder builder = new StringBuilder(comment);
 			builder.append("\n");
 			builder.append("Dependencies: [ ");
 			builder.append(iDependencies.next());
-			while(iDependencies.hasNext()){
+			while (iDependencies.hasNext()) {
 				ResourceLocation uid = iDependencies.next();
 				builder.append(", ").append(uid.toString());
 			}

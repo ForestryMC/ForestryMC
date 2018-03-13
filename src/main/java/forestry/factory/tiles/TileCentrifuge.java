@@ -34,6 +34,7 @@ import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -43,6 +44,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -208,14 +210,14 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	/* ITRIGGERPROVIDER */
 	// TODO: BuildCraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(FactoryTriggers.lowResource25);
-//		res.add(FactoryTriggers.lowResource10);
-//		return res;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+	//		res.add(FactoryTriggers.lowResource25);
+	//		res.add(FactoryTriggers.lowResource10);
+	//		return res;
+	//	}
 
 	/* ISocketable */
 	@Override

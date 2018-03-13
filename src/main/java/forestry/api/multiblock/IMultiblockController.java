@@ -36,7 +36,7 @@ public interface IMultiblockController {
 	 */
 	@Nullable
 	String getLastValidationError();
-	
+
 	@Nullable
 	BlockPos getLastValidationErrorPosition();
 

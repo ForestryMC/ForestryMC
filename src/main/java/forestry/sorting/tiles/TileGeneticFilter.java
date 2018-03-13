@@ -197,7 +197,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemHandlerFilter(this, facing));
 		}
-		if(capability == GeneticCapabilities.FILTER_LOGIC){
+		if (capability == GeneticCapabilities.FILTER_LOGIC) {
 			return GeneticCapabilities.FILTER_LOGIC.cast(logic);
 		}
 		return super.getCapability(capability, facing);

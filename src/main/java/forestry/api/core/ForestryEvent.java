@@ -65,7 +65,7 @@ public abstract class ForestryEvent extends Event {
 	 * @deprecated removed in 1.13
 	 */
 	@Deprecated
-	public static class PreInit extends ForestryEvent{
+	public static class PreInit extends ForestryEvent {
 		/**
 		 * The main mod instance for Forestry.
 		 */

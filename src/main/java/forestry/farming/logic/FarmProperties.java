@@ -41,9 +41,9 @@ public final class FarmProperties implements IFarmProperties {
 	public Collection<IFarmable> getFarmables() {
 		if (farmables == null) {
 			farmables = farmablesIdentifiers.stream()
-				.map(FarmRegistry.getInstance()::getFarmables)
-				.flatMap(Collection::stream)
-				.collect(Collectors.toSet());
+					.map(FarmRegistry.getInstance()::getFarmables)
+					.flatMap(Collection::stream)
+					.collect(Collectors.toSet());
 		}
 		return farmables;
 	}

@@ -38,7 +38,7 @@ import forestry.api.genetics.ISpeciesRoot;
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	/* TRANSLATORS */
 	private final HashMap<Object, IIndividualTranslator<IIndividual, Object>> translators = new HashMap<>();
-	
+
 	/* RESEARCH */
 	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<>();
 
@@ -93,15 +93,15 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		}
 		return template;
 	}
-	
+
 	/* TRANSLATORS */
 	@Override
 	public <O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator) {
-		if(!translators.containsKey(translatorKey)){
+		if (!translators.containsKey(translatorKey)) {
 			translators.put(translatorKey, (IIndividualTranslator<IIndividual, Object>) translator);
 		}
 	}
-	
+
 	@Nullable
 	@Override
 	public <O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey) {
@@ -112,16 +112,16 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public <O, I extends IIndividual> I translateMember(O objectToTranslator) {
 		Object translatorKey = null;
-		if(objectToTranslator instanceof ItemStack){
+		if (objectToTranslator instanceof ItemStack) {
 			translatorKey = ((ItemStack) objectToTranslator).getItem();
-		}else if(objectToTranslator instanceof IBlockState){
+		} else if (objectToTranslator instanceof IBlockState) {
 			translatorKey = ((IBlockState) objectToTranslator).getBlock();
 		}
-		if(translatorKey == null){
+		if (translatorKey == null) {
 			return null;
 		}
 		IIndividualTranslator<I, O> translator = getTranslator(translatorKey);
-		if(translator == null){
+		if (translator == null) {
 			return null;
 		}
 		return translator.getIndividualFromObject(objectToTranslator);
@@ -146,7 +146,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		int speciesIndex = getSpeciesChromosomeType().ordinal();
 		for (IMutation mutation : getMutations(false)) {
 			IAllele[] template = mutation.getTemplate();
-			if(template == null || template.length <= speciesIndex){
+			if (template == null || template.length <= speciesIndex) {
 				continue;
 			}
 			IAllele speciesAllele = template[speciesIndex];

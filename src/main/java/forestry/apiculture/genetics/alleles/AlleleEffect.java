@@ -23,10 +23,12 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

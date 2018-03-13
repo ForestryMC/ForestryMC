@@ -15,6 +15,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;
+
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {

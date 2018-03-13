@@ -182,13 +182,13 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 			}
 		}
 	}
-	
-	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops){
-		if(cocoonDrops.isEmpty()){
+
+	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops) {
+		if (cocoonDrops.isEmpty()) {
 			return true;
 		}
-		for(ItemStack stack : cocoonDrops){
-			if(!stack.isEmpty()){
+		for (ItemStack stack : cocoonDrops) {
+			if (!stack.isEmpty()) {
 				return false;
 			}
 		}

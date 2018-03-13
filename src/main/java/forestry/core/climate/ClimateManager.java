@@ -29,14 +29,14 @@ public class ClimateManager implements IClimateManager {
 	private static final ClimateManager INSTANCE = new ClimateManager();
 
 	private static final Map<Biome, IClimateState> BIOME_STATES = new HashMap<>();
-	
+
 	private final World2ObjectMap<ClimateWorldManager> managers;
 
 	private ClimateManager() {
-		managers = new World2ObjectMap(world->new ClimateWorldManager(this));
+		managers = new World2ObjectMap(world -> new ClimateWorldManager(this));
 	}
-	
-	public static ClimateManager getInstance(){
+
+	public static ClimateManager getInstance() {
 		return INSTANCE;
 	}
 
@@ -62,11 +62,11 @@ public class ClimateManager implements IClimateManager {
 		}
 		return BIOME_STATES.get(biome);
 	}
-	
+
 	@Override
 	public IClimateState getClimateState(World world, BlockPos pos) {
 		ClimateWorldManager manager = managers.get(world);
-		if(manager == null){
+		if (manager == null) {
 			return getBiomeState(world, pos);
 		}
 		return manager.getClimateState(world, pos);

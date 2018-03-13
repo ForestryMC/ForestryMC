@@ -14,16 +14,16 @@ public class MultiblockValidationException extends Exception {
 
 	@Nullable
 	private BlockPos position;
-	
+
 	public MultiblockValidationException(String reason) {
 		super(reason);
 	}
-	
+
 	public MultiblockValidationException(String reason, BlockPos position) {
 		super(reason);
 		this.position = position;
 	}
-	
+
 	public BlockPos getPosition() {
 		return position;
 	}

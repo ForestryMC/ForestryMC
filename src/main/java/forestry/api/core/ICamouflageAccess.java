@@ -30,7 +30,7 @@ public interface ICamouflageAccess {
 	void addModIdToBlackList(String modID);
 
 	boolean isItemBlackListed(ItemStack camouflageBlock);
-	
+
 	@Nullable
 	ICamouflageItemHandler getHandler(ItemStack stack);
 

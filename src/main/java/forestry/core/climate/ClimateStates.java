@@ -43,9 +43,9 @@ public final class ClimateStates implements IClimateStates {
 
 	public static boolean isNearTarget(IClimateState state, IClimateState target) {
 		return target.getHumidity() - ClimateSourceModifier.CLIMATE_CHANGE < state.getHumidity()
-			&& target.getHumidity() + ClimateSourceModifier.CLIMATE_CHANGE > state.getHumidity()
-			&& target.getTemperature() - ClimateSourceModifier.CLIMATE_CHANGE < state.getTemperature()
-			&& target.getTemperature() + ClimateSourceModifier.CLIMATE_CHANGE > state.getTemperature();
+				&& target.getHumidity() + ClimateSourceModifier.CLIMATE_CHANGE > state.getHumidity()
+				&& target.getTemperature() - ClimateSourceModifier.CLIMATE_CHANGE < state.getTemperature()
+				&& target.getTemperature() + ClimateSourceModifier.CLIMATE_CHANGE > state.getTemperature();
 	}
 
 	public static boolean isZero(IClimateState state) {
@@ -76,7 +76,7 @@ public final class ClimateStates implements IClimateStates {
 
 	@Override
 	public IClimateState create(NBTTagCompound compound, ClimateStateType type) {
-		if(compound.getBoolean(ClimateState.ABSENT_NBT_KEY)){
+		if (compound.getBoolean(ClimateState.ABSENT_NBT_KEY)) {
 			return AbsentClimateState.INSTANCE;
 		}
 		return new ClimateState(compound, type);
@@ -84,7 +84,7 @@ public final class ClimateStates implements IClimateStates {
 
 	@Override
 	public IClimateState create(NBTTagCompound compound) {
-		if(compound.getBoolean(ClimateState.ABSENT_NBT_KEY)){
+		if (compound.getBoolean(ClimateState.ABSENT_NBT_KEY)) {
 			return AbsentClimateState.INSTANCE;
 		}
 		return new ClimateState(compound);

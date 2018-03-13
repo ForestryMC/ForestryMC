@@ -84,16 +84,16 @@ public class ModuleDatabase extends BlankForestryModule {
 		for (Object special : possibleSpecial) {
 			ItemRegistryCore coreItems = ModuleCore.getItems();
 			RecipeUtil.addRecipe("database_" + getIngredientName(firstChest) + "_" + getIngredientName(secondChest) + "_" + getIngredientName(special), getBlocks().database,
-				"I#I",
-				"FYS",
-				"WCW",
-				'#', coreItems.portableAlyzer,
-				'I', "ingotBronze",
-				'W', "plankWood",
-				'C', special,
-				'Y', coreItems.sturdyCasing,
-				'F', firstChest,
-				'S', secondChest);
+					"I#I",
+					"FYS",
+					"WCW",
+					'#', coreItems.portableAlyzer,
+					'I', "ingotBronze",
+					'W', "plankWood",
+					'C', special,
+					'Y', coreItems.sturdyCasing,
+					'F', firstChest,
+					'S', secondChest);
 		}
 	}
 

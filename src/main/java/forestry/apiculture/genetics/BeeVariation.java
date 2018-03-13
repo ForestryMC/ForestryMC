@@ -7,6 +7,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.alleles.AlleleHelper;
+
 import net.minecraft.item.ItemStack;
 
 public abstract class BeeVariation implements IBeeDefinition {

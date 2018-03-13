@@ -29,5 +29,5 @@ public class CharcoalJeiPlugin implements IModPlugin {
 		registry.addRecipes(TreeManager.pileWalls, RECIPE_UID);
 		registry.addRecipeCatalyst(new ItemStack(ModuleCharcoal.getBlocks().woodPile), RECIPE_UID);
 	}
-	
+
 }

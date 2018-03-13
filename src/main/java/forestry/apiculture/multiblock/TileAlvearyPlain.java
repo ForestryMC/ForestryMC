@@ -20,18 +20,18 @@ public class TileAlvearyPlain extends TileAlveary {//implements ITriggerProvider
 
 	/* ITRIGGERPROVIDER */
 	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		Collection<ITriggerExternal> res = new ArrayList<>();
-//		res.add(ApicultureTriggers.missingQueen);
-//		res.add(ApicultureTriggers.missingDrone);
-//		return res;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+	//		return null;
+	//	}
+	//
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		Collection<ITriggerExternal> res = new ArrayList<>();
+	//		res.add(ApicultureTriggers.missingQueen);
+	//		res.add(ApicultureTriggers.missingDrone);
+	//		return res;
+	//	}
 }

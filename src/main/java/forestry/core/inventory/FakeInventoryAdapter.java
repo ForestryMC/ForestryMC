@@ -13,6 +13,7 @@ package forestry.core.inventory;
 import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

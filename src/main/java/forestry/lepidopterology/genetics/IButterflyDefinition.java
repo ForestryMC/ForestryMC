@@ -14,6 +14,7 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.IGeneticDefinition;
+
 import net.minecraft.item.ItemStack;
 
 public interface IButterflyDefinition extends IGeneticDefinition {

@@ -86,7 +86,7 @@ public class TickHandlerCoreServer {
 
 	/**
 	 * This is from {@link GameRegistry#generateWorld(int, int, World, IChunkGenerator, IChunkProvider)} where the seed is constructed.
- 	 */
+	 */
 	private static Random getRetrogenRandom(World world, ChunkCoords coords) {
 		long worldSeed = world.getSeed();
 		Random random = new Random(worldSeed);
@@ -98,7 +98,7 @@ public class TickHandlerCoreServer {
 
 	private static boolean canDecorate(WorldServer server, ChunkCoords chunkCoords) {
 		ChunkProviderServer chunkProvider = server.getChunkProvider();
-		for	(int x = 0; x <= 1; x++) {
+		for (int x = 0; x <= 1; x++) {
 			for (int z = 0; z <= 1; z++) {
 				if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
 					return false;

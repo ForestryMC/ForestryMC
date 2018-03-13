@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.Log;
+
 import net.minecraft.world.World;
 
 /**

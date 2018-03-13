@@ -97,14 +97,14 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-		
+
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-		
+
 		if (world == null || pos == null) {
 			return createEmptyKey(map, fancy);
 		}
-		
+
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 
 		if (tile == null) {
@@ -118,8 +118,8 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 				fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
 				fancy);
 	}
-	
-	private Key createEmptyKey(TextureMap map, boolean fancy){
+
+	private Key createEmptyKey(TextureMap map, boolean fancy) {
 		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
 		ResourceLocation spriteLocation = oakSpecies.getLeafSpriteProvider().getSprite(false, fancy);
 		TextureAtlasSprite sprite = map.getAtlasSprite(spriteLocation.toString());

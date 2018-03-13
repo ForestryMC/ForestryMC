@@ -11,6 +11,7 @@
 package forestry.core.gui.slots;
 
 import forestry.core.gui.IContainerCrafting;
+
 import net.minecraft.inventory.IInventory;
 
 /**

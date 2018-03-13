@@ -142,7 +142,7 @@ public class BlockFarm extends BlockStructure {
 		}
 		return world.setBlockToAir(pos);
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		int meta = getMetaFromState(state);

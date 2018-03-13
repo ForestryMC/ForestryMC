@@ -40,54 +40,54 @@ public class WidgetDatabaseScreen extends WidgetElementProvider {
 		this.state = DatabaseScreenLogic.ScreenState.NO_INDIVIDUAL;
 	}
 
-	public void setTabs(WidgetDatabaseTabs tabs){
+	public void setTabs(WidgetDatabaseTabs tabs) {
 		this.tabs = tabs;
 	}
 
-	public int onTabChange(EnumDatabaseTab tab){
+	public int onTabChange(EnumDatabaseTab tab) {
 		state = logic.onTabChange(logic.tabs[tab.ordinal()]);
 		update();
-		if(state == DatabaseScreenLogic.ScreenState.SUCCESS){
+		if (state == DatabaseScreenLogic.ScreenState.SUCCESS) {
 			SoundUtil.playButtonClick();
 			return logic.selectedTab.getTab().ordinal();
 		}
 		return -1;
 	}
 
-	public void onItemChange(ItemStack itemStack){
+	public void onItemChange(ItemStack itemStack) {
 		state = logic.onItemChange(itemStack);
 		update();
-		if(state == DatabaseScreenLogic.ScreenState.SUCCESS){
+		if (state == DatabaseScreenLogic.ScreenState.SUCCESS) {
 			tabs.selectedTab = logic.selectedTab.getTab().ordinal();
-		}else {
+		} else {
 			tabs.selectedTab = -1;
 		}
 	}
 
-	public ItemStack getItemStack(EnumDatabaseTab tab){
-		if(state == DatabaseScreenLogic.ScreenState.SUCCESS){
+	public ItemStack getItemStack(EnumDatabaseTab tab) {
+		if (state == DatabaseScreenLogic.ScreenState.SUCCESS) {
 			return logic.databasePlugin.getTabDatabaseIconItem(tab);
 		}
 		return new ItemStack(Items.PAPER);
 	}
 
-	public String getTooltip(EnumDatabaseTab tab){
-		if(state == DatabaseScreenLogic.ScreenState.SUCCESS){
+	public String getTooltip(EnumDatabaseTab tab) {
+		if (state == DatabaseScreenLogic.ScreenState.SUCCESS) {
 			String tooltip = logic.tabs[tab.ordinal()].getTooltip(logic.individual);
-			if(tooltip != null) {
+			if (tooltip != null) {
 				return tooltip;
 			}
 		}
 		return Translator.translateToLocal("for.gui.database.tab." + tab.toString().toLowerCase(Locale.ENGLISH) + ".name");
 	}
 
-	private void update(){
+	private void update() {
 		//reset list and layout helper
 		scrollable.clear();
 		scrollBar.setVisible(false);
 		scrollable.updateVisibleElements(0);
 		layoutHelper = new GuiElementHelper(scrollable);
-		if(state == DatabaseScreenLogic.ScreenState.SUCCESS){
+		if (state == DatabaseScreenLogic.ScreenState.SUCCESS) {
 			IDatabaseTab selectedTab = logic.selectedTab;
 			selectedTab.createElements(layoutHelper, logic.individual, logic.itemStack);
 			int invisibleElements = scrollable.getInvisibleElementCount();
@@ -95,19 +95,19 @@ public class WidgetDatabaseScreen extends WidgetElementProvider {
 				scrollBar.setParameters(this, 0, invisibleElements, 1);
 				scrollBar.setVisible(true);
 				//scrollBar.setValue(0);
-			}else{
+			} else {
 				scrollBar.setValue(0);
 			}
 			scrollable.updateVisibleElements(scrollBar.getValue());
-		}else{
+		} else {
 			GuiElementHelper layoutHelper = new GuiElementHelper(scrollable);
 			FontRenderer fontRenderer = manager.gui.getFontRenderer();
-			String key ="for.gui.portablealyzer.help";
-			if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
+			String key = "for.gui.portablealyzer.help";
+			if (state == DatabaseScreenLogic.ScreenState.NO_PLUGIN) {
 				key = "for.gui.database.support";
 			}
 			List<String> lines = fontRenderer.listFormattedStringToWidth(Translator.translateToLocal(key), width - 10);
-			for(String text : lines) {
+			for (String text : lines) {
 				layoutHelper.addText(2, text, -1);
 			}
 			scrollable.updateVisibleElements(0);
@@ -126,7 +126,7 @@ public class WidgetDatabaseScreen extends WidgetElementProvider {
 		super.draw(startX, startY);
 	}
 
-	public int size(){
+	public int size() {
 		return scrollable.getSize();
 	}
 }

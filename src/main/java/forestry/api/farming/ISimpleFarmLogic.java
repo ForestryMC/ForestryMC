@@ -26,5 +26,5 @@ public interface ISimpleFarmLogic {
 	Iterable<IFarmable> getSeeds();
 
 	String getName();
-	
+
 }

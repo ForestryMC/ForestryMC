@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -44,11 +45,11 @@ public enum EnumFarmBlockTexture {
 		this.base = base;
 		this.formatting = formatting;
 	}
-	
+
 	public TextFormatting getFormatting() {
 		return formatting;
 	}
-	
+
 	/**
 	 * @return The texture sprite from the material of the farm block
 	 */
@@ -111,7 +112,7 @@ public enum EnumFarmBlockTexture {
 	public String getName() {
 		return base.getItem().getItemStackDisplayName(base);
 	}
-	
+
 	public String getUid() {
 		return toString().toLowerCase(Locale.ENGLISH);
 	}

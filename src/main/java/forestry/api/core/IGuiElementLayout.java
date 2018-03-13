@@ -23,26 +23,26 @@ public interface IGuiElementLayout extends IGuiElement {
 	 */
 	IGuiElementLayout removeElement(IGuiElement element);
 
-	default IGuiElementLayout addElements(IGuiElement... elements){
-		for(IGuiElement element : elements){
+	default IGuiElementLayout addElements(IGuiElement... elements) {
+		for (IGuiElement element : elements) {
 			addElement(element);
 		}
 		return this;
 	}
 
-	default IGuiElementLayout removeElements(IGuiElement... elements){
-		for(IGuiElement element : elements){
+	default IGuiElementLayout removeElements(IGuiElement... elements) {
+		for (IGuiElement element : elements) {
 			removeElement(element);
 		}
 		return this;
 	}
 
-	default IGuiElementLayout addElements(Collection<IGuiElement> elements){
+	default IGuiElementLayout addElements(Collection<IGuiElement> elements) {
 		elements.forEach(element -> addElement(element));
 		return this;
 	}
 
-	default IGuiElementLayout removeElements(Collection<IGuiElement> elements){
+	default IGuiElementLayout removeElements(Collection<IGuiElement> elements) {
 		elements.forEach(element -> removeElement(element));
 		return this;
 	}

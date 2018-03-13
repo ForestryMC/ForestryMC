@@ -16,6 +16,7 @@ import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.IFilterSlotDelegate;
+
 import net.minecraft.inventory.IInventory;
 
 public abstract class ContainerBeeHelper {

@@ -60,7 +60,7 @@ public class FarmLogicCrops extends FarmLogicWatered {
 	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if(!world.isBlockLoaded(position)){
+			if (!world.isBlockLoaded(position)) {
 				break;
 			}
 

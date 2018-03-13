@@ -41,9 +41,8 @@ public interface ITreeGenome extends IGenome {
 	boolean getFireproof();
 
 	IAlleleLeafEffect getEffect();
-	
+
 	/**
-	 * 
 	 * @return A ItemStack that is used in getPickBlock of the leave block.
 	 */
 	ItemStack getDecorativeLeaves();

@@ -2,6 +2,7 @@ package forestry.energy.compat;
 
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+
 import net.minecraftforge.energy.IEnergyStorage;
 
 /**

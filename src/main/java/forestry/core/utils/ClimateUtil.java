@@ -31,8 +31,8 @@ public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-								  EnumTemperature baseTemp, EnumTolerance tolTemp,
-								  EnumHumidity baseHumid, EnumTolerance tolHumid) {
+			EnumTemperature baseTemp, EnumTolerance tolTemp,
+			EnumHumidity baseHumid, EnumTolerance tolHumid) {
 		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
 				getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
@@ -207,10 +207,10 @@ public class ClimateUtil implements IClimateHelper {
 	public String toDisplay(EnumHumidity humidity) {
 		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
-	
+
 	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,
-			   EnumTemperature baseTemp, EnumTolerance tolTemp,
-			   EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates){
+			EnumTemperature baseTemp, EnumTolerance tolTemp,
+			EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates) {
 
 		if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
 			if (baseTemp.ordinal() > temperature.ordinal()) {
@@ -228,19 +228,19 @@ public class ClimateUtil implements IClimateHelper {
 			}
 		}
 	}
-	
-	public static float getTemperature(World world, BlockPos pos){
+
+	public static float getTemperature(World world, BlockPos pos) {
 		IClimateState state = ForestryAPI.climateManager.getClimateState(world, pos);
 		return state.getTemperature();
 	}
-	
-	public static float getHumidity(World world, BlockPos pos){
+
+	public static float getHumidity(World world, BlockPos pos) {
 		IClimateState state = ForestryAPI.climateManager.getClimateState(world, pos);
 		return state.getHumidity();
 	}
-	
-	public static int getColor(EnumTemperature temperature){
-		switch (temperature){
+
+	public static int getColor(EnumTemperature temperature) {
+		switch (temperature) {
 			case ICY:
 				return 0xe6e6fa;
 			case COLD:

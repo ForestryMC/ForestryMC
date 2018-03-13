@@ -25,6 +25,7 @@ public class MigrationHelper {
 	private static Map<String, String> itemRemappings = new HashMap<>();
 
 	private static Set<String> ignoredMappings = new HashSet<>();
+
 	static {
 		ignoredMappings.add("greenhouse.sprinkler");
 
@@ -108,5 +109,6 @@ public class MigrationHelper {
 		}
 	}
 
-	private MigrationHelper() {}
+	private MigrationHelper() {
+	}
 }

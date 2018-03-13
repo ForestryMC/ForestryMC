@@ -262,13 +262,13 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			NetworkUtil.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
 		});
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if(GuiScreen.isShiftKeyDown()){
+		if (GuiScreen.isShiftKeyDown()) {
 			tooltip.add(Translator.translateToLocal("tile.for.alveary.tooltip"));
-		}else{
+		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}

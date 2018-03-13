@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IForestryPacketClient;
@@ -32,11 +33,13 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NBTUtilForestry.NBTList;
 import forestry.core.utils.NetworkUtil;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;

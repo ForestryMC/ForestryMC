@@ -20,7 +20,7 @@ public class AdvancementManager {
 	}
 
 	private static <T extends ICriterionInstance> ICriterionTrigger<T> registerAdvancementTrigger(ICriterionTrigger<T> trigger) {
-		if(criterionRegister == null) {
+		if (criterionRegister == null) {
 			criterionRegister = ReflectionHelper.findMethod(CriteriaTriggers.class, "register", "func_192118_a", ICriterionTrigger.class);
 			criterionRegister.setAccessible(true);
 		}

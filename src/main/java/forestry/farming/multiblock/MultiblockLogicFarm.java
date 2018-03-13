@@ -12,6 +12,7 @@ package forestry.farming.multiblock;
 
 import forestry.api.multiblock.IMultiblockLogicFarm;
 import forestry.core.multiblock.MultiblockLogic;
+
 import net.minecraft.world.World;
 
 public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal> implements IMultiblockLogicFarm {

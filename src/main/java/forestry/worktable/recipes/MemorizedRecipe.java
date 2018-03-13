@@ -48,7 +48,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public MemorizedRecipe(NBTTagCompound nbt) {
 		readFromNBT(nbt);
 	}
-	
+
 	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, List<IRecipe> recipes) {
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
 		this.recipes = recipes;
@@ -57,7 +57,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public InventoryCraftingForestry getCraftMatrix() {
 		return craftMatrix;
 	}
-	
+
 	public void setCraftMatrix(InventoryCraftingForestry craftMatrix) {
 		this.craftMatrix = craftMatrix;
 	}
@@ -86,7 +86,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		recipes.add(recipe);
 		selectedRecipe = 0;
 	}
-	
+
 	public ItemStack getOutputIcon() {
 		IRecipe selectedRecipe = getSelectedRecipe();
 		if (selectedRecipe != null) {
@@ -97,7 +97,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		}
 		return ItemStack.EMPTY;
 	}
-	
+
 	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting, World world) {
 		IRecipe selectedRecipe = getSelectedRecipe();
 		if (selectedRecipe != null && selectedRecipe.matches(inventoryCrafting, world)) {
@@ -108,7 +108,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		}
 		return ItemStack.EMPTY;
 	}
-	
+
 	@Nullable
 	public IRecipe getSelectedRecipe() {
 		if (recipes.isEmpty()) {
@@ -117,7 +117,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 			return recipes.get(selectedRecipe);
 		}
 	}
-	
+
 	public boolean hasRecipe(@Nullable IRecipe recipe) {
 		return this.recipes.contains(recipe);
 	}
@@ -148,7 +148,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		if (nbttagcompound.hasKey("SelectedRecipe")) {
 			selectedRecipe = nbttagcompound.getInteger("SelectedRecipe");
 		}
-		
+
 		recipes.clear();
 		NBTTagList recipesNbt = nbttagcompound.getTagList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
 		for (int i = 0; i < recipesNbt.tagCount(); i++) {
@@ -159,7 +159,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 				recipes.add(recipe);
 			}
 		}
-		
+
 		if (selectedRecipe > recipes.size()) {
 			selectedRecipe = 0;
 		}
@@ -171,7 +171,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		nbttagcompound.setLong("LastUsed", lastUsed);
 		nbttagcompound.setBoolean("Locked", locked);
 		nbttagcompound.setInteger("SelectedRecipe", selectedRecipe);
-		
+
 		NBTTagList recipesNbt = new NBTTagList();
 		for (IRecipe recipe : recipes) {
 			ResourceLocation recipeKey = ForgeRegistries.RECIPES.getKey(recipe);
@@ -180,7 +180,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 			}
 		}
 		nbttagcompound.setTag("Recipes", recipesNbt);
-		
+
 		return nbttagcompound;
 	}
 
@@ -190,9 +190,9 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		data.writeInventory(craftMatrix);
 		data.writeBoolean(locked);
 		data.writeVarInt(selectedRecipe);
-		
+
 		data.writeVarInt(recipes.size());
-		for (IRecipe recipe: recipes) {
+		for (IRecipe recipe : recipes) {
 			ResourceLocation recipeId = ForgeRegistries.RECIPES.getKey(recipe);
 			if (recipeId != null) {
 				data.writeString(recipeId.toString());
@@ -205,7 +205,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		data.readInventory(craftMatrix);
 		locked = data.readBoolean();
 		selectedRecipe = data.readVarInt();
-		
+
 		recipes.clear();
 		int recipeCount = data.readVarInt();
 		for (int i = 0; i < recipeCount; i++) {

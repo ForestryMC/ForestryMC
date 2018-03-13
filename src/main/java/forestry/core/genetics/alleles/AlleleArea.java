@@ -11,6 +11,7 @@
 package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAlleleArea;
+
 import net.minecraft.util.math.Vec3i;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {

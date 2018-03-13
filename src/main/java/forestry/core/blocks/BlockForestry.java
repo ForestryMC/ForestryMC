@@ -11,6 +11,7 @@
 package forestry.core.blocks;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.owner.IOwnedTile;
@@ -18,6 +19,7 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;

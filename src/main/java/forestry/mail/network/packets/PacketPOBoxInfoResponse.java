@@ -19,7 +19,9 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gui.GuiMailboxInfo;
+
 import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

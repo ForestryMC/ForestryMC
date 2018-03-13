@@ -18,20 +18,20 @@ public class TileBog extends TilePlanter {
 	@Override
 	public NonNullList<ItemStack> createResourceStacks() {
 		return createList(
-			new ItemStack(ModuleCore.getBlocks().bogEarth),
-			new ItemStack(ModuleCore.getBlocks().bogEarth),
-			new ItemStack(ModuleCore.getBlocks().bogEarth),
-			new ItemStack(ModuleCore.getBlocks().bogEarth)
+				new ItemStack(ModuleCore.getBlocks().bogEarth),
+				new ItemStack(ModuleCore.getBlocks().bogEarth),
+				new ItemStack(ModuleCore.getBlocks().bogEarth),
+				new ItemStack(ModuleCore.getBlocks().bogEarth)
 		);
 	}
 
 	@Override
 	public NonNullList<ItemStack> createProductionStacks() {
 		return createList(
-			new ItemStack(ModuleCore.getItems().peat),
-			new ItemStack(ModuleCore.getItems().peat),
-			new ItemStack(ModuleCore.getItems().peat),
-			new ItemStack(ModuleCore.getItems().peat)
+				new ItemStack(ModuleCore.getItems().peat),
+				new ItemStack(ModuleCore.getItems().peat),
+				new ItemStack(ModuleCore.getItems().peat),
+				new ItemStack(ModuleCore.getItems().peat)
 		);
 	}
 }

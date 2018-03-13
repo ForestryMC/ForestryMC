@@ -31,7 +31,7 @@ public class LeafDecayHelper {
 		}
 		IBlockState state = world.getBlockState(pos);
 
-		if(!state.getProperties().containsKey(BlockLeaves.DECAYABLE)){
+		if (!state.getProperties().containsKey(BlockLeaves.DECAYABLE)) {
 			return;
 		}
 

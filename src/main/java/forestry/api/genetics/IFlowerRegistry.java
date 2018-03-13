@@ -61,6 +61,7 @@ public interface IFlowerRegistry {
 
 	/**
 	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
+	 *
 	 * @since Forestry 5.5.4
 	 */
 	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<IBlockState> potentialFlowers);
@@ -78,6 +79,7 @@ public interface IFlowerRegistry {
 
 	/**
 	 * Checks a single coordinate to see if it is an accepted flower.
+	 *
 	 * @since Forestry 5.5.2
 	 */
 	IBlockPosPredicate createAcceptedFlowerPredicate(String flowerType);
@@ -95,6 +97,7 @@ public interface IFlowerRegistry {
 
 	/**
 	 * Checks a single coordinate to see if it is an accepted flower.
+	 *
 	 * @deprecated since Forestry 5.5.2. Use {@link #createAcceptedFlowerPredicate(String)}.
 	 */
 	@Deprecated

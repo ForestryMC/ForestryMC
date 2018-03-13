@@ -22,10 +22,10 @@ public class TileFarmGourd extends TilePlanter {
 	@Override
 	public NonNullList<ItemStack> createProductionStacks() {
 		return createList(
-			new ItemStack(Blocks.MELON_BLOCK),
-			new ItemStack(Blocks.PUMPKIN),
-			new ItemStack(Blocks.PUMPKIN),
-			new ItemStack(Blocks.MELON_BLOCK)
+				new ItemStack(Blocks.MELON_BLOCK),
+				new ItemStack(Blocks.PUMPKIN),
+				new ItemStack(Blocks.PUMPKIN),
+				new ItemStack(Blocks.MELON_BLOCK)
 		);
 	}
 }

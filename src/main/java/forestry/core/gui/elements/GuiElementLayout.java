@@ -23,7 +23,7 @@ public abstract class GuiElementLayout extends GuiElement implements IGuiElement
 		return this;
 	}
 
-	public void addTooltip(String line){
+	public void addTooltip(String line) {
 		tooltip.add(line);
 	}
 
@@ -62,7 +62,7 @@ public abstract class GuiElementLayout extends GuiElement implements IGuiElement
 				}
 			}
 		}
-		if(!tooltip.isEmpty()){
+		if (!tooltip.isEmpty()) {
 			return tooltip;
 		}
 		return Collections.emptyList();

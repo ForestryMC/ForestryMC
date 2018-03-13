@@ -13,7 +13,7 @@ public interface IFarmProperties {
 	/**
 	 * Can be used to register a {@link IBlockState} as a valid soil.
 	 */
-	default void registerSoil(ItemStack resource, IBlockState soilState){
+	default void registerSoil(ItemStack resource, IBlockState soilState) {
 		registerSoil(resource, soilState, false);
 	}
 

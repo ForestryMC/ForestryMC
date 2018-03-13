@@ -145,8 +145,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		@Override
 		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-			if(this.speedModifier>16.0f)
-			{
+			if (this.speedModifier > 16.0f) {
 				return 16.0f;
 			}
 			return this.speedModifier;

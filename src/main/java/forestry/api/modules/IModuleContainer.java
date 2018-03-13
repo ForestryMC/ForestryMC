@@ -27,7 +27,7 @@ public interface IModuleContainer {
 	/**
 	 * Called after configured the modules.
 	 */
-	default void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules){
+	default void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
 	}
 
 

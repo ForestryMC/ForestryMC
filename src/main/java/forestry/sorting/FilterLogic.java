@@ -239,9 +239,9 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Nullable
-	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active){
+	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active) {
 		AlleleFilter filter = getGenomeFilter(facing, index);
-		if(filter == null){
+		if (filter == null) {
 			return null;
 		}
 		return active ? filter.activeAllele : filter.inactiveAllele;

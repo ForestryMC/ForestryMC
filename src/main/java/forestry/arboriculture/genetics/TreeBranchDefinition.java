@@ -25,6 +25,7 @@ import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 public enum TreeBranchDefinition implements IBranchDefinition {

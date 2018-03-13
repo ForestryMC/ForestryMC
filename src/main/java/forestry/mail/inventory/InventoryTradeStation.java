@@ -18,6 +18,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.TradeStation;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -76,7 +76,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		
+
 		fontRenderer.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
 
 		clearTradeInfoWidgets();
@@ -99,13 +99,13 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	}
 
 	private void drawTradePreview(ITradeStationInfo tradeInfo, int x, int y) {
-		
+
 		fontRenderer.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
-		
+
 		fontRenderer.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
-		
+
 		fontRenderer.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
 
 		for (int i = 0; i < tradeInfo.getRequired().size(); i++) {

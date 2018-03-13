@@ -47,7 +47,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < 16;i++){
+		for (int i = 0; i < 16; i++) {
 			manager.registerItemModel(item, i, "ash_block");
 		}
 	}
@@ -70,7 +70,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = new ArrayList<>();
-		Random rand = world instanceof World ? ((World)world).rand : new Random();
+		Random rand = world instanceof World ? ((World) world).rand : new Random();
 		int amount = state.getValue(AMOUNT) + 9 + rand.nextInt(1 + fortune);
 		drops.add(new ItemStack(Items.COAL, amount, 1));
 		drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));

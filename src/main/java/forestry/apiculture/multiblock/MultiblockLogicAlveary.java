@@ -12,6 +12,7 @@ package forestry.apiculture.multiblock;
 
 import forestry.api.multiblock.IMultiblockLogicAlveary;
 import forestry.core.multiblock.MultiblockLogic;
+
 import net.minecraft.world.World;
 
 public class MultiblockLogicAlveary extends MultiblockLogic<IAlvearyControllerInternal> implements IMultiblockLogicAlveary {

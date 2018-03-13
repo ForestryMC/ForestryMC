@@ -34,7 +34,7 @@ public interface IGuiElement {
 	void draw(int startX, int startY);
 
 	@SideOnly(Side.CLIENT)
-	default List<String> getToolTip(int mouseX, int mouseY){
+	default List<String> getToolTip(int mouseX, int mouseY) {
 		return Collections.emptyList();
 	}
 

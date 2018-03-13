@@ -86,7 +86,7 @@ public class WoodHelper {
 			} else {
 				String modID = Constants.MOD_ID;
 				Block block = Block.getBlockFromItem(stack.getItem());
-				if(block != null){
+				if (block != null) {
 					modID = block.getRegistryName().getResourceDomain();
 				}
 				return new ModelResourceLocation(modID + ":" + blockKind + "/" + woodType, "inventory");

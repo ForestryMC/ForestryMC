@@ -17,6 +17,7 @@ import java.util.List;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
+
 import net.minecraft.world.World;
 
 public class BeeModeHelper implements ICommandModeHelper {

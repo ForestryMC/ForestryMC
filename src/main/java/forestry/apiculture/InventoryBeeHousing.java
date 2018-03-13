@@ -16,6 +16,7 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 

@@ -71,7 +71,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 			}
 		}
 	}
-	
+
 	@Nullable
 	private static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);

@@ -10,8 +10,11 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
 import mezz.jei.api.ingredients.IIngredients;
+
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe> {

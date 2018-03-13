@@ -278,7 +278,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		}
 		return lastValidationException.getMessage();
 	}
-	
+
 	@Override
 	public BlockPos getLastValidationErrorPosition() {
 		if (lastValidationException == null) {
@@ -473,11 +473,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
 	 */
 	protected abstract boolean updateServer(int tickCount);
-	
+
 	protected int getTickCount() {
 		return tickCount;
 	}
-	
+
 	/**
 	 * Client-side update loop. Generally, this shouldn't do anything, but if you want
 	 * to do some interpolation or something, do it here.

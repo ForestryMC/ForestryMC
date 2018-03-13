@@ -212,7 +212,7 @@ public class BlockGreenhouse extends BlockStructure implements ISpriteRegister, 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	@SideOnly(Side.CLIENT)

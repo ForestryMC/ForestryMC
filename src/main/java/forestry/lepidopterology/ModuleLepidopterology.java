@@ -134,14 +134,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-		
+
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
 
 		proxy.preInitializeRendering();
 
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)) {
 			LepidopterologyFilterRule.init();
 			LepidopterologyFilterRuleType.init();
 		}

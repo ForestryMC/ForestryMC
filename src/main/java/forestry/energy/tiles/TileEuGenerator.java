@@ -71,7 +71,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		resourceTank.setFilters(FuelManager.generatorFuel.keySet());
 
 		tankManager = new TankManager(this, resourceTank);
-		
+
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}

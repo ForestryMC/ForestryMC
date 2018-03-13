@@ -32,7 +32,7 @@ public class PacketUpdateClimate extends ForestryPacket implements IForestryPack
 
 	BlockPos pos;
 	ClimateContainer container;
-	
+
 	public PacketUpdateClimate(BlockPos pos, ClimateContainer container) {
 		this.pos = pos;
 		this.container = container;
@@ -65,11 +65,11 @@ public class PacketUpdateClimate extends ForestryPacket implements IForestryPack
 				}
 			}*/
 			IGreenhouseControllerInternal controller = MultiblockUtil.getController(player.world, position, IGreenhouseComponent.class);
-			if(controller == null){
+			if (controller == null) {
 				return;
 			}
 			IClimateContainer container = controller.getClimateContainer();
-			if(container != null && container instanceof IStreamable){
+			if (container != null && container instanceof IStreamable) {
 				IStreamable streamable = (IStreamable) container;
 				streamable.readData(data);
 				IClimateHousing parent = container.getParent();

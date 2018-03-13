@@ -27,13 +27,13 @@ public class GrowthRuleSnow implements IFlowerGrowthRule {
 	@Deprecated
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
 		return isValidSpot(world, pos) &&
-			helper.plantRandomFlower(flowerType, world, pos);
+				helper.plantRandomFlower(flowerType, world, pos);
 	}
 
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&
-			helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
+				helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
 	}
 
 	private boolean isValidSpot(World world, BlockPos pos) {

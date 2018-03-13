@@ -135,7 +135,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
-		if(!world.isBlockLoaded(position)){
+		if (!world.isBlockLoaded(position)) {
 			return Collections.emptyList();
 		}
 

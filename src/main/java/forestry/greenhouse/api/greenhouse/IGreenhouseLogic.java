@@ -8,10 +8,10 @@ package forestry.greenhouse.api.greenhouse;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 
-public interface IGreenhouseLogic extends INbtReadable, INbtWritable{
+public interface IGreenhouseLogic extends INbtReadable, INbtWritable {
 
 	void work(int ticks);
-	
+
 	String getUID();
-	
+
 }

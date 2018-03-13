@@ -11,6 +11,7 @@
 package forestry.core.models;
 
 import forestry.arboriculture.IWoodTyped;
+
 import net.minecraft.block.Block;
 
 /**

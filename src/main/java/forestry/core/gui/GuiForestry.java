@@ -83,7 +83,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 		addLedgers();
 	}
-	
+
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
@@ -232,7 +232,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 		bindTexture(textureFile);
 	}
 
-	protected void drawBackground(){
+	protected void drawBackground() {
 		bindTexture(textureFile);
 
 		int x = (width - xSize) / 2;

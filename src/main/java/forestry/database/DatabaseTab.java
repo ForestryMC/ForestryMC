@@ -33,14 +33,14 @@ public enum DatabaseTab implements IDatabaseTab {
 		public void createElements(IGuiElementHelper layoutHelper, IIndividual individual, ItemStack itemStack) {
 			IGuiElementLayoutHelper groupHelper = layoutHelper.layoutHelper((x, y) -> layoutHelper.factory().createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
 			Collection<ItemStack> products = getProducts(individual);
-			if(!products.isEmpty()) {
+			if (!products.isEmpty()) {
 				layoutHelper.addText(Translator.translateToLocal("for.gui.beealyzer.produce"), GuiElementAlignment.CENTER);
 				products.forEach(product -> groupHelper.add(new GuiElementItemStack(0, 0, product)));
 				groupHelper.finish();
 			}
 
 			Collection<ItemStack> specialties = getSpecialties(individual);
-			if(specialties.isEmpty()){
+			if (specialties.isEmpty()) {
 				return;
 			}
 
@@ -49,22 +49,22 @@ public enum DatabaseTab implements IDatabaseTab {
 			groupHelper.finish();
 		}
 
-		public Collection<ItemStack> getSpecialties(IIndividual individual){
-			if(individual instanceof IBee){
+		public Collection<ItemStack> getSpecialties(IIndividual individual) {
+			if (individual instanceof IBee) {
 				IBee bee = (IBee) individual;
 				return bee.getSpecialtyList();
-			}else if(individual instanceof ITree){
+			} else if (individual instanceof ITree) {
 				ITree tree = (ITree) individual;
 				return tree.getSpecialties().keySet();
 			}
 			return Collections.emptyList();
 		}
 
-		public Collection<ItemStack> getProducts(IIndividual individual){
-			if(individual instanceof IBee){
+		public Collection<ItemStack> getProducts(IIndividual individual) {
+			if (individual instanceof IBee) {
 				IBee bee = (IBee) individual;
 				return bee.getProduceList();
-			}else if(individual instanceof ITree){
+			} else if (individual instanceof ITree) {
 				ITree tree = (ITree) individual;
 				return tree.getProducts().keySet();
 			}
@@ -89,13 +89,13 @@ public enum DatabaseTab implements IDatabaseTab {
 
 			IGuiElementLayoutHelper groupHelper = layoutHelper.layoutHelper((x, y) -> layoutHelper.factory().createHorizontal(x + 1, y, 16), 100, 0);
 			Collection<? extends IMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));
-			if(!mutations.isEmpty()) {
+			if (!mutations.isEmpty()) {
 				layoutHelper.addText(TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.database.mutations.further"), GuiElementAlignment.CENTER);
 				mutations.forEach(mutation -> groupHelper.add(layoutHelper.factory().createMutation(0, 0, 50, 16, mutation, species, breedingTracker)));
 				groupHelper.finish();
 			}
 			mutations = getValidMutations(speciesRoot.getResultantMutations(species));
-			if(mutations.isEmpty()){
+			if (mutations.isEmpty()) {
 				return;
 			}
 			layoutHelper.addText(TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.database.mutations.resultant"), GuiElementAlignment.CENTER);
@@ -103,11 +103,11 @@ public enum DatabaseTab implements IDatabaseTab {
 			groupHelper.finish();
 		}
 
-		public Collection<? extends IMutation> getValidMutations(List<? extends IMutation> mutations){
+		public Collection<? extends IMutation> getValidMutations(List<? extends IMutation> mutations) {
 			Iterator<? extends IMutation> iterator = mutations.iterator();
-			while(iterator.hasNext()){
-				IMutation mutation  = iterator.next();
-				if(mutation.isSecret()){
+			while (iterator.hasNext()) {
+				IMutation mutation = iterator.next();
+				if (mutation.isSecret()) {
 					iterator.remove();
 				}
 			}
@@ -120,7 +120,7 @@ public enum DatabaseTab implements IDatabaseTab {
 		}
 	};
 
-	public String getTooltip(IIndividual individual){
+	public String getTooltip(IIndividual individual) {
 		return I18n.translateToLocal("for.gui.database.tab." + getTab().toString().toLowerCase() + ".name");
 	}
 }

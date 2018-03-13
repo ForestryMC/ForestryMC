@@ -13,25 +13,25 @@ package forestry.mail.triggers;
 // TODO: Buildcraft for 1.9
 public class TriggerBuffer {//extends Trigger {
 
-//	private final float threshold;
-//
-//	public TriggerBuffer(String tag, float threshold) {
-//		super(tag, "mailBuffer");
-//		this.threshold = threshold;
-//	}
-//
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " > " + threshold * 100 + "%";
-//	}
-//
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof TileTrader)) {
-//			return false;
-//		}
-//
-//		return ((TileTrader) tile).hasOutputBufMin(threshold);
-//	}
+	//	private final float threshold;
+	//
+	//	public TriggerBuffer(String tag, float threshold) {
+	//		super(tag, "mailBuffer");
+	//		this.threshold = threshold;
+	//	}
+	//
+	//	@Override
+	//	public String getDescription() {
+	//		return super.getDescription() + " > " + threshold * 100 + "%";
+	//	}
+	//
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//
+	//		if (!(tile instanceof TileTrader)) {
+	//			return false;
+	//		}
+	//
+	//		return ((TileTrader) tile).hasOutputBufMin(threshold);
+	//	}
 }

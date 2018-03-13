@@ -53,12 +53,12 @@ class ClimateState implements IClimateState, IClimateInfo {
 		this.type = ClimateStateType.values()[compound.getByte(TYPE_NBT_KEY)];
 		readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setFloat(TEMPERATURE_NBT_KEY, temperature);
 		compound.setFloat(HUMIDITY_NBT_KEY, humidity);
-		compound.setByte(TYPE_NBT_KEY, (byte)type.ordinal());
+		compound.setByte(TYPE_NBT_KEY, (byte) type.ordinal());
 		compound.setBoolean(ABSENT_NBT_KEY, !isPresent());
 		return compound;
 	}
@@ -79,17 +79,17 @@ class ClimateState implements IClimateState, IClimateInfo {
 	}
 
 	@Override
-	public IClimateState addTemperature(float temperature){
+	public IClimateState addTemperature(float temperature) {
 		return ClimateStates.of(this.temperature + temperature, humidity, type);
 	}
-	
+
 	@Override
-	public IClimateState addHumidity(float humidity){
+	public IClimateState addHumidity(float humidity) {
 		return ClimateStates.of(temperature, this.humidity + humidity, type);
 	}
-	
+
 	@Override
-	public IClimateState add(IClimateState state){
+	public IClimateState add(IClimateState state) {
 		return ClimateStates.of(this.temperature + state.getTemperature(), this.humidity + state.getHumidity(), type);
 	}
 
@@ -99,7 +99,7 @@ class ClimateState implements IClimateState, IClimateInfo {
 	}
 
 	@Override
-	public IClimateState remove(IClimateState state){
+	public IClimateState remove(IClimateState state) {
 		return ClimateStates.of(this.temperature - state.getTemperature(), this.humidity - state.getHumidity(), type);
 	}
 
@@ -112,33 +112,33 @@ class ClimateState implements IClimateState, IClimateInfo {
 	public ClimateStateType getType() {
 		return type;
 	}
-	
+
 	@Override
 	public float getTemperature() {
 		return temperature;
 	}
-	
+
 	@Override
 	public float getHumidity() {
 		return humidity;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof IClimateState)){
+		if (!(obj instanceof IClimateState)) {
 			return false;
 		}
 		IClimateState otherState = (IClimateState) obj;
 		return otherState.getTemperature() == temperature && otherState.getHumidity() == humidity;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Float.hashCode(temperature) * 31 + Float.hashCode(humidity);
 	}
-	
-    @Override
+
+	@Override
 	public String toString() {
-        return MoreObjects.toStringHelper(this).add("temperature", temperature).add("humidity", humidity).toString();
-    }
+		return MoreObjects.toStringHelper(this).add("temperature", temperature).add("humidity", humidity).toString();
+	}
 }

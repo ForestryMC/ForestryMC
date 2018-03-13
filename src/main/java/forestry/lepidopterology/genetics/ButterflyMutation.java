@@ -19,6 +19,7 @@ import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyMutationBuilder;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.genetics.mutations.Mutation;
+
 import net.minecraft.world.World;
 
 public class ButterflyMutation extends Mutation implements IButterflyMutation, IButterflyMutationBuilder {

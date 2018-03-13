@@ -6,9 +6,12 @@ import java.util.List;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
 import mezz.jei.api.ingredients.IIngredients;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRecipe> {

@@ -149,9 +149,9 @@ public class LocalizedConfiguration extends Configuration {
 		return getInt(name, category, defaultValue, minValue, maxValue, comment, langKey);
 	}
 
-	public void addCategoryCommentLocalized(String category){
+	public void addCategoryCommentLocalized(String category) {
 		String langKey = "for.config." + category + '.' + "category_comment";
-		setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey),100));
+		setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey), 100));
 	}
 
 }

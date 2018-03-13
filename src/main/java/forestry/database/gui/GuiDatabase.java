@@ -34,6 +34,7 @@ import forestry.database.gui.widgets.WidgetDatabaseSelectedItem;
 import forestry.database.gui.widgets.WidgetDatabaseSlot;
 import forestry.database.gui.widgets.WidgetDatabaseTabs;
 import forestry.database.tiles.TileDatabase;
+
 import org.lwjgl.input.Keyboard;
 
 public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlotChangeWatcher, IScrollable {
@@ -60,23 +61,23 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 		ySize = 202;
 		manager = new DatabaseManager(database, this);
 
-		for(Slot slot : container.inventorySlots){
-			if(slot instanceof SlotFilteredInventory){
+		for (Slot slot : container.inventorySlots) {
+			if (slot instanceof SlotFilteredInventory) {
 				SlotFilteredInventory slotDatabase = (SlotFilteredInventory) slot;
 				slotDatabase.setChangeWatcher(this);
 			}
 		}
-		for(int i = 0;i < SLOTS;i++){
+		for (int i = 0; i < SLOTS; i++) {
 			WidgetDatabaseSlot slot = new WidgetDatabaseSlot(widgetManager);
 			slots.add(slot);
 			widgetManager.add(slot);
 		}
-		int screenX = - 140;
+		int screenX = -140;
 		WidgetScrollBar scrollBar = new WidgetScrollBar(widgetManager, screenX + 106, 10, new Drawable(WidgetDatabaseScreen.TEXTURE, 202, 0, 3, 156), false, new Drawable(WidgetDatabaseScreen.TEXTURE, 205, 0, 3, 5));
 		widgetManager.add(databaseScreen = new WidgetDatabaseScreen(widgetManager, screenX, 0, scrollBar));
 		widgetManager.add(scrollBar);
 		widgetManager.add(new WidgetDatabaseTabs(widgetManager, screenX, 177, databaseScreen));
-		widgetManager.add(this.scrollBar = new WidgetScrollBar(widgetManager, 196, 19, 12, 90 , new Drawable(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png"), 232, 0, 12, 15)));
+		widgetManager.add(this.scrollBar = new WidgetScrollBar(widgetManager, 196, 19, 12, 90, new Drawable(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png"), 232, 0, 12, 15)));
 		this.scrollBar.setParameters(this, 0, database.getSizeInventory() / 4 - 6, 1);
 		widgetManager.add(new WidgetDatabaseSelectedItem(widgetManager, 184, 158, manager));
 	}
@@ -113,9 +114,9 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 		if (this.searchField.textboxKeyTyped(typedChar, keyCode)) {
 			scrollBar.setValue(0);
 			manager.markForSorting();
-		} else if((keyCode == Keyboard.KEY_DOWN || keyCode == Keyboard.KEY_RIGHT) && downButton.enabled) {
+		} else if ((keyCode == Keyboard.KEY_DOWN || keyCode == Keyboard.KEY_RIGHT) && downButton.enabled) {
 			downButton.onPressed();
-		} else if((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && upButton.enabled) {
+		} else if ((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && upButton.enabled) {
 			upButton.onPressed();
 		} else {
 			super.keyTyped(typedChar, keyCode);
@@ -125,7 +126,7 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		Slot slot = getSlotAtPosition(mouseX, mouseY);
-		if(slot != null && slot.getSlotIndex() == -1){
+		if (slot != null && slot.getSlotIndex() == -1) {
 			return;
 		}
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -133,12 +134,12 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 	}
 
 	@Nullable
-	public DatabaseItem getItem(int index){
+	public DatabaseItem getItem(int index) {
 		return manager.getItem(index);
 	}
 
 	@Nullable
-	public DatabaseItem getSelectedItem(){
+	public DatabaseItem getSelectedItem() {
 		return manager.getSelected();
 	}
 
@@ -174,10 +175,10 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 		updateViewedItems();
 	}
 
-	public void onUpdateSelectedSlot(boolean changed){
+	public void onUpdateSelectedSlot(boolean changed) {
 		upButton.enabled = manager.canSubtract();
 		downButton.enabled = manager.canAdd();
-		if(changed){
+		if (changed) {
 			int index = getSelectedItem().invIndex;
 			database.selectedSlot = manager.getSelectedSlot();
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerDatabase.SELECT_ID, index));
@@ -188,7 +189,7 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button instanceof GuiDatabaseButton){
+		if (button instanceof GuiDatabaseButton) {
 			GuiDatabaseButton databaseButton = (GuiDatabaseButton) button;
 			databaseButton.onPressed();
 		}
@@ -216,13 +217,13 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 
 	@Override
 	public void onSlotChanged(IInventory inventory, int slot) {
-		if(manager.getSelected() != null && slot == manager.getSelected().invIndex){
+		if (manager.getSelected() != null && slot == manager.getSelected().invIndex) {
 			databaseScreen.onItemChange(manager.getSelectedItemStack());
 		}
 		manager.markForSorting();
 	}
 
-	public void updateViewedItems(){
+	public void updateViewedItems() {
 		updateViewedItems(manager.getSorted());
 	}
 
@@ -235,20 +236,20 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 		int slotStart = currentRow * 4;
 		//The inventory index of the last slot.
 		int slotEnd = (currentRow + 6) * 4;
-		if(slotEnd > database.getSizeInventory()){
+		if (slotEnd > database.getSizeInventory()) {
 			slotEnd = database.getSizeInventory();
 		}
 		//The row of the first slot
-		byte startRow = (byte)(currentRow % 2);
+		byte startRow = (byte) (currentRow % 2);
 		//The index of the empty slot in the list.
 		int emptySlot = sorted.size() - 1;
-		for(int invIndex = 0;invIndex < database.getSizeInventory();invIndex++){
-			if(invIndex >= slotStart && invIndex < slotEnd) {
+		for (int invIndex = 0; invIndex < database.getSizeInventory(); invIndex++) {
+			if (invIndex >= slotStart && invIndex < slotEnd) {
 				int x = invIndex % 4;
 				int y = invIndex / 4 - currentRow;
 				int yOffset;
 				int xOffset;
-				if(startRow == 0) {
+				if (startRow == 0) {
 					yOffset = 25;
 					xOffset = 17;
 					if (y % 2 == 1) {
@@ -269,7 +270,7 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 				int yPos = yOffset + y / 2 * 25;
 				//If the index is above the count of the valid items in the list, set the index to the same value like the index of the empty slot.
 				int index = invIndex;
-				if(sorted.size() <= index || sorted.isEmpty()){
+				if (sorted.size() <= index || sorted.isEmpty()) {
 					index = emptySlot;
 				}
 				WidgetDatabaseSlot slot = slots.get(invIndex - slotStart);
@@ -277,9 +278,9 @@ public class GuiDatabase extends GuiForestry<ContainerDatabase> implements ISlot
 			}
 		}
 		//Create screen elements
-		if(!sorted.isEmpty() && databaseScreen.size() == 0) {
+		if (!sorted.isEmpty() && databaseScreen.size() == 0) {
 			databaseScreen.onItemChange(manager.getSelectedItemStack());
-			if(database.selectedSlot != -1) {
+			if (database.selectedSlot != -1) {
 				manager.setSelectedSlot(database.selectedSlot);
 			}
 		}

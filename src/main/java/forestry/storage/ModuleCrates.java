@@ -80,7 +80,7 @@ public class ModuleCrates extends BlankForestryModule {
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
 			// / CRATES
 			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
-				" # ", "# #", " # ", '#', "logWood");
+					" # ", "# #", " # ", '#', "logWood");
 		}
 	}
 

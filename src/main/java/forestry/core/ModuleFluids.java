@@ -139,13 +139,13 @@ public class ModuleFluids extends BlankForestryModule {
 				continue;
 			}
 			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
-				"AAA",
-				"BEB",
-				"CCC",
-				'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
-				'B', Items.SUGAR,
-				'C', Items.WHEAT,
-				'E', Items.EGG);
+					"AAA",
+					"BEB",
+					"CCC",
+					'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
+					'B', Items.SUGAR,
+					'C', Items.WHEAT,
+					'E', Items.EGG);
 		}
 	}
 }

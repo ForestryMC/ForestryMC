@@ -14,7 +14,9 @@ import java.util.Collection;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
 import forestry.arboriculture.genetics.TreeDefinition;
+
 import net.minecraft.block.properties.PropertyEnum;
 
 public class PropertyTreeType extends PropertyEnum<TreeDefinition> {

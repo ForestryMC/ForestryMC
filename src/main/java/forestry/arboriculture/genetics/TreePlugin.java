@@ -22,7 +22,7 @@ import forestry.core.items.ItemFruit;
 
 //TODO: Add support for the alyzer
 @SideOnly(Side.CLIENT)
-public class TreePlugin implements ISpeciesPlugin<ITree>  {
+public class TreePlugin implements ISpeciesPlugin<ITree> {
 	public static final TreePlugin INSTANCE = new TreePlugin();
 	private static final TreeDatabaseTab ACTIVE = new TreeDatabaseTab(EnumDatabaseTab.ACTIVE_SPECIES);
 	private static final TreeDatabaseTab INACTIVE = new TreeDatabaseTab(EnumDatabaseTab.INACTIVE_SPECIES);
@@ -50,7 +50,7 @@ public class TreePlugin implements ISpeciesPlugin<ITree>  {
 
 	@Override
 	public IDatabaseTab getSpeciesTab(boolean active) {
-		if(active){
+		if (active) {
 			return ACTIVE;
 		}
 		return INACTIVE;
@@ -58,7 +58,7 @@ public class TreePlugin implements ISpeciesPlugin<ITree>  {
 
 	@Override
 	public ItemStack getTabDatabaseIconItem(EnumDatabaseTab tab) {
-		switch (tab){
+		switch (tab) {
 			case ACTIVE_SPECIES:
 				return TreeDefinition.Cherry.getMemberStack(EnumGermlingType.SAPLING);
 			case PRODUCTS:

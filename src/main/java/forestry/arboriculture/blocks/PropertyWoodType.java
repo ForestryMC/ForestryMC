@@ -13,6 +13,7 @@ package forestry.arboriculture.blocks;
 import java.util.Collection;
 
 import forestry.api.arboriculture.IWoodType;
+
 import net.minecraft.block.properties.PropertyEnum;
 
 public abstract class PropertyWoodType<T extends Enum<T> & IWoodType> extends PropertyEnum<T> {

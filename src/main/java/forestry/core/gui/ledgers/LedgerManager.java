@@ -55,7 +55,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void clear(){
+	public void clear() {
 		this.ledgers.clear();
 	}
 

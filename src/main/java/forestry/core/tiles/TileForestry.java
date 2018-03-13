@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
@@ -28,6 +29,7 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -40,9 +42,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.Capability;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
@@ -168,17 +173,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	/* ITriggerProvider */
 	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		return null;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+	//		return null;
+	//	}
+	//
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		return null;
+	//	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {

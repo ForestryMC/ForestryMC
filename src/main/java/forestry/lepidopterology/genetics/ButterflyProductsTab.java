@@ -25,21 +25,21 @@ public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {
 	public void createElements(IGuiElementHelper layoutHelper, IButterfly individual, ItemStack itemStack) {
 		IGuiElementLayoutHelper groupHelper = layoutHelper.layoutHelper((x, y) -> layoutHelper.factory().createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
 		Collection<ItemStack> butterflyLoot = individual.getGenome().getPrimary().getButterflyLoot().keySet();
-		if(!butterflyLoot.isEmpty()) {
+		if (!butterflyLoot.isEmpty()) {
 			layoutHelper.addText(Translator.translateToLocal("for.gui.loot.butterfly"), GuiElementAlignment.CENTER);
 			butterflyLoot.forEach(stack -> groupHelper.add(new GuiElementItemStack(0, 0, stack)));
 			groupHelper.finish();
 		}
 
 		Collection<ItemStack> caterpillarLoot = individual.getGenome().getPrimary().getCaterpillarLoot().keySet();
-		if(!caterpillarLoot.isEmpty()){
+		if (!caterpillarLoot.isEmpty()) {
 			layoutHelper.addText(Translator.translateToLocal("for.gui.loot.caterpillar"), GuiElementAlignment.CENTER);
 			caterpillarLoot.forEach(stack -> groupHelper.add(new GuiElementItemStack(0, 0, stack)));
 			groupHelper.finish();
 		}
 
 		Collection<ItemStack> cocoonLoot = individual.getGenome().getCocoon().getCocoonLoot().keySet();
-		if(!cocoonLoot.isEmpty()){
+		if (!cocoonLoot.isEmpty()) {
 			layoutHelper.addText(Translator.translateToLocal("for.gui.loot.cocoon"), GuiElementAlignment.CENTER);
 			cocoonLoot.forEach(stack -> groupHelper.add(new GuiElementItemStack(0, 0, stack)));
 			groupHelper.finish();

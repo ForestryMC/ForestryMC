@@ -15,11 +15,13 @@ import java.util.List;
 import java.util.Random;
 
 import forestry.apiculture.worldgen.VillageApiaristHouse;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class VillageCreationApiculture implements VillagerRegistry.IVillageCreationHandler {

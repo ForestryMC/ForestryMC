@@ -209,7 +209,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 			if (leaves != null) {
 				if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 					return leaves.getFruitColour();
-				}else {
+				} else {
 					EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 					return leaves.getFoliageColour(thePlayer);
 				}

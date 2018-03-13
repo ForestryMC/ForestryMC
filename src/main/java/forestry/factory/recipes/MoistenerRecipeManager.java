@@ -18,6 +18,7 @@ import java.util.Set;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.utils.ItemStackUtil;
+
 import net.minecraft.item.ItemStack;
 
 public class MoistenerRecipeManager implements IMoistenerManager {

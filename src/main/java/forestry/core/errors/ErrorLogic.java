@@ -26,7 +26,7 @@ public class ErrorLogic implements IErrorLogic {
 
 	@Override
 	public final boolean setCondition(boolean condition, IErrorState errorState) {
-		if(errorState == null){
+		if (errorState == null) {
 			return false;
 		}
 		if (condition) {
@@ -73,7 +73,7 @@ public class ErrorLogic implements IErrorLogic {
 		for (int i = 0; i < errorStateCount; i++) {
 			short errorStateId = data.readShort();
 			IErrorState errorState = ForestryAPI.errorStateRegistry.getErrorState(errorStateId);
-			if(errorState != null) {
+			if (errorState != null) {
 				errorStates.add(errorState);
 			}
 		}

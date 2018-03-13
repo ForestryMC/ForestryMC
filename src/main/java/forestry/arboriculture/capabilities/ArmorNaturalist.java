@@ -1,6 +1,7 @@
 package forestry.arboriculture.capabilities;
 
 import forestry.api.core.IArmorNaturalist;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

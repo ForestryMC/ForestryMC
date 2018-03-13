@@ -19,50 +19,47 @@ import forestry.greenhouse.api.climate.IClimateSource;
  */
 public enum ClimateSourceType {
 
-	TEMPERATURE{
-		
+	TEMPERATURE {
 		@Override
 		public boolean canChangeHumidity() {
 			return false;
 		}
-		
+
 		@Override
 		public boolean canChangeTemperature() {
 			return true;
 		}
-	}, HUMIDITY{
-		
+	}, HUMIDITY {
 		@Override
 		public boolean canChangeHumidity() {
 			return true;
 		}
-		
+
 		@Override
 		public boolean canChangeTemperature() {
 			return false;
 		}
-	}, BOTH{
-		
+	}, BOTH {
 		@Override
 		public boolean canChangeHumidity() {
 			return true;
 		}
-		
+
 		@Override
 		public boolean canChangeTemperature() {
 			return true;
 		}
 	};
-	
-	public boolean affectClimateType(ClimateType type){
+
+	public boolean affectClimateType(ClimateType type) {
 		return this == BOTH || type == ClimateType.HUMIDITY && this == HUMIDITY || type == ClimateType.TEMPERATURE && this == TEMPERATURE;
 	}
-	
+
 	/**
 	 * @return true if this sourceType can change the temperature on a {@link IClimateState}, false if can not.
 	 */
 	public abstract boolean canChangeTemperature();
-	
+
 	/**
 	 * @return true if this sourceType can change the humidity on a {@link IClimateState}, false if can not.
 	 */

@@ -199,22 +199,19 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	public String getNameFromMeta(int meta) {
 		return HiveType.VALUES[meta].getName();
 	}
-	
+
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
-	{
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 5;
 	}
-	
+
 	@Override
-	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
-	{
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return true;
 	}
-	
+
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
-	{
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 5;
 	}
 }

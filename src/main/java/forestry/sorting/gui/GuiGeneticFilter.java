@@ -158,7 +158,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		return tile;
 	}
 
-	public IFilterLogic getLogic(){
+	public IFilterLogic getLogic() {
 		return tile.getLogic();
 	}
 }

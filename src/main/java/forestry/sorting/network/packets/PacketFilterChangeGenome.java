@@ -67,7 +67,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 				allele = null;
 			}
 			IFilterLogic logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
-			if(logic != null) {
+			if (logic != null) {
 				if (logic.setGenomeFilter(facing, index, active, allele)) {
 					logic.getNetworkHandler().sendToPlayers(logic, player.getServerWorld(), player);
 				}

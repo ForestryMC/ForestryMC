@@ -170,7 +170,7 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	/* RENDERING */
 	@Override
 	public final boolean isOpaqueCube(IBlockState state) {
-		if(!Proxies.render.fancyGraphicsEnabled()){
+		if (!Proxies.render.fancyGraphicsEnabled()) {
 			TreeDefinition treeDefinition = state.getValue(getVariant());
 			return !TreeDefinition.Willow.equals(treeDefinition);
 		}

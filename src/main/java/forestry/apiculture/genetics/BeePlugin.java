@@ -50,7 +50,7 @@ public class BeePlugin implements ISpeciesPlugin<IBee> {
 
 	@Override
 	public IDatabaseTab getSpeciesTab(boolean active) {
-		if(active){
+		if (active) {
 			return ACTIVE;
 		}
 		return INACTIVE;
@@ -58,7 +58,7 @@ public class BeePlugin implements ISpeciesPlugin<IBee> {
 
 	@Override
 	public ItemStack getTabDatabaseIconItem(EnumDatabaseTab tab) {
-		switch (tab){
+		switch (tab) {
 			case ACTIVE_SPECIES:
 				return BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.QUEEN);
 			case PRODUCTS:

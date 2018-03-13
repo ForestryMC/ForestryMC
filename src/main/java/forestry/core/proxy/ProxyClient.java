@@ -45,7 +45,7 @@ public class ProxyClient extends ProxyCommon {
 	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
 	}
-	
+
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);

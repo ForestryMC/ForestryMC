@@ -61,7 +61,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
 		this.tradeInfoWidgets = new ArrayList<>();
-		
+
 		address = new GuiTextField(0, this.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13);
 		text = new GuiTextBox(1, this.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
 	}
@@ -71,13 +71,13 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		super.initGui();
 
 		Keyboard.enableRepeatEvents(true);
-		
+
 		address = new GuiTextField(0, this.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13);
 		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
 			address.setText(recipient.getName());
 		}
-		
+
 		text = new GuiTextBox(1, this.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
 		text.setMaxStringLength(128);
 		if (!container.getText().isEmpty()) {
@@ -183,11 +183,11 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 			fontRenderer.drawSplitString(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			return;
 		}
-		
+
 		fontRenderer.drawString(Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
-		
+
 		fontRenderer.drawString(Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {

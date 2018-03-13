@@ -86,7 +86,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
-	
+
 	@Override
 	public void render(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (engine != null) {

@@ -13,7 +13,7 @@ public class AlleleFilter {
 
 	public boolean isValid(String activeUID, String inactiveUID) {
 		return (this.activeAllele == null || activeUID.equals(this.activeAllele.getUID()))
-			&& (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getUID()));
+				&& (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getUID()));
 	}
 
 	public boolean isEmpty() {

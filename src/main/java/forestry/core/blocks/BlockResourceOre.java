@@ -66,7 +66,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 			this.dropXpOnBlockBreak(world, pos, MathHelper.getInt(world.rand, 1, 4));
 		}
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		EnumResourceType type = state.getValue(ORE_RESOURCES);

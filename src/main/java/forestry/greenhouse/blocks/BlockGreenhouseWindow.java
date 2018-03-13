@@ -240,7 +240,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	@Override

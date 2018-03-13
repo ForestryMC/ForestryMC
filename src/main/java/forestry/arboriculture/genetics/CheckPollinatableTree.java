@@ -13,6 +13,7 @@ package forestry.arboriculture.genetics;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
+
 import net.minecraftforge.common.EnumPlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {

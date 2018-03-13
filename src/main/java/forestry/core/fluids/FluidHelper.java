@@ -74,10 +74,10 @@ public final class FluidHelper {
 		ItemStack filled = input.copy();
 		filled.setCount(1);
 
-		if(emptyStack.isEmpty()){
+		if (emptyStack.isEmpty()) {
 			emptyStack = filled;
 		}
-		
+
 		IFluidHandlerItem fluidFilledHandler = FluidUtil.getFluidHandler(filled);
 		IFluidHandlerItem fluidEmptyHandler = FluidUtil.getFluidHandler(emptyStack);
 		if (fluidFilledHandler == null || fluidEmptyHandler == null) {

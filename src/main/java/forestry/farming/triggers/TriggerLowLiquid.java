@@ -18,32 +18,32 @@ public class TriggerLowLiquid extends Trigger {
 	private final float threshold;
 
 	public TriggerLowLiquid(String tag, float threshold) {
-//		super(tag, "lowLiquid");
+		//		super(tag, "lowLiquid");
 		this.threshold = threshold;
 	}
 
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " < " + threshold * 100 + "%";
-//	}
-//
-//	/**
-//	 * Return true if the tile given in parameter activates the trigger, given
-//	 * the parameters.
-//	 */
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//		if (!(tile instanceof TileFarmHatch)) {
-//			return false;
-//		}
-//
-//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-//		ITankManager tankManager = tileHatch.getMultiblockLogic().getController().getTankManager();
-//
-//		IFluidTank tank = tankManager.getTank(0);
-//		if (tank.getCapacity() == 0) {
-//			return false;
-//		}
-//		return (float) tank.getFluidAmount() / tank.getCapacity() <= threshold;
-//	}
+	//	@Override
+	//	public String getDescription() {
+	//		return super.getDescription() + " < " + threshold * 100 + "%";
+	//	}
+	//
+	//	/**
+	//	 * Return true if the tile given in parameter activates the trigger, given
+	//	 * the parameters.
+	//	 */
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+	//		if (!(tile instanceof TileFarmHatch)) {
+	//			return false;
+	//		}
+	//
+	//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+	//		ITankManager tankManager = tileHatch.getMultiblockLogic().getController().getTankManager();
+	//
+	//		IFluidTank tank = tankManager.getTank(0);
+	//		if (tank.getCapacity() == 0) {
+	//			return false;
+	//		}
+	//		return (float) tank.getFluidAmount() / tank.getCapacity() <= threshold;
+	//	}
 }

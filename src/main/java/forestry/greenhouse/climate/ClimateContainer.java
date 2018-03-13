@@ -41,7 +41,7 @@ import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 
 public class ClimateContainer implements IClimateContainer, IStreamable {
-	
+
 	protected final IClimateHousing parent;
 	protected final Set<IClimateSource> sources;
 	protected final Supplier<Boolean> canWork;
@@ -52,7 +52,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	protected IClimateState boundaryDown;
 	protected double sizeModifier;
 	private NBTTagCompound modifierData;
-	
+
 	/**
 	 * Creates an empty region.
 	 */
@@ -72,7 +72,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.canWork = canWork;
 		this.sizeModifier = 1.0D;
 	}
-	
+
 	@Override
 	public IClimateHousing getParent() {
 		return parent;
@@ -105,37 +105,37 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		float humidityBoundaryUp = 0.0F;
 		float temperatureBoundaryDown = 0.0F;
 		float humidityBoundaryDown = 0.0F;
-		for(IClimateSource source : sources){
-			if(source.affectClimateType(ClimateType.HUMIDITY)){
-				humidityBoundaryUp+=source.getBoundaryModifier(ClimateType.HUMIDITY, true);
-				humidityBoundaryDown+=source.getBoundaryModifier(ClimateType.HUMIDITY, false);
+		for (IClimateSource source : sources) {
+			if (source.affectClimateType(ClimateType.HUMIDITY)) {
+				humidityBoundaryUp += source.getBoundaryModifier(ClimateType.HUMIDITY, true);
+				humidityBoundaryDown += source.getBoundaryModifier(ClimateType.HUMIDITY, false);
 			}
-			if(source.affectClimateType(ClimateType.TEMPERATURE)){
-				temperatureBoundaryUp+= source.getBoundaryModifier(ClimateType.TEMPERATURE, true);
-				temperatureBoundaryDown+= source.getBoundaryModifier(ClimateType.TEMPERATURE, false);
+			if (source.affectClimateType(ClimateType.TEMPERATURE)) {
+				temperatureBoundaryUp += source.getBoundaryModifier(ClimateType.TEMPERATURE, true);
+				temperatureBoundaryDown += source.getBoundaryModifier(ClimateType.TEMPERATURE, false);
 			}
 		}
-		if(temperatureBoundaryUp != 0){
-			temperatureBoundaryUp/=sizeModifier;
+		if (temperatureBoundaryUp != 0) {
+			temperatureBoundaryUp /= sizeModifier;
 		}
-		if(temperatureBoundaryDown != 0){
-			temperatureBoundaryDown/=sizeModifier;
+		if (temperatureBoundaryDown != 0) {
+			temperatureBoundaryDown /= sizeModifier;
 		}
-		if(humidityBoundaryUp != 0){
-			humidityBoundaryUp/=sizeModifier;
+		if (humidityBoundaryUp != 0) {
+			humidityBoundaryUp /= sizeModifier;
 		}
-		if(humidityBoundaryDown != 0){
-			humidityBoundaryDown/=sizeModifier;
+		if (humidityBoundaryDown != 0) {
+			humidityBoundaryDown /= sizeModifier;
 		}
 		boundaryUp = parent.getDefaultClimate().add(ClimateStates.of(temperatureBoundaryUp, humidityBoundaryUp));
 		boundaryDown = parent.getDefaultClimate().remove(ClimateStates.of(temperatureBoundaryDown, humidityBoundaryDown));
 	}
-	
+
 	@Override
 	public IClimateState getBoundaryDown() {
 		return boundaryDown;
 	}
-	
+
 	@Override
 	public IClimateState getBoundaryUp() {
 		return boundaryUp;
@@ -155,12 +155,12 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		targetedState = ForestryAPI.states.create(nbt.getCompoundTag("Target"));
 		modifierData = nbt.getCompoundTag("modifierData");
 	}
-	
+
 	@Override
 	public void setTargetedState(IClimateState state) {
 		this.targetedState = state;
 	}
-	
+
 	@Override
 	public IClimateState getTargetedState() {
 		return targetedState;
@@ -169,7 +169,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
-	
+
 	/**
 	 * @return The ticks between updates.
 	 */
@@ -204,7 +204,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	public Collection<IClimateSource> getClimateSources() {
 		return sources;
 	}
-	
+
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		data.writeClimateState(state);
@@ -222,25 +222,25 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		targetedState = data.readClimateState();
 		modifierData = data.readCompoundTag();
 	}
-	
+
 	@Override
 	public IClimateState getState() {
 		return state;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof IClimateContainer)){
+		if (!(obj instanceof IClimateContainer)) {
 			return false;
 		}
 		IClimateContainer container = (IClimateContainer) obj;
 		IClimateHousing parent = container.getParent();
-		if(parent.getCoordinates() == null || this.parent.getCoordinates() == null){
+		if (parent.getCoordinates() == null || this.parent.getCoordinates() == null) {
 			return false;
 		}
 		return this.parent.getCoordinates().equals(parent.getCoordinates());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return parent.getCoordinates().hashCode();

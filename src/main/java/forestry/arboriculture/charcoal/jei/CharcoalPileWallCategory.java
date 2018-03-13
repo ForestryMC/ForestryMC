@@ -24,7 +24,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 	private final IDrawableAnimated arrowAnimated;
 	private final IDrawableStatic flame;
 	private final IDrawableAnimated flameAnimated;
-	
+
 	public CharcoalPileWallCategory(IGuiHelper helper) {
 		super(helper.createBlankDrawable(120, 38), "tile.for.charcoal.pile.wall.name");
 		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/charcoal_pile_wall.png");
@@ -53,7 +53,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		slot.draw(minecraft, 84, 16);
 		slot.draw(minecraft, 104, 16);
 	}
-	
+
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, CharcoalPileWallWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();

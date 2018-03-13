@@ -17,6 +17,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
