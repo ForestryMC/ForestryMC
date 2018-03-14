@@ -31,18 +31,16 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.ApiaristAI;
+import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.models.ModelBlockCached;
@@ -150,12 +148,11 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handleVillagerAI(EntityJoinWorldEvent event) {
-		IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfs = ForgeRegistries.VILLAGER_PROFESSIONS;
 		Entity entity = event.getEntity();
 		if ((entity instanceof EntityVillager)) {
-			EntityVillager villager = (EntityVillager) event.getEntity();
-			ResourceLocation villagerProf = villagerProfs.getKey(villager.getProfessionForge());
-			if (villagerProf.toString().equals(Constants.ID_VILLAGER_APIARIST)) {
+			EntityVillager villager = (EntityVillager) entity;
+			VillagerRegistry.VillagerProfession profession = villager.getProfessionForge();
+			if (profession == ModuleApiculture.villagerApiarist) {
 				villager.tasks.addTask(6, new ApiaristAI(villager, 0.6));
 			}
 		}
