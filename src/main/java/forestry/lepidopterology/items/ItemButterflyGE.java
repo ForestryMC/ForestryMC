@@ -61,6 +61,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
@@ -188,14 +189,20 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
-			Preconditions.checkNotNull(tagCompound);
-			if(!tagCompound.hasKey(NBT_AGE)){
-				tagCompound.setInteger(NBT_AGE, 0);
+			IButterflyGenome genome;
+			int age;
+			if(tagCompound == null){
+				genome = ButterflyDefinition.CabbageWhite.getGenome();
+				age = 0;
+			}else {
+				if (!tagCompound.hasKey(NBT_AGE)) {
+					tagCompound.setInteger(NBT_AGE, 0);
+				}
+				age = tagCompound.getInteger(NBT_AGE);
+				IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
+				Preconditions.checkNotNull(individual);
+				genome = (IButterflyGenome) individual.getGenome();
 			}
-			int age = tagCompound.getInteger(NBT_AGE);
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
-			Preconditions.checkNotNull(individual);
-			IButterflyGenome genome = (IButterflyGenome) individual.getGenome();
 			return genome.getCocoon().getCocoonItemModel(age);
 		}
 

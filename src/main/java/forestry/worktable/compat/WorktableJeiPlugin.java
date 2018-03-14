@@ -14,6 +14,7 @@ import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.worktable.ModuleWorktable;
 import forestry.worktable.blocks.BlockRegistryWorktable;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
@@ -26,7 +27,7 @@ public class WorktableJeiPlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		if(!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.WORKTABLE))){
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.WORKTABLE))) {
 			return;
 		}
 		BlockRegistryWorktable blocks = ModuleWorktable.getBlocks();
