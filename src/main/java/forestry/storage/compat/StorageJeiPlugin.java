@@ -1,8 +1,14 @@
 package forestry.storage.compat;
 
+import net.minecraft.util.ResourceLocation;
+
+import forestry.api.core.ForestryAPI;
+import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
+import forestry.modules.ForestryModuleUids;
 import forestry.storage.ModuleBackpacks;
 import forestry.storage.items.ItemRegistryBackpacks;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
@@ -11,6 +17,10 @@ import mezz.jei.api.JEIPlugin;
 public class StorageJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.BACKPACKS))) {
+			return;
+		}
+
 		ItemRegistryBackpacks items = ModuleBackpacks.getItems();
 
 		JeiUtil.addDescription(registry, "minerBag",
