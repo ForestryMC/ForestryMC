@@ -13,6 +13,8 @@ package forestry.arboriculture.genetics;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
+import forestry.apiculture.ModuleApiculture;
+
 import net.minecraftforge.common.EnumPlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
@@ -36,7 +38,7 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 	public boolean canMateWith(IIndividual pollen) {
 		return pollen instanceof ITree &&
 				tree.getMate() == null &&
-				!tree.isGeneticEqual(pollen);
+				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
 	}
 
 	@Override
