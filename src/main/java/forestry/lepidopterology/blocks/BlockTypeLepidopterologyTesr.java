@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
+import net.minecraft.util.math.AxisAlignedBB;
+
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -17,7 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", "lepichest", TileNaturalistChest.chestBoundingBox);
@@ -27,7 +28,7 @@ public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, String renderName, AxisAlignedBB boundingBox) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0");
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
 		Proxies.render.setRenderChest(machineProperties, renderName);
 		this.machineProperties = machineProperties;
 	}

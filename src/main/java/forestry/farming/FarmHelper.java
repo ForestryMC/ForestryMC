@@ -136,11 +136,7 @@ public class FarmHelper {
 					targetLocation = targetLocation.offset(farmSide.getFacing());
 					BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
-					if (!world.isBlockLoaded(groundLocation)) {
-						break;
-					}
-
-					if (!farmHousing.isValidPlatform(world, groundLocation)) {
+					if (!world.isBlockLoaded(groundLocation) || !farmHousing.isValidPlatform(world, groundLocation)) {
 						break;
 					}
 
@@ -164,7 +160,7 @@ public class FarmHelper {
 
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
 			BlockPos position = targetPosition.add(0, yOffset, 0);
-			if (farmHousing.isValidPlatform(world, position)) {
+			if (world.isBlockLoaded(position) && farmHousing.isValidPlatform(world, position)) {
 				return position;
 			}
 		}

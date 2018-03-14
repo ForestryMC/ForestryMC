@@ -80,12 +80,14 @@ public class Config {
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
 	public static Set<Integer> blacklistedOreDims = new HashSet<Integer>();
+	public static Set<Integer> whitelistedOreDims = new HashSet<Integer>();
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
 	public static Set<Integer> blacklistedTreeDims = new HashSet<Integer>();
+	public static Set<Integer> whitelistedTreeDims = new HashSet<Integer>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -163,8 +165,30 @@ public class Config {
 		blacklistedTreeDims.add(dimID);
 	}
 	
+	public static void whitelistTreeDim(int dimID) {
+		whitelistedTreeDims.add(dimID);
+	}
+	
 	public static void blacklistOreDim(int dimID) {
 		blacklistedOreDims.add(dimID);
+	}
+	
+	public static void whitelistOreDim(int dimID) {
+		whitelistedOreDims.add(dimID);
+	}
+	
+	public static boolean isValidOreDim(int dimID) {		//blacklist has priority
+		if(blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
+			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
+		}
+		return false;
+	}
+	
+	public static boolean isValidTreeDim(int dimID) { 		//blacklist has priority
+		if(blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
+			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
+		}
+		return false;
 	}
 
 	public static void load(Side side) {
@@ -235,8 +259,11 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for(int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()){
+		for(int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
  			blacklistedOreDims.add(dimId);
+		}
+		for(int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
+			whitelistedOreDims.add(dimId);
 		}
 		
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
@@ -245,6 +272,9 @@ public class Config {
 		for(int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()){
 			 			blacklistedTreeDims.add(dimId);
 		}
+		for(int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()){
+ 			whitelistedTreeDims.add(dimId);
+}
 			 	
 		
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);

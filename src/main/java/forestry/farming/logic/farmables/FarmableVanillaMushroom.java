@@ -12,11 +12,13 @@ package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
+import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableVanillaMushroom extends FarmableBase {
@@ -34,5 +36,13 @@ public class FarmableVanillaMushroom extends FarmableBase {
 		}
 
 		return new CropDestroy(world, blockState, pos, null);
+	}
+
+	@Override
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		if(!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
+			return false;
+		}
+		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 }

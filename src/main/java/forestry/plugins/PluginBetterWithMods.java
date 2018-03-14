@@ -38,8 +38,7 @@ public class PluginBetterWithMods extends CompatPlugin {
 			IBlockState mature = defaultState.withProperty(AGE, 7).withProperty(TOP, false);
 			IBlockState topMature = defaultState.withProperty(AGE, 7).withProperty(TOP, true);
 
-			farmRegistry.registerFarmables("farmWheat", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, false));
-			farmRegistry.registerFarmables("farmOrchard", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
+			farmRegistry.registerFarmables("farmCrops", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
 
 			RecipeManagers.squeezerManager.addRecipe(10, hempSeed, Fluids.SEED_OIL.getFluid(seedAmount));
 		}

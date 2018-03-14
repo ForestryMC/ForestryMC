@@ -82,7 +82,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	@Nullable
 	protected ICrop getCrop(World world, BlockPos position) {
-		if (world.isAirBlock(position)) {
+		if (!world.isBlockLoaded(position) || world.isAirBlock(position)) {
 			return null;
 		}
 		IBlockState blockState = world.getBlockState(position);
@@ -98,6 +98,9 @@ public abstract class FarmLogic implements IFarmLogic {
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
+		if(!world.isBlockLoaded(position)){
+			return false;
+		}
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
 		return block == Blocks.WATER;

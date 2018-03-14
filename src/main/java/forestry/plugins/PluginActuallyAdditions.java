@@ -75,10 +75,8 @@ public class PluginActuallyAdditions extends CompatPlugin {
 		if (seedItem != null) {
 			Block plantBlock = getBlock(blockName);
 			if (plantBlock != null) {
-				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7);
-				ForestryAPI.farmRegistry.registerFarmables("farmWheat", crop);
-				FarmableAgingCrop cropOrchard = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
-				ForestryAPI.farmRegistry.registerFarmables("farmOrchard", cropOrchard);
+				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
+				ForestryAPI.farmRegistry.registerFarmables("farmCrops", crop);
 			}
 		}
 	}

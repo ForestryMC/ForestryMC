@@ -195,7 +195,7 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmProperties arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
 		IFarmProperties cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
 		IFarmProperties mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
-		IFarmProperties succulentFarm = registry.registerLogic("farmSucculent", FarmLogicSucculent::new);
+		IFarmProperties succulentFarm = registry.registerLogic("farmSucculentes", FarmLogicSucculent::new);
 		IFarmProperties peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
 		IFarmProperties infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
 		IFarmProperties poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
@@ -222,6 +222,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmCropsManaged = new CircuitFarmLogic("managedCrops", cropsFarm, false);
 		Circuits.farmCropsManual = new CircuitFarmLogic("manualCrops", cropsFarm, true);
 		cropsFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
+		cocoaFarm.registerFarmables("farmWheat");
 
 		Circuits.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", infernalFarm, false);
 		Circuits.farmInfernalManual = new CircuitFarmLogic("manualInfernal", infernalFarm, true);

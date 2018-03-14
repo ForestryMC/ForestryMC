@@ -18,6 +18,8 @@ public class OreDictUtil {
 	public static final String GEAR_TIN = "gearTin";
 	public static final String GEAR_STONE = "gearStone";
 
+	public static final String BLOCK_WOOL = "blockWool";
+
 	public static final String CRAFTING_TABLE_WOOD = "craftingTableWood";
 
 	public static final String BEE_COMB = "beeComb";

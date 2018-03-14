@@ -204,6 +204,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		if (ic2EnergySink.useEnergy(euConfig.euForCycle)) {
 			currentOutput = euConfig.rfPerCycle;
 			energyManager.generateEnergy(euConfig.rfPerCycle);
+			world.updateComparatorOutputLevel(pos, getBlockType());
 		}
 
 	}

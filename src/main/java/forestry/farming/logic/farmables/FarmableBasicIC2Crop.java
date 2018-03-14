@@ -22,7 +22,7 @@ public class FarmableBasicIC2Crop implements IFarmable {
 	/**
 	 * Perform some of the actions of the crop-matron.
 	 */
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public static void babysitCrop(TileEntity tileEntity) {
 		if (CropBasicIC2Crop.isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile) tileEntity;

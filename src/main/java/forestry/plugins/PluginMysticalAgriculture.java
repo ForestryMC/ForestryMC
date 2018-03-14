@@ -162,8 +162,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
 				if (seeds != null && block != null) {
-					farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7));
-					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
+					farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
 			for(int i = 1;i <= 5;i++){
@@ -173,8 +172,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
 				if (seeds != null && block != null) {
-					farmRegistry.registerFarmables("farmWheat", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7));
-					farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
+					farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
 		}

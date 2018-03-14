@@ -128,7 +128,8 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 						activatePile(blockState, world, position, true);
 					}
 				} else if(world.isAirBlock(position) || !blockState.isSideSolid(world, position, facing.getOpposite()) || block.isFlammable(world, position, facing.getOpposite())){
-					world.setBlockState(position, Blocks.FIRE.getDefaultState());
+					world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+					return;
 				}
 			}
 			if(rand.nextFloat() < 0.5F){

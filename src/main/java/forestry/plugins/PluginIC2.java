@@ -71,7 +71,7 @@ import ic2.api.recipe.Recipes;
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.ic2.description")
 public class PluginIC2 extends BlankForestryModule {
-	public static final String modId = "ic2";
+	public static final String MOD_ID = "ic2";
 	
 	@Nullable
 	private static ItemStack rubberSapling;
@@ -89,7 +89,7 @@ public class PluginIC2 extends BlankForestryModule {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isModLoaded(PluginIC2.modId);
+		return ModUtil.isModLoaded(PluginIC2.MOD_ID);
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class PluginIC2 extends BlankForestryModule {
 	}
 
 	@Override
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void preInit() {
 		// rubber chain
 		rubberWood = IC2Items.getItem("rubber_wood");
@@ -130,7 +130,7 @@ public class PluginIC2 extends BlankForestryModule {
 	}
 
 	@Override
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void doInit() {
 		// Remove some items from the recycler
 		if (Recipes.recyclerBlacklist != null) {
@@ -210,7 +210,7 @@ public class PluginIC2 extends BlankForestryModule {
 	}
 
 	@Override
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void registerRecipes() {
 		ItemRegistryCore coreItems = ModuleCore.items;
 

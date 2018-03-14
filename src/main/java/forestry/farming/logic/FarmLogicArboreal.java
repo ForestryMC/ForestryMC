@@ -116,6 +116,10 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
 			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
+				if(!world.isBlockLoaded(candidate)){
+					return crops;
+				}
+
 				if (!checkedBlocks.contains(candidate)) {
 					checkedBlocks.add(candidate);
 
@@ -164,7 +168,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	private boolean plantSapling(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
-		Collections.shuffle(farmables);
+		Collections.shuffle(getFarmables());
 		for (IFarmable candidate : getFarmables()) {
 			if (farmHousing.plantGermling(candidate, world, position, direction)) {
 				return true;

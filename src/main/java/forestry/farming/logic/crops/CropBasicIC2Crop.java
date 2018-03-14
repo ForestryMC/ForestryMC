@@ -38,7 +38,7 @@ public class CropBasicIC2Crop extends Crop {
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if there is an IC2 crop and false otherwise.
 	 */
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public static boolean isIC2Crop(TileEntity tileEntity) {
 		return tileEntity instanceof ICropTile;
 	}
@@ -49,7 +49,7 @@ public class CropBasicIC2Crop extends Crop {
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if crop size is optimal for harvest and false otherwise.
 	 */
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public static boolean canHarvestCrop(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile) tileEntity;
@@ -70,7 +70,7 @@ public class CropBasicIC2Crop extends Crop {
 	 * @param tileEntity tile entity to be checked.
 	 * @return list containing the drops.
 	 */
-	@Optional.Method(modid = PluginIC2.modId)
+	@Optional.Method(modid = PluginIC2.MOD_ID)
 	private static NonNullList<ItemStack> getCropDrops(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile) tileEntity;

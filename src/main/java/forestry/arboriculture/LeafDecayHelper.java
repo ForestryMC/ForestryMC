@@ -2,12 +2,13 @@ package forestry.arboriculture;
 
 import java.util.Random;
 
-import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
 
 /**
  * Based on vanilla leaf decay in {@link BlockLeaves#updateTick(World, BlockPos, IBlockState, Random)}
@@ -29,6 +30,10 @@ public class LeafDecayHelper {
 			return;
 		}
 		IBlockState state = world.getBlockState(pos);
+
+		if(!state.getProperties().containsKey(BlockLeaves.DECAYABLE)){
+			return;
+		}
 
 		// Fix a bug where Forestry leaves were not decayable.
 		// The non-decayable Forestry leaves are all BlockDecorativeLeaves.
