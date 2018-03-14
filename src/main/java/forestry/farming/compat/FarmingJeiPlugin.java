@@ -22,7 +22,7 @@ public class FarmingJeiPlugin implements IModPlugin {
 		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
 			return;
 		}
-		
+
 		BlockRegistryFarming blocks = ModuleFarming.getBlocks();
 		Item farmBlock = Item.getItemFromBlock(blocks.farm);
 		subtypeRegistry.registerSubtypeInterpreter(farmBlock, itemStack -> {
