@@ -22,6 +22,8 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityVillager;
@@ -158,6 +160,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static boolean hivesDamageOnPeaceful = false;
 
+	public static boolean doSelfPollination = true;
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -280,6 +284,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
+		
+		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
 		config.save();
 
@@ -408,6 +414,28 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
+
+		//Flower Pots
+		IBlockState flowerPot = Blocks.FLOWER_POT.getBlockState().getBaseState();
+		PropertyEnum<BlockFlowerPot.EnumFlowerType> CONTENTS = BlockFlowerPot.CONTENTS;
+		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
+
+		for (BlockFlowerPot.EnumFlowerType flowerType : BlockFlowerPot.EnumFlowerType.values()) {
+			if (flowerType == BlockFlowerPot.EnumFlowerType.EMPTY ||
+					flowerType.getName().contains("sapling") ||
+					flowerType == BlockFlowerPot.EnumFlowerType.DEAD_BUSH ||
+					flowerType == BlockFlowerPot.EnumFlowerType.FERN) {
+				continue;
+			} else if (flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_RED ||
+					flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_BROWN) {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
+
+			} else if (flowerType == BlockFlowerPot.EnumFlowerType.CACTUS) {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
+			} else {
+				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), standardTypes);
+			}
+		}
 	}
 
 	@Override
@@ -916,7 +944,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
+			boolean hasVillageGenerated) {
 		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
 			return;
 		}

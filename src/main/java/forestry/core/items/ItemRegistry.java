@@ -39,7 +39,7 @@ public abstract class ItemRegistry {
 		item.setRegistryName(name);
 
 		MigrationHelper.addItemName(name);
-		
+
 		ForgeRegistries.ITEMS.register(item);
 		Proxies.common.registerItem(item);
 		return item;

@@ -27,12 +27,8 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.utils.ItemStackUtil;
 
 public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
-	//Added in for future ease of change, but hard coded for now.
-	private static final int MAX_CRAFT_GRID_WIDTH = 3;
-	private static final int MAX_CRAFT_GRID_HEIGHT = 3;
-
-	private NonNullList<NonNullList<ItemStack>> input;
-	private NonNullList<String> oreDicts;
+	private final NonNullList<NonNullList<ItemStack>> input;
+	private final NonNullList<String> oreDicts;
 	private int width;
 	private int height;
 	private boolean mirrored = true;
@@ -156,8 +152,8 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
-		for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
-			for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {
+		for (int x = 0; x <= inv.getWidth() - width; x++) {
+			for (int y = 0; y <= inv.getHeight() - height; ++y) {
 				if (checkMatch(inv, x, y, false)) {
 					return true;
 				}
@@ -178,8 +174,8 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	
 	@Override
 	public boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
-		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
-			for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
+		for (int x = 0; x < inv.getWidth(); x++) {
+			for (int y = 0; y < inv.getHeight(); y++) {
 				int subX = x - startX;
 				int subY = y - startY;
 				NonNullList<ItemStack> target = null;
