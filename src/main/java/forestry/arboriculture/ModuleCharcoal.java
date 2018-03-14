@@ -59,10 +59,10 @@ public class ModuleCharcoal extends BlankForestryModule {
 
 		//Charcoal
 		RecipeUtil.addRecipe("charcoal_block", blocks.charcoal,
-			"###",
-			"###",
-			"###",
-			'#', new ItemStack(Items.COAL, 1, 1));
+				"###",
+				"###",
+				"###",
+				'#', new ItemStack(Items.COAL, 1, 1));
 		RecipeUtil.addShapelessRecipe("charcoal", new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block
