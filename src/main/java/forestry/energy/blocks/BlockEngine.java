@@ -29,8 +29,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
@@ -151,5 +153,20 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		IBlockState blockState = world.getBlockState(pos);
 		EnumFacing facing = blockState.getValue(BlockBase.FACING);
 		return facing.getOpposite() == side;
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+		TileEngine tileEngine = TileUtil.getTile(worldIn, pos, TileEngine.class);
+		if(tileEngine != null){
+			EnergyManager energyManager = tileEngine.getEnergyManager();
+			return energyManager.calculateRedstone();
+		}
+		return 0;
 	}
 }
