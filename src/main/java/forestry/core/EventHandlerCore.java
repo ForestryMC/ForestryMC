@@ -152,7 +152,7 @@ public class EventHandlerCore {
 		if ((entity instanceof EntityVillager)) {
 			EntityVillager villager = (EntityVillager) entity;
 			VillagerRegistry.VillagerProfession profession = villager.getProfessionForge();
-			if (profession == ModuleApiculture.villagerApiarist) {
+			if (ModuleApiculture.villagerApiarist != null && profession == ModuleApiculture.villagerApiarist) {
 				villager.tasks.addTask(6, new ApiaristAI(villager, 0.6));
 			}
 		}
