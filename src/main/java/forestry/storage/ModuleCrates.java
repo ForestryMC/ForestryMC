@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,6 +32,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.modules.BlankForestryModule;
@@ -146,6 +148,35 @@ public class ModuleCrates extends BlankForestryModule {
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean processIMCMessage(FMLInterModComms.IMCMessage message) {
+		if (message.key.equals("add-crate-items")) {
+			ItemStack value = message.getItemStackValue();
+			if (value != null) {
+				StorageManager.crateRegistry.registerCrate(value);
+			} else {
+				IMCUtil.logInvalidIMCMessage(message);
+			}
+			return true;
+		} else if (message.key.equals("add-crate-oredict")) {
+			String value = message.getStringValue();
+			StorageManager.crateRegistry.registerCrate(value);
+			return true;
+		} else if (message.key.equals("blacklist-crate-item")) {
+			ItemStack value = message.getItemStackValue();
+			if (value != null) {
+				cratesRejectedItem.add(value);
+			} else {
+				IMCUtil.logInvalidIMCMessage(message);
+			}
+			return true;
+		} else if (message.key.equals("blacklist-crate-oredict")) {
+			cratesRejectedOreDict.add(message.getStringValue());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
