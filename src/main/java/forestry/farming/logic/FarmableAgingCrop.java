@@ -1,11 +1,9 @@
 package forestry.farming.logic;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 
 /**
  * For blocks that are harvestable once they are a certain age.
@@ -59,7 +61,7 @@ public class FarmableAgingCrop implements IFarmable {
 		}
 
 		IBlockState replantState = getReplantState(blockState);
-		return new CropDestroy(world, blockState, pos, replantState);
+		return new CropDestroy(world, blockState, pos, replantState, germling);
 	}
 
 	@Nullable

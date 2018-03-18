@@ -11,10 +11,8 @@
 package forestry.farming.logic;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -22,16 +20,30 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.event.ForgeEventFactory;
+
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+
 public class CropDestroy extends Crop {
 
 	protected final IBlockState blockState;
 	@Nullable
 	protected final IBlockState replantState;
 
+	protected final ItemStack germling;
+
 	public CropDestroy(World world, IBlockState blockState, BlockPos position, @Nullable IBlockState replantState) {
+		this(world, blockState, position, replantState, ItemStack.EMPTY);
+	}
+
+	public CropDestroy(World world, IBlockState blockState, BlockPos position, @Nullable IBlockState replantState, ItemStack germling) {
 		super(world, position);
 		this.blockState = blockState;
 		this.replantState = replantState;
+		this.germling = germling;
 	}
 
 	@Override
@@ -44,6 +56,24 @@ public class CropDestroy extends Crop {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvested = NonNullList.create();
 		harvested.addAll(block.getDrops(world, pos, blockState, 0));
+		float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, blockState, 0, 1.0F, false, null);
+
+		boolean removedSeed = germling.isEmpty();
+		Iterator<ItemStack> dropIterator = harvested.iterator();
+		while (dropIterator.hasNext()) {
+			ItemStack next = dropIterator.next();
+			if (world.rand.nextFloat() <= chance) {
+				if (!removedSeed && ItemStackUtil.isIdenticalItem(next, germling)) {
+					next.shrink(1);
+					if (next.isEmpty()) {
+						dropIterator.remove();
+					}
+					removedSeed = true;
+				}
+			} else {
+				dropIterator.remove();
+			}
+		}
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
