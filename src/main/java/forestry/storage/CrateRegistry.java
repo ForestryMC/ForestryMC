@@ -61,6 +61,9 @@ public class CrateRegistry implements ICrateRegistry {
 
 	@Override
 	public void registerCrate(String oreDictName) {
+		if (ModuleCrates.cratesRejectedOreDict.contains(oreDictName)) {
+			return;
+		}
 		if (OreDictionary.doesOreNameExist(oreDictName)) {
 			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
 				if (stack != null) {
@@ -83,6 +86,11 @@ public class CrateRegistry implements ICrateRegistry {
 
 	@Override
 	public void registerCrate(ItemStack stack) {
+		for (ItemStack blacklistStack : ModuleCrates.cratesRejectedItem) {
+			if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, blacklistStack)) {
+				return;
+			}
+		}
 		registerCrate(stack, null);
 	}
 }

@@ -465,7 +465,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 			// accepted oreDict
 			{
-				String[] defaultOreRegexpNames =new String[0];
+				String[] defaultOreRegexpNames = new String[0];
 				List<String> defaultOreRegexpList = backpackAcceptedOreDictRegexpDefaults.get(backpackUid);
 				if (defaultOreRegexpList != null) {
 					Collections.sort(defaultOreRegexpList);

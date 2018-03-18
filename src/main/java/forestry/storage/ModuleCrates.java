@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,17 +17,22 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.storage.items.ItemCrated;
@@ -36,6 +42,11 @@ import forestry.storage.proxy.ProxyStorage;
 
 @ForestryModule(moduleID = ForestryModuleUids.CRATE, containerID = Constants.MOD_ID, name = "Crate", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.crates.description")
 public class ModuleCrates extends BlankForestryModule {
+
+	private static final String CONFIG_CATEGORY = "crates";
+
+	public static final List<String> cratesRejectedOreDict = new ArrayList<>();
+	public static List<ItemStack> cratesRejectedItem = new ArrayList<>();
 
 	private static final List<ItemCrated> crates = new ArrayList<>();
 
@@ -68,6 +79,76 @@ public class ModuleCrates extends BlankForestryModule {
 	}
 
 	@Override
+	public void doInit() {
+		final String newConfig = CONFIG_CATEGORY + ".cfg";
+
+		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		if (!config.getDefinedConfigVersion().equals(config.getLoadedConfigVersion())) {
+			boolean deleted = configFile.delete();
+			if (deleted) {
+				config = new LocalizedConfiguration(configFile, "1.0.0");
+			}
+		}
+
+		handleConfig(config);
+
+		config.save();
+	}
+
+	private void handleConfig(LocalizedConfiguration config) {
+
+		// accepted items
+		{
+			String[] crateItemList = config.getStringListLocalized("items", "accepted", Constants.EMPTY_STRINGS);
+			List<ItemStack> crateItems = ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE);
+			for (ItemStack crateItem : crateItems) {
+				StorageManager.crateRegistry.registerCrate(crateItem);
+			}
+		}
+
+		// rejected items
+		{
+			String[] crateItemList = config.getStringListLocalized("items", "rejected", Constants.EMPTY_STRINGS);
+			cratesRejectedItem = ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE);
+		}
+
+		// accepted oreDict
+		{
+			String[] crateOreDictList = config.getStringListLocalized("oredict", "accepted", Constants.EMPTY_STRINGS);
+
+			for (String name : OreDictionary.getOreNames()) {
+				if (name == null) {
+					Log.error("Found a null oreName in the ore dictionary");
+				} else {
+					for (String regex : crateOreDictList) {
+						if (name.matches(regex)) {
+							StorageManager.crateRegistry.registerCrate(name);
+						}
+					}
+				}
+			}
+		}
+
+		// rejected oreDict
+		{
+			String[] crateOreDictList = config.getStringListLocalized("oredict", "rejected", Constants.EMPTY_STRINGS);
+
+			for (String name : OreDictionary.getOreNames()) {
+				if (name == null) {
+					Log.error("Found a null oreName in the ore dictionary");
+				} else {
+					for (String regex : crateOreDictList) {
+						if (name.matches(regex)) {
+							cratesRejectedOreDict.add(name);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
 	public Set<ResourceLocation> getDependencyUids() {
 		return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
 	}
@@ -80,7 +161,7 @@ public class ModuleCrates extends BlankForestryModule {
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
 			// / CRATES
 			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
-				" # ", "# #", " # ", '#', "logWood");
+					" # ", "# #", " # ", '#', "logWood");
 		}
 	}
 
