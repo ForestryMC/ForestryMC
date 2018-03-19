@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,7 +35,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
@@ -50,6 +51,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.farming.FarmRegistry;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableBush;
 import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.ForestryModuleUids;
 
@@ -65,16 +67,16 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 	private static final ArrayList<ItemStack> ores = new ArrayList<>();
 	private static final ArrayList<ItemStack> gems = new ArrayList<>();
 
-	@ObjectHolder("biomesoplenty:pinecone")
-	public static final Item PINECONE = null;
-	@ObjectHolder("biomesoplenty:berries")
-	public static final Item BERRIES = null;
-	@ObjectHolder("biomesoplenty:pear")
-	public static final Item PEAR = null;
-	@ObjectHolder("biomesoplenty:peach")
-	public static final Item PEACH = null;
-	@ObjectHolder("biomesoplenty:persimmon")
-	public static final Item PERSIMMON = null;
+	@GameRegistry.ItemStackHolder("biomesoplenty:pinecone")
+	public static final ItemStack PINECONE = null;
+	@GameRegistry.ItemStackHolder("biomesoplenty:berries")
+	public static final ItemStack BERRIES = null;
+	@GameRegistry.ItemStackHolder("biomesoplenty:pear")
+	public static final ItemStack PEAR = null;
+	@GameRegistry.ItemStackHolder("biomesoplenty:peach")
+	public static final ItemStack PEACH = null;
+	@GameRegistry.ItemStackHolder("biomesoplenty:persimmon")
+	public static final ItemStack PERSIMMON = null;
 
 	private static final IForgeRegistry<Item> REGISTRY = ForgeRegistries.ITEMS;
 
@@ -150,8 +152,7 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 		ItemStack seed = getItemStack("turnip_seeds");
 		RecipeManagers.squeezerManager.addRecipe(10, NonNullList.from(seed, seed), Fluids.SEED_OIL.getFluid(amount));
 		RecipeManagers.moistenerManager.addRecipe(seed, new ItemStack(Blocks.MYCELIUM), 5000);
-		ItemStack pinecone = new ItemStack(PINECONE);
-		RecipeManagers.squeezerManager.addRecipe(10, NonNullList.from(pinecone, pinecone), Fluids.SEED_OIL.getFluid(amount));
+		RecipeManagers.squeezerManager.addRecipe(10, NonNullList.from(PINECONE, PINECONE), Fluids.SEED_OIL.getFluid(amount));
 		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
 			Block block = getBlock("turnip_block");
 
@@ -164,8 +165,10 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 					)
 			);
 
-
-			//			FarmRegistry.getInstance().registerFarmables("farmOrchard", new Farmable);
+			Block berryBush = Block.getBlockFromItem(getItem("plant_0"));
+			IBlockState berryState = Block.getBlockFromItem(getItem("plant_0")).getStateFromMeta(5);
+			IBlockState bushState = Block.getBlockFromItem(getItem("plant_0")).getStateFromMeta(2);
+			FarmRegistry.getInstance().registerFarmables("farmOrchard", new FarmableBush(bushState, berryState));
 		}
 
 		ItemRegistryCore coreItems = ModuleCore.getItems();
@@ -173,7 +176,7 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2;
 		final int juiceAmount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 		ItemStack mulch = coreItems.mulch.getItemStack();
-		for (ItemStack fruit : new ItemStack[]{new ItemStack(PEAR), new ItemStack(PEACH), new ItemStack(PERSIMMON)}) {
+		for (ItemStack fruit : new ItemStack[]{PEAR, PEACH, PERSIMMON}) {
 			RecipeManagers.squeezerManager.addRecipe(
 					10, NonNullList.from(fruit, fruit),
 					Fluids.JUICE.getFluid(juiceAmount), mulch,
@@ -182,8 +185,7 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
-		ItemStack berry = new ItemStack(BERRIES);
-		RecipeManagers.squeezerManager.addRecipe(3, NonNullList.from(berry, berry), Fluids.JUICE.getFluid(amount));
+		RecipeManagers.squeezerManager.addRecipe(3, NonNullList.from(BERRIES, BERRIES), Fluids.JUICE.getFluid(amount));
 
 		RecipeUtil.addFermenterRecipes(getItemStack("turnip"), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 

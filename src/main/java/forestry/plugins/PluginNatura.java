@@ -18,6 +18,8 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -73,6 +75,7 @@ public class PluginNatura extends BlankForestryModule {
 	private static final ArrayList<ItemStack> fruits = new ArrayList<>();
 	private static final ArrayList<ItemStack> soups = new ArrayList<>();
 	private static final ArrayList<ItemStack> berries = new ArrayList<>();
+	private static final ArrayList<ItemStack> bushes = new ArrayList<>();
 	private static final ArrayList<ItemStack> edibles = new ArrayList<>();
 	private static final ArrayList<ItemStack> seeds = new ArrayList<>();
 	private static final ArrayList<ItemStack> logs = new ArrayList<>();
@@ -190,6 +193,11 @@ public class PluginNatura extends BlankForestryModule {
 				return;
 			}
 
+			if (itemName.matches("^.*_berrybush_$")) {
+				consumeSubItems(item, "berrybush", bushes);
+				return;
+			}
+
 			if (itemName.matches("^.*_logs\\d?$")) {
 				consumeSubItems(item, "logs", logs);
 				return;
@@ -285,7 +293,7 @@ public class PluginNatura extends BlankForestryModule {
 				} catch (Exception ignored) {
 					return;
 				}
-				Log.info("[PluginNatura] Addding crop '{}'", itemStack);
+				Log.info("[PluginNatura] Adding crop '{}'", itemStack);
 				if (seedItem.isEmpty()) {
 					return;
 				}
@@ -299,6 +307,20 @@ public class PluginNatura extends BlankForestryModule {
 						)
 				);
 			});
+			for (ItemStack stack : bushes) {
+				Block block = ItemStackUtil.getBlock(stack);
+				IBlockState state = block.getBlockState().getBaseState();
+
+				PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
+				FarmRegistry.getInstance().registerFarmables("farmOrchard",
+						new FarmableAgingCrop(
+								ItemStack.EMPTY,
+								block,
+								AGE,
+								3
+						)
+				);
+			}
 		}
 
 		ItemRegistryCore coreItems = ModuleCore.getItems();
