@@ -40,4 +40,5 @@ public class ForestryModuleUids {
 	public static final String RUSTIC = "rustic";
 	public static final String ROOTS = "roots";
 	public static final String BETTER_WITH_MODS = "betterwithmods";
+	public static final String TECH_REBORN = "techreborn";
 }
