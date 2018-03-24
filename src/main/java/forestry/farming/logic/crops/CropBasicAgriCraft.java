@@ -37,7 +37,7 @@ public class CropBasicAgriCraft extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvest = NonNullList.create();
-		harvest.addAll(block.getDrops(world, pos, blockState, 0));
+		block.getDrops(harvest, world, pos, blockState, 0);
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}

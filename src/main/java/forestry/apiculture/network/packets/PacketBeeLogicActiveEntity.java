@@ -12,6 +12,12 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.BeekeepingLogic;
@@ -20,10 +26,6 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBeeLogicActiveEntity extends ForestryPacket implements IForestryPacketClient {
 	private final Entity entity;
@@ -54,7 +56,7 @@ public class PacketBeeLogicActiveEntity extends ForestryPacket implements IFores
 				IBeeHousing beeHousing = (IBeeHousing) entity;
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				if (beekeepingLogic instanceof BeekeepingLogic) {
-					((BeekeepingLogic) beekeepingLogic).readData(data);
+					beekeepingLogic.readData(data);
 				}
 			}
 		}

@@ -328,8 +328,7 @@ public abstract class ItemStackUtil {
 			ItemStack req = condensedRequiredStacks.get(y);
 			String offerDict = condensedRequiredDicts.get(y);
 			int reqCount = 0;
-			for (int i = 0;i < condensedOfferedStacks.size();i++) {
-				ItemStack offer = condensedOfferedStacks.get(i);
+			for (ItemStack offer : condensedOfferedStacks) {
 				if (isCraftingEquivalent(req, offer, offerDict, craftingTools)) {
 					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
 					reqCount = Math.max(reqCount, stackCount);

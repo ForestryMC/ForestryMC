@@ -66,7 +66,7 @@ public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItem
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < 3;i++) {
+		for (int i = 0; i < 3; i++) {
 			manager.registerItemModel(item, i, "wood_pile");
 		}
 	}
@@ -82,12 +82,13 @@ public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItem
 		}
 		return false;
 	}
+
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		switch (rot) {
 			case COUNTERCLOCKWISE_90:
 			case CLOCKWISE_90:
 
-				switch ((EnumFacing.Axis)state.getValue(AXIS)) {
+				switch (state.getValue(AXIS)) {
 					case X:
 						return state.withProperty(AXIS, EnumFacing.Axis.Z);
 					case Z:
@@ -109,13 +110,11 @@ public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItem
 		return state.getValue(AXIS).ordinal();
 	}
 
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, new IProperty[] {AXIS});
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{AXIS});
 	}
 
-	protected ItemStack getSilkTouchDrop(IBlockState state)
-	{
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(Item.getItemFromBlock(this));
 	}
 
