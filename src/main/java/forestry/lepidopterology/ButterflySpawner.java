@@ -26,6 +26,10 @@ public class ButterflySpawner implements ILeafTickHandler {
 	@Override
 	public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
 
+		if (!world.getGameRules().getBoolean("doMobSpawning")) {
+			return false;
+		}
+
 		if (rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
 		}
