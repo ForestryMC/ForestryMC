@@ -33,6 +33,7 @@ import forestry.core.utils.TickHelper;
 
 public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	private final TileHive housing;
+	private IBee queen;
 	private IEffectData effectData[] = new IEffectData[2];
 	private final HasFlowersCache hasFlowersCache = new HasFlowersCache();
 	private final TickHelper tickHelper = new TickHelper();
@@ -92,10 +93,11 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	public boolean canWork() {
 		tickHelper.onTick();
 
-		IBee queen = housing.getContainedBee();
-		hasFlowersCache.update(queen, housing);
-
 		if (tickHelper.updateOnInterval(200)) {
+			if (queen == null) {                //Trying to set this in constructor causes crash
+				queen = housing.getContainedBee();
+			}
+			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
 			boolean canWork = (world.isDaytime() || queen.getGenome().getNeverSleeps()) &&
 					(!housing.isRaining() || queen.getGenome().getToleratesRain());
