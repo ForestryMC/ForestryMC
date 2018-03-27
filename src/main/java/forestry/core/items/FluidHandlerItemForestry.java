@@ -1,9 +1,12 @@
 package forestry.core.items;
 
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+
+import forestry.core.config.Config;
 
 public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consumable {
 	private final EnumContainerType containerType;
@@ -41,6 +44,15 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	protected void setFluid(FluidStack fluid) {
 		super.setFluid(fluid);
 		container.setItemDamage(1); // show the filled container model
+	}
+
+	@Override
+	protected void setContainerToEmpty() {
+		if (Config.nonConsumableCapsules) {
+			container.getTagCompound().removeTag(FLUID_NBT_KEY);
+		} else {
+			super.setContainerToEmpty();
+		}
 	}
 }
 
