@@ -327,8 +327,8 @@ public class Config {
 		ringFarms = configCommon.getBooleanLocalized("tweaks.cultivation", "ring", ringFarms);
 		ringSize = configCommon.getIntLocalized("tweaks.cultivation", "ring_size", ringSize, 1, 8);
 
-		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks", "capsule", CapsuleFluidPickup);
-		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks", "capsule", nonConsumableCapsules);
+		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
+		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
 		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
 		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
