@@ -153,7 +153,7 @@ public class SimpleModel implements IModel {
 				try {
 					model = ModelLoaderRegistry.getModel(loc);
 				} catch (Exception e) {
-					throw Throwables.propagate(e);
+					throw new RuntimeException(e);
 				}
 			}
 
