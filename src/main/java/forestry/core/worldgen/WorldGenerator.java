@@ -68,15 +68,16 @@ public class WorldGenerator implements IWorldGenerator {
 	}
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
-		if(!Config.isValidOreDim(world.provider.getDimension()))
+		if (!Config.isValidOreDim(world.provider.getDimension())) {
 			return;
+		}
 
 		if (apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
 			BlockResourceOre resourcesBlock = ModuleCore.getBlocks().resources;
 
-			IBlockState apatiteBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.APATITE.getMeta());
-			IBlockState copperBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.COPPER.getMeta());
-			IBlockState tinBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.TIN.getMeta());
+			IBlockState apatiteBlockState = resourcesBlock.getDefaultState().withProperty(BlockResourceOre.ORE_RESOURCES, EnumResourceType.APATITE);
+			IBlockState copperBlockState = resourcesBlock.getDefaultState().withProperty(BlockResourceOre.ORE_RESOURCES, EnumResourceType.COPPER);
+			IBlockState tinBlockState = resourcesBlock.getDefaultState().withProperty(BlockResourceOre.ORE_RESOURCES, EnumResourceType.TIN);
 			apatiteGenerator = new WorldGenMinable(apatiteBlockState, 36);
 			copperGenerator = new WorldGenMinable(copperBlockState, 6);
 			tinGenerator = new WorldGenMinable(tinBlockState, 6);
