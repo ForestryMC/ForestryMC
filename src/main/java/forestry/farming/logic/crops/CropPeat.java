@@ -49,7 +49,7 @@ public class CropPeat extends Crop {
 
 		IBlockState blockState = world.getBlockState(pos);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNC);

@@ -22,6 +22,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -41,21 +43,19 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	private final BlockPos pos;
 	private final VisualFXType visualFX;
 	private final SoundFXType soundFX;
-	private final IBlockState blockState;
 
-	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState blockState) {
-		this(type, SoundFXType.NONE, pos, blockState);
+	public PacketFXSignal(VisualFXType type, BlockPos pos) {
+		this(type, SoundFXType.NONE, pos);
 	}
 
-	public PacketFXSignal(SoundFXType type, BlockPos pos, IBlockState blockState) {
-		this(VisualFXType.NONE, type, pos, blockState);
+	public PacketFXSignal(SoundFXType type, BlockPos pos) {
+		this(VisualFXType.NONE, type, pos);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState blockState) {
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos) {
 		this.pos = pos;
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
-		this.blockState = blockState;
 	}
 
 	@Override
@@ -63,9 +63,6 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
-		Block block = blockState.getBlock();
-		data.writeVarInt(Block.getIdFromBlock(block));
-		data.writeVarInt(block.getMetaFromState(blockState));
 	}
 
 	@Override
@@ -80,10 +77,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			BlockPos pos = data.readBlockPos();
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
-			Block block = Block.getBlockById(data.readVarInt());
-			IBlockState blockState = block.getStateFromMeta(data.readVarInt());
-
 			World world = player.world;
+			IBlockState blockState = world.getBlockState(pos);
+			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
 				Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);

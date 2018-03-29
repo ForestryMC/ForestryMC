@@ -85,7 +85,7 @@ public class CropRubber extends CropDestroy {
 		NonNullList<ItemStack> harvested = NonNullList.create();
 		harvested.add(PluginIC2.resin.copy());
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);

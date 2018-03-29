@@ -32,7 +32,7 @@ public class CropChorusFlower extends Crop {
 
 		harvested.removeIf(next -> world.rand.nextFloat() > chance);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, BLOCK_STATE);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockToAir(pos);

@@ -236,7 +236,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		sapling.setTree(tree.copy());
 		sapling.getOwnerHandler().setOwner(owner);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		return true;

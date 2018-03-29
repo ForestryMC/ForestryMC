@@ -29,7 +29,7 @@ public class FarmableRusticSapling implements IFarmable {
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		if (world.setBlockState(pos, germlingBlock.getStateFromMeta(germling.getItemDamage()))) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, germlingBlock.getStateFromMeta(germling.getItemDamage()));
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
