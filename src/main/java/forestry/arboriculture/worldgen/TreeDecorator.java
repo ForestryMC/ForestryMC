@@ -46,16 +46,16 @@ import forestry.core.utils.BlockUtil;
 public class TreeDecorator {
 	private static final List<IAlleleTreeSpecies> SPECIES = new ArrayList<>();
 	private static final Map<ResourceLocation, Set<ITree>> biomeCache = new HashMap<>();
-	
+
 	@SubscribeEvent
 	public void decorateTrees(Decorate event) {
-		if(event.getType() == Decorate.EventType.TREE){
+		if (event.getType() == Decorate.EventType.TREE) {
 			decorateTrees(event.getWorld(), event.getRand(), event.getPos().getX() + 8, event.getPos().getZ() + 8);
 		}
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if(!Config.isValidTreeDim(world.provider.getDimension())) {
+		if (!Config.isValidTreeDim(world.provider.getDimension())) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -67,17 +67,17 @@ public class TreeDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			Biome biome = world.getBiome(pos);
-			
+
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
-				if (species.getRarity()  >= rand.nextFloat()) {
+				if (species.getRarity() >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
-	
-					if(pos == null){
+
+					if (pos == null) {
 						continue;
 					}
-					
+
 					if (species.getGrowthProvider().canSpawn(tree, world, pos)) {
 						if (TreeGenHelper.generateTree(tree, world, pos)) {
 							return;
@@ -87,49 +87,47 @@ public class TreeDecorator {
 			}
 		}
 	}
-	
+
 	@Nullable
-	private static BlockPos getValidPos(World world, int x, int z, ITree tree){
+	private static BlockPos getValidPos(World world, int x, int z, ITree tree) {
 		// get to the ground
 		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
-		
+
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
-		
+
 		IBlockState blockState = world.getBlockState(pos);
-		IBlockState downState = world.getBlockState(pos.down());
 		while (BlockUtil.canReplace(blockState, world, pos)) {
 			pos.move(EnumFacing.DOWN);
 			if (pos.getY() <= 0) {
 				return null;
 			}
 			blockState = world.getBlockState(pos);
-			downState = world.getBlockState(pos.down());
 		}
-		if(tree instanceof IPlantable && blockState.getBlock().canSustainPlant(blockState, world, pos, EnumFacing.UP, (IPlantable) tree)){
+		if (tree instanceof IPlantable && blockState.getBlock().canSustainPlant(blockState, world, pos, EnumFacing.UP, (IPlantable) tree)) {
 			return pos.up();
 		}
 		return null;
 	}
-	
-	private static List<IAlleleTreeSpecies> getSpecies(){
-		if(!SPECIES.isEmpty()){
+
+	private static List<IAlleleTreeSpecies> getSpecies() {
+		if (!SPECIES.isEmpty()) {
 			return SPECIES;
 		}
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
-				if(alleleTreeSpecies.getRarity() > 0){
+				if (alleleTreeSpecies.getRarity() > 0) {
 					SPECIES.add(alleleTreeSpecies);
 				}
 			}
 		}
 		return SPECIES;
 	}
-	
-	private static void generateBiomeCache(World world, Random rand){
+
+	private static void generateBiomeCache(World world, Random rand) {
 		for (IAlleleTreeSpecies species : getSpecies()) {
 			IAllele[] template = TreeManager.treeRoot.getTemplate(species);
 			ITreeGenome genome = TreeManager.treeRoot.templateAsGenome(template);
@@ -143,11 +141,11 @@ public class TreeDecorator {
 			}
 		}
 	}
-	
+
 	private static final class BiomeCache {
 		protected final Biome biome;
 		protected final List<ITree> validTrees;
-		
+
 		public BiomeCache(Biome biome, List<ITree> validTrees) {
 			this.biome = biome;
 			this.validTrees = validTrees;
