@@ -58,6 +58,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
@@ -215,7 +216,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void registerTriggers() {
-//		FactoryTriggers.initialize();
+		//		FactoryTriggers.initialize();
 	}
 
 	@Override
@@ -329,12 +330,12 @@ public class ModuleFactory extends BlankForestryModule {
 				'#', new ItemStack(Items.REPEATER, 1, 0),
 				'X', new ItemStack(Blocks.REDSTONE_ORE, 1, 0)});
 		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.flexibleCasing.getItemStack(), new Object[]{
-			"#E#",
-			"B B",
-			"#E#",
-			'#', OreDictUtil.INGOT_BRONZE,
-			'B', OreDictUtil.SLIMEBALL,
-			'E', "gemEmerald"});
+				"#E#",
+				"B B",
+				"#E#",
+				'#', OreDictUtil.INGOT_BRONZE,
+				'B', OreDictUtil.SLIMEBALL,
+				'E', "gemEmerald"});
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
@@ -398,8 +399,8 @@ public class ModuleFactory extends BlankForestryModule {
 		RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_WHEAT, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_POTATO, 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.BROWN_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(ItemStackUtil.getItemFromRegistry("minecraft:brown_mushroom")), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(ItemStackUtil.getItemFromRegistry("minecraft:red_mushroom")), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
 
 		// FABRICATOR
 
