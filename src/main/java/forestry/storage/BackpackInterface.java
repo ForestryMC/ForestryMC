@@ -42,9 +42,11 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public void addItemToForestryBackpack(String backpackUid, ItemStack itemStack) {
+	public void addItemToForestryBackpack(String backpackUid, @Nullable ItemStack itemStack) {
+		if (itemStack == null) {
+			return;
+		}
 		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
-		Preconditions.checkNotNull(itemStack, "itemStack must not be null");
 		Preconditions.checkArgument(!itemStack.isEmpty(), "itemStack must not be empty");
 
 		String stringForItemStack = ItemStackUtil.getStringForItemStack(itemStack);

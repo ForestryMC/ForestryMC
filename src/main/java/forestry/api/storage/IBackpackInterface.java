@@ -39,7 +39,7 @@ public interface IBackpackInterface {
 	 * @param itemStack   The itemStack that the backpack should accept.
 	 *                    {@link OreDictionary#WILDCARD_VALUE} can be used for meta value.
 	 */
-	void addItemToForestryBackpack(String backpackUid, ItemStack itemStack);
+	void addItemToForestryBackpack(String backpackUid,@Nullable ItemStack itemStack);
 
 	/**
 	 * Register a backpack definition with a given uid.

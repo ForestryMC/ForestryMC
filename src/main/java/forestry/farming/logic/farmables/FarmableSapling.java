@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -33,6 +34,14 @@ public class FarmableSapling implements IFarmable {
 	protected final boolean ignoreMetadata;
 	protected final Block saplingBlock;
 	protected final ItemStack[] windfall;
+
+	public FarmableSapling(final ItemStack germling, final Item windfallItem) {
+		this(germling, new ItemStack(windfallItem));
+	}
+
+	public FarmableSapling(final ItemStack germling, final ItemStack onlyWindfall) {
+		this(germling, new ItemStack[]{onlyWindfall});
+	}
 
 	public FarmableSapling(final ItemStack germling, final ItemStack[] windfall) {
 		this(germling, windfall, true);

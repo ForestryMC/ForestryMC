@@ -30,6 +30,7 @@ import forestry.storage.items.ItemCrated;
 public class CrateRegistry implements ICrateRegistry {
 
 	private static void registerCrate(ItemStack stack, @Nullable String oreDictName) {
+
 		if (stack.isEmpty()) {
 			Log.error("Tried to make a crate without an item");
 			return;
@@ -72,17 +73,26 @@ public class CrateRegistry implements ICrateRegistry {
 	}
 
 	@Override
-	public void registerCrate(Block block) {
+	public void registerCrate(@Nullable Block block) {
+		if (block == null) {
+			return;
+		}
 		registerCrate(new ItemStack(block), null);
 	}
 
 	@Override
-	public void registerCrate(Item item) {
+	public void registerCrate(@Nullable Item item) {
+		if (item == null) {
+			return;
+		}
 		registerCrate(new ItemStack(item), null);
 	}
 
 	@Override
-	public void registerCrate(ItemStack stack) {
+	public void registerCrate(@Nullable ItemStack stack) {
+		if (stack == null) {
+			return;
+		}
 		registerCrate(stack, null);
 	}
 }

@@ -55,7 +55,7 @@ public class CropDestroy extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvested = NonNullList.create();
-		harvested.addAll(block.getDrops(world, pos, blockState, 0));
+		block.getDrops(harvested, world, pos, blockState, 0);
 		float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, blockState, 0, 1.0F, false, null);
 
 		boolean removedSeed = germling.isEmpty();

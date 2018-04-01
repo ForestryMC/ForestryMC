@@ -18,6 +18,8 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -73,6 +75,7 @@ public class PluginNatura extends BlankForestryModule {
 	private static final ArrayList<ItemStack> fruits = new ArrayList<>();
 	private static final ArrayList<ItemStack> soups = new ArrayList<>();
 	private static final ArrayList<ItemStack> berries = new ArrayList<>();
+	private static final ArrayList<ItemStack> bushes = new ArrayList<>();
 	private static final ArrayList<ItemStack> edibles = new ArrayList<>();
 	private static final ArrayList<ItemStack> seeds = new ArrayList<>();
 	private static final ArrayList<ItemStack> logs = new ArrayList<>();
@@ -114,9 +117,9 @@ public class PluginNatura extends BlankForestryModule {
 				consumeSubItems(item, "saplings", saplings);
 
 				RecipeUtil.addFermenterRecipes(
-					new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE),
-					ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
-					Fluids.BIOMASS
+						new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE),
+						ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
+						Fluids.BIOMASS
 				);
 
 				ItemStack[] windfall = new ItemStack[]{};
@@ -127,8 +130,8 @@ public class PluginNatura extends BlankForestryModule {
 				}
 
 				FarmRegistry.getInstance().registerFarmables("farmArboreal", new FarmableSapling(
-					new ItemStack(item),
-					windfall
+						new ItemStack(item),
+						windfall
 				));
 				return;
 			}
@@ -153,9 +156,9 @@ public class PluginNatura extends BlankForestryModule {
 					final Block smallShroomBlock = Block.getBlockFromItem(subItem.getItem());
 
 					FarmRegistry.getInstance().registerFarmables("farmShroom", new FarmableVanillaMushroom(
-						subItem,
-						smallShroomBlock.getStateFromMeta(subItem.getMetadata()),
-						largeShroomBlock
+							subItem,
+							smallShroomBlock.getStateFromMeta(subItem.getMetadata()),
+							largeShroomBlock
 					));
 
 				});
@@ -187,6 +190,11 @@ public class PluginNatura extends BlankForestryModule {
 
 			if (itemName.matches("^.*_seeds$")) {
 				consumeSubItems(item, "seeds", seeds);
+				return;
+			}
+
+			if (itemName.matches("^.*_berrybush_$")) {
+				consumeSubItems(item, "berrybush", bushes);
 				return;
 			}
 
@@ -260,9 +268,9 @@ public class PluginNatura extends BlankForestryModule {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
 		Iterables.concat(
-			edibles, logs, saplings, shrooms,
-			materials, seeds, berries, fruits,
-			crops
+				edibles, logs, saplings, shrooms,
+				materials, seeds, berries, fruits,
+				crops
 		).forEach(crateRegistry::registerCrate);
 	}
 
@@ -285,20 +293,34 @@ public class PluginNatura extends BlankForestryModule {
 				} catch (Exception ignored) {
 					return;
 				}
-				Log.info("[PluginNatura] Addding crop '{}'", itemStack);
+				Log.info("[PluginNatura] Adding crop '{}'", itemStack);
 				if (seedItem.isEmpty()) {
 					return;
 				}
 
 				FarmRegistry.getInstance().registerFarmables("farmCrops",
-					new FarmableAgingCrop(
-						seedItem,
-						block,
-						(IProperty<Integer>) block.getBlockState().getProperty("age"),
-						maxAge
-					)
+						new FarmableAgingCrop(
+								seedItem,
+								block,
+								(IProperty<Integer>) block.getBlockState().getProperty("age"),
+								maxAge
+						)
 				);
 			});
+			for (ItemStack stack : bushes) {
+				Block block = ItemStackUtil.getBlock(stack);
+				IBlockState state = block.getBlockState().getBaseState();
+
+				PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
+				FarmRegistry.getInstance().registerFarmables("farmOrchard",
+						new FarmableAgingCrop(
+								ItemStack.EMPTY,
+								block,
+								AGE,
+								3
+						)
+				);
+			}
 		}
 
 		ItemRegistryCore coreItems = ModuleCore.getItems();
@@ -307,9 +329,9 @@ public class PluginNatura extends BlankForestryModule {
 		final int juiceAmount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 		ItemStack mulch = coreItems.mulch.getItemStack();
 		fruits.forEach(fruit -> RecipeManagers.squeezerManager.addRecipe(
-			10, NonNullList.from(fruit, fruit),
-			Fluids.JUICE.getFluid(juiceAmount), mulch,
-			ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"))
+				10, NonNullList.from(fruit, fruit),
+				Fluids.JUICE.getFluid(juiceAmount), mulch,
+				ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"))
 		);
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
@@ -335,7 +357,7 @@ public class PluginNatura extends BlankForestryModule {
 	}
 
 
-	/* 
+	/*
 	 * Register soils required by Natura trees. Must run in postInit(), after core PluginFarming has registered FarmingLogic instances
 	 */
 	@Override
@@ -346,7 +368,7 @@ public class PluginNatura extends BlankForestryModule {
 		if (farmArboreal != null) {
 			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState());
 		}
-		if(mushroomFarm != null){
+		if (mushroomFarm != null) {
 			mushroomFarm.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState());
 			mushroomFarm.registerSoil(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState());
 		}

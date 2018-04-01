@@ -28,8 +28,10 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.crops.CropRubber;
 import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginTechReborn;
 
 public class FarmLogicRubber extends FarmLogic {
 
@@ -37,15 +39,21 @@ public class FarmLogicRubber extends FarmLogic {
 
 	public FarmLogicRubber(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
-			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
+		if ((PluginIC2.rubberWood == null || PluginIC2.resin == null) && 
+				(PluginTechReborn.rubberItemsSuccess())) {
+			Log.warning("Failed to init a farm logic {} since rubber wood or resin were not found", getClass().getName());
 			active = false;
 		}
 	}
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return PluginIC2.resin;
+		if (ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
+			return PluginIC2.resin;
+		} else if (ModUtil.isModLoaded(PluginTechReborn.MOD_ID)) {
+			return PluginTechReborn.SAP;
+		}
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -119,13 +127,13 @@ public class FarmLogicRubber extends FarmLogic {
 		for (int j = 0; j < 10; j++) {
 			BlockPos candidate = position.add(0, j, 0);
 
-			if(!world.isBlockLoaded(candidate)){
+			if (!world.isBlockLoaded(candidate)) {
 				return crops;
 			}
 
 			IBlockState blockState = world.getBlockState(candidate);
 			Block block = blockState.getBlock();
-			if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
+			if ((PluginIC2.rubberWood != null && !ItemStackUtil.equals(block, PluginIC2.rubberWood)) && (PluginTechReborn.RUBBER_WOOD!=null && !ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD))) {
 				break;
 			}
 
