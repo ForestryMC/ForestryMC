@@ -29,7 +29,6 @@ public class ForestryModuleUids {
 	public static final String BUILDCRAFT_RECIPES = "buildcraft.recipes";
 	public static final String BUILDCRAFT_STATEMENTS = "buildcraft.statements";
 	public static final String BUILDCRAFT_TRANSPORT = "buildcraft.transport";
-	public static final String CHISEL = "chisel";
 	public static final String ENDER_IO = "ender.io";
 	public static final String EXTRA_UTILITIES = "extra.utilities";
 	public static final String NATURA = "natura";

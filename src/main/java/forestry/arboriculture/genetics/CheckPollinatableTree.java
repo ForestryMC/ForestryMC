@@ -13,6 +13,8 @@ package forestry.arboriculture.genetics;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
+import forestry.apiculture.ModuleApiculture;
+
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.apiculture.ModuleApiculture;

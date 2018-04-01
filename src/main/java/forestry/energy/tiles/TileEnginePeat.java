@@ -11,9 +11,26 @@
 package forestry.energy.tiles;
 
 import java.io.IOException;
+import java.util.Collection;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
@@ -214,7 +231,9 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
 		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-			InventoryUtil.moveItemStack(wasteItemHandler, inventoryCache.getAdjacentInventories());
+			EnumFacing powerSide = world.getBlockState(getPos()).getValue(BlockBase.FACING);
+			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
+			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
 		}
 	}
 
@@ -292,14 +311,14 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	/* ITriggerProvider */
 	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(FactoryTriggers.lowFuel25);
-//		res.add(FactoryTriggers.lowFuel10);
-//		return res;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+	//		res.add(FactoryTriggers.lowFuel25);
+	//		res.add(FactoryTriggers.lowFuel10);
+	//		return res;
+	//	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

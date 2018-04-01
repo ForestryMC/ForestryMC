@@ -13,6 +13,7 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -22,6 +23,8 @@ import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.EnumHelper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,13 +34,16 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.ModuleApiculture;
+import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 
 public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
+	public static final ArmorMaterial APIARIST_ARMOR = EnumHelper.addArmorMaterial("APIARIST_ARMOR", "forestry:textures/items", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F)
+			.setRepairItem(ModuleCore.getItems().craftingMaterial.getWovenSilk());
+
 	public ItemArmorApiarist(EntityEquipmentSlot equipmentSlotIn) {
-		super(ArmorMaterial.LEATHER, 0, equipmentSlotIn);
-		this.setMaxDamage(100);
+		super(APIARIST_ARMOR, 0, equipmentSlotIn);
 		setCreativeTab(Tabs.tabApiculture);
 	}
 
