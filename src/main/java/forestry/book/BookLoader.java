@@ -164,7 +164,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	private void loadEntries(Map<String, EntryData> entries, String entry) {
 		ResourceLocation location = getResourceLocation(entry + ".json");
 		EntryData data = fromJson(location, EntryData.class, null);
-		if(data != null) {
+		if (data != null) {
 			entries.put(entry, data);
 			for (String subEntry : data.subEntries) {
 				loadEntries(entries, subEntry);

@@ -256,7 +256,7 @@ public class MultiblockElement extends GuiElement {
 		GlStateManager.enableBlend();
 		RenderHelper.disableStandardItemLighting();
 /*
-    fontRenderer.setUnicodeFlag(true);
+	fontRenderer.setUnicodeFlag(true);
     //if(localizedText!=null&&!localizedText.isEmpty())
     //fontRenderer.drawSplitString(localizedText, x,y+yOffTotal, 120, manual.getTextColour());
 
