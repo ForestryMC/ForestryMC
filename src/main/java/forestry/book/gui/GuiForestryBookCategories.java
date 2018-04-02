@@ -26,7 +26,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 		int x = 0;
 		int y = 0;
 		for (IBookCategory category : book.getCategories()) {
-			if(category.getEntries().isEmpty()){
+			if (category.getEntries().isEmpty()) {
 				continue;
 			}
 			buttonList.add(new GuiButtonBookCategory(y * 3 + x, guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category));
@@ -45,7 +45,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 
 	@Override
 	protected void drawText() {
-		drawCenteredString(fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X+ 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		drawCenteredString(fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		String about = Translator.translateToLocal("for.gui.book.about");
 		fontRenderer.drawSplitString(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
 		fontRenderer.drawString(Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about, 108), 0);
@@ -54,7 +54,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button instanceof GuiButtonBookCategory){
+		if (button instanceof GuiButtonBookCategory) {
 			GuiButtonBookCategory buttonCategory = (GuiButtonBookCategory) button;
 			mc.displayGuiScreen(new GuiForestryBookEntries(book, buttonCategory.category));
 		}

@@ -23,8 +23,10 @@ public class CraftingElement extends PaneLayout {
 	private static final Drawable CRAFTING_COUNT = new Drawable(BOOK_TEXTURE, 104, 181, 34, 14);
 	private static final Drawable RIGHT_BUTTON = new Drawable(BOOK_TEXTURE, 138, 181, 10, 9);
 	private static final Drawable LEFT_BUTTON = new Drawable(BOOK_TEXTURE, 148, 181, 10, 9);
+	//
 	private final IRecipe[] recipes;
 	private final ElementGroup recipeElement;
+	//
 	@Nullable
 	private ElementGroup text;
 	@Nullable
@@ -52,10 +54,10 @@ public class CraftingElement extends PaneLayout {
 		recipeElement = panel(0, gridStartY, width, height);
 
 		//Recipe Switch
-		if(recipes.length > 1) {
+		if (recipes.length > 1) {
 			//Recipe Count
 			drawable(0, 0, CRAFTING_COUNT).setAlign(GuiElementAlignment.BOTTOM_CENTER);
-			text = panel( width, height);
+			text = panel(width, height);
 			leftButton = add(new ButtonElement(-27, -2, LEFT_BUTTON, e -> updateRecipe(recipeIndex - 1)));
 			leftButton.setAlign(GuiElementAlignment.BOTTOM_CENTER);
 
@@ -66,7 +68,7 @@ public class CraftingElement extends PaneLayout {
 		updateRecipe(0);
 	}
 
-	private void updateRecipe(int recipeIndex){
+	private void updateRecipe(int recipeIndex) {
 		this.recipeIndex = recipeIndex;
 		IRecipe recipe = recipes[recipeIndex];
 		recipeElement.clear();
@@ -84,14 +86,14 @@ public class CraftingElement extends PaneLayout {
 				recipeElement.add(new IngredientElement(1 + x * 20, 1 + y * 20, ingredient));
 			}
 		}
-		if(text != null) {
+		if (text != null) {
 			text.clear();
 			text.text(TextFormatting.BLACK.toString() + (recipeIndex + 1) + "/" + recipes.length, GuiElementAlignment.BOTTOM_CENTER, 0).setYPosition(2);
 		}
-		if(leftButton != null){
+		if (leftButton != null) {
 			leftButton.setEnabled(recipeIndex > 0);
 		}
-		if(rightButton != null){
+		if (rightButton != null) {
 			rightButton.setEnabled(recipeIndex < recipes.length - 1);
 		}
 	}

@@ -11,13 +11,13 @@ import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookPageFactory;
-import forestry.book.pages.TextPageParser;
+import forestry.book.pages.ContentPageLoader;
 
 public class BookEntryBuilder implements IBookEntryBuilder {
 	private final String name;
 	private final IBookCategory category;
 	private ItemStack stack = ItemStack.EMPTY;
-	private IBookPageFactory loader = TextPageParser.INSTANCE;
+	private IBookPageFactory loader = ContentPageLoader.INSTANCE;
 	private List<IBookEntryBuilder> subEntries = new LinkedList<>();
 	private String title = "missing.title";
 	private BookContent[][] content = new BookContent[0][0];
@@ -40,7 +40,7 @@ public class BookEntryBuilder implements IBookEntryBuilder {
 	}
 
 	@Override
-	public BookEntryBuilder addSubEntry(String name, ItemStack stack) {
+	public BookEntryBuilder createSubEntry(String name, ItemStack stack) {
 		BookEntryBuilder builder = new BookEntryBuilder(category, name).setStack(stack);
 		subEntries.add(builder);
 		return builder;

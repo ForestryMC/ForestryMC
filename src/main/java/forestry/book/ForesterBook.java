@@ -28,8 +28,8 @@ public class ForesterBook implements IForesterBook {
 		return category;
 	}
 
-	public void addCaregories(IBookCategory[] categories){
-		for(IBookCategory category : categories){
+	public void addCaregories(IBookCategory[] categories) {
+		for (IBookCategory category : categories) {
 			categoriesByName.put(category.getName(), category);
 		}
 	}

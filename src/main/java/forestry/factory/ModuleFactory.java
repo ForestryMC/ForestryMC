@@ -26,8 +26,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -631,19 +629,5 @@ public class ModuleFactory extends BlankForestryModule {
 				'#', "blockGlass",
 				'X', "ingotIron",
 				'Y', coreItems.sturdyCasing);
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		IBookCategory category = book.addCategory("core")
-				.addEntry("carpenter", new ItemStack(getBlocks().carpenter))
-				.addEntry("centrifuge", new ItemStack(getBlocks().centrifuge))
-				.addEntry("fabricator", new ItemStack(getBlocks().fabricator))
-				.addEntry("moistener", new ItemStack(getBlocks().moistener))
-				.addEntry("fermenter", new ItemStack(getBlocks().fermenter))
-				.addEntry("raintank", new ItemStack(getBlocks().raintank))
-				.addEntry("bottler", new ItemStack(getBlocks().bottler))
-				.addEntry("still", new ItemStack(getBlocks().still))
-				.addEntry("rainmaker", new ItemStack(getBlocks().rainmaker));
 	}
 }

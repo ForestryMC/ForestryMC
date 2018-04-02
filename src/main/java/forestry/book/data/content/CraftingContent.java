@@ -21,15 +21,15 @@ public class CraftingContent extends BookContent<CraftingData> {
 
 	@Nullable
 	@Override
-	public boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
-		if(data == null || data.locations.length == 0){
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+		if (data == null || data.locations.length == 0) {
 			return false;
 		}
 		IRecipe[] recipes = new IRecipe[data.locations.length];
-		for(int i = 0;i < recipes.length;i++){
+		for (int i = 0; i < recipes.length; i++) {
 			recipes[i] = ForgeRegistries.RECIPES.getValue(data.locations[i]);
 		}
-		group.add(new CraftingElement(0, 0, recipes, false));
+		page.add(new CraftingElement(0, 0, recipes, false));
 		return true;
 	}
 }

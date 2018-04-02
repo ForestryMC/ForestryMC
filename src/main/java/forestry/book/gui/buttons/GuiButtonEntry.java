@@ -30,9 +30,9 @@ public class GuiButtonEntry extends GuiButton {
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			String text = displayString;
-			if(hovered){
+			if (hovered) {
 				text = TextFormatting.GOLD + text;
-			}else{
+			} else {
 				text = TextFormatting.DARK_GRAY + text;
 			}
 
@@ -42,7 +42,7 @@ public class GuiButtonEntry extends GuiButton {
 			fontRenderer.setUnicodeFlag(unicode);
 
 			ItemStack stack = entry.getStack();
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y, zLevel);
 				RenderHelper.enableGUIStandardItemLighting();

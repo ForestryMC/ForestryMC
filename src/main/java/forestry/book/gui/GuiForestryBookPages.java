@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,50 +12,47 @@ import net.minecraft.client.gui.GuiButton;
 
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
-import forestry.api.book.IBookPage;
 import forestry.api.book.IForesterBook;
+import forestry.api.gui.IElementGroup;
+import forestry.api.gui.IGuiElement;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 public class GuiForestryBookPages extends GuiForesterBook {
 	private final IBookCategory category;
 	private final IBookEntry entry;
 	@Nullable
 	private final IBookEntry parent;
-	private List<IBookPage> pages;
+	private final List<GuiButtonSubEntry> subButtons = new ArrayList<>();
+	private List<IGuiElement> pages;
 	private int pageIndex = 0;
-	@Nullable
-	private IBookPage leftPage;
-	@Nullable
-	private IBookPage rightPage;
+	private IElementGroup leftPage;
+	private IElementGroup rightPage;
 
 	public GuiForestryBookPages(IForesterBook book, IBookCategory category, IBookEntry entry, @Nullable IBookEntry parent) {
 		super(book);
 		this.category = category;
 		this.entry = entry;
 		this.parent = parent;
-		this.pages = Collections.emptyList();
-		initPages();
-	}
-
-	private void initPages(){
+		ElementGroup group = elementManager.group();
+		leftPage = group.panel(LEFT_PAGE_START_X, LEFT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
+		rightPage = group.panel(RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
 		pages = ImmutableList.copyOf(entry.getPageFactory().load(entry));
 		setPages(0);
 	}
 
-	public void setPages(int index){
-		if(index < 0 || index >= pages.size()){
-			leftPage = null;
-			rightPage = null;
+	public void setPages(int index) {
+		leftPage.clear();
+		rightPage.clear();
+		if (index < 0 || index >= pages.size()) {
 			pageIndex = 0;
 			return;
 		}
-		leftPage = pages.get(index);
-		if(pages.size() > index + 1) {
-			rightPage = pages.get(index + 1);
-		}else{
-			rightPage = null;
+		leftPage.add(pages.get(index));
+		if (pages.size() > index + 1) {
+			rightPage.add(pages.get(index + 1));
 		}
 		pageIndex = index;
 	}
@@ -69,49 +66,21 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	@Override
 	public void initGui() {
 		super.initGui();
-		if(leftPage != null) {
-			leftPage.initPage(this);
-			if (rightPage != null) {
-				rightPage.initPage(this);
-			}
-		}
 		IBookEntry firstEntry = parent != null ? parent : entry;
-		addButton(new GuiButtonSubEntry(buttonList.size(), guiLeft + -24, guiTop + 12, firstEntry, entry));
+		subButtons.add(addButton(new GuiButtonSubEntry(buttonList.size(), guiLeft + -24, guiTop + 12, firstEntry, entry)));
 		IBookEntry[] subEntries = firstEntry.getSubEntries();
-		for(int i = 0;i < subEntries.length;i++){
+		for (int i = 0; i < subEntries.length; i++) {
 			IBookEntry subEntry = subEntries[i];
-			addButton(new GuiButtonSubEntry(buttonList.size(), guiLeft + -24, guiTop + 12 + ((i + 1) * 22), subEntry, entry));
+			subButtons.add(addButton(new GuiButtonSubEntry(buttonList.size(), guiLeft + -24, guiTop + 12 + ((i + 1) * 22), subEntry, entry)));
 		}
-	}
-
-	@Override
-	protected void drawPages(int mouseX, int mouseY) {
-		if(leftPage != null) {
-			leftPage.draw(this, guiLeft + LEFT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, mouseX - guiLeft - LEFT_PAGE_START_X, mouseY - guiTop - LEFT_PAGE_START_Y);
-		}
-		if(rightPage != null){
-			rightPage.draw(this, guiLeft + RIGHT_PAGE_START_X, guiTop + RIGHT_PAGE_START_Y, mouseX - guiLeft - RIGHT_PAGE_START_X, mouseY - guiTop - RIGHT_PAGE_START_Y);
-		}
-	}
-
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		if(leftPage != null) {
-			leftPage.mouseClicked(mouseX - guiLeft - LEFT_PAGE_START_X, mouseY - guiTop - LEFT_PAGE_START_Y, mouseButton);
-		}
-		if(rightPage != null ) {
-			rightPage.mouseClicked(mouseX - guiLeft - RIGHT_PAGE_START_X, mouseY - guiTop - RIGHT_PAGE_START_Y, mouseButton);
-		}
-		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	protected List<String> getTooltip(int mouseX, int mouseY) {
 		List<String> tooltip = new LinkedList<>();
-		if(leftPage != null) {
-			tooltip.addAll(leftPage.getTooltip(mouseX - guiLeft - LEFT_PAGE_START_X, mouseY - guiTop - LEFT_PAGE_START_Y));
-			if (rightPage != null) {
-				tooltip.addAll(rightPage.getTooltip(mouseX - guiLeft - RIGHT_PAGE_START_X, mouseY - guiTop - RIGHT_PAGE_START_Y));
+		for (GuiButtonSubEntry subEntry : subButtons) {
+			if (subEntry.isMouseOver(mouseX, mouseY)) {
+				tooltip.addAll(subEntry.getToolTip());
 			}
 		}
 		return tooltip;
@@ -124,28 +93,23 @@ public class GuiForestryBookPages extends GuiForesterBook {
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button instanceof GuiButtonPage){
+		if (button instanceof GuiButtonPage) {
 			GuiButtonPage pageButton = (GuiButtonPage) button;
-			if(pageButton.left){
+			if (pageButton.left) {
 				setPages(pageIndex - 2);
-			}else{
+			} else {
 				setPages(pageIndex + 2);
 			}
 			initGui();
-		}else if(button instanceof GuiButtonSubEntry){
+		} else if (button instanceof GuiButtonSubEntry) {
 			GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
 			mc.displayGuiScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
-		}else if(button instanceof GuiButtonBack || pages.isEmpty()){
+		} else if (button instanceof GuiButtonBack || pages.isEmpty()) {
 			displayEntries();
-		}else if(leftPage != null) {
-			leftPage.onButtonPressed(this, button);
-			if(rightPage != null){
-				leftPage.onButtonPressed(this, button);
-			}
 		}
 	}
 
-	private void displayEntries(){
+	private void displayEntries() {
 		mc.displayGuiScreen(new GuiForestryBookEntries(book, category));
 	}
 }

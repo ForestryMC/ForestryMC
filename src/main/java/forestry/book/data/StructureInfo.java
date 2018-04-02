@@ -38,11 +38,11 @@ public class StructureInfo {
 		this.structureLength = length;
 		IBlockState[][][] states = new IBlockState[height][length][width];
 
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < length; x++) {
-				for(int z = 0; z < width; z++) {
-					for(BlockData data : blockData) {
-						if(inside(x, y, z, data.pos, data.endPos)) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < length; x++) {
+				for (int z = 0; z < width; z++) {
+					for (BlockData data : blockData) {
+						if (inside(x, y, z, data.pos, data.endPos)) {
 							states[y][x][z] = convert(data);
 							break;
 						}
@@ -57,20 +57,19 @@ public class StructureInfo {
 
 	private IBlockState convert(BlockData data) {
 		Block block = Block.getBlockFromName(data.block);
-		if(block == null) {
+		if (block == null) {
 			return Blocks.AIR.getDefaultState();
 		}
 		IBlockState state;
-		if(data.state == null || data.state.isEmpty()) {
+		if (data.state == null || data.state.isEmpty()) {
 			state = block.getStateFromMeta(data.meta);
-		}
-		else {
+		} else {
 			state = block.getDefaultState();
 
-			for(Map.Entry<String, String> entry : data.state.entrySet()) {
+			for (Map.Entry<String, String> entry : data.state.entrySet()) {
 				Optional<IProperty<?>> property = state.getPropertyKeys().stream().filter(iProperty -> entry.getKey().equals(iProperty.getName())).findFirst();
 
-				if(property.isPresent()) {
+				if (property.isPresent()) {
 					state = setProperty(state, property.get(), entry.getValue());
 				}
 			}
@@ -80,7 +79,7 @@ public class StructureInfo {
 
 	private <T extends Comparable<T>> IBlockState setProperty(IBlockState state, IProperty<T> prop, String valueString) {
 		com.google.common.base.Optional<T> value = prop.parseValue(valueString);
-		if(value.isPresent()) {
+		if (value.isPresent()) {
 			state = state.withProperty(prop, value.get());
 		}
 		return state;
@@ -88,9 +87,9 @@ public class StructureInfo {
 
 
 	private boolean inside(int x, int y, int z, int[] rangeStart, int[] rangeEnd) {
-		if(x >= rangeStart[0] && x <= rangeEnd[0]) {
-			if(y >= rangeStart[1] && y <= rangeEnd[1]) {
-				if(z >= rangeStart[2] && z <= rangeEnd[2]) {
+		if (x >= rangeStart[0] && x <= rangeEnd[0]) {
+			if (y >= rangeStart[1] && y <= rangeEnd[1]) {
+				if (z >= rangeStart[2] && z <= rangeEnd[2]) {
 					return true;
 				}
 			}
@@ -111,20 +110,20 @@ public class StructureInfo {
 	public boolean canStep() {
 		int index = blockIndex;
 		do {
-			if(++index >= maxBlockIndex) {
+			if (++index >= maxBlockIndex) {
 				return false;
 			}
-		} while(isEmpty(index));
+		} while (isEmpty(index));
 		return true;
 	}
 
 	public void step() {
 		int start = blockIndex;
 		do {
-			if(++blockIndex >= maxBlockIndex) {
+			if (++blockIndex >= maxBlockIndex) {
 				blockIndex = 0;
 			}
-		} while(isEmpty(blockIndex) && blockIndex != start);
+		} while (isEmpty(blockIndex) && blockIndex != start);
 	}
 
 	private boolean isEmpty(int index) {

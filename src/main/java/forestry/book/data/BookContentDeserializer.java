@@ -18,10 +18,10 @@ public class BookContentDeserializer implements JsonDeserializer<BookContent> {
 	public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		JsonObject object = json.getAsJsonObject();
 		String type = JsonUtils.getString(object, "type", "text");
-		Class<? extends BookContent> typeClass = BookLoader.getType(type);
+		Class<? extends BookContent> typeClass = BookLoader.INSTANCE.getContentType(type);
 		BookContent content = context.deserialize(object, typeClass == null ? TextContent.class : typeClass);
 		content.type = type;
-		if(content.getDataClass() != null) {
+		if (content.getDataClass() != null) {
 			content.data = context.deserialize(object, content.getDataClass());
 		}
 		content.onDeserialization();

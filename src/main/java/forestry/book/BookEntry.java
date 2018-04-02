@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookPageFactory;
-import forestry.core.utils.Translator;
 
 public class BookEntry implements IBookEntry {
 	private final String name;
@@ -48,11 +47,6 @@ public class BookEntry implements IBookEntry {
 	@Override
 	public String getTitle() {
 		return title;
-	}
-
-	@Override
-	public String getLocalizedPages() {
-		return Translator.translateToLocal("for.gui.book.entry." + name + ".pages");
 	}
 
 	@Override

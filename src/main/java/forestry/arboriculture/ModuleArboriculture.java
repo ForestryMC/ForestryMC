@@ -59,7 +59,6 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.book.IForesterBook;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
@@ -445,20 +444,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 				'#', "blockGlass",
 				'X', "treeSapling",
 				'Y', "chestWood");
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		BlockRegistryArboriculture blocks = getBlocks();
-		ItemRegistryArboriculture items = getItems();
-
-		book.addCategory("arboriculture").setStack(TreeDefinition.Cherry.getMemberStack(EnumGermlingType.SAPLING))
-			.addEntry("tree_introduction", new ItemStack(Items.BOOK))
-			.addEntry("tree_chest", new ItemStack(blocks.treeChest))
-			.addEntry("pollination", TreeDefinition.Ebony.getMemberStack(EnumGermlingType.POLLEN))
-			.addEntry("grafters", items.grafter.getItemStack())
-			.addEntry("tree_mutations", TreeDefinition.Teak.getMemberStack(EnumGermlingType.SAPLING))
-			.addEntry("tree_genes", EnumFruit.CHERRY.getStack());
 	}
 
 	private static void registerAlleles() {

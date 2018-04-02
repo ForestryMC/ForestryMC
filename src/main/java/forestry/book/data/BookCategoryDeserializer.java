@@ -13,7 +13,7 @@ import net.minecraft.util.JsonUtils;
 import forestry.book.BookCategory;
 import forestry.core.utils.JsonUtil;
 
-public class BookCategoryDeserializer implements JsonDeserializer<BookCategory>{
+public class BookCategoryDeserializer implements JsonDeserializer<BookCategory> {
 	@Override
 	public BookCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		JsonObject object = json.getAsJsonObject();

@@ -51,11 +51,11 @@ public class StructureBlockAccess implements IBlockAccess {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		if(y >= 0 && y < structure.length) {
-			if(x >= 0 && x < structure[y].length) {
-				if(z >= 0 && z < structure[y][x].length) {
+		if (y >= 0 && y < structure.length) {
+			if (x >= 0 && x < structure[y].length) {
+				if (z >= 0 && z < structure[y][x].length) {
 					int index = y * (data.structureLength * data.structureWidth) + x * data.structureWidth + z;
-					if(index <= data.getLimiter()) {
+					if (index <= data.getLimiter()) {
 						return structure[y][x][z] != null ? structure[y][x][z] : Blocks.AIR.getDefaultState();
 					}
 				}

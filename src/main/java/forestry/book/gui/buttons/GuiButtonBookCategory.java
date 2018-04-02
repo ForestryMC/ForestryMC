@@ -21,7 +21,7 @@ public class GuiButtonBookCategory extends GuiButton implements IToolTipProvider
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-		if(visible){
+		if (visible) {
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			FontRenderer fontRenderer = mc.fontRenderer;
 			GlStateManager.pushMatrix();

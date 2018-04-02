@@ -20,8 +20,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.SidedProxy;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -94,17 +92,6 @@ public class ModuleEnergy extends BlankForestryModule {
 					'Y', Items.CLOCK,
 					'Z', "gearCopper",
 					'V', Blocks.PISTON);
-		}
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		BlockRegistryEnergy blocks = getBlocks();
-		IBookCategory category = book.addCategory("core")
-			.addEntry("peat_engine", new ItemStack(blocks.peatEngine))
-			.addEntry("biogas_engine", new ItemStack(blocks.biogasEngine));
-		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			category.addEntry("clockwork_engine", new ItemStack(blocks.clockworkEngine));
 		}
 	}
 }

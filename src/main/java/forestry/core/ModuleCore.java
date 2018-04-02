@@ -37,8 +37,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -458,15 +456,6 @@ public class ModuleCore extends BlankForestryModule {
 					items.craftingMaterial.getSilkWisp(), 0.15f
 			));
 		}
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		IBookCategory category = book.addCategory("core")
-				.setStack(new ItemStack(getItems().wrench))
-				.addEntry("ores", new ItemStack(getBlocks().resources))
-				.addEntry("portable_alyzer", getItems().portableAlyzer.getItemStack())
-				.addEntry("analyzer", new ItemStack(getBlocks().analyzer));
 	}
 
 	@Override

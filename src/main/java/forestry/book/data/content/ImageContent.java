@@ -13,6 +13,7 @@ import forestry.core.gui.elements.DrawableElement;
 public class ImageContent extends BookContent<Drawable> {
 	private int width;
 	private int height;
+
 	@Override
 	public Class<? extends Drawable> getDataClass() {
 		return Drawable.class;
@@ -20,11 +21,11 @@ public class ImageContent extends BookContent<Drawable> {
 
 	@Nullable
 	@Override
-	public boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
-		if(data == null){
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+		if (data == null) {
 			return false;
 		}
-		group.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
+		page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
 		return true;
 	}
 }

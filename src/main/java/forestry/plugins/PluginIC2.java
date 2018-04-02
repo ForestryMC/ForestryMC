@@ -28,8 +28,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -69,6 +67,7 @@ import forestry.farming.logic.farmables.FarmableBasicIC2Crop;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
 
@@ -326,13 +325,5 @@ public class PluginIC2 extends BlankForestryModule {
 					'Y', "gearTin",
 					'V', Blocks.PISTON);
 		}
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		BlockRegistryIC2 blocks = getBlocks();
-		IBookCategory category = book.addCategory("core")
-			.addEntry("ic2_generator", new ItemStack(blocks.generator))
-			.addEntry("ic2_eletrical_engine", new ItemStack(blocks.electricalEngine));
 	}
 }

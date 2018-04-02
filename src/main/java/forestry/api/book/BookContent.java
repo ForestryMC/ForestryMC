@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright 2011-2014 SirSengir
+ *
+ * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
+ ******************************************************************************/
 package forestry.api.book;
 
 import javax.annotation.Nullable;
@@ -8,15 +13,35 @@ import forestry.api.gui.IGuiElementFactory;
 
 public abstract class BookContent<D> {
 	public String type;
-	public boolean forcePage = false;
-	@Nullable
-	public transient D data = null;
 
+	/**
+	 * A data object that was deserialized from the json object of this content.
+	 * Can be everything from an image to a crafting recipe.
+	 */
+	@Nullable
+	public D data = null;
+
+	/**
+	 * The class of the data field. Used for the deserialization. If the result of this method is null the data field
+	 * will be null too.
+	 */
 	@Nullable
 	public abstract Class<? extends D> getDataClass();
 
-	public void onDeserialization(){
+	/**
+	 * Called after the deserialization.
+	 */
+	public void onDeserialization() {
 	}
 
-	public abstract boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement);
+	/**
+	 * Adds the content to the page by adding a {@link IGuiElement} or at the content to the previous element.
+	 *
+	 * @param page The gui element that represents a book page
+	 * @param previous The content of the previous element.
+	 * @param previousElement The element that was previously added to the page.
+	 *
+	 * @return True if you added an element.
+	 */
+	public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement);
 }

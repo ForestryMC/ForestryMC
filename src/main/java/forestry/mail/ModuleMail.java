@@ -21,8 +21,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
@@ -177,11 +175,6 @@ public class ModuleMail extends BlankForestryModule {
 				'Y', coreItems.sturdyCasing,
 				'Z', coreItems.tubes.get(EnumElectronTube.IRON, 1),
 				'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		IBookCategory category = book.addCategory("mail").setStack(new ItemStack(getBlocks().mailbox));
 	}
 
 	@Override

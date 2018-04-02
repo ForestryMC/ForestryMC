@@ -39,12 +39,12 @@ public class CarpenterContent extends BookContent<CraftingData> {
 
 	@Nullable
 	@Override
-	public boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
-		if(data == null || data.stack.isEmpty()){
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+		if (data == null || data.stack.isEmpty()) {
 			return false;
 		}
 		boolean firstRecipe = /*previous instanceof CarpenterContent*/false;
-		for(ICarpenterRecipe recipe : CarpenterRecipeManager.getRecipes(data.stack)) {
+		for (ICarpenterRecipe recipe : CarpenterRecipeManager.getRecipes(data.stack)) {
 			if (recipe == null) {
 				continue;
 			}
@@ -69,7 +69,7 @@ public class CarpenterContent extends BookContent<CraftingData> {
 				}
 			}
 			panel.item(71, gridStartY + 41, gridRecipe.getOutput());
-			group.add(panel);
+			page.add(panel);
 		}
 		return true;
 	}

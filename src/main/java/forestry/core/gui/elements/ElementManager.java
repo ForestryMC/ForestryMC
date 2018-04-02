@@ -24,6 +24,10 @@ public class ElementManager<G extends GuiScreen & IGuiSizable> {
 		this.container.setGuiState(state);
 	}
 
+	public ElementGroup group(){
+		return container;
+	}
+
 	public void add(IGuiElement element) {
 		container.add(element);
 	}
@@ -67,7 +71,7 @@ public class ElementManager<G extends GuiScreen & IGuiSizable> {
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			ScaledResolution scaledresolution = new ScaledResolution(state.getMinecraft());
-			GuiUtils.drawHoveringText(lines, mouseX - state.getGuiLeft(), mouseY - state.getGuiTop(), scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, state.getFontRenderer());
+			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, state.getFontRenderer());
 			GlStateManager.popMatrix();
 		}
 	}

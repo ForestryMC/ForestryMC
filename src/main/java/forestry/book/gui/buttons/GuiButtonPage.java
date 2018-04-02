@@ -11,7 +11,7 @@ import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
-public class GuiButtonPage extends GuiButton implements IToolTipProvider{
+public class GuiButtonPage extends GuiButton implements IToolTipProvider {
 	public boolean left;
 
 	public GuiButtonPage(int buttonId, int x, int y, boolean left) {
@@ -21,7 +21,7 @@ public class GuiButtonPage extends GuiButton implements IToolTipProvider{
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-		if(visible){
+		if (visible) {
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			TextureManager manager = mc.renderEngine;

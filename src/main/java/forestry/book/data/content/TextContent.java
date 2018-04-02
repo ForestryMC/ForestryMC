@@ -16,16 +16,16 @@ public class TextContent extends BookContent<TextData> {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
-		if(data == null){
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+		if (data == null) {
 			return false;
 		}
 		TextDataElement element;
-		if(previousElement instanceof TextDataElement) {
+		if (previousElement instanceof TextDataElement) {
 			element = (TextDataElement) previousElement;
-		}else{
-			element = new TextDataElement(0, 0, group.getWidth(), 0);
-			group.add(element);
+		} else {
+			element = new TextDataElement(0, 0, page.getWidth(), 0);
+			page.add(element);
 		}
 		element.addData(data);
 		return true;

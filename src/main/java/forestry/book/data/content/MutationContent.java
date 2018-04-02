@@ -17,7 +17,7 @@ public class MutationContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup group, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
 		return false;
 	}
 }

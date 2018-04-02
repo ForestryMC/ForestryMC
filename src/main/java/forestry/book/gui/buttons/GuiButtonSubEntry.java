@@ -1,6 +1,7 @@
 package forestry.book.gui.buttons;
 
-import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -11,10 +12,8 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import forestry.api.book.IBookEntry;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.GuiUtil;
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 
-public class GuiButtonSubEntry extends GuiButton implements IToolTipProvider {
+public class GuiButtonSubEntry extends GuiButton {
 	public final IBookEntry selectedEntry;
 	public final IBookEntry subEntry;
 
@@ -41,19 +40,11 @@ public class GuiButtonSubEntry extends GuiButton implements IToolTipProvider {
 		GlStateManager.popMatrix();
 	}
 
-	@Nullable
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return null;
+	public List<String> getToolTip() {
+		return Collections.singletonList(subEntry.getTitle());
 	}
 
-	@Override
-	public boolean isToolTipVisible() {
-		return false;
-	}
-
-	@Override
 	public boolean isMouseOver(int mouseX, int mouseY) {
-		return false;
+		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 	}
 }

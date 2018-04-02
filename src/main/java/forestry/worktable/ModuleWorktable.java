@@ -5,10 +5,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
@@ -57,11 +54,5 @@ public class ModuleWorktable extends BlankForestryModule {
 			'B', Items.BOOK,
 			'W', "craftingTableWood",
 			'C', "chestWood");
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		IBookCategory category = book.addCategory("core")
-			.addEntry("worktable", new ItemStack(getBlocks().worktable));
 	}
 }

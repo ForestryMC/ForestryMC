@@ -67,14 +67,12 @@ import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.book.IForesterBook;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
-import forestry.api.multiblock.MultiblockBlueprints;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -126,7 +124,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
-import forestry.core.multiblock.MultiblockBlueprint;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
@@ -372,38 +369,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		blocks.apiary.init();
 		blocks.beeHouse.init();
 		blocks.beeChest.init();
-	}
-
-	@Override
-	public void registerBookEntries(IForesterBook book) {
-		book.addCategory("beekeeping")
-			.setStack(getItems().beeComb.get(EnumHoneyComb.HONEY, 1))
-			.addEntry("bee_introduction", new ItemStack(Items.BOOK))
-			.addEntry("bees", getItems().beeComb.get(EnumHoneyComb.HONEY, 1))
-			.addEntry("smoker", getItems().smoker.getItemStack())
-			.addEntry("scoop", getItems().scoop.getItemStack())
-			.addEntry("breeding", BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.QUEEN))
-			.addEntry("bee_genes", BeeDefinition.DILIGENT.getMemberStack(EnumBeeType.LARVAE))
-			.addEntry("bee_house", new ItemStack(getBlocks().beeHouse))
-			.addEntry("apiary", new ItemStack(getBlocks().apiary))
-			.addEntry("frames", new ItemStack(getItems().frameImpregnated))
-			.addEntry("alveary", getBlocks().getAlvearyBlockStack(BlockAlvearyType.PLAIN))
-			.addEntry("bees_mundane", new ItemStack(getBlocks().beehives))
-			//.addEntry("bee_mutations_start", new ItemStack(getItems().pollenCluster))
-			.addEntry("bee_mutations_0", BeeDefinition.COMMON.getMemberStack(EnumBeeType.QUEEN))
-			.addEntry("apiarist_suit", new ItemStack(getItems().apiaristChest))
-			.addEntry("bee_chest", new ItemStack(getBlocks().beeChest))
-			.addEntry("minecarts", new ItemStack(getItems().minecartBeehouse));
-		IBlockState[][][] blockStates = new IBlockState[4][3][3];
-		for(int x = 0;x < 3;x++){
-			for(int y = 0;y < 3;y++){
-				for(int z = 0;z < 3;z++){
-					blockStates[y][x][z] = getBlocks().getAlvearyBlock(BlockAlvearyType.PLAIN).getDefaultState();
-					blockStates[3][x][z] = Blocks.WOODEN_SLAB.getDefaultState();
-				}
-			}
-		}
-		MultiblockBlueprints.blueprints.put("alveary", new MultiblockBlueprint(blockStates, 3, 4, 3, getBlocks().getAlvearyBlockStack(BlockAlvearyType.PLAIN)));
 	}
 
 	@Override

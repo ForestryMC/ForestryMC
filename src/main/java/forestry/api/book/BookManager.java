@@ -5,10 +5,6 @@
  ******************************************************************************/
 package forestry.api.book;
 
-import java.util.Collection;
-
-import forestry.api.gui.IGuiElement;
-
-public interface IBookPageFactory {
-	Collection<IGuiElement> load(IBookEntry entry);
+public class BookManager {
+	public static IBookLoader loader;
 }

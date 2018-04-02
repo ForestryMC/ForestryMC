@@ -41,6 +41,8 @@ public interface IElementGroup extends IGuiElement {
 		return this;
 	}
 
+	void clear();
+
 	@Nullable
 	IGuiElement getLastElement();
 

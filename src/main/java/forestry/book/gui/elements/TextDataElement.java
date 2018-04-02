@@ -20,19 +20,19 @@ public class TextDataElement extends GuiElement {
 
 	@Override
 	public int getHeight() {
-		if(height >= 0){
+		if (height >= 0) {
 			return height;
 		}
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		boolean unicode = fontRenderer.getUnicodeFlag();
 		fontRenderer.setUnicodeFlag(true);
-		for(TextData data : textElements){
-			if(data.text.equals("\n")) {
+		for (TextData data : textElements) {
+			if (data.text.equals("\n")) {
 				height += fontRenderer.FONT_HEIGHT;
 				continue;
 			}
 
-			if(data.paragraph){
+			if (data.paragraph) {
 				height += fontRenderer.FONT_HEIGHT * 1.6D;
 			}
 
@@ -40,22 +40,22 @@ public class TextDataElement extends GuiElement {
 
 			modifiers += TextFormatting.getValueByName(data.color);
 
-			if(data.bold) {
+			if (data.bold) {
 				modifiers += TextFormatting.BOLD;
 			}
-			if(data.italic) {
+			if (data.italic) {
 				modifiers += TextFormatting.ITALIC;
 			}
-			if(data.underlined) {
+			if (data.underlined) {
 				modifiers += TextFormatting.UNDERLINE;
 			}
-			if(data.strikethrough) {
+			if (data.strikethrough) {
 				modifiers += TextFormatting.STRIKETHROUGH;
 			}
-			if(data.obfuscated) {
+			if (data.obfuscated) {
 				modifiers += TextFormatting.OBFUSCATED;
 			}
-			height+=fontRenderer.getWordWrappedHeight(modifiers + data.text, width);
+			height += fontRenderer.getWordWrappedHeight(modifiers + data.text, width);
 		}
 		fontRenderer.setUnicodeFlag(unicode);
 		return height;
@@ -68,14 +68,14 @@ public class TextDataElement extends GuiElement {
 		fontRenderer.setUnicodeFlag(true);
 		int x = 0;
 		int y = 0;
-		for(TextData data : textElements){
-			if(data.text.equals("\n")) {
+		for (TextData data : textElements) {
+			if (data.text.equals("\n")) {
 				x = 0;
 				y += fontRenderer.FONT_HEIGHT;
 				continue;
 			}
 
-			if(data.paragraph){
+			if (data.paragraph) {
 				x = 0;
 				y += fontRenderer.FONT_HEIGHT * 1.6D;
 			}
@@ -95,31 +95,31 @@ public class TextDataElement extends GuiElement {
 		fontRenderer.setUnicodeFlag(unicode);
 	}
 
-	private String getFormattedString(TextData data){
+	private String getFormattedString(TextData data) {
 		StringBuilder modifiers = new StringBuilder();
 
 		modifiers.append(TextFormatting.getValueByName(data.color));
 
-		if(data.bold) {
+		if (data.bold) {
 			modifiers.append(TextFormatting.BOLD);
 		}
-		if(data.italic) {
+		if (data.italic) {
 			modifiers.append(TextFormatting.ITALIC);
 		}
-		if(data.underlined) {
+		if (data.underlined) {
 			modifiers.append(TextFormatting.UNDERLINE);
 		}
-		if(data.strikethrough) {
+		if (data.strikethrough) {
 			modifiers.append(TextFormatting.STRIKETHROUGH);
 		}
-		if(data.obfuscated) {
+		if (data.obfuscated) {
 			modifiers.append(TextFormatting.OBFUSCATED);
 		}
 		modifiers.append(data.text);
 		return modifiers.toString();
 	}
 
-	public void addData(TextData textData){
+	public void addData(TextData textData) {
 		textElements.add(textData);
 		height = -1;
 	}

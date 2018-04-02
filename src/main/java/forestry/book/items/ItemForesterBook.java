@@ -12,6 +12,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import forestry.book.BookLoader;
+import forestry.book.gui.GuiForesterBook;
 import forestry.book.gui.GuiForestryBookCategories;
 import forestry.core.items.ItemWithGui;
 
@@ -30,7 +31,7 @@ public class ItemForesterBook extends ItemWithGui {
 
 	@Override
 	public GuiScreen getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return /*GuiForesterBook.guiScreen != null ? GuiForesterBook.guiScreen :*/ new GuiForestryBookCategories(BookLoader.INSTANCE.loadBook());
+		return GuiForesterBook.guiScreen != null ? GuiForesterBook.guiScreen : new GuiForestryBookCategories(BookLoader.INSTANCE.loadBook());
 	}
 
 	@Nullable

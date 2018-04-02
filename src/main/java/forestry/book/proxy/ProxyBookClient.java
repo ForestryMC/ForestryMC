@@ -26,7 +26,7 @@ public class ProxyBookClient extends ProxyBook {
 	@Override
 	public void preInit() {
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-		if(resourceManager instanceof IReloadableResourceManager){
+		if (resourceManager instanceof IReloadableResourceManager) {
 			IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
 			manager.registerReloadListener(BookLoader.INSTANCE);
 		}
