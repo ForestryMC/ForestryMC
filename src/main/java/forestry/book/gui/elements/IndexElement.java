@@ -12,17 +12,17 @@ import forestry.core.gui.elements.layouts.VerticalLayout;
 public class IndexElement extends VerticalLayout {
 	public IndexElement(int xPos, int yPos, IndexEntry[] data) {
 		super(xPos, yPos, 108);
-		for(IndexEntry index : data){
+		for (IndexEntry index : data) {
 			add(new IndexEntryElement(index));
 		}
 	}
 
-	private class IndexEntryElement extends TextElement{
+	private class IndexEntryElement extends TextElement {
 		private final IndexEntry data;
 
 		public IndexEntryElement(IndexEntry data) {
 			super(-1, 9, data.title, GuiElementAlignment.TOP_LEFT, 0, true);
-			width+=TextElement.FONT_RENDERER.getStringWidth(" > ");
+			width += TextElement.FONT_RENDERER.getStringWidth(" > ");
 			this.data = data;
 		}
 
@@ -40,7 +40,7 @@ public class IndexElement extends VerticalLayout {
 		public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 			super.mouseClicked(mouseX, mouseY, mouseButton);
 			GuiForesterBook bookGui = GuiForesterBook.guiScreen;
-			if(bookGui instanceof GuiForestryBookPages){
+			if (bookGui instanceof GuiForestryBookPages) {
 				GuiForestryBookPages pagesGui = (GuiForestryBookPages) bookGui;
 				pagesGui.switchPage(data.page);
 			}

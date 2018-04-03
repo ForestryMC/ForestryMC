@@ -29,7 +29,7 @@ public class TextDataElement extends GuiElement {
 		for (TextData data : textElements) {
 			boolean lastEmpty = false;
 			if (data.text.equals("\n")) {
-				if(lastEmpty){
+				if (lastEmpty) {
 					height += fontRenderer.FONT_HEIGHT;
 				}
 				lastEmpty = true;

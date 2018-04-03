@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import net.minecraftforge.fml.common.SidedProxy;
 
 import forestry.api.book.BookManager;
@@ -50,6 +52,7 @@ public class ModuleBook extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		proxy.preInit();
+		MinecraftForge.EVENT_BUS.register(new EventHandlerBook());
 	}
 
 	@Override

@@ -27,10 +27,10 @@ public class ImageContent extends BookContent<Drawable> {
 		if (data == null) {
 			return false;
 		}
-		if(center) {
+		if (center) {
 			page.panel(page.getWidth(), pageHeight - page.getHeight())
-			.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
-		}else {
+				.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
+		} else {
 			page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
 		}
 		return true;

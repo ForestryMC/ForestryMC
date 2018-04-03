@@ -59,9 +59,9 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		pageIndex = index;
 	}
 
-	public void switchPage(int page){
-		if(page % 2 == 1){
-			page-=1;
+	public void switchPage(int page) {
+		if (page % 2 == 1) {
+			page -= 1;
 		}
 		this.nextPage = page;
 	}
@@ -69,7 +69,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if(nextPage >= 0){
+		if (nextPage >= 0) {
 			lastPage = pageIndex;
 			setPages(nextPage);
 			nextPage = -1;
@@ -121,18 +121,18 @@ public class GuiForestryBookPages extends GuiForesterBook {
 				setPages(pageIndex + 2);
 			}
 			initGui();
-			if(lastPage >= 0){
+			if (lastPage >= 0) {
 				lastPage = -1;
 			}
 		} else if (button instanceof GuiButtonSubEntry) {
 			GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
 			mc.displayGuiScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
 		} else if (button instanceof GuiButtonBack || pages.isEmpty()) {
-			if(lastPage >= 0){
+			if (lastPage >= 0) {
 				setPages(lastPage);
-				lastPage= -1;
+				lastPage = -1;
 				initGui();
-			}else {
+			} else {
 				displayEntries();
 			}
 		}

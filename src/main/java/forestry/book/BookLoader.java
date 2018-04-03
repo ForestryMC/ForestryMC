@@ -147,7 +147,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		}
 		for (String entry : entryNames) {
 			EntryData data = entries.get(entry);
-			if(data != null) {
+			if (data != null) {
 				IBookEntryBuilder builder = category.createEntry(entry);
 				builder.setStack(data.icon);
 				builder.setContent(data.content);

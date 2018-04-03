@@ -18,7 +18,7 @@ public class IndexContent extends BookContent<IndexData> {
 
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		if(data == null || data.entries.length <= 0){
+		if (data == null || data.entries.length <= 0) {
 			return false;
 		}
 		page.add(new IndexElement(0, 0, data.entries));
