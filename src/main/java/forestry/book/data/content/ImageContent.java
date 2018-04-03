@@ -13,6 +13,8 @@ import forestry.core.gui.elements.DrawableElement;
 public class ImageContent extends BookContent<Drawable> {
 	private int width;
 	private int height;
+	//Centers the element between the end of the page and the last element
+	private boolean center;
 
 	@Override
 	public Class<? extends Drawable> getDataClass() {
@@ -21,11 +23,16 @@ public class ImageContent extends BookContent<Drawable> {
 
 	@Nullable
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null) {
 			return false;
 		}
-		page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
+		if(center) {
+			page.panel(page.getWidth(), pageHeight - page.getHeight())
+			.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
+		}else {
+			page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
+		}
 		return true;
 	}
 }

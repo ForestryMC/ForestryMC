@@ -23,7 +23,7 @@ public class MutationContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		IAllele allele = AlleleManager.alleleRegistry.getAllele(species);
 		if (!(allele instanceof IAlleleSpecies)) {
 			return false;

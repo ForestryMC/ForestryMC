@@ -21,7 +21,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 
 	@Nullable
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null || data.locations.length == 0) {
 			return false;
 		}

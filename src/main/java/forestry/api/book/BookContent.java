@@ -41,7 +41,8 @@ public abstract class BookContent<D> {
 	 * @param previous The content of the previous element.
 	 * @param previousElement The element that was previously added to the page.
 	 *
+	 * @param pageHeight
 	 * @return True if you added an element.
 	 */
-	public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement);
+	public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
 }

@@ -54,7 +54,7 @@ public class StructureContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (structureFile == null) {
 			return false;
 		}

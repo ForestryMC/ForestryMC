@@ -16,7 +16,7 @@ public class TextContent extends BookContent<TextData> {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null) {
 			return false;
 		}

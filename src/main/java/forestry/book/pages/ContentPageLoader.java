@@ -8,6 +8,7 @@ import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookPageFactory;
 import forestry.api.gui.IGuiElement;
+import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 
@@ -28,7 +29,7 @@ public class ContentPageLoader implements IBookPageFactory {
 			VerticalLayout page = new VerticalLayout(108);
 			pages.add(page);
 			for (BookContent content : contentArray) {
-				if (content.addElements(page, GuiElementFactory.INSTANCE, previous, previousElement)) {
+				if (content.addElements(page, GuiElementFactory.INSTANCE, previous, previousElement, GuiForesterBook.PAGE_HEIGHT - (pages.size() % 2 == 1 ? 13 : 0))) {
 					previous = content;
 					previousElement = page.getLastElement();
 					page.layout();

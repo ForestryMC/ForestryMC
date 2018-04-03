@@ -27,10 +27,16 @@ public class TextDataElement extends GuiElement {
 		boolean unicode = fontRenderer.getUnicodeFlag();
 		fontRenderer.setUnicodeFlag(true);
 		for (TextData data : textElements) {
+			boolean lastEmpty = false;
 			if (data.text.equals("\n")) {
-				height += fontRenderer.FONT_HEIGHT;
+				if(lastEmpty){
+					height += fontRenderer.FONT_HEIGHT;
+				}
+				lastEmpty = true;
+				//height += fontRenderer.FONT_HEIGHT;
 				continue;
 			}
+			lastEmpty = false;
 
 			if (data.paragraph) {
 				height += fontRenderer.FONT_HEIGHT * 1.6D;

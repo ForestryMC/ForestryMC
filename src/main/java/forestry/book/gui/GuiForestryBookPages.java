@@ -30,6 +30,8 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	private int pageIndex = 0;
 	private IElementGroup leftPage;
 	private IElementGroup rightPage;
+	private int nextPage = -1;
+	private int lastPage = -1;
 
 	public GuiForestryBookPages(IForesterBook book, IBookCategory category, IBookEntry entry, @Nullable IBookEntry parent) {
 		super(book);
@@ -43,7 +45,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		setPages(0);
 	}
 
-	public void setPages(int index) {
+	private void setPages(int index) {
 		leftPage.clear();
 		rightPage.clear();
 		if (index < 0 || index >= pages.size()) {
@@ -55,6 +57,24 @@ public class GuiForestryBookPages extends GuiForesterBook {
 			rightPage.add(pages.get(index + 1));
 		}
 		pageIndex = index;
+	}
+
+	public void switchPage(int page){
+		if(page % 2 == 1){
+			page-=1;
+		}
+		this.nextPage = page;
+	}
+
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		if(nextPage >= 0){
+			lastPage = pageIndex;
+			setPages(nextPage);
+			nextPage = -1;
+			initGui();
+		}
 	}
 
 	@Override
@@ -101,11 +121,20 @@ public class GuiForestryBookPages extends GuiForesterBook {
 				setPages(pageIndex + 2);
 			}
 			initGui();
+			if(lastPage >= 0){
+				lastPage = -1;
+			}
 		} else if (button instanceof GuiButtonSubEntry) {
 			GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
 			mc.displayGuiScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
 		} else if (button instanceof GuiButtonBack || pages.isEmpty()) {
-			displayEntries();
+			if(lastPage >= 0){
+				setPages(lastPage);
+				lastPage= -1;
+				initGui();
+			}else {
+				displayEntries();
+			}
 		}
 	}
 

@@ -38,6 +38,7 @@ import forestry.book.data.EntryData;
 import forestry.book.data.content.CarpenterContent;
 import forestry.book.data.content.CraftingContent;
 import forestry.book.data.content.ImageContent;
+import forestry.book.data.content.IndexContent;
 import forestry.book.data.content.MutationContent;
 import forestry.book.data.content.StructureContent;
 import forestry.book.data.content.TextContent;
@@ -68,6 +69,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		registerContentType("mutation", MutationContent.class);
 		registerContentType("carpenter", CarpenterContent.class);
 		registerContentType("structure", StructureContent.class);
+		registerContentType("index", IndexContent.class);
 	}
 
 	@Override
@@ -145,19 +147,21 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		}
 		for (String entry : entryNames) {
 			EntryData data = entries.get(entry);
-			IBookEntryBuilder builder = category.createEntry(entry);
-			builder.setStack(data.icon);
-			builder.setContent(data.content);
-			builder.setTitle(data.title);
-			for (String subEntry : data.subEntries) {
-				EntryData subData = entries.get(subEntry);
-				if (subData != null) {
-					IBookEntryBuilder subBuilder = builder.createSubEntry(subEntry, subData.icon);
-					subBuilder.setContent(subData.content);
-					subBuilder.setTitle(subData.title);
+			if(data != null) {
+				IBookEntryBuilder builder = category.createEntry(entry);
+				builder.setStack(data.icon);
+				builder.setContent(data.content);
+				builder.setTitle(data.title);
+				for (String subEntry : data.subEntries) {
+					EntryData subData = entries.get(subEntry);
+					if (subData != null) {
+						IBookEntryBuilder subBuilder = builder.createSubEntry(subEntry, subData.icon);
+						subBuilder.setContent(subData.content);
+						subBuilder.setTitle(subData.title);
+					}
 				}
+				builder.addToCategory();
 			}
-			builder.addToCategory();
 		}
 	}
 
