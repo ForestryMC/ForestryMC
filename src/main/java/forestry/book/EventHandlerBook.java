@@ -13,7 +13,7 @@ import forestry.core.config.Config;
 
 public class EventHandlerBook {
 
-	public static final String PLAYER_HAS_BOOK = "forestry.spawned_book";
+	private static final String HAS_BOOK = "forestry.spawned_book";
 
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -21,9 +21,9 @@ public class EventHandlerBook {
 			NBTTagCompound playerData = event.player.getEntityData();
 			NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
 
-			if (!data.getBoolean(PLAYER_HAS_BOOK)) {
+			if (!data.getBoolean(HAS_BOOK)) {
 				ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(ModuleBook.getItems().book));
-				data.setBoolean(PLAYER_HAS_BOOK, true);
+				data.setBoolean(HAS_BOOK, true);
 				playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
 			}
 		}

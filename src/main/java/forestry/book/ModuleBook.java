@@ -41,7 +41,7 @@ public class ModuleBook extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		BookManager.loader = BookLoader.INSTANCE;
+		BookManager.loader = BookRegistry.INSTANCE;
 	}
 
 	@Override

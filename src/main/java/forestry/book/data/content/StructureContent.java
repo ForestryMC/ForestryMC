@@ -23,14 +23,15 @@ import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
-import forestry.book.BookLoader;
-import forestry.book.data.BlockData;
-import forestry.book.data.StructureData;
+import forestry.book.BookRegistry;
+import forestry.book.data.structure.BlockData;
+import forestry.book.data.structure.StructureData;
 import forestry.book.gui.elements.MultiblockElement;
 import forestry.core.utils.ResourceUtil;
 
 public class StructureContent extends BookContent {
-	private String structureFile;
+	@Nullable
+	private String structureFile = null;
 	private transient StructureData structureData;
 
 	@Nullable
@@ -45,11 +46,11 @@ public class StructureContent extends BookContent {
 			return;
 		}
 
-		ResourceLocation location = BookLoader.getResourceLocation(structureFile);
+		ResourceLocation location = BookRegistry.getResourceLocation(structureFile);
 
 		if (location != null && ResourceUtil.resourceExists(location)) {
 			IResource resource = ResourceUtil.getResource(location);
-			structureData = BookLoader.GSON.fromJson(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8), StructureData.class);
+			structureData = BookRegistry.GSON.fromJson(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8), StructureData.class);
 		}
 	}
 
@@ -66,7 +67,7 @@ public class StructureContent extends BookContent {
 		int[] size = structureData.size;
 		BlockData[] structure = structureData.structure;
 
-		if (size != null && size.length == 3 && structure != null && structure.length > 0) {
+		if (size.length == 3 && structure.length > 0) {
 			boolean showButtons = size[1] > 1;
 			if (showButtons) {
 				//structureSizeX -= GuiArrow.ArrowType.REFRESH.w;

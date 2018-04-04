@@ -1,4 +1,4 @@
-package forestry.book.data;
+package forestry.book.data.deserializer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

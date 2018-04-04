@@ -30,10 +30,8 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntryBuilder;
-import forestry.api.book.IBookLoader;
+import forestry.api.book.IBookRegistry;
 import forestry.api.book.IForesterBook;
-import forestry.book.data.BookCategoryDeserializer;
-import forestry.book.data.BookContentDeserializer;
 import forestry.book.data.EntryData;
 import forestry.book.data.content.CarpenterContent;
 import forestry.book.data.content.CraftingContent;
@@ -42,12 +40,14 @@ import forestry.book.data.content.IndexContent;
 import forestry.book.data.content.MutationContent;
 import forestry.book.data.content.StructureContent;
 import forestry.book.data.content.TextContent;
+import forestry.book.data.deserializer.BookCategoryDeserializer;
+import forestry.book.data.deserializer.BookContentDeserializer;
 import forestry.core.utils.JsonUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
 import forestry.modules.ModuleHelper;
 
-public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
+public class BookRegistry implements IResourceManagerReloadListener, IBookRegistry {
 	public static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
 		.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
@@ -55,14 +55,14 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		.registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
 		.registerTypeAdapter(Entries.class, new EntriesDeserializer())
 		.create();
-	public static final BookLoader INSTANCE = new BookLoader();
+	public static final BookRegistry INSTANCE = new BookRegistry();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
 	private final Map<String, Class<? extends BookContent>> contentByType = new HashMap<>();
 	@Nullable
 	private ForesterBook book = null;
 
-	private BookLoader() {
+	private BookRegistry() {
 		registerContentType("text", TextContent.class);
 		registerContentType("image", ImageContent.class);
 		registerContentType("crafting", CraftingContent.class);
@@ -83,9 +83,11 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		}
 		book = new ForesterBook();
 		BookCategory[] categories = fromJson(new ResourceLocation(BOOK_LOCATION + "categories.json"), BookCategory[].class, new BookCategory[0]);
-		book.addCaregories(categories);
-		for (BookCategory category : categories) {
-			loadCategory(category);
+		if (categories != null) {
+			book.addCategories(categories);
+			for (BookCategory category : categories) {
+				loadCategory(category);
+			}
 		}
 		return book;
 	}
@@ -102,26 +104,25 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 			String lang = currentLanguage.getLanguageCode();
 			String defaultLang = "en_US";
 
-			ResourceLocation res = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
-			if (ResourceUtil.resourceExists(res)) {
-				return res;
+			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
+			if (ResourceUtil.resourceExists(location)) {
+				return location;
 			}
-			res = new ResourceLocation(String.format(BOOK_LOCATION_LANG, defaultLang, path));
-			if (ResourceUtil.resourceExists(res)) {
-				return res;
+			location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, defaultLang, path));
+			if (ResourceUtil.resourceExists(location)) {
+				return location;
 			}
-			res = new ResourceLocation(BOOK_LOCATION + path);
-			if (ResourceUtil.resourceExists(res)) {
-				return res;
-			}
-			return null;
-		} else {
-			ResourceLocation res = new ResourceLocation(path);
-			if (ResourceUtil.resourceExists(res)) {
-				return res;
+			location = new ResourceLocation(BOOK_LOCATION + path);
+			if (ResourceUtil.resourceExists(location)) {
+				return location;
 			}
 			return null;
 		}
+		ResourceLocation location = new ResourceLocation(path);
+		if (ResourceUtil.resourceExists(location)) {
+			return location;
+		}
+		return null;
 	}
 
 	@Nullable

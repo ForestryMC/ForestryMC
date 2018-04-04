@@ -1,4 +1,4 @@
-package forestry.book.pages;
+package forestry.book;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -17,7 +17,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.book.BookLoader;
+import forestry.book.BookRegistry;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
@@ -28,7 +28,7 @@ public class ProxyBookClient extends ProxyBook {
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		if (resourceManager instanceof IReloadableResourceManager) {
 			IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
-			manager.registerReloadListener(BookLoader.INSTANCE);
+			manager.registerReloadListener(BookRegistry.INSTANCE);
 		}
 	}
 }

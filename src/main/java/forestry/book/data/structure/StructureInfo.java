@@ -10,7 +10,7 @@
  *
  * Any alternate licenses are noted where appropriate.
  ******************************************************************************/
-package forestry.book.data;
+package forestry.book.data.structure;
 
 import java.util.Map;
 import java.util.Optional;

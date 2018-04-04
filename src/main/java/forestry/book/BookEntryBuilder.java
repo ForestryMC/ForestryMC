@@ -11,7 +11,6 @@ import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookPageFactory;
-import forestry.book.pages.ContentPageLoader;
 
 public class BookEntryBuilder implements IBookEntryBuilder {
 	private final String name;

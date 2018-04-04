@@ -1,4 +1,4 @@
-package forestry.book.data;
+package forestry.book.data.deserializer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import net.minecraft.util.JsonUtils;
 
 import forestry.api.book.BookContent;
-import forestry.book.BookLoader;
+import forestry.book.BookRegistry;
 import forestry.book.data.content.TextContent;
 
 public class BookContentDeserializer implements JsonDeserializer<BookContent> {
@@ -18,7 +18,7 @@ public class BookContentDeserializer implements JsonDeserializer<BookContent> {
 	public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		JsonObject object = json.getAsJsonObject();
 		String type = JsonUtils.getString(object, "type", "text");
-		Class<? extends BookContent> typeClass = BookLoader.INSTANCE.getContentType(type);
+		Class<? extends BookContent> typeClass = BookRegistry.INSTANCE.getContentType(type);
 		BookContent content = context.deserialize(object, typeClass == null ? TextContent.class : typeClass);
 		content.type = type;
 		if (content.getDataClass() != null) {

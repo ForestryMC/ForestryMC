@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.book;
 
-public interface IBookLoader {
+public interface IBookRegistry {
 
 	/**
 	 * Adds a content type.

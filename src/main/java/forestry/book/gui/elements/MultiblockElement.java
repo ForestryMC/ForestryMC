@@ -27,9 +27,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.book.data.BlockData;
-import forestry.book.data.StructureBlockAccess;
-import forestry.book.data.StructureInfo;
+import forestry.book.data.structure.BlockData;
+import forestry.book.data.structure.StructureBlockAccess;
+import forestry.book.data.structure.StructureInfo;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElement;
 
