@@ -9,6 +9,20 @@ import java.util.Collection;
 
 import forestry.api.gui.IGuiElement;
 
+/**
+ * A factory that creates book pages for a book entry.
+ */
 public interface IBookPageFactory {
-	Collection<IGuiElement> load(IBookEntry entry);
+	/**
+	 * Usually called at the moment the player opens the given entry.
+	 * Creates a collection of gui elements that represent a page of the book.
+	 *
+	 * @param entry The opened book entry.
+	 * @param leftPageHeight The height of a page on the left side of the book.
+	 * @param rightPageHeight The height of a page on the right side of the book.
+	 * @param pageWidth The width of a book page.
+	 *
+	 * @return A collection where every member represent a page of the book.
+	 */
+	Collection<IGuiElement> load(IBookEntry entry, int leftPageHeight, int rightPageHeight, int pageWidth);
 }

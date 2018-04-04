@@ -30,7 +30,7 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntryBuilder;
-import forestry.api.book.IBookRegistry;
+import forestry.api.book.IBookLoader;
 import forestry.api.book.IForesterBook;
 import forestry.book.data.EntryData;
 import forestry.book.data.content.CarpenterContent;
@@ -47,7 +47,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
 import forestry.modules.ModuleHelper;
 
-public class BookRegistry implements IResourceManagerReloadListener, IBookRegistry {
+public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
 		.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
@@ -55,14 +55,14 @@ public class BookRegistry implements IResourceManagerReloadListener, IBookRegist
 		.registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
 		.registerTypeAdapter(Entries.class, new EntriesDeserializer())
 		.create();
-	public static final BookRegistry INSTANCE = new BookRegistry();
+	public static final BookLoader INSTANCE = new BookLoader();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
 	private final Map<String, Class<? extends BookContent>> contentByType = new HashMap<>();
 	@Nullable
 	private ForesterBook book = null;
 
-	private BookRegistry() {
+	private BookLoader() {
 		registerContentType("text", TextContent.class);
 		registerContentType("image", ImageContent.class);
 		registerContentType("crafting", CraftingContent.class);

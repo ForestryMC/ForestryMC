@@ -9,6 +9,9 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.IndexData;
 import forestry.book.gui.elements.IndexElement;
 
+/**
+ * A book
+ */
 public class IndexContent extends BookContent<IndexData> {
 	@Nullable
 	@Override

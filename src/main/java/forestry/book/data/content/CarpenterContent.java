@@ -26,6 +26,9 @@ import forestry.core.gui.elements.TankElement;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
+/**
+ * A book content that displays a carpenter recipe.
+ */
 public class CarpenterContent extends BookContent<CraftingData> {
 	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/atlas_crafting.png");
 	private static final Drawable CARPENTER_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 0, 108, 60);
@@ -37,7 +40,6 @@ public class CarpenterContent extends BookContent<CraftingData> {
 		return CraftingData.class;
 	}
 
-	@Nullable
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null || data.stack.isEmpty()) {

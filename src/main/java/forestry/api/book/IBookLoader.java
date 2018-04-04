@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.book;
 
-public interface IBookRegistry {
+public interface IBookLoader {
 
 	/**
 	 * Adds a content type.
@@ -15,7 +15,17 @@ public interface IBookRegistry {
 	 */
 	void registerContentType(String name, Class<? extends BookContent> contentClass);
 
+	/**
+	 * Loads the book if it was not loaded already or if it was invalidated. Otherwise it returns the last loaded
+	 * instance.
+	 *
+	 * @return The current instance of the forestry guide book.
+	 */
 	IForesterBook loadBook();
 
+	/**
+	 * Invalidates the current instance of the book.
+	 * The next time {@link #loadBook()} gets called a new instance of the book will be loaded.
+	 */
 	void invalidateBook();
 }

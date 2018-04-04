@@ -6,5 +6,5 @@
 package forestry.api.book;
 
 public class BookManager {
-	public static IBookRegistry loader;
+	public static IBookLoader loader;
 }

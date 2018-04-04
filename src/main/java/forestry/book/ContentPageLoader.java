@@ -20,7 +20,7 @@ public class ContentPageLoader implements IBookPageFactory {
 	}
 
 	@Override
-	public Collection<IGuiElement> load(IBookEntry entry) {
+	public Collection<IGuiElement> load(IBookEntry entry, int leftPageHeight, int rightPageHeight, int pageWidth) {
 		List<IGuiElement> pages = new ArrayList<>();
 		BookContent previous = null;
 		IGuiElement previousElement = null;

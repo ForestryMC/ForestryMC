@@ -41,7 +41,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		ElementGroup group = elementManager.group();
 		leftPage = group.panel(LEFT_PAGE_START_X, LEFT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
 		rightPage = group.panel(RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
-		pages = ImmutableList.copyOf(entry.getPageFactory().load(entry));
+		pages = ImmutableList.copyOf(entry.getPageFactory().load(entry, GuiForesterBook.PAGE_HEIGHT - 13, GuiForesterBook.PAGE_HEIGHT, GuiForesterBook.PAGE_WIDTH));
 		setPages(0);
 	}
 

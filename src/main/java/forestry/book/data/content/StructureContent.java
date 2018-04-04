@@ -23,12 +23,15 @@ import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
-import forestry.book.BookRegistry;
+import forestry.book.BookLoader;
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureData;
 import forestry.book.gui.elements.MultiblockElement;
 import forestry.core.utils.ResourceUtil;
 
+/**
+ * A book content that displays a multiblock structure.
+ */
 public class StructureContent extends BookContent {
 	@Nullable
 	private String structureFile = null;
@@ -46,11 +49,11 @@ public class StructureContent extends BookContent {
 			return;
 		}
 
-		ResourceLocation location = BookRegistry.getResourceLocation(structureFile);
+		ResourceLocation location = BookLoader.getResourceLocation(structureFile);
 
 		if (location != null && ResourceUtil.resourceExists(location)) {
 			IResource resource = ResourceUtil.getResource(location);
-			structureData = BookRegistry.GSON.fromJson(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8), StructureData.class);
+			structureData = BookLoader.GSON.fromJson(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8), StructureData.class);
 		}
 	}
 

@@ -13,13 +13,15 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CraftingElement;
 
+/**
+ * A book content that displays one ore more crafting recipes.
+ */
 public class CraftingContent extends BookContent<CraftingData> {
 	@Override
 	public Class<CraftingData> getDataClass() {
 		return CraftingData.class;
 	}
 
-	@Nullable
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null || data.locations.length == 0) {

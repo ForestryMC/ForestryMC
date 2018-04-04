@@ -8,6 +8,11 @@ package forestry.api.book;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+/**
+ * IForesterBook is the interface that the forestry guide book class implements.
+ * <p>
+ * You can get the current instance of the guide book from {@link IBookLoader#loadBook()}.
+ */
 public interface IForesterBook {
 
 	/**

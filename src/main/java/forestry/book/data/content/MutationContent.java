@@ -13,6 +13,9 @@ import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
 import forestry.book.gui.elements.MutationElement;
 
+/**
+ * A book content that displays one or more mutations.
+ */
 public class MutationContent extends BookContent {
 	public String species = "";
 

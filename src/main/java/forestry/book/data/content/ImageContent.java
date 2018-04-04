@@ -10,7 +10,11 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.DrawableElement;
 
+/**
+ * A book content that displays a image.
+ */
 public class ImageContent extends BookContent<Drawable> {
+	//The size fo the gui element.
 	private int width;
 	private int height;
 	//Centers the element between the end of the page and the last element
@@ -21,7 +25,6 @@ public class ImageContent extends BookContent<Drawable> {
 		return Drawable.class;
 	}
 
-	@Nullable
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null) {

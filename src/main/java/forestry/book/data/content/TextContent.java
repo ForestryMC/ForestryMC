@@ -9,6 +9,9 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.TextData;
 import forestry.book.gui.elements.TextDataElement;
 
+/**
+ * A book content that displays one or more texts.
+ */
 public class TextContent extends BookContent<TextData> {
 	@Override
 	public Class<? extends TextData> getDataClass() {
