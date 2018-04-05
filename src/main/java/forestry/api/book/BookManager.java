@@ -5,6 +5,10 @@
  ******************************************************************************/
 package forestry.api.book;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public class BookManager {
+	@SideOnly(Side.CLIENT)
 	public static IBookLoader loader;
 }

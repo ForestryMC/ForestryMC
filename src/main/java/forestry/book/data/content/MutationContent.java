@@ -2,6 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -16,6 +19,7 @@ import forestry.book.gui.elements.MutationElement;
 /**
  * A book content that displays one or more mutations.
  */
+@SideOnly(Side.CLIENT)
 public class MutationContent extends BookContent {
 	public String species = "";
 

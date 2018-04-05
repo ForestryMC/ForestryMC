@@ -6,10 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;
 
+@SideOnly(Side.CLIENT)
 public class ForesterBook implements IForesterBook {
 
 	private final Map<String, IBookCategory> categoriesByName = new HashMap<>();

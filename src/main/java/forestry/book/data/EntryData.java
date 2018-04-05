@@ -2,8 +2,12 @@ package forestry.book.data;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 
+@SideOnly(Side.CLIENT)
 public class EntryData {
 	/**
 	 * The localized title of the entry.

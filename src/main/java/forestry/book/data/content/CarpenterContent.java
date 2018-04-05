@@ -2,6 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -12,6 +15,7 @@ import forestry.book.gui.elements.CarpenterElement;
 /**
  * A book content that displays a carpenter recipe.
  */
+@SideOnly(Side.CLIENT)
 public class CarpenterContent extends BookContent<CraftingData> {
 
 	@Nullable

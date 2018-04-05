@@ -10,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.Constants;
@@ -18,6 +21,7 @@ import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
+@SideOnly(Side.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/crafting.png");
 	private static final Drawable CARPENTER_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 0, 108, 60);

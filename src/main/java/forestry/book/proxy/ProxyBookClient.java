@@ -17,11 +17,17 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.book.BookManager;
 import forestry.book.BookLoader;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
 public class ProxyBookClient extends ProxyBook {
+
+	@Override
+	public void setupAPI() {
+		BookManager.loader = BookLoader.INSTANCE;
+	}
 
 	@Override
 	public void preInit() {

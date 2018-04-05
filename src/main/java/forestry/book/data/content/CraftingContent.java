@@ -8,6 +8,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
@@ -19,6 +21,7 @@ import forestry.book.gui.elements.CraftingElement;
 /**
  * A book content that displays one ore more crafting recipes.
  */
+@SideOnly(Side.CLIENT)
 public class CraftingContent extends BookContent<CraftingData> {
 	@Override
 	public Class<CraftingData> getDataClass() {

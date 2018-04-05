@@ -14,6 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
@@ -23,6 +25,7 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.ElementManager;
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png");
 	static final int LEFT_PAGE_START_X = 16;

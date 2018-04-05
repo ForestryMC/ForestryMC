@@ -2,12 +2,16 @@ package forestry.book.gui.elements;
 
 import java.util.Collection;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
 
+@SideOnly(Side.CLIENT)
 public class MutationElement extends SelectionElement<IMutation> {
 	private static final Drawable SLOT = new Drawable(GuiForesterBook.TEXTURE, 0, 223, 18, 18);
 	private static final Drawable MUTATION_PLUS = new Drawable(GuiForesterBook.TEXTURE, 0, 241, 15, 15);

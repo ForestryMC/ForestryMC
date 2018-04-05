@@ -2,6 +2,9 @@ package forestry.book.gui.elements;
 
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.GuiElementAlignment;
 import forestry.book.data.IndexEntry;
 import forestry.book.gui.GuiForesterBook;
@@ -9,6 +12,7 @@ import forestry.book.gui.GuiForestryBookPages;
 import forestry.core.gui.elements.TextElement;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 
+@SideOnly(Side.CLIENT)
 public class IndexElement extends VerticalLayout {
 	public IndexElement(int xPos, int yPos, IndexEntry[] data) {
 		super(xPos, yPos, 108);

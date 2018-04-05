@@ -8,11 +8,15 @@ package forestry.api.book;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 /**
  * IForesterBook is the interface that the forestry guide book class implements.
  * <p>
  * You can get the current instance of the guide book from {@link IBookLoader#loadBook()}.
  */
+@SideOnly(Side.CLIENT)
 public interface IForesterBook {
 
 	/**

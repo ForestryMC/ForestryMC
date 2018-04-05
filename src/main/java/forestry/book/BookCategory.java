@@ -7,11 +7,15 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.core.utils.Translator;
 
+@SideOnly(Side.CLIENT)
 public class BookCategory implements IBookCategory {
 	private final String name;
 	private final transient Map<String, IBookEntry> entries = new LinkedHashMap<>();

@@ -32,6 +32,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookLoader;
@@ -54,6 +57,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
 import forestry.modules.ModuleHelper;
 
+@SideOnly(Side.CLIENT)
 public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())

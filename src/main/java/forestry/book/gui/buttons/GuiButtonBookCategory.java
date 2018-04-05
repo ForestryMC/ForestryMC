@@ -6,11 +6,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookCategory;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonBookCategory extends GuiButton implements IToolTipProvider {
 	public final IBookCategory category;
 

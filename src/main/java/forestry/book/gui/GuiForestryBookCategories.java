@@ -6,6 +6,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBookCategory;
@@ -13,6 +16,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.utils.Translator;
 
+@SideOnly(Side.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {
 	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, "textures/gui/almanac/logo.png"), 0, 0, 256, 58, 256, 58);
 

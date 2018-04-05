@@ -7,10 +7,14 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonBack extends GuiButton implements IToolTipProvider {
 	public GuiButtonBack(int buttonId, int x, int y) {
 		super(buttonId, x, y, 18, 9, "");

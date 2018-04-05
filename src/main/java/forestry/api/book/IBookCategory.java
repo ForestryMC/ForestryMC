@@ -10,6 +10,10 @@ import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public interface IBookCategory {
 	/**
 	 * @return the {@link ItemStack} that represents this category at the front page.

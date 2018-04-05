@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
@@ -12,6 +15,7 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.PaneLayout;
 
+@SideOnly(Side.CLIENT)
 public abstract class SelectionElement<R> extends PaneLayout {
 	private static final Drawable CRAFTING_COUNT = new Drawable(GuiForesterBook.TEXTURE, 104, 181, 34, 14);
 	private static final Drawable RIGHT_BUTTON = new Drawable(GuiForesterBook.TEXTURE, 138, 181, 10, 9);

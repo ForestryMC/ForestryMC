@@ -9,10 +9,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookEntry;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.GuiUtil;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonSubEntry extends GuiButton {
 	public final IBookEntry selectedEntry;
 	public final IBookEntry subEntry;

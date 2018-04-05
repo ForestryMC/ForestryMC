@@ -23,6 +23,9 @@ import org.apache.commons.io.IOUtils;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -37,6 +40,7 @@ import forestry.core.utils.ResourceUtil;
 /**
  * A book content that displays a multiblock structure.
  */
+@SideOnly(Side.CLIENT)
 public class StructureContent extends BookContent {
 	@Nullable
 	private String structureFile = null;

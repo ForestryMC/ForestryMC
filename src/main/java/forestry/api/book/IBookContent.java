@@ -2,10 +2,14 @@ package forestry.api.book;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
 
+@SideOnly(Side.CLIENT)
 public interface IBookContent {
 	/**
 	 * Called after the deserialization.

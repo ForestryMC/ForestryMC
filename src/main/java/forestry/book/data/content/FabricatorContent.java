@@ -8,6 +8,9 @@ import java.util.Map;
 
 import net.minecraftforge.fluids.Fluid;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -17,6 +20,7 @@ import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.FabricatorElement;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
+@SideOnly(Side.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
 
 	@Override

@@ -7,9 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.book.data.TextData;
 import forestry.core.gui.elements.GuiElement;
 
+@SideOnly(Side.CLIENT)
 public class TextDataElement extends GuiElement {
 
 	private final List<TextData> textElements = new ArrayList<>();

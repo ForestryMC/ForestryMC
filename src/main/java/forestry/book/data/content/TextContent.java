@@ -2,6 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -12,6 +15,7 @@ import forestry.book.gui.elements.TextDataElement;
 /**
  * A book content that displays one or more texts.
  */
+@SideOnly(Side.CLIENT)
 public class TextContent extends BookContent<TextData> {
 	@Override
 	public Class<? extends TextData> getDataClass() {

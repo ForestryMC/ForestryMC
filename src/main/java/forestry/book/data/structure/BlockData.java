@@ -16,6 +16,10 @@ import com.google.gson.JsonObject;
 
 import java.util.Map;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class BlockData {
 	public int[] pos;
 	public int[] endPos;

@@ -9,12 +9,16 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 /**
  * A entry in the {@link IForesterBook}.
  * <p>
  * Forestry crates them with the help of json file, but you can add you own custom ones with
  * {@link IBookCategory#addEntry(IBookEntry)}.
  */
+@SideOnly(Side.CLIENT)
 public interface IBookEntry {
 
 	/**

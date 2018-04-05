@@ -6,6 +6,9 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;
@@ -13,6 +16,7 @@ import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonEntry;
 import forestry.book.gui.buttons.GuiButtonPage;
 
+@SideOnly(Side.CLIENT)
 public class GuiForestryBookEntries extends GuiForesterBook {
 	private final IBookCategory category;
 	private int entryIndex = 0;

@@ -11,6 +11,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IForesterBook;
 import forestry.book.BookLoader;
 import forestry.book.gui.GuiForesterBook;
@@ -30,6 +33,7 @@ public class ItemForesterBook extends ItemWithGui {
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public GuiScreen getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		IForesterBook book = BookLoader.INSTANCE.loadBook();

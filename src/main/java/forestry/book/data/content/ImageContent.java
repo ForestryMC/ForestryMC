@@ -2,6 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;
@@ -13,6 +16,7 @@ import forestry.core.gui.elements.DrawableElement;
 /**
  * A book content that displays a image.
  */
+@SideOnly(Side.CLIENT)
 public class ImageContent extends BookContent<Drawable> {
 	//The size fo the gui element.
 	private int width;

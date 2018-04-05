@@ -9,10 +9,14 @@ import java.lang.reflect.Type;
 
 import net.minecraft.util.JsonUtils;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.content.TextContent;
 
+@SideOnly(Side.CLIENT)
 public class BookContentDeserializer implements JsonDeserializer<BookContent> {
 	@Override
 	public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {

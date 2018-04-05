@@ -2,6 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -9,9 +12,7 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.IndexData;
 import forestry.book.gui.elements.IndexElement;
 
-/**
- * A book
- */
+@SideOnly(Side.CLIENT)
 public class IndexContent extends BookContent<IndexData> {
 	@Nullable
 	@Override

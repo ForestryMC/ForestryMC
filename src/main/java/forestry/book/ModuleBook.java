@@ -11,7 +11,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.common.SidedProxy;
 
-import forestry.api.book.BookManager;
 import forestry.api.modules.ForestryModule;
 import forestry.book.items.ItemRegistryBook;
 import forestry.book.proxy.ProxyBook;
@@ -41,7 +40,7 @@ public class ModuleBook extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		BookManager.loader = BookLoader.INSTANCE;
+		proxy.setupAPI();
 	}
 
 	@Override

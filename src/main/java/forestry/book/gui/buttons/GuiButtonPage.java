@@ -7,10 +7,14 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonPage extends GuiButton implements IToolTipProvider {
 	public boolean left;
 

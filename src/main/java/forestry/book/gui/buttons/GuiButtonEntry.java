@@ -8,9 +8,13 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.book.IBookEntry;
 import forestry.core.gui.GuiUtil;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonEntry extends GuiButton {
 	public final IBookEntry entry;
 
