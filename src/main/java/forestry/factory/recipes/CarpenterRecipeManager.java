@@ -11,9 +11,11 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -109,6 +111,17 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 			recipeFluids.clear();
 		}
 		return removed;
+	}
+
+	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack){
+		if (itemStack.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return recipes.stream().filter(recipe -> {
+			ItemStack output = recipe.getCraftingGridRecipe().getOutput();
+			return ItemStackUtil.isIdenticalItem(itemStack, output);
+		}).collect(Collectors.toList());
 	}
 
 	public static Set<Fluid> getRecipeFluids() {

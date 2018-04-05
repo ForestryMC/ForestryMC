@@ -1,16 +1,16 @@
 package forestry.core.gui.widgets;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 
+import forestry.core.gui.Drawable;
 import org.lwjgl.input.Mouse;
 
-import forestry.core.gui.Drawable;
-
 public class WidgetScrollBar extends Widget {
-	private Optional<Drawable> background;
+	@Nullable
+	private Drawable background;
 	private WidgetSlider slider;
 	private boolean visible;
 
@@ -19,6 +19,7 @@ public class WidgetScrollBar extends Widget {
 	private int step;
 
 	private int currentValue;
+	@Nullable
 	private IScrollable listener;
 
 	private boolean isScrolling;
@@ -29,7 +30,7 @@ public class WidgetScrollBar extends Widget {
 	public WidgetScrollBar(WidgetManager manager, int xPos, int yPos, int width, int height, Drawable sliderTexture) {
 		super(manager, xPos, yPos);
 
-		this.background = Optional.empty();
+		this.background = null;
 		this.width = width;
 		this.height = height;
 
@@ -44,9 +45,9 @@ public class WidgetScrollBar extends Widget {
 
 		int offset = hasBorder ? 1 : 0;
 
-		this.background = Optional.of(backgroundTexture);
-		this.width = backgroundTexture.width;
-		this.height = backgroundTexture.height;
+		this.background = backgroundTexture;
+		this.width = backgroundTexture.uWidth;
+		this.height = backgroundTexture.vHeight;
 
 		isScrolling = false;
 		wasClicked = false;
@@ -98,8 +99,8 @@ public class WidgetScrollBar extends Widget {
 			return;
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		if(background.isPresent()){
-			background.get().draw(startX + xPos, startY + yPos);
+		if(background != null){
+			background.draw(startX + xPos, startY + yPos);
 		}
 		slider.draw(startX, startY);
 	}

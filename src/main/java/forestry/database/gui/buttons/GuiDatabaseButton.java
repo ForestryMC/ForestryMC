@@ -1,18 +1,18 @@
 package forestry.database.gui.buttons;
 
 import forestry.core.gui.buttons.GuiBetterButton;
-import forestry.database.DatabaseManager;
+import forestry.database.gui.GuiDatabase;
 
 public class GuiDatabaseButton<V> extends GuiBetterButton {
 
 	public final DatabaseButton type;
-	public final DatabaseManager manager;
+	public final GuiDatabase gui;
 	public V value;
 
-	public GuiDatabaseButton(int id, int x, int y, V value, DatabaseManager manager, DatabaseButton type) {
+	public GuiDatabaseButton(int id, int x, int y, V value, GuiDatabase gui, DatabaseButton type) {
 		super(id, x, y, type.getDefaultTexture());
 		this.type = type;
-		this.manager = manager;
+		this.gui = gui;
 		setValue(value);
 	}
 

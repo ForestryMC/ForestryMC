@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum StandardButtonTextureSets implements IButtonTextureSet {
-
 	LARGE_BUTTON(0, 0, 20, 200),
 	SMALL_BUTTON(0, 80, 15, 200),
 	LOCKED_BUTTON(224, 0, 16, 16),
@@ -57,4 +58,8 @@ public enum StandardButtonTextureSets implements IButtonTextureSet {
 		return width;
 	}
 
+	@Override
+	public ResourceLocation getTexture() {
+		return GuiBetterButton.TEXTURE;
+	}
 }

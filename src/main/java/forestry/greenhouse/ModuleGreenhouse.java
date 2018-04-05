@@ -18,7 +18,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.MinecraftForge;
 
@@ -30,7 +29,6 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.climate.ClimateType;
 import forestry.api.core.CamouflageManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.modules.ForestryModule;
 import forestry.core.CreativeTabForestry;
@@ -74,6 +72,7 @@ import forestry.greenhouse.tiles.TileHumidifier;
 import forestry.greenhouse.tiles.TileHygroregulator;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleGreenhouse extends BlankForestryModule {
@@ -98,7 +97,7 @@ public class ModuleGreenhouse extends BlankForestryModule {
 	}
 
 	public static CreativeTabs getGreenhouseTab() {
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			return Tabs.tabAgriculture;
 		}
 		return CreativeTabForestry.tabForestry;

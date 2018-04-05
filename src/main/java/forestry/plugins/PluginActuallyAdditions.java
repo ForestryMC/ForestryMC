@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,10 +14,10 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.ACT_ADD, name = "Actually Additions", author = "Ellpeck", url = "http://ellpeck.de/actadd", unlocalizedDescription = "for.module.actuallyadditions.description")
@@ -38,7 +37,7 @@ public class PluginActuallyAdditions extends CompatPlugin {
 		Item coffeeSeed = getItem("item_coffee_seed");
 
 		//add farm seed planting
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			registerSeedPlant(canolaSeed, "block_canola");
 			registerSeedPlant(flaxSeed, "block_flax");
 			registerSeedPlant(riceSeed, "block_rice");

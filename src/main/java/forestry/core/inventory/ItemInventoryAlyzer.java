@@ -16,9 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
@@ -27,10 +25,10 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_ENERGY = 0;
@@ -50,7 +48,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			return false;
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 
 			Item item = itemstack.getItem();
@@ -115,7 +113,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 		// Analyze if necessary
 		if (individual != null && !individual.isAnalyzed()) {
-			final boolean requiresEnergy = ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE));
+			final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
 			if (requiresEnergy) {
 				// Requires energy
 				if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
@@ -171,5 +169,15 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 	public boolean hasSpecimen() {
 		return !getSpecimen().isEmpty();
+	}
+
+	@Override
+	protected void onWriteNBT(NBTTagCompound nbt) {
+		ItemStack energy = getStackInSlot(ItemInventoryAlyzer.SLOT_ENERGY);
+		int amount = 0;
+		if(!energy.isEmpty()){
+			amount = energy.getCount();
+		}
+		nbt.setInteger("Charges", amount);
 	}
 }

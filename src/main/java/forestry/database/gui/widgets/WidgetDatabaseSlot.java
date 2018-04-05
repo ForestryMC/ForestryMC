@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,6 +17,7 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.database.DatabaseItem;
 import forestry.database.gui.GuiDatabase;
@@ -108,7 +107,7 @@ public class WidgetDatabaseSlot extends Widget {
 		}
 
 		if(GuiScreen.isCtrlKeyDown() && mouseButton == 0){
-			gui.getManager().setSelectedSlot(databaseIndex);
+			gui.analyzer.setSelectedSlot(databaseIndex);
 			return;
 		}
 
@@ -147,12 +146,10 @@ public class WidgetDatabaseSlot extends Widget {
 	@Nullable
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		Minecraft minecraft = Minecraft.getMinecraft();
-		EntityPlayer player = minecraft.player;
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (!itemStack.isEmpty()) {
-			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+			tip.add(ItemTooltipUtil.getInformation(itemStack));
 		}
 		return tip;
 	}
@@ -161,7 +158,9 @@ public class WidgetDatabaseSlot extends Widget {
 		if(!isEmpty){
 			return false;
 		}
-		return ((GuiDatabase)manager.gui).getItem(databaseIndex) == ((GuiDatabase)manager.gui).getSelectedItem();
+		DatabaseItem slotItem = ((GuiDatabase)manager.gui).getItem(databaseIndex);
+		DatabaseItem selectedItem = ((GuiDatabase)manager.gui).getSelectedItem();
+		return slotItem != null && slotItem.equals(selectedItem);
 	}
 
 	public ItemStack getItemStack(){

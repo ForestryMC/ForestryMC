@@ -21,7 +21,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Config;
@@ -51,6 +49,7 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -217,7 +216,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) && !TreeManager.treeRoot.isMember(inputStack)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 

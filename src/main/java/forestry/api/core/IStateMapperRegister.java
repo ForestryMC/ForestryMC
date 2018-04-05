@@ -8,6 +8,10 @@ package forestry.api.core;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * @deprecated TODO Remove in 1.13: Not needed in the api
+ */
+@Deprecated
 public interface IStateMapperRegister {
 
 	@SideOnly(Side.CLIENT)
