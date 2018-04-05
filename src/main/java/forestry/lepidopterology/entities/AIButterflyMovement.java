@@ -52,7 +52,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		// Reset destination if we did collide.
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
-		} else if (entity.isCollided) {
+		} else if (entity.collided) {
 			flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
 		} else if (entity.world.rand.nextInt(300) == 0) {
 			flightTarget = getRandomDestination();

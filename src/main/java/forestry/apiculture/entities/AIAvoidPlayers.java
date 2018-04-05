@@ -64,7 +64,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 		}
 		
-		if (player.getDistanceSq(randomTarget.x, randomTarget.y, randomTarget.z) < player.getDistanceSqToEntity(mob)) {
+		if (player.getDistanceSq(randomTarget.x, randomTarget.y, randomTarget.z) < player.getDistance(mob)) {
 			return false;
 		}
 		
@@ -89,7 +89,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if (player != null && mob.getDistanceSqToEntity(player) < 49.0D) {
+		if (player != null && mob.getDistance(player) < 49.0D) {
 			mob.getNavigator().setSpeed(nearSpeed);
 		} else {
 			mob.getNavigator().setSpeed(farSpeed);

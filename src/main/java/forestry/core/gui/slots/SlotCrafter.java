@@ -76,7 +76,7 @@ public class SlotCrafter extends Slot {
 		
 		this.amountCrafted = 0;
 		IRecipe irecipe = crafter.getRecipeUsed();
-		if (irecipe != null && !irecipe.isHidden()) {
+		if (irecipe != null && !irecipe.isDynamic()) {
 			this.player.unlockRecipes(Lists.newArrayList(irecipe));
 		}
 	}
