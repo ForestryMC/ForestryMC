@@ -23,7 +23,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 			return false;
 		}
 
-		if (!entity.isCollidedHorizontally && entity.getRNG().nextInt(64) != 0) {
+		if (!entity.collidedHorizontally && entity.getRNG().nextInt(64) != 0) {
 			return false;
 		}
 
@@ -66,7 +66,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 	public void updateTask() {
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
-		} else if (entity.isCollidedVertically && entity.getRNG().nextInt(62) == 0) {
+		} else if (entity.collidedVertically && entity.getRNG().nextInt(62) == 0) {
 			flightTarget = null;
 		}
 

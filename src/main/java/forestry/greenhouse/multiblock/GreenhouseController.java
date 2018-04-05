@@ -454,7 +454,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
 			for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 				Biome biome = world.getBiome(new BlockPos(x, 0, z));
-				temperature += biome.getTemperature();
+				temperature += biome.getDefaultTemperature();
 				humidity += biome.getRainfall();
 				biomes++;
 			}
