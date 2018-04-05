@@ -16,14 +16,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ICircuit;
-import forestry.api.core.ForestryAPI;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.modules.ForestryModule;
@@ -49,6 +47,7 @@ import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {
@@ -117,7 +116,7 @@ public class ModuleMail extends BlankForestryModule {
 		ItemStack stampGlue;
 		ItemStack letterGlue;
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			stampGlue = beeItems.honeyDrop.getItemStack();
 			letterGlue = beeItems.propolis.getWildcard();
@@ -136,7 +135,7 @@ public class ModuleMail extends BlankForestryModule {
 
 				ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
-				RecipeUtil.addRecipe("stamps", stamps,
+				RecipeUtil.addRecipe("stamps_" + stampDefinition.getUid(), stamps,
 						"XXX",
 						"###",
 						"ZZZ",

@@ -13,8 +13,8 @@ public class WidgetSlider extends Widget {
 	public WidgetSlider(WidgetManager manager, int xPos, int yPos, Drawable texture) {
 		super(manager, xPos, yPos);
 		this.texture = texture;
-		this.width = texture.width;
-		this.height = texture.height;
+		this.width = texture.uWidth;
+		this.height = texture.vHeight;
 	}
 
 	public void setOffset(int xOffset, int yOffset) {

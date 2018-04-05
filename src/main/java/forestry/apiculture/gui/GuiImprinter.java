@@ -93,13 +93,13 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException {
-		super.mouseClicked(i, j, k);
+	protected void mouseClicked(int mouseX, int mouseY, int k) throws IOException {
+		super.mouseClicked(mouseX, mouseY, k);
 
 		int cornerX = (width - xSize) / 2;
 		int cornerY = (height - ySize) / 2;
 
-		int slot = getHabitatSlotAtPosition(i - cornerX, j - cornerY);
+		int slot = getHabitatSlotAtPosition(mouseX - cornerX, mouseY - cornerY);
 		if (slot < 0) {
 			return;
 		}

@@ -67,26 +67,13 @@ public class DatabaseHelper {
 					break;
 				}
 			}
-
-			/*if(pattern.matcher(name.toLowerCase()).find() || item.isEmpty()) {
-				sorted.add(databaseItem);
-				continue;
-			}
-
-			List<String> lines = item.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
-			for(String tooltip : lines) {
-				if(pattern.matcher(tooltip).find()) {
-					sorted.add(databaseItem);
-					break;
-				}
-			}*/
 		}
 
 		sorted.sort(SORT_BY_NAME);
 	}
 
 	//TODO: Add more filter options
-	public static List<Predicate<ItemStack>> getFilters(Pattern pattern, String searchText){
+	private static List<Predicate<ItemStack>> getFilters(Pattern pattern, String searchText){
 		List<Predicate<ItemStack>> filters = new LinkedList<>();
 		filters.add(new DatabaseFilterName(pattern));
 		filters.add(new DatabaseFilterToolTip(pattern));

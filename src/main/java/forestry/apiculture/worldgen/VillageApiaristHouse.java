@@ -26,7 +26,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -53,7 +52,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.flowers.Flower;
@@ -65,6 +63,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
@@ -383,7 +382,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		if (villagerCount <= 0) {
 			return registry.getID(ModuleApiculture.villagerApiarist);
-		} else if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+		} else if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			return registry.getID(ModuleArboriculture.villagerArborist);
 		} else {
 			return currentVillagerProfession;
@@ -408,7 +407,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 			IWoodType woodType;
 			boolean fireproof;
 
-			if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+			if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 				woodType = EnumForestryWoodType.getRandom(random);
 				fireproof = random.nextInt(4) == 0;
 			} else {

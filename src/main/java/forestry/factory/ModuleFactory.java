@@ -21,7 +21,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -74,6 +73,7 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.storage.ModuleCrates;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
@@ -338,7 +338,7 @@ public class ModuleFactory extends BlankForestryModule {
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME);
@@ -483,7 +483,7 @@ public class ModuleFactory extends BlankForestryModule {
 		// RAIN SUBSTRATES
 
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), ItemStack.EMPTY, coreItems.iodineCharge.getItemStack(),
 					"Z#Z",
@@ -539,7 +539,7 @@ public class ModuleFactory extends BlankForestryModule {
 		RecipeManagers.carpenterManager.addRecipe(ItemStack.EMPTY, ingotBronze, "#", '#', coreItems.brokenBronzeShovel);
 
 		// Crating and uncrating
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CRATE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {
 			ModuleCrates.createCrateRecipes();
 		}
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");

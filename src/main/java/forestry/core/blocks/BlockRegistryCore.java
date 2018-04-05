@@ -71,10 +71,10 @@ public class BlockRegistryCore extends BlockRegistry {
 		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		ashBrick = new BlockAshBrick();
-		registerBlock(ashBrick, new ItemBlockForestry(ashBrick), "ash_brick");
+		registerBlock(ashBrick, new ItemBlockForestry<>(ashBrick), "ash_brick");
 
 		ashStairs = new BlockAshStairs(ashBrick.getDefaultState());
-		registerBlock(ashStairs, new ItemBlockForestry(ashStairs), "ash_stairs");
+		registerBlock(ashStairs, new ItemBlockForestry<>(ashStairs), "ash_stairs");
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);

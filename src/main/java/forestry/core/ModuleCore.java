@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -76,6 +77,7 @@ import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
@@ -290,7 +292,7 @@ public class ModuleCore extends BlankForestryModule {
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
@@ -330,7 +332,7 @@ public class ModuleCore extends BlankForestryModule {
 		}
 
 		// ANALYZER
-		RecipeUtil.addRecipe("alyzer", blocks.analyzer,
+		RecipeUtil.addRecipe("analyzer", blocks.analyzer,
 				"XTX",
 				" Y ",
 				"X X",
@@ -431,7 +433,7 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))){
+		if(!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)){
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 
@@ -449,7 +451,7 @@ public class ModuleCore extends BlankForestryModule {
 			'#', Items.BRICK);
 
 		// alternate recipes
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
 					items.craftingMaterial.getSilkWisp(), 0.15f
 			));
