@@ -37,7 +37,11 @@ public class TankElement extends GuiElement {
 	}
 
 	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<FluidTankInfo> tank, @Nullable Drawable overlay) {
-		super(xPos, yPos, 16, 58);
+		this(xPos, yPos, background, tank, overlay, 16, 58);
+	}
+
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<FluidTankInfo> tank, @Nullable Drawable overlay, int width, int height) {
+		super(xPos, yPos, width, height);
 		this.background = background;
 		this.tank = tank;
 		this.overlay = overlay;

@@ -11,12 +11,13 @@ import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookPageFactory;
+import forestry.book.pages.JsonPageFactory;
 
 public class BookEntryBuilder implements IBookEntryBuilder {
 	private final String name;
 	private final IBookCategory category;
 	private ItemStack stack = ItemStack.EMPTY;
-	private IBookPageFactory loader = ContentPageLoader.INSTANCE;
+	private IBookPageFactory loader = JsonPageFactory.INSTANCE;
 	private List<IBookEntryBuilder> subEntries = new LinkedList<>();
 	private String title = "missing.title";
 	private BookContent[][] content = new BookContent[0][0];

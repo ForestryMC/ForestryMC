@@ -25,17 +25,24 @@ public class GuiButtonSubEntry extends GuiButton {
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+		if(!visible){
+			return;
+		}
 		boolean active = subEntry == selectedEntry;
 		TextureManager manager = mc.renderEngine;
 		manager.bindTexture(GuiForesterBook.TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
 		drawTexturedModalRect(x, y, 48 + (active ? 24 : 0), 201, 24, 21);
+
 		GlStateManager.translate(x + 8.0F, y + 4.0F, zLevel);
 		GlStateManager.scale(0.85F, 0.85F, 0.85F);
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.enableRescaleNormal();
+
 		GuiUtil.drawItemStack(mc.fontRenderer, subEntry.getStack(), 0, 0);
+
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.popMatrix();
 	}

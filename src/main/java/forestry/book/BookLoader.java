@@ -31,10 +31,12 @@ import net.minecraft.util.ResourceLocation;
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookLoader;
+import forestry.api.book.IBookPageFactory;
 import forestry.api.book.IForesterBook;
 import forestry.book.data.EntryData;
 import forestry.book.data.content.CarpenterContent;
 import forestry.book.data.content.CraftingContent;
+import forestry.book.data.content.FabricatorContent;
 import forestry.book.data.content.ImageContent;
 import forestry.book.data.content.IndexContent;
 import forestry.book.data.content.MutationContent;
@@ -42,6 +44,7 @@ import forestry.book.data.content.StructureContent;
 import forestry.book.data.content.TextContent;
 import forestry.book.data.deserializer.BookCategoryDeserializer;
 import forestry.book.data.deserializer.BookContentDeserializer;
+import forestry.book.pages.JsonPageFactory;
 import forestry.core.utils.JsonUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
@@ -59,6 +62,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
 	private final Map<String, Class<? extends BookContent>> contentByType = new HashMap<>();
+	private final Map<String, IBookPageFactory> factoryByName = new HashMap<>();
 	@Nullable
 	private ForesterBook book = null;
 
@@ -70,11 +74,27 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		registerContentType("carpenter", CarpenterContent.class);
 		registerContentType("structure", StructureContent.class);
 		registerContentType("index", IndexContent.class);
+		registerContentType("fabricator", FabricatorContent.class);
+		registerPageFactory(JsonPageFactory.NAME, JsonPageFactory.INSTANCE);
 	}
 
 	@Override
 	public void registerContentType(String name, Class<? extends BookContent> contentClass) {
 		contentByType.put(name, contentClass);
+	}
+
+	@Override
+	public void registerPageFactory(String name, IBookPageFactory factory) {
+		factoryByName.put(name, factory);
+	}
+
+	@Override
+	public IBookPageFactory getPageFactory(String name) {
+		IBookPageFactory factory = factoryByName.get(name);
+		if(factory == null){
+			return JsonPageFactory.INSTANCE;
+		}
+		return factory;
 	}
 
 	public IForesterBook loadBook() {
@@ -138,7 +158,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 				Entries entries = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), Entries.class);
 				entryNames.addAll(entries.names);
 			} catch (IOException e) {
-				Log.error("Failed to parse entries file.{0}", e);
+				Log.error("Failed to parse entries file {}.{}", entriesLocation, e);
 			}
 
 		}
@@ -153,12 +173,14 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 				builder.setStack(data.icon);
 				builder.setContent(data.content);
 				builder.setTitle(data.title);
+				builder.setLoader(BookLoader.INSTANCE.getPageFactory(data.loader));
 				for (String subEntry : data.subEntries) {
 					EntryData subData = entries.get(subEntry);
 					if (subData != null) {
 						IBookEntryBuilder subBuilder = builder.createSubEntry(subEntry, subData.icon);
 						subBuilder.setContent(subData.content);
 						subBuilder.setTitle(subData.title);
+						builder.setLoader(BookLoader.INSTANCE.getPageFactory(subData.loader));
 					}
 				}
 				builder.addToCategory();
@@ -189,7 +211,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		try (InputStream inputStream = resource.getInputStream()) {
 			return GSON.fromJson(new InputStreamReader(inputStream, StandardCharsets.UTF_8), classOfT);
 		} catch (Exception e) {
-			Log.error("Failed to load resource: {}", e);
+			Log.error("Failed to load resource {}: {}", location, e);
 			return fallback;
 		}
 	}

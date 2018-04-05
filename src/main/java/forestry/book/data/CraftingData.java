@@ -12,4 +12,8 @@ public class CraftingData {
 	 * The result stack of the recipes of this crafting data.
 	 */
 	public ItemStack stack = ItemStack.EMPTY;
+	/**
+	 * The result stacks of the recipes of this crafting data.
+	 */
+	public ItemStack[] stacks = new ItemStack[0];
 }

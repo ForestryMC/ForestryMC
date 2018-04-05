@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.book;
 
+import javax.annotation.Nullable;
+
 public interface IBookLoader {
 
 	/**
@@ -14,6 +16,11 @@ public interface IBookLoader {
 	 * @param contentClass The class for the deserialization of the content.
 	 */
 	void registerContentType(String name, Class<? extends BookContent> contentClass);
+
+	void registerPageFactory(String name, IBookPageFactory factory);
+
+	@Nullable
+	IBookPageFactory getPageFactory(String name);
 
 	/**
 	 * Loads the book if it was not loaded already or if it was invalidated. Otherwise it returns the last loaded

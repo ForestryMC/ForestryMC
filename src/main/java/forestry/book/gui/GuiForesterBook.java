@@ -3,7 +3,6 @@ package forestry.book.gui;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -16,7 +15,6 @@ import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
@@ -26,8 +24,7 @@ import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.ElementManager;
 
 public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
-	public static final Comparator<IBookEntry> ENTRY_COMPARATOR = (f, s) -> f.getName().compareToIgnoreCase(s.getName());
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/atlas.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png");
 	static final int LEFT_PAGE_START_X = 16;
 	static final int RIGHT_PAGE_START_X = 132;
 	static final int PAGE_START_Y = 12;
@@ -41,7 +38,7 @@ public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
 	@Nullable
 	public static GuiForesterBook guiScreen;
 	protected final IForesterBook book;
-	protected final ElementManager<GuiForesterBook> elementManager;
+	final ElementManager<GuiForesterBook> elementManager;
 
 	protected int guiLeft;
 	protected int guiTop;

@@ -14,7 +14,7 @@ import forestry.core.gui.Drawable;
 import forestry.core.utils.Translator;
 
 public class GuiForestryBookCategories extends GuiForesterBook {
-	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, "textures/books/logo.png"), 0, 0, 256, 58, 256, 58);
+	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, "textures/gui/almanac/logo.png"), 0, 0, 256, 58, 256, 58);
 
 	public GuiForestryBookCategories(IForesterBook book) {
 		super(book);

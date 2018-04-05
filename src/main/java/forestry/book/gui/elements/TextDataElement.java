@@ -26,14 +26,13 @@ public class TextDataElement extends GuiElement {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		boolean unicode = fontRenderer.getUnicodeFlag();
 		fontRenderer.setUnicodeFlag(true);
+		boolean lastEmpty = false;
 		for (TextData data : textElements) {
-			boolean lastEmpty = false;
 			if (data.text.equals("\n")) {
 				if (lastEmpty) {
 					height += fontRenderer.FONT_HEIGHT;
 				}
 				lastEmpty = true;
-				//height += fontRenderer.FONT_HEIGHT;
 				continue;
 			}
 			lastEmpty = false;

@@ -1,4 +1,4 @@
-package forestry.book;
+package forestry.book.pages;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,11 +12,12 @@ import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 
-public class ContentPageLoader implements IBookPageFactory {
+public class JsonPageFactory implements IBookPageFactory {
 
-	public static final ContentPageLoader INSTANCE = new ContentPageLoader();
+	public static final String NAME = "json";
+	public static final JsonPageFactory INSTANCE = new JsonPageFactory();
 
-	private ContentPageLoader() {
+	private JsonPageFactory() {
 	}
 
 	@Override

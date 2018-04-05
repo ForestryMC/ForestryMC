@@ -33,7 +33,7 @@ public class MutationContent extends BookContent {
 		}
 		IAlleleSpecies s = (IAlleleSpecies) allele;
 		ISpeciesRoot root = s.getRoot();
-		page.add(new MutationElement(0, 0, root.getResultantMutations(s).toArray(new IMutation[0]), false));
+		page.add(new MutationElement(0, 0, root.getResultantMutations(s).toArray(new IMutation[0])));
 		return true;
 	}
 }

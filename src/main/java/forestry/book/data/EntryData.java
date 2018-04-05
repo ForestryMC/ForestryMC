@@ -18,6 +18,10 @@ public class EntryData {
 	 */
 	public String[] subEntries = new String[0];
 	/**
+	 * The name of the page factory.
+	 */
+	public String loader;
+	/**
 	 * The item that will be displayed next to the title.
 	 */
 	public ItemStack icon = ItemStack.EMPTY;

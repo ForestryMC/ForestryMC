@@ -31,7 +31,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 		for (int i = 0; i < recipes.length; i++) {
 			recipes[i] = ForgeRegistries.RECIPES.getValue(data.locations[i]);
 		}
-		page.add(new CraftingElement(0, 0, recipes, false));
+		page.add(new CraftingElement(0, 0, recipes));
 		return true;
 	}
 }

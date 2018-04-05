@@ -34,7 +34,6 @@ public class GuiButtonBookCategory extends GuiButton implements IToolTipProvider
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.popMatrix();
 		}
-		//super.drawButton(mc, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
