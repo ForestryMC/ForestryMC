@@ -14,8 +14,11 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -28,6 +31,7 @@ import forestry.book.BookLoader;
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureData;
 import forestry.book.gui.elements.MultiblockElement;
+import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
 
 /**
@@ -54,7 +58,16 @@ public class StructureContent extends BookContent {
 
 		if (location != null && ResourceUtil.resourceExists(location)) {
 			IResource resource = ResourceUtil.getResource(location);
-			structureData = BookLoader.GSON.fromJson(new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)), StructureData.class);
+			if (resource == null) {
+				return;
+			}
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+				structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
+			} catch (IOException e) {
+				Log.error("Failed to load structure file {}.{}", location, e);
+			} finally {
+				IOUtils.closeQuietly(resource);
+			}
 		}
 	}
 

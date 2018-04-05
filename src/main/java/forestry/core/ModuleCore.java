@@ -433,7 +433,7 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)){
+		if(!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)){
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 

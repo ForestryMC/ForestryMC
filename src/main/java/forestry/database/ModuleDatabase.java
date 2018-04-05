@@ -17,6 +17,7 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.database.blocks.BlockRegistryDatabase;
 import forestry.database.network.PacketRegistryDatabase;
 import forestry.lepidopterology.ModuleLepidopterology;
@@ -62,13 +63,13 @@ public class ModuleDatabase extends BlankForestryModule {
 			possibleChests.add(new ItemStack(ModuleLepidopterology.getBlocks().butterflyChest));
 		}
 		if (possibleChests.size() == 1) {
-			addRecipe(possibleSpecial, "chestWood", possibleChests.get(0));
+			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, possibleChests.get(0));
 		}
 		if (possibleSpecial.isEmpty()) {
-			possibleSpecial.add("chestWood");
+			possibleSpecial.add(OreDictUtil.CHEST_WOOD);
 		}
 		if (possibleChests.isEmpty()) {
-			addRecipe(possibleSpecial, "chestWood", "chestWood");
+			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, OreDictUtil.CHEST_WOOD);
 		} else {
 			for (int firstChest = 0; firstChest < possibleChests.size(); firstChest++) {
 				for (int secondChest = 0; secondChest < possibleChests.size(); secondChest++) {

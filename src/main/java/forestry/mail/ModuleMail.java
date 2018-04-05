@@ -135,7 +135,7 @@ public class ModuleMail extends BlankForestryModule {
 
 				ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
-				RecipeUtil.addRecipe("stamps", stamps,
+				RecipeUtil.addRecipe("stamps_" + stampDefinition.getUid(), stamps,
 						"XXX",
 						"###",
 						"ZZZ",

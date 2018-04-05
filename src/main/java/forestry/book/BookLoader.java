@@ -1,5 +1,6 @@
 package forestry.book;
 
+import com.google.common.collect.MapMaker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 
 import org.apache.commons.io.IOUtils;
 
@@ -165,7 +167,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 				IOUtils.closeQuietly(entryResource);
 			}
 		}
-		Map<String, EntryData> entries = new HashMap<>();
+		Map<String, EntryData> entries = new MapMaker().concurrencyLevel(ForkJoinPool.commonPool().getPoolSize() + 1).initialCapacity(entryNames.size()).makeMap();
 		entryNames.parallelStream().forEach(entry -> loadEntries(entries, entry));
 		entryNames.parallelStream().forEach(entry -> {
 			EntryData data = entries.get(entry);

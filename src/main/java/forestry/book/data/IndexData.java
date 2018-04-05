@@ -4,5 +4,5 @@ public class IndexData {
 	/**
 	 * All entries of this index.
 	 */
-	public IndexEntry[] entries;
+	public IndexEntry[] entries = new IndexEntry[0];
 }

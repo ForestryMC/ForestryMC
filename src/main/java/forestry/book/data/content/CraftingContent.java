@@ -1,8 +1,11 @@
 package forestry.book.data.content;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -27,11 +30,14 @@ public class CraftingContent extends BookContent<CraftingData> {
 		if (data == null || data.locations.length == 0) {
 			return false;
 		}
-		IRecipe[] recipes = new IRecipe[data.locations.length];
-		for (int i = 0; i < recipes.length; i++) {
-			recipes[i] = ForgeRegistries.RECIPES.getValue(data.locations[i]);
+		List<IRecipe> recipes = new LinkedList<>();
+		for (ResourceLocation location : data.locations) {
+			IRecipe recipe = ForgeRegistries.RECIPES.getValue(location);
+			if (recipe != null) {
+				recipes.add(recipe);
+			}
 		}
-		page.add(new CraftingElement(0, 0, recipes));
+		page.add(new CraftingElement(0, 0, recipes.toArray(new IRecipe[0])));
 		return true;
 	}
 }
