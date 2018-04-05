@@ -13,6 +13,7 @@
 package forestry.book.data.content;
 
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
@@ -53,7 +54,7 @@ public class StructureContent extends BookContent {
 
 		if (location != null && ResourceUtil.resourceExists(location)) {
 			IResource resource = ResourceUtil.getResource(location);
-			structureData = BookLoader.GSON.fromJson(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8), StructureData.class);
+			structureData = BookLoader.GSON.fromJson(new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)), StructureData.class);
 		}
 	}
 

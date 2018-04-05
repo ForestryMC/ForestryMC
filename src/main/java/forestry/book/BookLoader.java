@@ -8,8 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
@@ -91,7 +93,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	@Override
 	public IBookPageFactory getPageFactory(String name) {
 		IBookPageFactory factory = factoryByName.get(name);
-		if(factory == null){
+		if (factory == null) {
 			return JsonPageFactory.INSTANCE;
 		}
 		return factory;
@@ -154,19 +156,18 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		ResourceLocation entriesLocation = new ResourceLocation(BOOK_LOCATION + "entries/" + category.getName() + ".json");
 		Set<String> entryNames = new HashSet<>();
 		for (IResource entryResource : ResourceUtil.getResources(entriesLocation)) {
-			try (InputStream stream = entryResource.getInputStream()) {
-				Entries entries = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), Entries.class);
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(entryResource.getInputStream(), StandardCharsets.UTF_8))) {
+				Entries entries = GSON.fromJson(reader, Entries.class);
 				entryNames.addAll(entries.names);
 			} catch (IOException e) {
 				Log.error("Failed to parse entries file {}.{}", entriesLocation, e);
+			} finally {
+				IOUtils.closeQuietly(entryResource);
 			}
-
 		}
 		Map<String, EntryData> entries = new HashMap<>();
-		for (String entry : entryNames) {
-			loadEntries(entries, entry);
-		}
-		for (String entry : entryNames) {
+		entryNames.parallelStream().forEach(entry -> loadEntries(entries, entry));
+		entryNames.parallelStream().forEach(entry -> {
 			EntryData data = entries.get(entry);
 			if (data != null) {
 				IBookEntryBuilder builder = category.createEntry(entry);
@@ -185,7 +186,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 				}
 				builder.addToCategory();
 			}
-		}
+		});
 	}
 
 	private void loadEntries(Map<String, EntryData> entries, String entry) {
@@ -208,11 +209,13 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		if (resource == null) {
 			return fallback;
 		}
-		try (InputStream inputStream = resource.getInputStream()) {
-			return GSON.fromJson(new InputStreamReader(inputStream, StandardCharsets.UTF_8), classOfT);
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+			return GSON.fromJson(reader, classOfT);
 		} catch (Exception e) {
 			Log.error("Failed to load resource {}: {}", location, e);
 			return fallback;
+		} finally {
+			IOUtils.closeQuietly(resource);
 		}
 	}
 

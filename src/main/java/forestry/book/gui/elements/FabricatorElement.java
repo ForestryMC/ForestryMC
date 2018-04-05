@@ -30,7 +30,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	private static final Drawable FABRICATOR_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 61, 16, 16);
 
 	public FabricatorElement(int xPos, int yPos, ItemStack stack) {
-		this(0, 0, new ItemStack[]{ stack });
+		this(0, 0, new ItemStack[]{stack});
 	}
 
 	public FabricatorElement(int xPos, int yPos, ItemStack[] stacks) {
@@ -56,11 +56,11 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 					continue;
 				}
 				NonNullList<ItemStack> items = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(21 + x * 19,  1 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[items.size()]))));
+				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[items.size()]))));
 			}
 		}
 		ItemStack plan = recipe.getPlan();
-		if(!plan.isEmpty()) {
+		if (!plan.isEmpty()) {
 			selectedElement.item(91, 1, plan);
 		}
 		selectedElement.item(91, 39, recipe.getRecipeOutput());

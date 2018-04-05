@@ -25,9 +25,9 @@ public class CarpenterContent extends BookContent<CraftingData> {
 		if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
 			return false;
 		}
-		if(!data.stack.isEmpty()) {
+		if (!data.stack.isEmpty()) {
 			page.add(new CarpenterElement(0, 0, data.stack));
-		}else{
+		} else {
 			page.add(new CarpenterElement(0, 0, data.stacks));
 		}
 		return true;

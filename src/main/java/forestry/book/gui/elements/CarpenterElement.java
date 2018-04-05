@@ -24,7 +24,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	private static final Drawable CARPENTER_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 1, 16, 58);
 
 	public CarpenterElement(int xPos, int yPos, ItemStack stack) {
-		this(0, 0, new ItemStack[]{ stack });
+		this(0, 0, new ItemStack[]{stack});
 	}
 
 	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {

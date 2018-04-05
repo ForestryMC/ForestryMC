@@ -5,21 +5,18 @@
  ******************************************************************************/
 package forestry.api.book;
 
-import javax.annotation.Nullable;
-
 public interface IBookLoader {
 
 	/**
 	 * Adds a content type.
 	 *
-	 * @param name The name of the content type.
+	 * @param name         The name of the content type.
 	 * @param contentClass The class for the deserialization of the content.
 	 */
 	void registerContentType(String name, Class<? extends BookContent> contentClass);
 
 	void registerPageFactory(String name, IBookPageFactory factory);
 
-	@Nullable
 	IBookPageFactory getPageFactory(String name);
 
 	/**

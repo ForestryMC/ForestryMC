@@ -42,7 +42,7 @@ public interface IBookEntryBuilder {
 	 * <p>
 	 * Important: You not have to call {@link #addToCategory()} at the end of the creation of the sub entry
 	 *
-	 * @param name The unique name of the sub entry.
+	 * @param name  The unique name of the sub entry.
 	 * @param stack The stack that represents the sub entry.
 	 * @return The entry builder of the sub entry.
 	 */

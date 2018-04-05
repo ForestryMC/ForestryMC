@@ -25,7 +25,7 @@ public class GuiButtonSubEntry extends GuiButton {
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-		if(!visible){
+		if (!visible) {
 			return;
 		}
 		boolean active = subEntry == selectedEntry;

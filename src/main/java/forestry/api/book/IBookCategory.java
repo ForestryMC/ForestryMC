@@ -26,7 +26,7 @@ public interface IBookCategory {
 	/**
 	 * Adds an entry with the given name and the given icon to the category.
 	 *
-	 * @param name A unique name for this entry.
+	 * @param name  A unique name for this entry.
 	 * @param stack The stack that will be displayed next to the entry title at the category page.
 	 */
 	IBookCategory addEntry(String name, ItemStack stack);
@@ -47,7 +47,7 @@ public interface IBookCategory {
 	 * At the end of your creation you have to call {@link IBookEntryBuilder#addToCategory()} to add the entry to this
 	 * category.
 	 *
-	 * @param name A unique name for this entry.
+	 * @param name  A unique name for this entry.
 	 * @param stack The stack that will be displayed next to the entry title at the category page.
 	 */
 	IBookEntryBuilder createEntry(String name, ItemStack stack);

@@ -51,8 +51,8 @@ public abstract class SelectionElement<R> extends PaneLayout {
 		selectedElement = GuiElementFactory.INSTANCE.createPanel(0, 2, width, this.height);
 	}
 
-	protected final void setIndex(int index){
-		if(index == this.index || index >= recipes.length || index < 0){
+	protected final void setIndex(int index) {
+		if (index == this.index || index >= recipes.length || index < 0) {
 			return;
 		}
 		this.index = index;

@@ -35,7 +35,6 @@ public interface IForesterBook {
 	Collection<IBookCategory> getCategories();
 
 	/**
-	 *
 	 * @return A collection that contains all unique names of the categories
 	 */
 	Collection<String> getCategoryNames();
