@@ -11,9 +11,7 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -162,7 +160,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		ResourceLocation entriesLocation = new ResourceLocation(BOOK_LOCATION + "entries/" + category.getName() + ".json");
 		Set<String> entryNames = new HashSet<>();
 		for (IResource entryResource : ResourceUtil.getResources(entriesLocation)) {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(entryResource.getInputStream(), StandardCharsets.UTF_8))) {
+			try (BufferedReader reader = ResourceUtil.createReader(entryResource)) {
 				Entries entries = GSON.fromJson(reader, Entries.class);
 				entryNames.addAll(entries.names);
 			} catch (IOException e) {
@@ -173,26 +171,28 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		}
 		Map<String, EntryData> entries = new MapMaker().concurrencyLevel(ForkJoinPool.commonPool().getPoolSize() + 1).initialCapacity(entryNames.size()).makeMap();
 		entryNames.parallelStream().forEach(entry -> loadEntries(entries, entry));
-		entryNames.parallelStream().forEach(entry -> {
-			EntryData data = entries.get(entry);
-			if (data != null) {
-				IBookEntryBuilder builder = category.createEntry(entry);
-				builder.setStack(data.icon);
-				builder.setContent(data.content);
-				builder.setTitle(data.title);
-				builder.setLoader(BookLoader.INSTANCE.getPageFactory(data.loader));
-				for (String subEntry : data.subEntries) {
-					EntryData subData = entries.get(subEntry);
-					if (subData != null) {
-						IBookEntryBuilder subBuilder = builder.createSubEntry(subEntry, subData.icon);
-						subBuilder.setContent(subData.content);
-						subBuilder.setTitle(subData.title);
-						builder.setLoader(BookLoader.INSTANCE.getPageFactory(subData.loader));
-					}
+		entryNames.parallelStream().forEach(entry -> createEntry(entries, category, entry));
+	}
+
+	private void createEntry(Map<String, EntryData> entries, BookCategory category, String entry){
+		EntryData data = entries.get(entry);
+		if (data != null) {
+			IBookEntryBuilder builder = category.createEntry(entry);
+			builder.setStack(data.icon);
+			builder.setContent(data.content);
+			builder.setTitle(data.title);
+			builder.setLoader(BookLoader.INSTANCE.getPageFactory(data.loader));
+			for (String subEntry : data.subEntries) {
+				EntryData subData = entries.get(subEntry);
+				if (subData != null) {
+					IBookEntryBuilder subBuilder = builder.createSubEntry(subEntry, subData.icon);
+					subBuilder.setContent(subData.content);
+					subBuilder.setTitle(subData.title);
+					builder.setLoader(BookLoader.INSTANCE.getPageFactory(subData.loader));
 				}
-				builder.addToCategory();
 			}
-		});
+			builder.addToCategory();
+		}
 	}
 
 	private void loadEntries(Map<String, EntryData> entries, String entry) {
@@ -215,7 +215,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		if (resource == null) {
 			return fallback;
 		}
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+		try (BufferedReader reader = ResourceUtil.createReader(resource)) {
 			return GSON.fromJson(reader, classOfT);
 		} catch (Exception e) {
 			Log.error("Failed to load resource {}: {}", location, e);

@@ -24,7 +24,7 @@ public class EntryData {
 	/**
 	 * The name of the page factory.
 	 */
-	public String loader;
+	public String loader = "json";
 	/**
 	 * The item that will be displayed next to the title.
 	 */
