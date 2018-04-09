@@ -11,9 +11,10 @@ import java.util.function.Predicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.genetics.ISpeciesRoot;
 
@@ -39,7 +40,7 @@ public interface IBackpackInterface {
 	 * @param itemStack   The itemStack that the backpack should accept.
 	 *                    {@link OreDictionary#WILDCARD_VALUE} can be used for meta value.
 	 */
-	void addItemToForestryBackpack(String backpackUid, ItemStack itemStack);
+	void addItemToForestryBackpack(String backpackUid, @Nullable ItemStack itemStack);
 
 	/**
 	 * Register a backpack definition with a given uid.
