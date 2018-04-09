@@ -37,8 +37,6 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -166,34 +164,26 @@ public class PluginIC2 extends BlankForestryModule {
 
 	@Override
 	public void postInit() {
-		if (BackpackManager.backpackInterface == null) {
-			return;
-		}
-
-		BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, resin);
-		BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubber);
-		BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubberSapling);
 		ItemStack rubberLeaves = IC2Items.getItem("leaves");
-		BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, rubberLeaves);
+
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, resin);
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, rubberSapling);
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, rubber);
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, rubberLeaves);
 	}
 
 	@Override
 	public void registerCrates() {
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if (crateRegistry == null) {
-			return;
-		}
-
-		crateRegistry.registerCrate(resin);
+		ModuleHelper.registerCrate(resin);
 
 		ItemStack scrap = IC2Items.getItem("crafting", "scrap");
-		crateRegistry.registerCrate(scrap);
+		ModuleHelper.registerCrate(scrap);
 
 		ItemStack uuMatter = IC2Items.getItem("misc_resource", "matter");
-		crateRegistry.registerCrate(uuMatter);
+		ModuleHelper.registerCrate(uuMatter);
 
-		crateRegistry.registerCrate("ingotSilver");
-		crateRegistry.registerCrate("itemRubber");
+		ModuleHelper.registerCrate("ingotSilver");
+		ModuleHelper.registerCrate("itemRubber");
 	}
 
 	@Override
