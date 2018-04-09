@@ -39,6 +39,7 @@ import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
 import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.TECH_REBORN, name = "TechReborn", author = "temp1011", url = Constants.URL, unlocalizedDescription = "for.module.techreborn.description")
 public class PluginTechReborn extends CompatPlugin {
@@ -71,23 +72,23 @@ public class PluginTechReborn extends CompatPlugin {
 
 		ItemStack scrap = getItemStack("part", 33);
 		ItemStack uuMatter = getItemStack("uumatter");
-		crateRegistry.registerCrate(SAP);
-		crateRegistry.registerCrate(scrap);
-		crateRegistry.registerCrate(uuMatter);
-		crateRegistry.registerCrate("ingotLead");
-		crateRegistry.registerCrate("ingotAluminum");
-		crateRegistry.registerCrate("ingotBrass");
-		crateRegistry.registerCrate("ingotNickel");
+		ModuleHelper.registerCrate(SAP);
+		ModuleHelper.registerCrate(scrap);
+		ModuleHelper.registerCrate(uuMatter);
+		ModuleHelper.registerCrate("ingotLead");
+		ModuleHelper.registerCrate("ingotAluminum");
+		ModuleHelper.registerCrate("ingotBrass");
+		ModuleHelper.registerCrate("ingotNickel");
 
 		if (!ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
-			crateRegistry.registerCrate("ingotSilver");
-			crateRegistry.registerCrate("itemRubber");
+			ModuleHelper.registerCrate("ingotSilver");
+			ModuleHelper.registerCrate("itemRubber");
 		}
 	}
 
 	@Override
 	public void registerBackpackItems() {
-		BackpackManager.backpackInterface.addItemToForestryBackpack(BackpackManager.FORESTER_UID, SAP);
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, SAP);
 	}
 
 	@Override
