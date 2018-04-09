@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +23,7 @@ public interface ICrateRegistry {
 
 	void registerCrate(Block block);
 
-	void registerCrate(@Nullable ItemStack stack);
+	void registerCrate(ItemStack stack);
 
 	void registerCrate(String oreDictName);
 

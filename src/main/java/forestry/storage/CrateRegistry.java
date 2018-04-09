@@ -72,26 +72,17 @@ public class CrateRegistry implements ICrateRegistry {
 	}
 
 	@Override
-	public void registerCrate(@Nullable Block block) {
-		if (block == null) {
-			return;
-		}
+	public void registerCrate(Block block) {
 		registerCrate(new ItemStack(block), null);
 	}
 
 	@Override
-	public void registerCrate(@Nullable Item item) {
-		if (item == null) {
-			return;
-		}
+	public void registerCrate(Item item) {
 		registerCrate(new ItemStack(item), null);
 	}
 
 	@Override
-	public void registerCrate(@Nullable ItemStack stack) {
-		if (stack == null) {
-			return;
-		}
+	public void registerCrate(ItemStack stack) {
 		registerCrate(stack, null);
 	}
 }
