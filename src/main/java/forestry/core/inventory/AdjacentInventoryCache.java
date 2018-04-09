@@ -69,6 +69,13 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		return invs;
 	}
 
+	public Collection<IItemHandler> getAdjacentInventoriesOtherThan(EnumFacing side) {
+		checkChanged();
+		Collection<IItemHandler> ret = getAdjacentInventories();
+		ret.remove(getAdjacentInventory(side));
+		return ret;
+	}
+
 	@Override
 	public void changed() {
 		changed = true;

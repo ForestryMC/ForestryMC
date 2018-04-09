@@ -10,19 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
+
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.gui.slots.SlotLocked;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.SlotUtil;
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -31,13 +24,25 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.SlotUtil;
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
+
 @invtweaks.api.container.ChestContainer(showButtons = false)
 public abstract class ContainerForestry extends Container {
+	public static final int PLAYER_HOTBAR_OFFSET = 27;
+	public static final int PLAYER_INV_SLOTS = PLAYER_HOTBAR_OFFSET + 9;
+
 	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
-				addSlotToContainer(new Slot(playerInventory, column + row * 9 + 9, xInv + column * 18, yInv + row * 18));
+				addSlot(playerInventory, column + row * 9 + 9, xInv + column * 18, yInv + row * 18);
 			}
 		}
 		// Player hotbar
@@ -47,6 +52,10 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+		addSlotToContainer(new Slot(playerInventory, slot, x, y));
+	}
+
+	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y){
 		addSlotToContainer(new Slot(playerInventory, slot, x, y));
 	}
 
@@ -63,7 +72,7 @@ public abstract class ContainerForestry extends Container {
 
 		if (clickTypeIn == ClickType.SWAP && dragType_or_button >= 0 && dragType_or_button < 9) {
 			// hotkey used to move item from slot to hotbar
-			int hotbarSlotIndex = 27 + dragType_or_button;
+			int hotbarSlotIndex = PLAYER_HOTBAR_OFFSET + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);
 			if (hotbarSlot instanceof SlotLocked) {
 				return ItemStack.EMPTY;
@@ -80,6 +89,11 @@ public abstract class ContainerForestry extends Container {
 
 		return super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 	}
+
+	public Slot getForestrySlot(int slot){
+		return getSlot(PLAYER_INV_SLOTS  + slot);
+	}
+
 
 	@Override
 	public final ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {

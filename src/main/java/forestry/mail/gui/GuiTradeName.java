@@ -16,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.gui.GuiTextField;
 
-import org.lwjgl.input.Keyboard;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
@@ -25,6 +23,8 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
+
+import org.lwjgl.input.Keyboard;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	private final TileTrader tile;
@@ -65,9 +65,9 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	protected void mouseClicked(int par1, int par2, int mouseButton) throws IOException {
-		super.mouseClicked(par1, par2, mouseButton);
-		addressNameField.mouseClicked(par1, par2, mouseButton);
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override

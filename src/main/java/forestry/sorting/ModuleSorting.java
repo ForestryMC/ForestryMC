@@ -22,7 +22,7 @@ import forestry.core.utils.OreDictUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleManager;
+import forestry.modules.ModuleHelper;
 import forestry.sorting.blocks.BlockRegistrySorting;
 import forestry.sorting.network.PacketRegistrySorting;
 import forestry.sorting.tiles.TileGeneticFilter;
@@ -68,7 +68,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
+		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_api", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"PGP",
@@ -79,7 +79,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'P', ModuleApiculture.getItems().propolis);
 		}
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) {
+		if(ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_arb", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",
@@ -90,7 +90,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'F', OreDictUtil.FRUIT_FORESTRY);
 		}
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if(ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			RecipeUtil.addRecipe("genetic_filter_lep", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",

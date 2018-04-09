@@ -86,7 +86,19 @@ public interface ISpeciesRoot {
 	 */
 	ISpeciesType getIconType();
 
+	default ISpeciesType[] getTypes(){
+		return new ISpeciesType[0];
+	}
+
 	ItemStack getMemberStack(IIndividual individual, ISpeciesType type);
+
+	default ItemStack getMemberStack(IAlleleSpecies species, ISpeciesType type){
+		return getMemberStack(getTemplate(species), type);
+	}
+
+	default ItemStack getMemberStack(IAllele[] template, ISpeciesType type){
+		return getMemberStack(templateAsIndividual(template), type);
+	}
 
 	/* BREEDING TRACKER */
 	IBreedingTracker getBreedingTracker(World world, @Nullable GameProfile player);
@@ -147,6 +159,15 @@ public interface ISpeciesRoot {
 	Map<String, IAllele[]> getGenomeTemplates();
 
 	List<? extends IIndividual> getIndividualTemplates();
+
+	/**
+	 * The type of the species that will be used at the given position of the mutation recipe in the gui.
+	 *
+	 * @param position 0 = first parent, 1 = second parent, 2 = result
+	 */
+	default ISpeciesType getTypeForMutation(int position){
+		return getIconType();
+	}
 
 	/* MUTATIONS */
 
@@ -211,17 +232,12 @@ public interface ISpeciesRoot {
 	IAlyzerPlugin getAlyzerPlugin();
 
 	/**
-	 * A array with the size of 4. With the database tabs of this {@link IIndividual}.
-	 */
-	//IDatabaseTab[] getDatabaseTabs();
-
-	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.
 	 * @since 5.7
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)
-	default ISpeciesPlugin getSpeciesPlugin(){
+	default IDatabasePlugin getSpeciesPlugin(){
 		return null;
 	}
 }

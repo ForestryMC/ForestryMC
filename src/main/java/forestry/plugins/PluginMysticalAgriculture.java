@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
@@ -15,6 +14,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.MAGICAL_AGRICULTURE, name = "Mystical Agriculture", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.mysticalagriculture.description")
@@ -27,7 +27,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 
 	@Override
 	public void registerRecipes() {
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			ImmutableList<String> crops = ImmutableList.of(
 				"stone",
 				"dirt",

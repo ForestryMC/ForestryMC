@@ -83,7 +83,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return !isDead && player.getDistanceSqToEntity(this) <= 64.0D;
+		return !isDead && player.getDistance(this) <= 64.0D;
 	}
 
 	@Override

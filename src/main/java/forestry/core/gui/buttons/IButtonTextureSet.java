@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -23,4 +25,5 @@ public interface IButtonTextureSet {
 
 	int getWidth();
 
+	ResourceLocation getTexture();
 }

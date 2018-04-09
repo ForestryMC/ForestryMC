@@ -35,9 +35,9 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesPlugin;
 import forestry.api.genetics.ISpeciesType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
@@ -127,6 +127,11 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public EnumFlutterType getIconType() {
 		return EnumFlutterType.BUTTERFLY;
+	}
+
+	@Override
+	public ISpeciesType[] getTypes() {
+		return EnumFlutterType.values();
 	}
 
 	@Override
@@ -370,7 +375,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpeciesPlugin getSpeciesPlugin() {
+	public IDatabasePlugin getSpeciesPlugin() {
 		return ButterflyPlugin.INSTANCE;
 	}
 }

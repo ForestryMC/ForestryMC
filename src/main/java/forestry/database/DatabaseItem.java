@@ -16,6 +16,7 @@ public class DatabaseItem {
 		if(!(obj instanceof DatabaseItem)){
 			return false;
 		}
-		return ((DatabaseItem) obj).invIndex == invIndex && ((DatabaseItem) obj).itemStack.isEmpty() == itemStack.isEmpty();
+		DatabaseItem other = (DatabaseItem) obj;
+		return other.invIndex == invIndex && other.itemStack.isEmpty() == itemStack.isEmpty();
 	}
 }

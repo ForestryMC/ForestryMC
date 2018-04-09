@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
@@ -64,6 +65,7 @@ import forestry.farming.logic.farmables.FarmableBasicIC2Crop;
 import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
@@ -85,7 +87,17 @@ public class PluginIC2 extends BlankForestryModule {
 	public static ItemStack fertilizer;
 
 	@Nullable
-	public BlockRegistryIC2 blocks;
+	public static BlockRegistryIC2 blocks;
+
+	public static BlockRegistryIC2 getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
+
+	@Override
+	public void registerItemsAndBlocks() {
+		blocks = new BlockRegistryIC2();
+	}
 
 	@Override
 	public boolean isAvailable() {
@@ -227,7 +239,7 @@ public class PluginIC2 extends BlankForestryModule {
 		}
 
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ENERGY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ENERGY)) {
 			Fluid biogas = FluidRegistry.getFluid("ic2biogas");
 			if (biogas != null) {
 				int burnDuration = Math.round(Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas"));
@@ -253,7 +265,7 @@ public class PluginIC2 extends BlankForestryModule {
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.energyElectricBoost2);
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.IRON, 1), Circuits.energyElectricEfficiency1);
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			if (resin != null && rubberWood != null) {
 				ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
@@ -282,10 +294,5 @@ public class PluginIC2 extends BlankForestryModule {
 					'Y', "gearTin",
 					'V', Blocks.PISTON);
 		}
-	}
-
-	@Override
-	public void registerItemsAndBlocks() {
-		blocks = new BlockRegistryIC2();
 	}
 }

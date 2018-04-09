@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.inventory.Container;
+
 import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.Translator;
-import net.minecraft.inventory.Container;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
 	private final String unlocalizedTitle;
@@ -29,7 +30,15 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 
 		String name = Translator.translateToLocal(this.unlocalizedTitle);
 		textLayout.line = 6;
-		textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
+		if(centeredTitle()) {
+			textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
+		}else{
+			textLayout.drawLine(name, 8, ColourProperties.INSTANCE.get("gui.title"));
+		}
 		bindTexture(textureFile);
+	}
+
+	protected boolean centeredTitle(){
+		return true;
 	}
 }
