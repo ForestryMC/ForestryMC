@@ -51,7 +51,7 @@ public class FarmLogicRubber extends FarmLogic {
 		if (ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
 			return PluginIC2.resin;
 		} else if (ModUtil.isModLoaded(PluginTechReborn.MOD_ID)) {
-			return PluginTechReborn.SAP;
+			return PluginTechReborn.sap;
 		}
 		return ItemStack.EMPTY;
 	}
