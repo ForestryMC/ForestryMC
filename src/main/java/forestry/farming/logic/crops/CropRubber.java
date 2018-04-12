@@ -94,7 +94,7 @@ public class CropRubber extends CropDestroy {
 		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(world.getBlockState(pos).getBlock(), PluginIC2.rubberWood)) {
 			harvested.add(PluginIC2.resin.copy());
 		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(world.getBlockState(pos).getBlock(), PluginTechReborn.RUBBER_WOOD)) {
-			harvested.add(PluginTechReborn.SAP.copy());
+			harvested.add(PluginTechReborn.sap.copy());
 		}
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);

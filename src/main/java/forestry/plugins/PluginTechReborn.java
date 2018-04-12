@@ -53,8 +53,8 @@ public class PluginTechReborn extends CompatPlugin {
 	@Nullable
 	public static final ItemStack RUBBER_SAPLING = null;
 
-	private ItemStack sap;
-	private ItemStack rubber;
+	public static ItemStack sap;
+	public static ItemStack rubber;
 
 	public PluginTechReborn() {
 		super("TechReborn", MOD_ID);
