@@ -2,14 +2,13 @@ package forestry.plugins;
 
 import com.google.common.collect.ImmutableMap;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.GameRegistry.ItemStackHolder;
 
 import forestry.api.circuits.ChipsetManager;
@@ -19,8 +18,6 @@ import forestry.api.farming.IFarmProperties;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -41,19 +38,23 @@ import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
+import techreborn.api.ISubItemRetriever;
+import techreborn.api.TechRebornAPI;
+
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.TECH_REBORN, name = "TechReborn", author = "temp1011", url = Constants.URL, unlocalizedDescription = "for.module.techreborn.description")
 public class PluginTechReborn extends CompatPlugin {
 
 	public static final String MOD_ID = "techreborn";
 
 	@ItemStackHolder("techreborn:rubber_log")
+	@Nullable
 	public static ItemStack RUBBER_WOOD = null;
 	@ItemStackHolder("techreborn:rubber_sapling")
+	@Nullable
 	public static final ItemStack RUBBER_SAPLING = null;
-	@ItemStackHolder(value = "techreborn:part", meta = 31)
-	public static ItemStack SAP = null;
-	@ItemStackHolder(value = "techreborn:part", meta = 32)
-	public static final ItemStack RUBBER = null;
+
+	private ItemStack sap;
+	private ItemStack rubber;
 
 	public PluginTechReborn() {
 		super("TechReborn", MOD_ID);
@@ -67,12 +68,20 @@ public class PluginTechReborn extends CompatPlugin {
 	}
 
 	@Override
-	public void registerCrates() {
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+	@Optional.Method(modid = "techreborn")
+	public void doInit() {
+		ISubItemRetriever getItem = TechRebornAPI.subItemRetriever;
+		sap = getItem.getPartByName("rubberSap");
+		rubber = getItem.getPartByName("rubber");
 
-		ItemStack scrap = getItemStack("part", 33);
+	}
+
+	@Override
+	@Optional.Method(modid = "techreborn")
+	public void registerCrates() {
+		ItemStack scrap = TechRebornAPI.subItemRetriever.getPartByName("scrap");
 		ItemStack uuMatter = getItemStack("uumatter");
-		ModuleHelper.registerCrate(SAP);
+		ModuleHelper.registerCrate(sap);
 		ModuleHelper.registerCrate(scrap);
 		ModuleHelper.registerCrate(uuMatter);
 		ModuleHelper.registerCrate("ingotLead");
@@ -88,10 +97,11 @@ public class PluginTechReborn extends CompatPlugin {
 
 	@Override
 	public void registerBackpackItems() {
-		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, SAP);
+		ModuleHelper.addItemToBackpack(BackpackManager.FORESTER_UID, sap);
 	}
 
 	@Override
+	@Optional.Method(modid = "techreborn")
 	public void registerRecipes() {
 		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY,
 				Fluids.GLASS.getFluid(500),
@@ -100,18 +110,14 @@ public class PluginTechReborn extends CompatPlugin {
 
 		ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 		if (!ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
-			RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(SAP, 1.0f));
+			RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(sap, 1.0f));
 		} else {
 			Log.info("Using ic2 Propolis recipe rather than Tech Reborn");
 		}
 
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 		if (bogEarthOutputCan > 0) {
-			NBTTagCompound fluidTag = new NBTTagCompound();
-			FluidStack waterBucket = new FluidStack(FluidRegistry.WATER, 1000);
-			waterBucket.writeToNBT(fluidTag);
-			ItemStack waterCell = getItemStack("dynamiccell");
-			waterCell.setTagCompound(fluidTag);
+			ItemStack waterCell = TechRebornAPI.subItemRetriever.getCellByName("water");
 			ItemStack bogEarthCan = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
 			RecipeUtil.addRecipe("techreborn_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 		}
@@ -125,6 +131,6 @@ public class PluginTechReborn extends CompatPlugin {
 
 	public static boolean rubberItemsSuccess() {
 		return ItemStackUtil.getItemFromRegistry("techreborn:rubber_wood") != null
-				&& new ItemStack(ItemStackUtil.getItemFromRegistry("techreborn:part"), 1, 31).isEmpty();
+				&& !new ItemStack(ItemStackUtil.getItemFromRegistry("techreborn:part"), 1, 31).isEmpty();
 	}
 }
