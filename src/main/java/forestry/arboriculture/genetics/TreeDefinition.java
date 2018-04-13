@@ -979,8 +979,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, leafIconProvider, germlingIconProvider, woodProvider, this, leafProvider);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
-		leafProvider.init(this.species);
-
 		this.woodType = woodType;
 	}
 
