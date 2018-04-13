@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -34,6 +33,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.module.biomesoplenty.description")
@@ -56,10 +56,10 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 		colorizedSaplings =  getBlock("colorizedSaplings");
 		food = getItem("food");
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			addFlowers();
 		}
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			addFarmCrops();
 		}
 	}
@@ -67,7 +67,7 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 	@Override
 	public void registerRecipes() {
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			addFermenterRecipes();
 			addSqueezerRecipes();
 		}
@@ -97,13 +97,13 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 //		}
 
 		Block boPTurnip = getBlock("turnip");
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING)) && boPTurnip != null) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING) && boPTurnip != null) {
 			Item boPTurnipSeeds = getItem("turnipSeeds");
 			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (!boPTurnipSeedStack.isEmpty()) {
 				//TODO BoP for 1.9: Add farmable saplings
 				//				Farmables.farmables.get("farmVegetables").add(new FarmableHandPlanted(boPTurnipSeedStack, boPTurnip, 7));
-				if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+				if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 					RecipeManagers.squeezerManager.addRecipe(10, boPTurnipSeedStack, Fluids.SEED_OIL.getFluid(amount));
 				}
 			}

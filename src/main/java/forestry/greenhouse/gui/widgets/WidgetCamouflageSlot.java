@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -32,6 +31,7 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
 
 public class WidgetCamouflageSlot extends Widget {
@@ -49,10 +49,10 @@ public class WidgetCamouflageSlot extends Widget {
 			ItemStack camouflageBlock = camouflageHandler.getCamouflageBlock();
 
 			if (camouflageBlock.isEmpty()) {
-				toolTip.add(TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
+				toolTip.add(Translator.translateToLocal("for.gui.empty"), TextFormatting.ITALIC);
 			} else {
 				Minecraft minecraft = Minecraft.getMinecraft();
-				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(minecraft.player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+				toolTip.add(ItemTooltipUtil.getInformation(camouflageBlock));
 			}
 		}
 	};

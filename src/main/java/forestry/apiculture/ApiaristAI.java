@@ -11,13 +11,6 @@
 
 package forestry.apiculture;
 
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.blocks.BlockApiculture;
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.passive.EntityVillager;
@@ -25,6 +18,13 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.apiculture.EnumBeeType;
+import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.items.ItemBeeGE;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public class ApiaristAI extends EntityAIMoveToBlock {
 	private final EntityVillager villager;

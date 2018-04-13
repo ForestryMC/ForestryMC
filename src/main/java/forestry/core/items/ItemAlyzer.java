@@ -10,16 +10,26 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.Tabs;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.core.utils.Translator;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
@@ -40,5 +50,16 @@ public class ItemAlyzer extends ItemWithGui {
 	@Override
 	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, world, tooltip, advanced);
+		int charges = 0;
+		NBTTagCompound compound = stack.getTagCompound();
+		if(compound != null){
+			charges = compound.getInteger("Charges");
+		}
+		tooltip.add(TextFormatting.GOLD + Translator.translateToLocalFormatted(stack.getUnlocalizedName() + ".charges", charges));
 	}
 }

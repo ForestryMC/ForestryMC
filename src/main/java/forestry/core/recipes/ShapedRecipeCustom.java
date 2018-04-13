@@ -168,7 +168,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	}
 	
 	@Override
-	public boolean isHidden() {
+	public boolean isDynamic() {
 		return false;
 	}
 	

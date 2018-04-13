@@ -10,9 +10,17 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
@@ -23,10 +31,6 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 
@@ -177,4 +181,15 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		return isSecret;
 	}
 
+	@Override
+	public String toString() {
+		MoreObjects.ToStringHelper stringHelper = MoreObjects.toStringHelper(this)
+			.add("first", species0)
+			.add("second", species1)
+			.add("result", template[0]);
+		if(!specialConditions.isEmpty()){
+			stringHelper.add("conditions", getSpecialConditions());
+		}
+		return stringHelper.toString();
+	}
 }

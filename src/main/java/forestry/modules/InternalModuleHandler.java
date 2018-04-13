@@ -163,6 +163,14 @@ public class InternalModuleHandler {
 		}
 	}
 
+	public void runBookInit() {
+		for (IForestryModule module : modules) {
+			Log.debug("Book Entry Registration Start: {}", module);
+			//odule.registerBookEntries(ForesterBook.INSTANCE);
+			Log.debug("Book Entry Registration  Complete: {}", module);
+		}
+	}
+
 	public void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
 		for (FMLInterModComms.IMCMessage message : messages) {
 			for (BlankForestryModule module : modules) {

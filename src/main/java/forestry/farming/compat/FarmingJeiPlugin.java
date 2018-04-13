@@ -2,14 +2,12 @@ package forestry.farming.compat;
 
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Constants;
 import forestry.farming.ModuleFarming;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.ISubtypeRegistry;
@@ -19,7 +17,7 @@ import mezz.jei.api.JEIPlugin;
 public class FarmingJeiPlugin implements IModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			return;
 		}
 

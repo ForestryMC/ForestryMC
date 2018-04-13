@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -59,14 +61,14 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
-		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
-
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
+		Random rand = world instanceof World ? ((World) world).rand : new Random();
 		if (state.getValue(ORE_RESOURCES) == EnumResourceType.APATITE) {
-			this.dropXpOnBlockBreak(world, pos, MathHelper.getInt(world.rand, 1, 4));
+			return MathHelper.getInt(rand, 1, 4);
 		}
+		return super.getExpDrop(state, world, pos, fortune);
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		EnumResourceType type = state.getValue(ORE_RESOURCES);

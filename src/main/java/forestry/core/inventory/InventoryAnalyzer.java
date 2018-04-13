@@ -12,19 +12,17 @@ package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	public static final short SLOT_ANALYZE = 0;
@@ -57,7 +55,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 
 	@Override
 	public void setInventorySlotContents(int slotId, ItemStack itemStack) {
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) && !TreeManager.treeRoot.isMember(itemStack)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(itemStack)) {
 			itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 		}
 

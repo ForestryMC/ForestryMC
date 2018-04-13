@@ -26,7 +26,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -90,6 +89,7 @@ import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -130,7 +130,7 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
 
 		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables("farmArboreal", new FarmableGE());
 		}
 

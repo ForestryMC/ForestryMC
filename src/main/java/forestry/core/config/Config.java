@@ -112,6 +112,9 @@ public class Config {
 	public static boolean ringFarms = true;
 	public static int ringSize = 4;
 
+	// Book
+	public static boolean spawnWithBook = true;
+
 	// Mail
 	public static boolean mailAlertEnabled = true;
 	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
@@ -340,6 +343,8 @@ public class Config {
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
+
+		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
 
 		configCommon.save();
 	}

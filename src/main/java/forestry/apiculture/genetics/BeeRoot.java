@@ -49,9 +49,9 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesPlugin;
 import forestry.api.genetics.ISpeciesType;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
@@ -174,6 +174,24 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public EnumBeeType getIconType() {
 		return EnumBeeType.DRONE;
+	}
+
+	@Override
+	public ISpeciesType[] getTypes() {
+		return EnumBeeType.values();
+	}
+
+	@Override
+	public ISpeciesType getTypeForMutation(int position) {
+		switch (position){
+			case 0:
+				return EnumBeeType.PRINCESS;
+			case 1:
+				return EnumBeeType.DRONE;
+			case 2:
+				return EnumBeeType.QUEEN;
+		}
+		return getIconType();
 	}
 
 	@Override
@@ -385,7 +403,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpeciesPlugin getSpeciesPlugin() {
+	public IDatabasePlugin getSpeciesPlugin() {
 		return BeePlugin.INSTANCE;
 	}
 }

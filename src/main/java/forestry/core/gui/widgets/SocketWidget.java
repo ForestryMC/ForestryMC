@@ -11,8 +11,6 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +24,7 @@ import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
 
 public class SocketWidget extends Widget {
@@ -60,9 +59,7 @@ public class SocketWidget extends Widget {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
 			if (!stack.isEmpty()) {
-				Minecraft minecraft = Minecraft.getMinecraft();
-				EntityPlayer player = minecraft.player;
-				toolTip.add(stack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+				toolTip.add(ItemTooltipUtil.getInformation(stack));
 				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));

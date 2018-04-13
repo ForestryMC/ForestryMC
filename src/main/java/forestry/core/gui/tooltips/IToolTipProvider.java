@@ -28,4 +28,9 @@ public interface IToolTipProvider {
 
 	@SideOnly(Side.CLIENT)
 	boolean isMouseOver(int mouseX, int mouseY);
+
+	@SideOnly(Side.CLIENT)
+	default boolean isRelativeToGui(){
+		return true;
+	}
 }

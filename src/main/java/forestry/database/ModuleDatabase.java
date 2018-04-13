@@ -17,12 +17,13 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.OreDictUtil;
 import forestry.database.blocks.BlockRegistryDatabase;
 import forestry.database.network.PacketRegistryDatabase;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleManager;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.DATABASE, name = "Database", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.database.description")
 public class ModuleDatabase extends BlankForestryModule {
@@ -50,25 +51,25 @@ public class ModuleDatabase extends BlankForestryModule {
 	public void registerRecipes() {
 		List<Object> possibleChests = new LinkedList<>();
 		List<Object> possibleSpecial = new LinkedList<>();
-		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			possibleChests.add(new ItemStack(ModuleApiculture.getBlocks().beeChest));
 			possibleSpecial.add(new ItemStack(ModuleApiculture.getItems().royalJelly));
 		}
-		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			possibleChests.add(new ItemStack(ModuleArboriculture.getBlocks().treeChest));
 			possibleSpecial.add(ItemFruit.EnumFruit.PLUM.getStack());
 		}
-		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			possibleChests.add(new ItemStack(ModuleLepidopterology.getBlocks().butterflyChest));
 		}
 		if (possibleChests.size() == 1) {
-			addRecipe(possibleSpecial, "chestWood", possibleChests.get(0));
+			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, possibleChests.get(0));
 		}
 		if (possibleSpecial.isEmpty()) {
-			possibleSpecial.add("chestWood");
+			possibleSpecial.add(OreDictUtil.CHEST_WOOD);
 		}
 		if (possibleChests.isEmpty()) {
-			addRecipe(possibleSpecial, "chestWood", "chestWood");
+			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, OreDictUtil.CHEST_WOOD);
 		} else {
 			for (int firstChest = 0; firstChest < possibleChests.size(); firstChest++) {
 				for (int secondChest = 0; secondChest < possibleChests.size(); secondChest++) {

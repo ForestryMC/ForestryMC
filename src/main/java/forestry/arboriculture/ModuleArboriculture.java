@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -110,7 +109,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.VillagerTradeLists;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleManager;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -215,7 +214,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandTree());
 
-		if(ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)){
+		if(ModuleHelper.isEnabled( ForestryModuleUids.SORTING)){
 			ArboricultureFilterRuleType.init();
 		}
 	}
@@ -391,7 +390,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 					'#', fireproofPlanks.copy());
 
 			// Fabricator recipes
-			if (ForestryAPI.enabledModules.containsAll(Arrays.asList(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY), new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE)))) {
+			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
 				logs.setCount(1);
 				fireproofLogs.setCount(1);
 				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
@@ -412,7 +411,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			}
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 
 			// SQUEEZER RECIPES
 			int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
