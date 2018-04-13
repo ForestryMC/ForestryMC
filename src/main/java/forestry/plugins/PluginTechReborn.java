@@ -67,7 +67,7 @@ public class PluginTechReborn extends CompatPlugin {
 	}
 
 	@Override
-	@Optional.Method(modid = "techreborn")
+	@Optional.Method(modid = MOD_ID)
 	public void doInit() {
 		ISubItemRetriever getItem = TechRebornAPI.subItemRetriever;
 		sap = getItem.getPartByName("rubberSap");
@@ -76,7 +76,7 @@ public class PluginTechReborn extends CompatPlugin {
 	}
 
 	@Override
-	@Optional.Method(modid = "techreborn")
+	@Optional.Method(modid = MOD_ID)
 	public void registerCrates() {
 		ItemStack scrap = TechRebornAPI.subItemRetriever.getPartByName("scrap");
 		ItemStack uuMatter = getItemStack("uumatter");
@@ -100,7 +100,7 @@ public class PluginTechReborn extends CompatPlugin {
 	}
 
 	@Override
-	@Optional.Method(modid = "techreborn")
+	@Optional.Method(modid = MOD_ID)
 	public void registerRecipes() {
 		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY,
 				Fluids.GLASS.getFluid(500),
