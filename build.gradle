@@ -59,6 +59,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+	maven {
+		name = "Modmuss50"
+		url = "http://maven.modmuss50.me"
+	}
 }
 
 dependencies {
@@ -66,6 +70,7 @@ dependencies {
 	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
 	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	compile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 }
 
 configurations {
