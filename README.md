@@ -28,6 +28,8 @@ IntelliJ IDEA: "gradlew idea genIntellijRuns"
 
 To package, open a command line and type "gradlew build".
 
+For mod authors: the Forestry maven is located at http://maven.ic2.player.to/net/sengir/forestry/
+
 ### Notes
 
 Beware of ugly code.
