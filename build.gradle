@@ -61,7 +61,7 @@ repositories {
 	}
 	maven {
 		name = "invtweaks"
-		url = "https://minecraft.curseforge.com/api/maven/"
+		url = "https://maven.thiakil.com/"
 	}
 }
 
