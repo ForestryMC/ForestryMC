@@ -41,7 +41,7 @@ public class CropFruit extends Crop {
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 		return tile.pickFruit(ItemStack.EMPTY);
 	}

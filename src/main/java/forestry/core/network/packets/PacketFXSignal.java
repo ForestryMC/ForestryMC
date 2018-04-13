@@ -43,19 +43,21 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	private final BlockPos pos;
 	private final VisualFXType visualFX;
 	private final SoundFXType soundFX;
+	private final IBlockState blockState;
 
-	public PacketFXSignal(VisualFXType type, BlockPos pos) {
-		this(type, SoundFXType.NONE, pos);
+	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState blockState) {
+		this(type, SoundFXType.NONE, pos, blockState);
 	}
 
-	public PacketFXSignal(SoundFXType type, BlockPos pos) {
-		this(VisualFXType.NONE, type, pos);
+	public PacketFXSignal(SoundFXType type, BlockPos pos, IBlockState blockState) {
+		this(VisualFXType.NONE, type, pos, blockState);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos) {
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState blockState) {
 		this.pos = pos;
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
+		this.blockState = blockState;
 	}
 
 	@Override
@@ -63,6 +65,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
+		NBTTagCompound tag = new NBTTagCompound();
+		NBTUtil.writeBlockState(tag, blockState);
+		data.writeCompoundTag(tag);
 	}
 
 	@Override
@@ -78,7 +83,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
 			World world = player.world;
-			IBlockState blockState = world.getBlockState(pos);
+			IBlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
 			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {

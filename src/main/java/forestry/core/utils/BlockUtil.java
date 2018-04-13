@@ -318,7 +318,7 @@ public abstract class BlockUtil {
 
 	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, IBlockState blockState) {
 		if (world.setBlockState(pos, blockState)) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
@@ -327,7 +327,7 @@ public abstract class BlockUtil {
 
 	public static boolean setBlockWithBreakSound(World world, BlockPos pos, IBlockState blockState, IBlockState oldState) {
 		if (world.setBlockState(pos, blockState)) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
@@ -336,7 +336,7 @@ public abstract class BlockUtil {
 
 	public static boolean setBlockToAirWithSound(World world, BlockPos pos, IBlockState oldState) {
 		if (world.setBlockToAir(pos)) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}

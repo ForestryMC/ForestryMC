@@ -40,7 +40,7 @@ public class CropDestroyDouble extends Crop {
 		block.getDrops(harvested, world, pos, blockState, 0);
 		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockToAir(pos.up());

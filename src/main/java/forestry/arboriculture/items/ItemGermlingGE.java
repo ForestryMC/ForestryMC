@@ -177,7 +177,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			pollinatable.mateWith(tree);
 
 			IBlockState blockState = worldIn.getBlockState(pos);
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
 
 			if (!playerIn.capabilities.isCreativeMode) {
