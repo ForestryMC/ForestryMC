@@ -37,7 +37,7 @@ import forestry.core.utils.TickHelper;
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String NBT_KEY = "hasFlowerCache";
 	private static final String NBT_KEY_FLOWERS = "flowers";
-	private static final int FLOWER_CHECK_INTERVAL = 200;
+	private static final int FLOWER_CHECK_INTERVAL = 2;
 
 	private final TickHelper tickHelper = new TickHelper();
 
