@@ -108,11 +108,13 @@ public class PluginTechReborn extends CompatPlugin {
 				ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 
-		ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-		if (!ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
-			RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(sap, 1.0f));
-		} else {
-			Log.info("Using ic2 Propolis recipe rather than Tech Reborn");
+		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
+			if (!ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
+				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(sap, 1.0f));
+			} else {
+				Log.info("Using ic2 Propolis recipe rather than Tech Reborn");
+			}
 		}
 
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");

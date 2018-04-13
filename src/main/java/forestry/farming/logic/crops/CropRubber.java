@@ -45,12 +45,12 @@ public class CropRubber extends CropDestroy {
 	private static <T extends Comparable<T>> IBlockState getReplantState(IBlockState sappyState) {
 		if (hasRubberToHarvest(sappyState)) {
 			for (Map.Entry<IProperty<?>, Comparable<?>> wetPropertyEntry : sappyState.getProperties().entrySet()) {
-				if (wetPropertyEntry.getKey() instanceof PropertyBool && wetPropertyEntry.getKey().getName().equals("hassap")) {
-					return sappyState.withProperty(PropertyBool.create("hassap"), false);
-				}
 				String valueWetString = wetPropertyEntry.getValue().toString();
 				String valueDryString = valueWetString.replace("wet", "dry");
 				IProperty<?> property = wetPropertyEntry.getKey();
+				if (property instanceof PropertyBool && property.getName().equals("hassap")) {
+					return sappyState.withProperty(PropertyBool.create("hassap"), false);
+				}
 
 				IBlockState baseState = sappyState.getBlock().getBlockState().getBaseState();
 				IBlockState dryState = getStateWithValue(baseState, property, valueDryString);
@@ -79,8 +79,7 @@ public class CropRubber extends CropDestroy {
 	}
 
 	@Nullable
-	private static <T extends Comparable<T>> IBlockState getStateWithValue(IBlockState
-			baseState, IProperty<T> property, String valueString) {
+	private static <T extends Comparable<T>> IBlockState getStateWithValue(IBlockState baseState, IProperty<T> property, String valueString) {
 		Optional<T> value = property.parseValue(valueString);
 		if (value.isPresent()) {
 			return baseState.withProperty(property, value.get());
@@ -91,9 +90,10 @@ public class CropRubber extends CropDestroy {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> harvested = NonNullList.create();
-		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(world.getBlockState(pos).getBlock(), PluginIC2.rubberWood)) {
+		Block harvestBlock = world.getBlockState(pos).getBlock();
+		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(harvestBlock, PluginIC2.rubberWood)) {
 			harvested.add(PluginIC2.resin.copy());
-		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(world.getBlockState(pos).getBlock(), PluginTechReborn.RUBBER_WOOD)) {
+		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
 			harvested.add(PluginTechReborn.sap.copy());
 		}
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
