@@ -284,7 +284,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
-		
+
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
 		config.save();
@@ -991,41 +991,49 @@ public class ModuleApiculture extends BlankForestryModule {
 			}
 			return true;
 		} else if (message.key.equals("add-plantable-flower")) {
-			try {
-				NBTTagCompound tagCompound = message.getNBTValue();
-				IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
-				double weight = tagCompound.getDouble("weight");
-				List<String> flowerTypes = new ArrayList<>();
-				for (String key : tagCompound.getKeySet()) {
-					if (key.contains("flowertype")) {
-						flowerTypes.add(tagCompound.getString("flowertype"));
-					}
-				}
-				FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[flowerTypes.size()]));
-				return true;
-			} catch (Exception e) {
-				IMCUtil.logInvalidIMCMessage(message);
-				return false;
-			}
+			return addPlantableFlower(message);
 		} else if (message.key.equals("add-acceptable-flower")) {
-			try {
-				NBTTagCompound tagCompound = message.getNBTValue();
-				IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
-				List<String> flowerTypes = new ArrayList<>();
-				for (String key : tagCompound.getKeySet()) {
-					if (key.contains("flowertype")) {
-						flowerTypes.add(tagCompound.getString("flowertype"));
-					}
-				}
-				FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[flowerTypes.size()]));
-				return true;
-			} catch (Exception e) {
-				IMCUtil.logInvalidIMCMessage(message);
-				return false;
-			}
+			return addAcceptableFlower(message);
 		}
 
 		return false;
+	}
+
+	private boolean addPlantableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			double weight = tagCompound.getDouble("weight");
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
+	}
+
+	private boolean addAcceptableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
 	}
 
 	@SubscribeEvent
