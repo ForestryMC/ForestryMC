@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.GameRegistry.ItemStackHolder;
@@ -108,7 +107,7 @@ public class PluginTechReborn extends CompatPlugin {
 				ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			if (!ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
 				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(sap, 1.0f));
@@ -124,7 +123,7 @@ public class PluginTechReborn extends CompatPlugin {
 			RecipeUtil.addRecipe("techreborn_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 			ChipsetManager.solderManager.addRecipe(layoutManual, ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			ForestryAPI.farmRegistry.registerFarmables("rubberTreeFarm", new FarmableSapling(RUBBER_SAPLING, new ItemStack[0]));
