@@ -56,6 +56,7 @@ import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @SuppressWarnings("unused")
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.NATURA, name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.natura.description")
@@ -274,7 +275,7 @@ public class PluginNatura extends BlankForestryModule {
 			RecipeManagers.moistenerManager.addRecipe(seed, new ItemStack(Blocks.MYCELIUM), 5000);
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			cropBlocks.forEach(itemStack -> {
 				Block block = ItemStackUtil.getBlock(itemStack);
 				ItemStack seedItem;

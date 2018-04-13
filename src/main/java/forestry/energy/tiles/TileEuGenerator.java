@@ -20,7 +20,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -28,7 +27,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -48,8 +46,8 @@ import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.plugins.ForestryCompatPlugins;
-
 import ic2.api.energy.prefab.BasicSource;
 
 public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile, IStreamableGui {
@@ -60,6 +58,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	private int tickCount = 0;
 
+	@Nullable
 	private BasicSource ic2EnergySource;
 
 	public TileEuGenerator() {
@@ -72,7 +71,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 		tankManager = new TankManager(this, resourceTank);
 		
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
+		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}
 	}
@@ -229,7 +228,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 	}
 
-	@Nonnull
+	@Nullable
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		if (super.hasCapability(capability, facing)) {

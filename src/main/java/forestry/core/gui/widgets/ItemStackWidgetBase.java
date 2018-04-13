@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.utils.ItemTooltipUtil;
 
 public abstract class ItemStackWidgetBase extends Widget {
 	public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
@@ -32,19 +31,19 @@ public abstract class ItemStackWidgetBase extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack itemStack = getItemStack();
 		if (!itemStack.isEmpty()) {
+			RenderHelper.enableGUIStandardItemLighting();
 			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
+			RenderHelper.disableStandardItemLighting();
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		Minecraft minecraft = Minecraft.getMinecraft();
-		EntityPlayer player = minecraft.player;
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (!itemStack.isEmpty()) {
-			tip.add(itemStack.getTooltip(player, minecraft.gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+			tip.add(ItemTooltipUtil.getInformation(itemStack));
 		}
 		return tip;
 	}

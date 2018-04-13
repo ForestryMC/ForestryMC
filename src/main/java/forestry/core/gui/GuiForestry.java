@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
+import forestry.core.gui.elements.ElementManager;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
@@ -46,12 +47,13 @@ import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 
-public abstract class GuiForestry<C extends Container> extends GuiContainer {
+public abstract class GuiForestry<C extends Container> extends GuiContainer implements IGuiSizable {
 	protected final C container;
 
 	public final ResourceLocation textureFile;
 	protected final WidgetManager widgetManager;
 	protected final LedgerManager ledgerManager;
+	protected final ElementManager elementManager;
 	protected final TextLayoutHelper textLayout;
 
 	protected GuiForestry(String texture, C container) {
@@ -63,6 +65,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
+		this.elementManager = new ElementManager(this);
 
 		this.textureFile = texture;
 
@@ -80,6 +83,8 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 
 		this.ledgerManager.setMaxWidth(maxLedgerWidth);
 		this.ledgerManager.clear();
+
+		this.elementManager.init(guiLeft, guiTop);
 
 		addLedgers();
 	}
@@ -144,20 +149,22 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseClicked(int xPos, int yPos, int mouseButton) throws IOException {
-		super.mouseClicked(xPos, yPos, mouseButton);
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		// / Handle ledger clicks
-		ledgerManager.handleMouseClicked(xPos, yPos, mouseButton);
-		widgetManager.handleMouseClicked(xPos, yPos, mouseButton);
+		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
+		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
+		elementManager.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
-	protected void mouseReleased(int mouseX, int mouseY, int state) {
-		if (widgetManager.handleMouseRelease(mouseX, mouseY, state)) {
+	protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
 			return;
 		}
-		super.mouseReleased(mouseX, mouseY, state);
+		elementManager.mouseReleased(mouseX, mouseY, mouseButton);
+		super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -166,6 +173,14 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 		widgetManager.handleMouseMove(mouseX, mouseY, mouseButton, time);
 
 		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
+	}
+
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		if(elementManager.keyTyped(typedChar, keyCode)){
+			return;
+		}
+		super.keyTyped(typedChar, keyCode);
 	}
 
 	@Nullable
@@ -209,6 +224,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
 			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
+			elementManager.drawTooltip(mouseX, mouseY);
 		}
 	}
 
@@ -229,15 +245,18 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 		}
 		GlStateManager.popMatrix();
 
+		GlStateManager.color(1.0F, 1.0F, 1.0F);
+		elementManager.draw(mouseX, mouseY);
+
 		bindTexture(textureFile);
 	}
 
 	protected void drawBackground(){
 		bindTexture(textureFile);
 
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		//int x = (width - xSize) / 2;
+		//int y = (height - ySize) / 2;
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	protected void drawWidgets() {
@@ -255,10 +274,12 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 		this.zLevel = level;
 	}
 
+	@Override
 	public int getSizeX() {
 		return xSize;
 	}
 
+	@Override
 	public int getSizeY() {
 		return ySize;
 	}
@@ -271,6 +292,11 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer {
 	@Override
 	public int getGuiTop() {
 		return guiTop;
+	}
+
+	@Override
+	public Minecraft getMC() {
+		return mc;
 	}
 
 	@Override
