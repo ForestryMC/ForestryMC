@@ -56,7 +56,6 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
 
 public class BeekeepingLogic implements IBeekeepingLogic {
 
@@ -77,7 +76,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	private final HasFlowersCache hasFlowersCache = new HasFlowersCache();
 	private final QueenCanWorkCache queenCanWorkCache = new QueenCanWorkCache();
 	private final PollenHandler pollenHandler = new PollenHandler();
-	private final TickHelper tickHelper = new TickHelper();
 
 	// Client
 	private boolean active;
@@ -228,10 +226,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		for (IErrorState errorState : queenErrors) {
 			errorLogic.setCondition(true, errorState);
 		}
-		tickHelper.onTick();
-		if (tickHelper.updateOnInterval(100)) {
-			hasFlowersCache.update(queen, housing);
-		}
+
+		hasFlowersCache.update(queen, housing);
+
 		boolean hasFlowers = hasFlowersCache.hasFlowers();
 		boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);
