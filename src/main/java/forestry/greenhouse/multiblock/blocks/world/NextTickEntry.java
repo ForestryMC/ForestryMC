@@ -35,7 +35,7 @@ class NextTickEntry implements Comparable<NextTickEntry> {
 			return false;
 		} else {
 			NextTickEntry nextticklistentry = (NextTickEntry) o;
-			return this.position.equals(nextticklistentry.position) && provider.equals(provider);
+			return this.position.equals(nextticklistentry.position);
 		}
 	}
 

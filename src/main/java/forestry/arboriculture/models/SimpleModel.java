@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -152,6 +153,7 @@ public class SimpleModel implements IModel {
 				try {
 					model = ModelLoaderRegistry.getModel(loc);
 				} catch (Exception e) {
+					Throwables.throwIfUnchecked(e);
 					throw new RuntimeException(e);
 				}
 			}
