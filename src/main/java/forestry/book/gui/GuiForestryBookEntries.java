@@ -30,22 +30,21 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 	public void initGui() {
 		super.initGui();
 		int offset = entryIndex * 24;
-		int yOffset = 0;
-		List<IBookEntry> entries = new ArrayList<>(category.getEntries());
-		for (IBookEntry entry : entries.subList(offset, entries.size() > offset + 12 ? offset + 12 : entries.size())) {
-			addButton(new GuiButtonEntry(yOffset, guiLeft + LEFT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + yOffset * (fontRenderer.FONT_HEIGHT + 2), entry));
-			yOffset++;
-		}
-		offset += 12;
-		yOffset = 0;
-		if (entries.size() > offset) {
-			for (IBookEntry entry : entries.subList(offset, entries.size() > offset + 12 ? offset + 12 : entries.size())) {
-				addButton(new GuiButtonEntry(yOffset, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + yOffset * (fontRenderer.FONT_HEIGHT + 2), entry));
-				yOffset++;
-			}
-		}
+		addEntryButtons(offset, LEFT_PAGE_START_X, LEFT_PAGE_START_Y);
+		addEntryButtons(offset + 12, RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y);
 		elementManager.init(guiLeft, guiTop);
 		elementManager.clear();
+	}
+
+	private void addEntryButtons(int indexStart, int xStart, int yStart){
+		List<IBookEntry> entries = new ArrayList<>(category.getEntries());
+		if(indexStart >= entries.size()){
+			return;
+		}
+		for(int i = 0;i + indexStart < entries.size() && i + indexStart < indexStart + 12;i++){
+			IBookEntry entry = entries.get(i);
+			addButton(new GuiButtonEntry(i, guiLeft + xStart, guiTop + yStart + i * (fontRenderer.FONT_HEIGHT + 2), entry));
+		}
 	}
 
 	@Override
