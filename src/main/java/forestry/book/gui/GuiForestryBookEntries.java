@@ -41,9 +41,17 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 		if(indexStart >= entries.size()){
 			return;
 		}
-		for(int i = 0;i + indexStart < entries.size() && i + indexStart < indexStart + 12;i++){
-			IBookEntry entry = entries.get(indexStart + i);
-			addButton(new GuiButtonEntry(i, guiLeft + xStart, guiTop + yStart + i * (fontRenderer.FONT_HEIGHT + 2), entry));
+		final int maxIndex;
+		if(entries.size() > indexStart + 12){
+			maxIndex = indexStart + 12;
+		}else{
+			maxIndex = entries.size();
+		}
+		int yOffset = 0;
+		for(int i = indexStart;i < maxIndex;i++){
+			IBookEntry entry = entries.get(i);
+			addButton(new GuiButtonEntry(buttonList.size(), guiLeft + xStart, guiTop + yStart + yOffset, entry));
+			yOffset += fontRenderer.FONT_HEIGHT + 2;
 		}
 	}
 

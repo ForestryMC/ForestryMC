@@ -39,8 +39,4 @@ public class ResourceUtil {
 			return Collections.emptyList();
 		}
 	}
-
-	public static boolean resourceExists(ResourceLocation location) {
-		return getResource(location) != null;
-	}
 }

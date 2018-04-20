@@ -1,6 +1,5 @@
 package forestry.book;
 
-import com.google.common.collect.MapMaker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -14,10 +13,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ForkJoinPool;
 
 import org.apache.commons.io.IOUtils;
 
@@ -67,6 +65,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static final BookLoader INSTANCE = new BookLoader();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
+	private static final String DEFAULT_LANG = "en_US";
 	private final Map<String, Class<? extends BookContent>> contentByType = new HashMap<>();
 	private final Map<String, IBookPageFactory> factoryByName = new HashMap<>();
 	@Nullable
@@ -108,7 +107,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 			return book;
 		}
 		book = new ForesterBook();
-		BookCategory[] categories = fromJson(new ResourceLocation(BOOK_LOCATION + "categories.json"), BookCategory[].class, new BookCategory[0]);
+		BookCategory[] categories = fromJson(BOOK_LOCATION + "categories.json", BookCategory[].class, new BookCategory[0]);
 		if (categories != null) {
 			book.addCategories(categories);
 			for (BookCategory category : categories) {
@@ -124,31 +123,27 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	@Nullable
-	public static ResourceLocation getResourceLocation(String path) {
+	public static IResource getResource(String path){
+		IResource resource;
 		if (!path.contains(":")) {
 			Language currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
 			String lang = currentLanguage.getLanguageCode();
-			String defaultLang = "en_US";
 
 			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
-			if (ResourceUtil.resourceExists(location)) {
-				return location;
+			resource = ResourceUtil.getResource(location);
+			if (resource != null) {
+				return resource;
 			}
-			location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, defaultLang, path));
-			if (ResourceUtil.resourceExists(location)) {
-				return location;
+			location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, DEFAULT_LANG, path));
+			resource = ResourceUtil.getResource(location);
+			if (resource != null) {
+				return resource;
 			}
 			location = new ResourceLocation(BOOK_LOCATION + path);
-			if (ResourceUtil.resourceExists(location)) {
-				return location;
-			}
-			return null;
+			return ResourceUtil.getResource(location);
 		}
 		ResourceLocation location = new ResourceLocation(path);
-		if (ResourceUtil.resourceExists(location)) {
-			return location;
-		}
-		return null;
+		return ResourceUtil.getResource(location);
 	}
 
 	@Nullable
@@ -158,7 +153,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 
 	private void loadCategory(BookCategory category) {
 		ResourceLocation entriesLocation = new ResourceLocation(BOOK_LOCATION + "entries/" + category.getName() + ".json");
-		Set<String> entryNames = new HashSet<>();
+		List<String> entryNames = new LinkedList<>();
 		for (IResource entryResource : ResourceUtil.getResources(entriesLocation)) {
 			try (BufferedReader reader = ResourceUtil.createReader(entryResource)) {
 				Entries entries = GSON.fromJson(reader, Entries.class);
@@ -169,9 +164,9 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 				IOUtils.closeQuietly(entryResource);
 			}
 		}
-		Map<String, EntryData> entries = new MapMaker().concurrencyLevel(ForkJoinPool.commonPool().getPoolSize() + 1).initialCapacity(entryNames.size()).makeMap();
-		entryNames.parallelStream().forEach(entry -> loadEntries(entries, entry));
-		entryNames.parallelStream().forEach(entry -> createEntry(entries, category, entry));
+		Map<String, EntryData> entries = new HashMap<>(entryNames.size());
+		entryNames.forEach(entry -> loadEntries(entries, entry));
+		entryNames.forEach(entry -> createEntry(entries, category, entry));
 	}
 
 	private void createEntry(Map<String, EntryData> entries, BookCategory category, String entry){
@@ -196,8 +191,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	private void loadEntries(Map<String, EntryData> entries, String entry) {
-		ResourceLocation location = getResourceLocation(entry + ".json");
-		EntryData data = fromJson(location, EntryData.class, null);
+		EntryData data = fromJson(entry + ".json", EntryData.class, null);
 		if (data != null) {
 			entries.put(entry, data);
 			for (String subEntry : data.subEntries) {
@@ -207,11 +201,8 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	@Nullable
-	private <T> T fromJson(@Nullable ResourceLocation location, Class<T> classOfT, @Nullable T fallback) {
-		if (location == null) {
-			return fallback;
-		}
-		IResource resource = ResourceUtil.getResource(location);
+	private <T> T fromJson( String location, Class<T> classOfT, @Nullable T fallback) {
+		IResource resource = getResource(location);
 		if (resource == null) {
 			return fallback;
 		}
@@ -231,7 +222,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	private static class Entries {
-		private final Set<String> names = new HashSet<>();
+		private final List<String> names = new LinkedList<>();
 	}
 
 	private static class EntriesDeserializer implements JsonDeserializer<Entries> {
