@@ -42,7 +42,7 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 			return;
 		}
 		for(int i = 0;i + indexStart < entries.size() && i + indexStart < indexStart + 12;i++){
-			IBookEntry entry = entries.get(i);
+			IBookEntry entry = entries.get(indexStart + i);
 			addButton(new GuiButtonEntry(i, guiLeft + xStart, guiTop + yStart + i * (fontRenderer.FONT_HEIGHT + 2), entry));
 		}
 	}
