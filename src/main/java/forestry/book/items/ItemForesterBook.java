@@ -37,7 +37,12 @@ public class ItemForesterBook extends ItemWithGui {
 	@Override
 	public GuiScreen getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		IForesterBook book = BookLoader.INSTANCE.loadBook();
-		return GuiForesterBook.guiScreen != null ? GuiForesterBook.guiScreen : new GuiForestryBookCategories(book);
+		GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();
+		if(guiScreen != null && guiScreen.getBook() != book){
+			GuiForesterBook.setGuiScreen(null);
+			guiScreen = null;
+		}
+		return guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
 	}
 
 	@Nullable
