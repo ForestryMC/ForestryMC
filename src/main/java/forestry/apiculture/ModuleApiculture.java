@@ -158,6 +158,10 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static boolean hivesDamageOnPeaceful = false;
 	
+	public static boolean ignobleDecayInAlveary = true;
+	
+	public static float decayChance = 0.02f;
+  
 	public static boolean doSelfPollination = true;
 	
 	public static int maxFlowersSpawnedPerHive = 20;
@@ -282,6 +286,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
+		
+		decayChance = config.getFloatLocalized("beekeeping", "decay.chance", 0.02f, 0.0f, 1.0f);
 		
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
@@ -923,6 +929,10 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
+	}
+	
+	public static void setAlvearyDecay(boolean decay) {
+		ignobleDecayInAlveary = decay;
 	}
 
 	private static void parseBeeBlacklist(String[] items) {
