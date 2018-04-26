@@ -6,10 +6,10 @@
 !/forestry_techne
 !/gradle/wrapper
 !/src
+!/lang
 
 # files
 !/.gitignore
-!/.gitmodules
 !/CLA.txt
 !/CONTRIBUTING.md
 !/LICENSE.txt
