@@ -2,33 +2,26 @@ package forestry.core.utils;
 
 import java.util.IllegalFormatException;
 
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 
 public class Translator {
 	private Translator() {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String translateToLocal(String key) {
-		if (I18n.canTranslate(key)) {
-			return I18n.translateToLocal(key);
-		} else {
-			return I18n.translateToFallback(key);
-		}
+		return I18n.format(key);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static boolean canTranslateToLocal(String key) {
-		return I18n.canTranslate(key);
+		return I18n.hasKey(key);
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {
-		String s = translateToLocal(key);
 		try {
-			return String.format(s, format);
+			return I18n.format(key, format);
 		} catch (IllegalFormatException e) {
-			String errorMessage = "Format error: " + s;
+			String errorMessage = "Format error: " + I18n.format(key);
 			Log.error(errorMessage, e);
 			return errorMessage;
 		}
