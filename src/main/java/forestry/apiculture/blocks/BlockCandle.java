@@ -63,9 +63,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	public static final Set<Item> lightingItems;
 	public static final String colourTagName = "colour";
 
-	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
+	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 
-	private enum State implements IStringSerializable {
+	enum State implements IStringSerializable {
 		ON("on"), OFF("off");
 
 		private final String name;
