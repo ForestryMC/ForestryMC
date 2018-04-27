@@ -31,6 +31,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -157,9 +159,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int ticksPerBeeWorkCycle = 550;
 
 	public static boolean hivesDamageOnPeaceful = false;
-	
+
 	public static boolean doSelfPollination = true;
-	
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -282,7 +284,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
-		
+
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
 		config.save();
@@ -988,9 +990,50 @@ public class ModuleApiculture extends BlankForestryModule {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;
+		} else if (message.key.equals("add-plantable-flower")) {
+			return addPlantableFlower(message);
+		} else if (message.key.equals("add-acceptable-flower")) {
+			return addAcceptableFlower(message);
 		}
 
 		return false;
+	}
+
+	private boolean addPlantableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			double weight = tagCompound.getDouble("weight");
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
+	}
+
+	private boolean addAcceptableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
 	}
 
 	@SubscribeEvent
