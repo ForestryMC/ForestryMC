@@ -29,7 +29,7 @@ import forestry.core.render.ForestryResource;
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
-	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
+	public static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
 	@Nullable
 	private ToolTip toolTip;

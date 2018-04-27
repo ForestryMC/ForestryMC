@@ -37,9 +37,17 @@ import forestry.core.utils.TickHelper;
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String NBT_KEY = "hasFlowerCache";
 	private static final String NBT_KEY_FLOWERS = "flowers";
-	private static final int FLOWER_CHECK_INTERVAL = 200;
+	private int flowerCheckInterval;
 
 	private final TickHelper tickHelper = new TickHelper();
+
+	public HasFlowersCache() {
+		this.flowerCheckInterval = 200;
+	}
+	
+	public HasFlowersCache(int checkInterval) {
+		flowerCheckInterval = checkInterval;
+	}
 
 	@Nullable
 	private FlowerData flowerData;
@@ -76,7 +84,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		World world = beeHousing.getWorldObj();
 		tickHelper.onTick();
 
-		if (!flowerCoords.isEmpty() && tickHelper.updateOnInterval(FLOWER_CHECK_INTERVAL)) {
+		if (!flowerCoords.isEmpty() && tickHelper.updateOnInterval(flowerCheckInterval)) {
 			Iterator<BlockPos> iterator = flowerCoords.iterator();
 			while (iterator.hasNext()) {
 				BlockPos flowerPos = iterator.next();
@@ -118,7 +126,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			IBeeGenome genome = queen.getGenome();
 			String flowerType = genome.getFlowerProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-				|| !this.flowerData.territory.equals(genome.getTerritory())) {
+					|| !this.flowerData.territory.equals(genome.getTerritory())) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();

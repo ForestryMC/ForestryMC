@@ -39,6 +39,11 @@ public class ModuleEnergy extends BlankForestryModule {
 	@Nullable
 	public static BlockRegistryEnergy blocks;
 
+	public static BlockRegistryEnergy getBlocks() {
+		Preconditions.checkState(blocks != null);
+		return blocks;
+	}
+
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryEnergy();
@@ -46,7 +51,7 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryEnergy blocks = getBlocks();
 		blocks.peatEngine.init();
 		blocks.biogasEngine.init();
 
@@ -57,7 +62,7 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		Preconditions.checkState(blocks != null);
+		BlockRegistryEnergy blocks = getBlocks();
 
 		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
 				"###",

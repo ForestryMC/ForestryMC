@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import forestry.api.multiblock.IMultiblockController;
 import net.minecraft.util.math.BlockPos;
+
+import forestry.api.multiblock.IMultiblockController;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.EnumFarmBlockType;
 
 public class TileFarmPlain extends TileFarm {
 	@Override
@@ -21,7 +24,7 @@ public class TileFarmPlain extends TileFarm {
 		// set band block meta
 		int bandY = maxCoord.getY() - 1;
 		if (getPos().getY() == bandY) {
-			this.world.setBlockState(getPos(), getBlockType().getStateFromMeta(1), 2);
+			this.world.setBlockState(getPos(), getBlockType().getDefaultState().withProperty(BlockFarm.META, EnumFarmBlockType.BAND), 2);
 		}
 	}
 

@@ -11,6 +11,7 @@
 package forestry.energy.tiles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -19,7 +20,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,7 +28,6 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
@@ -42,6 +41,7 @@ import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.plugins.ForestryCompatPlugins;
 
 import ic2.api.energy.prefab.BasicSink;
@@ -63,6 +63,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig();
 
+	@Nullable
 	private BasicSink ic2EnergySink;
 
 	public TileEngineElectric() {
@@ -70,7 +71,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 		setInternalInventory(new InventoryEngineElectric(this));
 		
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2))) {
+		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 		}
 	}

@@ -114,6 +114,9 @@ public class Config {
 	public static boolean ringFarms = true;
 	public static int ringSize = 4;
 
+	// Book
+	public static boolean spawnWithBook = true;
+
 	// Mail
 	public static boolean mailAlertEnabled = true;
 	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
@@ -124,6 +127,7 @@ public class Config {
 
 	// Fluids
 	public static boolean CapsuleFluidPickup = false;
+	public static boolean nonConsumableCapsules = false;
 
 	// Gui tabs (Ledger)
 	public static int guiTabSpeed = 8;
@@ -273,9 +277,9 @@ public class Config {
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-
+    
 		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "TreeFrequency", generateTreesAmount, 0.0F, 10.0F);
-
+    
 		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
 			blacklistedTreeDims.add(dimId);
 		}
@@ -331,7 +335,8 @@ public class Config {
 		ringFarms = configCommon.getBooleanLocalized("tweaks.cultivation", "ring", ringFarms);
 		ringSize = configCommon.getIntLocalized("tweaks.cultivation", "ring_size", ringSize, 1, 8);
 
-		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks", "capsule", CapsuleFluidPickup);
+		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
+		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
 		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
 		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
@@ -347,6 +352,8 @@ public class Config {
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
+
+		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
 
 		configCommon.save();
 	}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,18 +48,20 @@ public class GuiUtil {
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
 
-	public static void drawToolTips(GuiForestry gui, ToolTip toolTips, int mouseX, int mouseY) {
+	public static void drawToolTips(IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
 		List<String> lines = toolTips.getLines();
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
-			ScaledResolution scaledresolution = new ScaledResolution(gui.mc);
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.mc.fontRenderer);
+			if(provider == null || provider.isRelativeToGui()) {
+				GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
+			}
+			ScaledResolution scaledresolution = new ScaledResolution(gui.getMC());
+			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.getMC().fontRenderer);
 			GlStateManager.popMatrix();
 		}
 	}
 
-	public static void drawToolTips(GuiForestry gui, Collection<?> objects, int mouseX, int mouseY) {
+	public static void drawToolTips(IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
 			if (!(obj instanceof IToolTipProvider)) {
 				continue;
@@ -67,15 +70,21 @@ public class GuiUtil {
 			if (!provider.isToolTipVisible()) {
 				continue;
 			}
-			ToolTip tips = provider.getToolTip(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+			int mX = mouseX;
+			int mY = mouseY;
+			if(provider.isRelativeToGui()){
+				mX-=gui.getGuiLeft();
+				mY-=gui.getGuiTop();
+			}
+			ToolTip tips = provider.getToolTip(mX, mY);
 			if (tips == null) {
 				continue;
 			}
-			boolean mouseOver = provider.isMouseOver(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+			boolean mouseOver = provider.isMouseOver(mX, mY);
 			tips.onTick(mouseOver);
 			if (mouseOver && tips.isReady()) {
 				tips.refresh();
-				drawToolTips(gui, tips, mouseX, mouseY);
+				drawToolTips(gui, provider, tips, mouseX, mouseY);
 			}
 		}
 	}

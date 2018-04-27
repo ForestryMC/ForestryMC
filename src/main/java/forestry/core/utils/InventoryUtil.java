@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,12 +28,12 @@ import net.minecraftforge.items.IItemHandler;
 
 import net.minecraftforge.fml.common.Optional;
 
-import forestry.api.core.ForestryAPI;
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {
@@ -79,7 +78,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT))) {
+		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
 

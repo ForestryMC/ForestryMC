@@ -22,6 +22,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -63,9 +65,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
-		Block block = blockState.getBlock();
-		data.writeVarInt(Block.getIdFromBlock(block));
-		data.writeVarInt(block.getMetaFromState(blockState));
+		NBTTagCompound tag = new NBTTagCompound();
+		NBTUtil.writeBlockState(tag, blockState);
+		data.writeCompoundTag(tag);
 	}
 
 	@Override
@@ -80,10 +82,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			BlockPos pos = data.readBlockPos();
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
-			Block block = Block.getBlockById(data.readVarInt());
-			IBlockState blockState = block.getStateFromMeta(data.readVarInt());
-
 			World world = player.world;
+			IBlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
+			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
 				Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);

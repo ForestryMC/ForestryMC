@@ -49,7 +49,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 	public void updateTask() {
 		if (shouldContinueExecuting()) {
 			if (entity.getButterfly().getMate() == null && targetMate != null) {
-				if (entity.cooldownMate <= 0 && entity.getDistanceSqToEntity(targetMate) < 9.0D) {
+				if (entity.cooldownMate <= 0 && entity.getDistance(targetMate) < 9.0D) {
 					entity.getButterfly().mate(targetMate.getButterfly());
 					targetMate.getButterfly().mate(entity.getButterfly());
 					entity.cooldownMate = EntityButterfly.COOLDOWNS;
@@ -113,9 +113,9 @@ public class AIButterflyMate extends AIButterflyInteract {
 		EntityButterfly nextButterfly = null;
 
 		for (EntityButterfly butterfly : nextButterflys) {
-			if (this.entity.canMateWith(butterfly) && this.entity.getDistanceSqToEntity(butterfly) < d0) {
+			if (this.entity.canMateWith(butterfly) && this.entity.getDistance(butterfly) < d0) {
 				nextButterfly = butterfly;
-				d0 = this.entity.getDistanceSqToEntity(butterfly);
+				d0 = this.entity.getDistance(butterfly);
 			}
 		}
 

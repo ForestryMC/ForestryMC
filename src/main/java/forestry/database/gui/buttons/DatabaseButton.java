@@ -20,30 +20,7 @@ public enum DatabaseButton {
 		public void onPressed(GuiDatabaseButton button) {
 			//Client side only button
 			button.setValue(DatabaseHelper.ascending =!DatabaseHelper.ascending);
-			button.manager.markForSorting();
-		}
-	},
-	SELECTED_UP{
-
-		@Override
-		public void onPressed(GuiDatabaseButton button) {
-			button.manager.setSelectedSlot(button.manager.getSelectedSlot() - 1);
-		}
-
-		@Override
-		public IButtonTextureSet getDefaultTexture() {
-			return StandardButtonTextureSets.UP_BUTTON;
-		}
-	},
-	SELECTED_DOWN{
-		@Override
-		public void onPressed(GuiDatabaseButton button) {
-			button.manager.setSelectedSlot(button.manager.getSelectedSlot() + 1);
-		}
-
-		@Override
-		public IButtonTextureSet getDefaultTexture() {
-			return StandardButtonTextureSets.DOWN_BUTTON;
+			button.gui.markForSorting();
 		}
 	};
 

@@ -114,7 +114,7 @@ public abstract class HiveDecorator {
 		}
 
 		Biome biome = world.getBiome(hivePos);
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(hivePos));
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}

@@ -159,10 +159,14 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		}
 
 		nbt.setTag(KEY_SLOTS, slotsNbt);
+		onWriteNBT(nbt);
 	}
 
 	private static String getSlotNBTKey(int i) {
 		return Integer.toString(i, Character.MAX_RADIX);
+	}
+
+	protected void onWriteNBT(NBTTagCompound nbt){
 	}
 
 	public void onSlotClick(int slotIndex, EntityPlayer player) {

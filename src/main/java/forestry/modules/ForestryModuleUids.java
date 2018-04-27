@@ -19,7 +19,9 @@ public class ForestryModuleUids {
 	public static final String BACKPACKS = "backpacks";
 	public static final String DATABASE = "database";
 	public static final String SORTING = "sorting";
+	public static final String BOOK = "book";
 	public static final String CULTIVATION = "cultivation";
+	public static final String RESEARCH = "research";
 
 	//Mod Plugins
 	public static final String BIOMES_O_PLENTY = "biomes.o.plenty";
@@ -27,7 +29,6 @@ public class ForestryModuleUids {
 	public static final String BUILDCRAFT_RECIPES = "buildcraft.recipes";
 	public static final String BUILDCRAFT_STATEMENTS = "buildcraft.statements";
 	public static final String BUILDCRAFT_TRANSPORT = "buildcraft.transport";
-	public static final String CHISEL = "chisel";
 	public static final String ENDER_IO = "ender.io";
 	public static final String EXTRA_UTILITIES = "extra.utilities";
 	public static final String NATURA = "natura";
@@ -39,4 +40,5 @@ public class ForestryModuleUids {
 	public static final String RUSTIC = "rustic";
 	public static final String ROOTS = "roots";
 	public static final String BETTER_WITH_MODS = "betterwithmods";
+	public static final String TECH_REBORN = "techreborn";
 }

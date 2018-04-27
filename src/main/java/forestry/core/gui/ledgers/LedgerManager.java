@@ -82,8 +82,8 @@ public class LedgerManager {
 	@Nullable
 	private Ledger getAtPosition(int mX, int mY) {
 		if (!ledgers.isEmpty()) {
-			final int xShift = (gui.width - gui.getSizeX()) / 2 + gui.getSizeX();
-			int yShift = (gui.height - gui.getSizeY()) / 2 + 8;
+			final int xShift = gui.getGuiLeft() + gui.getSizeX();
+			int yShift = gui.getGuiTop() + 8;
 
 			for (Ledger ledger : ledgers) {
 				if (!ledger.isVisible()) {
@@ -100,8 +100,8 @@ public class LedgerManager {
 			}
 		}
 
-		final int xShiftError = (gui.width - gui.getSizeX()) / 2;
-		int yShiftError = (gui.height - gui.getSizeY()) / 2 + 8;
+		final int xShiftError = gui.getGuiLeft();
+		int yShiftError = gui.getGuiTop() + 8;
 
 		for (ErrorLedger errorLedger : errorLedgers) {
 			if (!errorLedger.isVisible()) {
@@ -175,7 +175,7 @@ public class LedgerManager {
 		if (ledger != null) {
 			ToolTip toolTip = new ToolTip();
 			toolTip.add(ledger.getTooltip());
-			GuiUtil.drawToolTips(gui, toolTip, mouseX, mouseY);
+			GuiUtil.drawToolTips(gui, null, toolTip, mouseX, mouseY);
 		}
 	}
 
@@ -205,6 +205,15 @@ public class LedgerManager {
 			}
 		}
 
+	}
+
+	public boolean hasOpenedLedger(){
+		for (Ledger ledger : ledgers) {
+			if (ledger.isOpen()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public int getMaxWidth() {

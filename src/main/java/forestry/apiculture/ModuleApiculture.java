@@ -31,6 +31,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -135,7 +137,7 @@ import forestry.food.ModuleFood;
 import forestry.food.items.ItemRegistryFood;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleManager;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -157,9 +159,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int ticksPerBeeWorkCycle = 550;
 
 	public static boolean hivesDamageOnPeaceful = false;
-	
+
 	public static boolean doSelfPollination = true;
-	
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -237,7 +239,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.SORTING)) {
+		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
@@ -282,7 +284,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
-		
+
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
 		config.save();
@@ -550,7 +552,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 
 		// FOOD STUFF
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FOOD))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FOOD)) {
 			ItemRegistryFood foodItems = ModuleFood.getItems();
 			RecipeUtil.addRecipe("honeyed_slice", new ItemStack(foodItems.honeyedSlice, 4),
 					"###", "#X#", "###",
@@ -607,7 +609,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'#', coreItems.beeswax);
 
 		// / ALVEARY
-		ItemStack alvearyPlainBlock = blocks.getAlvearyBlock(BlockAlvearyType.PLAIN);
+		ItemStack alvearyPlainBlock = blocks.getAlvearyBlockStack(BlockAlvearyType.PLAIN);
 		RecipeUtil.addRecipe("alveary_plain", alvearyPlainBlock,
 				"###",
 				"#X#",
@@ -615,7 +617,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'X', coreItems.impregnatedCasing,
 				'#', coreItems.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe("alveary_swarmer", blocks.getAlvearyBlock(BlockAlvearyType.SWARMER),
+		RecipeUtil.addRecipe("alveary_swarmer", blocks.getAlvearyBlockStack(BlockAlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -623,7 +625,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'X', alvearyPlainBlock,
 				'G', OreDictUtil.INGOT_GOLD);
 		// FAN
-		RecipeUtil.addRecipe("alveary_fan", blocks.getAlvearyBlock(BlockAlvearyType.FAN),
+		RecipeUtil.addRecipe("alveary_fan", blocks.getAlvearyBlockStack(BlockAlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -631,7 +633,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'X', alvearyPlainBlock,
 				'I', OreDictUtil.INGOT_IRON);
 		// HEATER
-		RecipeUtil.addRecipe("alveary_heater", blocks.getAlvearyBlock(BlockAlvearyType.HEATER),
+		RecipeUtil.addRecipe("alveary_heater", blocks.getAlvearyBlockStack(BlockAlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -639,7 +641,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'X', alvearyPlainBlock,
 				'I', OreDictUtil.INGOT_IRON, 'Y', OreDictUtil.STONE);
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe("alveary_hygro", blocks.getAlvearyBlock(BlockAlvearyType.HYGRO),
+		RecipeUtil.addRecipe("alveary_hygro", blocks.getAlvearyBlockStack(BlockAlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -647,14 +649,14 @@ public class ModuleApiculture extends BlankForestryModule {
 				'I', OreDictUtil.INGOT_IRON,
 				'G', OreDictUtil.BLOCK_GLASS);
 		// STABILISER
-		RecipeUtil.addRecipe("alveary_stabiliser", blocks.getAlvearyBlock(BlockAlvearyType.STABILISER),
+		RecipeUtil.addRecipe("alveary_stabiliser", blocks.getAlvearyBlockStack(BlockAlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', alvearyPlainBlock,
 				'G', OreDictUtil.GEM_QUARTZ);
 		// SIEVE
-		RecipeUtil.addRecipe("alveary_sieve", blocks.getAlvearyBlock(BlockAlvearyType.SIEVE),
+		RecipeUtil.addRecipe("alveary_sieve", blocks.getAlvearyBlockStack(BlockAlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",
@@ -662,7 +664,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				'I', OreDictUtil.INGOT_IRON,
 				'W', coreItems.craftingMaterial.getWovenSilk());
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / SQUEEZER
 			FluidStack honeyDropFluid = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			RecipeManagers.squeezerManager.addRecipe(10, items.honeyDrop.getItemStack(), honeyDropFluid, items.propolis.getItemStack(), 5);
@@ -988,9 +990,50 @@ public class ModuleApiculture extends BlankForestryModule {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;
+		} else if (message.key.equals("add-plantable-flower")) {
+			return addPlantableFlower(message);
+		} else if (message.key.equals("add-acceptable-flower")) {
+			return addAcceptableFlower(message);
 		}
 
 		return false;
+	}
+
+	private boolean addPlantableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			double weight = tagCompound.getDouble("weight");
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
+	}
+
+	private boolean addAcceptableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
 	}
 
 	@SubscribeEvent

@@ -28,7 +28,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
@@ -40,7 +39,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
-import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
@@ -65,6 +63,7 @@ import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.storage.items.ItemRegistryBackpacks;
 
 @ForestryModule(moduleID = ForestryModuleUids.BACKPACKS, containerID = Constants.MOD_ID, name = "Backpack", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.backpacks.description", lootTable = "storage")
@@ -103,13 +102,13 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 		BackpackDefinition definition;
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootBees");
 			definition = new BackpackDefinition(new Color(0xc4923d), Color.WHITE, filter);
 			BackpackManager.backpackInterface.registerBackpackDefinition("apiarist", definition);
 		}
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootButterflies");
 			definition = new BackpackDefinition(new Color(0x995b31), Color.WHITE, filter);
 			BackpackManager.backpackInterface.registerBackpackDefinition("lepidopterist", definition);
@@ -374,7 +373,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 				new ItemStack(Items.SPRUCE_DOOR)
 		)));
 
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
 					new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
@@ -557,12 +556,12 @@ public class ModuleBackpacks extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		ItemRegistryBackpacks items = getItems();
-		if (items.apiaristBackpack != null && ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.APICULTURE))) {
+		if (items.apiaristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
 			addBackpackRecipe("bee", items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
 		}
 
-		if (items.lepidopteristBackpack != null && ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.LEPIDOPTEROLOGY))) {
+		if (items.lepidopteristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			BlockRegistryLepidopterology butterflyBlocks = ModuleLepidopterology.getBlocks();
 			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
 			addBackpackRecipe("butterfly", items.lepidopteristBackpack, "stickWood", chest);
@@ -576,7 +575,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 		addBackpackRecipe("building", items.builderBackpack, Items.CLAY_BALL);
 
 		// / CARPENTER
-		if (ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY))) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / BACKPACKS WOVEN
 			addT2BackpackRecipe(items.minerBackpack, items.minerBackpackT2);
 			addT2BackpackRecipe(items.diggerBackpack, items.diggerBackpackT2);
