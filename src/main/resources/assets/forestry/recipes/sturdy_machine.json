@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:sturdy_machine"
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTBRONZE"
+    }
+  }
+}

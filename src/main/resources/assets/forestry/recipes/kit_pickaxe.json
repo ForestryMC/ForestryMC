@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "forestry:kit_pickaxe"
+  },
+  "ingredients": [
+    {
+      "item": "forestry:bronze_pickaxe"
+    },
+    {
+      "item": "forestry:carton"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

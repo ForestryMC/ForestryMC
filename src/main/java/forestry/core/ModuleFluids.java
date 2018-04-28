@@ -134,18 +134,22 @@ public class ModuleFluids extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.FLUIDS;
 		for (EnumContainerType containerType : EnumContainerType.values()) {
 			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
 				continue;
 			}
-			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
-				"AAA",
-				"BEB",
-				"CCC",
-				'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
-				'B', Items.SUGAR,
-				'C', Items.WHEAT,
-				'E', Items.EGG);
+			RecipeUtil.addRecipe(id, new ItemStack(Items.CAKE),
+					"AAA",
+					"BEB",
+					"CCC",
+					'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
+					'B', Items.SUGAR,
+					'C', Items.WHEAT,
+					'E', Items.EGG);
 		}
 	}
 }

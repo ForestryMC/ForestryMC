@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "minecraft:torch",
+    "count": 3
+  },
+  "pattern": [
+    " # ",
+    " # ",
+    " Y "
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:beeswax"
+    },
+    "Y": {
+      "item": "#STICKWOOD"
+    }
+  }
+}

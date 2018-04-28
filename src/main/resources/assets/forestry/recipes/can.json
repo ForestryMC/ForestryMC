@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:can",
+    "count": 12
+  },
+  "pattern": [
+    " # ",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "forestry:smoker"
+  },
+  "pattern": [
+    "LS#",
+    "LF#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    },
+    "S": {
+      "item": "#STICKWOOD"
+    },
+    "F": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "L": {
+      "item": "#LEATHER"
+    }
+  }
+}

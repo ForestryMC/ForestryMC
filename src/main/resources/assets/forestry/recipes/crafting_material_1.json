@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:crafting_material",
+    "data": 1
+  },
+  "pattern": [
+    "# #",
+    " # ",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:propolis",
+      "data": 2
+    }
+  }
+}

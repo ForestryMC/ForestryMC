@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "forestry:bee_house",
+    "data": 0
+  },
+  "pattern": [
+    "XXX",
+    "#C#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#PLANKWOOD"
+    },
+    "C": {
+      "item": "#BEECOMB"
+    },
+    "X": {
+      "item": "#SLABWOOD"
+    }
+  }
+}

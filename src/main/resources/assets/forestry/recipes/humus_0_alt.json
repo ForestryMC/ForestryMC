@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:humus",
+    "data": 0,
+    "count": 8
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "forestry:fertilizer_compound"
+    }
+  }
+}

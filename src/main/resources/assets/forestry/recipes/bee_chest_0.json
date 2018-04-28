@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "forestry:bee_chest",
+    "data": 0
+  },
+  "pattern": [
+    " # ",
+    "XYX",
+    "XXX"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#BEECOMB"
+    },
+    "Y": {
+      "item": "#CHESTWOOD"
+    }
+  }
+}

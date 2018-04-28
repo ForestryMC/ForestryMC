@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "forestry:habitat_locator"
+  },
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#DUSTREDSTONE"
+    },
+    "X": {
+      "item": "#INGOTBRONZE"
+    }
+  }
+}

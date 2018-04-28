@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:ingot_bronze",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

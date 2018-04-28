@@ -1,0 +1,5 @@
+{
+  "conditions": {
+    "module": "forestry.core.recipes.json.DisableRecipe"
+  }
+}

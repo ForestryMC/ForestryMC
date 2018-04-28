@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "forestry:ingot_copper",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#BLOCKCOPPER"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:apiarist_helmet"
+  },
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:crafting_material",
+      "data": 3
+    }
+  }
+}

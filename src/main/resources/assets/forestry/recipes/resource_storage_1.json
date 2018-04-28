@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:resource_storage",
+    "data": 1
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTCOPPER"
+    }
+  }
+}

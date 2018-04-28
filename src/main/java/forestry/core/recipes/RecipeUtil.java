@@ -25,20 +25,19 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
-	
+
 	// TODO use json recipes
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
@@ -78,12 +77,12 @@ public abstract class RecipeUtil {
 		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
-		
+
 		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
 		if (expectedOutput.isEmpty()) {
 			return null;
 		}
-		
+
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
@@ -98,7 +97,7 @@ public abstract class RecipeUtil {
 				}
 			}
 		}
-		
+
 		if (recipe.matches(crafting, world)) {
 			ItemStack output = recipe.getCraftingResult(crafting);
 			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
@@ -108,7 +107,7 @@ public abstract class RecipeUtil {
 
 		return null;
 	}
-	
+
 	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy) {
@@ -132,28 +131,24 @@ public abstract class RecipeUtil {
 		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
-	public static void addRecipe(String recipeName, Block block, Object... obj) {
-		addRecipe(recipeName, new ItemStack(block), obj);
+	public static void addRecipe(String moduleUID, Block block, Object... obj) {
+		addRecipe(moduleUID, new ItemStack(block), obj);
 	}
 
-	public static void addRecipe(String recipeName, Item item, Object... obj) {
-		addRecipe(recipeName, new ItemStack(item), obj);
+	public static void addRecipe(String moduleUID, Item item, Object... obj) {
+		addRecipe(moduleUID, new ItemStack(item), obj);
 	}
 
-	public static void addRecipe(String recipeName, ItemStack itemstack, Object... obj) {
-		ShapedRecipeCustom recipe = new ShapedRecipeCustom(itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, recipeName);
-		ForgeRegistries.RECIPES.register(recipe);
+	public static void addRecipe(String moduleUID, ItemStack itemstack, Object... obj) {
+		RecipeConverter.addShapedRecipe(itemstack, moduleUID, obj);
 	}
 
-	public static void addShapelessRecipe(String recipeName, Item item, Object... obj) {
-		addShapelessRecipe(recipeName, new ItemStack(item), obj);
+	public static void addShapelessRecipe(String moduleUID, Item item, Object... obj) {
+		addShapelessRecipe(moduleUID, new ItemStack(item), obj);
 	}
 
-	public static void addShapelessRecipe(String recipeName, ItemStack itemstack, Object... obj) {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(null, itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, recipeName);
-		ForgeRegistries.RECIPES.register(recipe);
+	public static void addShapelessRecipe(String moduleUID, ItemStack itemstack, Object... obj) {
+		RecipeConverter.addShapelessRecipe(itemstack, moduleUID, obj);
 	}
 
 	public static void addSmelting(ItemStack res, Item prod, float xp) {

@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "forestry:apiary",
+    "data": 0
+  },
+  "pattern": [
+    "XXX",
+    "#C#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#PLANKWOOD"
+    },
+    "C": {
+      "item": "forestry:impregnated_casing"
+    },
+    "X": {
+      "item": "#SLABWOOD"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "forestry:fertilizer_compound",
+    "count": 8
+  },
+  "pattern": [
+    " # ",
+    " X ",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#SAND"
+    },
+    "X": {
+      "item": "#GEMAPATITE"
+    }
+  }
+}
