@@ -239,7 +239,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
@@ -540,15 +540,15 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for (int blockCount = 0; blockCount < blocks.beeCombs.length; blockCount++) {
-			BlockHoneyComb block = blocks.beeCombs[blockCount];
-			for (int blockMeta = 0; blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16; blockMeta++) {
-				int itemMeta = blockMeta + blockCount * 16;
-				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
-						"###",
-						"###",
-						"###", '#', items.beeComb.get(EnumHoneyComb.get(itemMeta), 1));
-			}
+		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+			int remainder = i % 16;
+			int quotient = i / 16;
+			BlockHoneyComb block = blocks.beeCombs[quotient];
+			RecipeUtil.addRecipe("comb." + i, new ItemStack(block, 1, remainder),
+					"###",
+					"###",
+					"###", '#', items.beeComb.get(EnumHoneyComb.get(i), 1));
+
 		}
 
 		// FOOD STUFF
