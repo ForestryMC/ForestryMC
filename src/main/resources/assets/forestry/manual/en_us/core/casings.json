@@ -1,0 +1,38 @@
+{
+	"title": "Casings",
+	"icon":{
+		"item": "forestry:sturdy_machine"
+	},
+	"content": [
+		[
+			{
+				"text": "Casings are crafting components that are used in the construction of nearly every machine."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:sturdy_casing"
+				]
+			}
+		],[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:hardened_machine"
+					},
+					{
+						"item": "forestry:impregnated_casing"
+					}
+				]
+			},
+			{
+				"type": "fabricator",
+				"stack": {
+					"item": "forestry:flexible_casing"
+				}
+				
+			}
+		]
+	]
+}

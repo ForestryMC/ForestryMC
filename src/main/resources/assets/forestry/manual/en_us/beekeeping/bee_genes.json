@@ -1,0 +1,205 @@
+{
+	"title": "Bee Genes",
+	"icon":{
+		"item": "forestry:bee_larvae_ge",
+		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "Species",
+						"page": 1
+					},
+					{
+						"title": "Speed",
+						"page": 1
+					},
+					{
+						"title": "Lifespan",
+						"page": 1
+					},
+					{
+						"title": "Fertility",
+						"page": 2
+					},
+					{
+						"title": "Temp. and Humid. Tolerance",
+						"page": 2
+					},
+					{
+						"title": "Never Sleeps",
+						"page": 3
+					},
+					{
+						"title": "Tolerates Rain",
+						"page": 3
+					},
+					{
+						"title": "Cave Dwelling",
+						"page": 3
+					},
+					{
+						"title": "Flower",
+						"page": 4
+					},
+					{
+						"title": "Flowering",
+						"page": 4
+					},
+					{
+						"title": "Territory",
+						"page": 5
+					},
+					{
+						"title": "Effect",
+						"page": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "Species",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "The species of a bee specifies which products a bee queen produces, if the bee is only active at night and which climate the bee prefers."
+			},
+			{
+				"text": "Speed",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "The speed of a bee defines how long the queen needs to produce products."
+			},
+			{
+				"text": "Lifespan",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Like the name says it its the lifespan of a bee.A long lifespan is good to produce"
+			}
+		],
+		[
+			{
+				"text": "much resources, but a short lifespan is good for bee breeding."
+			},
+			{
+				"text": "Fertility",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "How many drones the bee produces after it died."
+			},
+			{
+				"text": "Temperature and Humidity Tolerance",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "The difference from its preferred Climate / Humidity a bee will be able to work in. This can range from zero to three, in one or both directions."
+			}
+		],
+		[
+			{
+				"text": "Never Sleeps",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This trait defines if a naturally diurnal bee can work during the night and if a naturally nocturnal bee can work during the day."
+			},
+			{
+				"text": "Tolerates Rain",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This trait defines if the bee can fly during it rains."
+			},
+			{
+				"text": "Cave Dwelling",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This trait defines if the bee can work without a clear view of the sky."
+			}
+		],
+		[
+			{
+				"text": "Flower",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This trait specifies which type of flower the bee needs to work."
+			},
+			{
+				"text": "Flowering",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Bees with a high flowering trait do spread flowers faster around the hive and do pollinate trees more often."
+			}
+		],
+		[
+			{
+				"text": "Territory",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "The territory in that the bee pollinates trees and flowers and the area in that the effect of the bee effects objects."
+			},
+			{
+				"text": "Effect",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Some bees have special effects like poison other entities or speed up the growth of crops."
+			}
+		]
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"title": "农场出货箱（管道）",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 3
+	},
+	"content": [
+		[
+			{
+				"text": "使用农场出货箱，你就可以通过管道系统来为农场补充物资，并及时运出产物。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_hatch_brick"
+				]
+			}
+		]
+	]
+}

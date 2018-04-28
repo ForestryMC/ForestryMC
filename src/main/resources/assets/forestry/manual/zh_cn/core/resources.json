@@ -1,0 +1,37 @@
+{
+	"title": "资源方块",
+	"icon":{
+		"item": "forestry:resource_storage",
+		"data": 3
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:apatite_block",
+					"forestry:copper_block",
+					"forestry:tin_block",
+					"forestry:bronze_block"
+				]
+			},
+			{
+				"text": ""
+			},
+			{
+				"text": "磷灰石和所有金属锭都能合成为方块，方块也能分解回原状。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:block_to_apatite",
+					"forestry:block_to_copper",
+					"forestry:block_to_tin",
+					"forestry:block_to_bronze"
+				]
+			}
+		]
+	]
+}

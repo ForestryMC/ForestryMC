@@ -1,0 +1,24 @@
+{
+	"title": "Soldering Iron",
+	"icon":{
+		"item": "forestry:soldering_iron"
+	},
+	"content": [
+		[	
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:soldering_iron"
+				}
+			},
+			{
+				"text": "The Soldering Iron is a tool used for attaching Electron Tubes to Circuit Boards in order to manipulate how an Electrical Engine works or to program MultiFarms. As well as upgrading the Squeezer or Centrifuge."
+			}
+		],
+		[
+			{
+				"text": "Once Electron Tubes have been attached to Circuit Boards they cannot be removed, only replaced. The Circuit Boards are automatically crafted as soon as the basic recipe requirements are met, so it's best practice to place your Electron Tubes and then the Circuit Boards."
+			}
+		]
+	]
+}

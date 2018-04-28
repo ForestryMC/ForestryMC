@@ -1,0 +1,19 @@
+{
+	"title": "Electrical Engine",
+	"icon": {
+		"item": "forestry:engine_electrical"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_eletrical_engine"
+				]
+			},
+			{
+				"text": "The Electrical Engine is used to convert EU from IndustrialCraft² into RF (previously MJ1)). The engine produces 20 RF/t and requires 6 EU/t to run when not upgraded, and will accept any voltage."
+			}
+		]
+	]
+}

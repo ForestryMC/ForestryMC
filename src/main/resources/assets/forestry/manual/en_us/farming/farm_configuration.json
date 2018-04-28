@@ -1,0 +1,609 @@
+{
+	"title": "Farm Configuration",
+	"icon": {
+		"item": "forestry:thermionic_tubes",
+		"data": 4
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "Arboretum",
+						"page": 1
+					},
+					{
+						"title": "Peat Bog",
+						"page": 1
+					},
+					{
+						"title": "Crop Farm",
+						"page": 2
+					},
+					{
+						"title": "Infernal Farm",
+						"page": 2
+					},
+					{
+						"title": "Shroom Farm",
+						"page": 3
+					},
+					{
+						"title": "Orchard",
+						"page": 3
+					},
+					{
+						"title": "Succulent Farm",
+						"page": 4
+					},
+					{
+						"title": "Reed Farm",
+						"page": 4
+					},
+					{
+						"title": "Gourd Farm",
+						"page": 5
+					},
+					{
+						"title": "Cocoa Plantation",
+						"page": 5
+					},
+					{
+						"title": "Rubber Plantation",
+						"page": 6
+					},
+					{
+						"title": "Red Orchid Farm",
+						"page": 6
+					},
+					{
+						"title": "Ender Farm",
+						"page": 7
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "Arboretum",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Golden Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Dirt, Humus"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 10 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 30 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Saplings"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Wood, Saplings, Apples"
+			},
+			
+			{
+				"text": "Peat Bog",
+				"underlined": true,
+				"paragraph": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Obsidian Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Bog Earth"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 20 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: None"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Peat, Dirt"
+			}
+		],
+		[
+			{
+				"text": "Crop Farm",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Bronze Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Dirt"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 20 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Crop Seeds"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Crops"
+			},
+			{
+				"text": "Infernal Farm",
+				"underlined": true,
+				"paragraph": true
+			},
+					{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Blazing Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Soul Sand"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: None"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 20 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Nether Wart"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Nether Wart (Grown)"
+			}
+		],
+		[
+			{
+				"text": "Shroom Farm",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Apatine Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Mycelium"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 80 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 20 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Mushrooms"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Large mushrooms"
+			},
+			{
+				"text": "Orchard",
+				"underlined": true,
+				"paragraph": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Emerald Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Dirt"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 40"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Trees (grown)"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Any fruits"
+			}
+		],
+		[
+			{
+				"text": "Succulent Farm",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Copper Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Sand"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 1 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Cactus"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Cactus (3-tall)"
+			},
+			{
+				"text": "Reed Farm",
+				"underlined": true,
+				"paragraph": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Tin Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Sand/Dirt"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 20"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Sugar Canes"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Sugar Canes (3-tall)"
+			}
+		],
+		[
+			{
+				"text": "Gourd Farm",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Lapis Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Dirt"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 40 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Pumpkin/Melon Seeds"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Pumpkins, Melons"
+			},
+			{
+				"text": "Cocoa Plantation",
+				"underlined": true,
+				"paragraph": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Diamantine Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Jungle Wood"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 20 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 120 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Cocoa Beans"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Cocoa Plants"
+			}
+		],
+		[
+			{
+				"text": "Rubber Plantation",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Rubberised  Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Dirt"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: 5 mB"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 10 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Rubber Saplings"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Sticky Resin"
+			},
+			{
+				"text": "Red Orchid Farm",
+				"underlined": true,
+				"paragraph": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Orchid Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: Redstone Ore"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: None"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 20 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Red Orchid"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Redstone"
+			}
+		],
+		[
+			{
+				"text": "Ender Farm",
+				"underlined": true
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Tube: Ender Electron Tube"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Soil: End Stone"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Water: None"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Fertilizer: 20 mU"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Germlings: Chorus Flower or Ender Lilly Seeds"
+			},
+			{	
+				"text": "\n"
+			},
+			{
+				"text": "Harvest: Chorus Fruit & Chorus Flower or  Ender Pearls"
+			}
+		]
+	]
+}

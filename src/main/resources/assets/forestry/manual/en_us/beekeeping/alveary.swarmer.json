@@ -1,0 +1,28 @@
+{
+	"title": "Alveary Swarmer",
+	"icon":{
+		"item": "forestry:alveary.swarmer"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_swarmer"
+				]
+			},
+			{
+				"text": "The Swarmer is a special Alveary block, which has a 1% chance of spawning a Swarm Hive near the Apiary per Royal Jelly that's inside it. The bees found in those Swarms are the same as the one in the Alveary, but the princesses are always Ignoble."
+			}
+		],
+		[
+			{
+				"text": "Similar to the Alveary Fan and Alveary Heater Blocks, the Swarmer replaces one of the blocks in the Apiary. Right-click it to access its inventory, and place Royal Jelly inside it for it to operate."
+			},
+			{
+				"text": "When a hive is ready to spawn and a new hive will appear in the world somewhere nearby, within about 25 blocks of the alveary. It will contain only the new princess.",
+				"paragraph": true
+			}
+		]
+	]
+}

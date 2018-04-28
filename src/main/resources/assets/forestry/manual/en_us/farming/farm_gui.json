@@ -1,0 +1,140 @@
+{
+	"title": "Farm GUI",
+	"icon":{
+		"item": "glass"
+	},
+	"content": [
+		[
+			{
+				"type": "image",
+					"u": 0,
+					"v": 0,
+					"uWidth": 648,
+					"vHeight": 406,
+					"textureLocation": "forestry:textures/gui/almanac/guis/multi_farm.png",
+					"textureWidth": 648,
+					"textureHeight": 406,
+					"width": 102,
+					"height": 64
+			},
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "I - Water Input Slot",
+						"page": 1
+					},
+					{
+						"title": "II - Water Tank",
+						"page": 1
+					},
+					{
+						"title": "III - Circuit Board Socket",
+						"page": 2
+					},
+					{
+						"title": "IV - Fertilizer Slot",
+						"page": 3
+					},
+					{
+						"title": "V - Soil Inventory",
+						"page": 3
+					},
+					{
+						"title": "VI - Germlings Inventory",
+						"page": 4
+					},
+					{
+						"title": "VII - Output Inventory",
+						"page": 4
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "The GUI is divided into seven areas:"
+			},
+			{
+				"text": "I - Water Input Slot",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Place Water Buckets/Cans/Capsules in here in order to fill the Water Tank (II)."
+			},
+			{
+				"text": "II - Water Tank",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This shows how much water the Multi-Farm currently has. It can be filled through (I) or through Farm Valve blocks."
+			}
+		],
+		[
+			{
+				"text": "III - Circuit Board Socket",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This area shows the current configuration of the MultiFarm. It has a socket in the center for you to place (or remove, using a Soldering Iron) Circuit Boards in order to place Electron Tubes that will alter the Multi-Farm's behaviour. See Configuring the Farm for more information."
+			}
+		],
+		[
+			{
+				"text": "IV - Fertilizer Slot",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Most farm configurations will need Fertilizer for operation. Place Fertilizer in here or pipe it into the Multi-Farm."
+			},
+			{
+				"text": "V - Soil Inventory",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This is where you will place the necessary soil for the farm to either lay down the farmland (if it's a Managed Farm) or to replace decayed soil blocks."
+			}
+		],
+		[
+			{
+				"text": "VI - Germlings Inventory",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "This is where you will place the germlings (Saplings, Seeds, Cactus, etc.) for use in the farm."
+			},
+			{
+				"text": "VII - Output Inventory",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Any waste or harvested resources end here."
+			}
+		]
+	]
+}

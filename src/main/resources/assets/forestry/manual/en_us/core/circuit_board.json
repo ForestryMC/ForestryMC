@@ -1,0 +1,38 @@
+{
+	"title": "Circuit Board",
+	"icon":{
+		"item": "forestry:chipsets"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:chipsets",
+						"data": 0,
+						"nbt": "{\"T\":0s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 1,
+						"nbt": "{\"T\":1s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 2,
+						"nbt": "{\"T\":2s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 3,
+						"nbt": "{\"T\":3s}"
+					}
+				]
+			},
+			{
+				"text": "Circuit Boards can be fitted with Electron Tubes by using a Soldering Iron. Once complete, they can be placed in the sockets on machine guis. Use a Soldering Iron to remove them from a socket."
+			}
+		]
+	]
+}

@@ -1,0 +1,32 @@
+{
+	"title": "造雨机",
+	"icon": {
+		"item": "forestry:rainmaker"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:rainmaker"
+				]
+			},
+			{
+				"text": "造雨机需要玩家使用碘酒胶囊或驱云电荷才能工作。"
+			},
+			{
+				"text": "使用碘酒胶囊会令造雨机立刻降下大雨，而使用驱云电荷则会让天空拨云见日。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "不论是碘酒胶囊还是驱云电荷，都需要玩家手动右击，或是用管道送入造雨机中方能使用。"
+			},
+			{
+				"text": "碘酒胶囊和驱云电荷都需要在木工机中制作。",
+				"paragraph": true
+			}
+		]
+	]
+}
