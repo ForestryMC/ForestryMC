@@ -28,7 +28,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 

@@ -45,7 +45,7 @@ import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.api.climate.GreenhouseState;
 import forestry.greenhouse.api.climate.IClimateContainer;

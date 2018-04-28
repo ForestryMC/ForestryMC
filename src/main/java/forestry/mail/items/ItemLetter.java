@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.core.items.ItemWithGui;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
 import forestry.mail.gui.ContainerLetter;

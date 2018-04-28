@@ -32,7 +32,7 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
 

@@ -60,7 +60,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;

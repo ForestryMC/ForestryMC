@@ -25,7 +25,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	private final ItemInventorySolderingIron itemInventory;

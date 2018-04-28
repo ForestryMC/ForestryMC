@@ -53,7 +53,7 @@ import forestry.core.inventory.StandardStackFilters;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.storage.BackpackMode;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.GuiBackpack;

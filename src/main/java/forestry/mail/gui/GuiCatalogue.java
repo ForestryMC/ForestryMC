@@ -30,7 +30,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 

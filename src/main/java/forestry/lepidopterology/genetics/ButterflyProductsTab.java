@@ -15,7 +15,7 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.ItemElement;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 @SideOnly(Side.CLIENT)
 public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {

@@ -37,7 +37,7 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
 import forestry.core.utils.StringUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 
 public class FlutterlyzerPlugin implements IAlyzerPlugin {

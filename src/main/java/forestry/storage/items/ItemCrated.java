@@ -33,7 +33,7 @@ import forestry.api.core.IModelManager;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.ItemStackUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;

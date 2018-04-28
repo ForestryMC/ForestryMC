@@ -65,7 +65,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.models.ModelCamouflaged;
 import forestry.greenhouse.tiles.TileDehumidifier;

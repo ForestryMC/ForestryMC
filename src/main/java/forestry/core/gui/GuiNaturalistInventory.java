@@ -35,7 +35,7 @@ import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class GuiNaturalistInventory extends GuiForestry<Container> {
 	private final ISpeciesRoot speciesRoot;

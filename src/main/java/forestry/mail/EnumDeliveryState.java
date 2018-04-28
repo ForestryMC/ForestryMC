@@ -11,7 +11,7 @@
 package forestry.mail;
 
 import forestry.api.mail.IPostalState;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public enum EnumDeliveryState implements IPostalState {
 	OK("for.chat.mail.ok"),

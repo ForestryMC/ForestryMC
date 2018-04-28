@@ -58,7 +58,7 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;

@@ -14,7 +14,7 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBookCategory;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 @SideOnly(Side.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {

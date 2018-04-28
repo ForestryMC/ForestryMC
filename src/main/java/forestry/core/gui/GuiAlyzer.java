@@ -46,7 +46,7 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.render.ColourProperties;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 

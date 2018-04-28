@@ -25,7 +25,7 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.tiles.ITitled;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IGuiHandlerEntity {
 

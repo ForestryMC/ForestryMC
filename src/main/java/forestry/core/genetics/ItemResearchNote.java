@@ -42,7 +42,7 @@ import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemResearchNote extends ItemForestry {
 

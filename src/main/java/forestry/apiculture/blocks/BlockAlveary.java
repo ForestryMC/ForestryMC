@@ -60,7 +60,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public abstract class BlockAlveary extends BlockStructure implements IStateMapperRegister {
 	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);

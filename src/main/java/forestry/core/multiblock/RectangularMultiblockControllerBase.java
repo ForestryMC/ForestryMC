@@ -2,7 +2,7 @@ package forestry.core.multiblock;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

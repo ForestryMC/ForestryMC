@@ -7,7 +7,7 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import forestry.api.core.Translator;
+import net.minecraft.client.resources.I18n;
 
 public interface ICircuit {
 	String getUID();
@@ -15,7 +15,7 @@ public interface ICircuit {
 	String getUnlocalizedName();
 
 	default String getLocalizedName() {
-		return Translator.translateToLocal(getUnlocalizedName());
+		return I18n.format(getUnlocalizedName());
 	}
 
 	boolean isCircuitable(Object tile);

@@ -18,6 +18,9 @@ import java.util.Collection;
 import java.util.List;
 
 
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,7 +39,7 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 import forestry.core.utils.ItemTooltipUtil;
 

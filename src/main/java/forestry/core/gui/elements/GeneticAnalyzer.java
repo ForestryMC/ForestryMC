@@ -24,7 +24,7 @@ import forestry.core.gui.elements.layouts.ScrollableElement;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 import org.lwjgl.input.Keyboard;
 

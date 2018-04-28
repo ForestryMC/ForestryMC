@@ -26,7 +26,7 @@ import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 

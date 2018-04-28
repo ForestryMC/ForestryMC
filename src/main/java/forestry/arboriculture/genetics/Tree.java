@@ -55,7 +55,7 @@ import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class Tree extends Individual implements ITree, IPlantable {
 	private final ITreeGenome genome;

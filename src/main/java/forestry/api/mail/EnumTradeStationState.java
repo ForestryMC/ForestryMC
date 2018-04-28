@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import forestry.api.core.Translator;
+import net.minecraft.client.resources.I18n;
 
 public enum EnumTradeStationState implements IPostalState {
 	OK("for.chat.mail.ok"),
@@ -28,6 +28,6 @@ public enum EnumTradeStationState implements IPostalState {
 
 	@Override
 	public String getDescription() {
-		return Translator.translateToLocal(unlocalizedDescription);
+		return I18n.format(unlocalizedDescription);
 	}
 }

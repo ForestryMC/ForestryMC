@@ -22,8 +22,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-import forestry.api.core.Translator;
-
 public abstract class PlayerUtil {
 
 	//TODO: use null everywhere instead of an emptyUUID

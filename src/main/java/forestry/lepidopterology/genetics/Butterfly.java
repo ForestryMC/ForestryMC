@@ -54,7 +54,7 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.ClimateUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {

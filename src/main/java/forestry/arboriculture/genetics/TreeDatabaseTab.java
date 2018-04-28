@@ -23,7 +23,7 @@ import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGenetic;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 @SideOnly(Side.CLIENT)
 public class TreeDatabaseTab implements IDatabaseTab<ITree> {

@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.core.gui.Drawable;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class TankElement extends GuiElement {
 	/* Attributes - Final */

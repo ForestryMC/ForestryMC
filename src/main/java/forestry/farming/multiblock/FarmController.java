@@ -70,7 +70,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmHelper.FarmWorkStatus;
 import forestry.farming.FarmHelper.Stage;

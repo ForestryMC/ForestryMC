@@ -21,7 +21,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.modules.ModuleManager;
 
 /**

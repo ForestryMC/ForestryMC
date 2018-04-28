@@ -37,7 +37,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ClimateUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;

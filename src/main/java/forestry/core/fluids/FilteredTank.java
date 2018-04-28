@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;

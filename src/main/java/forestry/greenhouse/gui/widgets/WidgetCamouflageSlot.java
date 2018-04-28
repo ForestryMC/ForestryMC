@@ -32,7 +32,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class WidgetCamouflageSlot extends Widget {
 	private final ICamouflageHandler camouflageHandler;

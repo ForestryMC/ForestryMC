@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestryTool;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public ItemGrafter(int maxDamage) {

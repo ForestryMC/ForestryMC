@@ -52,7 +52,7 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;

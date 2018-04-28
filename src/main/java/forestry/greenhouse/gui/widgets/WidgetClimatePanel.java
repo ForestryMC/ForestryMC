@@ -32,7 +32,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.gui.GuiGreenhouse;

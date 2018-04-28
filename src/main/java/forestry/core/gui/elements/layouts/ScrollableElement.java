@@ -28,7 +28,7 @@ import forestry.api.gui.IGuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.render.ColourProperties;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 import org.lwjgl.opengl.GL11;
 

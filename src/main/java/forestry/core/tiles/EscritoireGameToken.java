@@ -22,7 +22,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

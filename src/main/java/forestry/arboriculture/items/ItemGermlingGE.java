@@ -51,7 +51,7 @@ import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IColoredItem {
 

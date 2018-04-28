@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import forestry.core.render.TextureManagerForestry;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 

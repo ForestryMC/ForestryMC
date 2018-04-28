@@ -32,7 +32,7 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 

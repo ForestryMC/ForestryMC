@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;

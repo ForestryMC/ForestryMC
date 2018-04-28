@@ -29,7 +29,7 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();

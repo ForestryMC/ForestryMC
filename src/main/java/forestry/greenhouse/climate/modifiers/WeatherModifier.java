@@ -24,7 +24,7 @@ import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.StringUtil;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.climate.IClimateModifier;
 

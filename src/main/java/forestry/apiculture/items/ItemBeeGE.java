@@ -42,7 +42,7 @@ import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 

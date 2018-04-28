@@ -1,7 +1,7 @@
 package forestry.core.recipes.jei;
 
 import forestry.core.config.Constants;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeCategory;

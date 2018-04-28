@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
-import forestry.api.core.Translator;
+import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
