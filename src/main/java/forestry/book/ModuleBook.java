@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import forestry.api.modules.ForestryModule;
 import forestry.book.items.ItemRegistryBook;
 import forestry.book.proxy.ProxyBook;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
@@ -56,11 +57,15 @@ public class ModuleBook extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		RecipeUtil.addShapelessRecipe("book_honey", new ItemStack(getItems().book), Items.BOOK, OreDictUtil.DROP_HONEY);
-		RecipeUtil.addShapelessRecipe("book_tree", new ItemStack(getItems().book), Items.BOOK, OreDictUtil.TREE_SAPLING);
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.BOOK;
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, OreDictUtil.DROP_HONEY);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, OreDictUtil.TREE_SAPLING);
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			ItemRegistryLepidopterology itemsLepi = ModuleLepidopterology.getItems();
-			RecipeUtil.addShapelessRecipe("book_butterfly", new ItemStack(getItems().book), Items.BOOK, itemsLepi.butterflyGE);
+			RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, itemsLepi.butterflyGE);
 		}
 	}
 

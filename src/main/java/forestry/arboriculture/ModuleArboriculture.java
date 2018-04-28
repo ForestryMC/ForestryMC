@@ -177,7 +177,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
-		
+
 		if (Config.generateTrees) {
 			MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
 		}
@@ -214,7 +214,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandTree());
 
-		if(ModuleHelper.isEnabled( ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ArboricultureFilterRuleType.init();
 		}
 	}
@@ -279,6 +279,10 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.ARBORICULTURE;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryArboriculture blocks = getBlocks();
 		ItemRegistryArboriculture items = getItems();
@@ -312,29 +316,29 @@ public class ModuleArboriculture extends BlankForestryModule {
 			if (woodType instanceof EnumForestryWoodType) {
 				planks.setCount(4);
 				logs.setCount(1);
-				RecipeUtil.addShapelessRecipe("planks_" + woodType.getName(), planks.copy(), logs.copy());
+				RecipeUtil.addShapelessRecipe(id, planks.copy(), logs.copy());
 
 				slabs.setCount(6);
 				planks.setCount(1);
-				RecipeUtil.addRecipe("slabs_" + woodType.getName(), slabs.copy(), "###", '#', planks.copy());
+				RecipeUtil.addRecipe(id, slabs.copy(), "###", '#', planks.copy());
 
 				fences.setCount(3);
 				planks.setCount(1);
-				RecipeUtil.addRecipe("fences_" + woodType.getName(), fences.copy(),
+				RecipeUtil.addRecipe(id, fences.copy(),
 						"#X#",
 						"#X#",
 						'#', planks.copy(), 'X', "stickWood");
 
 				fenceGates.setCount(1);
 				planks.setCount(1);
-				RecipeUtil.addRecipe("fence_gates_" + woodType.getName(), fenceGates.copy(),
+				RecipeUtil.addRecipe(id, fenceGates.copy(),
 						"X#X",
 						"X#X",
 						'#', planks.copy(), 'X', "stickWood");
 
 				stairs.setCount(4);
 				planks.setCount(1);
-				RecipeUtil.addRecipe("stairs_" + woodType.getName(), stairs.copy(),
+				RecipeUtil.addRecipe(id, stairs.copy(),
 						"#  ",
 						"## ",
 						"###",
@@ -342,7 +346,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 				doors.setCount(3);
 				planks.setCount(1);
-				RecipeUtil.addRecipe("doors_" + woodType.getName(), doors.copy(),
+				RecipeUtil.addRecipe(id, doors.copy(),
 						"## ",
 						"## ",
 						"## ",
@@ -351,31 +355,31 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 			fireproofPlanks.setCount(4);
 			fireproofLogs.setCount(1);
-			RecipeUtil.addShapelessRecipe("fireproof_planks_" + woodType.getName(), fireproofPlanks.copy(), fireproofLogs.copy());
+			RecipeUtil.addShapelessRecipe(id, fireproofPlanks.copy(), fireproofLogs.copy());
 
 			fireproofSlabs.setCount(6);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe("fireproof_slabs_" + woodType.getName(), fireproofSlabs.copy(),
+			RecipeUtil.addRecipe(id, fireproofSlabs.copy(),
 					"###",
 					'#', fireproofPlanks.copy());
 
 			fireproofFences.setCount(3);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe("fireproof_fences_" + woodType.getName(), fireproofFences.copy(),
+			RecipeUtil.addRecipe(id, fireproofFences.copy(),
 					"#X#",
 					"#X#",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			fireproofFenceGates.setCount(1);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe("fireproof_fence_gates_" + woodType.getName(), fireproofFenceGates.copy(),
+			RecipeUtil.addRecipe(id, fireproofFenceGates.copy(),
 					"X#X",
 					"X#X",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			fireproofStairs.setCount(4);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe("fireproof_stairs_" + woodType.getName(), fireproofStairs.copy(),
+			RecipeUtil.addRecipe(id, fireproofStairs.copy(),
 					"#  ",
 					"## ",
 					"###",
@@ -383,7 +387,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 			doors.setCount(3);
 			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe("fireproof_doors_" + woodType.getName(), doors.copy(),
+			RecipeUtil.addRecipe(id, doors.copy(),
 					"## ",
 					"## ",
 					"## ",
@@ -425,19 +429,19 @@ public class ModuleArboriculture extends BlankForestryModule {
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PLUM.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PAPAYA.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
 			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.DATES.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
-			
+
 			RecipeUtil.addFermenterRecipes(new ItemStack(items.sapling, 1, OreDictionary.WILDCARD_VALUE), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
 		// Grafter
-		RecipeUtil.addRecipe("grafter", items.grafter.getItemStack(),
+		RecipeUtil.addRecipe(id, items.grafter.getItemStack(),
 				"  B",
 				" # ",
 				"#  ",
 				'B', "ingotBronze",
 				'#', "stickWood");
 
-		RecipeUtil.addRecipe("tree_chest", blocks.treeChest,
+		RecipeUtil.addRecipe(id, blocks.treeChest,
 				" # ",
 				"XYX",
 				"XXX",
@@ -541,7 +545,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			return true;
 		} else if (message.key.equals("blacklist-trees-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistTreeDim(dim);
 			}
 			return true;
