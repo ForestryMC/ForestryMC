@@ -6,7 +6,6 @@
 !/forestry_techne
 !/gradle/wrapper
 !/src
-!/lang
 
 # files
 !/.gitignore

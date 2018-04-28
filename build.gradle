@@ -25,7 +25,6 @@ group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming
 archivesBaseName = "forestry_" + mcversion
 
 ext.dirDest = './build/dist'
-ext.dirLang = "./lang"
 
 // java version
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,14 +37,6 @@ minecraft {
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
-}
-
-sourceSets {
-	main {
-		resources {
-			srcDir project.dirLang
-		}
-	}
 }
 
 repositories {
