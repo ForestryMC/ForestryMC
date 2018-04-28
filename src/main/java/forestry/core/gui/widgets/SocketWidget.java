@@ -25,7 +25,7 @@ import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class SocketWidget extends Widget {
 

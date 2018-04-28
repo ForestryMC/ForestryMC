@@ -17,7 +17,7 @@ import java.util.Locale;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IClassification;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class Classification implements IClassification {
 

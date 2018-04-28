@@ -18,7 +18,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class LocalizedConfiguration extends Configuration {
 

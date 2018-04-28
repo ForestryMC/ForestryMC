@@ -13,12 +13,11 @@ package forestry.farming.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.farming.models.EnumFarmBlockTexture;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -28,8 +27,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
-import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends ItemBlock {
 

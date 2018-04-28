@@ -36,7 +36,7 @@ import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {

@@ -8,7 +8,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 import mezz.jei.api.gui.ITooltipCallback;
 

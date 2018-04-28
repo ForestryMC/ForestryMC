@@ -14,7 +14,7 @@ import net.minecraft.inventory.Container;
 
 import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
 	private final String unlocalizedTitle;

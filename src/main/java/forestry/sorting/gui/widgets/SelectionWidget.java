@@ -11,7 +11,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.gui.widgets.WidgetScrollBar;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
 

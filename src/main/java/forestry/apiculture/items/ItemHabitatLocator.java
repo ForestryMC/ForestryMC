@@ -40,7 +40,7 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.ClimateUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";

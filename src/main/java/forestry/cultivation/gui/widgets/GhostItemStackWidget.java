@@ -15,7 +15,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.cultivation.inventory.InventoryPlanter;
 
 public class GhostItemStackWidget extends ItemStackWidget {
