@@ -18,7 +18,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.factory.tiles.TileBottler;
 
 public class GuiBottler extends GuiForestryTitled<ContainerBottler> {

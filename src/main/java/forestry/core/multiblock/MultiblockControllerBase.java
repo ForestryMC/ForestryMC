@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are

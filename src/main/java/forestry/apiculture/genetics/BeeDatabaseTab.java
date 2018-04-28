@@ -20,7 +20,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 @SideOnly(Side.CLIENT)
 public class BeeDatabaseTab implements IDatabaseTab<IBee> {

@@ -14,7 +14,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 /**
  * A ledger containing climate information.

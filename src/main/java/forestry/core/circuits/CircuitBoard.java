@@ -27,7 +27,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public class CircuitBoard implements ICircuitBoard {
 

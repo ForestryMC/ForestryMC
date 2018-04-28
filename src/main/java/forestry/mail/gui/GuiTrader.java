@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.mail.tiles.TileTrader;
 
 public class GuiTrader extends GuiForestry<ContainerTrader> {

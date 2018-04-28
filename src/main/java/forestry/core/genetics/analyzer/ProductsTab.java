@@ -14,7 +14,7 @@ import forestry.api.gui.IElementGenetic;
 import forestry.api.gui.IElementLayoutHelper;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.ItemElement;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public class ProductsTab extends DatabaseTab {
 	public ProductsTab(Supplier<ItemStack> stackSupplier) {

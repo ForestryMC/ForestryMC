@@ -16,7 +16,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**

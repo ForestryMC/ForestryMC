@@ -29,7 +29,7 @@ import forestry.api.core.Tabs;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {

@@ -35,7 +35,7 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 

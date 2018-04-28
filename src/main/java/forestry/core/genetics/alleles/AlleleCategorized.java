@@ -1,6 +1,6 @@
 package forestry.core.genetics.alleles;
 
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import org.apache.commons.lang3.text.WordUtils;
 
 /**

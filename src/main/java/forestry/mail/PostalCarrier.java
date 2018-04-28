@@ -29,7 +29,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class PostalCarrier implements IPostalCarrier {

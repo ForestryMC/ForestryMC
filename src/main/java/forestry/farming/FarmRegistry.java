@@ -31,7 +31,7 @@ import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.farming.logic.FakeFarmProperties;
 import forestry.farming.logic.FarmLogicSimple;
 import forestry.farming.logic.FarmProperties;

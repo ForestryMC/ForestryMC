@@ -19,7 +19,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 @SideOnly(Side.CLIENT)
 public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {

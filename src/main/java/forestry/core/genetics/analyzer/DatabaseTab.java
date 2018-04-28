@@ -2,11 +2,11 @@ package forestry.core.genetics.analyzer;
 
 import java.util.function.Supplier;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.genetics.IIndividual;
+import forestry.api.core.Translator;
 
 public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab<I> {
 	private final Supplier<ItemStack> stackSupplier;
@@ -24,6 +24,6 @@ public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab
 
 	@Override
 	public String getTooltip(IIndividual individual) {
-		return I18n.format("for.gui.database.tab." + name + ".name");
+		return Translator.translateToLocal("for.gui.database.tab." + name + ".name");
 	}
 }

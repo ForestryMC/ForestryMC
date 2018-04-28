@@ -13,7 +13,7 @@ package forestry.energy.gui;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 

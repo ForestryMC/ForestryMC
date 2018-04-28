@@ -27,7 +27,7 @@ import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public class Letter implements ILetter {
 	private static final Random rand = new Random();

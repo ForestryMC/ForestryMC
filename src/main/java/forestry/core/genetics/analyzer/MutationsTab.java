@@ -19,7 +19,7 @@ import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGenetic;
 import forestry.api.gui.IElementLayoutHelper;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public class MutationsTab extends DatabaseTab {
 	public MutationsTab(Supplier<ItemStack> stackSupplier) {

@@ -11,7 +11,7 @@
 package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAllele;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public abstract class Allele implements IAllele {
 	private final String modId;

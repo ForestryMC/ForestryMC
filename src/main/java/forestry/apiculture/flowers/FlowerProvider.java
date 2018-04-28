@@ -14,7 +14,7 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;

@@ -14,7 +14,7 @@ import java.util.List;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 public abstract class Circuit implements ICircuit {
 	private final String uid;

@@ -13,7 +13,7 @@ package forestry.greenhouse.gui;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
 public class GreenhouseEnergyLedger extends Ledger {

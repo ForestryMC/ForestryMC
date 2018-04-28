@@ -41,7 +41,7 @@ import forestry.core.items.ItemForestry;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;

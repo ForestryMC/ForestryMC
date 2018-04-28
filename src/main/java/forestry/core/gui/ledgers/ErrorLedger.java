@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.api.core.Translator;
 
 /**
  * A ledger displaying error messages and help text.

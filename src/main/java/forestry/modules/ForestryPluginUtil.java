@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
@@ -15,6 +14,7 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Log;
+import forestry.api.core.Translator;
 
 public class ForestryPluginUtil {
 	private ForestryPluginUtil() {
@@ -35,7 +35,7 @@ public class ForestryPluginUtil {
 	public static String getComment(IForestryModule module) {
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
-		String comment = I18n.format(info.unlocalizedDescription());
+		String comment = Translator.translateToLocal(info.unlocalizedDescription());
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
 		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();
