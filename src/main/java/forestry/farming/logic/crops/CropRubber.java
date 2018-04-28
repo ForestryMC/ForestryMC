@@ -18,6 +18,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -29,6 +30,7 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginTechReborn;
 
 public class CropRubber extends CropDestroy {
 
@@ -46,6 +48,9 @@ public class CropRubber extends CropDestroy {
 				String valueWetString = wetPropertyEntry.getValue().toString();
 				String valueDryString = valueWetString.replace("wet", "dry");
 				IProperty<?> property = wetPropertyEntry.getKey();
+				if (property instanceof PropertyBool && property.getName().equals("hassap")) {
+					return sappyState.withProperty(PropertyBool.create("hassap"), false);
+				}
 
 				IBlockState baseState = sappyState.getBlock().getBlockState().getBaseState();
 				IBlockState dryState = getStateWithValue(baseState, property, valueDryString);
@@ -60,13 +65,15 @@ public class CropRubber extends CropDestroy {
 
 	public static boolean hasRubberToHarvest(IBlockState blockState) {
 		Block block = blockState.getBlock();
-		if (ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
+		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
 			ImmutableCollection<Comparable<?>> propertyValues = blockState.getProperties().values();
 			for (Comparable<?> propertyValue : propertyValues) {
 				if (propertyValue.toString().contains("wet")) {
 					return true;
 				}
 			}
+		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD)) {
+			return blockState.getValue(PropertyBool.create("hassap"));
 		}
 		return false;
 	}
@@ -83,8 +90,12 @@ public class CropRubber extends CropDestroy {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> harvested = NonNullList.create();
-		harvested.add(PluginIC2.resin.copy());
-
+		Block harvestBlock = world.getBlockState(pos).getBlock();
+		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(harvestBlock, PluginIC2.rubberWood)) {
+			harvested.add(PluginIC2.resin.copy());
+		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
+			harvested.add(PluginTechReborn.sap.copy());
+		}
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
