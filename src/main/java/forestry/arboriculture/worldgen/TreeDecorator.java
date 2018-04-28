@@ -55,7 +55,7 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if (!Config.isValidTreeDim(world.provider.getDimension())) {
+		if (!Config.isValidTreeDim(world.provider.getDimension()) || Config.generateTreesAmount == 0) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
