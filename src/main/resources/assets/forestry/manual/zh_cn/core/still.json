@@ -1,0 +1,32 @@
+{
+	"title": "蒸馏器",
+	"icon": {
+		"item": "forestry:still"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:still"
+				]
+			},
+			{
+				"text": "蒸馏器可将生物质以 10:3 的比例精炼为生物乙醇燃料。也就是说，十桶生物质可加工出三桶生物乙醇燃料。"
+			}
+		],
+		[
+			{
+				"text": "如果你有安装 Buildcraft，你还可以使用 BuildCraft 的精炼厂，产率则是 4:1。"
+			},
+			{
+				"text": "生物乙醇可充当生物质发电机的燃料，以为 IndustrialCraft² 的机器提供电力；或用作 BuildCraft 的燃烧引擎的燃料。它不能用作沼气引擎的燃料！",
+				"paragraph": true
+			},
+			{
+				"text": "换言之，如果你没有装 Buildcraft 或 IndustrialCraft²，这台机器可能对你来说没什么用。",
+				"paragraph": true
+			}
+		]
+	]
+}

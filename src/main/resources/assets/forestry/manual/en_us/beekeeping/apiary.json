@@ -1,0 +1,29 @@
+{
+	"title": "Apiary",
+	"icon":{
+		"item": "forestry:apiary"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:apiary"
+				]
+			},
+			{
+				"text": "Similar liket the bee house the apiary can contain a family of bees, and collect honeycombs for your troubles."
+			}
+		],
+		[
+			{
+				"text": "To obtain the apiary I had to go through a long and arduous journey of trial and error, involving creepers, lapis lazuli and a few sheep, but luckily I recorded these steps for future generations. I first started with the squeezing of my many seeds into seed oil.The arrangement of eight logs (of any tree) in a carpenter along with my seed oil resulted in a impregnated casing which could hold the bee. To secure this casing in the world, I then"
+			}
+		],
+		[
+			{
+				"text": "arranged it on my crafting table with wooden planks and wooden slabs to form an acceptable home for my bees. The resultant apiary can then be placed in the world wherever I want. Actually, I lied. I traded for an apiary with a friendly beekeeper in a village. Just thought I'd let you go to the effort of making it first. If I could see you now I'd be laughing."
+			}
+		]
+	]
+}

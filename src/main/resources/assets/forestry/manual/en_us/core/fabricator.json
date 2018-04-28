@@ -1,0 +1,21 @@
+{
+	"title": "Thermionic Fabricator",
+	"icon": {
+		"item": "forestry:fabricator"
+	},
+	"content": [
+		[
+			{
+				"text": "The Thermionic Fabricator is used to craft electron tubes and stained glass. It requires Redstone Flux (RF) energy to run. Once warmed up, it needs to maintain a certain heat level to operate. The amount of power supplied will determine how much heat will be generated. If you do not supply enough power to maintain the current temperature it will slowly drop."
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:fabricator"
+				]
+			}
+		]
+	]
+}

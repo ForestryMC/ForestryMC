@@ -1,0 +1,25 @@
+{
+	"title": "Letters",
+	"icon":{
+		"item": "forestry:letters"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:letter",
+					"forestry:letter_recycling"
+				]
+			},
+			{
+				"text": "Letters can be used in a Mailbox to be sent to other mailboxes or Trade Stations. For a letter to be sent, you need to right click a mailbox with the letter in hand."
+			}
+		],
+		[
+			{
+				"text": "For a letter to be able to be sent, you need stamps."
+			}
+		]
+	]
+}

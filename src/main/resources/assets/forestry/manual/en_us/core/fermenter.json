@@ -1,0 +1,32 @@
+{
+	"title": "Fermenter",
+	"icon": {
+		"item": "forestry:fermenter"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:fermenter"
+				]
+			},
+			{
+				"text": "The Fermenter is a machine that processes organic matter such as Saplings and Sugar Canes into Biomass, which can be used as a fuel in a Biogas Engine, or in the Bio Generator."
+			}
+		],
+		[
+			{
+				"text": "It can also be used to produce Short Mead out of Honeydew and Liquid Honey."
+			},
+			{
+				"text": "Fermentation Items such as Fertilizer, Mulch or Compost are required as catalysts. Each item has different properties.",
+				"paragraph": true
+			},
+			{
+				"text": "Any liquids produced by this machine can be canned, bottled or extracted via Buildcraft Waterproof Pipes.",
+				"paragraph": true
+			}
+		]
+	]
+}

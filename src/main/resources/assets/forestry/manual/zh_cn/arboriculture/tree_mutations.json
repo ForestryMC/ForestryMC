@@ -1,0 +1,14 @@
+{
+	"title": "树木突变",
+	"icon":{
+			"item": "forestry:sapling",
+			"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeTeak\",UID0:\"forestry..treeTeak\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"text": "当附近有乐于帮忙的昆虫时，不同种之间相互授粉这种事情也可以自然发生。人们早已知道蜜蜂能传播花粉；而蝴蝶在树叶上休息时也会带走花粉，进而也能胜任。在蜜蜂的活动范围内种不同种类的树，它们就有可能互相授粉，也许变异就会在这个过程中发生。"
+			}
+		]
+	]
+}

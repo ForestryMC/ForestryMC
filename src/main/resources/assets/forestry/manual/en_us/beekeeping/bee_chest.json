@@ -1,0 +1,24 @@
+{
+	"title": "Apiarist's Chest",
+	"icon":{
+		"item": "forestry:bee_chest"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bee_chest"
+				]
+			},
+			{
+				"text": "During the course of your beekeeping career, it will quickly become apparent that many more bees are produced than you will know what to do with. Since only identical drones will stack with each other, and this occurs rarely, you will soon find"
+			}
+		],
+		[
+			{
+				"text": "your conventional chests full to bursting with bees. Luckily, those who have come before have developed the perfect technology to deal with the overflow of insects. §lThe Apiarist's Chest§r is a storage device for up to 125 individual bees, with 25 slots spread over 5 pages, and a pane that displays overall statistics for species discovered, princess collected, queens bred and drones produced."
+			}
+		]
+	]
+}

@@ -1,0 +1,27 @@
+{
+	"title": "Bees",
+	"icon":{
+		"item": "forestry:bee_combs"
+	},
+	"content": [
+		[
+			{
+				"text": "Bees sting. Bees are yellow and stripy. Bees buzz. You may already know these things, but the first rule of beekeeping is know your enemy (actually the first rule is you must always talk about beekeeping club). Bees are small yellow insects found in hives, scattered around our remarkably polygonal world. There are five different hives I have discovered in this world, and another which I dare not speak about."
+			}
+		],
+		[
+			{
+				"text": "The easiest way to find the hives is to explore at night, as the glow of working bees guided me to them (as well as mobs, as I found to my cost)"
+			},
+			{
+				"text": "Outside of apiaries and alvearies (more later) bees seem to be both totally docile and immortal. The first thing I noticed about bees were that they were clearly split into three castes. In the hives I found both princess and drones, where the princesses were",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "distinguisable by their more regal appearance. But when the two are brought together somewhere special the princess can transform into the queen. The queen will spend her lifespan creating things such as honey combs until she eventually dies, spawning a new princess and multiple drones. This means that your bee population will grow exponentially, meaning you'll need plenty of storage."
+			}
+		]
+	]
+}

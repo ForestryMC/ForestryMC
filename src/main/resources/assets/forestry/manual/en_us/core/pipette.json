@@ -1,0 +1,19 @@
+{
+	"title": "Pipette",
+	"icon":{
+		"item": "forestry:pipette"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:pipette"
+				]
+			},
+			{
+				"text": "Can pick up small amounts of liquid. In Forestry GUIs, you can hold a pipette and click the tanks to fill or drain them directly."
+			}
+		]
+	]
+}

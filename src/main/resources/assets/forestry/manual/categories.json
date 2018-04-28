@@ -1,0 +1,48 @@
+[
+	{
+		"name": "beekeeping",
+		"icon":{
+			"item": "forestry:bee_combs"
+		},
+		"modules": [
+			"apiculture"
+		]
+	},
+	{
+		"name": "core",
+		"icon":{
+			"item": "forestry:wrench"
+		}
+	},
+	{
+		"name": "farming",
+		"icon":{
+			"item": "wheat"
+		},
+		"modules": [
+			"farming"
+		]
+	},
+	{
+		"name": "arboriculture",
+		"icon":{
+			"item": "forestry:sapling",
+			"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeCherry\",UID0:\"forestry..treeCherry\",Slot:0b}]}}"
+		},
+		"modules": [
+			"arboriculture"
+		]
+	},
+	{
+		"name": "genetics",
+		"icon":{
+			"item": "forestry:genetic_filter"
+		}
+	},
+	{
+		"name": "mail",
+		"icon":{
+			"item": "forestry:mailbox"
+		}
+	}
+]

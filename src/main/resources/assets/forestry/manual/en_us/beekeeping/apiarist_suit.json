@@ -1,0 +1,35 @@
+{
+	"title": "Apiarist's Clothes",
+	"icon":{
+		"item": "forestry:apiarist_chest"
+	},
+	"content": [
+		[
+			{
+				"text": "Tired of getting poisoned by those pesky Tropical Bees?"
+			},
+			{
+				"text": "Fear that their Silk Wisps have no use?",
+				"paragraph": true
+			},
+			{
+				"text": "Well, fear not, because you can turn those Wisps into Woven Silk and turn that into suits! Bee-Suits!The Apiarist's Clothes can be equipped to lessen or even nullify the negative effects of Bees (such as Poison from Tropical Bees).",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "The more pieces of clothing you wear, the more often will Bees leave you alone."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:apiarist_hat",
+					"forestry:apiarist_chest",
+					"forestry:apiarist_legs",
+					"forestry:apiarist_boots"
+				]
+			}
+		]
+	]
+}
