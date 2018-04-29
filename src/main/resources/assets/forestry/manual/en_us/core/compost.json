@@ -1,0 +1,20 @@
+{
+	"title": "Compost",
+	"icon":{
+		"item": "forestry:fertilizer_bio"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:wheat_to_compost",
+					"forestry:ash_to_compost"
+				]
+			},
+			{
+				"text": ""
+			}
+		]
+	]
+}

@@ -1,0 +1,30 @@
+{
+	"title": "数据库",
+	"icon":{
+		"item": "forestry:database"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:database_bee_chest_tree_chest_royal_jelly",
+					"forestry:database_bee_chest_tree_chest_fruits",
+					"forestry:database_bee_chest_butterfly_chest_royal_jelly",
+					"forestry:database_bee_chest_butterfly_chest_fruits",
+					"forestry:database_tree_chest_bee_chest_royal_jelly",
+					"forestry:database_tree_chest_bee_chest_fruits",
+					"forestry:database_tree_chest_butterfly_chest_royal_jelly",
+					"forestry:database_tree_chest_butterfly_chest_fruits",
+					"forestry:database_butterfly_chest_bee_chest_royal_jelly",
+					"forestry:database_butterfly_chest_bee_chest_fruits",
+					"forestry:database_butterfly_chest_tree_chest_royal_jelly",
+					"forestry:database_butterfly_chest_tree_chest_fruits"
+				]
+			},
+			{
+				"text": "数据库是用来存储蜜蜂、树苗、蝴蝶等带基因物品的方块。它最多能存储 136 种不同类型的物品，同时配有搜索栏。"
+			}
+		]
+	]
+}

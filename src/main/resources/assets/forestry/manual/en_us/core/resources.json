@@ -1,0 +1,34 @@
+{
+	"title": "Resource Blocks",
+	"icon":{
+		"item": "forestry:resource_storage",
+		"data": 3
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:apatite_block",
+					"forestry:copper_block",
+					"forestry:tin_block",
+					"forestry:bronze_block"
+				]
+			},
+			{
+				"text": "Apatite and all metal ingots of forestry can be crafted into blocks and back."
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:block_to_apatite",
+					"forestry:block_to_copper",
+					"forestry:block_to_tin",
+					"forestry:block_to_bronze"
+				]
+			}
+		]
+	]
+}

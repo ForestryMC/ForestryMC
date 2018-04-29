@@ -1,0 +1,36 @@
+{
+	"title": "Grafters",
+	"icon": {
+		"item": "forestry:grafter"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:grafter"
+				]
+			},
+			{
+				"text": "Are you sick and tired of breaking leaves and ending up with empty hands? Are your treebreeding efforts hampered by a distinct lack of saplings? Don't despair! Forestry Inc. is proud to introduce the GRAFTER!"
+			}
+		],
+		[
+			{
+				"text": "Our patented grafter will significantly increase your chance at a sapling drop when used on leaves! No more frustration when you get that first pollinated leaf after hours of waiting, only to have it drop no saplings at all! Just use the grafter and you are almost guaranteed to be able to extract a sapling from it. This sturdy device will save you hours of work."
+			}
+		],
+		[
+			{
+				"text": "Proven Grafter",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "The Proven Grafter is significantly stronger than the Bronze Grafter and can only be obtained by trading with villagers."
+			}
+		]
+	]
+}

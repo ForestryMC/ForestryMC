@@ -1,0 +1,19 @@
+{
+	"title": "Wrench",
+	"icon":{
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"text": "The wrench allows the player to rotate all forestry machines and engines."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:wrench"
+				]
+			}
+		]
+	]
+}

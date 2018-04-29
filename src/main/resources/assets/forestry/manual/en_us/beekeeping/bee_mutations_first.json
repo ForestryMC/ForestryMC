@@ -1,0 +1,28 @@
+{
+	"title": "First Mutations",
+	"icon":{
+		"item": "forestry:bee_queen_ge",
+		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.speciesCommon\",UID0:\"forestry.speciesCommon\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"text": "The children of two different bees will have a mixture of the genes of the two parents, and may even be a new species that you are yet to discover. By allowing these so called 'mutations' to occur, I discovered that these few species of naturally occuring bee opened up a world of possibilities, with many weird and exotic species to be found."
+			}
+		],
+		[
+			{
+				"text": "I will explain the many species that I discovered later on in the guide, along with tips to how I obtained them. A true apiarist never shares his secrets after all. From these bees and the other mundane species I discovered the Common and Cultivated bees. These bees are staples of any apiarist’s collection, and the common bee is considered the beginner apiarist’s badge of participation."
+			}
+		],
+		[
+			{
+				"text": "Although the common bee is not particularly interesting, its descendant the cultivated bee is fast working, producing more honey in a shorter amount of time. It also thinks anything but opera is underneath it, meaning it was *this* far away from being called the snobby bee."
+			},
+			{
+				"type": "mutation",
+				"species": "forestry.speciesCommon"
+			}
+		]
+	]
+}

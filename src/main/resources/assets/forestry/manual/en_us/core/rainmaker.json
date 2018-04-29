@@ -1,0 +1,36 @@
+{
+	"title": "Rainmaker",
+	"icon": {
+		"item": "forestry:rainmaker"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:rainmaker"
+				]
+			},
+			{
+				"text": "The Rainmaker is a machine that, when placed, will wait for the player to give it an Iodine Charge or a Dissipation Charge."
+			},
+			{
+				"text": "An Iodine Charge when placed inside the Rainmaker will make it rain and the",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "Dissipation Charge when placed inside the Rainmaker will stop the rain."
+			},
+			{
+				"text": "Charges can be inserted in to the machine either by a player right-clicking with the charge in hand or by inserting the charges using pipes,",
+				"paragraph": true
+			},
+			{
+				"text": "Both Iodine Charges and Dissipation Charges are made in the Carpenter.",
+				"paragraph": true
+			}
+		]
+	]
+}

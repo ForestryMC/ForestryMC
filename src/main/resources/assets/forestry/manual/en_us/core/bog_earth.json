@@ -1,0 +1,30 @@
+{
+	"title": "Bog Earth",
+	"icon":{
+		"item": "forestry:bog_earth"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bucket_bog_earth",
+					"forestry:can_bog_earth",
+					"forestry:capsule_bog_earth",
+					"forestry:refractory_capsule_bog_earth"
+				]
+			},
+			{
+				"text": "Slowly turns into peat if left to soak near water for a while."
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:bog_earth"
+				}
+			}
+		]
+	]
+}

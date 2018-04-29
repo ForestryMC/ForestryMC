@@ -1,0 +1,19 @@
+{
+	"title": "Escritoire",
+	"icon":{
+		"item": "forestry:escritoire"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:escritoire"
+				]
+			},
+			{
+				"text": "Play a matching mini-game to research bee, tree, and butterfly mutations. Gives research notes that boost mutation rates, and other rewards."
+			}
+		]
+	]
+}

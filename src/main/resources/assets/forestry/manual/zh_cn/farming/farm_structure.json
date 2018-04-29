@@ -1,0 +1,30 @@
+{
+	"title": "农场结构",
+	"icon":{
+		"item": "forestry:ffarm"
+	},
+	"content": [
+		[
+			{
+				"text": "农场方块是多功能农场的主体结构方块，有鉴于多功能农场是多方块结构，视尺寸不同你需要数量不等的农场方块。农场主体的第三层必须全部是这种方块；其他位置上的方块都可换成带其他功能的特种农场方块。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_basic_brick"
+				]
+			},
+			{
+				"text": "配方中的砖块可以换成任意种类的石砖、平滑或錾制砂石或者平滑或錾制石英块。不同的材料只决定不同的外观。不同种类材料制成的农场方块可以混搭，不影响使用。"
+			}
+		]
+	],
+	"subEntries": [
+		"farming/farm_structure.valve",
+		"farming/farm_structure.gearbox",
+		"farming/farm_structure.hatch",
+		"farming/farm_structure.control"
+	]
+}
