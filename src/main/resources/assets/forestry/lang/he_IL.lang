@@ -1,0 +1,31 @@
+####################
+# CORE
+####################
+
+yes=כן
+no=לא
+beverage.effect.alcoholic=אלבוהולי
+beverage.effect.antidote=נוגדן
+chat.accesslocked=הוא הבעלים של מכונה זו והוא הגדיר אותה כפרטית
+circuit.dampener.1=מטח אש
+circuit.electric.choke.1=התחשמלות
+circuit.electric.efficiency.1=יעילות חשמלית
+circuit.electric.boost.1=הגברה חשמלת 1
+circuit.electric.boost.2=הגברה חשמלית 2
+circuit.usage.engineTin=במנועים חשמליים
+death.engine.clockwork=%1$s נדקר על ידי קפיץ שיצא מהמקום
+death.engine.clockwork.player=%1$s נדקר על ידי קפיץ שיצא מהמקום %2$s היה השען חסר המזל
+errors.unknown.desc=בעיה לא ידועה
+errors.unknown.help=מזל טוב, מצאת באג לא ידוע
+errors.ok.desc=אין בעיות
+errors.ok.help=הכל בסדר ולא צריך לשנות כלום
+errors.invalid_biome.desc=סביבה אלימה
+errors.invalid_biome.help=מכונה או תושבים לא יכולים לעבוד באזור זה
+errors.is_raining.desc=גשום
+errors.is_raining.help=אפשרי רק כאשר לא גשום
+errors.not_raining.desc=לא גשום
+errors.not_raining.help=אפשרי רק כאשר גשום
+errors.no_fuel.desc=אין דלק
+errors.no_fuel.help=חדש את מלאי הדלק במכונה זו
+errors.no_heat.desc=לא התחמם
+errors.no_heat.help=מיכל החימום לא התחמם מספיק

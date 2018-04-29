@@ -8,7 +8,6 @@ death.engine.clockwork=%1$s подвергся нападению со стор�
 for.beverage.effect.alcoholic=Спиртное
 for.beverage.effect.antidote=Противоядие
 
-for.chat.accesslocked=%s является владельцем этого механизма и заблокировал доступ.
 for.chat.cannotmemorizeagain=Вы уже запомнили эту информацию.
 
 for.chat.command.aliases=Aliases: %s
@@ -64,78 +63,74 @@ for.circuit.layout.farms.managed.usage=Управляемые фермы
 for.circuit.layout.farms.manual.name=Ручная ферма
 for.circuit.layout.farms.manual.usage=Ручные фермы
 
-for.errors.circuitMismatch.desc=Несоответствие макету
-for.errors.circuitMismatch.help=Количество ламп не совпадает с размером печатной платы.
-for.errors.forcedCooldown.desc=Принудительное охлаждение
-for.errors.forcedCooldown.help=Двигатель перегрелся, он остывает.
-for.errors.invalidBiome.desc=Неблагоприятная среда
-for.errors.invalidBiome.help=Механизм или жители не могут работать в данном биоме.
-for.errors.isRaining.desc=Дождь
-for.errors.isRaining.help=Работа возможна, только если не идёт дождь.
-for.errors.noCircuitBoard.desc=Плата отсутствует
-for.errors.noCircuitBoard.help=Вставьте плату, чтобы спаять выбранные лампы на неё.
-for.errors.noCircuitLayout.desc=Макеты не найдены
-for.errors.noCircuitLayout.help=Макеты не доступны в соответствии с текущими настройками игры.
-for.errors.noDisposal.desc=Нельзя выбросить отходы
-for.errors.noDisposal.help=Недостаточно свободного места для извлечения отходов.
-for.errors.noDrone.desc=Нет трутня
-for.errors.noDrone.help=Спаривание требует наличия трутня.
-for.errors.noEnergyNet.desc=Нет электричества
-for.errors.noEnergyNet.help=В Вашем мире любое электричество бесполезно. (Установите IndustrialCraft\u00b2.)
-for.errors.noPower.desc=Нет энергии
-for.errors.noPower.help=Этому механизму требуется энергия RF.
-for.errors.noFlower.desc=Нет цветов
-for.errors.noFlower.help=Пчелы улья не нашли подходящих для них цветов.
-for.errors.noFuel.desc=Нет топлива
-for.errors.noFuel.help=Пополните запас топлива этого механизма.
-for.errors.noHeat.desc=Не прогрет
-for.errors.noHeat.help=Заправьте нагревающий резервуар.
-for.errors.noHoney.desc=Требуется мёд
-for.errors.noHoney.help=Данному устройству для работы требуется капля мёда или медвяная роса.
-for.errors.noQueen.desc=Нет королевы
-for.errors.noQueen.help=Предоставьте данному улью королеву, или принцессу и трутня.
-for.errors.noRecipe.desc=Нет рецепта
-for.errors.noRecipe.help=Нет соответствующих рецептов для доставленных ресурсов.
-for.errors.noRecipient.desc=Нет адресата
-for.errors.noRecipient.help=Для отправки письма оно должно быть адресовано.
-for.errors.noResource.desc=Отсутствуют ресурсы
-for.errors.noResource.help=Требуется больше ресурсов для дальнейшей работы.
-for.errors.noSky.desc=Не видно неба
-for.errors.noSky.help=Очистите зону над механизмом.
-for.errors.noSpace.desc=Нет места в инвентаре
-for.errors.noSpace.help=Очистите инвентарь этого механизма.
-for.errors.noSpaceTank.desc=Нет места в резервуаре
-for.errors.noSpaceTank.help=Опустошите резервуар этого механизма.
-for.errors.noSpecimen.desc=Нечего анализировать
-for.errors.noSpecimen.help=Предоставьте образец для анализа.
-for.errors.noStamps.desc=Нужны марки
-for.errors.noStamps.help=Торговая станция требует больше марок для оплаты почтовых расходов.
-for.errors.noPaper.desc=Нужна бумага
-for.errors.noPaper.help=Торговая станция требует больше бумаги, чтобы отправлять письма.
-for.errors.noSupplies.desc=Нужны припасы
-for.errors.noSupplies.help=Торговая станция требует припасов для отправки.
-for.errors.noTrade.desc=Нет набора для торговли
-for.errors.noTrade.help=Торговая станция требует предметы, для отправки и получения.
-for.errors.notAlphaNumeric.desc=Только буквы и цифры 
-for.errors.notAlphaNumeric.help=Данная строка должна состоять только из букв и цифр.
-for.errors.notDay.desc=Не дневное время
-for.errors.notDay.help=Работа возможна только в течении дня.
-for.errors.notGloomy.desc=Не достаточно темно
-for.errors.notGloomy.help=Для работы требуется меньший уровень освещения.
-for.errors.notLucid.desc=Не достаточно светло
-for.errors.notLucid.help=Для работы требуется больший уровень освещения.
-for.errors.notNight.desc=Не ночное время
-for.errors.notNight.help=Работа возможна только в течении ночи.
-for.errors.notPostpaid.desc=Требуется марки
-for.errors.notPostpaid.help=Добавьте больше марок для оплаты почтовых расходов.
-for.errors.notRaining.desc=Нет дождя
-for.errors.notRaining.help=Работа возможна только, когда идёт дождь.
-for.errors.notUnique.desc=Не уникальная
-for.errors.notUnique.help=Данная строка должна быть уникальной в этом мире. Выберете другую.
+for.errors.circuit_mismatch.desc=Несоответствие макету
+for.errors.circuit_mismatch.help=Количество ламп не совпадает с размером печатной платы.
+for.errors.forced_cooldown.desc=Принудительное охлаждение
+for.errors.forced_cooldown.help=Двигатель перегрелся, он остывает.
+for.errors.is_raining.desc=Дождь
+for.errors.is_raining.help=Работа возможна, только если не идёт дождь.
+for.errors.no_circuit_board.desc=Плата отсутствует
+for.errors.no_circuit_board.help=Вставьте плату, чтобы спаять выбранные лампы на неё.
+for.errors.no_circuit_layout.desc=Макеты не найдены
+for.errors.no_circuit_layout.help=Макеты не доступны в соответствии с текущими настройками игры.
+for.errors.no_disposal.desc=Нельзя выбросить отходы
+for.errors.no_disposal.help=Недостаточно свободного места для извлечения отходов.
+for.errors.no_drone.desc=Нет трутня
+for.errors.no_drone.help=Спаривание требует наличия трутня.
+for.errors.no_energy_net.desc=Нет электричества
+for.errors.no_energy_net.help=В Вашем мире любое электричество бесполезно. (Установите IndustrialCraft\u00b2.)
+for.errors.no_power.desc=Нет энергии
+for.errors.no_power.help=Этому механизму требуется энергия RF.
+for.errors.no_flower.desc=Нет цветов
+for.errors.no_flower.help=Пчелы улья не нашли подходящих для них цветов.
+for.errors.no_fuel.desc=Нет топлива
+for.errors.no_fuel.help=Пополните запас топлива этого механизма.
+for.errors.no_heat.desc=Не прогрет
+for.errors.no_heat.help=Заправьте нагревающий резервуар.
+for.errors.no_honey.desc=Требуется мёд
+for.errors.no_honey.help=Данному устройству для работы требуется капля мёда или медвяная роса.
+for.errors.no_queen.desc=Нет королевы
+for.errors.no_queen.help=Предоставьте данному улью королеву, или принцессу и трутня.
+for.errors.no_recipe.desc=Нет рецепта
+for.errors.no_recipe.help=Нет соответствующих рецептов для доставленных ресурсов.
+for.errors.no_recipient.desc=Нет адресата
+for.errors.no_recipient.help=Для отправки письма оно должно быть адресовано.
+for.errors.no_resource.desc=Отсутствуют ресурсы
+for.errors.no_resource.help=Требуется больше ресурсов для дальнейшей работы.
+for.errors.no_sky.desc=Не видно неба
+for.errors.no_sky.help=Очистите зону над механизмом.
+for.errors.no_space.desc=Нет места в инвентаре
+for.errors.no_space.help=Очистите инвентарь этого механизма.
+for.errors.no_space_tank.desc=Нет места в резервуаре
+for.errors.no_space_tank.help=Опустошите резервуар этого механизма.
+for.errors.no_specimen.desc=Нечего анализировать
+for.errors.no_specimen.help=Предоставьте образец для анализа.
+for.errors.no_stamps.desc=Нужны марки
+for.errors.no_stamps.help=Торговая станция требует больше марок для оплаты почтовых расходов.
+for.errors.no_paper.desc=Нужна бумага
+for.errors.no_paper.help=Торговая станция требует больше бумаги, чтобы отправлять письма.
+for.errors.no_supplies.desc=Нужны припасы
+for.errors.no_supplies.help=Торговая станция требует припасов для отправки.
+for.errors.no_trade.desc=Нет набора для торговли
+for.errors.no_trade.help=Торговая станция требует предметы, для отправки и получения.
+for.errors.not_alpha_numeric.desc=Только буквы и цифры
+for.errors.not_alpha_numeric.help=Данная строка должна состоять только из букв и цифр.
+for.errors.not_day.desc=Не дневное время
+for.errors.not_day.help=Работа возможна только в течении дня.
+for.errors.not_gloomy.desc=Не достаточно темно
+for.errors.not_gloomy.help=Для работы требуется меньший уровень освещения.
+for.errors.not_lucid.desc=Не достаточно светло
+for.errors.not_lucid.help=Для работы требуется больший уровень освещения.
+for.errors.not_night.desc=Не ночное время
+for.errors.not_night.help=Работа возможна только в течении ночи.
+for.errors.not_postpaid.desc=Требуется марки
+for.errors.not_postpaid.help=Добавьте больше марок для оплаты почтовых расходов.
+for.errors.not_raining.desc=Нет дождя
+for.errors.not_raining.help=Работа возможна только, когда идёт дождь.
+for.errors.not_unique.desc=Не уникальная
+for.errors.not_unique.help=Данная строка должна быть уникальной в этом мире. Выберете другую.
 for.errors.unknown.desc=Неизвестная ошибка
 for.errors.unknown.help=Поздравляем, Вы обнаружили неполадку.
-for.errors.wrongStacksize.desc=Слишком много предметов
-for.errors.wrongStacksize.help=Только отдельные предметы могут быть использованы здесь.
 
 for.flowers.cacti=Кактусы
 for.flowers.end=Край
@@ -147,7 +142,7 @@ for.flowers.vanilla=Цветы
 for.flowers.wheat=Пшеница
 for.flowers.snow=Зимние
 
-fluid.bioethanol=Этанол
+fluid.bio.ethanol=Этанол
 fluid.biomass=Биомасса
 fluid.glass=Жидкое стекло
 fluid.for.honey=Мёд
@@ -155,8 +150,8 @@ fluid.ice=Молотый лёд
 fluid.juice=Фруктовый сок
 fluid.short.mead=Питный мёд
 fluid.milk=Молоко
-fluid.seedoil=Растительное масло
-tile.forestry.fluid.bioethanol.name=Этанол
+fluid.seed.oil=Растительное масло
+tile.forestry.fluid.bio.ethanol.name=Этанол
 tile.forestry.fluid.biomass.name=Биомасса
 tile.forestry.fluid.glass.name=Жидкое стекло
 tile.forestry.fluid.for.honey.name=Мёд
@@ -164,7 +159,7 @@ tile.forestry.fluid.ice.name=Молотый лёд
 tile.forestry.fluid.juice.name=Фруктовый сок
 tile.forestry.fluid.short.mead.name=Питный мёд
 tile.forestry.fluid.milk.name=Молоко
-tile.forestry.fluid.seedoil.name=Растительное масло
+tile.forestry.fluid.seed.oil.name=Растительное масло
 
 for.gui.access=Доступ
 for.gui.active=Активно
@@ -235,26 +230,20 @@ for.gui.normal=Обычная
 for.gui.escritoire.probe=Изучить образцы
 for.gui.escritoire.instructions=Положите генетический образец в центр, чтобы начать. Также положите несколько в левые слоты и изучите их для помощи.
 
-# Write as many notes as you like, just set the count correctly.
-
-for.gui.escritoire.notes.level1.count=3
 for.gui.escritoire.notes.level1.1=Я нашёл любопытный образец во время путешествия.
 for.gui.escritoire.notes.level1.2=Этот странный малый нуждается в дальнейшем исследовании.
 for.gui.escritoire.notes.level1.3=Ликуя, я решил сразу начать с моего исследования.
 
-for.gui.escritoire.notes.level2.count=4
 for.gui.escritoire.notes.level2.1=Я был поражён дивной натурой этого образца.
 for.gui.escritoire.notes.level2.2=Образец дёрнулся, когда я осматривал его более внимательно.
 for.gui.escritoire.notes.level2.3=Странные знаки на нижней части удивили меня.
 for.gui.escritoire.notes.level2.4=Об этом будут говорить в обществе, когда я закончу исследование.
 
-for.gui.escritoire.notes.level3.count=4
 for.gui.escritoire.notes.level3.1=После некоторых мыслей, я обнаружил новое интересное направление.
 for.gui.escritoire.notes.level3.2=Я почесал голову над этим открытием и подверг всё сомнению.
 for.gui.escritoire.notes.level3.3=Я думал, что мои глаза обманывают меня, но не тут-то было.
 for.gui.escritoire.notes.level3.4=Ранее недоступная точка привела меня к вопросу о классификации образца.
 
-for.gui.escritoire.notes.level4.count=7
 for.gui.escritoire.notes.level4.1=Мои крики разочарования заставили домработника заглянуть в мой кабинет от беспокойства.
 for.gui.escritoire.notes.level4.2=В безумии и на грани отчаяния, я разорвал все заметки!
 for.gui.escritoire.notes.level4.3=Это... просто не имеет никакого смысла!
@@ -263,14 +252,12 @@ for.gui.escritoire.notes.level4.5=Кувалда едва сделала вмя�
 for.gui.escritoire.notes.level4.6=Я клянусь, оно смотрит на меня, своими ужасными, маленькими, похожими на бусинки, глазами.
 for.gui.escritoire.notes.level4.7=Оно смеётся? Я слышал смех? Кто здесь смеётся?
 
-for.gui.escritoire.notes.success.count=5
 for.gui.escritoire.notes.success.1=Эврика!
 for.gui.escritoire.notes.success.2=Чудо! Моё имя войдёт в историю!
 for.gui.escritoire.notes.success.3=Мои коллеги будут впечатлены!
 for.gui.escritoire.notes.success.4=Все будут завидовать мне!
 for.gui.escritoire.notes.success.5=Да!
 
-for.gui.escritoire.notes.failure.count=5
 for.gui.escritoire.notes.failure.1=Всё потеряно.
 for.gui.escritoire.notes.failure.2=Я сжёг все мои заметки.
 for.gui.escritoire.notes.failure.3=Зачем? Поначалу я делал большие успехи...
@@ -280,8 +267,8 @@ for.gui.escritoire.notes.failure.5=О, мой...
 for.gui.mail.foreveryattached=за каждые прикреплённые
 for.gui.mail.from=От
 for.gui.mail.nametrader=Назовите Вашу торговую станцию
-for.gui.mail.nothingtotrade=Торговой станции нечем торговать.
-for.gui.mail.notrader=Торговая станция с данным именем не доступна.
+for.gui.mail.nothing.to.trade=Торговой станции нечем торговать.
+for.gui.mail.no.trader=Торговая станция с данным именем не доступна.
 for.gui.mail.pleasesend=Пожалуйста пришлите
 for.gui.mail.to=Кому
 for.gui.mail.receive=Получать
@@ -317,10 +304,6 @@ for.gui.pollination=Скорость опыления
 for.gui.princesses=Принцесс
 for.gui.produce=Продукция
 for.gui.queens=Королев
-
-for.gui.rule.private=Приватный
-for.gui.rule.restricted=Ограниченный
-for.gui.rule.shared=Общий
 
 forestry.allele.normal=Обычный
 forestry.allele.average=Средний
@@ -388,12 +371,6 @@ for.gui.warm=Жаркая
 for.gui.water=Вода
 for.gui.worker=рабочий
 
-for.hints.accesscontrol.desc=Владелец механизма может устанавливать три вида доступа: общий, ограниченный и приватный.
-for.hints.accesscontrol.tag=Контроль доступа
-for.hints.accesspipe.desc=Механизм с приватным доступом никаким образом не будет взаимодействовать с трубами и лампами.
-for.hints.accesspipe.tag=Ограничение доступа к трубам
-for.hints.accessrules.desc=Общий доступ - это когда любой может демонтировать механизм или взаимодействовать с ним. Ограниченный позволяет только взаимодействовать с ним.
-for.hints.accessrules.tag=Виды доступа
 for.hints.apiaristsuit.desc=Полный костюм пчеловода будет защищать Вас от всех негативных эффектов пчёл.
 for.hints.apiaristsuit.tag=Костюм от пчёл!
 for.hints.beebiomes.desc=Пчёлы работают только в тех биомах, что подходят их виду. Используйте анализатор пчёл и определитель ареала для их выяснения.
@@ -452,8 +429,6 @@ for.hints.postage.desc=Отправка писем требует оплату �
 for.hints.postage.tag=Платите перевозчику
 for.hints.powerraintank.desc=Даже обесточенный сборщик дождя будет собирать воду. Но для её разлива требуется энергия от двигателя.
 for.hints.powerraintank.tag=Разлив требует энергию!
-for.hints.powerrequired.desc=Это устройство требует энергию от двигателей для работы. Для начала производства разместите двигатель вплотную к устройству, а потом запустите его.
-for.hints.powerrequired.tag=Требует энергию!
 for.hints.shortmead.desc=Ваш бродильный аппарат может не только создавать биомассу, используйте медвяную росу и жидкий мёд для создания питного мёда.
 for.hints.shortmead.tag=Получите Ваш энергетический напиток!
 for.hints.usesofash.desc=Зола может быть использована для создания минерального удобрения, а также для создания смолистого торфа.
@@ -498,73 +473,57 @@ for.trigger.noFrames=Нет рамок
 
 for.yes=Да
 
-item.for.adventurerBag.name=Рюкзак авантюриста
-item.for.adventurerBagT2.name=Тканный рюкзак авантюриста
+item.for.adventurer_bag.name=Рюкзак авантюриста
+item.for.adventurer_bagT2.name=Тканный рюкзак авантюриста
 item.for.ambrosia.name=Амброзия
 item.for.apatite.name=Апатит
 
-item.for.apiaristBag.name=Рюкзак пчеловода
-item.for.apiaristBoots.name=Ботинки пчеловода
-item.for.apiaristChest.name=Куртка пчеловода
-item.for.apiaristHelmet.name=Защитная маска пчеловода
-item.for.apiaristLegs.name=Штаны пчеловода
+item.for.apiarist_bag.name=Рюкзак пчеловода
+item.for.apiarist_boots.name=Ботинки пчеловода
+item.for.apiarist_chest.name=Куртка пчеловода
+item.for.apiarist_helmet.name=Защитная маска пчеловода
+item.for.apiarist_legs.name=Штаны пчеловода
 
 item.for.ash.name=Зола
 
 item.for.beealyzer.name=Анализатор пчёл
-item.for.habitatLocator.name=Определитель ареала
+item.for.habitat_locator.name=Определитель ареала
 
-item.for.beeCombs.cocoa.name=Какао-соты
-item.for.beeCombs.darkened.name=Потемневшие соты
-item.for.beeCombs.dripping.name=Капающие соты
-item.for.beeCombs.frozen.name=Морозные соты
-item.for.beeCombs.honey.name=Медовые соты
-item.for.beeCombs.irradiated.name=Облучённые соты
-item.for.beeCombs.mellow.name=Спелые соты
-item.for.beeCombs.mossy.name=Замшелые соты
-item.for.beeCombs.mysterious.name=Таинственные соты
-item.for.beeCombs.omega.name=Омега-соты
-item.for.beeCombs.parched.name=Пересохшие соты
-item.for.beeCombs.powdery.name=Рыхлые соты
-item.for.beeCombs.reddened.name=Покрасневшие соты
-item.for.beeCombs.silky.name=Шелковистые соты
-item.for.beeCombs.simmering.name=Кипящие соты
-item.for.beeCombs.stringy.name=Вязкие соты
-item.for.beeCombs.wheaten.name=Пшеничные соты
+item.for.bee_combs.cocoa.name=Какао-соты
+item.for.bee_combs.darkened.name=Потемневшие соты
+item.for.bee_combs.dripping.name=Капающие соты
+item.for.bee_combs.frozen.name=Морозные соты
+item.for.bee_combs.honey.name=Медовые соты
+item.for.bee_combs.irradiated.name=Облучённые соты
+item.for.bee_combs.mellow.name=Спелые соты
+item.for.bee_combs.mossy.name=Замшелые соты
+item.for.bee_combs.mysterious.name=Таинственные соты
+item.for.bee_combs.omega.name=Омега-соты
+item.for.bee_combs.parched.name=Пересохшие соты
+item.for.bee_combs.powdery.name=Рыхлые соты
+item.for.bee_combs.reddened.name=Покрасневшие соты
+item.for.bee_combs.silky.name=Шелковистые соты
+item.for.bee_combs.simmering.name=Кипящие соты
+item.for.bee_combs.stringy.name=Вязкие соты
+item.for.bee_combs.wheaten.name=Пшеничные соты
 
 item.for.beeswax.name=Пчелиный воск
 
 item.for.beverage.meadCurative.name=Целебный мёд
 item.for.beverage.meadShort.name=Питный мёд
 
-item.for.biomeFinder.name=Определитель ареала
-item.for.bituminousPeat.name=Смолистый торф
-item.for.brokenBronzePickaxe.name=Сломанная кирка
-item.for.brokenBronzeShovel.name=Сломанная лопата
-item.for.bronzePickaxe.name=Кирка выживающего
-item.for.bronzeShovel.name=Лопата выживающего
-item.for.builderBag.name=Рюкзак строителя
-item.for.builderBagT2.name=Тканный рюкзак строителя
+item.for.biome_finder.name=Определитель ареала
+item.for.bituminous_peat.name=Смолистый торф
+item.for.broken_bronze_pickaxe.name=Сломанная кирка
+item.for.broken_bronze_shovel.name=Сломанная лопата
+item.for.bronze_pickaxe.name=Кирка выживающего
+item.for.bronze_shovel.name=Лопата выживающего
+item.for.builder_bag.name=Рюкзак строителя
+item.for.builder_bagT2.name=Тканный рюкзак строителя
 
-item.for.bucketEthanol.name=Ведро этанола
-item.for.bucketBiomass.name=Ведро биомассы
-item.for.bucketHoney.name=Ведро мёда
-item.for.bucketIce.name=Ведро молотого льда
-item.for.bucketJuice.name=Ведро фруктового сока
-item.for.bucketSeedOil.name=Ведро растительного масла
-item.for.bucketGlass.name=Ведро жидкого стекла
-item.for.bucketShortMead.name=Ведро питного мёда
+item.for.can.empty.name=Банка
+item.for.can.grammar=Банка %s
 
-item.for.canEmpty.name=Банка
-item.for.canEthanol.name=Банка этанола
-item.for.canBiomass.name=Банка биомассы
-item.for.canFuel.name=Банка топлива
-item.for.canHoney.name=Банка мёда
-item.for.canIce.name=Банка льда
-item.for.canJuice.name=Банка сока
-item.for.canLava.name=Банка лавы
-item.for.canOil.name=Банка нефти
-item.for.canSeedOil.name=Банка растительного масла
 item.for.carton.name=Картон
 
 item.for.circuitboard.basic.name=Основная печатная плата
@@ -572,27 +531,27 @@ item.for.circuitboard.enhanced.name=Продвинутая печатная пл
 item.for.circuitboard.intricate.name=Усложнённая печатная плата
 item.for.circuitboard.refined.name=Усовершенствованная печатная плата
 
-item.for.craftingMaterial.dissipationCharge.name=Рассеивающий заряд
-item.for.craftingMaterial.iceShard.name=Осколок льда
-item.for.craftingMaterial.pulsatingDust.name=Пульсирующая пыль
-item.for.craftingMaterial.pulsatingMesh.name=Пульсирующая сеть
-item.for.craftingMaterial.scentedPaneling.name=Пропитанная обшивка
-item.for.craftingMaterial.silkWisp.name=Клочок шёлка
-item.for.craftingMaterial.wovenSilk.name=Тканый шёлк
+item.for.crafting_material.dissipation_charge.name=Рассеивающий заряд
+item.for.crafting_material.ice_shard.name=Осколок льда
+item.for.crafting_material.pulsating_dust.name=Пульсирующая пыль
+item.for.crafting_material.pulsating_mesh.name=Пульсирующая сеть
+item.for.crafting_material.scented_paneling.name=Пропитанная обшивка
+item.for.crafting_material.silk_wisp.name=Клочок шёлка
+item.for.crafting_material.woven_silk.name=Тканый шёлк
 
 item.for.crate.name=Ящик
-item.for.decayingWheat.name=Загнивающая пшеница
-item.for.diggerBag.name=Рюкзак землекопа
-item.for.diggerBagT2.name=Тканный рюкзак землекопа
+item.for.decaying_wheat.name=Загнивающая пшеница
+item.for.digger_bag.name=Рюкзак землекопа
+item.for.digger_bagT2.name=Тканный рюкзак землекопа
 
-item.for.fertilizerBio.name=Компост
-item.for.fertilizerCompound.name=Минеральное удобрение
-item.for.foresterBag.name=Рюкзак лесника
-item.for.foresterBagT2.name=Тканный рюкзак лесника
+item.for.fertilizer_bio.name=Компост
+item.for.fertilizer_compound.name=Минеральное удобрение
+item.for.forester_bag.name=Рюкзак лесника
+item.for.forester_bagT2.name=Тканный рюкзак лесника
 
-item.for.frameImpregnated.name=Пропитанная рамка
-item.for.frameProven.name=Проверенная рамка
-item.for.frameUntreated.name=Необработанная рамка
+item.for.frame_impregnated.name=Пропитанная рамка
+item.for.frame_proven.name=Проверенная рамка
+item.for.frame_untreated.name=Необработанная рамка
 
 item.for.fruits.cherry.name=Вишня
 item.for.fruits.chestnut.name=Каштан
@@ -602,43 +561,43 @@ item.for.fruits.papaya.name=Папайя
 item.for.fruits.plum.name=Слива
 item.for.fruits.walnut.name=Грецкий орех
 
-item.for.gearBronze.name=Бронзовая шестерня
-item.for.gearCopper.name=Медная шестерня
-item.for.gearTin.name=Оловянная шестерня
+item.for.gear_bronze.name=Бронзовая шестерня
+item.for.gear_copper.name=Медная шестерня
+item.for.gear_tin.name=Оловянная шестерня
 
-item.for.hardenedMachine.name=Укреплённый корпус
+item.for.hardened_machine.name=Укреплённый корпус
 
 item.for.honeydew.name=Медвяная роса
 
-item.for.honeyDrop.charged.name=Заряженная капля
-item.for.honeyDrop.honey.name=Капля мёда
-item.for.honeyDrop.omega.name=Омега-капля
-item.for.honeyedSlice.name=Бутерброд с мёдом
+item.for.honey_drop.charged.name=Заряженная капля
+item.for.honey_drop.honey.name=Капля мёда
+item.for.honey_drop.omega.name=Омега-капля
+item.for.honeyed_slice.name=Бутерброд с мёдом
 
-item.for.honeyPot.name=Горшочек мёда
-item.for.hunterBag.name=Рюкзак охотника
-item.for.hunterBagT2.name=Тканный рюкзак охотника
+item.for.honey_pot.name=Горшочек мёда
+item.for.hunter_bag.name=Рюкзак охотника
+item.for.hunter_bagT2.name=Тканный рюкзак охотника
 
-item.for.impregnatedCasing.name=Пропитанный корпус
+item.for.impregnated_casing.name=Пропитанный корпус
 item.for.imprinter.name=Импринтер
 item.for.infuser.name=Наполнитель
 
-item.for.ingotBronze.name=Бронзовый слиток
-item.for.ingotCopper.name=Медный слиток
-item.for.ingotTin.name=Оловянный слиток
+item.for.ingot_bronze.name=Бронзовый слиток
+item.for.ingot_copper.name=Медный слиток
+item.for.ingot_tin.name=Оловянный слиток
 
-item.for.iodineCapsule.name=Капсула йода
-item.for.kitPickaxe.name=Сборная кирка
-item.for.kitShovel.name=Сборная лопата
+item.for.iodine_capsule.name=Капсула йода
+item.for.kit_pickaxe.name=Сборная кирка
+item.for.kit_shovel.name=Сборная лопата
 item.for.letters.name=Письмо
 
-item.for.minerBag.name=Рюкзак шахтёра
-item.for.minerBagT2.name=Тканный рюкзак шахтёра
+item.for.miner_bag.name=Рюкзак шахтёра
+item.for.miner_bagT2.name=Тканный рюкзак шахтёра
 
-item.for.mouldyWheat.name=Плесневелая пшеница
+item.for.mouldy_wheat.name=Плесневелая пшеница
 item.for.mulch.name=Мульча
-item.for.naturalistHelmet.name=Очки
-item.for.oakStick.name=Полированная палка
+item.for.naturalist_helmet.name=Очки
+item.for.oak_stick.name=Полированная палка
 item.for.peat.name=Торф
 item.for.phosphor.name=Фосфор
 item.for.pipette.name=Пипетка
@@ -651,18 +610,10 @@ item.for.propolis.sticky.name=Липкий прополис
 item.for.propolis.pulsating.name=Пульсирующий прополис
 item.for.propolis.silky.name=Шелковистый прополис
 
-item.for.refractoryEthanol.name=Капсула этанола
-item.for.refractoryBiomass.name=Капсула биомассы
-item.for.refractoryEmpty.name=Огнеупорная капсула
-item.for.refractoryFuel.name=Капсула топлива
-item.for.refractoryHoney.name=Капсула мёда
-item.for.refractoryIce.name=Капсула льда
-item.for.refractoryJuice.name=Капсула сока
-item.for.refractoryLava.name=Капсула лавы
-item.for.refractoryOil.name=Капсула нефти
-item.for.refractorySeedOil.name=Капсула растительного масла
-item.for.refractoryWater.name=Капсула воды
-item.for.refractoryWax.name=Огнеупорный воск
+item.for.refractory.empty.name=Огнеупорная капсула
+item.for.refractory.grammar=Капсула %s
+
+item.for.refractory_wax.name=Огнеупорный воск
 
 item.for.researchNote.name=Записки игрока %s
 item.for.royalJelly.name=Маточное молочко
@@ -678,40 +629,30 @@ item.for.stamps.50n.name=Почтовая марка (50n)
 item.for.stamps.100n.name=Почтовая марка (100n)
 item.for.stamps.name=Почтовая марка
 
-item.for.sturdyMachine.name=Прочный корпус
-item.for.tent.name=Палатка выжившего
+item.for.sturdy_machine.name=Прочный корпус
 
-item.for.thermionicTubes.ex-0.name=Медная электронная лампа
-item.for.thermionicTubes.ex-1.name=Оловянная электронная лампа
-item.for.thermionicTubes.ex-2.name=Бронзовая электронная лампа
-item.for.thermionicTubes.ex-3.name=Железная электронная лампа
-item.for.thermionicTubes.ex-4.name=Золотая электронная лампа
-item.for.thermionicTubes.ex-5.name=Алмазная электронная лампа
-item.for.thermionicTubes.ex-6.name=Обсидиановая электронная лампа
-item.for.thermionicTubes.ex-7.name=Огненная электронная лампа
-item.for.thermionicTubes.ex-8.name=Прорезиненная электронная лампа
-item.for.thermionicTubes.ex-9.name=Изумрудная электронная лампа
-item.for.thermionicTubes.ex-10.name=Апатитовая электронная лампа
-item.for.thermionicTubes.ex-11.name=Лазуритовая электронная лампа
-item.for.thermionicTubes.ex-12.name=Электронная лампа Края
+item.for.thermionic_tubes.copper.name=Медная электронная лампа
+item.for.thermionic_tubes.tin.name=Оловянная электронная лампа
+item.for.thermionic_tubes.bronze.name=Бронзовая электронная лампа
+item.for.thermionic_tubes.iron.name=Железная электронная лампа
+item.for.thermionic_tubes.gold.name=Золотая электронная лампа
+item.for.thermionic_tubes.diamond.name=Алмазная электронная лампа
+item.for.thermionic_tubes.obsidian.name=Обсидиановая электронная лампа
+item.for.thermionic_tubes.blaze.name=Огненная электронная лампа
+item.for.thermionic_tubes.rubber.name=Прорезиненная электронная лампа
+item.for.thermionic_tubes.emerald.name=Изумрудная электронная лампа
+item.for.thermionic_tubes.apatite.name=Апатитовая электронная лампа
+item.for.thermionic_tubes.lapis.name=Лазуритовая электронная лампа
+item.for.thermionic_tubes.ender.name=Электронная лампа Края
 
 item.for.treealyzer.name=Анализатор деревьев
 
-item.for.canWater.name=Банка воды
+item.for.capsule.empty.name=Восковая капсула
+item.for.capsule.grammar=Капсула %s
 
-item.for.waxCapsule.name=Восковая капсула
-item.for.waxCapsuleEthanol.name=Капсула этанола
-item.for.waxCapsuleBiomass.name=Капсула биомассы
-item.for.waxCapsuleFuel.name=Капсула топлива
-item.for.waxCapsuleHoney.name=Капсула мёда
-item.for.waxCapsuleIce.name=Капсула льда
-item.for.waxCapsuleJuice.name=Капсула сока
-item.for.waxCapsuleOil.name=Капсула нефти
-item.for.waxCapsuleSeedOil.name=Капсула растительного масла
-item.for.waxCapsuleWater.name=Капсула воды
-item.for.waxCast.name=Восковая форма
+item.for.wax_cast.name=Восковая форма
 
-item.for.woodPulp.name=Древесная масса
+item.for.wood_pulp.name=Древесная масса
 item.for.wrench.name=Гаечный ключ
 
 itemGroup.apiculture=Пчеловодство
@@ -719,60 +660,43 @@ itemGroup.arboriculture=Лесоводство
 itemGroup.forestry=Forestry
 itemGroup.lepidopterology=Лепидоптерология
 
-tile.for.core.0.name=Анализатор
-tile.for.core.1.name=Секретер
+tile.for.analyzer.name=Анализатор
+tile.for.escritoire.name=Секретер
 
-tile.for.engine.0.name=Электродвигатель
-tile.for.engine.1.name=Торфяной двигатель
-tile.for.engine.2.name=Биогазовый двигатель
-tile.for.engine.3.name=Биогенератор
-tile.for.engine.4.name=Заводной двигатель
+tile.for.engine_electrical.name=Электродвигатель
+tile.for.engine_peat.name=Торфяной двигатель
+tile.for.engine_biogas.name=Биогазовый двигатель
+tile.for.engine_generator.name=Биогенератор
+tile.for.engine_clockwork.name=Заводной двигатель
 
-tile.for.factory.0.name=Разливочный механизм
-tile.for.factory.1.name=Плотник
-tile.for.factory.2.name=Центрифуга
-tile.for.factory.3.name=Бродильный аппарат
-tile.for.factory.4.name=Увлажнитель
-tile.for.factory.5.name=Соковыжималка
-tile.for.factory.6.name=Дистиллятор
-tile.for.factory.7.name=Вызыватель дождя
-tile.for.factory2.0.name=Электроламповый завод
-tile.for.factory2.1.name=Сборщик дождя
-tile.for.factory2.2.name=Рабочий стол
+tile.for.bottler.name=Разливочный механизм
+tile.for.carpenter.name=Плотник
+tile.for.centrifuge.name=Центрифуга
+tile.for.fermenter.name=Бродильный аппарат
+tile.for.moistener.name=Увлажнитель
+tile.for.squeezer.name=Соковыжималка
+tile.for.still.name=Дистиллятор
+tile.for.rainmaker.name=Вызыватель дождя
+tile.for.fabricator.name=Электроламповый завод
+tile.for.raintank.name=Сборщик дождя
+tile.for.worktable.name=Рабочий стол
 
-tile.for.mail.0.name=Почтовый ящик
-tile.for.mail.1.name=Торговая станция
-tile.for.mail.2.name=Сборщик марок
+tile.for.mailbox.name=Почтовый ящик
+tile.for.trade_station.name=Торговая станция
+tile.for.stamp_collector.name=Сборщик марок
 
-tile.for.resources.0.name=Апатитовая руда
-tile.for.resources.1.name=Медная руда
-tile.for.resources.2.name=Оловянная руда
+tile.for.resources.apatite.name=Апатитовая руда
+tile.for.resources.copper.name=Медная руда
+tile.for.resources.tin.name=Оловянная руда
 
-tile.for.resourceStorage.0.name=Апатитовый блок
-tile.for.resourceStorage.1.name=Медный блок
-tile.for.resourceStorage.2.name=Оловянный блок
-tile.for.resourceStorage.3.name=Бронзовый блок
+tile.for.resource_storage.apatite.name=Апатитовый блок
+tile.for.resource_storage.copper.name=Медный блок
+tile.for.resource_storage.tin.name=Оловянный блок
+tile.for.resource_storage.bronze.name=Бронзовый блок
 
-tile.for.soil.0.name=Гумус
-tile.for.soil.1.name=Болотная земля
-tile.for.soil.2.name=Торф
-
-tile.for.stained.0.name=Белое стекло
-tile.for.stained.1.name=Оранжевое стекло
-tile.for.stained.2.name=Сиреневое стекло
-tile.for.stained.3.name=Светло-синее стекло
-tile.for.stained.4.name=Жёлтое стекло
-tile.for.stained.5.name=Лаймовое стекло
-tile.for.stained.6.name=Розовое стекло
-tile.for.stained.7.name=Серое стекло
-tile.for.stained.8.name=Светло-серое стекло
-tile.for.stained.9.name=Бирюзовое стекло
-tile.for.stained.10.name=Фиолетовое стекло
-tile.for.stained.11.name=Синее стекло
-tile.for.stained.12.name=Коричневое стекло
-tile.for.stained.13.name=Зелёное стекло
-tile.for.stained.14.name=Красное стекло
-tile.for.stained.15.name=Чёрное стекло
+tile.for.humus.name=Гумус
+tile.for.bog_earth.bog_earth.name=Болотная земля
+tile.for.bog_earth.peat.name=Торф
 
 ####################
 # APICULTURE
@@ -983,17 +907,16 @@ for.genus.bees.reddened=Reddened
 for.genus.bees.tropical=Tropical
 for.genus.bees.vengeful=Vengeful
 
-item.for.beePrincessGE.name=Принцесса
-item.for.beeQueenGE.name=Королева
+item.for.bee_princess_ge.name=Принцесса
+item.for.bee_queen_ge.name=Королева
 
-tile.for.alveary.0.name=Пчелиный улей
-tile.for.alveary.1.name=Вход улья
-tile.for.alveary.2.name=Роевня
-tile.for.alveary.3.name=Вентилятор улья
-tile.for.alveary.4.name=Обогреватель улья
-tile.for.alveary.5.name=Регулятор влажности улья
-tile.for.alveary.6.name=Стабилизатор улья
-tile.for.alveary.7.name=Сито улья
+tile.for.alveary.plain.name=Пчелиный улей
+tile.for.alveary.swarmer.name=Роевня
+tile.for.alveary.fan.name=Вентилятор улья
+tile.for.alveary.heater.name=Обогреватель улья
+tile.for.alveary.hygro.name=Регулятор влажности улья
+tile.for.alveary.stabiliser.name=Стабилизатор улья
+tile.for.alveary.sieve.name=Сито улья
 
 tile.for.apiculture.0.name=Пасека
 tile.for.apicultureChest.0.name=Сундук пчеловода
@@ -1013,7 +936,7 @@ tile.for.candle.dyed.stump.name=Тёмная окрашенная свеча
 tile.for.candle.lit.name=Светлая свеча
 tile.for.candle.stump.name=Тёмная свеча
 
-tile.for.stump.0.name=Потухшая свеча
+tile.for.stump.name=Потухшая свеча
 
 ####################
 # ARBORICULTURE
@@ -1080,14 +1003,12 @@ for.gui.family=Семейство
 for.gui.fireproof=Огнестойкость
 for.gui.fruits=Плоды
 for.gui.girth=Область посадки
-for.gui.growth=Условие роста
 for.gui.height=Высота
 for.gui.maturity=Созревание
 for.gui.native="Родной" биом
 for.gui.saplings=Вид саженца
 for.gui.sappiness=Жизнеспособность
 for.gui.supports=Вид плодов
-for.gui.tolerated=Нужный биом
 for.gui.treealyzer.help=Положите саженец и предоставьте мёд или нектар, в качестве катализатора.
 for.gui.treealyzer=Анализатор деревьев
 for.gui.yield=Урожай
@@ -1144,10 +1065,11 @@ for.trees.species.padauk=падука
 for.trees.species.cocobolo=кокоболо
 for.trees.species.zebrawood=зебрано
 
-for.fences.grammar=Забор из %TYPE
+for.fence.grammar=Забор из %TYPE
 for.log.grammar=Древесина %TYPE
 for.planks.grammar=Доски из %TYPE
 for.slab.grammar=Плита из %TYPE
+for.slab.double.grammar=Плита из %TYPE
 for.stairs.grammar=Ступеньки из %TYPE
 
 for.trees.woodType.larch=лиственницы
@@ -1183,9 +1105,9 @@ for.trees.woodType.zebrawood=зебрано
 tile.for.fireproof=%s (Огнестойкость)
 
 item.for.grafter.name=Садовый нож
-item.for.grafterProven.name=Проверенный садовый нож
+item.for.grafter_proven.name=Проверенный садовый нож
 
-tile.for.arboriculture.0.name=Сундук лесовода
+tile.for.tree_chest.name=Сундук лесовода
 
 tile.for.saplingGE.0.name=Саженец
 tile.for.leaves.0.name=Листва
@@ -1213,12 +1135,12 @@ for.circuit.manualShroom=Грибная ферма
 for.circuit.manualSucculent=Кактусовая ферма
 for.circuit.manualVegetable=Овощная ферма
 
-for.errors.noFarmland.desc=Нет рабочей зоны
-for.errors.noFarmland.help=Гладкий песчаник, кирпичи или каменные кирпичи создают платформу, где будет строиться ферма.
-for.errors.noFertilizer.desc=Нет удобрения
-for.errors.noFertilizer.help=Для работы фермы требуется удобрение. Компоста недостаточно.
-for.errors.noLiquid.desc=Нет воды
-for.errors.noLiquid.help=В зависимости от количества осадков, температуры и влажности фермы должны быть снабжены различным количеством воды.
+for.errors.no_farmland.desc=Нет рабочей зоны
+for.errors.no_farmland.help=Гладкий песчаник, кирпичи или каменные кирпичи создают платформу, где будет строиться ферма.
+for.errors.no_fertilizer.desc=Нет удобрения
+for.errors.no_fertilizer.help=Для работы фермы требуется удобрение. Компоста недостаточно.
+for.errors.no_liquid.desc=Нет воды
+for.errors.no_liquid.help=В зависимости от количества осадков, температуры и влажности фермы должны быть снабжены различным количеством воды.
 
 for.gui.farm.title=Ферма
 for.gui.hydr.heat=тепла
@@ -1316,9 +1238,9 @@ for.lepidopterology.effect.none=Нет
 
 item.for.butterfly.name=Бабочка
 item.for.flutterlyzer.name=Анализатор бабочек
-item.for.lepidopteristBag.name=Рюкзак лепидоптеролога
+item.for.lepidopterist_bag.name=Рюкзак лепидоптеролога
 item.for.moth.name=Мотылёк
-tile.for.lepidopterology.0.name=Сундук лепидоптеролога
+tile.for.butterfly_chest.name=Сундук лепидоптеролога
 
 ####################
 # MAIL
@@ -1340,17 +1262,17 @@ for.chat.command.forestry.mail.virtualize.format=Формат: /%s <назван
 for.chat.command.forestry.mail.virtualize.no_tradestation=Торговая станция, с названием '%s', не найдена.
 for.chat.command.forestry.mail.virtualize.set=Установить виртуализацию для '%s' к %s.
 
-for.chat.mail.insufficient_buffer=Торговая станция переполнена.
-for.chat.mail.insufficient_offer=Торговая станция запрашивает больше.
-for.chat.mail.insufficient_paper=Торговая станция израсходовала бумагу.
-for.chat.mail.insufficient_stamps=Торговая станция израсходовала марки.
-for.chat.mail.insufficient_trade_good=Торговая станция израсходовала припасы.
-for.chat.mail.mailbox_full=Почтовый ящик адресата переполнен.
-for.chat.mail.not_mailable=Письмо нельзя отправить.
-for.chat.mail.not_postpaid=На письме недостаточно марок.
-for.chat.mail.no_mailbox=Адресат не имеет почтового ящика.
+for.chat.mail.insufficient.buffer=Торговая станция переполнена.
+for.chat.mail.insufficient.offer=Торговая станция запрашивает больше.
+for.chat.mail.insufficient.paper=Торговая станция израсходовала бумагу.
+for.chat.mail.insufficient.stamps=Торговая станция израсходовала марки.
+for.chat.mail.insufficient.trade.good=Торговая станция израсходовала припасы.
+for.chat.mail.mailbox.full=Почтовый ящик адресата переполнен.
+for.chat.mail.not.mailable=Письмо нельзя отправить.
+for.chat.mail.not.postpaid=На письме недостаточно марок.
+for.chat.mail.no.mailbox=Адресат не имеет почтового ящика.
 for.chat.mail.ok=Торговля доступна
-for.chat.mail.response_not_mailable=Торговая станция не может отправить ответное письмо. Вы должны иметь почтовый ящик, чтобы отправить его.
+for.chat.mail.response.not.mailable.format=Торговая станция не может отправить ответное письмо. %s
 for.chat.mail.wrongstacksize=Можно написать только одно письмо за раз.
 
 for.gui.mail.address.copy=Использовать

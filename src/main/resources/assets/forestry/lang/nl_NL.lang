@@ -1,0 +1,98 @@
+####################
+# ARBORICULTURE
+####################
+
+gui.maturity=Rijpt
+gui.treealyzer=Boomanalyseerder
+gui.treealyzer.help=Lever een kiemplant en lever honing of nectar als katalysator.
+gui.saplings=Kiemplant
+gui.yield=Opbrengst
+gui.sappiness=Sappigheid
+gui.height=Hoogte
+gui.fruits=Vruchten
+gui.supports=Ondersteunt
+gui.family=Familie
+gui.girth=Omvang
+gui.native=Bodem
+gui.tolerated=Tolereert
+gui.growth=Groei
+description.treeOak=Allerdaagse bomen soort wiens appel-draagende eigenschap een onderwerp is in muziek en dans.|Codex Lignum
+description.treeBirch=Wijdverbreide berk, die gemiddelde minder hoog is.|Codex Lignum
+description.treeLime=Lange loof boom. Deze is recentelijk opnieuw ingedeeld tot de Malvaceae familie.|Codex Lignum
+description.treeWalnut=Lange loof boom met een grote stronk. Natuurlijk voorkomende walnoot bomen dragen vruchten die enige rijptijd nodig hebben.|Codex Lignum
+description.treeChestnut=Lange loof boom met een grote stronk. Natuurlijk voorkomende kastanje bomen dragen vruchten die enige rijptijd nodig hebben.|Codex Lignum
+description.treeSipiri=Lange altijd groene bomen met kostbaar hout. Hout en schors zijn aangenaam gekleurd. Groeit alleen in tropische klimaten.|Codex Lignum
+description.treeWillow=Grote loof boom. De witte wilgen groeien snel. Komen alleen voor in een vochtig klimaat.|Codex Lignum
+description.treeCherry=Kleine boom. In zijn natuurlijke vorm zal het kersen dragen, die een rijp periode moeten ondergaan..|Codex Lignum
+family.pomes=Pomes
+family.prunes=Pruimen
+family.nuts=Noten
+family.jungle=Oerwoud
+fruits.apple=Appel
+fruits.cherry=Cherry
+fruits.chestnut=Kastanje
+fruits.walnut=Walnoot
+fruits.cocoa=Cacao
+fruits.none=Geen
+fruits.plum=Plum
+fruits.lemon=Citroen
+fruits.dates=Dadels
+fruits.papaya=Papaja
+item.grafter=Grafter
+item.grafter_proven=Proven Grafter
+tile.log=Hout
+tile.planks=houten planken
+tile.slab=houten plaat
+tile.fences=houten hek
+tile.for.stairs=houten treden
+wood.0=Lariks
+wood.1=Teak
+wood.2=Acacia
+wood.3=Linde
+wood.4=Kastanje
+wood.5=Wengй
+wood.6=Baobab
+wood.7=Sequoia
+wood.8=Kapok
+wood.9=Ebbe
+wood.10=Mahonie
+wood.11=Balsa
+wood.12=Wilg
+wood.13=Walnoot
+wood.14=Groenhart
+wood.15=Kersen
+wood.16=Mahoe
+wood.17=Populier
+wood.18=Palm
+wood.19=Papaja
+wood.20=Den
+wood.21=Pruim
+wood.22=Esdoorn
+wood.23=Citrus
+
+####################
+# MAIL
+####################
+
+chat.mail.no_mailbox=Ontvanger heeft geen brievenbus.
+chat.mail.not_mailable=Brief is niet verstuurbaar,
+chat.mail.not_postpaid=Brief is niet voldoende bestempeld.
+chat.mail.mailbox_full=Ontvangers brievenbus is vol.
+chat.mail.already_mailed=Brief is al verstuurd.
+chat.mail.response_not_mailable=Handelskantoor kan de antwoordbrief niet versturen. Je hebt een brievenbus nodig.
+chat.mail.insufficient_offer=Handelskantoor eist meer.
+chat.mail.insufficient_trade_good=Handelskantoor heeft niet genoeg benodigdheden.
+chat.mail.insufficient_buffer=Handelskantoor is vol.
+chat.mail.insufficient_paper=Handelskantoor heeft niet genoeg papier.
+chat.mail.insufficient_stamps=Handelskantoor heeft niet genoeg postzegels.
+chat.mail.ok=Handel is beschikbaar.
+chat.mail.wrongstacksize=Kan maar een brief tegelijk schrijven.
+gui.mail.catalogue.close=Sluiten
+gui.mail.catalogue.trade=Handel
+gui.mail.filter.all=Alles
+gui.mail.filter.online=Online
+gui.mail.filter.offline=Offline
+gui.mail.willtrade=%s wil handelen.
+gui.mail.address.copy=Geruiken
+gui.mail.tradefor=voor
+item.catalogue=Catalogus

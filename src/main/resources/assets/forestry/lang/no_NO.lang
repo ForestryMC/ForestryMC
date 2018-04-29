@@ -1,0 +1,27 @@
+####################
+# MAIL
+####################
+
+chat.mail.no_mailbox=Mottakeren har ikke post boks.
+chat.mail.not_mailable=Kan ikke send dette brevet.
+chat.mail.not_postpaid=Brevet er ikke tilstrekkelig stemplet.
+chat.mail.mailbox_full=Mottakerens Post boks er full.
+chat.mail.already_mailed=Kan ikke tilbake sende brevet.
+chat.mail.response_not_mailable=Bytte stasjonen kan ikke sende dette brevet. Du mе ha en PostBox til og sende det til.
+chat.mail.insufficient_offer=Trade station demands more.
+chat.mail.insufficient_trade_good=Bytte stasjonen har gеtt tom for forsyninger..
+chat.mail.insufficient_buffer=Bytte stasjonen er full.
+chat.mail.insufficient_paper=Bytte stasjonen har gеtt tom for papir.
+chat.mail.insufficient_stamps=Bytte stasjonen har gеtt tom for Frimerker.
+chat.mail.ok=Bytte er tilgjenlig.
+chat.mail.wrongstacksize=Du kan bare skrive ett brev om gangen.
+gui.mail.catalogue.close=Lukket
+gui.mail.catalogue.trade=Bytte
+gui.mail.filter.all=Alle
+gui.mail.filter.online=Av
+gui.mail.filter.offline=Pе
+gui.mail.willtrade=%s vill bytte
+gui.mail.address.copy=Bruke
+gui.mail.tradefor=for
+gui.mail.notrades=Ingen bytte ledig.
+item.catalogue=Katalog

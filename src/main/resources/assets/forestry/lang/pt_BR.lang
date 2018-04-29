@@ -8,7 +8,6 @@ death.engine.clockwork=%1$s foi apunhalado por uma mola solta.
 for.beverage.effect.alcoholic=Alcoólico
 for.beverage.effect.antidote=Antídoto
 
-for.chat.accesslocked=%s é o proprietário desta máquina e bloqueou o acesso.
 for.chat.cannotmemorizeagain=Você já memorizou esta informação.
 
 for.chat.command.aliases=Pseudônimo: %s
@@ -64,78 +63,74 @@ for.circuit.layout.farms.managed.usage=Fazendas Gerenciadas
 for.circuit.layout.farms.manual.name=Fazenda Manual
 for.circuit.layout.farms.manual.usage=Fazendas Manuais
 
-for.errors.circuitMismatch.desc=A Ordem Não Corresponde
-for.errors.circuitMismatch.help=A quantidade de tubos não coincide com o tamanho da placa de circuito.
-for.errors.forcedCooldown.desc=Superaquecimento
-for.errors.forcedCooldown.help=Motor está superaquecido e foi desligado para resfriar.
-for.errors.invalidBiome.desc=Ambiente Hostil
-for.errors.invalidBiome.help=A maquina ou criaturas não podem trabalhar neste bioma.
-for.errors.isRaining.desc=Chuva
-for.errors.isRaining.help=O funcionamento só é possível quando não está chovendo.
-for.errors.noCircuitBoard.desc=Falta Placa
-for.errors.noCircuitBoard.help=Inserir uma placa de circuito para soldar os tubos selecionados para ele.
-for.errors.noCircuitLayout.desc=Nenhum Diagrama Encontrado
-for.errors.noCircuitLayout.help=Nenhum diagrama disponíveis devido às configurações atuais do jogo.
-for.errors.noDisposal.desc=Resíduo Não Descartável
-for.errors.noDisposal.help=Espaço insuficiente para eliminar resíduos do produtos.
-for.errors.noDrone.desc=Sem Zangão
-for.errors.noDrone.help=O acasalamento requer um zangão presente.
-for.errors.noEnergyNet.desc=Sem eletricidade
-for.errors.noEnergyNet.help=Seu mundo é estéril de eletricidade. (Instale o IndustrialCraft\u00b2.)
-for.errors.noPower.desc=Sem Energia
-for.errors.noPower.help=Esta máquina requer energia de RF para trabalhar.
-for.errors.noFlower.desc=Sem Flores
-for.errors.noFlower.help=Os membros da colméia não estão encontrando as flores certas.
-for.errors.noFuel.desc=Sem Combustível
-for.errors.noFuel.help=Reponha as fontes de combustível desta máquina.
-for.errors.noHeat.desc=Não Aquecido
-for.errors.noHeat.help=Encher o tanque de aquecimento.
-for.errors.noHoney.desc=Mel Mecessário
-for.errors.noHoney.help=Esta buginganga requer gotas de mel ou melaço para operar.
-for.errors.noQueen.desc=Não Há Rainha
-for.errors.noQueen.help=Ponha nesta colmeia uma rainha ou uma princesa e um zangão.
-for.errors.noRecipe.desc=Sem Receita
-for.errors.noRecipe.help=Nenhuma receita correspondente foi encontrada para os recursos fornecidos.
-for.errors.noRecipient.desc=Sem Destinatário
-for.errors.noRecipient.help=Você precisa endereçar sua carta à um destinatário para enviá-la.
-for.errors.noResource.desc=Falta Recursos
-for.errors.noResource.help=Mais recursos precisam ser fornecidos para esta operação.
-for.errors.noSky.desc=Céu Obstruído
-for.errors.noSky.help=Limpe a área acima da máquina.
-for.errors.noSpace.desc=Sem Espaço no Inventário
-for.errors.noSpace.help=Esvazie o inventário desta máquina.
-for.errors.noSpaceTank.desc=Sem espaço no tanque
-for.errors.noSpaceTank.help=Esvazie o tanque de líquidos desta máquina.
-for.errors.noSpecimen.desc=Nada Para Analisar
-for.errors.noSpecimen.help=Forneça uma espécime para analisar.
-for.errors.noStamps.desc=Falta de Selos
-for.errors.noStamps.help=O posto de troca requer mais selos para pagar a postagem.
-for.errors.noPaper.desc=Falta de Papel
-for.errors.noPaper.help=O posto de troca requer mais papel para enviar cartas.
-for.errors.noSupplies.desc=Precisa de Suprimentos
-for.errors.noSupplies.help=O posto de troca requer mais suprimentos para enviar.
-for.errors.noTrade.desc=Nenhuma Conjunto de Troca
-for.errors.noTrade.help=O posto de troca requer itens para Enviar e Receber.
-for.errors.notAlphaNumeric.desc=Não é Alfanumérico
-for.errors.notAlphaNumeric.help=A sequência (string) fornecida deve ser composta por letras e números.
-for.errors.notDay.desc=Só Durante o Dia
-for.errors.notDay.help=O funcionamento só é possível durante o dia.
-for.errors.notGloomy.desc=Não esta escuro
-for.errors.notGloomy.help=Um baixo nível de luz é necessário para a máquina operar.
-for.errors.notLucid.desc=Sem Luz Suficiente
-for.errors.notLucid.help=Um maior nível de luz é necessário para a operação.
-for.errors.notNight.desc=Só à Noite
-for.errors.notNight.help=O funcionamento só é possível durante a noite.
-for.errors.notPostpaid.desc=Requer Selos
-for.errors.notPostpaid.help=Aplica mais selos para pagar o serviço postal.
-for.errors.notRaining.desc=Sem Chuva
-for.errors.notRaining.help=O funcionamento só é possível quando está chovendo.
-for.errors.notUnique.desc=Não é Único
-for.errors.notUnique.help=A sequência (string) fornecida deve ser única no mundo. Escolha uma diferente.
+for.errors.circuit_mismatch.desc=A Ordem Não Corresponde
+for.errors.circuit_mismatch.help=A quantidade de tubos não coincide com o tamanho da placa de circuito.
+for.errors.forced_cooldown.desc=Superaquecimento
+for.errors.forced_cooldown.help=Motor está superaquecido e foi desligado para resfriar.
+for.errors.is_raining.desc=Chuva
+for.errors.is_raining.help=O funcionamento só é possível quando não está chovendo.
+for.errors.no_circuit_board.desc=Falta Placa
+for.errors.no_circuit_board.help=Inserir uma placa de circuito para soldar os tubos selecionados para ele.
+for.errors.no_circuit_layout.desc=Nenhum Diagrama Encontrado
+for.errors.no_circuit_layout.help=Nenhum diagrama disponíveis devido às configurações atuais do jogo.
+for.errors.no_disposal.desc=Resíduo Não Descartável
+for.errors.no_disposal.help=Espaço insuficiente para eliminar resíduos do produtos.
+for.errors.no_drone.desc=Sem Zangão
+for.errors.no_drone.help=O acasalamento requer um zangão presente.
+for.errors.no_energy_net.desc=Sem eletricidade
+for.errors.no_energy_net.help=Seu mundo é estéril de eletricidade. (Instale o IndustrialCraft\u00b2.)
+for.errors.no_power.desc=Sem Energia
+for.errors.no_power.help=Esta máquina requer energia de RF para trabalhar.
+for.errors.no_flower.desc=Sem Flores
+for.errors.no_flower.help=Os membros da colméia não estão encontrando as flores certas.
+for.errors.no_fuel.desc=Sem Combustível
+for.errors.no_fuel.help=Reponha as fontes de combustível desta máquina.
+for.errors.no_heat.desc=Não Aquecido
+for.errors.no_heat.help=Encher o tanque de aquecimento.
+for.errors.no_honey.desc=Mel Mecessário
+for.errors.no_honey.help=Esta buginganga requer gotas de mel ou melaço para operar.
+for.errors.no_queen.desc=Não Há Rainha
+for.errors.no_queen.help=Ponha nesta colmeia uma rainha ou uma princesa e um zangão.
+for.errors.no_recipe.desc=Sem Receita
+for.errors.no_recipe.help=Nenhuma receita correspondente foi encontrada para os recursos fornecidos.
+for.errors.no_recipient.desc=Sem Destinatário
+for.errors.no_recipient.help=Você precisa endereçar sua carta à um destinatário para enviá-la.
+for.errors.no_resource.desc=Falta Recursos
+for.errors.no_resource.help=Mais recursos precisam ser fornecidos para esta operação.
+for.errors.no_sky.desc=Céu Obstruído
+for.errors.no_sky.help=Limpe a área acima da máquina.
+for.errors.no_space.desc=Sem Espaço no Inventário
+for.errors.no_space.help=Esvazie o inventário desta máquina.
+for.errors.no_space_tank.desc=Sem espaço no tanque
+for.errors.no_space_tank.help=Esvazie o tanque de líquidos desta máquina.
+for.errors.no_specimen.desc=Nada Para Analisar
+for.errors.no_specimen.help=Forneça uma espécime para analisar.
+for.errors.no_stamps.desc=Falta de Selos
+for.errors.no_stamps.help=O posto de troca requer mais selos para pagar a postagem.
+for.errors.no_paper.desc=Falta de Papel
+for.errors.no_paper.help=O posto de troca requer mais papel para enviar cartas.
+for.errors.no_supplies.desc=Precisa de Suprimentos
+for.errors.no_supplies.help=O posto de troca requer mais suprimentos para enviar.
+for.errors.no_trade.desc=Nenhuma Conjunto de Troca
+for.errors.no_trade.help=O posto de troca requer itens para Enviar e Receber.
+for.errors.not_alpha_numeric.desc=Não é Alfanumérico
+for.errors.not_alpha_numeric.help=A sequência (string) fornecida deve ser composta por letras e números.
+for.errors.not_day.desc=Só Durante o Dia
+for.errors.not_day.help=O funcionamento só é possível durante o dia.
+for.errors.not_gloomy.desc=Não esta escuro
+for.errors.not_gloomy.help=Um baixo nível de luz é necessário para a máquina operar.
+for.errors.not_lucid.desc=Sem Luz Suficiente
+for.errors.not_lucid.help=Um maior nível de luz é necessário para a operação.
+for.errors.not_night.desc=Só à Noite
+for.errors.not_night.help=O funcionamento só é possível durante a noite.
+for.errors.not_postpaid.desc=Requer Selos
+for.errors.not_postpaid.help=Aplica mais selos para pagar o serviço postal.
+for.errors.not_raining.desc=Sem Chuva
+for.errors.not_raining.help=O funcionamento só é possível quando está chovendo.
+for.errors.not_unique.desc=Não é Único
+for.errors.not_unique.help=A sequência (string) fornecida deve ser única no mundo. Escolha uma diferente.
 for.errors.unknown.desc=Erro Desconhecido
 for.errors.unknown.help=Parabéns, você encontrou uma falha.
-for.errors.wrongStacksize.desc=Muitos Itens
-for.errors.wrongStacksize.help=Somente itens individuais podem ser usados aqui.
 
 for.flowers.cacti=Cactos
 for.flowers.end=´End´
@@ -146,7 +141,7 @@ for.flowers.nether=Nether
 for.flowers.vanilla=Flores
 for.flowers.wheat=Trigo
 
-fluid.bioethanol=Etanol
+fluid.bio.ethanol=Etanol
 fluid.biomass=Biomassa
 fluid.glass=Vidro Líquido
 fluid.for.honey=Mel
@@ -154,8 +149,8 @@ fluid.ice=Gelo Picado
 fluid.juice=Suco de Fruta
 fluid.short.mead=Hidromel
 fluid.milk=Leite
-fluid.seedoil=Óleo Vegetal
-tile.forestry.fluid.bioethanol.name=Etanol
+fluid.seed.oil=Óleo Vegetal
+tile.forestry.fluid.bio.ethanol.name=Etanol
 tile.forestry.fluid.biomass.name=Biomassa
 tile.forestry.fluid.glass.name=Vidro Líquido
 tile.forestry.fluid.for.honey.name=Mel
@@ -163,7 +158,7 @@ tile.forestry.fluid.ice.name=Gelo Picado
 tile.forestry.fluid.juice.name=Suco de Fruta
 tile.forestry.fluid.short.mead.name=Hidromel
 tile.forestry.fluid.milk.name=Leite
-tile.forestry.fluid.seedoil.name=Óleo Vegetal
+tile.forestry.fluid.seed.oil.name=Óleo Vegetal
 
 for.gui.access=Acesso
 for.gui.active=Ativo
@@ -266,26 +261,20 @@ forestry.allele.lowest=Baixíssimo
 for.gui.escritoire.probe=Examinar Espécimes
 for.gui.escritoire.instructions=Coloca uma amostra genética no centro para começar. Coloque mais nas ranhuras (slots) a esquerda para examiná-los e obter ajuda.
 
-# Write as many notes as you like, just set the count correctly.
-
-for.gui.escritoire.notes.level1.count=3
 for.gui.escritoire.notes.level1.1=Eu encontrei um espécime curioso em minhas viagens.
 for.gui.escritoire.notes.level1.2=Isto precisa de mais investigação.
 for.gui.escritoire.notes.level1.3=Eufórico, eu gostaria começar logo as minhas pesquisas.
 
-for.gui.escritoire.notes.level2.count=4
 for.gui.escritoire.notes.level2.1=Fiquei espantado com a sua natureza maravilhosa.
 for.gui.escritoire.notes.level2.2=O espécime se contraiu, enquanto eu inspecionava mais de perto.
 for.gui.escritoire.notes.level2.3=Estranhas marcas na parte de baixo me deixaram curioso.
 for.gui.escritoire.notes.level2.4=Este será o assunto da sociedade quando eu terminar a investigação.
 
-for.gui.escritoire.notes.level3.count=4
 for.gui.escritoire.notes.level3.1=Depois de algumas ferroadas, descobri uma nova pista interessante.
 for.gui.escritoire.notes.level3.2=Coceia a cabeça e questionei tudo.
 for.gui.escritoire.notes.level3.3=Pensei que meus olhos me enganavam, mas lá estava ele.
 for.gui.escritoire.notes.level3.4=Um ponto inédito me levou a questionar a classificação do espécime.
 
-for.gui.escritoire.notes.level4.count=7
 for.gui.escritoire.notes.level4.1=Os meus gritos de frustração fizeram a governanta olhar para o meu estudo com preocupação.
 for.gui.escritoire.notes.level4.2=Em um frenesi e à beira do desespero, eu rasguei todas as notas!
 for.gui.escritoire.notes.level4.3=Isto... não faz qualquer sentido!
@@ -294,14 +283,12 @@ for.gui.escritoire.notes.level4.5=A marreta mal fez um dente, então eu passeia 
 for.gui.escritoire.notes.level4.6=Eu juro que ela estava olhando para mim, com seus redondos e cruéis olhinhos.
 for.gui.escritoire.notes.level4.7=Riso? Eu ouço o riso? Quem está rindo aqui?
 
-for.gui.escritoire.notes.success.count=5
 for.gui.escritoire.notes.success.1=EUREKA!
 for.gui.escritoire.notes.success.2=Maravilhoso! Meu nome ficará na história!
 for.gui.escritoire.notes.success.3=Meus colegas vão ficar impressionados!
 for.gui.escritoire.notes.success.4=Eu vou ser invejaado por todos na sociedade!
 for.gui.escritoire.notes.success.5=Isso!
 
-for.gui.escritoire.notes.failure.count=5
 for.gui.escritoire.notes.failure.1=Tudo está perdido.
 for.gui.escritoire.notes.failure.2=Oh, e agora quem poderá me defender?
 for.gui.escritoire.notes.failure.3=Por que? Eu tinha feito tantos avanços no início...
@@ -311,8 +298,8 @@ for.gui.escritoire.notes.failure.5=Puxa vida...
 for.gui.mail.foreveryattached=para cada anexo
 for.gui.mail.from=De
 for.gui.mail.nametrader=O nome de seu posto de troca
-for.gui.mail.nothingtotrade=O posto de troca não tem nada para trocar.
-for.gui.mail.notrader=Nenhuma posto de troca de mesmo nome disponível.
+for.gui.mail.nothing.to.trade=O posto de troca não tem nada para trocar.
+for.gui.mail.no.trader=Nenhuma posto de troca de mesmo nome disponível.
 for.gui.mail.pleasesend=Por favor envie
 for.gui.mail.to=Para
 for.gui.mail.receive=Receber
@@ -351,10 +338,6 @@ for.gui.princesses=Princesas
 for.gui.produce=Produção
 for.gui.queens=Rainhas
 
-for.gui.rule.private=Privado
-for.gui.rule.restricted=Restrito
-for.gui.rule.shared=Compartilhado
-
 forestry.allele.lifespan.shortened=Encurtado
 forestry.allele.lifespan.shorter=Curta
 forestry.allele.lifespan.shortest=Mais Curta
@@ -381,12 +364,6 @@ for.gui.warm=Quente
 for.gui.water=Água
 for.gui.worker=Trabalho
 
-for.hints.accesscontrol.desc=Proprietário de uma máquina pode configurá-la com três diferentes tipos de acesso: restrito, privado ou compartilhado.
-for.hints.accesscontrol.tag=Controle de Acesso
-for.hints.accesspipe.desc=Uma máquina configurada privada não permitirá qualquer interação com tubos ou canos.
-for.hints.accesspipe.tag=Tubulação de Acesso Restrito
-for.hints.accessrules.desc=Acesso "Compartilhado" permite a qualquer pessoa quebrar a máquina ou interagir com ele. O "Restrito" só permite, à qualquer um, interação.
-for.hints.accessrules.tag=Regras de Acesso
 for.hints.apiaristsuit.desc=Roupa de Apicultor completa protege de todos os efeitos negativos das abelhas.
 for.hints.apiaristsuit.tag=Roupa de Apicultor!
 for.hints.beebiomes.desc=As abelhas só trabalham em biomas que se adequam a sua espécie. Use seu Abelhanalizador e o localizador de habitat para encontrar o certo.
@@ -445,8 +422,6 @@ for.hints.postage.desc=Enviar cartas custa selos. Com um taxa base de 1N, cada a
 for.hints.postage.tag=Pague o barqueiro
 for.hints.powerraintank.desc=Mesmo um Tanque de Chuva sem energia irá recolher chuva. No entanto, para a garrafa d'água, a energia de um motor se faz necessária.
 for.hints.powerraintank.tag=Engarrafamento requer energia!
-for.hints.powerrequired.desc=Esta máquina exige energia de um motor para funcionar. Conecte um motor e ligue, para permitir a produção.
-for.hints.powerrequired.tag=Requer energia!
 for.hints.shortmead.desc=Seu fermentador não só cria biomassa, você também pode usar melaço e mel líquido para fazer hidromel.
 for.hints.shortmead.tag=Pegue sua bebida energética!
 for.hints.usesofash.desc=Cinzas podem ser usadas para criar fertilizante e é necessária para refinar turfa betuminosa.
@@ -491,73 +466,57 @@ for.trigger.noFrames=Sem Quadros
 
 for.yes=Sim
 
-item.for.adventurerBag.name=Bolsa do Aventureiro
-item.for.adventurerBagT2.name=Mochila do Aventureiro
+item.for.adventurer_bag.name=Bolsa do Aventureiro
+item.for.adventurer_bagT2.name=Mochila do Aventureiro
 item.for.ambrosia.name=Ambrosia
 item.for.apatite.name=Apatita
 
-item.for.apiaristBag.name=Mochila do Apicultor
-item.for.apiaristBoots.name=Sapatos do Apicultor
-item.for.apiaristChest.name=Camisa do Apicultor
-item.for.apiaristHelmet.name=Chapéu do Apicultor
-item.for.apiaristLegs.name=Calças do Apicultor
+item.for.apiarist_bag.name=Mochila do Apicultor
+item.for.apiarist_boots.name=Sapatos do Apicultor
+item.for.apiarist_chest.name=Camisa do Apicultor
+item.for.apiarist_helmet.name=Chapéu do Apicultor
+item.for.apiarist_legs.name=Calças do Apicultor
 
 item.for.ash.name=Cinzas
 
 item.for.beealyzer.name=Abelhanalizador
-item.for.habitatLocator.name=Localizador de Habitats
+item.for.habitat_locator.name=Localizador de Habitats
 
-item.for.beeCombs.cocoa.name=Favo de Cacau
-item.for.beeCombs.darkened.name=Favo Escurecido
-item.for.beeCombs.dripping.name=Favo Gotejante
-item.for.beeCombs.frozen.name=Favo Congelado
-item.for.beeCombs.honey.name=Favo de Mel
-item.for.beeCombs.irradiated.name=Favo Irradiado
-item.for.beeCombs.mellow.name=Favo Suave
-item.for.beeCombs.mossy.name=Favo de Musgo
-item.for.beeCombs.mysterious.name=Favo Misterioso
-item.for.beeCombs.omega.name=Favo Omega
-item.for.beeCombs.parched.name=Favo Resequido
-item.for.beeCombs.powdery.name=Favo em Pó
-item.for.beeCombs.reddened.name=Favo Encarnado
-item.for.beeCombs.silky.name=Favo Sedoso
-item.for.beeCombs.simmering.name=Favo Cozido
-item.for.beeCombs.stringy.name=Favo Fibroso
-item.for.beeCombs.wheaten.name=Favo de Trigo
+item.for.bee_combs.cocoa.name=Favo de Cacau
+item.for.bee_combs.darkened.name=Favo Escurecido
+item.for.bee_combs.dripping.name=Favo Gotejante
+item.for.bee_combs.frozen.name=Favo Congelado
+item.for.bee_combs.honey.name=Favo de Mel
+item.for.bee_combs.irradiated.name=Favo Irradiado
+item.for.bee_combs.mellow.name=Favo Suave
+item.for.bee_combs.mossy.name=Favo de Musgo
+item.for.bee_combs.mysterious.name=Favo Misterioso
+item.for.bee_combs.omega.name=Favo Omega
+item.for.bee_combs.parched.name=Favo Resequido
+item.for.bee_combs.powdery.name=Favo em Pó
+item.for.bee_combs.reddened.name=Favo Encarnado
+item.for.bee_combs.silky.name=Favo Sedoso
+item.for.bee_combs.simmering.name=Favo Cozido
+item.for.bee_combs.stringy.name=Favo Fibroso
+item.for.bee_combs.wheaten.name=Favo de Trigo
 
 item.for.beeswax.name=Cera de Abelha
 
 item.for.beverage.meadCurative.name=Hidromel Curativo
 item.for.beverage.meadShort.name=Hidromel
 
-item.for.biomeFinder.name=Localizador de Habitates
-item.for.bituminousPeat.name=Turfa Betuminosa
-item.for.brokenBronzePickaxe.name=Picareta Quebrada
-item.for.brokenBronzeShovel.name=Pá Quebrada
-item.for.bronzePickaxe.name=Picareta do Sobrevivente
-item.for.bronzeShovel.name=Pá do Sobrevivente
-item.for.builderBag.name=Bolsa do Construtor
-item.for.builderBagT2.name=Mochila do Construtor
+item.for.biome_finder.name=Localizador de Habitates
+item.for.bituminous_peat.name=Turfa Betuminosa
+item.for.broken_bronze_pickaxe.name=Picareta Quebrada
+item.for.broken_bronze_shovel.name=Pá Quebrada
+item.for.bronze_pickaxe.name=Picareta do Sobrevivente
+item.for.bronze_shovel.name=Pá do Sobrevivente
+item.for.builder_bag.name=Bolsa do Construtor
+item.for.builder_bagT2.name=Mochila do Construtor
 
-item.for.bucketEthanol.name=Balde de Etanol
-item.for.bucketBiomass.name=Balde de Biomassa
-item.for.bucketHoney.name=Balde de Mel
-item.for.bucketIce.name=Balde de Gelo Picado
-item.for.bucketJuice.name=Balde de Suco
-item.for.bucketSeedOil.name=Balde de Óleo Vegetal
-item.for.bucketGlass.name=Balde de Vidro Líquido
-item.for.bucketShortMead.name=Balde de Hidromel
+item.for.can.empty.name=Lata
+item.for.can.grammar=Lata de %s
 
-item.for.canEmpty.name=Lata
-item.for.canEthanol.name=Lata de Etanol
-item.for.canBiomass.name=Lata de Biomassa
-item.for.canFuel.name=Lata de Combustível
-item.for.canHoney.name=Lata Mel
-item.for.canIce.name=Lata de Gelo
-item.for.canJuice.name=Lata de Suco
-item.for.canLava.name=Lata de Lava
-item.for.canOil.name=Lata de Óleo
-item.for.canSeedOil.name=Lata de Óleo Vegetal
 item.for.carton.name=Cartão
 
 item.for.circuitboard.basic.name=Placa de Circuito Básica
@@ -565,27 +524,27 @@ item.for.circuitboard.enhanced.name=Placa de Circuito Aprimorada
 item.for.circuitboard.intricate.name=Placa de Circuito Intrincada
 item.for.circuitboard.refined.name=Placa de Circuito Refinada
 
-item.for.craftingMaterial.dissipationCharge.name=Carga de Dissipação
-item.for.craftingMaterial.iceShard.name=Caco de Gelo
-item.for.craftingMaterial.pulsatingDust.name=Poeira Pulsante
-item.for.craftingMaterial.pulsatingMesh.name=Malha Pulsante
-item.for.craftingMaterial.scentedPaneling.name=Painéis Perfumados
-item.for.craftingMaterial.silkWisp.name=Fio de Seda
-item.for.craftingMaterial.wovenSilk.name=Tecido de Seda
+item.for.crafting_material.dissipation_charge.name=Carga de Dissipação
+item.for.crafting_material.ice_shard.name=Caco de Gelo
+item.for.crafting_material.pulsating_dust.name=Poeira Pulsante
+item.for.crafting_material.pulsating_mesh.name=Malha Pulsante
+item.for.crafting_material.scented_paneling.name=Painéis Perfumados
+item.for.crafting_material.silk_wisp.name=Fio de Seda
+item.for.crafting_material.woven_silk.name=Tecido de Seda
 
 item.for.crate.name=Caixa
-item.for.decayingWheat.name=Trigo em Decomposição
-item.for.diggerBag.name=Bolsa do Escavador
-item.for.diggerBagT2.name=Mochila do Escavador
+item.for.decaying_wheat.name=Trigo em Decomposição
+item.for.digger_bag.name=Bolsa do Escavador
+item.for.digger_bagT2.name=Mochila do Escavador
 
-item.for.fertilizerBio.name=Adubo
-item.for.fertilizerCompound.name=Fertilizante
-item.for.foresterBag.name=Bolsa do 'Forestreyro'
-item.for.foresterBagT2.name=Mochila do 'Forestreyro'
+item.for.fertilizer_bio.name=Adubo
+item.for.fertilizer_compound.name=Fertilizante
+item.for.forester_bag.name=Bolsa do 'Forestreyro'
+item.for.forester_bagT2.name=Mochila do 'Forestreyro'
 
-item.for.frameImpregnated.name=Quadro Impregnado
-item.for.frameProven.name=Quadro Comprovado
-item.for.frameUntreated.name=Quadro Não Tratado
+item.for.frame_impregnated.name=Quadro Impregnado
+item.for.frame_proven.name=Quadro Comprovado
+item.for.frame_untreated.name=Quadro Não Tratado
 
 item.for.fruits.cherry.name=Cereja
 item.for.fruits.chestnut.name=Castanha
@@ -595,43 +554,43 @@ item.for.fruits.papaya.name=Mamão
 item.for.fruits.plum.name=Ameixa
 item.for.fruits.walnut.name=Noz
 
-item.for.gearBronze.name=Engrenagem de Bronze
-item.for.gearCopper.name=Engrenagem de Cobre
-item.for.gearTin.name=Engrenagem de Estanho
+item.for.gear_bronze.name=Engrenagem de Bronze
+item.for.gear_copper.name=Engrenagem de Cobre
+item.for.gear_tin.name=Engrenagem de Estanho
 
-item.for.hardenedMachine.name=Revestimento Endurecido
+item.for.hardened_machine.name=Revestimento Endurecido
 
 item.for.honeydew.name=Melaço
 
-item.for.honeyDrop.charged.name=Gota Carregada
-item.for.honeyDrop.honey.name=Gota de Mel
-item.for.honeyDrop.omega.name=Gota de Omega
-item.for.honeyedSlice.name=Fatia de Doce
+item.for.honey_drop.charged.name=Gota Carregada
+item.for.honey_drop.honey.name=Gota de Mel
+item.for.honey_drop.omega.name=Gota de Omega
+item.for.honeyed_slice.name=Fatia de Doce
 
-item.for.honeyPot.name=Pote de Mel
-item.for.hunterBag.name=Bolsa do Caçador
-item.for.hunterBagT2.name=Mochila do Caçador
+item.for.honey_pot.name=Pote de Mel
+item.for.hunter_bag.name=Bolsa do Caçador
+item.for.hunter_bagT2.name=Mochila do Caçador
 
-item.for.impregnatedCasing.name=Invólucro Impregnado
+item.for.impregnated_casing.name=Invólucro Impregnado
 item.for.imprinter.name=Impressora
 item.for.infuser.name=Infusor
 
-item.for.ingotBronze.name=Lingote de Bronze
-item.for.ingotCopper.name=Lingote de Cobre
-item.for.ingotTin.name=Lingote de Estanho
+item.for.ingot_bronze.name=Lingote de Bronze
+item.for.ingot_copper.name=Lingote de Cobre
+item.for.ingot_tin.name=Lingote de Estanho
 
-item.for.iodineCapsule.name=Cápsula de Iodo
-item.for.kitPickaxe.name=Kit de Picaretas
-item.for.kitShovel.name=Kit de Pás
+item.for.iodine_capsule.name=Cápsula de Iodo
+item.for.kit_pickaxe.name=Kit de Picaretas
+item.for.kit_shovel.name=Kit de Pás
 item.for.letters.name=Carta
 
-item.for.minerBag.name=Bolsa do Minerador
-item.for.minerBagT2.name=Mochila do Minerador
+item.for.miner_bag.name=Bolsa do Minerador
+item.for.miner_bagT2.name=Mochila do Minerador
 
-item.for.mouldyWheat.name=Trigo Mofado
+item.for.mouldy_wheat.name=Trigo Mofado
 item.for.mulch.name=Bagaço
-item.for.naturalistHelmet.name=Óculos
-item.for.oakStick.name=Vara Impregnada
+item.for.naturalist_helmet.name=Óculos
+item.for.oak_stick.name=Vara Impregnada
 item.for.peat.name=Turfa
 item.for.phosphor.name=Fósforo
 item.for.pipette.name=Pipeta
@@ -644,18 +603,11 @@ item.for.propolis.pulsating.name=Própolis Pulsante
 item.for.propolis.silky.name=Própolis Sedoso
 item.for.propolis.sticky.name=Própolis Viscoso
 
-item.for.refractoryEthanol.name=Cápsula de Etanol
-item.for.refractoryBiomass.name=Cápsula de Biomassa
-item.for.refractoryEmpty.name=Cápsula Refratária
-item.for.refractoryFuel.name=Cápsula de Combustível
-item.for.refractoryHoney.name=Cápsula de Mel
-item.for.refractoryIce.name=Cápsula de Gelo
-item.for.refractoryJuice.name=Cápsula de Suco
-item.for.refractoryLava.name=Cápsula de Lava
-item.for.refractoryOil.name=Cápsula de Óleo
-item.for.refractorySeedOil.name=Cápsula de Óleo Vegatal
-item.for.refractoryWater.name=Cápsula D'água
-item.for.refractoryWax.name=Cera em Pó
+item.for.refractory.empty.name=Cápsula Refratária
+item.for.refractory.grammar=Cápsula de %s
+item.for.refractory.water.name=Cápsula D'água
+
+item.for.refractory_wax.name=Cera em Pó
 
 item.for.researchNote.name=Notas do %s
 item.for.royalJelly.name=Geléia Real
@@ -671,40 +623,32 @@ item.for.stamps.50n.name=Selo (50n)
 item.for.stamps.100n.name=Selo (100n)
 item.for.stamps.name=Selo
 
-item.for.sturdyMachine.name=Carcaça Resistente
-item.for.tent.name=Tenda do Sobrevivente
+item.for.sturdy_machine.name=Carcaça Resistente
 
-item.for.thermionicTubes.ex-0.name=Válvula Eletrónica de Cobre
-item.for.thermionicTubes.ex-1.name=Válvula Eletrónica de Estanho
-item.for.thermionicTubes.ex-2.name=Válvula Eletrónica de Bronze
-item.for.thermionicTubes.ex-3.name=Válvula Eletrónica de Ferro
-item.for.thermionicTubes.ex-4.name=Válvula Eletrónica de Ouro
-item.for.thermionicTubes.ex-5.name=Válvula Eletrónica de ´Diamantine´
-item.for.thermionicTubes.ex-6.name=Válvula Eletrónica de Obsidiana
-item.for.thermionicTubes.ex-7.name=Válvula Eletrónica de Ardende
-item.for.thermionicTubes.ex-8.name=Válvula Eletrónica de Emborrachado
-item.for.thermionicTubes.ex-9.name=Válvula Eletrónica de Esmeralda
-item.for.thermionicTubes.ex-10.name=Válvula Eletrónica de Apatita
-item.for.thermionicTubes.ex-11.name=Válvula Eletrónica de Lápis-lazúli
-item.for.thermionicTubes.ex-12.name=Válvula Eletrónica de Ender
+item.for.thermionic_tubes.copper.name=Válvula Eletrónica de Cobre
+item.for.thermionic_tubes.tin.name=Válvula Eletrónica de Estanho
+item.for.thermionic_tubes.bronze.name=Válvula Eletrónica de Bronze
+item.for.thermionic_tubes.iron.name=Válvula Eletrónica de Ferro
+item.for.thermionic_tubes.gold.name=Válvula Eletrónica de Ouro
+item.for.thermionic_tubes.diamond.name=Válvula Eletrónica de ´Diamantine´
+item.for.thermionic_tubes.obsidian.name=Válvula Eletrónica de Obsidiana
+item.for.thermionic_tubes.blaze.name=Válvula Eletrónica de Ardende
+item.for.thermionic_tubes.rubber.name=Válvula Eletrónica de Emborrachado
+item.for.thermionic_tubes.emerald.name=Válvula Eletrónica de Esmeralda
+item.for.thermionic_tubes.apatite.name=Válvula Eletrónica de Apatita
+item.for.thermionic_tubes.lapis.name=Válvula Eletrónica de Lápis-lazúli
+item.for.thermionic_tubes.ender.name=Válvula Eletrónica de Ender
 
 item.for.treealyzer.name=Arvoranalizador
 
-item.for.canWater.name=Lata D'água
+item.for.can.water.name=Lata D'água
 
-item.for.waxCapsule.name=Cápsula de Cera
-item.for.waxCapsuleEthanol.name=Cápsula de Etanol
-item.for.waxCapsuleBiomass.name=Cápsula de Biomassa
-item.for.waxCapsuleFuel.name=Cápsula de Combustível
-item.for.waxCapsuleHoney.name=Cápsula de Mel
-item.for.waxCapsuleIce.name=Cápsula de Gelo
-item.for.waxCapsuleJuice.name=Cápsula de Suco
-item.for.waxCapsuleOil.name=Cápsula de Óleo
-item.for.waxCapsuleSeedOil.name=Cápsula de Óleo Vegetal
-item.for.waxCapsuleWater.name=Cápsula de D'água
-item.for.waxCast.name=Molde de Cera
+item.for.capsule.empty.name=Cápsula de Cera
+item.for.capsule.grammar=Cápsula de %s
 
-item.for.woodPulp.name=Polpa de Árvore
+item.for.wax_cast.name=Molde de Cera
+
+item.for.wood_pulp.name=Polpa de Árvore
 item.for.wrench.name=Chave Inglesa
 
 itemGroup.apiculture=Forestry - Apicultura
@@ -712,60 +656,43 @@ itemGroup.arboriculture=Forestry - Arboricultura
 itemGroup.forestry=Forestry
 itemGroup.lepidopterology=Forestry - Heteropterologia
 
-tile.for.core.0.name=Analisador
-tile.for.core.1.name=Escrivaninha
+tile.for.analyzer.name=Analisador
+tile.for.escritoire.name=Escrivaninha
 
-tile.for.engine.0.name=Motor Elétrico
-tile.for.engine.1.name=Motor de Turfa
-tile.for.engine.2.name=Motor de Biogás
-tile.for.engine.3.name=Bio Gerador
-tile.for.engine.4.name=Motor de Engrenagem
+tile.for.engine_electrical.name=Motor Elétrico
+tile.for.engine_peat.name=Motor de Turfa
+tile.for.engine_biogas.name=Motor de Biogás
+tile.for.engine_generator.name=Bio Gerador
+tile.for.engine_clockwork.name=Motor de Engrenagem
 
-tile.for.factory.0.name=Engarrafador
-tile.for.factory.1.name=Carpinteiro
-tile.for.factory.2.name=Centrífuga
-tile.for.factory.3.name=Fermentador
-tile.for.factory.4.name=Humidificador
-tile.for.factory.5.name=Hidratador
-tile.for.factory.6.name=Refinador
-tile.for.factory.7.name=Fazedor de Chuva
-tile.for.factory2.0.name=Fabricador Termiônico
-tile.for.factory2.1.name=Tanque de Chuva
-tile.for.factory2.2.name=Mesa de Trabalho
+tile.for.bottler.name=Engarrafador
+tile.for.carpenter.name=Carpinteiro
+tile.for.centrifuge.name=Centrífuga
+tile.for.fermenter.name=Fermentador
+tile.for.moistener.name=Humidificador
+tile.for.squeezer.name=Hidratador
+tile.for.still.name=Refinador
+tile.for.rainmaker.name=Fazedor de Chuva
+tile.for.fabricator.name=Fabricador Termiônico
+tile.for.raintank.name=Tanque de Chuva
+tile.for.worktable.name=Mesa de Trabalho
 
-tile.for.mail.0.name=Caixa de Correio
-tile.for.mail.1.name=Posto de Troca
-tile.for.mail.2.name=Filatelia
+tile.for.mailbox.name=Caixa de Correio
+tile.for.trade_station.name=Posto de Troca
+tile.for.stamp_collector.name=Filatelia
 
-tile.for.resources.0.name=Minério de Apatita
-tile.for.resources.1.name=Minério de Cobre
-tile.for.resources.2.name=Minério de Estanho
+tile.for.resources.apatite.name=Minério de Apatita
+tile.for.resources.copper.name=Minério de Cobre
+tile.for.resources.tin.name=Minério de Estanho
 
-tile.for.resourceStorage.0.name=Bloco de Apatita
-tile.for.resourceStorage.1.name=Bloco de Cobre
-tile.for.resourceStorage.2.name=Bloco de Estanho
-tile.for.resourceStorage.3.name=Bloco de Bronze
+tile.for.resource_storage.apatite.name=Bloco de Apatita
+tile.for.resource_storage.copper.name=Bloco de Cobre
+tile.for.resource_storage.tin.name=Bloco de Estanho
+tile.for.resource_storage.bronze.name=Bloco de Bronze
 
-tile.for.soil.0.name=Húmus
-tile.for.soil.1.name=Terra do Pântano
-tile.for.soil.2.name=Turfa
-
-tile.for.stained.0.name=Vitral Branco
-tile.for.stained.1.name=Vitral Laranja
-tile.for.stained.2.name=Vitral Magenta
-tile.for.stained.3.name=Vitral Azul Claro
-tile.for.stained.4.name=Vitral Amarelo
-tile.for.stained.5.name=Vitral Lima
-tile.for.stained.6.name=Vitral Rosa
-tile.for.stained.7.name=Vitral Cinza
-tile.for.stained.8.name=Vitral Cinza claro
-tile.for.stained.9.name=Vitral Ciano
-tile.for.stained.10.name=Vitral Lilás
-tile.for.stained.11.name=Vitral Azul
-tile.for.stained.12.name=Vitral Marrom
-tile.for.stained.13.name=Vitral Verde
-tile.for.stained.14.name=Vitral Vermelho
-tile.for.stained.15.name=Vitral Preto
+tile.for.humus.name=Húmus
+tile.for.bog_earth.bog_earth.name=Terra do Pântano
+tile.for.bog_earth.peat.name=Turfa
 
 ####################
 # APICULTURE
@@ -976,17 +903,16 @@ for.genus.bees.reddened=Encarnada
 for.genus.bees.tropical=Tropical
 for.genus.bees.vengeful=Vingativa
 
-item.for.beePrincessGE.name=Princesa
-item.for.beeQueenGE.name=Rainha
+item.for.bee_princess_ge.name=Princesa
+item.for.bee_queen_ge.name=Rainha
 
-tile.for.alveary.0.name=Apiaryum
-tile.for.alveary.1.name=Apiaryum, Entrada
-tile.for.alveary.2.name=Enxame
-tile.for.alveary.3.name=Apiaryum, Ventilador
-tile.for.alveary.4.name=Apiaryum, Aquecedor
-tile.for.alveary.5.name=Apiaryum, Hidroregulador
-tile.for.alveary.6.name=Apiaryum, Estabilizador
-tile.for.alveary.7.name=Apiaryum, Peneira
+tile.for.alveary.plain.name=Apiaryum
+tile.for.alveary.swarmer.name=Enxame
+tile.for.alveary.fan.name=Apiaryum, Ventilador
+tile.for.alveary.heater.name=Apiaryum, Aquecedor
+tile.for.alveary.hygro.name=Apiaryum, Hidroregulador
+tile.for.alveary.stabiliser.name=Apiaryum, Estabilizador
+tile.for.alveary.sieve.name=Apiaryum, Peneira
 
 tile.for.apiculture.0.name=Apiário
 tile.for.apicultureChest.0.name=Baú do Apiarista
@@ -1006,7 +932,7 @@ tile.for.candle.dyed.stump.name=Vela Tingida Apagada
 tile.for.candle.lit.name=Vela Acesa
 tile.for.candle.stump.name=Vela Apagada
 
-tile.for.stump.0.name=Toco de Vela
+tile.for.stump.name=Toco de Vela
 
 ####################
 # ARBORICULTURE
@@ -1073,20 +999,15 @@ for.gui.family=Família
 for.gui.fireproof=À Prova de Fogo
 for.gui.fruits=Frutas
 for.gui.girth=Circunferência
-for.gui.growth=Desenvolvimento
 for.gui.height=Porte
 for.gui.maturity=Amadurecimento
 for.gui.native=Solo
 for.gui.saplings=Mudas
 for.gui.sappiness=Mudas
 for.gui.supports=Suporte
-for.gui.tolerated=Tolera
 for.gui.treealyzer.help=Forneça muda e mel ou melaço como catalisador.
 for.gui.treealyzer=Arvoranalizador
 for.gui.yield=Rendimento
-
-for.growth.normal=Luz
-for.growth.tropical=Tropical
 
 for.trees.grammar.blossom.type=Flor de
 for.trees.grammar.blossom=%TYPE %SPECIES
@@ -1137,10 +1058,11 @@ for.trees.species.padauk=Pau-Brasil
 for.trees.species.cocobolo=Cocobolo
 for.trees.species.zebrawood=Zebrano
 
-for.fences.grammar=Cerca de %TYPE
+for.fence.grammar=Cerca de %TYPE
 for.log.grammar=Madeira de %TYPE
 for.planks.grammar=Placas de Madeira de %TYPE
 for.slab.grammar=Lajes de Madeira de %TYPE
+for.slab.double.grammar=Lajes de Madeira de %TYPE
 for.stairs.grammar=Escadas de Madeira de %TYPE
 
 for.trees.woodType.larch=Larício
@@ -1176,9 +1098,9 @@ for.trees.woodType.zebrawood=Zebrano
 tile.for.fireproof=%s (À Prova de Fogo)
 
 item.for.grafter.name=Enxerto
-item.for.grafterProven.name=Enxerto Comprovado
+item.for.grafter_proven.name=Enxerto Comprovado
 
-tile.for.arboriculture.0.name=Baú do Arborista
+tile.for.tree_chest.name=Baú do Arborista
 
 tile.for.saplingGE.0.name=Muda
 tile.for.leaves.0.name=Folhas
@@ -1206,12 +1128,12 @@ for.circuit.manualShroom=Fazenda de Cogumelos
 for.circuit.manualSucculent=Fazenda de Suculentas
 for.circuit.manualVegetable=Fazenda de Vegetais
 
-for.errors.noFarmland.desc=Terra Não Cultivável
-for.errors.noFarmland.help=Arenito liso, tijolos, ou tijolos de pedra criam uma plataforma para construir a fazenda.
-for.errors.noFertilizer.desc=Sem Fertilizante
-for.errors.noFertilizer.help=Fazendas exigem fertilizante. O adubo é insuficiente.
-for.errors.noLiquid.desc=Sem Água
-for.errors.noLiquid.help=Dependendo das chuvas, temperatura e umidade as fazendas devem ser supridas com diferentes quantidades de água.
+for.errors.no_farmland.desc=Terra Não Cultivável
+for.errors.no_farmland.help=Arenito liso, tijolos, ou tijolos de pedra criam uma plataforma para construir a fazenda.
+for.errors.no_fertilizer.desc=Sem Fertilizante
+for.errors.no_fertilizer.help=Fazendas exigem fertilizante. O adubo é insuficiente.
+for.errors.no_liquid.desc=Sem Água
+for.errors.no_liquid.help=Dependendo das chuvas, temperatura e umidade as fazendas devem ser supridas com diferentes quantidades de água.
 
 for.gui.farm.title=Fazenda
 for.gui.hydr.heat=Pelo Calor
@@ -1309,9 +1231,9 @@ for.lepidopterology.effect.none=Nenhum
 
 item.for.butterfly.name=Borboleta
 item.for.flutterlyzer.name=Borbo-analizador
-item.for.lepidopteristBag.name=Mochila do Heteropterologista
+item.for.lepidopterist_bag.name=Mochila do Heteropterologista
 item.for.moth.name=Mariposa
-tile.for.lepidopterology.0.name=Baú do Heteropterologista
+tile.for.butterfly_chest.name=Baú do Heteropterologista
 
 ####################
 # MAIL
@@ -1333,17 +1255,17 @@ for.chat.command.forestry.mail.virtualize.format=Formato: /%s <trade-station-nam
 for.chat.command.forestry.mail.virtualize.no_tradestation=Nenhuma estação de troca com o nome de '%s' foi encontrada.
 for.chat.command.forestry.mail.virtualize.set=Marcar virtualização para '%s' %s.
 
-for.chat.mail.insufficient_buffer=A estação de troca está cheia.
-for.chat.mail.insufficient_offer=A estação de troca requer mais.
-for.chat.mail.insufficient_paper=A estação de troca ficou sem papel.
-for.chat.mail.insufficient_stamps=A estação de troca ficou sem selos.
-for.chat.mail.insufficient_trade_good=A estação de troca ficou sem recursos.
-for.chat.mail.mailbox_full=A caixa de correio do destinatário está cheia.
-for.chat.mail.not_mailable=Não é possível enviar esta carta.
-for.chat.mail.not_postpaid=A carta não tem selos suficientes.
-for.chat.mail.no_mailbox=O destinatário não tem caixa de correio.
+for.chat.mail.insufficient.buffer=A estação de troca está cheia.
+for.chat.mail.insufficient.offer=A estação de troca requer mais.
+for.chat.mail.insufficient.paper=A estação de troca ficou sem papel.
+for.chat.mail.insufficient.stamps=A estação de troca ficou sem selos.
+for.chat.mail.insufficient.trade.good=A estação de troca ficou sem recursos.
+for.chat.mail.mailbox.full=A caixa de correio do destinatário está cheia.
+for.chat.mail.not.mailable=Não é possível enviar esta carta.
+for.chat.mail.not.postpaid=A carta não tem selos suficientes.
+for.chat.mail.no.mailbox=O destinatário não tem caixa de correio.
 for.chat.mail.ok=A troca está disponível.
-for.chat.mail.response_not_mailable=A estação de troca não podem enviar a carta resposta. Você precisa ter uma caixa de correio para receber.
+for.chat.mail.response.not.mailable.format=A estação de troca não podem enviar a carta resposta. %s
 for.chat.mail.wrongstacksize=Só é possível escrever uma carta de cada vez.
 
 for.gui.mail.address.copy=Usar
