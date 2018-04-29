@@ -89,10 +89,10 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		MailTriggers.initialize();
-//	}
+	//	@Override
+	//	public void registerTriggers() {
+	//		MailTriggers.initialize();
+	//	}
 
 	@Override
 	public void doInit() {
@@ -109,6 +109,10 @@ public class ModuleMail extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.MAIL;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		ItemRegistryMail items = getItems();
 		BlockRegistryMail blocks = getBlocks();
@@ -125,7 +129,7 @@ public class ModuleMail extends BlankForestryModule {
 			letterGlue = new ItemStack(Items.SLIME_BALL);
 		}
 
-		RecipeUtil.addShapelessRecipe("letter", items.letters.getItemStack(), Items.PAPER, letterGlue);
+		RecipeUtil.addShapelessRecipe(id, items.letters.getItemStack(), Items.PAPER, letterGlue);
 
 		if (Config.craftingStampsEnabled) {
 			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
@@ -135,7 +139,7 @@ public class ModuleMail extends BlankForestryModule {
 
 				ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
-				RecipeUtil.addRecipe("stamps_" + stampDefinition.getUid(), stamps,
+				RecipeUtil.addRecipe(id, stamps,
 						"XXX",
 						"###",
 						"ZZZ",
@@ -151,14 +155,14 @@ public class ModuleMail extends BlankForestryModule {
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe("letter_recycling", new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
+		RecipeUtil.addRecipe(id, new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
 
-		RecipeUtil.addShapelessRecipe("catalogue", items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
+		RecipeUtil.addShapelessRecipe(id, items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
-		RecipeUtil.addRecipe("mailbox", new ItemStack(blocks.mailbox),
+		RecipeUtil.addRecipe(id, new ItemStack(blocks.mailbox),
 				" # ",
 				"#Y#",
 				"XXX",
@@ -166,7 +170,7 @@ public class ModuleMail extends BlankForestryModule {
 				'X', "chestWood",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("trade_station", new ItemStack(blocks.tradeStation),
+		RecipeUtil.addRecipe(id, new ItemStack(blocks.tradeStation),
 				"Z#Z",
 				"#Y#",
 				"XWX",

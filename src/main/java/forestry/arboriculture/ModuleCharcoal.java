@@ -13,6 +13,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.blocks.BlockRegistryCharcoal;
 import forestry.arboriculture.charcoal.CharcoalPileWall;
 import forestry.core.ModuleCore;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
@@ -50,22 +51,26 @@ public class ModuleCharcoal extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.CHARCOAL;
 		BlockRegistryCharcoal blocks = getBlocks();
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		//Wood Pile
-		RecipeUtil.addShapelessRecipe("wood_pile", new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
-		RecipeUtil.addShapelessRecipe("wood_pile_decorative", new ItemStack(blocks.woodPile), blocks.woodPileDecorative);
-		RecipeUtil.addShapelessRecipe("decorative_wood_pile", new ItemStack(blocks.woodPileDecorative), blocks.woodPile);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPile), blocks.woodPileDecorative);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPileDecorative), blocks.woodPile);
 
 		//Charcoal
-		RecipeUtil.addRecipe("charcoal_block", blocks.charcoal,
+		RecipeUtil.addRecipe(id, blocks.charcoal,
 				"###",
 				"###",
 				"###",
 				'#', new ItemStack(Items.COAL, 1, 1));
-		RecipeUtil.addShapelessRecipe("charcoal", new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe("loam", new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
+		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
 	}
 }

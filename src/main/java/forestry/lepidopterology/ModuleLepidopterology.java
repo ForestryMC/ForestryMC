@@ -54,6 +54,7 @@ import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.recipes.RecipeUtil;
@@ -134,14 +135,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-		
+
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
 
 		proxy.preInitializeRendering();
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			LepidopterologyFilterRule.init();
 			LepidopterologyFilterRuleType.init();
 		}
@@ -307,12 +308,16 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.LEPIDOPTEROLOGY;
 		BlockRegistryLepidopterology blocks = getBlocks();
 		ItemRegistryLepidopterology items = getItems();
 
-		ForgeRegistries.RECIPES.register(new MatingRecipe());
+		ForgeRegistries.RECIPES.register(new MatingRecipe());    //TODO - JSON this?
 
-		RecipeUtil.addRecipe("butterfly_chest", blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
+		RecipeUtil.addRecipe(id, blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
 				new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
 	}
 

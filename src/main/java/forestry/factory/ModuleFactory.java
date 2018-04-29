@@ -49,6 +49,7 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
@@ -215,7 +216,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void registerTriggers() {
-//		FactoryTriggers.initialize();
+		//		FactoryTriggers.initialize();
 	}
 
 	@Override
@@ -241,7 +242,10 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.FACTORY;
 		// / FABRICATOR
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
@@ -329,12 +333,12 @@ public class ModuleFactory extends BlankForestryModule {
 				'#', new ItemStack(Items.REPEATER, 1, 0),
 				'X', new ItemStack(Blocks.REDSTONE_ORE, 1, 0)});
 		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.flexibleCasing.getItemStack(), new Object[]{
-			"#E#",
-			"B B",
-			"#E#",
-			'#', OreDictUtil.INGOT_BRONZE,
-			'B', OreDictUtil.SLIMEBALL,
-			'E', "gemEmerald"});
+				"#E#",
+				"B B",
+				"#E#",
+				'#', OreDictUtil.INGOT_BRONZE,
+				'B', OreDictUtil.SLIMEBALL,
+				'E', "gemEmerald"});
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
@@ -549,7 +553,7 @@ public class ModuleFactory extends BlankForestryModule {
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
 
-		RecipeUtil.addRecipe("bottler", blocks.bottler,
+		RecipeUtil.addRecipe(id, blocks.bottler,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -557,7 +561,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', fluidItems.canEmpty,
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("carpenter", blocks.carpenter,
+		RecipeUtil.addRecipe(id, blocks.carpenter,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -565,7 +569,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "ingotBronze",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("centrifuge", blocks.centrifuge,
+		RecipeUtil.addRecipe(id, blocks.centrifuge,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -573,7 +577,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "ingotCopper",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("fermenter", blocks.fermenter,
+		RecipeUtil.addRecipe(id, blocks.fermenter,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -581,7 +585,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "gearBronze",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("moistener", blocks.moistener,
+		RecipeUtil.addRecipe(id, blocks.moistener,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -589,7 +593,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "gearCopper",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("squeezer", blocks.squeezer,
+		RecipeUtil.addRecipe(id, blocks.squeezer,
 				"X#X",
 				"XYX",
 				"X#X",
@@ -597,7 +601,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "ingotTin",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("still", blocks.still,
+		RecipeUtil.addRecipe(id, blocks.still,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -605,7 +609,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "dustRedstone",
 				'Y', coreItems.sturdyCasing);
 
-		RecipeUtil.addRecipe("rainmaker", blocks.rainmaker,
+		RecipeUtil.addRecipe(id, blocks.rainmaker,
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -613,7 +617,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'X', "gearTin",
 				'Y', coreItems.hardenedCasing);
 
-		RecipeUtil.addRecipe("fabricator", blocks.fabricator,
+		RecipeUtil.addRecipe(id, blocks.fabricator,
 				"X#X",
 				"#Y#",
 				"XZX",
@@ -622,7 +626,7 @@ public class ModuleFactory extends BlankForestryModule {
 				'Y', coreItems.sturdyCasing,
 				'Z', "chestWood");
 
-		RecipeUtil.addRecipe("raintank", blocks.raintank,
+		RecipeUtil.addRecipe(id, blocks.raintank,
 				"X#X",
 				"XYX",
 				"X#X",

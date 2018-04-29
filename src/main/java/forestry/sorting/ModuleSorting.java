@@ -15,6 +15,7 @@ import forestry.api.genetics.IFilterLogic;
 import forestry.api.modules.ForestryModule;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.capabilities.NullStorage;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
@@ -46,14 +47,14 @@ public class ModuleSorting extends BlankForestryModule {
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -68,44 +69,48 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			RecipeUtil.addRecipe("genetic_filter_api", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"PGP",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'P', ModuleApiculture.getItems().propolis);
+		if (!Config.resetRecipes) {
+			return;
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			RecipeUtil.addRecipe("genetic_filter_arb", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"FGF",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'F', OreDictUtil.FRUIT_FORESTRY);
+		String id = ForestryModuleUids.SORTING;
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
+					"WDW",
+					"PGP",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'P', ModuleApiculture.getItems().propolis);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			RecipeUtil.addRecipe("genetic_filter_lep", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"FGF",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'F', ModuleLepidopterology.getItems().caterpillarGE);
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
+					"WDW",
+					"FGF",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'F', OreDictUtil.FRUIT_FORESTRY);
+		}
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
+					"WDW",
+					"FGF",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'F', ModuleLepidopterology.getItems().caterpillarGE);
 		}
 	}
 
 	@Override
 	public void doInit() {
 		GameRegistry.registerTileEntity(TileGeneticFilter.class, "forestry.GeneticFilter");
-		((FilterRegistry)AlleleManager.filterRegistry).init();
+		((FilterRegistry) AlleleManager.filterRegistry).init();
 	}
 }

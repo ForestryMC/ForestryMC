@@ -128,7 +128,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		
+
 		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables("farmArboreal", new FarmableGE());
@@ -213,7 +213,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
 		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
 		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
-			Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+				Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
@@ -233,12 +233,12 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmSucculentManaged = new CircuitFarmLogic("managedSucculent", succulentFarm, false);
 		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", succulentFarm, true);
-		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
+		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
 
 		Circuits.farmPoalesManaged = new CircuitFarmLogic("managedPoales", poalesFarm, false);
 		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(),true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(),false);
+		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
+		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(), false);
 
 		Circuits.farmGourdManaged = new CircuitFarmLogic("managedGourd", gourdFarm, false);
 		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true);
@@ -253,6 +253,10 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.FARMING;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryFarming blocks = getBlocks();
 
@@ -272,7 +276,7 @@ public class ModuleFarming extends BlankForestryModule {
 			valve.setTagCompound(compound);
 			control.setTagCompound(compound);
 
-			RecipeUtil.addRecipe("farm_basic_" + block.getUid(), basic,
+			RecipeUtil.addRecipe(id, basic,
 					"I#I",
 					"WCW",
 					'#', block.getBase(),
@@ -280,27 +284,27 @@ public class ModuleFarming extends BlankForestryModule {
 					'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
 					'I', "ingotCopper");
 
-			RecipeUtil.addRecipe("farm_gearbox_" + block.getUid(), gearbox,
+			RecipeUtil.addRecipe(id, gearbox,
 					" # ",
 					"TTT",
 					'#', basic,
 					'T', "gearTin");
 
-			RecipeUtil.addRecipe("farm_hatch_" + block.getUid(), hatch,
+			RecipeUtil.addRecipe(id, hatch,
 					" # ",
 					"TDT",
 					'#', basic,
 					'T', "gearTin",
 					'D', OreDictUtil.TRAPDOOR_WOOD);
 
-			RecipeUtil.addRecipe("farm_valve_" + block.getUid(), valve,
+			RecipeUtil.addRecipe(id, valve,
 					" # ",
 					"XTX",
 					'#', basic,
 					'T', "gearTin",
 					'X', "blockGlass");
 
-			RecipeUtil.addRecipe("farm_control_" + block.getUid(), control,
+			RecipeUtil.addRecipe(id, control,
 					" # ",
 					"XTX",
 					'#', basic,
@@ -317,7 +321,7 @@ public class ModuleFarming extends BlankForestryModule {
 		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("managedVegetable", Circuits.farmCropsManaged);
 		ChipsetManager.circuitRegistry.registerDeprecatedCircuitReplacement("manualVegetable", Circuits.farmCropsManual);
 
-		if(layoutManaged == null || layoutManual == null){
+		if (layoutManaged == null || layoutManual == null) {
 			return;
 		}
 

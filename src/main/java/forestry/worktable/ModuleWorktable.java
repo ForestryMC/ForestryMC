@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.init.Items;
 
 import forestry.api.modules.ForestryModule;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
@@ -45,14 +46,18 @@ public class ModuleWorktable extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.WORKTABLE;
 		BlockRegistryWorktable blocks = getBlocks();
 
-		RecipeUtil.addRecipe("worktable", blocks.worktable,
-			"B",
-			"W",
-			"C",
-			'B', Items.BOOK,
-			'W', "craftingTableWood",
-			'C', "chestWood");
+		RecipeUtil.addRecipe(id, blocks.worktable,
+				"B",
+				"W",
+				"C",
+				'B', Items.BOOK,
+				'W', "craftingTableWood",
+				'C', "chestWood");
 	}
 }

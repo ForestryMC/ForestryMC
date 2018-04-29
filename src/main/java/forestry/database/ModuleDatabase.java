@@ -12,6 +12,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.apiculture.ModuleApiculture;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.ModuleCore;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemRegistryCore;
@@ -49,6 +50,9 @@ public class ModuleDatabase extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
 		List<Object> possibleChests = new LinkedList<>();
 		List<Object> possibleSpecial = new LinkedList<>();
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
@@ -82,19 +86,21 @@ public class ModuleDatabase extends BlankForestryModule {
 	}
 
 	private void addRecipe(List<Object> possibleSpecial, Object firstChest, Object secondChest) {
+		String id = ForestryModuleUids.DATABASE;
+
 		for (Object special : possibleSpecial) {
 			ItemRegistryCore coreItems = ModuleCore.getItems();
-			RecipeUtil.addRecipe("database_" + getIngredientName(firstChest) + "_" + getIngredientName(secondChest) + "_" + getIngredientName(special), getBlocks().database,
-				"I#I",
-				"FYS",
-				"WCW",
-				'#', coreItems.portableAlyzer,
-				'I', "ingotBronze",
-				'W', "plankWood",
-				'C', special,
-				'Y', coreItems.sturdyCasing,
-				'F', firstChest,
-				'S', secondChest);
+			RecipeUtil.addRecipe(id, getBlocks().database,
+					"I#I",
+					"FYS",
+					"WCW",
+					'#', coreItems.portableAlyzer,
+					'I', "ingotBronze",
+					'W', "plankWood",
+					'C', special,
+					'Y', coreItems.sturdyCasing,
+					'F', firstChest,
+					'S', secondChest);
 		}
 	}
 

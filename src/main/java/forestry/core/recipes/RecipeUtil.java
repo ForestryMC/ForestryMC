@@ -140,6 +140,7 @@ public abstract class RecipeUtil {
 	}
 
 	public static void addRecipe(String moduleUID, ItemStack itemstack, Object... obj) {
+
 		RecipeConverter.addShapedRecipe(itemstack, moduleUID, obj);
 	}
 

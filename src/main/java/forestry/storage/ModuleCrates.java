@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.StorageManager;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -74,6 +75,10 @@ public class ModuleCrates extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if(!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.CRATE;
 		ItemRegistryCrates items = getItems();
 
 		// / CARPENTER

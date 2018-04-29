@@ -156,6 +156,9 @@ public class Forestry {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		if (Config.resetRecipes) {
+			RecipeConverter.generateConstants();
+		}
 		ModuleManager.getInternalHandler().runPostInit();
 
 		// Register world generator

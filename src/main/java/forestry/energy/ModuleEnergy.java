@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockRegistryEnergy;
@@ -62,9 +63,14 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
+		if (!Config.resetRecipes) {
+			return;
+		}
+		String id = ForestryModuleUids.ENERGY;
+
 		BlockRegistryEnergy blocks = getBlocks();
 
-		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
+		RecipeUtil.addRecipe(id, new ItemStack(blocks.peatEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -73,7 +79,7 @@ public class ModuleEnergy extends BlankForestryModule {
 				'Y', "gearCopper",
 				'V', Blocks.PISTON);
 
-		RecipeUtil.addRecipe("biogas_engine", new ItemStack(blocks.biogasEngine),
+		RecipeUtil.addRecipe(id, new ItemStack(blocks.biogasEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -83,7 +89,7 @@ public class ModuleEnergy extends BlankForestryModule {
 				'V', Blocks.PISTON);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe("clockwork_engine", new ItemStack(blocks.clockworkEngine),
+			RecipeUtil.addRecipe(id, new ItemStack(blocks.clockworkEngine),
 					"###",
 					" X ",
 					"ZVY",
