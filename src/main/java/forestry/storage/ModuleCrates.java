@@ -102,7 +102,7 @@ public class ModuleCrates extends BlankForestryModule {
 
 		// accepted items
 		{
-			String[] crateItemList = config.getStringListLocalized("items", "accepted", Constants.EMPTY_STRINGS);
+			String[] crateItemList = config.getStringListLocalized("crates.items", "accepted", Constants.EMPTY_STRINGS);
 			List<ItemStack> crateItems = ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE);
 			for (ItemStack crateItem : crateItems) {
 				StorageManager.crateRegistry.registerCrate(crateItem);
@@ -111,13 +111,13 @@ public class ModuleCrates extends BlankForestryModule {
 
 		// rejected items
 		{
-			String[] crateItemList = config.getStringListLocalized("items", "rejected", Constants.EMPTY_STRINGS);
+			String[] crateItemList = config.getStringListLocalized("crates.items", "rejected", Constants.EMPTY_STRINGS);
 			cratesRejectedItem = ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE);
 		}
 
 		// accepted oreDict
 		{
-			String[] crateOreDictList = config.getStringListLocalized("oredict", "accepted", Constants.EMPTY_STRINGS);
+			String[] crateOreDictList = config.getStringListLocalized("crates.oredict", "accepted", Constants.EMPTY_STRINGS);
 
 			for (String name : OreDictionary.getOreNames()) {
 				if (name == null) {
@@ -134,7 +134,7 @@ public class ModuleCrates extends BlankForestryModule {
 
 		// rejected oreDict
 		{
-			String[] crateOreDictList = config.getStringListLocalized("oredict", "rejected", Constants.EMPTY_STRINGS);
+			String[] crateOreDictList = config.getStringListLocalized("crates.oredict", "rejected", Constants.EMPTY_STRINGS);
 
 			for (String name : OreDictionary.getOreNames()) {
 				if (name == null) {

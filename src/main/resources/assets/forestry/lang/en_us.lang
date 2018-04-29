@@ -1859,6 +1859,11 @@ for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate
 for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
 
+for.config.crates.items.accepted.comment=Added items
+for.config.crates.items.rejected.comment=Blacklisted items
+for.config.crates.oredict.accepted.comment=Added oredict
+for.config.crates.oredict.rejected.comment=Blacklisted oredict
+
 for.config.gamemode=Game Mode
 
 for.config.gamemode.energy.demand.modifier.comment=Modifies the energy required to activate machines, as well as the max amount of energy stored and accepted.
