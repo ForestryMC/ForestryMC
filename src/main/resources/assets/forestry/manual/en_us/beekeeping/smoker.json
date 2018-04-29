@@ -1,0 +1,19 @@
+{
+	"title": "Smoker",
+	"icon":{
+		"item": "forestry:smoker"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:smoker"
+				]
+			},
+			{
+				"text": "The hive bees will sting you a little bit if you're too close, health regeneration covers it. They only get aggressive if you hit the hive, and can really hurt if you break the hive without smoking them first."
+			}
+		]
+	]
+}

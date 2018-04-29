@@ -1,0 +1,280 @@
+{
+	"title": "Farm Layouts",
+	"icon": {
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "Small",
+						"page": 1
+					},
+					{
+						"title": "Medium",
+						"page": 2
+					},
+					{
+						"title": "Medium Large",
+						"page": 3
+					},
+					{
+						"title": "Large",
+						"page": 4
+					},
+					{
+						"title": "Very Large",
+						"page": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "Small",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "W×L×H: 3×3×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Radius: 7 Blocks"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Space (W×L): 17×17"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Blocks: 36"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Land: 126"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 171,
+					"vHeight": 171,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x3.png",
+					"textureWidth": 171,
+					"textureHeight": 171,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Medium",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "W×L×H: 3×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Radius: 9 Blocks"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Space (W×L): 21×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Blocks: 48"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Land: 270"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 211,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x4.png",
+					"textureWidth": 211,
+					"textureHeight": 221,
+					"width": 85,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Medium Large",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "W×L×H: 4×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Radius: 9 Blocks"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Space (W×L): 22×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Blocks: 64"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Land: 288"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 221,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/4x4.png",
+					"textureWidth": 221,
+					"textureHeight": 221,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Large",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "W×L×H: 3×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Radius: 11 Blocks"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Space (W×L): 25×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Blocks: 60"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Land: 396"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 250,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 250,
+					"textureHeight": 271,
+					"width": 82,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Very Large",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "W×L×H: 5×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Radius: 11 Blocks"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Space (W×L): 27×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Blocks: 100"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Farm Land: 440"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 271,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 271,
+					"textureHeight": 271,
+					"width": 89,
+					"height": 89
+			}
+		]
+	]
+}

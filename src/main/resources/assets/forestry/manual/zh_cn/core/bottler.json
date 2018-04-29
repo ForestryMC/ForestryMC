@@ -1,0 +1,19 @@
+{
+	"title": "装瓶机",
+	"icon": {
+		"item": "forestry:bottler"
+	},
+	"content": [
+		[
+			{
+				"text": "装瓶机可用于从胶囊、锡罐或桶这样的的流体容器中提取液体，或者将液体灌入这些容器中。灌装的过程需要能量，但它不需要能量就可以将液体自动输出到临近的容器中。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bottler"
+				]
+			}
+		]
+	]
+}

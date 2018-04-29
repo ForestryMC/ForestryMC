@@ -1,0 +1,74 @@
+{
+	"title": "Alveary",
+	"icon":{
+		"item": "forestry:alveary.plain"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_plain"
+				]
+			},
+			{
+				"text": "After a while you will begin to notice that the primitive Apiary is not reaping the full potential of your bees. When you reach this point it is time to upgrade. The alveary is three times the size of the apiary, and I have seen the bees"
+			}
+		],
+		[
+			{
+				"text": "produce up to ten times more honey in an alveary than an apiary."
+			},
+			{
+				"type": "image",
+				"u": 0,
+				"v": 0,
+				"uWidth": 300,
+				"vHeight": 169,
+				"textureLocation": "forestry:textures/gui/almanac/scraps/alveary.png",
+				"textureWidth": 300,
+				"textureHeight": 169,
+				"width": 108,
+				"height": 60
+			},
+			{
+				"text": "To create this massive contraption you'll need to construct around twenty seven of these alveary blocks. Once you have these blocks you can form them into a cube, thus forming the"
+			}
+		],
+		[
+			{
+				"text": "body of the alveary. You'll also need to block off the roof, for which I recommend using wooden planks across the nine upper blocks. If you construct it correctly, you should see how it all comes together and the small holes where bees can dwell. The usage of this alveary is identical to that of the apiary, although I am yet to have any success with inserting wooden frames into it."
+			}
+		],
+		[
+			{
+				"type": "structure",
+				"structureFile": "structures/alveary.json"
+			}
+		],
+		[
+			{
+				"text": "Each one is very costly, consisting of scented paneling, which requires honey from bees working away in your many apiaries, and seed oil to construct sturdy casings."
+			},
+			{
+				"type": "carpenter",
+				"stack":{
+					"item": "forestry:crafting_material",
+					"data": 6
+				}
+			}
+		],
+		[
+			{
+				"text": "This means making an alveary is something that takes many days of hard graft, but it is well worth the effort. By arranging the paneling securely around the sturdy casing you'll end up with firm solid home for your bees, and the scent of the panels will spur them on to work far harder than anything you could achieve in the apiary."
+			}
+		]
+	],
+	"subEntries": [ 
+		"beekeeping/alveary.heater", 
+		"beekeeping/alveary.fan", 
+		"beekeeping/alveary.sieve",
+		"beekeeping/alveary.stabiliser",
+		"beekeeping/alveary.swarmer"
+	]
+}

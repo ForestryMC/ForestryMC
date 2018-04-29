@@ -1,0 +1,9 @@
+{
+	"farming":[
+		"farming/farm_structure",
+		"farming/multi_farms",
+		"farming/farm_layout",
+		"farming/farm_gui",
+		"farming/farm_configuration"
+	]
+}

@@ -1,0 +1,79 @@
+{
+	"title": "Electron Tubes",
+	"icon":{
+		"item": "forestry:thermionic_tubes"
+	},
+	"content": [
+		[
+			{
+				"type": "fabricator",
+				"stacks": [
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 0
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 1
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 2
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 3
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 4
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 5
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 6
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 7
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 8
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 9
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 10
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 11
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 12
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 13
+					}
+				]
+			},
+			{
+				"text": "Electron Tubes can be attached to Circuit Boards using a Soldering Iron. They have many purposes displayed on the tooltip, which depend on the circuit type selected in the"
+			}
+		],
+		[
+			{
+				"text": "Soldering Iron. Once soldered, they cannot be removed from a Circuit Board."
+			}
+		]
+	]
+}

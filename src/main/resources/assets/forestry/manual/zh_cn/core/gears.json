@@ -1,0 +1,21 @@
+{
+	"title": "齿轮",
+	"icon":{
+		"item": "forestry:gear_bronze"
+	},
+	"content": [
+		[
+			{
+				"text": "齿轮是基础合成材料。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:gear_tin",
+					"forestry:gear_copper",
+					"forestry:gear_bronze"
+				]
+			}
+		]
+	]
+}

@@ -1,0 +1,26 @@
+{
+	"title": "Mundane Bees",
+	"icon": {
+		"item": "forestry:beehives"
+	},
+	"content": [
+		[
+			{
+				"text": "There are six naturally occurring species that I discovered on my exploits: Forest, Meadows, Modest, Tropical, Wintry and Marshy. I refer to these as mundane bees, partly because they are not very interesting and partly because it’s a cool word that rhymes with terrain and brain."
+			},
+			{
+				"text": "Meadow bees infest large open grasslands, such as plains, and prefer a temperate climate.",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "It is closely related to the forest bee, which I’ve noticed is one of the most common pests in forests. Both of these bees are mostly docile, not even causing me the smallest of stings."
+			},
+			{
+				"text": "All other bee species are only occurring through mutation.",
+				"paragraph": true
+			}
+		]
+	]
+}

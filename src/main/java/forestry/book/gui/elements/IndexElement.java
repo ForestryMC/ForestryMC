@@ -43,7 +43,7 @@ public class IndexElement extends VerticalLayout {
 		@Override
 		public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 			super.mouseClicked(mouseX, mouseY, mouseButton);
-			GuiForesterBook bookGui = GuiForesterBook.guiScreen;
+			GuiForesterBook bookGui = GuiForesterBook.getGuiScreen();
 			if (bookGui instanceof GuiForestryBookPages) {
 				GuiForestryBookPages pagesGui = (GuiForestryBookPages) bookGui;
 				pagesGui.switchPage(data.page);
