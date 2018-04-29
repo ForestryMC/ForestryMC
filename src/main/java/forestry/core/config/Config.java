@@ -277,7 +277,7 @@ public class Config {
 
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
     
-		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "TreeFrequency", generateTreesAmount, 0.0F, 10.0F);
+		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
     
 		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
 			blacklistedTreeDims.add(dimId);
