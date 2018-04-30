@@ -541,8 +541,8 @@ public class ModuleApiculture extends BlankForestryModule {
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			int remainder = i % 16;
-			int quotient = i / 16;
+			int remainder = i & 15;
+			int quotient = i >> 4;
 			BlockHoneyComb block = blocks.beeCombs[quotient];
 			RecipeUtil.addRecipe("comb." + i, new ItemStack(block, 1, remainder),
 					"###",
