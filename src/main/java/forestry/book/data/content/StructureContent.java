@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.resources.IResource;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,7 +34,6 @@ import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureData;
 import forestry.book.gui.elements.MultiblockElement;
 import forestry.core.utils.Log;
-import forestry.core.utils.ResourceUtil;
 
 /**
  * A book content that displays a multiblock structure.
@@ -58,20 +56,16 @@ public class StructureContent extends BookContent {
 			return;
 		}
 
-		ResourceLocation location = BookLoader.getResourceLocation(structureFile);
-
-		if (location != null && ResourceUtil.resourceExists(location)) {
-			IResource resource = ResourceUtil.getResource(location);
-			if (resource == null) {
-				return;
-			}
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
-				structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
-			} catch (IOException e) {
-				Log.error("Failed to load structure file {}.{}", location, e);
-			} finally {
-				IOUtils.closeQuietly(resource);
-			}
+		IResource resource = BookLoader.getResource(structureFile);
+		if (resource == null) {
+			return;
+		}
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+			structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
+		} catch (IOException e) {
+			Log.error("Failed to load structure file {}.{}", structureFile, e);
+		} finally {
+			IOUtils.closeQuietly(resource);
 		}
 	}
 
@@ -89,28 +83,8 @@ public class StructureContent extends BookContent {
 		BlockData[] structure = structureData.structure;
 
 		if (size.length == 3 && structure.length > 0) {
-			boolean showButtons = size[1] > 1;
-			if (showButtons) {
-				//structureSizeX -= GuiArrow.ArrowType.REFRESH.w;
-			}
 			MultiblockElement elementStructure = new MultiblockElement(offset, 0, structureSizeX, structureSizeY, size, structure);
 			page.add(elementStructure);
-
-			/*if(showButtons) {
-				int col = book.appearance.structureButtonColor;
-				int colHover = book.appearance.structureButtonColorHovered;
-				int colToggled = book.appearance.structureButtonColorToggled;
-
-				int midY = y + structureSizeY / 2 - (GuiArrow.ArrowType.UP.h + GuiArrow.ArrowType.DOWN.h) / 2;
-
-				int dx = (GuiArrow.ArrowType.REFRESH.w - GuiArrow.ArrowType.UP.w) / 2;
-
-				//list.add(new ElementArrow(ElementStructure.BUTTON_ID_LAYER_UP, elementStructure, structureSizeX + offset + dx, midY, GuiArrow.ArrowType.UP, col, colHover));
-				//midY += GuiArrow.ArrowType.UP.h + 2;
-				//list.add(new ElementArrow(ElementStructure.BUTTON_ID_LAYER_DOWN, elementStructure, structureSizeX + offset + dx, midY, GuiArrow.ArrowType.DOWN, col, colHover));
-
-				list.add(new ElementAnimationToggle(ElementStructure.BUTTON_ID_ANIMATE, elementStructure, GuiBook.PAGE_WIDTH - GuiArrow.ArrowType.REFRESH.w, 0, GuiArrow.ArrowType.REFRESH, col, colHover, colToggled));
-			}*/
 		}
 		return true;
 	}

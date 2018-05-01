@@ -1,0 +1,28 @@
+{
+	"title": "腐殖土",
+	"icon":{
+		"item": "forestry:humus"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:compost_humus",
+					"forestry:fertilizer_humus"
+				]
+			},
+			{
+				"text": "富饶的土壤，不需要水即可支撑作物生长。随着肥力下降，会逐步退化成沙子。"
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:humus"
+				}
+			}
+		]
+	]
+}

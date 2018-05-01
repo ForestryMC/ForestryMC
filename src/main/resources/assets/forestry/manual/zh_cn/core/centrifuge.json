@@ -1,0 +1,19 @@
+{
+	"title": "离心机",
+	"icon": {
+		"item": "forestry:centrifuge"
+	},
+	"content": [
+		[
+			{
+				"text": "离心机主要用于从蜂窝中分离出各种蜜蜂产物。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:centrifuge"
+				]
+			}
+		]
+	]
+}

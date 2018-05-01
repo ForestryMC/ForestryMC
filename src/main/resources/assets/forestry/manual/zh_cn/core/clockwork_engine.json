@@ -1,0 +1,28 @@
+{
+	"title": "发条引擎",
+	"icon": {
+		"item": "forestry:engine_clockwork"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:clockwork_engine"
+				]
+			},
+			{
+				"text": "发条引擎是游戏早期一个不错的能量来源。根据上的发条的松紧，它可以产出 5～15 RF/t 不等的能量。不停地右击即可为它上发条；发条会在其工作时松下去。"
+			}
+		],
+		[
+			{
+				"text": "发条引擎没有 GUI。对着发条引擎右击即可上紧发条。引擎会在你上发条时停止工作，这样你可以确定当前引擎的状态。"
+			},
+			{
+				"text": "引擎为红色时，不建议继续上发条；此时继续强行上发条是个危险行为。",
+				"paragraph": true
+			}
+		]
+	]
+}

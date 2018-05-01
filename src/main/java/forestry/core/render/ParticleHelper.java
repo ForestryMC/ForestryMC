@@ -24,6 +24,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -71,7 +72,7 @@ public class ParticleHelper {
 			ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
 			if (fx != null) {
 				callback.addHitEffects(fx, world, pos, iblockstate);
-				effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+				fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);
 			}
 		}
 		return true;
@@ -88,7 +89,7 @@ public class ParticleHelper {
 	@SideOnly(Side.CLIENT)
 	public static boolean addDestroyEffects(World world, Block block, IBlockState state, BlockPos pos, ParticleManager effectRenderer, Callback callback) {
 		if (block != state.getBlock()) {
-			return true;
+			return false;
 		}
 
 		byte iterations = 4;
@@ -101,8 +102,7 @@ public class ParticleHelper {
 
 					ParticleDigging fx = (ParticleDigging) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
 					if (fx != null) {
-						callback.addDestroyEffects(fx, world, pos, state);
-						effectRenderer.addEffect(fx.setBlockPos(pos));
+						callback.addDestroyEffects(fx.setBlockPos(pos), world, pos, state);
 					}
 				}
 			}

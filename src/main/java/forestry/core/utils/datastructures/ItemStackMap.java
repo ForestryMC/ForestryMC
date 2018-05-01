@@ -12,7 +12,10 @@ package forestry.core.utils.datastructures;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 	private static final long serialVersionUID = -8511966739130702305L;
@@ -21,7 +24,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 	protected boolean areEqual(ItemStack a, Object b) {
 		if (b instanceof ItemStack) {
 			ItemStack b2 = (ItemStack) b;
-			return a.isItemEqual(b2) && ItemStack.areItemStackTagsEqual(a, b2);
+			return ItemStackUtil.isCraftingEquivalent(b2, a);
 		}
 		if (b instanceof Item) {
 			return a.getItem() == b;

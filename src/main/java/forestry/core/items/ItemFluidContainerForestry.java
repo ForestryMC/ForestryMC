@@ -77,7 +77,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (this.isInCreativeTab(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
-			
+
 			// filled
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 				ItemStack itemStack = new ItemStack(this);
@@ -194,9 +194,9 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 		} else {
-			if(Config.CapsuleFluidPickup) {
+			if (Config.CapsuleFluidPickup) {
 				RayTraceResult target = this.rayTrace(world, player, true);
-				if (target.typeOfHit != RayTraceResult.Type.BLOCK) {
+				if (target == null || target.typeOfHit != RayTraceResult.Type.BLOCK) {
 					return ActionResult.newResult(EnumActionResult.PASS, heldItem);
 				}
 

@@ -1,0 +1,60 @@
+{
+	"title": "邮票",
+	"icon":{
+		"item": "forestry:stamps"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:stamps_1n",
+					"forestry:stamps_2n",
+					"forestry:stamps_5n",
+					"forestry:stamps_10n",
+					"forestry:stamps_20n",
+					"forestry:stamps_50n",
+					"forestry:stamps_100n",
+				]
+			},
+			{
+				"text": "邮票面值越高，信件能附带的物品就越多。一枚普通的 1n 邮票只能让你信里写字。信件里每多附带一个物品就要多附加价值 1n 的邮票。"
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:stamps",
+						"data": 0
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 1
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 2
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 3
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 4
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 5
+					},
+					{
+						"item": "forestry:stamps",
+						"data": 6
+					}
+				]
+			}
+		]
+	]
+}

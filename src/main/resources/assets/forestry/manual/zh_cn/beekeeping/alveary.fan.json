@@ -1,0 +1,24 @@
+{
+	"title": "Alveary Fan",
+	"icon":{
+		"item": "forestry:alveary.fan"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_fan"
+				]
+			},
+			{
+				"text": "The Alveary Fan does the exact opposite of the Alveary Heater: It cools down the temperature of the Alveary. To use it, replace one of the blocks of the Alveary in the bottom two layers of the Alveary by the Alveary Fan Block."
+			}
+		],
+		[
+			{
+				"text": "The fan requires about 5 RF/tick keep the alveary continuously cooled 1 step."
+			}
+		]
+	]
+}

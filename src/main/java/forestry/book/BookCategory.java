@@ -18,7 +18,7 @@ import forestry.core.utils.Translator;
 @SideOnly(Side.CLIENT)
 public class BookCategory implements IBookCategory {
 	private final String name;
-	private final transient Map<String, IBookEntry> entries = new LinkedHashMap<>();
+	private final Map<String, IBookEntry> entries = new LinkedHashMap<>();
 	private ItemStack stack = ItemStack.EMPTY;
 
 	public BookCategory(String name) {

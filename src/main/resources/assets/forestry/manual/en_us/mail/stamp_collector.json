@@ -1,0 +1,17 @@
+{
+	"title": "Stamp Collector",
+	"icon":{
+		"item": "forestry:stamp_collector"
+	},
+	"content": [
+		[
+			{
+				"text": "The Stamp Collector is an admin machine that cannot be crafted."
+			},
+			{
+				"text": "As the name suggests the 'Stamp Collector' collects all the stamps spent by players on server. Anyone who has permission to interact with it can get the spent stamps.",
+				"paragraph": true
+			}
+		]
+	]
+}

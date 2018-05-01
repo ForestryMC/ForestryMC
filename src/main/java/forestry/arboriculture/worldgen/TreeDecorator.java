@@ -55,7 +55,7 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if (!Config.isValidTreeDim(world.provider.getDimension())) {
+		if (!Config.isValidTreeDim(world.provider.getDimension()) || Config.generateTreesAmount == 0) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -71,7 +71,7 @@ public class TreeDecorator {
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
-				if (species.getRarity() >= rand.nextFloat()) {
+				if (species.getRarity() * Config.generateTreesAmount >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
 
 					if (pos == null) {
