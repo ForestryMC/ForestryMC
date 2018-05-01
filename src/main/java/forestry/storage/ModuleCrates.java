@@ -1,7 +1,9 @@
 package forestry.storage;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -48,7 +51,7 @@ public class ModuleCrates extends BlankForestryModule {
 	private static final String CONFIG_CATEGORY = "crates";
 
 	public static final List<String> cratesRejectedOreDict = new ArrayList<>();
-	public static List<ItemStack> cratesRejectedItem = new ArrayList<>();
+	public static Multimap<Item, ItemStack> cratesRejectedItem = HashMultimap.create();
 
 	private static final List<ItemCrated> crates = new ArrayList<>();
 
@@ -78,10 +81,6 @@ public class ModuleCrates extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	@Override
-	public void doInit() {
 		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
 		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
@@ -112,7 +111,9 @@ public class ModuleCrates extends BlankForestryModule {
 		// rejected items
 		{
 			String[] crateItemList = config.getStringListLocalized("crates.items", "rejected", Constants.EMPTY_STRINGS);
-			cratesRejectedItem = ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE);
+			for (ItemStack stack : ItemStackUtil.parseItemStackStrings(crateItemList, OreDictionary.WILDCARD_VALUE)) {
+				cratesRejectedItem.put(stack.getItem(), stack);
+			}
 		}
 
 		// accepted oreDict
@@ -167,7 +168,7 @@ public class ModuleCrates extends BlankForestryModule {
 		} else if (message.key.equals("blacklist-crate-item")) {
 			ItemStack value = message.getItemStackValue();
 			if (value != null) {
-				cratesRejectedItem.add(value);
+				cratesRejectedItem.put(value.getItem(), value);
 			} else {
 				IMCUtil.logInvalidIMCMessage(message);
 			}

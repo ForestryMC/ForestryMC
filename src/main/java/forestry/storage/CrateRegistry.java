@@ -11,6 +11,7 @@
 package forestry.storage;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -86,11 +87,17 @@ public class CrateRegistry implements ICrateRegistry {
 
 	@Override
 	public void registerCrate(ItemStack stack) {
-		for (ItemStack blacklistStack : ModuleCrates.cratesRejectedItem) {
-			if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, blacklistStack)) {
+		Collection<ItemStack> testStacks = ModuleCrates.cratesRejectedItem.get(stack.getItem());
+		for (ItemStack testStack : testStacks) {
+			if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, testStack)) {
 				return;
 			}
 		}
 		registerCrate(stack, null);
+	}
+
+	@Override
+	public void blacklistCrate(ItemStack stack) {
+		ModuleCrates.cratesRejectedItem.put(stack.getItem(), stack);
 	}
 }
