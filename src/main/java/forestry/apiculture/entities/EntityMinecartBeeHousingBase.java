@@ -12,9 +12,17 @@ package forestry.apiculture.entities;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Random;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -37,13 +45,6 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
 	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(EntityMinecartBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);

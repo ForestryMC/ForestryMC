@@ -43,7 +43,7 @@ public class CropBasicGrowthCraft extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvest = NonNullList.create();
-		harvest.addAll(block.getDrops(world, pos, blockState, 0));
+		block.getDrops(harvest, world, pos, blockState, 0);
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}

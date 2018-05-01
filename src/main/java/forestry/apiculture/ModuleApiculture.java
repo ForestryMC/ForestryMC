@@ -425,7 +425,7 @@ public class ModuleApiculture extends BlankForestryModule {
 					flowerType.getName().contains("sapling") ||
 					flowerType == BlockFlowerPot.EnumFlowerType.DEAD_BUSH ||
 					flowerType == BlockFlowerPot.EnumFlowerType.FERN) {
-				continue;
+				//Don't register these as flowers
 			} else if (flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_RED ||
 					flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_BROWN) {
 				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);

@@ -176,7 +176,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 		genericCropsBuilder.addAll(spices);
 
 		IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
-		
+
 		ImmutableList<String> genericCrops = genericCropsBuilder.build();
 
 		ImmutableList.Builder<String> plants = ImmutableList.builder();
@@ -190,7 +190,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
 		for (String berryName : berries) {
 			ItemStack berry = getItemStack(berryName + "item");
-			ItemStack berrySeed = getItemStack( berryName + "seeditem");
+			ItemStack berrySeed = getItemStack(berryName + "seeditem");
 			Block berryBlock = getBlock("pam" + berryName + "crop");
 			if (berry != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, berry, Fluids.JUICE.getFluid(juiceAmount));
@@ -348,13 +348,13 @@ public class PluginHarvestCraft extends CompatPlugin {
 				RecipeManagers.squeezerManager.addRecipe(20, nut, Fluids.SEED_OIL.getFluid(15 * seedamount));
 			}
 		}
-			
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemStack hcHoneyItem = getItemStack("honeyitem");
 			if (hcHoneyItem != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
 			}
-	
+
 			ItemStack hcBeeswaxItem = getItemStack("beeswaxitem");
 			if (hcBeeswaxItem != null) {
 				RecipeUtil.addRecipe("pam_wax_capsule", ModuleFluids.getItems().waxCapsuleEmpty.getItemStack(ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule")), "XXX ", 'X', hcBeeswaxItem);

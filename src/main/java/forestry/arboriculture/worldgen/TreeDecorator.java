@@ -99,14 +99,12 @@ public class TreeDecorator {
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
 
 		IBlockState blockState = world.getBlockState(pos);
-		IBlockState downState = world.getBlockState(pos.down());
 		while (BlockUtil.canReplace(blockState, world, pos)) {
 			pos.move(EnumFacing.DOWN);
 			if (pos.getY() <= 0) {
 				return null;
 			}
 			blockState = world.getBlockState(pos);
-			downState = world.getBlockState(pos.down());
 		}
 		if (tree instanceof IPlantable && blockState.getBlock().canSustainPlant(blockState, world, pos, EnumFacing.UP, (IPlantable) tree)) {
 			return pos.up();
