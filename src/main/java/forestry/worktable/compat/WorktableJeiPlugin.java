@@ -25,7 +25,7 @@ public class WorktableJeiPlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.WORKTABLE)){
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.WORKTABLE)) {
 			return;
 		}
 		BlockRegistryWorktable blocks = ModuleWorktable.getBlocks();
