@@ -728,10 +728,10 @@ item.for.digger_bag.name=Digging Backpack
 item.for.digger_bag_t2.name=Woven Digging Backpack
 
 item.for.forester_bag.name=Foresting Backpack
-item.for.forester_bag_t2.name=Woven Foresting Woven Backpack
+item.for.forester_bag_t2.name=Woven Foresting Backpack
 
 item.for.hunter_bag.name=Hunting Backpack
-item.for.hunter_bag_t2.name=Hunter's Woven Backpack
+item.for.hunter_bag_t2.name=Woven Hunting Backpack
 
 item.for.miner_bag.name=Mining Backpack
 item.for.miner_bag_t2.name=Woven Mining Backpack
