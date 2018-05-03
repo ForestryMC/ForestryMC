@@ -37,6 +37,7 @@ import invtweaks.api.container.ContainerSectionCallback;
 public abstract class ContainerForestry extends Container {
 	public static final int PLAYER_HOTBAR_OFFSET = 27;
 	public static final int PLAYER_INV_SLOTS = PLAYER_HOTBAR_OFFSET + 9;
+	private int transferCount = 0; // number of items that have been shift-click-transfered during this click
 
 	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
 		// Player inventory
@@ -87,6 +88,7 @@ public abstract class ContainerForestry extends Container {
 			}
 		}
 
+		transferCount = 0;
 		return super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
@@ -101,7 +103,12 @@ public abstract class ContainerForestry extends Container {
 			return ItemStack.EMPTY;
 		}
 
-		return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
+		if (transferCount < 64)
+		{
+			transferCount++;
+			return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
+		}
+		return ItemStack.EMPTY;
 	}
 
 	protected abstract boolean canAccess(EntityPlayer player);
