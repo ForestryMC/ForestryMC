@@ -1861,8 +1861,8 @@ for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backp
 
 for.config.crates.items.accepted.comment=Added items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
 for.config.crates.items.rejected.comment=Blacklisted items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
-for.config.crates.oredict.accepted.comment=Added oredict. Format is 'oreDictName'. Regular expressions may also be used.
-for.config.crates.oredict.rejected.comment=Blacklisted oredict. Format is 'oreDictName'. Regular expressions may also be used.
+for.config.crates.oredict.accepted.comment=Added oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
+for.config.crates.oredict.rejected.comment=Blacklisted oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
 
 for.config.gamemode=Game Mode
 
