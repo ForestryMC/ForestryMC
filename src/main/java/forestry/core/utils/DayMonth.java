@@ -87,10 +87,7 @@ public class DayMonth {
 		if (this.day != other.day) {
 			return false;
 		}
-		if (this.month != other.month) {
-			return false;
-		}
-		return true;
+		return this.month == other.month;
 	}
 
 	@Override

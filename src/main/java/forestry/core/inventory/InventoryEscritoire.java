@@ -59,9 +59,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 		}
 
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
-			if (slotIndex >= SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT)) {
-				return true;
-			}
+			return slotIndex >= SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT);
 		}
 
 		return false;

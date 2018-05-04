@@ -163,6 +163,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because there is no Player parameter in getDrops()
 	//          and Mojang destroys the block and tile before calling getDrops.
+	// TODO in 1.13 - use new getDrops() (https://github.com/MinecraftForge/MinecraftForge/pull/4727)
 	private final ThreadLocal<NonNullList<ItemStack>> drops = new ThreadLocal<>();
 
 	/**
@@ -197,7 +198,7 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 		if (ret != null) {
 			drops.addAll(ret);
 		} else {
-			if(!(world instanceof World)){
+			if (!(world instanceof World)) {
 				return;
 			}
 			// leaves not harvested, get drops normally
