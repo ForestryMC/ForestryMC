@@ -190,6 +190,9 @@ public final class FluidHelper {
 							inv.setInventorySlotContents(outputSlot, newStack);
 							inv.decrStackSize(inputSlot, 1);
 						}
+						if(!isFillableEmptyContainer(newStack) && isFillableContainerWithRoom(newStack)) {
+							inv.setInventorySlotContents(inputSlot, newStack.copy());
+						}
 					} else {
 						inv.decrStackSize(inputSlot, 1);
 					}
@@ -314,4 +317,5 @@ public final class FluidHelper {
 
 		return true;
 	}
+
 }
