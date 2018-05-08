@@ -52,7 +52,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -933,7 +932,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				continue;
 			}
 
-			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
+			Log.debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
 		}
 	}
