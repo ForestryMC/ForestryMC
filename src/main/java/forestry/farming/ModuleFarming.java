@@ -72,6 +72,7 @@ import forestry.farming.logic.FarmLogicOrchard;
 import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicReeds;
 import forestry.farming.logic.FarmLogicSucculent;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.farming.logic.farmables.FarmableChorus;
 import forestry.farming.logic.farmables.FarmableGE;
@@ -129,33 +130,33 @@ public class ModuleFarming extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
 		
-		registry.registerFarmables("farmArboreal", new FarmableVanillaSapling());
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			registry.registerFarmables("farmArboreal", new FarmableGE());
+			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 		}
 
-		registry.registerFarmables("farmCrops",
+		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
 				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCrops.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3, 0));
 
 		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
-		registry.registerFarmables("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
 		IBlockState plantedRedMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
-		registry.registerFarmables("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
-		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-		registry.registerFarmables("farmGourd", new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
+		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
 
-		registry.registerFarmables("farmInfernal", new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
 
-		registry.registerFarmables("farmPoales", new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
 
-		registry.registerFarmables("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
-		registry.registerFarmables("farmEnder", FarmableChorus.INSTANCE);
+		registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 
 		//Forestry fertilizer
 		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
@@ -192,17 +193,17 @@ public class ModuleFarming extends BlankForestryModule {
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
 
-		IFarmProperties arborealFarm = registry.registerLogic("farmArboreal", FarmLogicArboreal::new);
-		IFarmProperties cropsFarm = registry.registerLogic("farmCrops", FarmLogicCrops::new);
-		IFarmProperties mushroomFarm = registry.registerLogic("farmShroom", FarmLogicMushroom::new);
-		IFarmProperties succulentFarm = registry.registerLogic("farmSucculentes", FarmLogicSucculent::new);
-		IFarmProperties peatFarm = registry.registerLogic("farmPeat", FarmLogicPeat::new);
-		IFarmProperties infernalFarm = registry.registerLogic("farmInfernal", FarmLogicInfernal::new);
-		IFarmProperties poalesFarm = registry.registerLogic("farmPoales", FarmLogicReeds::new);
-		IFarmProperties orchardFarm = registry.registerLogic("farmOrchard", FarmLogicOrchard::new);
-		IFarmProperties gourdFarm = registry.registerLogic("farmGourd", FarmLogicGourd::new);
-		IFarmProperties cocoaFarm = registry.registerLogic("farmCocoa", FarmLogicCocoa::new);
-		IFarmProperties enderFarm = registry.registerLogic("farmEnder", FarmLogicEnder::new);
+		IFarmProperties arborealFarm = registry.registerLogic(ForestryFarmIdentifier.ARBOREAL, FarmLogicArboreal::new);
+		IFarmProperties cropsFarm = registry.registerLogic(ForestryFarmIdentifier.CROPS, FarmLogicCrops::new);
+		IFarmProperties mushroomFarm = registry.registerLogic(ForestryFarmIdentifier.SHROOM, FarmLogicMushroom::new);
+		IFarmProperties succulentFarm = registry.registerLogic(ForestryFarmIdentifier.SUCCULENTES, FarmLogicSucculent::new);
+		IFarmProperties peatFarm = registry.registerLogic(ForestryFarmIdentifier.PEAT, FarmLogicPeat::new);
+		IFarmProperties infernalFarm = registry.registerLogic(ForestryFarmIdentifier.INFERNAL, FarmLogicInfernal::new);
+		IFarmProperties poalesFarm = registry.registerLogic(ForestryFarmIdentifier.POALES, FarmLogicReeds::new);
+		IFarmProperties orchardFarm = registry.registerLogic(ForestryFarmIdentifier.ORCHARD, FarmLogicOrchard::new);
+		IFarmProperties gourdFarm = registry.registerLogic(ForestryFarmIdentifier.GOURD, FarmLogicGourd::new);
+		IFarmProperties cocoaFarm = registry.registerLogic(ForestryFarmIdentifier.COCOA, FarmLogicCocoa::new);
+		IFarmProperties enderFarm = registry.registerLogic(ForestryFarmIdentifier.ENDER, FarmLogicEnder::new);
 
 		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
 		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);
