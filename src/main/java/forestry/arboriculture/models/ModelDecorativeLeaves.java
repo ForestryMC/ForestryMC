@@ -12,6 +12,8 @@ package forestry.arboriculture.models;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Objects;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -36,36 +38,64 @@ import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
 @SideOnly(Side.CLIENT)
-public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, TreeDefinition> {
+public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, ModelDecorativeLeaves.Key> {
 	public ModelDecorativeLeaves() {
 		super(BlockDecorativeLeaves.class);
 	}
 
+	public static class Key {
+		public final TreeDefinition definition;
+		public final boolean fancy;
+		private final int hashCode;
+
+		public Key(TreeDefinition definition, boolean fancy) {
+			this.definition = definition;
+			this.fancy = fancy;
+			this.hashCode = Objects.hash(definition, fancy);
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (other == null || !(other instanceof ModelDecorativeLeaves.Key)) {
+				return false;
+			} else {
+				ModelDecorativeLeaves.Key otherKey = (ModelDecorativeLeaves.Key) other;
+				return otherKey.definition == definition && otherKey.fancy == fancy;
+			}
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+	}
+
 	@Override
-	protected TreeDefinition getInventoryKey(ItemStack stack) {
+	protected Key getInventoryKey(ItemStack stack) {
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "ItemStack must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
-		return bBlock.getTreeType(stack.getMetadata());
+		return new Key(bBlock.getTreeType(stack.getMetadata()), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected TreeDefinition getWorldKey(IBlockState state) {
+	protected Key getWorldKey(IBlockState state) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
-		return state.getValue(bBlock.getVariant());
+		return new Key(state.getValue(bBlock.getVariant()), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected void bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDecorativeLeaves block, Key key, IModelBaker baker, boolean inventory) {
+		TreeDefinition treeDefinition = key.definition;
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		ITreeGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getPrimary();
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
-		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
+		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 
 		// Render the plain leaf block.
@@ -83,7 +113,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected IBakedModel bakeModel(IBlockState state, TreeDefinition key, BlockDecorativeLeaves block) {
+	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDecorativeLeaves block) {
 		IModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, key, baker, false);

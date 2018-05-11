@@ -12,6 +12,8 @@ package forestry.arboriculture.models;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Objects;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -36,38 +38,66 @@ import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
 @SideOnly(Side.CLIENT)
-public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, TreeDefinition> {
+public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, ModelDefaultLeaves.Key> {
 	public ModelDefaultLeaves() {
 		super(BlockDefaultLeaves.class);
 	}
 
-	@Override
-	protected TreeDefinition getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
-		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
-		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return bBlock.getTreeType(stack.getMetadata());
+	public static class Key {
+		public final TreeDefinition definition;
+		public final boolean fancy;
+		private final int hashCode;
+
+		public Key(TreeDefinition definition, boolean fancy) {
+			this.definition = definition;
+			this.fancy = fancy;
+			this.hashCode = Objects.hash(definition, fancy);
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (other == null || !(other instanceof Key)) {
+				return false;
+			} else {
+				Key otherKey = (Key) other;
+				return otherKey.definition == definition && otherKey.fancy == fancy;
+			}
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
 	}
 
 	@Override
-	protected TreeDefinition getWorldKey(IBlockState state) {
+	protected ModelDefaultLeaves.Key getInventoryKey(ItemStack stack) {
+		Block block = Block.getBlockFromItem(stack.getItem());
+		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
+		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
+		return new Key(bBlock.getTreeType(stack.getMetadata()), Proxies.render.fancyGraphicsEnabled());
+	}
+
+	@Override
+	protected ModelDefaultLeaves.Key getWorldKey(IBlockState state) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
 		TreeDefinition treeDefinition = bBlock.getTreeDefinition(state);
 		Preconditions.checkNotNull(treeDefinition);
-		return treeDefinition;
+		return new ModelDefaultLeaves.Key(treeDefinition, Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, TreeDefinition treeDefinition, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeaves block, Key key, IModelBaker baker, boolean inventory) {
+		TreeDefinition treeDefinition = key.definition;
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
 		ITreeGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getPrimary();
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
-		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
+		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 
 		// Render the plain leaf block.
@@ -85,7 +115,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Tre
 	}
 
 	@Override
-	protected IBakedModel bakeModel(IBlockState state, TreeDefinition key, BlockDefaultLeaves block) {
+	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDefaultLeaves block) {
 		IModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, key, baker, false);
