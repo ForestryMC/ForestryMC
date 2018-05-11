@@ -651,7 +651,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
-		if (ChipsetManager.circuitRegistry.isChipset(stack)) {
+		if (ChipsetManager.circuitRegistry.isChipset(stack) || stack.isEmpty()) {
 			// Dispose old chipsets correctly
 			if (!sockets.getStackInSlot(slot).isEmpty()) {
 				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
