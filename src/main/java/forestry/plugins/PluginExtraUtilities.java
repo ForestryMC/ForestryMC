@@ -37,6 +37,7 @@ import forestry.core.utils.Log;
 import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRedOrchid;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
 
@@ -57,9 +58,9 @@ public class PluginExtraUtilities extends CompatPlugin {
 		if (Config.isExUtilRedOrchidEnabled() && redOrchid != null) {
 			Item item = Item.getItemFromBlock(redOrchid);
 
-			registerFarmable(redOrchid, item, "farmOrchid");
+			registerFarmable(redOrchid, item, ForestryFarmIdentifier.ORCHID);
 
-			IFarmProperties orchidFarm = FarmRegistry.getInstance().registerLogic("farmOrchid", FarmLogicRedOrchid::new);
+			IFarmProperties orchidFarm = FarmRegistry.getInstance().registerLogic(ForestryFarmIdentifier.ORCHID, FarmLogicRedOrchid::new);
 			orchidFarm.registerSoil(new ItemStack(Blocks.REDSTONE_ORE), Blocks.REDSTONE_ORE.getDefaultState());
 			orchidFarm.registerSoil(new ItemStack(Blocks.LIT_REDSTONE_ORE), Blocks.LIT_REDSTONE_ORE.getDefaultState());
 
@@ -71,7 +72,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 
 		if (Config.isExUtilEnderLilyEnabled() && enderLilly != null) {
 			Item item = Item.getItemFromBlock(enderLilly);
-			registerFarmable(enderLilly, item, "farmEnder");
+			registerFarmable(enderLilly, item, ForestryFarmIdentifier.ENDER);
 		}
 	}
 

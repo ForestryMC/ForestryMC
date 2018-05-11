@@ -12,6 +12,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -162,7 +163,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
 				if (seeds != null && block != null) {
-					farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
+					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
 			for(int i = 1;i <= 5;i++){
@@ -172,7 +173,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
 				}
 				if (seeds != null && block != null) {
-					farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
+					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
 		}

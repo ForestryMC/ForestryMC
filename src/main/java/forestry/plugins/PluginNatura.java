@@ -51,6 +51,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.farming.logic.farmables.FarmableVanillaMushroom;
@@ -127,7 +128,7 @@ public class PluginNatura extends BlankForestryModule {
 					windfall = new ItemStack[]{potashApple};
 				}
 
-				FarmRegistry.getInstance().registerFarmables("farmArboreal", new FarmableSapling(
+				FarmRegistry.getInstance().registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
 					new ItemStack(item),
 					windfall
 				));
@@ -153,7 +154,7 @@ public class PluginNatura extends BlankForestryModule {
 					// block representing planted glowshroom
 					final Block smallShroomBlock = Block.getBlockFromItem(subItem.getItem());
 
-					FarmRegistry.getInstance().registerFarmables("farmShroom", new FarmableVanillaMushroom(
+					FarmRegistry.getInstance().registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(
 						subItem,
 						smallShroomBlock.getStateFromMeta(subItem.getMetadata()),
 						largeShroomBlock
@@ -291,7 +292,7 @@ public class PluginNatura extends BlankForestryModule {
 					return;
 				}
 
-				FarmRegistry.getInstance().registerFarmables("farmCrops",
+				FarmRegistry.getInstance().registerFarmables(ForestryFarmIdentifier.CROPS,
 					new FarmableAgingCrop(
 						seedItem,
 						block,
@@ -342,8 +343,8 @@ public class PluginNatura extends BlankForestryModule {
 	@Override
 	public void postInit() {
 		IFarmRegistry registry = FarmRegistry.getInstance();
-		IFarmProperties mushroomFarm = registry.getProperties("farmShroom");
-		IFarmProperties farmArboreal = registry.getProperties("farmArboreal");
+		IFarmProperties mushroomFarm = registry.getProperties(ForestryFarmIdentifier.SHROOM);
+		IFarmProperties farmArboreal = registry.getProperties(ForestryFarmIdentifier.ARBOREAL);
 		if (farmArboreal != null) {
 			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState());
 		}

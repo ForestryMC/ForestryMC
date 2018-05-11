@@ -61,7 +61,6 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -461,9 +460,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public NonNullList<ItemStack> getSpecialtyList() {
 		Set<ItemStack> specialties = genome.getPrimary().getSpecialtyChances().keySet();
 		NonNullList<ItemStack> specialtyList = NonNullList.create();
-		for (ItemStack specialty : specialties) {
-			specialtyList.add(specialty);
-		}
+		specialtyList.addAll(specialties);
 		return specialtyList;
 	}
 

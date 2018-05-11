@@ -3,10 +3,12 @@ package forestry.cultivation.tiles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.farming.logic.ForestryFarmIdentifier;
+
 public class TilePlantation extends TilePlanter {
 
 	public TilePlantation() {
-		super("farmRubber");
+		super(ForestryFarmIdentifier.RUBBER);
 	}
 
 	@Override
