@@ -68,7 +68,7 @@ import forestry.plugins.PluginTechReborn;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.2.2637,);"
+		dependencies = "required-after:forge@[14.23.2.2643,);"
 				+ "after:jei@[4.7.8.91,);"
 				+ "after:" + PluginIC2.MOD_ID + ";"
 				+ "after:" + PluginNatura.MOD_ID + ";"
