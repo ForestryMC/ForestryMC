@@ -159,8 +159,8 @@ public class PluginIC2 extends BlankForestryModule {
 
 		Circuits.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuits.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
-		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 7, 20);
-		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 15, 40);
+		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 4, 10);
+		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 7, 20);
 
 		blocks.electricalEngine.init();
 		blocks.generator.init();
