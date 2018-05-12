@@ -48,7 +48,7 @@ public class CommandMail extends SubCommand {
 		}
 
 		@Override
-		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 			if (!(sender instanceof EntityPlayer)) {
 				return;
 			}

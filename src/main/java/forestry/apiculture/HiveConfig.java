@@ -16,7 +16,7 @@ import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.core.config.LocalizedConfiguration;
 
 public class HiveConfig {
-	private static final Map<IHiveRegistry.HiveType, HiveConfig> configs = new EnumMap<IHiveRegistry.HiveType, HiveConfig>(IHiveRegistry.HiveType.class);
+	private static final Map<IHiveRegistry.HiveType, HiveConfig> configs = new EnumMap<>(IHiveRegistry.HiveType.class);
 	private static final String CATEGORY = "world.generate.beehives.blacklist";
 
 	private final Set<BiomeDictionary.Type> blacklistedTypes = new HashSet<>();

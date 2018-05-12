@@ -38,7 +38,7 @@ public class GreenhouseLimits implements IGreenhouseLimits {
 		height = compound.getInteger("height");
 	}
 
-	public GreenhouseLimits(PacketBufferForestry data) throws IOException {
+	public GreenhouseLimits(PacketBufferForestry data) {
 		minimumCoordinates = data.readPosition();
 		maximumCoordinates = data.readPosition();
 		depth = data.readInt();

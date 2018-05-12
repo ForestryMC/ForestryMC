@@ -69,7 +69,7 @@ public final class TreeGenHelper {
 		return false;
 	}
 
-	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
+	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException {
 		IAlleleTreeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {

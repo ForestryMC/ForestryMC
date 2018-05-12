@@ -62,7 +62,7 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(GuiButton button) {
 		if (button instanceof GuiButtonPage) {
 			GuiButtonPage pageButton = (GuiButtonPage) button;
 			if (pageButton.left) {
