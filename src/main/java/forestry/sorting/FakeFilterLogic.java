@@ -27,7 +27,7 @@ public final class FakeFilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void readGuiData(PacketBuffer data) throws IOException {
+	public void readGuiData(PacketBuffer data) {
 
 	}
 

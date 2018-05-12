@@ -33,7 +33,7 @@ public final class CommandModeSet extends SubCommand {
 	}
 
 	@Override
-	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 		if (args.length == 0 || args.length > 2) {
 			printHelp(sender);
 			return;

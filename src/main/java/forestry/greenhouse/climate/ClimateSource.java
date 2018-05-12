@@ -216,10 +216,8 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	private boolean canChange(float value, float target, ClimateSourceMode mode) {
 		if (mode == ClimateSourceMode.POSITIVE && value < target) {
 			return true;
-		} else if (mode == ClimateSourceMode.NEGATIVE && value > target) {
-			return true;
-		}
-		return false;
+		} else
+			return mode == ClimateSourceMode.NEGATIVE && value > target;
 	}
 
 	@Override

@@ -57,7 +57,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(GuiButton button) {
 		if (button instanceof GuiButtonBookCategory) {
 			GuiButtonBookCategory buttonCategory = (GuiButtonBookCategory) button;
 			mc.displayGuiScreen(new GuiForestryBookEntries(book, buttonCategory.category));

@@ -30,9 +30,8 @@ public class InventoryRainmaker extends InventoryAdapterTile<TileMillRainmaker> 
 				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
 				if (tile.getWorld().isRaining() && substrate.isReverse()) {
 					return true;
-				} else if (!tile.getWorld().isRaining() && !substrate.isReverse()) {
-					return true;
-				}
+				} else
+					return !tile.getWorld().isRaining() && !substrate.isReverse();
 			}
 		}
 

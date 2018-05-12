@@ -47,8 +47,7 @@ public class MultipartModel implements IModel {
 		partModels = builder.build();
 	}
 
-	private MultipartModel(ResourceLocation location, Multipart multipart, ImmutableMap<Selector, IModel> partModels)
-			throws Exception {
+	private MultipartModel(ResourceLocation location, Multipart multipart, ImmutableMap<Selector, IModel> partModels) {
 		this.location = location;
 		this.multipart = multipart;
 		this.partModels = partModels;

@@ -79,16 +79,16 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	public static Set<Integer> blacklistedOreDims = new HashSet<Integer>();
-	public static Set<Integer> whitelistedOreDims = new HashSet<Integer>();
+	public static Set<Integer> blacklistedOreDims = new HashSet<>();
+	public static Set<Integer> whitelistedOreDims = new HashSet<>();
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
 	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<Integer>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<Integer>();
+	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
+	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;

@@ -92,8 +92,8 @@ public class FilterLogic implements IFilterLogic {
 
 	@Override
 	public void writeGuiData(PacketBuffer data) {
-		for (int i = 0; i < filterRules.length; i++) {
-			data.writeShort(AlleleManager.filterRegistry.getId(filterRules[i]));
+		for (IFilterRuleType filterRule : filterRules) {
+			data.writeShort(AlleleManager.filterRegistry.getId(filterRule));
 		}
 
 		for (int i = 0; i < 6; i++) {
@@ -192,9 +192,7 @@ public class FilterLogic implements IFilterLogic {
 				IGenome genome = ind.getGenome();
 				IAllele active = genome.getPrimary();
 				IAllele inactive = genome.getSecondary();
-				if (!isValidAllelePair(facing, active.getUID(), inactive.getUID())) {
-					return false;
-				}
+				return isValidAllelePair(facing, active.getUID(), inactive.getUID());
 			}
 			return true;
 		}
