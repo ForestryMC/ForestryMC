@@ -4,10 +4,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import forestry.core.ModuleCore;
+import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileBog extends TilePlanter {
 	public TileBog() {
-		super("farmPeat");
+		super(ForestryFarmIdentifier.PEAT);
 	}
 
 	@Override

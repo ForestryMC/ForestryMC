@@ -5,9 +5,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.farming.logic.ForestryFarmIdentifier;
+
 public class TileArboretum extends TilePlanter {
 	public TileArboretum() {
-		super("farmArboreal");
+		super(ForestryFarmIdentifier.ARBOREAL);
 	}
 
 	@Override

@@ -52,7 +52,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -239,7 +238,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
@@ -425,7 +424,7 @@ public class ModuleApiculture extends BlankForestryModule {
 					flowerType.getName().contains("sapling") ||
 					flowerType == BlockFlowerPot.EnumFlowerType.DEAD_BUSH ||
 					flowerType == BlockFlowerPot.EnumFlowerType.FERN) {
-				continue;
+				//Don't register these as flowers
 			} else if (flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_RED ||
 					flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_BROWN) {
 				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
@@ -540,15 +539,15 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for (int blockCount = 0; blockCount < blocks.beeCombs.length; blockCount++) {
-			BlockHoneyComb block = blocks.beeCombs[blockCount];
-			for (int blockMeta = 0; blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16; blockMeta++) {
-				int itemMeta = blockMeta + blockCount * 16;
-				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
-						"###",
-						"###",
-						"###", '#', items.beeComb.get(EnumHoneyComb.get(itemMeta), 1));
-			}
+		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+			int remainder = i & 15;
+			int quotient = i >> 4;
+			BlockHoneyComb block = blocks.beeCombs[quotient];
+			RecipeUtil.addRecipe("comb." + i, new ItemStack(block, 1, remainder),
+					"###",
+					"###",
+					"###", '#', items.beeComb.get(EnumHoneyComb.get(i), 1));
+
 		}
 
 		// FOOD STUFF
@@ -933,7 +932,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				continue;
 			}
 
-			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
+			Log.debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
 		}
 	}

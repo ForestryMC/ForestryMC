@@ -1,0 +1,32 @@
+{
+	"title": "Clockwork Engine",
+	"icon": {
+		"item": "forestry:engine_clockwork"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:clockwork_engine"
+				]
+			},
+			{
+				"text": "The Clockwork Engine is an excellent alternative to other early-game power sources. It will output between 5 and 15 RF/tick depending on how much it is wound. Right-clicking on the engine block will wind it,"
+			}
+		], 
+		[
+			{
+				"text": "and as the engine works, it will gradually lose tick strength."
+			},
+			{
+				"text": "The Clockwork Engine has no GUI. To wind the engine, simply right-click on the block in the world. The piston will pause moving while you wind it, allowing you to see the current state of the engine.",
+				"paragraph": true
+			},
+			{
+				"text": "Once the engine block turns red, it is best to let the coils unwind some before winding again. Tightly wound springs can be potentially dangerous.",
+				"paragraph": true
+			}
+		]
+	]
+}

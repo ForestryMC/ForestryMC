@@ -1,0 +1,21 @@
+{
+	"title": "热电子加工台",
+	"icon": {
+		"item": "forestry:fabricator"
+	},
+	"content": [
+		[
+			{
+				"text": "热电子加工台可制作电子管和染色玻璃。它需要红石通量（RF）才能工作。它在预热后还需保持一定热量方能工作。产生热量的多少与你提供的能量有关；若能量不足，温度会缓慢下降。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:fabricator"
+				]
+			}
+		]
+	]
+}

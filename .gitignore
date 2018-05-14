@@ -9,7 +9,6 @@
 
 # files
 !/.gitignore
-!/.gitmodules
 !/CLA.txt
 !/CONTRIBUTING.md
 !/LICENSE.txt

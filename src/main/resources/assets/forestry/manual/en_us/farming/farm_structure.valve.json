@@ -1,0 +1,26 @@
+{
+	"title": "Farm Valve (Hydration)",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 4
+	},
+	"content": [
+		[
+			{
+				"text": "Some farms require water for hydration purposes. Although you can do it manually by supplying it through liquid containers (such as cans), you can also automate the process by using Farm Valves."
+			},
+			{
+				"text": "By connecting a Buildcraft Waterproof Pipe into the Farm Valve and supplying Water, you can automatically fill the Farm's Water Tank.",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_valve_brick"
+				]
+			}
+		]
+	]
+}

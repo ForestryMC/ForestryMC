@@ -1,0 +1,20 @@
+{
+	"title": "Fertilizer",
+	"icon":{
+		"item": "forestry:fertilizer_compound"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:sand_to_fertilizer",
+					"forestry:ash_to_fertilizer"
+				]
+			},
+			{
+				"text": "Rich fertilizer. Can be used as bonemeal on crops and saplings. Required in order to run a Forestry farm."
+			}
+		]
+	]
+}

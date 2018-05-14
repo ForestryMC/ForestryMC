@@ -45,31 +45,31 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		this.humidityMode = ClimateSourceMode.NONE;
 		this.state = ClimateStates.extendedZero();
 	}
-	
+
 	public void setHumidityMode(ClimateSourceMode humidityMode) {
 		this.humidityMode = humidityMode;
 	}
-	
+
 	public void setTemperatureMode(ClimateSourceMode temperatureMode) {
 		this.temperatureMode = temperatureMode;
 	}
-	
+
 	public void setOwner(O owner) {
 		this.owner = owner;
 	}
-	
+
 	@Override
 	public float getBoundaryModifier(ClimateType type, boolean boundaryUp) {
-		if(type == ClimateType.HUMIDITY){
-			if(humidityMode == ClimateSourceMode.POSITIVE && boundaryUp){
+		if (type == ClimateType.HUMIDITY) {
+			if (humidityMode == ClimateSourceMode.POSITIVE && boundaryUp) {
 				return getBoundModifier(ClimateType.HUMIDITY);
-			}else if(humidityMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
+			} else if (humidityMode == ClimateSourceMode.NEGATIVE && !boundaryUp) {
 				return getBoundModifier(ClimateType.HUMIDITY);
 			}
-		}else {
-			if(temperatureMode == ClimateSourceMode.POSITIVE && boundaryUp){
+		} else {
+			if (temperatureMode == ClimateSourceMode.POSITIVE && boundaryUp) {
 				return getBoundModifier(ClimateType.TEMPERATURE);
-			}else if(temperatureMode == ClimateSourceMode.NEGATIVE && !boundaryUp){
+			} else if (temperatureMode == ClimateSourceMode.NEGATIVE && !boundaryUp) {
 				return getBoundModifier(ClimateType.TEMPERATURE);
 			}
 		}
@@ -79,16 +79,16 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	protected float getBoundModifier(ClimateType type) {
 		return boundModifier;
 	}
-	
+
 	protected float getChange(ClimateType type) {
 		return change;
 	}
-	
+
 	@Override
 	public boolean isActive() {
 		return isActive;
 	}
-	
+
 	@Override
 	public boolean affectClimateType(ClimateType type) {
 		return sourceType.affectClimateType(type);
@@ -98,39 +98,39 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	public IClimateSourceOwner getOwner() {
 		return owner;
 	}
-	
+
 	@Override
 	public void onAdded(IClimateContainer container) {
 		this.container = container;
 	}
-	
+
 	@Override
 	public void onRemoved(IClimateContainer container) {
 		this.container = null;
 	}
-	
+
 	public void update() {
-		if(!addedToManager){
+		if (!addedToManager) {
 			onLoad();
 		}
 	}
-	
+
 	public void onLoad() {
 		World world = owner.getWorldObj();
-		if(!addedToManager && !world.isRemote) {
+		if (!addedToManager && !world.isRemote) {
 			GreenhouseManager.climateManager.addSource(owner);
 			addedToManager = true;
 		}
-		
+
 	}
-	
+
 	public void invalidate() {
 		this.onChunkUnload();
 	}
-	
+
 	public void onChunkUnload() {
 		World world = owner.getWorldObj();
-		if(addedToManager &&!world.isRemote) {
+		if (addedToManager && !world.isRemote) {
 			GreenhouseManager.climateManager.removeSource(owner);
 			addedToManager = false;
 		}
@@ -157,7 +157,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 			} else if (ClimateStates.isNearTarget(currentState, targetState)) {
 				return change;
 			}
-			if(oppositeType != null) {
+			if (oppositeType != null) {
 				//If the state is not already zero, remove one change state from the state.
 				change = getChange(oppositeType, defaultState, currentState);
 				change = ClimateStates.INSTANCE.create(-change.getTemperature(), -change.getHumidity(), ClimateStateType.EXTENDED);
@@ -165,7 +165,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		} else if (validType == null && oppositeType != null) {
 			//Remove the resources if the owner has enough resources and the state is not the default state.
 			removeResources(state, oppositeType);
-		} else if(validType != null){
+		} else if (validType != null) {
 			change = getChange(validType, targetState, previousState);
 			IClimateState changedState = state.add(change.scale(1 / sizeModifier));
 			boolean couldWork = canWork(changedState, oppositeType);
@@ -179,20 +179,17 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		if (ClimateStates.isZero(state) || ClimateStates.isNearZero(state)) {
 			state = ClimateStates.extendedZero();
 		}
-		if (false) {
-			state = ClimateStates.extendedZero();
-		}
 		setState(state);
 		return change;
 	}
 
-	protected void isNotValid(){
-		
+	protected void isNotValid() {
+
 	}
-	
-	protected void beforeWork(){
+
+	protected void beforeWork() {
 	}
-	
+
 	/**
 	 * @return true if the source can work, false if it can not.
 	 */
@@ -215,11 +212,11 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 		boolean canChangeTemperature = sourceType.canChangeTemperature() && canChange(state.getTemperature(), target.getTemperature(), temperatureMode);
 		return canChangeHumidity ? canChangeTemperature ? ClimateSourceType.BOTH : ClimateSourceType.HUMIDITY : canChangeTemperature ? ClimateSourceType.TEMPERATURE : null;
 	}
-	
-	private boolean canChange(float value, float target, ClimateSourceMode mode){
-		if(mode == ClimateSourceMode.POSITIVE && value < target){
+
+	private boolean canChange(float value, float target, ClimateSourceMode mode) {
+		if (mode == ClimateSourceMode.POSITIVE && value < target) {
 			return true;
-		}else if(mode == ClimateSourceMode.NEGATIVE && value > target){
+		} else if (mode == ClimateSourceMode.NEGATIVE && value > target) {
 			return true;
 		}
 		return false;

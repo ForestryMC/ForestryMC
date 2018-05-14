@@ -1,0 +1,49 @@
+{
+	"title": "农场齿轮箱（能量输入）",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 2
+	},
+	"content": [
+		[
+			{
+				"text": "你需要农场齿轮箱才能驱动农场，并让它自动收获作物。"
+			},
+			{
+				"text": "多个齿轮箱可以加快农场工作速度。",
+				"paragraph": true
+			},
+			{
+				"text": "红石通量",
+				"color": "red",
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "每个农场齿轮箱都需要有红石通量（RF）的输入方能工作。只需要让某种 RF 能量源接上去就可以了。",
+				"color": "red"
+			}
+		],
+		[
+			{
+				"text": "农场工作加速",
+				"color": "dark_purple"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "一个齿轮箱会让农场以 1 个单位的速度工作；自然地，多个齿轮箱就会让农场的工作速度加快。",
+				"color": "dark_purple"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_gearbox_brick"
+				]
+			}
+		]
+	]
+}

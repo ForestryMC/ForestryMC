@@ -1,0 +1,20 @@
+{
+	"title": "信件",
+	"icon":{
+		"item": "forestry:letters"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:letter",
+					"forestry:letter_recycling"
+				]
+			},
+			{
+				"text": "信件可以通过信箱派送到别的信箱或贸易站中。手持信件右击信箱以发信。信件必须有邮票才能送出。"
+			}
+		]
+	]
+}

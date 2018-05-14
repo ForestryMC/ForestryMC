@@ -10,7 +10,26 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -33,16 +52,6 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
@@ -78,6 +87,31 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
 		markDirty();
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+			super.hasCapability(capability, facing);
+	}
+
+	@Override
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (super.hasCapability(capability, facing)) {
+			return super.getCapability(capability, facing);
+		}
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (facing != null) {
+				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+			} else {
+				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+			}
+		}
+		return null;
 	}
 
 	/* IHousing */

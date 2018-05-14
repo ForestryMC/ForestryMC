@@ -1,0 +1,44 @@
+{
+	"core": [
+		"core/analyzer",
+		"core/ores",
+		"core/portable_alyzer",
+		"core/soldering_iron",
+		"core/tubes",
+		"core/fertilizer_compound",
+		"core/pipette",
+		"core/escritoire",
+		"core/humus",
+		"core/bog_earth",
+		"core/circuit_board",
+		"core/compost",
+		"core/casings",
+		"core/gears",
+		"core/resources",
+		"core/wrench"
+	],
+	"factory": [
+		"core/bottler",
+		"core/carpenter",
+		"core/centrifuge",
+		"core/fabricator",
+		"core/fermenter",
+		"core/moistener",
+		"core/rainmaker",
+		"core/raintank",
+		"core/squeezer",
+		"core/still"
+	],
+	"worktable": [
+		"core/core/worktable"
+	],
+	"energy": [
+		"core/peat_engine",
+		"core/biogas_engine",
+		"core/clockwork_engine"
+	],
+	"industrialcraft2": [
+		"core/ic2_generator",
+		"core/ic2_eletrical_engine"
+	]
+}

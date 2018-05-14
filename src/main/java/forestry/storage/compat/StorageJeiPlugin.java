@@ -1,11 +1,8 @@
 package forestry.storage.compat;
 
-import net.minecraft.util.ResourceLocation;
-
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import forestry.storage.ModuleBackpacks;
 import forestry.storage.items.ItemRegistryBackpacks;
 
@@ -17,7 +14,7 @@ import mezz.jei.api.JEIPlugin;
 public class StorageJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.BACKPACKS))) {
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
 			return;
 		}
 
@@ -47,9 +44,11 @@ public class StorageJeiPlugin implements IModPlugin {
 				items.builderBackpack,
 				items.builderBackpackT2
 		);
-		JeiUtil.addDescription(registry,
-				items.apiaristBackpack,
-				items.lepidopteristBackpack
-		);
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			JeiUtil.addDescription(registry, items.apiaristBackpack);
+		}
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+			JeiUtil.addDescription(registry, items.lepidopteristBackpack);
+		}
 	}
 }

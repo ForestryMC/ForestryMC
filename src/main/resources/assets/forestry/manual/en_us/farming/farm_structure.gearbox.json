@@ -1,0 +1,49 @@
+{
+	"title": "Farm Gearbox (Power)",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 2
+	},
+	"content": [
+		[
+			{
+				"text": "To power your Farm and have it automatically harvest crops, you will need at least one Farm Gearbox."
+			},
+			{
+				"text": "Farm operations can be hasted with additional Gearboxes.",
+				"paragraph": true
+			},
+			{
+				"text": "Redstone Flux Energy",
+				"color": "red",
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Each Farm Gearbox requires Redstone Flux Energy (RF) in order to work. You can supply them, by connecting any RF power source.",
+				"color": "red"
+			}
+		], 
+		[
+			{
+				"text": "Speeding farm",
+				"color": "dark_purple"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Each gearbox basically tells the farm to run 1 work unit, so multiple gearboxes tells the farm to do work more often.",
+				"color": "dark_purple"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_gearbox_brick"
+				]
+			}
+		]
+	]
+}
