@@ -543,7 +543,6 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			int remainder = i % 16;
 			int quotient = i / 16;
