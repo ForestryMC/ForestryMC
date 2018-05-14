@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:honeyed_slice",
+    "count": 4
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:honey_drop",
+      "data": 0
+    },
+    "X": {
+      "item": "minecraft:bread"
+    }
+  },
+  "group": "apiculture"
+}

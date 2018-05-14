@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:greenhouse",
+    "data": 3
+  },
+  "pattern": [
+    " X ",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "greenhouse",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#GEARTIN"
+    },
+    "X": {
+      "item": "forestry:greenhouse",
+      "data": 0
+    }
+  },
+  "group": "greenhouse"
+}

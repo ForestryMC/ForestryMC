@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "minecraft:paper"
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#EMPTIEDLETTER"
+    }
+  },
+  "group": "mail"
+}

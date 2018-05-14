@@ -38,7 +38,6 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,6 +76,7 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
@@ -338,7 +338,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		ITreekeepingMode mode = getTreekeepingMode(modeName);
 		Preconditions.checkNotNull(mode);
 		setTreekeepingMode(world, mode);
-		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);
+		Log.debug("Set Treekeeping mode for a world to " + mode);
 
 		return activeTreekeepingMode;
 	}
@@ -362,7 +362,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			}
 		}
 
-		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
+		Log.debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
 		return treekeepingModes.get(0);
 	}
 

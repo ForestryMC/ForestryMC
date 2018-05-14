@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:mailbox",
+    "data": 0
+  },
+  "pattern": [
+    " # ",
+    "#Y#",
+    "XXX"
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    },
+    "X": {
+      "item": "#CHESTWOOD"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "mail"
+}

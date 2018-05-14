@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:ash_brick",
+    "data": 0
+  },
+  "pattern": [
+    "A#A",
+    "# #",
+    "A#A"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#DUSTASH"
+    },
+    "#": {
+      "item": "minecraft:brick"
+    }
+  },
+  "group": "core"
+}

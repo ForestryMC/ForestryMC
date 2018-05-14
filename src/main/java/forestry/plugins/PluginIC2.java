@@ -63,6 +63,7 @@ import forestry.energy.circuits.CircuitElectricEfficiency;
 import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableBasicIC2Crop;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -130,7 +131,7 @@ public class PluginIC2 extends BlankForestryModule {
 		rubber = IC2Items.getItem("crafting", "rubber");
 		fertilizer = IC2Items.getItem("crop_res","fertilizer");
 
-		IFarmProperties rubberFarm = FarmRegistry.getInstance().registerLogic("farmRubber", FarmLogicRubber::new);
+		IFarmProperties rubberFarm = FarmRegistry.getInstance().registerLogic(ForestryFarmIdentifier.RUBBER, FarmLogicRubber::new);
 
 		Circuits.farmRubberManual = new CircuitFarmLogic("manualRubber", rubberFarm, true);
 
@@ -158,8 +159,8 @@ public class PluginIC2 extends BlankForestryModule {
 
 		Circuits.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuits.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
-		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 7, 20);
-		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 15, 40);
+		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 4, 10);
+		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 7, 20);
 
 		blocks.electricalEngine.init();
 		blocks.generator.init();
@@ -302,7 +303,7 @@ public class PluginIC2 extends BlankForestryModule {
 				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			}
 
-			FarmRegistry.getInstance().registerFarmables("farmOrchard", new FarmableBasicIC2Crop());
+			FarmRegistry.getInstance().registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableBasicIC2Crop());
 		}
 
 

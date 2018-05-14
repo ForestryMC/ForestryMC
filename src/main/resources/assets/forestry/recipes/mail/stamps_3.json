@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:stamps",
+    "data": 3,
+    "count": 9
+  },
+  "pattern": [
+    "XXX",
+    "###",
+    "ZZZ"
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "#INGOTGOLD"
+    },
+    "Z": {
+      "item": "forestry:honey_drop",
+      "data": 0
+    }
+  },
+  "group": "mail"
+}

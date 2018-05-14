@@ -3,6 +3,8 @@ package forestry.sorting;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
@@ -18,7 +20,7 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.OreDictUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.modules.BlankForestryModule;
@@ -73,39 +75,25 @@ public class ModuleSorting extends BlankForestryModule {
 			return;
 		}
 		String id = ForestryModuleUids.SORTING;
+		List<Object> ingredients = new ArrayList<>();
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
-					"WDW",
-					"PGP",
-					"BDB",
-					'D', OreDictUtil.GEM_DIAMOND,
-					'W', OreDictUtil.PLANK_WOOD,
-					'G', OreDictUtil.BLOCK_GLASS,
-					'B', OreDictUtil.GEAR_BRONZE,
-					'P', ModuleApiculture.getItems().propolis);
+			ingredients.add(ModuleApiculture.getItems().propolis);
 		}
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
-					"WDW",
-					"FGF",
-					"BDB",
-					'D', OreDictUtil.GEM_DIAMOND,
-					'W', OreDictUtil.PLANK_WOOD,
-					'G', OreDictUtil.BLOCK_GLASS,
-					'B', OreDictUtil.GEAR_BRONZE,
-					'F', OreDictUtil.FRUIT_FORESTRY);
+			ingredients.add(OreDictUtil.FRUIT_FORESTRY);
 		}
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			RecipeUtil.addRecipe(id, new ItemStack(getBlocks().filter, 2),
-					"WDW",
-					"FGF",
-					"BDB",
-					'D', OreDictUtil.GEM_DIAMOND,
-					'W', OreDictUtil.PLANK_WOOD,
-					'G', OreDictUtil.BLOCK_GLASS,
-					'B', OreDictUtil.GEAR_BRONZE,
-					'F', ModuleLepidopterology.getItems().caterpillarGE);
+			ingredients.add(ModuleLepidopterology.getItems().caterpillarGE);
 		}
+		RecipeConverter.addRecipeMultipleIngredients(new ItemStack(getBlocks().filter, 2), id,
+				"WDW",
+				"FGF",
+				"BDB",
+				'D', OreDictUtil.GEM_DIAMOND,
+				'W', OreDictUtil.PLANK_WOOD,
+				'G', OreDictUtil.BLOCK_GLASS,
+				'B', OreDictUtil.GEAR_BRONZE,
+				'F', ingredients);
 	}
 
 	@Override

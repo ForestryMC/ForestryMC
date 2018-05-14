@@ -52,7 +52,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -425,7 +424,7 @@ public class ModuleApiculture extends BlankForestryModule {
 					flowerType.getName().contains("sapling") ||
 					flowerType == BlockFlowerPot.EnumFlowerType.DEAD_BUSH ||
 					flowerType == BlockFlowerPot.EnumFlowerType.FERN) {
-				continue;
+				//Don't register these as flowers
 			} else if (flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_RED ||
 					flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_BROWN) {
 				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
@@ -938,7 +937,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				continue;
 			}
 
-			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
+			Log.debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
 		}
 	}

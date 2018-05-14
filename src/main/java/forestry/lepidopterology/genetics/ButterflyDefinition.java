@@ -13,9 +13,11 @@ package forestry.lepidopterology.genetics;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
+
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleSpeciesRegisterEvent;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -30,9 +32,6 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.utils.StringUtil;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.MinecraftForge;
 
 public enum ButterflyDefinition implements IButterflyDefinition {
 	CabbageWhite(ButterflyBranchDefinition.Pieris, "cabbageWhite", "rapae", new Color(0xccffee), true, 1.0f) {
@@ -323,7 +322,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 	}
-	
+
 	public static void preInit() {
 		// just used to initialize the enums
 	}

@@ -22,6 +22,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableDoubleCrop;
 import forestry.modules.ForestryModuleUids;
 
@@ -53,8 +54,7 @@ public class PluginImmersiveEngineering extends CompatPlugin {
 					IBlockState mature = defaultState.withProperty(age, (Comparable) bottom4.get());
 					IBlockState topMature = defaultState.withProperty(age, (Comparable) top0.get());
 
-					farmRegistry.registerFarmables("farmWheat", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, false));
-					farmRegistry.registerFarmables("farmOrchard", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
+					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
 
 					RecipeManagers.squeezerManager.addRecipe(10, hempSeed, Fluids.SEED_OIL.getFluid(seedAmount));
 				}

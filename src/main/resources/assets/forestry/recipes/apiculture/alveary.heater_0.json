@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "forestry:alveary.heater",
+    "data": 0
+  },
+  "pattern": [
+    "#I#",
+    " X ",
+    "YYY"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:thermionic_tubes",
+      "data": 4
+    },
+    "X": {
+      "item": "forestry:alveary.plain",
+      "data": 0
+    },
+    "I": {
+      "item": "#INGOTIRON"
+    },
+    "Y": {
+      "item": "#STONE"
+    }
+  },
+  "group": "apiculture"
+}

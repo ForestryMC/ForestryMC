@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "forestry:engine_biogas",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    " X ",
+    "YVY"
+  ],
+  "conditions": [
+    {
+      "module": "energy",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTBRONZE"
+    },
+    "V": {
+      "item": "minecraft:piston"
+    },
+    "X": {
+      "item": "#BLOCKGLASS"
+    },
+    "Y": {
+      "item": "#GEARBRONZE"
+    }
+  },
+  "group": "energy"
+}

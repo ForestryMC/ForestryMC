@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
+import forestry.arboriculture.IWoodTyped;
 
 public abstract class BlockArbPlanks extends BlockForestryPlanks<EnumForestryWoodType> {
 	public static List<BlockArbPlanks> create(boolean fireproof) {

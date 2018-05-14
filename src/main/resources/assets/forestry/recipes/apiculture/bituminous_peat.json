@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:bituminous_peat"
+  },
+  "pattern": [
+    " # ",
+    "XYX",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#DUSTASH"
+    },
+    "X": {
+      "item": "forestry:peat"
+    },
+    "Y": {
+      "item": "forestry:propolis",
+      "data": 0
+    }
+  },
+  "group": "apiculture"
+}

@@ -12,6 +12,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.farming.logic.farmables.FarmableRusticGrape;
 import forestry.farming.logic.farmables.FarmableRusticSapling;
@@ -50,14 +51,14 @@ public class PluginRustic extends CompatPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, grapes, Fluids.JUICE.getFluid(juiceAmount / 12));
 		}
 		if (grapeLeaves != null) {
-			farmRegistry.registerFarmables("farmOrchard", new FarmableRusticGrape(grapeLeaves));
+			farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableRusticGrape(grapeLeaves));
 		}
 
 		ItemStack sapling = getItemStack("sapling");
 		ItemStack ironBerries = getItemStack("ironberries");
 		ItemStack olives = getItemStack("olives");
 		if (sapling != null && ironBerries != null && olives != null) {
-			farmRegistry.registerFarmables("farmArboreal", new FarmableRusticSapling(sapling.getItem(), new ItemStack[]{ironBerries, olives}));
+			farmRegistry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableRusticSapling(sapling.getItem(), new ItemStack[]{ironBerries, olives}));
 		}
 
 		for (int i = 0; i < fruits.size(); i++) {
@@ -72,7 +73,7 @@ public class PluginRustic extends CompatPlugin {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount / 25));
 			}
 			if (seeds != null && block != null) {
-				farmRegistry.registerFarmables("farmOrchard", new FarmableAgingCrop(seeds, block, cropAge, 3, 2));
+				farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableAgingCrop(seeds, block, cropAge, 3, 2));
 			}
 		}
 	}

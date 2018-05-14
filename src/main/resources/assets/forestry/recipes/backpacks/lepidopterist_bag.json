@@ -1,0 +1,34 @@
+{
+  "result": {
+    "item": "forestry:lepidopterist_bag"
+  },
+  "pattern": [
+    "X#X",
+    "VYV",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "backpacks",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:wool",
+      "data": 0
+    },
+    "V": {
+      "item": "#STICKWOOD"
+    },
+    "X": {
+      "item": "minecraft:string"
+    },
+    "Y": {
+      "item": "forestry:butterfly_chest",
+      "data": 0
+    }
+  },
+  "group": "backpacks"
+}

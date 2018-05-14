@@ -1,0 +1,22 @@
+{
+  "output": {
+    "fireproof": true,
+    "count": 6,
+    "blockKind": "SLAB"
+  },
+  "input": {
+    "fireproof": true,
+    "blockKind": "PLANKS"
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "arboriculture",
+      "type": "module"
+    }
+  ],
+  "type": "forestry:woodType",
+  "group": "arboriculture"
+}

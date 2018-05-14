@@ -10,11 +10,32 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Random;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
@@ -28,24 +49,6 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable {
@@ -168,17 +171,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	/* ITriggerProvider */
 	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		return null;
-//	}
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+	//		return null;
+	//	}
+	//
+	//	@Optional.Method(modid = "BuildCraftAPI|statements")
+	//	@Override
+	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+	//		return null;
+	//	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {

@@ -12,6 +12,7 @@ package forestry.core;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -70,6 +71,7 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -396,9 +398,8 @@ public class ModuleCore extends BlankForestryModule {
 			ItemStack canWater = fluidItems.getContainer(EnumContainerType.CAN, FluidRegistry.WATER);
 			ItemStack waxCapsuleWater = fluidItems.getContainer(EnumContainerType.CAPSULE, FluidRegistry.WATER);
 			ItemStack refractoryWater = fluidItems.getContainer(EnumContainerType.REFRACTORY, FluidRegistry.WATER);
-			RecipeUtil.addRecipe(id, bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', OreDictUtil.SAND);
-			RecipeUtil.addRecipe(id, bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', OreDictUtil.SAND);
-			RecipeUtil.addRecipe(id, bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', OreDictUtil.SAND);
+			List<ItemStack> containers = Lists.newArrayList(canWater, waxCapsuleWater, refractoryWater);
+			RecipeConverter.addRecipeMultipleIngredients(bogEarth, id, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', containers, 'Y', OreDictUtil.SAND);
 		}
 
 		// Crafting Material

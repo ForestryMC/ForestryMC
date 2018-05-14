@@ -103,6 +103,7 @@ import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -297,101 +298,42 @@ public class ModuleArboriculture extends BlankForestryModule {
 		Collections.addAll(allWoodTypes, EnumForestryWoodType.VALUES);
 		Collections.addAll(allWoodTypes, EnumVanillaWoodType.VALUES);
 
+		//logs to planks
+		RecipeConverter.addWoodTypeRecipeShapeless(id, getBlocks().logs.get(0), getBlocks().planks.get(0), 4);
+		RecipeConverter.addWoodTypeRecipeShapeless(id, getBlocks().logsFireproof.get(0), getBlocks().planksFireproof.get(0), 4);
+
+		//planks to slabs
+		String[] planks_slabs_pattern = {"###"};
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().slabs.get(0), planks_slabs_pattern, 6);
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().slabsFireproof.get(0), planks_slabs_pattern, 6);
+
+		//fences
+		String[] fences_pattern = {"#X#", "#X#"};
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().fences.get(0), fences_pattern, 3);
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().fencesFireproof.get(0), fences_pattern, 3);
+
+		//fence gates
+		String[] fence_gate_pattern = {"X#X", "X#X"};
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().fenceGates.get(0), fence_gate_pattern, 1);
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().fenceGatesFireproof.get(0), fence_gate_pattern, 1);
+
+		//stairs
+		String[] stair_pattern = {"#  ", "## ", "###"};
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().stairs.get(0), stair_pattern, 4);
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().stairsFireproof.get(0), stair_pattern, 4);
+
+		//doors
+		String[] door_pattern = {"## ", "## ", "## "};
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().doors.get(0), door_pattern, 3);
+		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().doors.get(0), door_pattern, 3);
+
+
 		for (IWoodType woodType : allWoodTypes) {
 			ItemStack planks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
 			ItemStack logs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
-			ItemStack slabs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.SLAB, false);
-			ItemStack fences = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE, false);
-			ItemStack fenceGates = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE_GATE, false);
-			ItemStack stairs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.STAIRS, false);
-			ItemStack doors = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.DOOR, false);
 
 			ItemStack fireproofPlanks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, true);
 			ItemStack fireproofLogs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, true);
-			ItemStack fireproofSlabs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.SLAB, true);
-			ItemStack fireproofFences = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE, true);
-			ItemStack fireproofFenceGates = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.FENCE_GATE, true);
-			ItemStack fireproofStairs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.STAIRS, true);
-
-			if (woodType instanceof EnumForestryWoodType) {
-				planks.setCount(4);
-				logs.setCount(1);
-				RecipeUtil.addShapelessRecipe(id, planks.copy(), logs.copy());
-
-				slabs.setCount(6);
-				planks.setCount(1);
-				RecipeUtil.addRecipe(id, slabs.copy(), "###", '#', planks.copy());
-
-				fences.setCount(3);
-				planks.setCount(1);
-				RecipeUtil.addRecipe(id, fences.copy(),
-						"#X#",
-						"#X#",
-						'#', planks.copy(), 'X', "stickWood");
-
-				fenceGates.setCount(1);
-				planks.setCount(1);
-				RecipeUtil.addRecipe(id, fenceGates.copy(),
-						"X#X",
-						"X#X",
-						'#', planks.copy(), 'X', "stickWood");
-
-				stairs.setCount(4);
-				planks.setCount(1);
-				RecipeUtil.addRecipe(id, stairs.copy(),
-						"#  ",
-						"## ",
-						"###",
-						'#', planks.copy());
-
-				doors.setCount(3);
-				planks.setCount(1);
-				RecipeUtil.addRecipe(id, doors.copy(),
-						"## ",
-						"## ",
-						"## ",
-						'#', planks.copy());
-			}
-
-			fireproofPlanks.setCount(4);
-			fireproofLogs.setCount(1);
-			RecipeUtil.addShapelessRecipe(id, fireproofPlanks.copy(), fireproofLogs.copy());
-
-			fireproofSlabs.setCount(6);
-			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(id, fireproofSlabs.copy(),
-					"###",
-					'#', fireproofPlanks.copy());
-
-			fireproofFences.setCount(3);
-			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(id, fireproofFences.copy(),
-					"#X#",
-					"#X#",
-					'#', fireproofPlanks.copy(), 'X', "stickWood");
-
-			fireproofFenceGates.setCount(1);
-			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(id, fireproofFenceGates.copy(),
-					"X#X",
-					"X#X",
-					'#', fireproofPlanks.copy(), 'X', "stickWood");
-
-			fireproofStairs.setCount(4);
-			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(id, fireproofStairs.copy(),
-					"#  ",
-					"## ",
-					"###",
-					'#', fireproofPlanks.copy());
-
-			doors.setCount(3);
-			fireproofPlanks.setCount(1);
-			RecipeUtil.addRecipe(id, doors.copy(),
-					"## ",
-					"## ",
-					"## ",
-					'#', fireproofPlanks.copy());
 
 			// Fabricator recipes
 			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {

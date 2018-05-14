@@ -14,6 +14,9 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
@@ -39,6 +42,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.Log;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -138,18 +142,23 @@ public class ModuleFluids extends BlankForestryModule {
 			return;
 		}
 		String id = ForestryModuleUids.FLUIDS;
+		List<ItemStack> containers = new ArrayList<>();
 		for (EnumContainerType containerType : EnumContainerType.values()) {
 			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
 				continue;
 			}
-			RecipeUtil.addRecipe(id, new ItemStack(Items.CAKE),
-					"AAA",
-					"BEB",
-					"CCC",
-					'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
-					'B', Items.SUGAR,
-					'C', Items.WHEAT,
-					'E', Items.EGG);
+			containers.add(items.getContainer(containerType, Fluids.MILK.getFluid()));
 		}
+		if(containers.isEmpty()) {
+			return;
+		}
+		RecipeConverter.addRecipeMultipleIngredients(new ItemStack(Items.CAKE), id,
+				"AAA",
+				"BEB",
+				"CCC",
+				'A', containers,
+				'B', Items.SUGAR,
+				'C', Items.WHEAT,
+				'E', Items.EGG);
 	}
 }

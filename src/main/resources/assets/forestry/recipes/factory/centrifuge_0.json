@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:centrifuge",
+    "data": 0
+  },
+  "pattern": [
+    "X#X",
+    "XYX",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "factory",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#INGOTCOPPER"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "factory"
+}

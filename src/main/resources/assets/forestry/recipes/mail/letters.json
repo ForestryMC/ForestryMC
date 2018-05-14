@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:letters"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "forestry:propolis",
+      "data": 32767
+    }
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "mail"
+}

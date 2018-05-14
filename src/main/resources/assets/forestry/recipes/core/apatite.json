@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "forestry:apatite",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#BLOCKAPATITE"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "group": "core"
+}

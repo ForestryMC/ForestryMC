@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "forestry:bee_combs_0",
+    "data": 15
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:bee_combs",
+      "data": 15
+    }
+  },
+  "group": "apiculture"
+}

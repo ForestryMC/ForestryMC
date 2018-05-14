@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "forestry:adventurer_bag"
+  },
+  "pattern": [
+    "X#X",
+    "VYV",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "backpacks",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:wool",
+      "data": 0
+    },
+    "V": {
+      "item": "minecraft:bone"
+    },
+    "X": {
+      "item": "minecraft:string"
+    },
+    "Y": {
+      "item": "#CHESTWOOD"
+    }
+  },
+  "group": "backpacks"
+}

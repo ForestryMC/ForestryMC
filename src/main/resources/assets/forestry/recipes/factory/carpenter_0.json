@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:carpenter",
+    "data": 0
+  },
+  "pattern": [
+    "X#X",
+    "XYX",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "factory",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#INGOTBRONZE"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "factory"
+}

@@ -1,0 +1,30 @@
+{
+  "result": {
+    "nbt": "{Glass:\"glasslime\"}",
+    "item": "forestry:greenhouse.window_up",
+    "data": 0,
+    "type": "minecraft:item_nbt"
+  },
+  "pattern": [
+    "SGS",
+    "GGG",
+    "GGG"
+  ],
+  "conditions": [
+    {
+      "module": "greenhouse",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "#STICKWOOD"
+    },
+    "G": {
+      "item": "minecraft:stained_glass",
+      "data": 5
+    }
+  },
+  "group": "greenhouse"
+}

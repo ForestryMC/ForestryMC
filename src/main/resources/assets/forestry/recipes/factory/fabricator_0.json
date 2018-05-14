@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "forestry:fabricator",
+    "data": 0
+  },
+  "pattern": [
+    "X#X",
+    "#Y#",
+    "XZX"
+  ],
+  "conditions": [
+    {
+      "module": "factory",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#INGOTGOLD"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    },
+    "Z": {
+      "item": "#CHESTWOOD"
+    }
+  },
+  "group": "factory"
+}

@@ -1,8 +1,10 @@
 package forestry.book;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -17,6 +19,7 @@ import forestry.book.proxy.ProxyBook;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.OreDictUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
@@ -61,12 +64,13 @@ public class ModuleBook extends BlankForestryModule {
 			return;
 		}
 		String id = ForestryModuleUids.BOOK;
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, OreDictUtil.DROP_HONEY);
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, OreDictUtil.TREE_SAPLING);
+		List<Object> ingredients = Lists.newArrayList(OreDictUtil.DROP_HONEY, OreDictUtil.TREE_SAPLING);
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			ItemRegistryLepidopterology itemsLepi = ModuleLepidopterology.getItems();
-			RecipeUtil.addShapelessRecipe(id, new ItemStack(getItems().book), Items.BOOK, itemsLepi.butterflyGE);
+			ingredients.add(itemsLepi.butterflyGE);
 		}
+		RecipeConverter.addRecipeMultipleIngredientsShapeless(new ItemStack(getItems().book), id, Items.BOOK, ingredients);
+
 	}
 
 	@Override

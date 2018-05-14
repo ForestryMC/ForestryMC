@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:resource_storage",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#GEMAPATITE"
+    }
+  },
+  "group": "core"
+}

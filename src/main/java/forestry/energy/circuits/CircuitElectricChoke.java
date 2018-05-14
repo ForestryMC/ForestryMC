@@ -14,6 +14,6 @@ public class CircuitElectricChoke extends CircuitElectricChange {
 
 	public CircuitElectricChoke(String uid) {
 		super(uid);
-		this.configureChange(-2, -10);
+		this.configureChange(-1, -5);
 	}
 }

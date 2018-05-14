@@ -1,0 +1,36 @@
+{
+  "result": {
+    "nbt": "{FarmBlock:5}",
+    "item": "forestry:ffarm",
+    "data": 0,
+    "type": "minecraft:item_nbt"
+  },
+  "pattern": [
+    "I#I",
+    "WCW"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:sandstone",
+      "data": 1
+    },
+    "C": {
+      "item": "forestry:thermionic_tubes",
+      "data": 1
+    },
+    "W": {
+      "item": "#SLABWOOD"
+    },
+    "I": {
+      "item": "#INGOTCOPPER"
+    }
+  },
+  "group": "farming"
+}

@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:climatiser",
+    "data": 1
+  },
+  "pattern": [
+    "T#T",
+    "#X#",
+    "T#T"
+  ],
+  "conditions": [
+    {
+      "module": "greenhouse",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    },
+    "T": {
+      "item": "forestry:thermionic_tubes",
+      "data": 4
+    },
+    "X": {
+      "item": "forestry:greenhouse",
+      "data": 0
+    }
+  },
+  "group": "greenhouse"
+}

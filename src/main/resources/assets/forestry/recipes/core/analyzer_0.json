@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:analyzer",
+    "data": 0
+  },
+  "pattern": [
+    "XTX",
+    " Y ",
+    "X X"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "T": {
+      "item": "forestry:portable_alyzer"
+    },
+    "X": {
+      "item": "#INGOTBRONZE"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "core"
+}

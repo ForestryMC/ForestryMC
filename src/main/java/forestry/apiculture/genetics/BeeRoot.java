@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -59,6 +58,7 @@ import forestry.apiculture.BeekeepingLogic;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.utils.Log;
 
 public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
@@ -183,7 +183,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public ISpeciesType getTypeForMutation(int position) {
-		switch (position){
+		switch (position) {
 			case 0:
 				return EnumBeeType.PRINCESS;
 			case 1:
@@ -323,7 +323,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		Preconditions.checkNotNull(mode);
 
 		setBeekeepingMode(world, mode);
-		FMLCommonHandler.instance().getFMLLogger().debug("Set beekeeping mode for a world to " + mode);
+		Log.debug("Set beekeeping mode for a world to " + mode);
 
 		return activeBeekeepingMode;
 	}
@@ -349,7 +349,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 			}
 		}
 
-		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
+		Log.debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
 		return beekeepingModes.get(0);
 	}
 

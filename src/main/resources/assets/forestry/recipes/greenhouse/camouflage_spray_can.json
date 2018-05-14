@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:camouflage_spray_can"
+  },
+  "pattern": [
+    "TTT",
+    "TCT",
+    "TCT"
+  ],
+  "conditions": [
+    {
+      "module": "greenhouse",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "C": {
+      "item": "forestry:crafting_material",
+      "data": 7
+    },
+    "T": {
+      "item": "#INGOTTIN"
+    }
+  },
+  "group": "greenhouse"
+}

@@ -27,11 +27,11 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.utils.ItemStackUtil;
 
 public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
-	private final NonNullList<NonNullList<ItemStack>> input;
-	private final NonNullList<String> oreDicts;
-	private int width;
-	private int height;
-	private boolean mirrored = true;
+	protected final NonNullList<NonNullList<ItemStack>> input;
+	protected final NonNullList<String> oreDicts;
+	protected int width;
+	protected int height;
+	protected boolean mirrored = true;
 
 	public ShapedRecipeCustom(ItemStack result, Object... recipe) {
 		super(null, result, recipe);

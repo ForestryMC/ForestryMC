@@ -1,0 +1,24 @@
+{
+  "output": {
+    "fireproof": false,
+    "count": 4,
+    "blockKind": "STAIRS"
+  },
+  "input": {
+    "fireproof": false,
+    "blockKind": "PLANKS"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "arboriculture",
+      "type": "module"
+    }
+  ],
+  "type": "forestry:woodType",
+  "group": "arboriculture"
+}

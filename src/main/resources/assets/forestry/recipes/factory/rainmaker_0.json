@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:rainmaker",
+    "data": 0
+  },
+  "pattern": [
+    "X#X",
+    "#Y#",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "factory",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#GEARTIN"
+    },
+    "Y": {
+      "item": "forestry:hardened_machine"
+    }
+  },
+  "group": "factory"
+}

@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "forestry:frame_untreated"
+  },
+  "pattern": [
+    "###",
+    "#S#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#STICKWOOD"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "group": "apiculture"
+}

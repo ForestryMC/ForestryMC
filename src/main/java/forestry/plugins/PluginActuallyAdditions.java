@@ -15,6 +15,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -75,7 +76,7 @@ public class PluginActuallyAdditions extends CompatPlugin {
 			Block plantBlock = getBlock(blockName);
 			if (plantBlock != null) {
 				FarmableAgingCrop crop = new FarmableAgingCrop(new ItemStack(seedItem), plantBlock, BlockCrops.AGE, 7, 0);
-				ForestryAPI.farmRegistry.registerFarmables("farmCrops", crop);
+				ForestryAPI.farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, crop);
 			}
 		}
 	}

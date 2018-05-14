@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "forestry:candle",
+    "data": 1
+  },
+  "ingredients": [
+    {
+      "item": "forestry:candle",
+      "data": 1
+    }
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "apiculture"
+}

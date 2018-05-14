@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "forestry:farm_gourd",
+    "data": 0
+  },
+  "pattern": [
+    "GTG",
+    "TCT",
+    "GBG"
+  ],
+  "conditions": [
+    {
+      "module": "cultivation",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "B": {
+      "item": "forestry:chipsets",
+      "data": 0
+    },
+    "C": {
+      "item": "forestry:flexible_casing"
+    },
+    "T": {
+      "item": "forestry:thermionic_tubes",
+      "data": 11
+    },
+    "G": {
+      "item": "#BLOCKGLASS"
+    }
+  },
+  "group": "cultivation"
+}

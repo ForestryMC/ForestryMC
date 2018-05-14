@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:fermenter",
+    "data": 0
+  },
+  "pattern": [
+    "X#X",
+    "#Y#",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "factory",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#GEARBRONZE"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "factory"
+}

@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:wrench"
+  },
+  "pattern": [
+    "# #",
+    " # ",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTBRONZE"
+    }
+  },
+  "group": "core"
+}

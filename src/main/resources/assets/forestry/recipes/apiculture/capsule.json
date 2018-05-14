@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:capsule",
+    "count": 4
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:beeswax"
+    }
+  },
+  "group": "apiculture"
+}

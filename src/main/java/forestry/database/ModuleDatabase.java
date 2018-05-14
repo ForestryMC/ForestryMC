@@ -17,7 +17,7 @@ import forestry.core.config.Constants;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.OreDictUtil;
 import forestry.database.blocks.BlockRegistryDatabase;
 import forestry.database.network.PacketRegistryDatabase;
@@ -83,25 +83,23 @@ public class ModuleDatabase extends BlankForestryModule {
 				}
 			}
 		}
+
 	}
 
 	private void addRecipe(List<Object> possibleSpecial, Object firstChest, Object secondChest) {
 		String id = ForestryModuleUids.DATABASE;
-
-		for (Object special : possibleSpecial) {
-			ItemRegistryCore coreItems = ModuleCore.getItems();
-			RecipeUtil.addRecipe(id, getBlocks().database,
-					"I#I",
-					"FYS",
-					"WCW",
-					'#', coreItems.portableAlyzer,
-					'I', "ingotBronze",
-					'W', "plankWood",
-					'C', special,
-					'Y', coreItems.sturdyCasing,
-					'F', firstChest,
-					'S', secondChest);
-		}
+		ItemRegistryCore coreItems = ModuleCore.getItems();
+		RecipeConverter.addRecipeMultipleIngredients(new ItemStack(getBlocks().database), id,
+				"I#I",
+				"FYS",
+				"WCW",
+				'#', coreItems.portableAlyzer,
+				'I', "ingotBronze",
+				'W', "plankWood",
+				'C', possibleSpecial,
+				'Y', coreItems.sturdyCasing,
+				'F', firstChest,
+				'S', secondChest);
 	}
 
 	private String getIngredientName(Object o) {

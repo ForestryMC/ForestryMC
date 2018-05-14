@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:bog_earth",
+    "data": 0,
+    "count": 6
+  },
+  "pattern": [
+    "#Y#",
+    "YXY",
+    "#Y#"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "minecraft:water_bucket"
+    },
+    "Y": {
+      "item": "#SAND"
+    }
+  },
+  "group": "core"
+}
