@@ -409,11 +409,13 @@ public class RecipeConverter {
 		json.put("group", moduleUID);
 
 
-		File f = new File(moduleDir, inputType.getBlockKind().getName() + "_" + outputType.getBlockKind().getName() + ".json");
+		String fpsuffix = inputType.isFireproof() ? "_fireproof" : "";
+		String fileName = inputType.getBlockKind().getName() + "_" + outputType.getBlockKind().getName() + fpsuffix;
+		File f = new File(moduleDir, fileName + ".json");
 		String suffix = "";
 		while (f.exists()) {
 			suffix += "_alt";
-			f = new File(moduleDir, inputType.getBlockKind().getName() + "_" + outputType.getBlockKind().getName() + suffix + ".json");
+			f = new File(moduleDir, fileName + suffix + ".json");
 		}
 
 
