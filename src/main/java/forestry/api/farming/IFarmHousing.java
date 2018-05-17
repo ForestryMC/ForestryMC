@@ -62,7 +62,7 @@ public interface IFarmHousing extends IErrorLogicSource {
 	}
 
 	default boolean canPlantSoil(boolean manual){
-		return true;
+		return !manual;
 	}
 
 	/* INTERACTION WITH HATCHES */
