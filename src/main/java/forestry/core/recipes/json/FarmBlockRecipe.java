@@ -12,14 +12,20 @@
  */
 package forestry.core.recipes.json;
 
+import com.google.gson.JsonObject;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import forestry.core.utils.InventoryUtil;
@@ -49,7 +55,7 @@ public class FarmBlockRecipe extends ShapedOreRecipe {
 		if (inputStack.isEmpty() || !tag.hasKey("FarmBlock")) {
 			return ItemStack.EMPTY;
 		}
-		if(!outputStack.hasTagCompound()) {
+		if (!outputStack.hasTagCompound()) {
 			outputStack.setTagCompound(new NBTTagCompound());
 		}
 		outputStack.getTagCompound().setInteger("FarmBlock", tag.getInteger("FarmBlock"));
@@ -59,5 +65,20 @@ public class FarmBlockRecipe extends ShapedOreRecipe {
 	@Override
 	public boolean isDynamic() {
 		return true;
+	}
+
+	public static class Factory implements IRecipeFactory {
+		@Override
+		public IRecipe parse(JsonContext context, JsonObject json) {
+			ShapedOreRecipe oreRecipe = ShapedOreRecipe.factory(context, json);
+
+			CraftingHelper.ShapedPrimer primer = new CraftingHelper.ShapedPrimer();
+			primer.width = oreRecipe.getRecipeWidth();
+			primer.height = oreRecipe.getRecipeHeight();
+			primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
+			primer.input = oreRecipe.getIngredients();
+
+			return new FarmBlockRecipe(new ResourceLocation(oreRecipe.getGroup()), oreRecipe.getRecipeOutput(), primer);
+		}
 	}
 }
