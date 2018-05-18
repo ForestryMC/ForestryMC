@@ -10,28 +10,35 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-// TODO: Buildcraft for 1.9
-public class TriggerLowInput {//extends Trigger {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-//	private final float threshold;
-//
-//	public TriggerLowInput(String tag, float threshold) {
-//		super(tag, "lowInput");
-//		this.threshold = threshold;
-//	}
-//
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " < " + threshold * 100 + "%";
-//	}
-//
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof TileTrader)) {
-//			return false;
-//		}
-//
-//		return !((TileTrader) tile).hasInputBufMin(threshold);
-//	}
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.TileTrader;
+
+public class TriggerLowInput extends Trigger {
+
+	private final float threshold;
+
+	public TriggerLowInput(String tag, float threshold) {
+		super(tag, "lowInput");
+		this.threshold = threshold;
+	}
+
+	@Override
+	public String getDescription() {
+		return super.getDescription() + " < " + threshold * 100 + "%";
+	}
+
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+
+		if (!(tile instanceof TileTrader)) {
+			return false;
+		}
+
+		return !((TileTrader) tile).hasInputBufMin(threshold);
+	}
 }

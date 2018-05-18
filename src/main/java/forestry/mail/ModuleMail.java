@@ -12,14 +12,13 @@ package forestry.mail;
 
 import com.google.common.base.Preconditions;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
@@ -45,6 +44,7 @@ import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
+import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -88,11 +88,10 @@ public class ModuleMail extends BlankForestryModule {
 		}
 	}
 
-	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		MailTriggers.initialize();
-//	}
+	@Override
+	public void registerTriggers() {
+		MailTriggers.initialize();
+	}
 
 	@Override
 	public void doInit() {

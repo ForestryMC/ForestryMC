@@ -10,25 +10,33 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-// TODO: Buildcraft for 1.9
-public class TriggerMissingDrone {//extends Trigger {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-//	public TriggerMissingDrone() {
-//		super("missingDrone");
-//	}
-//
-//	/**
-//	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-//	 */
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof IErrorLogicSource)) {
-//			return false;
-//		}
-//
-//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
-//	}
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.triggers.Trigger;
+
+public class TriggerMissingDrone extends Trigger {
+
+	public TriggerMissingDrone() {
+		super("missingDrone");
+	}
+
+	/**
+	 * Return true if the tile given in parameter activates the trigger, given the parameters.
+	 */
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+
+		if (!(tile instanceof IErrorLogicSource)) {
+			return false;
+		}
+
+		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
+	}
 
 }

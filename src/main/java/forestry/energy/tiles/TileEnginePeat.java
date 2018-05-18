@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import java.io.IOException;
-import java.util.Collection;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,14 +17,20 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.io.IOException;
+import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBase;
@@ -43,6 +46,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+import forestry.factory.triggers.FactoryTriggers;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private ItemStack fuel = ItemStack.EMPTY;
@@ -310,15 +314,13 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* ITriggerProvider */
-	// TODO: buildcraft for 1.9
-	//	@Optional.Method(modid = "BuildCraftAPI|statements")
-	//	@Override
-	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-	//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-	//		res.add(FactoryTriggers.lowFuel25);
-	//		res.add(FactoryTriggers.lowFuel10);
-	//		return res;
-	//	}
+	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		triggers.add(FactoryTriggers.lowFuel25);
+		triggers.add(FactoryTriggers.lowFuel10);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

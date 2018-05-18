@@ -10,11 +10,29 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nullable;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -34,17 +52,7 @@ import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.factory.triggers.FactoryTriggers;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -207,15 +215,13 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	/* ITRIGGERPROVIDER */
-	// TODO: BuildCraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(FactoryTriggers.lowResource25);
-//		res.add(FactoryTriggers.lowResource10);
-//		return res;
-//	}
+	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		triggers.add(FactoryTriggers.lowResource25);
+		triggers.add(FactoryTriggers.lowResource10);
+	}
 
 	/* ISocketable */
 	@Override

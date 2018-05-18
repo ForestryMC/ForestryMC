@@ -10,24 +10,36 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
+import forestry.farming.triggers.FarmingTriggers;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-// TODO: Buildcraft for 1.9
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {
+import java.util.Collection;
+import java.util.Collections;
+
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
 
 	private static final EnumFacing[] dumpDirections = new EnumFacing[]{EnumFacing.DOWN};
 
@@ -76,22 +88,20 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 		return super.getCapability(capability, facing);
 	}
 
-	// TODO: Buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		return Collections.emptyList();
-//	}
-//
-//	/* ITRIGGERPROVIDER */
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		if (!getMultiblockLogic().isConnected()) {
-//			return Collections.emptyList();
-//		}
-//
-//		return FarmingTriggers.allExternalTriggers;
-//	}
+	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Override
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
 
+	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Override
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+
+	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		if (getMultiblockLogic().isConnected()) {
+			triggers.addAll(FarmingTriggers.allExternalTriggers);
+		}
+	}
 }

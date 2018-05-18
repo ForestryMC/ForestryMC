@@ -10,34 +10,41 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import forestry.core.triggers.Trigger;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-// TODO: Buildcraft for 1.9
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.tiles.TileFarmHatch;
+
 public class TriggerLowGermlings extends Trigger {
 
 	private final float threshold;
 
 	public TriggerLowGermlings(String tag, float threshold) {
-//		super(tag, "lowGermlings");
+		super(tag, "lowGermlings");
 		this.threshold = threshold;
 	}
 
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " < " + threshold * 100 + "%";
-//	}
-//
-//	/**
-//	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-//	 */
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//		if (!(tile instanceof TileFarmHatch)) {
-//			return false;
-//		}
-//
-//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-//		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
-//		return InventoryUtil.containsPercent(germlingsInventory, threshold);
-//	}
+	@Override
+	public String getDescription() {
+		return super.getDescription() + " < " + threshold * 100 + "%";
+	}
+
+	/**
+	 * Return true if the tile given in parameter activates the trigger, given the parameters.
+	 */
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+		if (!(tile instanceof TileFarmHatch)) {
+			return false;
+		}
+
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
+		return InventoryUtil.containsPercent(germlingsInventory, threshold);
+	}
 }

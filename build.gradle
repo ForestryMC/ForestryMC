@@ -40,9 +40,9 @@ minecraft {
 }
 
 repositories {
-	maven {
-		url 'http://maven.epoxide.xyz'
-	}
+  maven {
+    url = 'http://maven.mcmoddev.com'
+  }
 	maven {
 		url "http://dvs1.progwml6.com/files/maven"
 	}
@@ -54,14 +54,18 @@ repositories {
 		name = "Modmuss50"
 		url = "http://maven.modmuss50.me"
 	}
+  maven {
+    url = 'https://mod-buildcraft.com/maven'
+  }
 }
 
 dependencies {
-	deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
+  deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
 	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
 	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
+  deobfCompile "com.mod-buildcraft:buildcraft:${buildcraft_version}"
 }
 
 configurations {

@@ -10,9 +10,18 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
+import buildcraft.api.tiles.IHasWork;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
@@ -22,14 +31,9 @@ import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-//@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui {
+@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
+public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui, IHasWork {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -88,8 +92,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return false;
 	}
 
-	// TODO: buildcraft for 1.9
-//	@Override
+	@Override
 	public abstract boolean hasWork();
 
 	@Override
