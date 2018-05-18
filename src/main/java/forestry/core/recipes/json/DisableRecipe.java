@@ -14,17 +14,32 @@ package forestry.core.recipes.json;
 
 import com.google.gson.JsonObject;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
+
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 
-import forestry.modules.ModuleHelper;
+import forestry.api.core.ForestryAPI;
 
 public class DisableRecipe implements IConditionFactory {
 
+	private static Set<String> enabledModuleUIDs;
+
 	@Override
-	public BooleanSupplier parse(JsonContext context, JsonObject json) {    //TODO - cache enabled modules?
-		return () -> ModuleHelper.isEnabled(json.get("module").getAsString());
+	public BooleanSupplier parse(JsonContext context, JsonObject json) {
+		if (enabledModuleUIDs == null) {
+			getEnabledModules();
+		}
+		return () -> enabledModuleUIDs.contains(json.get("module").getAsString());
+	}
+
+	private static void getEnabledModules() {
+		enabledModuleUIDs = new HashSet<>();
+		Set<ResourceLocation> enabledModuleRLs = ForestryAPI.enabledModules;
+		enabledModuleRLs.forEach(rl -> enabledModuleUIDs.add(rl.getResourceDomain()));
 	}
 }
