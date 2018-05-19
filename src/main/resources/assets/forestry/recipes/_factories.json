@@ -3,7 +3,8 @@
     "module": "forestry.core.recipes.json.DisableRecipe"
   },
   "recipes": {
-    "woodType": "forestry.core.recipes.json.WoodTypeRecipeFactory",
-    "farm_block": "forestry.core.recipes.json.FarmBlockRecipe$Factory"
+    "wood_type": "forestry.core.recipes.json.WoodTypeRecipeFactory",
+    "farm_block": "forestry.core.recipes.json.FarmBlockRecipe$Factory",
+    "comb_block": "forestry.core.recipes.json.CombBlockRecipe$Factory"
   }
 }

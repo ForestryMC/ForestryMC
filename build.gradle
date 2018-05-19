@@ -41,9 +41,6 @@ minecraft {
 
 repositories {
 	maven {
-		url 'http://maven.epoxide.xyz'
-	}
-	maven {
 		url "http://dvs1.progwml6.com/files/maven"
 	}
 	maven {
@@ -53,6 +50,10 @@ repositories {
 	maven {
 		name = "Modmuss50"
 		url = "http://maven.modmuss50.me"
+	}
+	maven {
+
+		url 'http://maven.mcmoddev.com'
 	}
 }
 

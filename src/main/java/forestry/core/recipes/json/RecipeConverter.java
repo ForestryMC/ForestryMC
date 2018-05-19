@@ -136,6 +136,71 @@ public class RecipeConverter {
 		}
 	}
 
+	public static void addCombBlockRecipe(ItemStack result, String moduleUID, Object... components) {
+		setupDir();
+		File moduleDIR = setupModuleDir(moduleUID);
+		if (!ModuleHelper.isEnabled(moduleUID)) {
+			throw new IllegalArgumentException(String.format("Tried to register a recipe for a module that is not enabled! %s", ForgeRegistries.ITEMS.getKey(result.getItem()).toString()));
+		}
+
+		// GameRegistry.addShapedRecipe(result, components);
+
+		Map<String, Object> json = new HashMap<>();
+
+
+		json.put("conditions", getConditions(moduleUID));
+		List<String> pattern = new ArrayList<>();
+		int i = 0;
+		while (i < components.length && components[i] instanceof String) {
+			pattern.add((String) components[i]);
+			i++;
+		}
+		json.put("pattern", pattern);
+		json.put("group", moduleUID);
+
+		boolean isOreDict = false;
+		Map<String, Map<String, Object>> key = new HashMap<>();
+		Character curKey = null;
+		for (; i < components.length; i++) {
+			Object o = components[i];
+			if (o instanceof Character) {
+				if (curKey != null) {
+					throw new IllegalArgumentException("Provided two char keys in a row");
+				}
+				curKey = (Character) o;
+			} else {
+				if (curKey == null) {
+					throw new IllegalArgumentException("Providing object without a char key");
+				}
+				if (o instanceof String) {
+					isOreDict = true;
+				}
+				key.put(Character.toString(curKey), serializeItem(o));
+				curKey = null;
+			}
+		}
+		json.put("key", key);
+		json.put("type", "forestry:comb_block");
+		json.put("result", serializeItem(result));
+
+		// names the json the same name as the output's registry name
+		// repeatedly adds _alt if a file already exists
+		// janky I know but it works
+		String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
+		File f = new File(moduleDIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+
+		while (f.exists()) {
+			suffix += "_alt";
+			f = new File(moduleDIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+		}
+
+		try (FileWriter w = new FileWriter(f)) {
+			GSON.toJson(json, w);
+		} catch (IOException e) {
+			Log.error(e.getMessage());
+		}
+	}
+
 	public static void addFarmBlockRecipe(ItemStack result, String moduleUID, Object... components) {
 		setupDir();
 		File moduleDIR = setupModuleDir(moduleUID);
@@ -391,7 +456,7 @@ public class RecipeConverter {
 
 		Map<String, Object> json = new HashMap<>();
 		json.put("conditions", getConditions(moduleUID));
-		json.put("type", "forestry:woodType");
+		json.put("type", "forestry:wood_type");
 		json.put("pattern", Arrays.asList(recipe));
 
 		Map<String, Object> input = new HashMap<>();
@@ -436,7 +501,7 @@ public class RecipeConverter {
 
 		Map<String, Object> json = new HashMap<>();
 		json.put("conditions", getConditions(moduleUID));
-		json.put("type", "forestry:woodType");
+		json.put("type", "forestry:wood_type");
 
 		Map<String, Object> input = new HashMap<>();
 		input.put("blockKind", inputType.getBlockKind());

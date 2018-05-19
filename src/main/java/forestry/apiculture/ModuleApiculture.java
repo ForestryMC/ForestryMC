@@ -79,7 +79,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockCandle;
-import forestry.apiculture.blocks.BlockHoneyComb;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
@@ -127,6 +126,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
@@ -543,16 +543,11 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			int remainder = i % 16;
-			int quotient = i / 16;
-			BlockHoneyComb block = blocks.beeCombs[quotient];
-			RecipeUtil.addRecipe(id, new ItemStack(block, 1, remainder),
-					"###",
-					"###",
-					"###", '#', items.beeComb.get(EnumHoneyComb.get(i), 1));
+		RecipeConverter.addCombBlockRecipe(new ItemStack(blocks.beeCombs[0], 1, 0), id,
+				"###",
+				"###",
+				"###", '#', items.beeComb.get(EnumHoneyComb.get(0), 1));
 
-		}
 
 		// FOOD STUFF
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FOOD)) {
