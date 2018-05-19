@@ -10,11 +10,13 @@
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  *******************************************************************************
  */
-package forestry.core.recipes.json;
+package forestry.farming.recipes;
 
 import com.google.gson.JsonObject;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -68,6 +70,9 @@ public class FarmBlockRecipe extends ShapedOreRecipe {
 	}
 
 	public static class Factory implements IRecipeFactory {
+
+		public static final Set<FarmBlockRecipe> RECIPES = new HashSet<>();
+
 		@Override
 		public IRecipe parse(JsonContext context, JsonObject json) {
 			ShapedOreRecipe oreRecipe = ShapedOreRecipe.factory(context, json);
@@ -78,7 +83,9 @@ public class FarmBlockRecipe extends ShapedOreRecipe {
 			primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
 			primer.input = oreRecipe.getIngredients();
 
-			return new FarmBlockRecipe(new ResourceLocation(oreRecipe.getGroup()), oreRecipe.getRecipeOutput(), primer);
+			FarmBlockRecipe recipe = new FarmBlockRecipe(new ResourceLocation(oreRecipe.getGroup()), oreRecipe.getRecipeOutput(), primer);
+			RECIPES.add(recipe);
+			return recipe;
 		}
 	}
 

@@ -1,4 +1,4 @@
-package forestry.arboriculture.charcoal.jei;
+package forestry.apiculture.recipes;
 
 import javax.annotation.Nullable;
 
@@ -19,7 +19,6 @@ public class CombBlockRecipeWrapper implements IRecipeWrapper {
 	private static ItemHoneyComb comb = null;    //will this work? will these be shared fields?
 	@Nullable
 	private static BlockHoneyComb[] blockHoneyCombs = null;
-	private static int i = 0;    //TODO - make this less hacky
 
 	public CombBlockRecipeWrapper(int meta) {
 		this.meta = meta;

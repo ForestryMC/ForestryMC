@@ -10,19 +10,17 @@
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  *******************************************************************************
  */
-package forestry.core.recipes.json;
+package forestry.arboriculture.recipes;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import forestry.api.arboriculture.IWoodAccess;
+import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
 import forestry.core.utils.InventoryUtil;
@@ -31,24 +29,11 @@ import forestry.core.utils.ItemStackUtil;
 /**
  * used for logs -> planks (fireproof and not)
  */
-public class WoodTypeRecipeShapeless extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class WoodTypeRecipeShapeless extends WoodTypeRecipeBase implements IRecipe {
 
-	private ItemStack result = ItemStack.EMPTY;
-	private int outputCount;
-	private WoodBlockKind inputKind;
-	private WoodBlockKind outputKind;
-	private boolean inputFireproof;
-	private boolean outputFireproof;
-	private IWoodAccess access;
 
 	public WoodTypeRecipeShapeless(WoodBlockKind inputKind, WoodBlockKind outputKind, boolean inputFireproof, boolean outputFireproof, int outputCount) {
-		access = TreeManager.woodAccess;
-		this.inputKind = inputKind;
-		this.outputKind = outputKind;
-		this.inputFireproof = inputFireproof;
-		this.outputFireproof = outputFireproof;
-
-		this.outputCount = outputCount;
+		super(outputCount, inputKind, outputKind, inputFireproof, outputFireproof);
 	}
 
 	@Override
@@ -79,11 +64,6 @@ public class WoodTypeRecipeShapeless extends IForgeRegistryEntry.Impl<IRecipe> i
 		return logCount == 1;
 	}
 
-	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		result.setCount(outputCount);
-		return result.copy();
-	}
 
 	@Override
 	public boolean canFit(int width, int height) {
@@ -91,8 +71,9 @@ public class WoodTypeRecipeShapeless extends IForgeRegistryEntry.Impl<IRecipe> i
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
-		result.setCount(outputCount);
-		return result.copy();
+	public NonNullList<ItemStack> getStacks() {
+		NonNullList<ItemStack> ret = NonNullList.create();
+		ret.add(access.getStack(EnumForestryWoodType.values()[0], inputKind, inputFireproof));
+		return ret;
 	}
 }

@@ -10,11 +10,14 @@
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  *******************************************************************************
  */
-package forestry.core.recipes.json;
+package forestry.arboriculture.recipes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.JsonUtils;
@@ -28,6 +31,9 @@ import forestry.api.arboriculture.WoodBlockKind;
  * Very messy, there's probably a lot that can be done to clean this up
  */
 public class WoodTypeRecipeFactory implements IRecipeFactory {
+
+	public static final Set<WoodTypeRecipeBase> RECIPES = new HashSet<>();
+
 
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
@@ -54,7 +60,9 @@ public class WoodTypeRecipeFactory implements IRecipeFactory {
 		boolean outputFireproof = JsonUtils.getBoolean(output, "fireproof");
 		int outputCount = JsonUtils.getInt(output, "count", 1);
 
-		return pattern == null ? new WoodTypeRecipeShapeless(inputKind, outputKind, inputFireproof, outputFireproof, outputCount) :
+		WoodTypeRecipeBase recipe = pattern == null ? new WoodTypeRecipeShapeless(inputKind, outputKind, inputFireproof, outputFireproof, outputCount) :
 				new WoodTypeRecipe(inputKind, outputKind, inputFireproof, outputFireproof, pattern, outputCount);
+		RECIPES.add(recipe);
+		return recipe;
 	}
 }

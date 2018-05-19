@@ -1,10 +1,10 @@
 {
   "conditions": {
-    "module": "forestry.core.recipes.json.DisableRecipe"
+    "module": "forestry.core.recipes.DisableRecipe"
   },
   "recipes": {
-    "wood_type": "forestry.core.recipes.json.WoodTypeRecipeFactory",
-    "farm_block": "forestry.core.recipes.json.FarmBlockRecipe$Factory",
-    "comb_block": "forestry.core.recipes.json.CombBlockRecipe$Factory"
+    "wood_type": "forestry.arboriculture.recipes.WoodTypeRecipeFactory",
+    "farm_block": "forestry.farming.recipes.FarmBlockRecipe$Factory",
+    "comb_block": "forestry.apiculture.recipes.CombBlockRecipe$Factory"
   }
 }

@@ -1,4 +1,4 @@
-package forestry.core.recipes.json;
+package forestry.apiculture.recipes;
 
 import com.google.gson.JsonObject;
 

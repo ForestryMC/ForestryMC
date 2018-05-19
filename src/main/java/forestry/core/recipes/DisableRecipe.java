@@ -10,7 +10,7 @@
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  *******************************************************************************
  */
-package forestry.core.recipes.json;
+package forestry.core.recipes;
 
 import com.google.gson.JsonObject;
 
