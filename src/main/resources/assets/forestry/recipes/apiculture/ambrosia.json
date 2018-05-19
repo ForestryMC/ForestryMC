@@ -9,8 +9,17 @@
   ],
   "conditions": [
     {
-      "module": "apiculture",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "module"
+        },
+        {
+          "type": "module",
+          "module": "food"
+        }
+      ]
     }
   ],
   "type": "minecraft:crafting_shaped",

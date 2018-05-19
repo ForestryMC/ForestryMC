@@ -48,29 +48,4 @@ public class ModuleCharcoal extends BlankForestryModule {
 		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 3));
 		TreeManager.pileWalls.add(new CharcoalPileWall(ModuleCore.getBlocks().ashBrick, 5));
 	}
-
-	@Override
-	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.CHARCOAL;
-		BlockRegistryCharcoal blocks = getBlocks();
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-		//Wood Pile
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPile), OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD, OreDictUtil.LOG_WOOD);
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPile), blocks.woodPileDecorative);
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.woodPileDecorative), blocks.woodPile);
-
-		//Charcoal
-		RecipeUtil.addRecipe(id, blocks.charcoal,
-				"###",
-				"###",
-				"###",
-				'#', new ItemStack(Items.COAL, 1, 1));
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
-
-		//Dirt Pile Block
-		RecipeUtil.addShapelessRecipe(id, new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
-	}
 }

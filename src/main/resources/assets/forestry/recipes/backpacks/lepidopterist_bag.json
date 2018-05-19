@@ -9,8 +9,17 @@
   ],
   "conditions": [
     {
-      "module": "backpacks",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "backpacks",
+          "type": "module"
+        },
+        {
+          "type": "module",
+          "module": "lepidopterology"
+        }
+      ]
     }
   ],
   "type": "forge:ore_shaped",

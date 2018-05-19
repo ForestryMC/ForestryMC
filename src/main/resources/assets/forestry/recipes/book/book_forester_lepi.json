@@ -12,14 +12,29 @@
       },
       {
         "item": "#TREESAPLING"
+      },
+      {
+        "item": "forestry:butterfly_ge",
+        "data": 0
       }
     ]
   ],
   "conditions": [
     {
-      "module": "book",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "book",
+          "type": "module"
+        },
+        {
+          "module": "lepidopterology",
+          "type": "module"
+        }
+      ]
     }
+
+
   ],
   "type": "minecraft:crafting_shapeless",
   "group": "book"

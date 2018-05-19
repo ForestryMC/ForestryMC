@@ -103,7 +103,6 @@ import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -298,36 +297,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		Collections.addAll(allWoodTypes, EnumForestryWoodType.VALUES);
 		Collections.addAll(allWoodTypes, EnumVanillaWoodType.VALUES);
 
-		//logs to planks
-		RecipeConverter.addWoodTypeRecipeShapeless(id, getBlocks().logs.get(0), getBlocks().planks.get(0), 4);
-		RecipeConverter.addWoodTypeRecipeShapeless(id, getBlocks().logsFireproof.get(0), getBlocks().planksFireproof.get(0), 4);
-
-		//planks to slabs
-		String[] planks_slabs_pattern = {"###"};
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().slabs.get(0), planks_slabs_pattern, 6);
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().slabsFireproof.get(0), planks_slabs_pattern, 6);
-
-		//fences
-		String[] fences_pattern = {"#X#", "#X#"};
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().fences.get(0), fences_pattern, 3);
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().fencesFireproof.get(0), fences_pattern, 3);
-
-		//fence gates
-		String[] fence_gate_pattern = {"X#X", "X#X"};
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().fenceGates.get(0), fence_gate_pattern, 1);
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().fenceGatesFireproof.get(0), fence_gate_pattern, 1);
-
-		//stairs
-		String[] stair_pattern = {"#  ", "## ", "###"};
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().stairs.get(0), stair_pattern, 4);
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().stairsFireproof.get(0), stair_pattern, 4);
-
-		//doors
-		String[] door_pattern = {"## ", "## ", "## "};
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planks.get(0), getBlocks().doors.get(0), door_pattern, 3);
-		RecipeConverter.addWoodTypeRecipe(id, getBlocks().planksFireproof.get(0), getBlocks().doors.get(0), door_pattern, 3);
-
-
 		for (IWoodType woodType : allWoodTypes) {
 			ItemStack planks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
 			ItemStack logs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
@@ -374,22 +343,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 			RecipeUtil.addFermenterRecipes(new ItemStack(items.sapling, 1, OreDictionary.WILDCARD_VALUE), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
-
-		// Grafter
-		RecipeUtil.addRecipe(id, items.grafter.getItemStack(),
-				"  B",
-				" # ",
-				"#  ",
-				'B', "ingotBronze",
-				'#', "stickWood");
-
-		RecipeUtil.addRecipe(id, blocks.treeChest,
-				" # ",
-				"XYX",
-				"XXX",
-				'#', "blockGlass",
-				'X', "treeSapling",
-				'Y', "chestWood");
 	}
 
 	private static void registerAlleles() {

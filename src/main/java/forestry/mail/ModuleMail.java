@@ -14,40 +14,28 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ISaveEventHandler;
 import forestry.core.ModuleCore;
-import forestry.core.circuits.EnumCircuitBoardType;
-import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
-import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {
@@ -109,76 +97,12 @@ public class ModuleMail extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.MAIL;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		ItemRegistryMail items = getItems();
-		BlockRegistryMail blocks = getBlocks();
-
-		ItemStack stampGlue;
-		ItemStack letterGlue;
-
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-			stampGlue = beeItems.honeyDrop.getItemStack();
-			letterGlue = beeItems.propolis.getWildcard();
-		} else {
-			stampGlue = new ItemStack(Items.SLIME_BALL);
-			letterGlue = new ItemStack(Items.SLIME_BALL);
-		}
-
-		RecipeUtil.addShapelessRecipe(id, items.letters.getItemStack(), Items.PAPER, letterGlue);
-
-		if (Config.craftingStampsEnabled) {
-			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
-				if (Config.collectorStamps.contains(stampDefinition.getUid())) {
-					continue;
-				}
-
-				ItemStack stamps = items.stamps.get(stampDefinition, 9);
-
-				RecipeUtil.addRecipe(id, stamps,
-						"XXX",
-						"###",
-						"ZZZ",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.PAPER,
-						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), ItemStack.EMPTY, stamps,
-						"XXX",
-						"###",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.PAPER);
-			}
-		}
-
-		// Recycling
-		RecipeUtil.addRecipe(id, new ItemStack(Items.PAPER), "###", '#', OreDictUtil.EMPTIED_LETTER_ORE_DICT);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
 
-		RecipeUtil.addShapelessRecipe(id, items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.mailbox),
-				" # ",
-				"#Y#",
-				"XXX",
-				'#', "ingotTin",
-				'X', "chestWood",
-				'Y', coreItems.sturdyCasing);
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.tradeStation),
-				"Z#Z",
-				"#Y#",
-				"XWX",
-				'#', coreItems.tubes.get(EnumElectronTube.BRONZE, 1),
-				'X', "chestWood",
-				'Y', coreItems.sturdyCasing,
-				'Z', coreItems.tubes.get(EnumElectronTube.IRON, 1),
-				'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 	}
 
 	@Override

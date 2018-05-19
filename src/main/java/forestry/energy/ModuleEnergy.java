@@ -14,17 +14,11 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.SidedProxy;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.modules.BlankForestryModule;
@@ -58,46 +52,6 @@ public class ModuleEnergy extends BlankForestryModule {
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
 			blocks.clockworkEngine.init();
-		}
-	}
-
-	@Override
-	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.ENERGY;
-
-		BlockRegistryEnergy blocks = getBlocks();
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.peatEngine),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotCopper",
-				'X', "blockGlass",
-				'Y', "gearCopper",
-				'V', Blocks.PISTON);
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.biogasEngine),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotBronze",
-				'X', "blockGlass",
-				'Y', "gearBronze",
-				'V', Blocks.PISTON);
-
-		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe(id, new ItemStack(blocks.clockworkEngine),
-					"###",
-					" X ",
-					"ZVY",
-					'#', "plankWood",
-					'X', "blockGlass",
-					'Y', Items.CLOCK,
-					'Z', "gearCopper",
-					'V', Blocks.PISTON);
 		}
 	}
 }

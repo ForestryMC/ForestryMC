@@ -15,6 +15,7 @@ import forestry.core.utils.ItemStackUtil;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IStackHelper;
 
 public class WoodTypeRecipeWrapper implements IRecipeWrapper {
 
@@ -22,18 +23,20 @@ public class WoodTypeRecipeWrapper implements IRecipeWrapper {
 	private IWoodType woodType;
 	@Nullable
 	private static IWoodAccess access;
+	private IStackHelper helper;
 
-	public WoodTypeRecipeWrapper(WoodTypeRecipeBase recipe, IWoodType woodType) {
+	public WoodTypeRecipeWrapper(WoodTypeRecipeBase recipe, IWoodType woodType, IStackHelper helper) {
 		if (access == null) {
 			access = TreeManager.woodAccess;
 		}
 		this.recipe = recipe;
 		this.woodType = woodType;
+		this.helper = helper;
 	}
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		if(recipe.getOutputKind() == WoodBlockKind.SLAB) {
+		if (recipe.getOutputKind() == WoodBlockKind.SLAB) {
 			int i = 0;
 		}
 		NonNullList<ItemStack> stacks = recipe.getStacks();
@@ -43,7 +46,7 @@ public class WoodTypeRecipeWrapper implements IRecipeWrapper {
 				stacks.set(i, access.getStack(woodType, recipe.getInputKind(), recipe.isInputFireproof()));
 			}
 		}
-		ingredients.setInputs(ItemStack.class, stacks);
+		ingredients.setInputLists(ItemStack.class, helper.expandRecipeItemStackInputs(stacks));
 
 		ItemStack output = access.getStack(woodType, recipe.getOutputKind(), recipe.isOutputFireproof());
 		output.setCount(recipe.getOutputCount());

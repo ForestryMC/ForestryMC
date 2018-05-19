@@ -11,6 +11,7 @@ import forestry.api.arboriculture.IWoodType;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 
 @JEIPlugin
@@ -18,13 +19,14 @@ public class WoodTypeRecipePlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
+		IStackHelper helper = registry.getJeiHelpers().getStackHelper();
 		Set<WoodTypeRecipeWrapper> wrappers = new HashSet<>();
 		Set<IWoodType> woodTypes = new HashSet<>();
 		Collections.addAll(woodTypes, EnumForestryWoodType.values());
 		Collections.addAll(woodTypes, EnumVanillaWoodType.values());
 		for (WoodTypeRecipeBase recipe : WoodTypeRecipeFactory.RECIPES) {
 			for (IWoodType woodType : woodTypes) {
-				wrappers.add(new WoodTypeRecipeWrapper(recipe, woodType));
+				wrappers.add(new WoodTypeRecipeWrapper(recipe, woodType, helper));
 			}
 		}
 		registry.addRecipes(wrappers, VanillaRecipeCategoryUid.CRAFTING);

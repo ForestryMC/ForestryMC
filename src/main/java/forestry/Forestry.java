@@ -49,7 +49,6 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
@@ -126,9 +125,6 @@ public class Forestry {
 		String gameMode = Config.gameMode;
 		Preconditions.checkState(gameMode != null);
 		ForestryAPI.activeMode = new GameMode(gameMode);
-		if (Config.resetRecipes) {
-			RecipeConverter.deleteRecipes();
-		}
 
 		ModuleManager.getInternalHandler().runPreInit(event.getSide());
 	}
@@ -156,9 +152,6 @@ public class Forestry {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		if (Config.resetRecipes) {
-			RecipeConverter.generateConstants();
-		}
 		ModuleManager.getInternalHandler().runPostInit();
 
 		// Register world generator

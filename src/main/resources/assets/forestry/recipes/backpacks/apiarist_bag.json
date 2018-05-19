@@ -9,8 +9,16 @@
   ],
   "conditions": [
     {
-      "module": "backpacks",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "backpacks",
+          "type": "module"
+        },
+        { "type": "module",
+          "module": "apiculture"
+        }
+      ]
     }
   ],
   "type": "forge:ore_shaped",

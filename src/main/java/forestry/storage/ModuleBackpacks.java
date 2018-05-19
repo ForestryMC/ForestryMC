@@ -50,18 +50,14 @@ import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ModuleCore;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.ModuleLepidopterology;
-import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -539,29 +535,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.BACKPACKS;
-		ItemRegistryBackpacks items = getItems();
-		if (items.apiaristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
-			addBackpackRecipe(id, items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
-		}
-
-		if (items.lepidopteristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			BlockRegistryLepidopterology butterflyBlocks = ModuleLepidopterology.getBlocks();
-			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
-			addBackpackRecipe(id, items.lepidopteristBackpack, "stickWood", chest);
-		}
-
-		addBackpackRecipe(id, items.minerBackpack, "ingotIron");
-		addBackpackRecipe(id, items.diggerBackpack, "stone");
-		addBackpackRecipe(id, items.foresterBackpack, "logWood");
-		addBackpackRecipe(id, items.hunterBackpack, Items.FEATHER);
-		addBackpackRecipe(id, items.adventurerBackpack, Items.BONE);
-		addBackpackRecipe(id, items.builderBackpack, Items.CLAY_BALL);
-
 		// / CARPENTER
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / BACKPACKS WOVEN
@@ -572,21 +545,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 			addT2BackpackRecipe(items.adventurerBackpack, items.adventurerBackpackT2);
 			addT2BackpackRecipe(items.builderBackpack, items.builderBackpackT2);
 		}
-	}
-
-	private static void addBackpackRecipe(String moduleUID, Item backpack, Object material) {
-		addBackpackRecipe(moduleUID, backpack, material, "chestWood");
-	}
-
-	private static void addBackpackRecipe(String moduleUID, Item backpack, Object material, Object chest) {
-		RecipeUtil.addRecipe(moduleUID, backpack,
-				"X#X",
-				"VYV",
-				"X#X",
-				'#', Blocks.WOOL,
-				'X', Items.STRING,
-				'V', material,
-				'Y', chest);
 	}
 
 	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {

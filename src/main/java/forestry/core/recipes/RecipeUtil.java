@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
-import forestry.core.recipes.json.RecipeConverter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.InventoryCraftingForestry;
 
@@ -129,27 +127,6 @@ public abstract class RecipeUtil {
 
 	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
 		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
-	}
-
-	public static void addRecipe(String moduleUID, Block block, Object... obj) {
-		addRecipe(moduleUID, new ItemStack(block), obj);
-	}
-
-	public static void addRecipe(String moduleUID, Item item, Object... obj) {
-		addRecipe(moduleUID, new ItemStack(item), obj);
-	}
-
-	public static void addRecipe(String moduleUID, ItemStack itemstack, Object... obj) {
-
-		RecipeConverter.addShapedRecipe(itemstack, moduleUID, obj);
-	}
-
-	public static void addShapelessRecipe(String moduleUID, Item item, Object... obj) {
-		addShapelessRecipe(moduleUID, new ItemStack(item), obj);
-	}
-
-	public static void addShapelessRecipe(String moduleUID, ItemStack itemstack, Object... obj) {
-		RecipeConverter.addShapelessRecipe(itemstack, moduleUID, obj);
 	}
 
 	public static void addSmelting(ItemStack res, Item prod, float xp) {

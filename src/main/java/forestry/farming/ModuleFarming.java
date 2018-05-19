@@ -25,7 +25,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,9 +54,6 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.json.RecipeConverter;
-import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
@@ -81,7 +77,6 @@ import forestry.farming.logic.farmables.FarmableGourd;
 import forestry.farming.logic.farmables.FarmableStacked;
 import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
-import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
@@ -254,90 +249,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.FARMING;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-		BlockRegistryFarming blocks = getBlocks();
-
-		ItemStack basic = blocks.farm.get(EnumFarmBlockType.PLAIN, 1);
-		ItemStack gearbox = blocks.farm.get(EnumFarmBlockType.GEARBOX, 1);
-		ItemStack hatch = blocks.farm.get(EnumFarmBlockType.HATCH, 1);
-		ItemStack valve = blocks.farm.get(EnumFarmBlockType.VALVE, 1);
-		ItemStack control = blocks.farm.get(EnumFarmBlockType.CONTROL, 1);
-
-		RecipeConverter.addFarmBlockRecipe(gearbox, id,
-				" # ",
-				"TTT",
-				'#', basic,
-				'T', "gearTin");
-
-		RecipeConverter.addFarmBlockRecipe(hatch, id,
-				" # ",
-				"TDT",
-				'#', basic,
-				'T', "gearTin",
-				'D', OreDictUtil.TRAPDOOR_WOOD);
-
-		RecipeConverter.addFarmBlockRecipe(valve, id,
-				" # ",
-				"XTX",
-				'#', basic,
-				'T', "gearTin",
-				'X', "blockGlass");
-
-		RecipeConverter.addFarmBlockRecipe(control, id,
-				" # ",
-				"XTX",
-				'#', basic,
-				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
-				'X', "dustRedstone");
-		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-			NBTTagCompound compound = new NBTTagCompound();
-			block.saveToCompound(compound);
-
-			basic.setTagCompound(compound);
-			gearbox.setTagCompound(compound);
-			hatch.setTagCompound(compound);
-			valve.setTagCompound(compound);
-			control.setTagCompound(compound);
-
-			RecipeUtil.addRecipe(id, basic,
-					"I#I",
-					"WCW",
-					'#', block.getBase(),
-					'W', "slabWood",
-					'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
-					'I', "ingotCopper");
-
-			//			RecipeUtil.addRecipe(id, gearbox,
-			//					" # ",
-			//					"TTT",
-			//					'#', basic,
-			//					'T', "gearTin");
-			//
-			//			RecipeUtil.addRecipe(id, hatch,
-			//					" # ",
-			//					"TDT",
-			//					'#', basic,
-			//					'T', "gearTin",
-			//					'D', OreDictUtil.TRAPDOOR_WOOD);
-			//
-			//			RecipeUtil.addRecipe(id, valve,
-			//					" # ",
-			//					"XTX",
-			//					'#', basic,
-			//					'T', "gearTin",
-			//					'X', "blockGlass");
-			//
-			//			RecipeUtil.addRecipe(id, control,
-			//					" # ",
-			//					"XTX",
-			//					'#', basic,
-			//					'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
-			//					'X', "dustRedstone");
-		}
 
 		// Circuits
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");

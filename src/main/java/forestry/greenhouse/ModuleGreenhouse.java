@@ -35,18 +35,13 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.greenhouse.api.climate.IGreenhouseClimateManager;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.api.greenhouse.IGreenhouseHelper;
-import forestry.greenhouse.blocks.BlockClimatiserType;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.camouflage.CamouflageAccess;
 import forestry.greenhouse.camouflage.CamouflageHandlerBlock;
@@ -57,7 +52,6 @@ import forestry.greenhouse.climate.modifiers.ClimateSourceModifier;
 import forestry.greenhouse.climate.modifiers.TimeModifier;
 import forestry.greenhouse.climate.modifiers.WeatherModifier;
 import forestry.greenhouse.items.ItemRegistryGreenhouse;
-import forestry.greenhouse.multiblock.GreenhouseController;
 import forestry.greenhouse.multiblock.blocks.ChunkEvents;
 import forestry.greenhouse.multiblock.blocks.world.GreenhouseBlockManager;
 import forestry.greenhouse.network.PacketRegistryGreenhouse;
@@ -163,98 +157,7 @@ public class ModuleGreenhouse extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.GREENHOUSE;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-		BlockRegistryGreenhouse blocks = getBlocks();
-		ItemRegistryGreenhouse items = getItems();
-
-		// / CAMOUFLAGE SPRAY CAN
-		RecipeUtil.addRecipe(id, items.camouflageSprayCan, "TTT", "TCT", "TCT", 'T', OreDictUtil.INGOT_TIN, 'C', coreItems.craftingMaterial.getCamouflagedPaneling());
-
-		ItemStack greenhousePlainBlock = new ItemStack(blocks.greenhouseBlock, 2, BlockGreenhouseType.PLAIN.ordinal());
-		RecipeUtil.addRecipe(id, greenhousePlainBlock.copy(),
-				"#X#",
-				"SIS",
-				'I', OreDictUtil.INGOT_IRON,
-				'S', OreDictUtil.SLAB_WOOD,
-				'X', GreenhouseController.createDefaultCamouflageBlock(),
-				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
-		greenhousePlainBlock.setCount(1);
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.greenhouseBlock, 1, BlockGreenhouseType.CONTROL.ordinal()),
-				" X ",
-				"#T#",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.DUST_REDSTONE,
-				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.greenhouseBlock, 1, BlockGreenhouseType.GEARBOX.ordinal()),
-				" X ",
-				"###",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.GEAR_TIN);
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HYGRO.ordinal()),
-				"GIG",
-				"GXG",
-				"GIG",
-				'X', greenhousePlainBlock.copy(),
-				'I', OreDictUtil.INGOT_IRON,
-				'G', OreDictUtil.BLOCK_GLASS);
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HEATER.ordinal()),
-				"T#T",
-				"#X#",
-				"T#T",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.INGOT_TIN,
-				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.FAN.ordinal()),
-				"T#T",
-				"#X#",
-				"T#T",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.INGOT_IRON,
-				'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.DEHUMIDIFIER.ordinal()),
-				"T#T",
-				"#X#",
-				"T#T",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.INGOT_TIN,
-				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
-
-		RecipeUtil.addRecipe(id, new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HUMIDIFIER.ordinal()),
-				"T#T",
-				"#X#",
-				"T#T",
-				'X', greenhousePlainBlock.copy(),
-				'#', OreDictUtil.INGOT_TIN,
-				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
-
-		for (String glassName : GreenhouseManager.helper.getWindowGlasses()) {
-			ItemStack glassItem = GreenhouseManager.helper.getGlassItem(glassName);
-			ItemStack window = blocks.window.getItem(glassName);
-			ItemStack roodWindow = blocks.roofWindow.getItem(glassName);
-			RecipeUtil.addRecipe(id, roodWindow,
-					"SGS",
-					"GGG",
-					"GGG",
-					'G', glassItem,
-					'S', OreDictUtil.STICK_WOOD);
-
-			RecipeUtil.addRecipe(id, window,
-					"SGG",
-					"GGG",
-					"SGG",
-					'G', glassItem,
-					'S', OreDictUtil.STICK_WOOD);
-		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.greenhouse.climatiser");
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.climatiserTemperature1);
