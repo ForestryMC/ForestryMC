@@ -43,13 +43,4 @@ public class ModuleWorktable extends BlankForestryModule {
 
 		blocks.worktable.init();
 	}
-
-	@Override
-	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.WORKTABLE;
-		BlockRegistryWorktable blocks = getBlocks();
-	}
 }

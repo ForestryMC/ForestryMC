@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "buildcrafttransport:waterproof"
+  },
+  "ingredients": [
+    {
+      "item": "forestry:beeswax"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "buildcrafttransport"
+        }
+        ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "plugins"
+}

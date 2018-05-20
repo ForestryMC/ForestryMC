@@ -279,10 +279,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.ARBORICULTURE;
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryArboriculture blocks = getBlocks();
 		ItemRegistryArboriculture items = getItems();

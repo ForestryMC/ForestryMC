@@ -1,0 +1,41 @@
+{
+  "result": {
+    "item": "forestry:engine_electrical"
+  },
+  "pattern": [
+    "###",
+    " X ",
+    "YVY"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "energy",
+          "type": "module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ic2"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    },
+    "V": {
+      "item": "minecraft:piston"
+    },
+    "X": {
+      "item": "#BLOCKGLASS"
+    },
+    "Y": {
+      "item": "#GEARTIN"
+    }
+  },
+  "group": "plugins"
+}

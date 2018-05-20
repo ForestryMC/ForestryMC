@@ -242,10 +242,6 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.FACTORY;
 		// / FABRICATOR
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();

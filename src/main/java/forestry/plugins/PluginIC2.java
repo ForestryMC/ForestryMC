@@ -76,7 +76,7 @@ import ic2.api.recipe.Recipes;
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.INDUSTRIALCRAFT2, name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.ic2.description")
 public class PluginIC2 extends BlankForestryModule {
 	public static final String MOD_ID = "ic2";
-	
+
 	@Nullable
 	private static ItemStack rubberSapling;
 	@Nullable
@@ -87,7 +87,7 @@ public class PluginIC2 extends BlankForestryModule {
 	public static ItemStack resin;
 	@Nullable
 	public static ItemStack fertilizer;
-	
+
 	@Nullable
 	public static BlockRegistryIC2 blocks;
 
@@ -129,7 +129,7 @@ public class PluginIC2 extends BlankForestryModule {
 		resin = IC2Items.getItem("misc_resource", "resin");
 		rubberSapling = IC2Items.getItem("sapling");
 		rubber = IC2Items.getItem("crafting", "rubber");
-		fertilizer = IC2Items.getItem("crop_res","fertilizer");
+		fertilizer = IC2Items.getItem("crop_res", "fertilizer");
 
 		IFarmProperties rubberFarm = FarmRegistry.getInstance().registerLogic(ForestryFarmIdentifier.RUBBER, FarmLogicRubber::new);
 
@@ -138,7 +138,7 @@ public class PluginIC2 extends BlankForestryModule {
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin", CircuitSocketType.ELECTRIC_ENGINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
 
-		if(fertilizer != null){
+		if (fertilizer != null) {
 			FarmRegistry.getInstance().registerFertilizer(fertilizer, 250);
 		}
 	}
@@ -260,7 +260,7 @@ public class PluginIC2 extends BlankForestryModule {
 
 		if (rubberSapling != null && resin != null) {
 			String saplingName = ItemStackUtil.getBlockNameFromRegistryAsString(ItemStackUtil.getBlock(rubberSapling));
-			if(saplingName != null){
+			if (saplingName != null) {
 				String resinName = ItemStackUtil.getItemNameFromRegistryAsString(resin.getItem());
 				String imc = String.format("farmArboreal@%s.%s.%s.%s",
 						saplingName, rubberSapling.getItemDamage(),
@@ -280,15 +280,6 @@ public class PluginIC2 extends BlankForestryModule {
 			}
 		}
 
-		ItemStack waterCell = IC2Items.getItem("fluid_cell", "water");
-		if (waterCell != null) {
-			int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
-			if (bogEarthOutputCan > 0) {
-					ItemStack bogEarthCan = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-				RecipeUtil.addRecipe("ic2_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
-			}
-		}
-
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
 
 		// / Solder Manager
@@ -304,27 +295,6 @@ public class PluginIC2 extends BlankForestryModule {
 			}
 
 			FarmRegistry.getInstance().registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableBasicIC2Crop());
-		}
-
-
-		BlockRegistryEnergy energyBlocks = ModuleEnergy.blocks;
-		if (energyBlocks != null) {
-			RecipeUtil.addRecipe("ic2_generator", blocks.generator,
-					"X#X",
-					"XYX",
-					"X#X",
-					'#', "blockGlass",
-					'X', "ingotGold",
-					'Y', coreItems.sturdyCasing);
-
-			RecipeUtil.addRecipe("ic2_eletrical_engine", blocks.electricalEngine,
-					"###",
-					" X ",
-					"YVY",
-					'#', "ingotTin",
-					'X', "blockGlass",
-					'Y', "gearTin",
-					'V', Blocks.PISTON);
 		}
 	}
 }

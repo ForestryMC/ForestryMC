@@ -188,10 +188,6 @@ public class ModuleCrates extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(!Config.resetRecipes) {
-			return;
-		}
-		String id = ForestryModuleUids.CRATE;
 		ItemRegistryCrates items = getItems();
 
 		// / CARPENTER

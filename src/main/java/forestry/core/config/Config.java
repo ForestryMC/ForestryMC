@@ -156,9 +156,6 @@ public class Config {
 		return generateBeehivesAmount;
 	}
 
-	//Recipes
-	public static boolean resetRecipes = false;
-
 	//Compat
 	public static boolean isExUtilEnderLilyEnabled() {
 		return enableExUtilEnderLily;
@@ -359,7 +356,6 @@ public class Config {
 
 		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
 
-		resetRecipes = configCommon.getBooleanLocalized("recipes", "reset", resetRecipes);
 		configCommon.save();
 	}
 

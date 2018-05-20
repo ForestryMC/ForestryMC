@@ -39,15 +39,4 @@ public class PluginBuildCraftTransport extends BlankForestryModule {
 	public String getFailMessage() {
 		return "buildcrafttransport not found";
 	}
-
-	@Override
-	public void registerRecipes() {
-		Item beeswax = ModuleCore.getItems().beeswax;
-		Item pipeWaterproof = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BCT, "waterproof"));
-		if (pipeWaterproof != null) {
-			RecipeUtil.addShapelessRecipe("pipe_waterproof", new ItemStack(pipeWaterproof), beeswax);
-		} else {
-			Log.warning("No BuildCraft pipe waterproof found.");
-		}
-	}
 }

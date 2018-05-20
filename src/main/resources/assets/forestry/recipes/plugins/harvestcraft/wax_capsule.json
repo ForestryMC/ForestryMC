@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "forestry:capsule",
+    "count": 4
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "harvestcraft"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "harvestcraft:beeswaxitem"
+    }
+  },
+  "group": "plugins"
+}

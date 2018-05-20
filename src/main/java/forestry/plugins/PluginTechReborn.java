@@ -117,13 +117,6 @@ public class PluginTechReborn extends CompatPlugin {
 			}
 		}
 
-		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
-		if (bogEarthOutputCan > 0) {
-			ItemStack waterCell = TechRebornAPI.subItemRetriever.getCellByName("water");
-			ItemStack bogEarthCan = ModuleCore.getBlocks().bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, bogEarthOutputCan);
-			RecipeUtil.addRecipe("techreborn_bog_earth_can", bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
-		}
-
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 			ChipsetManager.solderManager.addRecipe(layoutManual, ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);

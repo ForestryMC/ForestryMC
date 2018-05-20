@@ -59,7 +59,6 @@ import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.items.ItemRegistryFluids;
 import forestry.core.loot.SetSpeciesNBT;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
@@ -240,8 +239,6 @@ public class ModuleCore extends BlankForestryModule {
 	public void registerRecipes() {
 		BlockRegistryCore blocks = getBlocks();
 		ItemRegistryCore items = getItems();
-		ItemRegistryFluids fluidItems = ModuleFluids.getItems();
-		String id = ForestryModuleUids.CORE;
 
 		/* SMELTING RECIPES */
 		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
