@@ -14,8 +14,9 @@ import forestry.farming.models.EnumFarmBlockTexture;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 
-public class FarmBlockRecipeWrapper implements IRecipeWrapper {
+public class FarmBlockRecipeWrapper implements IShapedCraftingRecipeWrapper {
 
 	private FarmBlockRecipe recipe;
 	@Nullable
@@ -47,5 +48,15 @@ public class FarmBlockRecipeWrapper implements IRecipeWrapper {
 		ItemStack output = recipe.getRecipeOutput().copy();
 		output.setTagCompound(textureTag.copy());
 		ingredients.setOutput(ItemStack.class, output);
+	}
+
+	@Override
+	public int getWidth() {
+		return recipe.getRecipeWidth();
+	}
+
+	@Override
+	public int getHeight() {
+		return recipe.getRecipeHeight();
 	}
 }

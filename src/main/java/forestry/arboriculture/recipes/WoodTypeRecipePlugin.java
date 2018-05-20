@@ -26,7 +26,9 @@ public class WoodTypeRecipePlugin implements IModPlugin {
 		Collections.addAll(woodTypes, EnumVanillaWoodType.values());
 		for (WoodTypeRecipeBase recipe : WoodTypeRecipeFactory.RECIPES) {
 			for (IWoodType woodType : woodTypes) {
-				wrappers.add(new WoodTypeRecipeWrapper(recipe, woodType, helper));
+				WoodTypeRecipeWrapper wrapper = (recipe instanceof WoodTypeRecipe) ? new WoodTypeRecipeWrapper.Shaped(recipe, woodType, helper) :
+						new WoodTypeRecipeWrapper(recipe, woodType, helper);
+				wrappers.add(wrapper);
 			}
 		}
 		registry.addRecipes(wrappers, VanillaRecipeCategoryUid.CRAFTING);

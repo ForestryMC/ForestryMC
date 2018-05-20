@@ -16,6 +16,7 @@ import forestry.core.utils.ItemStackUtil;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 
 public class WoodTypeRecipeWrapper implements IRecipeWrapper {
 
@@ -53,5 +54,22 @@ public class WoodTypeRecipeWrapper implements IRecipeWrapper {
 		ingredients.setOutput(ItemStack.class, output);
 
 
+	}
+
+	public static class Shaped extends WoodTypeRecipeWrapper implements IShapedCraftingRecipeWrapper {
+
+		public Shaped(WoodTypeRecipeBase recipe, IWoodType woodType, IStackHelper stackHelper) {
+			super(recipe, woodType, stackHelper);
+		}
+
+		@Override
+		public int getWidth() {
+			return ((WoodTypeRecipe) super.recipe).getRecipeWidth();
+		}
+
+		@Override
+		public int getHeight() {
+			return ((WoodTypeRecipe) super.recipe).getRecipeHeight();
+		}
 	}
 }
