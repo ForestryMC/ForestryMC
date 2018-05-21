@@ -35,7 +35,8 @@ public class TileEntityDataFixer {
 		public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
 			String id = compound.getString("id");
 			if (id.contains("forestry.")) {
-				id = id.replace(".", ":");
+				String teName = id.split("\\.")[1];
+				id = "forestry:" + teName;
 			}
 			compound.setString("id", id);
 			return compound;
