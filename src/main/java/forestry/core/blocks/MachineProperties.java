@@ -1,12 +1,9 @@
 package forestry.core.blocks;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-import forestry.api.core.IModelManager;
-import forestry.core.tiles.TileForestry;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -17,9 +14,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileForestry;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
@@ -30,11 +34,11 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	private Block block;
 
 	public MachineProperties(Class<T> teClass, String name) {
-		this("forestry." + name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+		this(name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
 	}
 
 	public MachineProperties(Class<T> teClass, String name, AxisAlignedBB boundingBox) {
-		this("forestry." + name, teClass, name, boundingBox);
+		this(name, teClass, name, boundingBox);
 	}
 
 	private MachineProperties(String teIdent, Class<T> teClass, String name, AxisAlignedBB boundingBox) {
@@ -68,7 +72,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 	@Override
 	public void registerTileEntity() {
-		GameRegistry.registerTileEntity(teClass, teIdent);
+		GameRegistry.registerTileEntity(teClass, new ResourceLocation(Constants.MOD_ID, name));
 	}
 
 	@Override
