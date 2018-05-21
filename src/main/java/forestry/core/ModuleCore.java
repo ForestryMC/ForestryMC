@@ -71,6 +71,7 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
+import forestry.core.tiles.TileEntityDataFixer;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
@@ -142,6 +143,8 @@ public class ModuleCore extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(World2ObjectMap.class);
 
 		rootCommand.addChildCommand(new CommandModules());
+
+		new TileEntityDataFixer();
 	}
 
 	@Override
@@ -288,7 +291,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		// / WRENCH
 		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-		
+
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
@@ -433,22 +436,22 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)){
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 
 		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
-			"A#A",
-			"# #",
-			"A#A",
-			'#', Items.BRICK,
-			'A', OreDictUtil.DUST_ASH);
+				"A#A",
+				"# #",
+				"A#A",
+				'#', Items.BRICK,
+				'A', OreDictUtil.DUST_ASH);
 		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
-			true,
-			"#  ",
-			"## ",
-			"###",
-			'#', Items.BRICK);
+				true,
+				"#  ",
+				"## ",
+				"###",
+				'#', Items.BRICK);
 
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
@@ -467,14 +470,14 @@ public class ModuleCore extends BlankForestryModule {
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("blacklist-ores-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistOreDim(dim);
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
