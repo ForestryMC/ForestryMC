@@ -35,13 +35,13 @@ public class PacketBeeLogicEntityRequest extends ForestryPacket implements IFore
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeEntityById(entity);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			Entity entity = data.readEntityById(player.world);
 			if (entity instanceof IBeeHousing) {
 				IBeeHousing beeHousing = (IBeeHousing) entity;

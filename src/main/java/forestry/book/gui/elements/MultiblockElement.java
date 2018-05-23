@@ -47,8 +47,8 @@ public class MultiblockElement extends GuiElement {
 	private boolean canTick = false;
 	private int tick = 0;
 
-	private float rotX = 0;
-	private float rotY = 0;
+	private float rotX;
+	private float rotY;
 
 	private StructureInfo structureData;
 	private StructureBlockAccess blockAccess;

@@ -34,13 +34,13 @@ public class PacketSolderingIronClick extends ForestryPacket implements IForestr
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeVarInt(slot);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			int slot = data.readVarInt();
 
 			if (!(player.openContainer instanceof IContainerSocketed)) {

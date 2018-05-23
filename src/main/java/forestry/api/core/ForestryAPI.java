@@ -26,7 +26,7 @@ import forestry.api.modules.IModuleManager;
  * If you need to distribute API files, try to only include the parts you are actually
  * using to minimize conflicts due to API changes.
  * <p>
- * .core     - Miscallenous base classes and interfaces as well as some basics for tools, armor, game modes and stuff needed by biome mods.
+ * .core     - Miscellaneous base classes and interfaces as well as some basics for tools, armor, game modes and stuff needed by biome mods.
  * .fuels    - Managers and classes to facilitate adding fuels to various engines and machines.
  * .recipes  - Managers and helpers to facilitate adding new recipes to various machines.
  * .storage  - Managers, events and interfaces for defining new backpacks and handling backpack behaviour.

@@ -163,7 +163,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) {
 		breedingProgressPercent = data.readVarInt();
 	}
 

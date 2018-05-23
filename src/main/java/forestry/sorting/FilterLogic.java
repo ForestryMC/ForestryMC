@@ -122,7 +122,7 @@ public class FilterLogic implements IFilterLogic {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void readGuiData(PacketBuffer data) throws IOException {
+	public void readGuiData(PacketBuffer data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			filterRules[i] = AlleleManager.filterRegistry.getRule(data.readShort());
 		}

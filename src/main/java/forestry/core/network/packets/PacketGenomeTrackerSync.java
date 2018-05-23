@@ -41,7 +41,7 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeCompoundTag(nbt);
 	}
 

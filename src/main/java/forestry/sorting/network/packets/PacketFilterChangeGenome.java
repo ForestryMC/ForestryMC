@@ -35,7 +35,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeShort(facing.getIndex());
 		data.writeShort(index);
@@ -55,7 +55,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			BlockPos pos = data.readBlockPos();
 			EnumFacing facing = EnumFacing.getFront(data.readShort());
 			short index = data.readShort();

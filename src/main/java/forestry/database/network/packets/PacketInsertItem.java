@@ -24,7 +24,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBoolean(single);
 	}
 
@@ -35,7 +35,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 
 	public static class Handler implements IForestryPacketHandlerServer{
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			boolean single = data.readBoolean();
 			Container container = player.openContainer;
 			if(!(container instanceof ContainerDatabase)){

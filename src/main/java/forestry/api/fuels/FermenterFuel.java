@@ -26,7 +26,7 @@ public class FermenterFuel {
 	}
 
 	/**
-	 * How much is fermeted per work cycle, i.e. how much biomass is produced per cycle.
+	 * How much is fermented per work cycle, i.e. how much biomass is produced per cycle.
 	 */
 	public int getFermentPerCycle() {
 		return fermentPerCycle;

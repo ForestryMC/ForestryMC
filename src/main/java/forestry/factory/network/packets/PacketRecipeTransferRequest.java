@@ -38,7 +38,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeItemStacks(craftingInventory);
 	}

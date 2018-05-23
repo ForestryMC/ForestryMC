@@ -44,7 +44,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		recipe.writeData(data);
 	}

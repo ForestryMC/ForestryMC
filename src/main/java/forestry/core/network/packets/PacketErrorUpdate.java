@@ -36,7 +36,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		errorLogic.writeData(data);
 	}
@@ -49,7 +49,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 
 			TileUtil.actOnTile(player.world, pos, IErrorLogicSource.class, errorSourceTile -> {

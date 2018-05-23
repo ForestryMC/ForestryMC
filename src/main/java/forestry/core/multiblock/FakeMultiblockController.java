@@ -192,7 +192,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) {
 
 	}
 }
