@@ -27,22 +27,16 @@ import forestry.core.utils.ItemStackUtil;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
-	private final String teIdent;
 	private final Class<T> teClass;
 	private final AxisAlignedBB boundingBox;
 	@Nullable
 	private Block block;
 
 	public MachineProperties(Class<T> teClass, String name) {
-		this(name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+		this(teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
 	}
 
 	public MachineProperties(Class<T> teClass, String name, AxisAlignedBB boundingBox) {
-		this(name, teClass, name, boundingBox);
-	}
-
-	private MachineProperties(String teIdent, Class<T> teClass, String name, AxisAlignedBB boundingBox) {
-		this.teIdent = teIdent;
 		this.teClass = teClass;
 		this.name = name;
 		this.boundingBox = boundingBox;
