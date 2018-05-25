@@ -1,0 +1,38 @@
+{
+	"title": "Bio Generator",
+	"icon": {
+		"item": "forestry:engine_generator"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_generator"
+				]
+			},
+			{
+				"text": "If you have IndustrialCraft², you can use Biomass or Biofuel to produce EU for use in IndustrialCraft² machines."
+			},
+			{
+				"text": "Its energy production depends on the fuel used, it'll produce far more energy with Biofuel than with Biomass.",
+				"paragraph": true
+			},
+			{
+				"text": "IndustrialCraft² Cable Connectivity",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "You can connect an IndustrialCraft² machine or storage unit directly to the Bio Generator, or use any cable that supports at least Low Voltage (LV), such as Copper Cable."
+			},
+			{
+				"text": "Ultra-Low-Current Cable (also known as Tin Cable) will not work!",
+				"paragraph": true
+			}
+		]
+	]
+}

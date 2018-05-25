@@ -46,12 +46,13 @@ import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.gui.BlankAdvancedGuiHandler;
+import mezz.jei.api.gui.IAdvancedGuiHandler;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
@@ -60,13 +61,13 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 public class FactoryJeiPlugin implements IModPlugin {
 	@Nullable
 	public static IJeiHelpers jeiHelpers;
-	
+
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)){
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			return;
 		}
-		
+
 		jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
@@ -86,8 +87,8 @@ public class FactoryJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
-		
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)){
+
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			return;
 		}
 		jeiHelpers = registry.getJeiHelpers();
@@ -136,7 +137,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		);
 	}
 
-	private static class ForestryAdvancedGuiHandler extends BlankAdvancedGuiHandler<GuiForestry> {
+	private static class ForestryAdvancedGuiHandler implements IAdvancedGuiHandler<GuiForestry> {
 
 		@Override
 		public Class<GuiForestry> getGuiContainerClass() {

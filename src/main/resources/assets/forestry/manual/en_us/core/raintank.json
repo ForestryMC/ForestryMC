@@ -1,0 +1,23 @@
+{
+	"title": "Rain Tank",
+	"icon": {
+		"item": "forestry:raintank"
+	},
+	"content": [
+		[
+			{
+				"text": "The raintank is a machine that will build up it's internal buffer with water when it's placed outside in the rain."
+			},
+			{
+				"text": "The raintank does not require energy to bottle water.",
+				"paragraph": true
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:raintank"
+				]
+			}
+		]
+	]
+}

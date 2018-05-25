@@ -1,0 +1,19 @@
+{
+	"title": "贸易目录",
+	"icon":{
+		"item": "forestry:catalogue"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:catalogue"
+				]
+			},
+			{
+				"text": "使用贸易目录即可浏览服务器上所有可用的贸易站。点击“使用”后，它会在你写邮件时自动填上对应贸易站的地址。"
+			}
+		]
+	]
+}

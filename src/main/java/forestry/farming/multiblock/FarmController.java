@@ -77,6 +77,7 @@ import forestry.farming.FarmHelper.Stage;
 import forestry.farming.FarmRegistry;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
 
@@ -630,7 +631,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void resetFarmLogic(FarmDirection direction) {
-		setFarmLogic(direction, FarmRegistry.getInstance().getProperties("farmArboreal").getLogic(false));
+		setFarmLogic(direction, FarmRegistry.getInstance().getProperties(ForestryFarmIdentifier.ARBOREAL).getLogic(false));
 	}
 
 	@Override
@@ -650,7 +651,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
-		if (ChipsetManager.circuitRegistry.isChipset(stack)) {
+		if (ChipsetManager.circuitRegistry.isChipset(stack) || stack.isEmpty()) {
 			// Dispose old chipsets correctly
 			if (!sockets.getStackInSlot(slot).isEmpty()) {
 				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {

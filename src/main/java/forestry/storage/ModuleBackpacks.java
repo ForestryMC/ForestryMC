@@ -140,7 +140,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		registerFenceAndFenceGatesToOreDict();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -386,22 +385,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedItemDefaults.putAll(backpackInterface.getBackpackAcceptedItems());
 	}
 
-	// Should be ore dicted in Forge at some point.
-	private static void registerFenceAndFenceGatesToOreDict() {
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.OAK_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.SPRUCE_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.BIRCH_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.JUNGLE_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.DARK_OAK_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_WOOD, Blocks.ACACIA_FENCE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.OAK_FENCE_GATE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.SPRUCE_FENCE_GATE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.BIRCH_FENCE_GATE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.JUNGLE_FENCE_GATE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.DARK_OAK_FENCE_GATE);
-		OreDictionary.registerOre(OreDictUtil.FENCE_GATE_WOOD, Blocks.ACACIA_FENCE_GATE);
-	}
-
 	private static List<String> getItemStrings(List<ItemStack> itemStacks) {
 		List<String> itemStrings = new ArrayList<>(itemStacks.size());
 		for (ItemStack itemStack : itemStacks) {
@@ -464,7 +447,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 			// accepted oreDict
 			{
-				String[] defaultOreRegexpNames =new String[0];
+				String[] defaultOreRegexpNames = new String[0];
 				List<String> defaultOreRegexpList = backpackAcceptedOreDictRegexpDefaults.get(backpackUid);
 				if (defaultOreRegexpList != null) {
 					Collections.sort(defaultOreRegexpList);

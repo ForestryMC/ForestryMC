@@ -17,7 +17,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/mc-1.12
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,9 +38,13 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
+<<<<<<< HEAD
 import forestry.core.translation.Translator;
 
+=======
+>>>>>>> upstream/mc-1.12
 import forestry.core.utils.ItemTooltipUtil;
+import forestry.core.utils.Translator;
 
 public class ItemElectronTube extends ItemOverlay {
 

@@ -460,9 +460,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public NonNullList<ItemStack> getSpecialtyList() {
 		Set<ItemStack> specialties = genome.getPrimary().getSpecialtyChances().keySet();
 		NonNullList<ItemStack> specialtyList = NonNullList.create();
-		for (ItemStack specialty : specialties) {
-			specialtyList.add(specialty);
-		}
+		specialtyList.addAll(specialties);
 		return specialtyList;
 	}
 

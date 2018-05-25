@@ -11,5 +11,5 @@ public enum EnumDatabaseTab {
 	//Used to display information about the products of the active species of the individual.
 	PRODUCTS,
 	//Used to display information about the mutations of the active species of the individual.
-	MUTATIONS;
+	MUTATIONS
 }

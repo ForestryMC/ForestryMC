@@ -18,10 +18,7 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
-		if (speciesRoot == null) {
-			return false;
-		}
-		return true;
+		return speciesRoot != null;
 	}
 
 	@Override

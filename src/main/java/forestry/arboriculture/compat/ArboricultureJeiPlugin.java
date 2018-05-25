@@ -10,6 +10,7 @@ import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -19,7 +20,7 @@ import mezz.jei.api.JEIPlugin;
 public class ArboricultureJeiPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE))) {
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			return;
 		}
 

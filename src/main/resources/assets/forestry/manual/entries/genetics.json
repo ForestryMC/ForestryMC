@@ -1,0 +1,8 @@
+{
+	"sorting": [
+		"genetics/filter"
+	],
+	"database": [
+		"genetics/database"
+	]
+}

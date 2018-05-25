@@ -1,0 +1,14 @@
+{
+	"title": "Tree Mutations",
+	"icon":{
+			"item": "forestry:sapling",
+			"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeTeak\",UID0:\"forestry..treeTeak\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"text": "Cross-pollination naturally occurs between tree types when there are helpful insects nearby. Bees are known to carry pollen from one tree to another, and butterflies taking repose on leaves are known to take pollen along with them as well. By having two varieties of trees near each other and within range of an active bee colony, it is possible that they will be crossbred, and perhaps have offspring that will mutate."
+			}
+		]
+	]
+}

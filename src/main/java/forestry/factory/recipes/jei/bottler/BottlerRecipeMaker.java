@@ -22,7 +22,7 @@ public class BottlerRecipeMaker {
 
 	public static List<BottlerRecipeWrapper> getBottlerRecipes(IIngredientRegistry ingredientRegistry) {
 		List<BottlerRecipeWrapper> recipes = new ArrayList<>();
-		for (ItemStack stack : ingredientRegistry.getIngredients(ItemStack.class)) {
+		for (ItemStack stack : ingredientRegistry.getAllIngredients(ItemStack.class)) {
 			if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 				IFluidHandlerItem fluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 				if (fluidHandler != null) {

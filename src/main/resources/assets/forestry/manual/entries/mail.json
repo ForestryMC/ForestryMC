@@ -1,0 +1,10 @@
+{
+	"mail": [
+		"mail/catalogue",
+		"mail/stamps",
+		"mail/mailbox",
+		"mail/stamp_collector",
+		"mail/trade_station",
+		"mail/letters"
+	]
+}

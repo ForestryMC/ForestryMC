@@ -33,6 +33,7 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.FarmRegistry;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -61,7 +62,7 @@ public class PluginTechReborn extends CompatPlugin {
 
 	@Override
 	public void preInit() {
-		IFarmProperties rubberFarm = FarmRegistry.getInstance().registerLogic("farmRubber", FarmLogicRubber::new);
+		IFarmProperties rubberFarm = FarmRegistry.getInstance().registerLogic(ForestryFarmIdentifier.RUBBER, FarmLogicRubber::new);
 
 		Circuits.farmRubberManual = new CircuitFarmLogic("manualRubber", rubberFarm, true);
 	}

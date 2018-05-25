@@ -1,0 +1,19 @@
+{
+	"title": "扳手",
+	"icon":{
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"text": "玩家可用扳手调节林业设备和引擎的方向。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:wrench"
+				]
+			}
+		]
+	]
+}
