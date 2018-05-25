@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.config.Constants;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+
+import forestry.core.config.Constants;
 
 public class Log {
 
@@ -37,7 +38,7 @@ public class Log {
 	}
 
 	private static void log(Level logLevel, String message, Object... params) {
-		LogManager.getLogger(Constants.MOD_ID).log(logLevel, message, params);
+		LogManager.getLogger(Constants.MOD_ID).log(logLevel, String.format("[Forestry] %s", message), params);
 	}
 
 }
