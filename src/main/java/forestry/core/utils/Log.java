@@ -38,7 +38,7 @@ public class Log {
 	}
 
 	private static void log(Level logLevel, String message, Object... params) {
-		LogManager.getLogger(Constants.MOD_ID).log(logLevel, String.format("[ Forestry ] %s", message), params);
+		LogManager.getLogger(Constants.MOD_ID).log(logLevel, String.format("[Forestry] %s", message), params);
 	}
 
 }
