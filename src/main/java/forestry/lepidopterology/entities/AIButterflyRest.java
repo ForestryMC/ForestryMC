@@ -116,7 +116,8 @@ public class AIButterflyRest extends AIButterflyBase {
 			return true;
 		} else if (block instanceof IGrowable) {
 			return true;
-		} else
+		} else {
 			return blockState.getMaterial() == Material.PLANTS;
+		}
 	}
 }
