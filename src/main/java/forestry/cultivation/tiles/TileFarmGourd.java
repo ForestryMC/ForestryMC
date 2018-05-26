@@ -4,9 +4,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.farming.logic.ForestryFarmIdentifier;
+
 public class TileFarmGourd extends TilePlanter {
 	public TileFarmGourd() {
-		super("farmGourd");
+		super(ForestryFarmIdentifier.GOURD);
 	}
 
 	@Override

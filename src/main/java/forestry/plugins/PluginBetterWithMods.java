@@ -13,6 +13,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableDoubleCrop;
 import forestry.modules.ForestryModuleUids;
 
@@ -38,7 +39,7 @@ public class PluginBetterWithMods extends CompatPlugin {
 			IBlockState mature = defaultState.withProperty(AGE, 7).withProperty(TOP, false);
 			IBlockState topMature = defaultState.withProperty(AGE, 7).withProperty(TOP, true);
 
-			farmRegistry.registerFarmables("farmCrops", new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
+			farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableDoubleCrop(hempSeed, planted, mature, topMature, true));
 
 			RecipeManagers.squeezerManager.addRecipe(10, hempSeed, Fluids.SEED_OIL.getFluid(seedAmount));
 		}

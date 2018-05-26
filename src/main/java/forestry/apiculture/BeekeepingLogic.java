@@ -228,6 +228,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		hasFlowersCache.update(queen, housing);
+
 		boolean hasFlowers = hasFlowersCache.hasFlowers();
 		boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);

@@ -5,9 +5,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.farming.logic.ForestryFarmIdentifier;
+
 public class TileFarmNether extends TilePlanter {
 	public TileFarmNether() {
-		super("farmInfernal");
+		super(ForestryFarmIdentifier.INFERNAL);
 	}
 
 	@Override

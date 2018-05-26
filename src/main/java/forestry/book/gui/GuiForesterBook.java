@@ -39,7 +39,7 @@ public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
 	private static final int X_SIZE = 256;
 	private static final int Y_SIZE = 181;
 	@Nullable
-	public static GuiForesterBook guiScreen;
+	private static GuiForesterBook guiScreen;
 	protected final IForesterBook book;
 	final ElementManager<GuiForesterBook> elementManager;
 
@@ -50,6 +50,10 @@ public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
 		this.book = book;
 		setGuiScreen(this);
 		this.elementManager = new ElementManager<>(this);
+	}
+
+	public IForesterBook getBook() {
+		return book;
 	}
 
 	@Override
@@ -169,6 +173,11 @@ public abstract class GuiForesterBook extends GuiScreen implements IGuiSizable {
 	@Override
 	public Minecraft getMC() {
 		return mc;
+	}
+
+	@Nullable
+	public static GuiForesterBook getGuiScreen() {
+		return guiScreen;
 	}
 
 	public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {

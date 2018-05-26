@@ -1,0 +1,38 @@
+{
+	"title": "生物质发电机",
+	"icon": {
+		"item": "forestry:engine_generator"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_generator"
+				]
+			},
+			{
+				"text": "如果你装了 IndustrialCraft²，你可以利用这生物质发电机，使用生物质或生物乙醇燃料来驱动 IndustrialCraft² 的机器。"
+			},
+			{
+				"text": "它产出的能量多少与燃料有关；生物乙醇燃料的能量产出比生物质高。",
+				"paragraph": true
+			},
+			{
+				"text": "与 IndustrialCraft² 电线连接",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "生物质发电机可与 IndustrialCraft² 的机器、存电单元或支持低压（LV）的电线（例如铜线）直接相连。"
+			},
+			{
+				"text": "不要将超低压电线与生物质发电机相连！",
+				"paragraph": true
+			}
+		]
+	]
+}

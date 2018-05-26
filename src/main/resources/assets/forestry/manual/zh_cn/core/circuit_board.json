@@ -1,0 +1,38 @@
+{
+	"title": "电子板",
+	"icon":{
+		"item": "forestry:chipsets"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:chipsets",
+						"data": 0,
+						"nbt": "{\"T\":0s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 1,
+						"nbt": "{\"T\":1s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 2,
+						"nbt": "{\"T\":2s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 3,
+						"nbt": "{\"T\":3s}"
+					}
+				]
+			},
+			{
+				"text": "使用电烙铁可以在电子板上安装电子管。安装有电子管的电子板可通过 GUI 插入设备的插槽中。要从设备中拆除电子板，请用电烙铁。"
+			}
+		]
+	]
+}

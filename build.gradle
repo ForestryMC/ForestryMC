@@ -25,7 +25,6 @@ group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming
 archivesBaseName = "forestry_" + mcversion
 
 ext.dirDest = './build/dist'
-ext.dirLang = "./lang"
 
 // java version
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -40,14 +39,6 @@ minecraft {
 	replace '@BUILD_NUMBER@', getBuildNumber()
 }
 
-sourceSets {
-	main {
-		resources {
-			srcDir project.dirLang
-		}
-	}
-}
-
 repositories {
 	maven {
 		url 'http://maven.epoxide.xyz'
@@ -59,6 +50,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+	maven {
+		name = "Modmuss50"
+		url = "http://maven.modmuss50.me"
+	}
 }
 
 dependencies {
@@ -66,6 +61,7 @@ dependencies {
 	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
 	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 }
 
 configurations {

@@ -1,0 +1,19 @@
+{
+	"title": "分析仪",
+	"icon": {
+		"item": "forestry:analyzer"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:analyzer"
+				]
+			},
+			{
+				"text": "便携式分析仪的固定版本。将蜜蜂、树苗、蝴蝶等放入左边的格子中，机器会开始分析并将分析完成的物种放入右边的格子中。"
+			}
+		]
+	]
+}

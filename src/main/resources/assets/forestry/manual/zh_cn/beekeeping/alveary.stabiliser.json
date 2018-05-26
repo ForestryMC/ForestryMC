@@ -1,0 +1,19 @@
+{
+	"title": "Alveary Stabiliser",
+	"icon":{
+		"item": "forestry:alveary.stabiliser"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_stabiliser"
+				]
+			},
+			{
+				"text": "The Alveary Stabiliser prevents the offsprings of the queen from mutate to new species. To use it, replace one of the blocks of the Alveary in the bottom two layers of the Alveary by the Alveary Stabiliser Block."
+			}
+		]
+	]
+}

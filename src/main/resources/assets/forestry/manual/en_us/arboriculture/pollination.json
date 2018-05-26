@@ -1,0 +1,28 @@
+{
+	"title": "Pollination",
+	"icon":{
+		"item": "forestry:pollen",
+		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeEbony\",UID0:\"forestry..treeEbony\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"text": "There are many misconceptions among laymen as to how tree breeding works. The common adage of “the birds and the bees” has many people confused, as it is partly wrong. You can't breed trees with birds! However, you may be happy to hear that almost any bee is able to cross-pollinate trees of different species. Though experienced forester will usually recommend some of the more high-end bee"
+			}
+		],
+		[
+			{
+				"text": "breeds like rural or industrious for dedicated tree breeding - or have bred their own specialised bees for that purpose - the beginner can rest assured that even the most mundane of bees will do an adequate job at pollinating nearby trees."
+			},
+			{
+				"text": "The underlying principle is rather simple: Set down apiaries near trees of different species and keep them stocked with working bee queens.",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "After a while - depending on the quality of the bee and the density of the surrounding forest - you will start to see some leaves change colour. These leaves have been pollinated by another tree with a different genetic makeup. Just break them and hope for a new sapling to drop."
+			}
+		]
+	]
+}

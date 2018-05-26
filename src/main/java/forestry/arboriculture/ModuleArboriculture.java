@@ -390,7 +390,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 					'#', fireproofPlanks.copy());
 
 			// Fabricator recipes
-			if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
+			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
 				logs.setCount(1);
 				fireproofLogs.setCount(1);
 				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{

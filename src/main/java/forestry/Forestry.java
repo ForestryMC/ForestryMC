@@ -55,6 +55,7 @@ import forestry.modules.ModuleManager;
 import forestry.plugins.ForestryCompatPlugins;
 import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginNatura;
+import forestry.plugins.PluginTechReborn;
 
 /**
  * Forestry Minecraft Mod
@@ -67,11 +68,12 @@ import forestry.plugins.PluginNatura;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.0.2500,);"
+		dependencies = "required-after:forge@[14.23.2.2643,);"
 				+ "after:jei@[4.7.8.91,);"
 				+ "after:" + PluginIC2.MOD_ID + ";"
 				+ "after:" + PluginNatura.MOD_ID + ";"
-				+ "after:toughasnails;")
+				+ "after:toughasnails;"
+				+ "after:" + PluginTechReborn.MOD_ID + ";")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")

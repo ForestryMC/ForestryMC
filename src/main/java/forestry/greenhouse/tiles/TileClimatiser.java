@@ -244,7 +244,6 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
-
 		if (!stack.isEmpty() && !ChipsetManager.circuitRegistry.isChipset(stack)) {
 			return;
 		}

@@ -1,0 +1,68 @@
+{
+	"title": "大蜂箱",
+	"icon":{
+		"item": "forestry:alveary.plain"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_plain"
+				]
+			},
+			{
+				"text": "许久后，你注意到原始的蜂箱无法令蜜蜂发挥所有潜能。是时候升级了。这大蜂箱的尺寸是普通蜂箱的三倍，但我的记录显示其蜂蜜的产量是蜂箱的十倍。"
+			}
+		],
+		[
+			{
+				"type": "image",
+				"u": 0,
+				"v": 0,
+				"uWidth": 300,
+				"vHeight": 169,
+				"textureLocation": "forestry:textures/gui/almanac/scraps/alveary.png",
+				"textureWidth": 300,
+				"textureHeight": 169,
+				"width": 108,
+				"height": 60
+			}
+		],
+		[
+			{
+				"text": "你需要二十七个大蜂箱方块才能建出这样一个新奇玩意。二十七个大蜂箱方块应该能组成一个正方体，这便是大蜂箱的主体。同时你还需要九个充当顶部的方块，这里我推荐使用木台阶。若一切准备得当，你应该会注意到它们会组成一个整体，并形成可供蜜蜂居住的孔穴结构。大蜂箱使用起来与普通蜂箱无异，但我至今也没能往里面塞进去任何框架。"
+			}
+		],
+		[
+			{
+				"type": "structure",
+				"structureFile": "structures/alveary.json"
+			}
+		],
+		[
+			{
+				"text": "每个大蜂箱方块都十分昂贵，需要用海量蜂蜜打造飘香镶板，还需要用种子油制造大量浸渍套件。"
+			},
+			{
+				"type": "carpenter",
+				"stack":{
+					"item": "forestry:crafting_material",
+					"data": 6
+				}
+			}
+		],
+		[
+			{
+				"text": "这意味着，一个大蜂箱可能需要很多天的努力才能造出来，但它的确物有所值。将镶板固定在浸渍套件的周围，得到的将会是蜜蜂们的坚固耐用的新家，镶板独有的香气将会激励蜜蜂们全力以赴地工作，而这是区区普通蜂房所做不到的。"
+			}
+		]
+	],
+	"subEntries": [
+		"beekeeping/alveary.heater",
+		"beekeeping/alveary.fan",
+		"beekeeping/alveary.sieve",
+		"beekeeping/alveary.stabiliser",
+		"beekeeping/alveary.swarmer"
+	]
+}

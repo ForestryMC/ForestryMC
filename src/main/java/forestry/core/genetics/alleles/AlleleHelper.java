@@ -56,7 +56,7 @@ public class AlleleHelper implements IAlleleHelper {
 			createAlleles(EnumAllele.Territory.class, EnumBeeChromosome.TERRITORY);
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE, ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (ModuleHelper.anyEnabled(ForestryModuleUids.APICULTURE, ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Speed.class,
 					EnumBeeChromosome.SPEED,
 					EnumButterflyChromosome.SPEED

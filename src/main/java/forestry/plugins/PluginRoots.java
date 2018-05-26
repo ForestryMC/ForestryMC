@@ -12,6 +12,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.modules.ForestryModuleUids;
 
@@ -57,7 +58,7 @@ public class PluginRoots extends CompatPlugin {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
 			}
 			if (seed != null && block != null) {
-				farmRegistry.registerFarmables("farmCrops", new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
+				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seed, block, BlockCrops.AGE, 7, 0));
 			}
 		}
 	}

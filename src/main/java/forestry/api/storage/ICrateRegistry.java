@@ -27,4 +27,12 @@ public interface ICrateRegistry {
 
 	void registerCrate(String oreDictName);
 
+	/**
+	 * prevent a crate from being registered
+	 * @param stack the ItemStack to blacklist
+	 */
+	default void blacklistCrate(ItemStack stack) {
+
+	}
+
 }

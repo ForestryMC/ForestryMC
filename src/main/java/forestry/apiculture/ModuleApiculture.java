@@ -31,6 +31,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -50,7 +52,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -157,9 +158,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int ticksPerBeeWorkCycle = 550;
 
 	public static boolean hivesDamageOnPeaceful = false;
-	
+
 	public static boolean doSelfPollination = true;
-	
+
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
@@ -237,7 +238,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
@@ -282,7 +283,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
-		
+
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
 		config.save();
@@ -423,7 +424,7 @@ public class ModuleApiculture extends BlankForestryModule {
 					flowerType.getName().contains("sapling") ||
 					flowerType == BlockFlowerPot.EnumFlowerType.DEAD_BUSH ||
 					flowerType == BlockFlowerPot.EnumFlowerType.FERN) {
-				continue;
+				//Don't register these as flowers
 			} else if (flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_RED ||
 					flowerType == BlockFlowerPot.EnumFlowerType.MUSHROOM_BROWN) {
 				flowerRegistry.registerAcceptableFlower(flowerPot.withProperty(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
@@ -538,15 +539,15 @@ public class ModuleApiculture extends BlankForestryModule {
 				"C",
 				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
-		for (int blockCount = 0; blockCount < blocks.beeCombs.length; blockCount++) {
-			BlockHoneyComb block = blocks.beeCombs[blockCount];
-			for (int blockMeta = 0; blockMeta < EnumHoneyComb.VALUES.length - blockCount * 16; blockMeta++) {
-				int itemMeta = blockMeta + blockCount * 16;
-				RecipeUtil.addRecipe("comb." + itemMeta, new ItemStack(block, 1, blockMeta),
-						"###",
-						"###",
-						"###", '#', items.beeComb.get(EnumHoneyComb.get(itemMeta), 1));
-			}
+		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+			int remainder = i & 15;
+			int quotient = i >> 4;
+			BlockHoneyComb block = blocks.beeCombs[quotient];
+			RecipeUtil.addRecipe("comb." + i, new ItemStack(block, 1, remainder),
+					"###",
+					"###",
+					"###", '#', items.beeComb.get(EnumHoneyComb.get(i), 1));
+
 		}
 
 		// FOOD STUFF
@@ -931,7 +932,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				continue;
 			}
 
-			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
+			Log.debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
 		}
 	}
@@ -988,9 +989,50 @@ public class ModuleApiculture extends BlankForestryModule {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;
+		} else if (message.key.equals("add-plantable-flower")) {
+			return addPlantableFlower(message);
+		} else if (message.key.equals("add-acceptable-flower")) {
+			return addAcceptableFlower(message);
 		}
 
 		return false;
+	}
+
+	private boolean addPlantableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			double weight = tagCompound.getDouble("weight");
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
+	}
+
+	private boolean addAcceptableFlower(IMCMessage message) {
+		try {
+			NBTTagCompound tagCompound = message.getNBTValue();
+			IBlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			List<String> flowerTypes = new ArrayList<>();
+			for (String key : tagCompound.getKeySet()) {
+				if (key.contains("flowertype")) {
+					flowerTypes.add(tagCompound.getString("flowertype"));
+				}
+			}
+			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[flowerTypes.size()]));
+			return true;
+		} catch (Exception e) {
+			IMCUtil.logInvalidIMCMessage(message);
+			return false;
+		}
 	}
 
 	@SubscribeEvent

@@ -483,7 +483,7 @@ public class ModuleFactory extends BlankForestryModule {
 		// RAIN SUBSTRATES
 
 
-		if (ModuleHelper.isEnabled(Constants.MOD_ID, ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), ItemStack.EMPTY, coreItems.iodineCharge.getItemStack(),
 					"Z#Z",

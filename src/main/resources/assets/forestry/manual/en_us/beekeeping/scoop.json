@@ -1,0 +1,24 @@
+{
+	"title": "Scoop",
+	"icon":{
+		"item": "forestry:scoop"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:scoop"
+				]
+			},
+			{
+				"text": "To get bees out you need to catch them with one of my most remarkable inventions, the scoop. Sadly my alternative names of “bee capturing implement” and “net-on-a-stick” did not catch on."
+			}
+		],
+		[
+			{
+				"text": "Somehow, beating in a repetitive manner on these hives reveals the bees, who are rather large and colourful. To create the scoop, you will need to assemble it using sticks and string, although I'll leave the art of tying a net from string to you."
+			}
+		]
+	]
+}
