@@ -17,7 +17,7 @@
           "type": "module"
         },
         {
-          "type": "api_setting",
+          "type": "config",
           "category": "energy.engine.clockwork"
         }
       ]

@@ -1,8 +1,7 @@
 {
   "conditions": {
     "module": "forestry.core.recipes.DisableRecipe",
-    "config": "forestry.core.recipes.ConfigDisableRecipe",
-    "api_setting": "forestry.core.recipes.APIDisableRecipe"
+    "config": "forestry.core.recipes.ConfigDisableRecipe"
   },
   "recipes": {
     "wood_type": "forestry.arboriculture.recipes.WoodTypeRecipeFactory",
