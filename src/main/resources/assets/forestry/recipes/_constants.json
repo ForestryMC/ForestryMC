@@ -93,6 +93,27 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeBlue"
+    },
+    "name": "DYEBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeRed"
+    },
+    "name": "DYERED"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeYellow"
+    },
+    "name": "DYEYELLOW"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "emptiedLetter"
     },
     "name": "EMPTIEDLETTER"
@@ -103,6 +124,13 @@
       "ore": "fruitForestry"
     },
     "name": "FRUITFORESTRY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearStone"
+    },
+    "name": "GEARSTONE"
   },
   {
     "ingredient": {

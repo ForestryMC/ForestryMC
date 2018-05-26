@@ -10,8 +10,17 @@
   ],
   "conditions": [
     {
-      "module": "energy",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "energy",
+          "type": "module"
+        },
+        {
+          "type": "api_setting",
+          "category": "energy.engine.clockwork"
+        }
+      ]
     }
   ],
   "type": "forge:ore_shaped",

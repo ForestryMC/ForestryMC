@@ -19,7 +19,13 @@
       "item": "#INGOTTIN"
     },
     "X": {
-      "item": "#INGOTCOPPER"
+      "type": "fallback",
+      "primary": {
+        "item": "#GEARSTONE"
+      },
+      "fallback": {
+        "item": "#INGOTCOPPER"
+      }
     }
   },
   "group": "core"

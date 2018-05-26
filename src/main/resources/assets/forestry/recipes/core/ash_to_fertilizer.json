@@ -14,7 +14,8 @@
       "type": "module"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.fertilizer.ash",
   "key": {
     "#": {
       "item": "#DUSTASH"

@@ -21,7 +21,8 @@
       ]
     }
   ],
-  "type": "minecraft:crafting_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.capsule",
   "key": {
     "#": {
       "item": "harvestcraft:beeswaxitem"

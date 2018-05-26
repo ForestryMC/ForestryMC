@@ -14,6 +14,7 @@ package forestry.core.recipes;
 
 import com.google.gson.JsonObject;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -25,8 +26,11 @@ import net.minecraftforge.common.crafting.JsonContext;
 
 import forestry.api.core.ForestryAPI;
 
+@SuppressWarnings("unused")
+
 public class DisableRecipe implements IConditionFactory {
 
+	@Nullable
 	private static Set<String> enabledModuleUIDs;
 
 	@Override

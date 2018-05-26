@@ -1,0 +1,45 @@
+{
+  "result": {
+    "item": "forestry:crafting_material",
+    "data": 7
+  },
+  "pattern": [
+    "WWW",
+    "YBR",
+    "WWW"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "core",
+          "type": "module"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "module",
+            "module": "factory"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "W": {
+      "item": "#PLANKWOOD"
+    },
+    "Y": {
+      "item": "#DYEYELLOW"
+    },
+    "B": {
+      "item": "#DYEBLUE"
+    },
+    "R": {
+      "item": "#DYERED"
+    }
+  },
+  "group": "core"
+}

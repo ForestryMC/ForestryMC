@@ -23,7 +23,8 @@
       ]
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.wheat",
   "key": {
     "#": {
       "item": "minecraft:dirt",

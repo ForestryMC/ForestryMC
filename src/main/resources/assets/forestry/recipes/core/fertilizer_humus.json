@@ -1,12 +1,13 @@
 {
   "result": {
-    "item": "forestry:fertilizer_bio",
-    "count": 4
+    "item": "forestry:humus",
+    "data": 0,
+    "count": 8
   },
   "pattern": [
-    " X ",
-    "X#X",
-    " X "
+    "###",
+    "#X#",
+    "###"
   ],
   "conditions": [
     {
@@ -14,14 +15,15 @@
       "type": "module"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.humus.fertilizer",
   "key": {
     "#": {
       "item": "minecraft:dirt",
       "data": 0
     },
     "X": {
-      "item": "#CROPWHEAT"
+      "item": "forestry:fertilizer_compound"
     }
   },
   "group": "core"

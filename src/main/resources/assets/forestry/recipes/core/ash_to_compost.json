@@ -1,13 +1,11 @@
 {
   "result": {
-    "item": "forestry:humus",
-    "data": 0,
-    "count": 8
+    "item": "forestry:fertilizer_bio"
   },
   "pattern": [
-    "###",
-    "#X#",
-    "###"
+    " X ",
+    "X#X",
+    " X "
   ],
   "conditions": [
     {
@@ -15,14 +13,15 @@
       "type": "module"
     }
   ],
-  "type": "minecraft:crafting_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.ash",
   "key": {
     "#": {
       "item": "minecraft:dirt",
       "data": 0
     },
     "X": {
-      "item": "forestry:fertilizer_bio"
+      "item": "#DUSTASH"
     }
   },
   "group": "core"

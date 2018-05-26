@@ -11,8 +11,18 @@
   ],
   "conditions": [
     {
-      "module": "apiculture",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "module"
+        },
+        {
+          "module": "factory",
+          "type": "module"
+        }
+
+      ]
     }
   ],
   "type": "minecraft:crafting_shapeless",

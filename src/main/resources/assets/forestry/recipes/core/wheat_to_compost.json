@@ -1,6 +1,7 @@
 {
   "result": {
-    "item": "forestry:fertilizer_bio"
+    "item": "forestry:fertilizer_bio",
+    "count": 4
   },
   "pattern": [
     " X ",
@@ -13,14 +14,15 @@
       "type": "module"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.wheat",
   "key": {
     "#": {
       "item": "minecraft:dirt",
       "data": 0
     },
     "X": {
-      "item": "#DUSTASH"
+      "item": "#CROPWHEAT"
     }
   },
   "group": "core"

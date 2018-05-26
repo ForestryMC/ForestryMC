@@ -7,8 +7,14 @@
       "item": "minecraft:paper"
     },
     {
-      "item": "forestry:propolis",
-      "data": 32767
+      "type": "fallback",
+      "primary": {
+        "item": "forestry:propolis",
+        "data": 32767
+      },
+      "secondary": {
+        "item": "minecraft:slime_ball"
+      }
     }
   ],
   "conditions": [

@@ -22,10 +22,10 @@
           "modid": "ic2"
         }
       ]
-
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.bogearth.can",
   "key": {
     "#": {
       "item": "minecraft:dirt",

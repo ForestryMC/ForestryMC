@@ -11,8 +11,17 @@
   ],
   "conditions": [
     {
-      "module": "mail",
-      "type": "module"
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "mail",
+          "type": "module"
+        },
+        {
+          "type": "config",
+          "category": "crafting.stamps:enabled"
+        }
+      ]
     }
   ],
   "type": "forge:ore_shaped",
@@ -24,8 +33,14 @@
       "item": "#INGOTGOLD"
     },
     "Z": {
-      "item": "forestry:honey_drop",
-      "data": 0
+      "type": "fallback",
+      "primary": {
+        "item": "forestry:honey_drop",
+        "data": 0
+      },
+      "secondary": {
+        "item": "minecraft:slime_ball"
+      }
     }
   },
   "group": "mail"

@@ -12,7 +12,8 @@
       "type": "module"
     }
   ],
-  "type": "minecraft:crafting_shaped",
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.refractory",
   "key": {
     "#": {
       "item": "forestry:refractory_wax"
