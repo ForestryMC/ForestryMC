@@ -144,12 +144,14 @@ public class PluginIC2 extends BlankForestryModule {
 	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void doInit() {
 		// Remove some items from the recycler
-		if (Recipes.recyclerBlacklist != null && ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-			Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beeQueenGE)));
-			Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beePrincessGE)));
-		} else {
-			Log.error("IC2 Recipes.recyclerBlacklist not found.");
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			if (Recipes.recyclerBlacklist != null) {
+				ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
+				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beeQueenGE)));
+				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beePrincessGE)));
+			} else {
+				Log.error("IC2 Recipes.recyclerBlacklist not found.");
+			}
 		}
 
 		Circuits.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
@@ -157,8 +159,8 @@ public class PluginIC2 extends BlankForestryModule {
 		Circuits.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 4, 10);
 		Circuits.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 7, 20);
 
-		blocks.electricalEngine.init();
-		blocks.generator.init();
+		getBlocks().electricalEngine.init();
+		getBlocks().generator.init();
 	}
 
 	@Override
@@ -188,7 +190,7 @@ public class PluginIC2 extends BlankForestryModule {
 	@Override
 	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = ModuleCore.items;
+		ItemRegistryCore coreItems = ModuleCore.getItems();
 
 		if (rubber != null) {
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
@@ -206,12 +208,10 @@ public class PluginIC2 extends BlankForestryModule {
 		}
 
 		ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-		if (beeItems != null) {
-			if (resin != null) {
-				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
-			} else {
-				Log.info("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
-			}
+		if (resin != null) {
+			RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
+		} else {
+			Log.info("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 		}
 
 		if (rubberSapling != null) {
@@ -246,7 +246,7 @@ public class PluginIC2 extends BlankForestryModule {
 			}
 		}
 
-		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
+		ICircuitLayout layout = Preconditions.checkNotNull(ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin"));
 
 		// / Solder Manager
 		ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.energyElectricChoke1);
@@ -256,7 +256,7 @@ public class PluginIC2 extends BlankForestryModule {
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			if (resin != null && rubberWood != null) {
-				ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+				ICircuitLayout layoutManual = Preconditions.checkNotNull(ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual"));
 				ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.RUBBER, 1), Circuits.farmRubberManual);
 			}
 
@@ -266,7 +266,7 @@ public class PluginIC2 extends BlankForestryModule {
 
 		BlockRegistryEnergy energyBlocks = ModuleEnergy.blocks;
 		if (energyBlocks != null) {
-			RecipeUtil.addRecipe("ic2_generator", blocks.generator,
+			RecipeUtil.addRecipe("ic2_generator", getBlocks().generator,
 					"X#X",
 					"XYX",
 					"X#X",
@@ -274,7 +274,7 @@ public class PluginIC2 extends BlankForestryModule {
 					'X', "ingotGold",
 					'Y', coreItems.sturdyCasing);
 
-			RecipeUtil.addRecipe("ic2_eletrical_engine", blocks.electricalEngine,
+			RecipeUtil.addRecipe("ic2_electrical_engine", getBlocks().electricalEngine,
 					"###",
 					" X ",
 					"YVY",
