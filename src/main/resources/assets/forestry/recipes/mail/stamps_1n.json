@@ -1,0 +1,55 @@
+{
+  "result": {
+    "item": "forestry:stamps",
+    "data": 0,
+    "count": 9
+  },
+  "pattern": [
+    "XXX",
+    "###",
+    "ZZZ"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "mail",
+          "type": "module"
+        },
+        {
+          "type": "config",
+          "category": "crafting.stamps:enabled"
+        },
+        {
+          "type": "collector_stamps",
+          "UID": "1n"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "#GEMAPATITE"
+    },
+    "Z": {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "forestry:honey_drop",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
+    }
+  },
+  "group": "mail"
+}

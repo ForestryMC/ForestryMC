@@ -20,12 +20,16 @@
     },
     "X": {
       "type": "fallback",
-      "primary": {
-        "item": "#GEARSTONE"
-      },
-      "fallback": {
-        "item": "#INGOTCOPPER"
-      }
+      "primary": [
+        {
+          "item": "#GEARSTONE"
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#INGOTCOPPER"
+        }
+      ]
     }
   },
   "group": "core"

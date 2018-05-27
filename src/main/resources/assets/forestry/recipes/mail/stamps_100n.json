@@ -1,7 +1,7 @@
 {
   "result": {
     "item": "forestry:stamps",
-    "data": 0,
+    "data": 6,
     "count": 9
   },
   "pattern": [
@@ -20,6 +20,10 @@
         {
           "type": "config",
           "category": "crafting.stamps:enabled"
+        },
+        {
+          "type": "collector_stamps",
+          "UID": "100n"
         }
       ]
     }
@@ -30,17 +34,21 @@
       "item": "minecraft:paper"
     },
     "X": {
-      "item": "#GEMAPATITE"
+      "item": "#INGOTGOLD"
     },
     "Z": {
       "type": "fallback",
-      "primary": {
-        "item": "forestry:honey_drop",
-        "data": 0
-      },
-      "secondary": {
-        "item": "minecraft:slime_ball"
-      }
+      "primary": [
+        {
+          "item": "forestry:honey_drop",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
     }
   },
   "group": "mail"

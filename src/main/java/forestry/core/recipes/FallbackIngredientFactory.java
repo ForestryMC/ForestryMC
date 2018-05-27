@@ -1,9 +1,13 @@
 package forestry.core.recipes;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
@@ -19,12 +23,30 @@ public class FallbackIngredientFactory implements IIngredientFactory {
 	public Ingredient parse(JsonContext context, JsonObject json) {
 		Ingredient ret;
 		try {
-			ret = CraftingHelper.getIngredient(JsonUtils.getJsonObject(json, "primary"), context);
+			JsonArray arr = JsonUtils.getJsonArray(json, "primary");
+			List<Ingredient> ingredientList = new ArrayList<>();
+			for (JsonElement element : arr) {
+				if (!(element instanceof JsonObject)) {
+					throw new JsonSyntaxException("Didn't supply json object for ingredient!");
+				}
+				JsonObject obj = (JsonObject) element;
+				ingredientList.add(CraftingHelper.getIngredient(obj, context));
+			}
+			ret = Ingredient.merge(ingredientList);
 		} catch (JsonSyntaxException e) {
-			ret = Ingredient.EMPTY;	//throws exception if item doesn't exist
+			ret = Ingredient.EMPTY;    //throws exception if item doesn't exist
 		}
 		if (ret.getMatchingStacks().length == 0) {
-			ret = CraftingHelper.getIngredient(JsonUtils.getJsonObject(json, "fallback"), context);
+			JsonArray fallbackArr = JsonUtils.getJsonArray(json, "fallback");
+			List<Ingredient> ingredients = new ArrayList<>();
+			for (JsonElement element : fallbackArr) {
+				if (!(element instanceof JsonObject)) {
+					throw new JsonSyntaxException("Didn't supply json object for ingredient!");
+				}
+				JsonObject obj = (JsonObject) element;
+				ingredients.add(CraftingHelper.getIngredient(obj, context));
+			}
+			ret = Ingredient.merge(ingredients);
 		}
 		return ret;
 	}

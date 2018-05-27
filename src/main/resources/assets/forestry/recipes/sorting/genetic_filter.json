@@ -25,15 +25,20 @@
     },
     "F": [
       {
-        "item": "forestry:propolis",
-        "data": 0
-      },
-      {
-        "item": "#FRUITFORESTRY"
-      },
-      {
-        "item": "forestry:caterpillar_ge",
-        "data": 0
+        "type": "multi_null",
+        "values": [
+          {
+            "item": "forestry:propolis",
+            "data": 0
+          },
+          {
+            "item": "#FRUITFORESTRY"
+          },
+          {
+            "item": "forestry:caterpillar_ge",
+            "data": 0
+          }
+        ]
       }
     ],
     "W": {

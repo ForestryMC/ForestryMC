@@ -1,7 +1,7 @@
 {
   "result": {
     "item": "forestry:stamps",
-    "data": 3,
+    "data": 5,
     "count": 9
   },
   "pattern": [
@@ -20,6 +20,10 @@
         {
           "type": "config",
           "category": "crafting.stamps:enabled"
+        },
+        {
+          "type": "collector_stamps",
+          "UID": "50n"
         }
       ]
     }
@@ -34,13 +38,17 @@
     },
     "Z": {
       "type": "fallback",
-      "primary": {
-        "item": "forestry:honey_drop",
-        "data": 0
-      },
-      "secondary": {
-        "item": "minecraft:slime_ball"
-      }
+      "primary": [
+        {
+          "item": "forestry:honey_drop",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
     }
   },
   "group": "mail"

@@ -1,7 +1,8 @@
 {
   "conditions": {
     "module": "forestry.core.recipes.DisableRecipe",
-    "config": "forestry.core.recipes.ConfigDisableRecipe"
+    "config": "forestry.core.recipes.ConfigDisableRecipe",
+    "collector_stamps": "forestry.core.recipes.StampCollectorRecipe"
   },
   "recipes": {
     "wood_type": "forestry.arboriculture.recipes.WoodTypeRecipeFactory",

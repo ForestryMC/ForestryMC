@@ -1,0 +1,80 @@
+{
+  "result": {
+    "item": "forestry:database",
+    "data": 0
+  },
+  "pattern": [
+    "I#I",
+    "FYS",
+    "WCW"
+  ],
+  "conditions": [
+    {
+      "module": "database",
+      "type": "module"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:portable_alyzer"
+    },
+    "C": [
+      {
+        "type": "forestry:fallback",
+        "primary": [
+          {
+            "item": "forestry:royal_jelly"
+          },
+          {
+            "item": "forestry:fruits",
+            "data": 4
+          }
+        ],
+        "fallback": [
+          {
+            "item": "#CHESTWOOD"
+          }
+        ]
+      }
+    ],
+    "S": {
+      "type": "forestry:fallback",
+      "primary": [
+        {
+          "item": "forestry:tree_chest",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#CHESTWOOD"
+        }
+      ]
+    },
+    "F": {
+      "type": "forestry:fallback",
+      "primary": [
+        {
+          "item": "forestry:butterfly_chest",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#CHESTWOOD"
+        }
+      ]
+    },
+    "W": {
+      "item": "#PLANKWOOD"
+    },
+    "I": {
+      "item": "#INGOTBRONZE"
+    },
+    "Y": {
+      "item": "forestry:sturdy_machine"
+    }
+  },
+  "group": "database"
+}
