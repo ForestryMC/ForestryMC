@@ -144,12 +144,10 @@ public class PluginIC2 extends BlankForestryModule {
 	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void doInit() {
 		// Remove some items from the recycler
-		if (Recipes.recyclerBlacklist != null) {
+		if (Recipes.recyclerBlacklist != null && ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-			if (beeItems != null) {
-				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beeQueenGE)));
-				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beePrincessGE)));
-			}
+			Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beeQueenGE)));
+			Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(new ItemStack(beeItems.beePrincessGE)));
 		} else {
 			Log.error("IC2 Recipes.recyclerBlacklist not found.");
 		}
