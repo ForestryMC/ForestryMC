@@ -207,11 +207,13 @@ public class PluginIC2 extends BlankForestryModule {
 			RecipeUtil.addFermenterRecipes(bioChaff, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 
-		ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-		if (resin != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
-		} else {
-			Log.info("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
+			if (resin != null) {
+				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
+			} else {
+				Log.info("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+			}
 		}
 
 		if (rubberSapling != null) {
