@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,10 @@ public class TreeManager {
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")
+	 *
+	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
+	@Nullable
 	public static ITreeRoot treeRoot;
 
 	/**
@@ -22,12 +26,18 @@ public class TreeManager {
 
 	/**
 	 * Used to create new trees.
+	 *
+	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
+	@Nullable
 	public static ITreeFactory treeFactory;
 
 	/**
 	 * Used to create new tree mutations.
+	 *
+	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
+	@Nullable
 	public static ITreeMutationFactory treeMutationFactory;
 	
 	public static List<ICharcoalPileWall> pileWalls = new ArrayList<>();

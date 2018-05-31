@@ -32,8 +32,8 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 		int offset = entryIndex * 24;
 		addEntryButtons(offset, LEFT_PAGE_START_X, LEFT_PAGE_START_Y);
 		addEntryButtons(offset + 12, RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y);
-		elementManager.init(guiLeft, guiTop);
-		elementManager.clear();
+		window.init(guiLeft, guiTop);
+		window.clear();
 	}
 
 	private void addEntryButtons(int indexStart, int xStart, int yStart){
@@ -77,11 +77,6 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 			GuiButtonEntry entry = (GuiButtonEntry) button;
 			mc.displayGuiScreen(new GuiForestryBookPages(book, category, entry.entry, null));
 		}
-	}
-
-	@Override
-	protected List<String> getTooltip(int mouseX, int mouseY) {
-		return elementManager.getTooltip(mouseX, mouseY);
 	}
 
 	private void displayCategories() {

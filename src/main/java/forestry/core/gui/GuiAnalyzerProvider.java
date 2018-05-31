@@ -61,9 +61,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		this.slots = slots;
 		this.firstSlot = firstSlot;
 
-		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(-189 - screenDistance, 0, hasBoarder, this);
+		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBoarder, this);
 		updateVisibility();
-		this.elementManager.add(analyzer);
 
 		SlotAnalyzer slotAnalyzer = null;
 		if (container instanceof ContainerAnalyzerProvider) {
@@ -96,7 +95,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		if (analyzer.isVisible()) {
 			this.guiLeft = (this.width - this.xSize + analyzer.getWidth() + (screenDistance)) / 2;
 		}
-		elementManager.init(guiLeft, guiTop + (ySize - 166) / 2);
+		window.init(guiLeft, guiTop + (ySize - 166) / 2);
 		/*analyzer.setXOffset(guiLeft);
 		analyzer.setYOffset(guiTop + (ySize - 166) / 2);*/
 

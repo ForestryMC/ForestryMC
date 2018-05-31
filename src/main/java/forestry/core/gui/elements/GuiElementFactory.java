@@ -18,10 +18,15 @@ import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.gui.GuiConstants;
+import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IElementLayout;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
+import forestry.api.gui.IWindowElement;
+import forestry.api.gui.style.ITextStyle;
+import forestry.api.gui.style.TextStyleBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
@@ -34,6 +39,10 @@ import forestry.core.render.ColourProperties;
 
 public class GuiElementFactory implements IGuiElementFactory {
 	/* Constants */
+	public static final ITextStyle DOMINANT_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.dominant")).build();
+	public static final ITextStyle RECESSIVE_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.recessive")).build();
+	public static final ITextStyle GUI_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.screen")).build();
+	public static final ITextStyle DATABASE_TITLE = new TextStyleBuilder().color(0xcfb53b).build();
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
 	/* Drawables */
@@ -50,8 +59,8 @@ public class GuiElementFactory implements IGuiElementFactory {
 	}
 
 	@Override
-	public IGeneticAnalyzer createAnalyzer(int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
-		return new GeneticAnalyzer(xPos, yPos, rightBoarder, provider);
+	public IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
+		return new GeneticAnalyzer(window, xPos, yPos, rightBoarder, provider);
 	}
 
 	@Override
@@ -65,7 +74,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 	}
 
 	@Override
-	public ElementGroup createPanel(int xPos, int yPos, int width, int height) {
+	public ElementGroup createPane(int xPos, int yPos, int width, int height) {
 		return new PaneLayout(xPos, yPos, width, height);
 	}
 
@@ -77,24 +86,32 @@ public class GuiElementFactory implements IGuiElementFactory {
 		}
 	}
 
+	public final ITextStyle getStateStyle(boolean dominant){
+		return dominant ? DOMINANT_STYLE : RECESSIVE_STYLE;
+	}
+
+	public final ITextStyle getGuiStyle(){
+		return GUI_STYLE;
+	}
+
 	public IGuiElement createFertilityInfo(IAlleleInteger fertilityAllele, int texOffset) {
 		String fertilityString = Integer.toString(fertilityAllele.getValue()) + " x";
 
 		AbstractElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
-		layout.text(fertilityString, getColorCoding(fertilityAllele.isDominant()));
+		layout.label(fertilityString, getStateStyle(fertilityAllele.isDominant()));
 		layout.drawable(0, -1, new Drawable(TEXTURE, 60, 240 + texOffset, 12, 8));
 		return layout;
 	}
 
 	public IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleSpecies species, String text) {
 		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
-		layout.text(text, getColorCoding(species.isDominant()));
+		layout.label(text, getStateStyle(species.isDominant()));
 		layout.add(createToleranceInfo(toleranceAllele));
 		return layout;
 	}
 
 	public IElementLayout createToleranceInfo(IAlleleTolerance toleranceAllele) {
-		int textColor = getColorCoding(toleranceAllele.isDominant());
+		ITextStyle textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
 		String text = "(" + toleranceAllele.getAlleleName() + ")";
 
@@ -107,7 +124,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case BOTH_4:
 			case BOTH_5:
 				layout.add(createBothSymbol(0, -1));
-				layout.text(text, textColor);
+				layout.label(text, textStyle);
 				break;
 			case DOWN_1:
 			case DOWN_2:
@@ -115,7 +132,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case DOWN_4:
 			case DOWN_5:
 				layout.add(createDownSymbol(0, -1));
-				layout.text(text, textColor);
+				layout.label(text, textStyle);
 				break;
 			case UP_1:
 			case UP_2:
@@ -123,11 +140,11 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case UP_4:
 			case UP_5:
 				layout.add(createUpSymbol(0, -1));
-				layout.text(text, textColor);
+				layout.label(text, textStyle);
 				break;
 			default:
 				layout.add(createNoneSymbol(0, -1));
-				layout.text("(0)", textColor);
+				layout.label("(0)", textStyle);
 				break;
 		}
 		return layout;
@@ -224,7 +241,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
-			element.text(x + 9, y + 1, 10, 10, "+");
+			element.label("+", x + 9, y + 1, 10, 10, GuiElementAlignment.TOP_LEFT, GuiConstants.DEFAULT_STYLE);
 		}
 	}
 

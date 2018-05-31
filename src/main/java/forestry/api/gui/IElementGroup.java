@@ -6,6 +6,12 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.gui.style.ITextStyle;
+
+@SideOnly(Side.CLIENT)
 public interface IElementGroup extends IGuiElement {
 	/**
 	 * Adds a element to this layout.
@@ -51,47 +57,37 @@ public interface IElementGroup extends IGuiElement {
 	 */
 	List<IGuiElement> getElements();
 
-	IGuiElement item(int xPos, int yPos, ItemStack itemStack);
+	IItemElement item(int xPos, int yPos, ItemStack itemStack);
 
-	default IGuiElement item(ItemStack itemStack) {
+	default IItemElement item(ItemStack itemStack) {
 		return item(0, 0, itemStack);
 	}
 
 	/**
-	 * Adds a text element with the default color,the align {@link GuiElementAlignment#TOP_LEFT} and the height 12.
+	 * Adds a single line of text.
 	 */
-	IGuiElement text(String text);
+	ILabelElement label(String text);
+
+	ILabelElement label(String text, ITextStyle style);
+
+	ILabelElement label(String text, GuiElementAlignment align);
+
+	ILabelElement label(String text, GuiElementAlignment align, ITextStyle textStyle);
+
+	ILabelElement label(String text, int width, int height, GuiElementAlignment align, ITextStyle textStyle);
+
+	ILabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, ITextStyle textStyle);
 
 	/**
-	 * Adds a text element with the align {@link GuiElementAlignment#TOP_LEFT} and the height 12.
+	 * Adds a text element that splits the text with wordwrap.
 	 */
-	IGuiElement text(String text, int color);
+	ITextElement splitText(String text, int width);
 
-	/**
-	 * Adds a text element with the default color and the height 12.
-	 */
-	IGuiElement text(String text, GuiElementAlignment align);
+	ITextElement splitText(String text, int width, ITextStyle textStyle);
 
-	IGuiElement text(String text, GuiElementAlignment align, int color, boolean unicode);
+	ITextElement splitText(String text, int width, GuiElementAlignment align, ITextStyle textStyle);
 
-	/**
-	 * Adds a text element with the height 12.
-	 */
-	IGuiElement text(String text, GuiElementAlignment align, int color);
-
-	IGuiElement text(int x, String text, GuiElementAlignment align, int color);
-
-	/**
-	 * Adds a text element.
-	 */
-	IGuiElement text(int x, int height, String text, GuiElementAlignment align, int color);
-
-	IGuiElement text(int x, int y, int width, int height, String text);
-
-	/**
-	 * Adds a text element.
-	 */
-	IGuiElement text(int x, int height, String text, GuiElementAlignment align, int color, boolean unicode);
+	ITextElement splitText(String text, int x, int y, int width, GuiElementAlignment align, ITextStyle textStyle);
 
 	default IElementLayout vertical(int width) {
 		return vertical(0, 0, width);
@@ -105,10 +101,10 @@ public interface IElementGroup extends IGuiElement {
 		return horizontal(0, 0, height);
 	}
 
-	IElementGroup panel(int xPos, int yPos, int width, int height);
+	IElementGroup pane(int xPos, int yPos, int width, int height);
 
-	default IElementGroup panel(int width, int height) {
-		return panel(0, 0, width, height);
+	default IElementGroup pane(int width, int height) {
+		return pane(0, 0, width, height);
 	}
 
 	IElementLayoutHelper layoutHelper(IElementLayoutHelper.LayoutFactory layoutFactory, int width, int height);
