@@ -24,7 +24,7 @@ import forestry.core.render.ColourProperties;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);

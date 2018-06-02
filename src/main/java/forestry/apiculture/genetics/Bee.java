@@ -69,7 +69,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.core.utils.VectUtil;
 
 public class Bee extends IndividualLiving implements IBee {

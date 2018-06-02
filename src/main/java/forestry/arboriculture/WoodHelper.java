@@ -18,7 +18,7 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class WoodHelper {
 

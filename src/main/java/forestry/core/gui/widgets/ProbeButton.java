@@ -15,7 +15,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;

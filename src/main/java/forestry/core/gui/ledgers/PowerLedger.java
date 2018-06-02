@@ -11,7 +11,7 @@
 package forestry.core.gui.ledgers;
 
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.energy.EnergyManager;
 
 public class PowerLedger extends Ledger {

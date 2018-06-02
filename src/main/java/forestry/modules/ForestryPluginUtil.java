@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
+import forestry.core.translation.Translator;
 import forestry.core.utils.Log;
 
 public class ForestryPluginUtil {
@@ -24,9 +25,9 @@ public class ForestryPluginUtil {
 	public static Map<String, List<IForestryModule>> getForestryModules(ASMDataTable asmDataTable) {
 		List<IForestryModule> instances = getInstances(asmDataTable, ForestryModule.class, IForestryModule.class);
 		Map<String, List<IForestryModule>> modules = new LinkedHashMap<>();
-		for(IForestryModule module : instances){
+		for (IForestryModule module : instances) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			modules.computeIfAbsent(info.containerID(), k-> new ArrayList<>()).add(module);
+			modules.computeIfAbsent(info.containerID(), k -> new ArrayList<>()).add(module);
 		}
 		return modules;
 	}
@@ -35,16 +36,16 @@ public class ForestryPluginUtil {
 	public static String getComment(IForestryModule module) {
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
-		String comment = I18n.translateToLocal(info.unlocalizedDescription());
+		String comment = Translator.translateToLocal(info.unlocalizedDescription());
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
-		if(!dependencies.isEmpty()){
+		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();
 
 			StringBuilder builder = new StringBuilder(comment);
 			builder.append("\n");
 			builder.append("Dependencies: [ ");
 			builder.append(iDependencies.next());
-			while(iDependencies.hasNext()){
+			while (iDependencies.hasNext()) {
 				ResourceLocation uid = iDependencies.next();
 				builder.append(", ").append(uid.toString());
 			}

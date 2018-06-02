@@ -1,7 +1,7 @@
 package forestry.mail;
 
 import forestry.api.mail.IPostalState;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class ResponseNotMailable implements IPostalState {
 	private final IPostalState state;

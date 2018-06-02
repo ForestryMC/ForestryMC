@@ -26,6 +26,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.translation.Translator;
 
 public class ClimateUtil implements IClimateHelper {
 

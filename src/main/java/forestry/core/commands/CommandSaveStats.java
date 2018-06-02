@@ -29,7 +29,7 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

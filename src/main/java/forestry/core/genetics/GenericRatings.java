@@ -11,7 +11,7 @@
 package forestry.core.genetics;
 
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class GenericRatings {
 

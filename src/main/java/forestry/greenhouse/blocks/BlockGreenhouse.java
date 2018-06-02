@@ -70,7 +70,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.greenhouse.ModuleGreenhouse;
 import forestry.greenhouse.api.climate.IClimateContainer;
 import forestry.greenhouse.api.greenhouse.IGreenhouseProvider;

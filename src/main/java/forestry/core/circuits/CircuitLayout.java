@@ -13,7 +13,7 @@ package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public class CircuitLayout implements ICircuitLayout {
 	private final String uid;

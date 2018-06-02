@@ -58,7 +58,7 @@ import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;

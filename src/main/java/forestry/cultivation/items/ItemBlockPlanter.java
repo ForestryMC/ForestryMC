@@ -3,7 +3,7 @@ package forestry.cultivation.items;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.cultivation.blocks.BlockPlanter;
 
 public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {

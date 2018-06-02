@@ -16,7 +16,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileEngine;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;

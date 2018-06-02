@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.core.translation.Translator;
+
 public class ItemTooltipUtil {
 	@SideOnly(Side.CLIENT)
 	public static void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {

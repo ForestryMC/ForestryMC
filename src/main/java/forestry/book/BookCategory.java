@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 
 @SideOnly(Side.CLIENT)
 public class BookCategory implements IBookCategory {

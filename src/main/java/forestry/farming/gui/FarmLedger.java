@@ -13,7 +13,7 @@ package forestry.farming.gui;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;

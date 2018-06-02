@@ -20,7 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
+import forestry.core.translation.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
 

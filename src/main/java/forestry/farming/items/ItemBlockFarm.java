@@ -24,8 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.core.translation.Translator;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends ItemBlock {
