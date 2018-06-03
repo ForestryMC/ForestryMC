@@ -31,7 +31,7 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_STATEMENTS, name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class PluginBuildCraftStatements extends BlankForestryModule implements ITriggerProvider {
 
 	@Override
@@ -44,7 +44,7 @@ public class PluginBuildCraftStatements extends BlankForestryModule implements I
 		return "Compatible BuildCraftAPI|statements version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void doInit() {
 		// Add custom trigger handler
@@ -53,7 +53,7 @@ public class PluginBuildCraftStatements extends BlankForestryModule implements I
 
 	/* ITriggerProvider */
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
 		TileEntity tile = container.getTile();
@@ -62,7 +62,7 @@ public class PluginBuildCraftStatements extends BlankForestryModule implements I
 		}
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
 		TileEntity tile = container.getTile();
@@ -71,7 +71,7 @@ public class PluginBuildCraftStatements extends BlankForestryModule implements I
 		}
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		if (tile instanceof ITriggerProvider) {

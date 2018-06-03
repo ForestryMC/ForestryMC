@@ -34,7 +34,7 @@ public class PluginBuildCraftRecipes extends BlankForestryModule {
 		return "Compatible BuildCraftAPI|recipes version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|recipes")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void registerRecipes() {
 		// Add recipe for ethanol

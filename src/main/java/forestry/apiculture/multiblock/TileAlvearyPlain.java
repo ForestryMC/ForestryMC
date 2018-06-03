@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import forestry.core.config.Constants;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
@@ -25,7 +26,7 @@ import buildcraft.api.statements.ITriggerInternalSided;
 import buildcraft.api.statements.ITriggerProvider;
 import forestry.apiculture.trigger.ApicultureTriggers;
 
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 	@Override
@@ -34,15 +35,15 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		triggers.add(ApicultureTriggers.missingQueen);

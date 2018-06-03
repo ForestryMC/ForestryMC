@@ -12,6 +12,7 @@ package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
 
+import forestry.core.config.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -316,7 +317,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		super.addExternalTriggers(triggers, side, tile);

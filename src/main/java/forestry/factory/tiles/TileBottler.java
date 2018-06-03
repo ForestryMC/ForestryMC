@@ -363,7 +363,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		super.addExternalTriggers(triggers, side, tile);

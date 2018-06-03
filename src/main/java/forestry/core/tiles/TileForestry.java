@@ -12,6 +12,7 @@ package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -57,7 +58,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable, ITriggerProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
@@ -177,14 +178,14 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
 
 	@Override
 	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) { }
 

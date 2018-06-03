@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import forestry.core.config.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -84,7 +85,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		super.addExternalTriggers(triggers, side, tile);

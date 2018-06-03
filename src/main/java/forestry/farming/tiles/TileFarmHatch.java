@@ -19,6 +19,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerInternalSided;
 import buildcraft.api.statements.ITriggerProvider;
 import forestry.api.multiblock.IFarmComponent;
+import forestry.core.config.Constants;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
@@ -38,7 +39,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import java.util.Collection;
 import java.util.Collections;
 
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
 
 	private static final EnumFacing[] dumpDirections = new EnumFacing[]{EnumFacing.DOWN};
@@ -88,16 +89,16 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 		return super.getCapability(capability, facing);
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		if (getMultiblockLogic().isConnected()) {

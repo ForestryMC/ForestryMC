@@ -312,7 +312,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		super.addExternalTriggers(triggers, side, tile);

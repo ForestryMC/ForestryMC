@@ -39,7 +39,7 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 		return "Compatible BuildCraftAPI|fuels version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|fuels")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void doInit() {
 		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
