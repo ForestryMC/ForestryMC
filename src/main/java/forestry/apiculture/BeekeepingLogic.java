@@ -116,9 +116,13 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		hasFlowersCache.writeToNBT(nbttagcompound);
 
 		Stack<ItemStack> spawnCopy = new Stack<>();
-		spawnCopy.addAll(spawn);
+		if (spawn.size()<128)
+			spawnCopy.addAll(spawn);
+		else
+			for (byte b=0;b<128;++b)
+			spawnCopy.add(spawn.get(b));
 		NBTTagList nbttaglist = new NBTTagList();
-		while (!spawnCopy.isEmpty()) {
+		while (!spawnCopy.isEmpty() && spawnCopy.size()<=128) {
 			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 			spawnCopy.pop().writeToNBT(nbttagcompound1);
 			nbttaglist.appendTag(nbttagcompound1);

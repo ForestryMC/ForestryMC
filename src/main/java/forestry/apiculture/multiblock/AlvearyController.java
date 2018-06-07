@@ -290,7 +290,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 		data.setFloat("TempChange", tempChange);
 		data.setFloat("HumidChange", humidChange);
-
 		beekeepingLogic.writeToNBT(data);
 		inventory.writeToNBT(data);
 	}
