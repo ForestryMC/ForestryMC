@@ -25,7 +25,7 @@ public class RecipePair<R extends IForestryRecipe> {
 	private final R recipe;
 	private final NonNullList<String> oreDictEntries;
 	
-	public RecipePair(R recipe, String[][] oreDictEntries) {
+	public RecipePair(@Nullable R recipe, String[][] oreDictEntries) {
 		this.recipe = recipe;
 		this.oreDictEntries = InventoryUtil.getOreDictAsList(oreDictEntries);
 	}
@@ -33,7 +33,8 @@ public class RecipePair<R extends IForestryRecipe> {
 	public boolean isEmpty(){
 		return recipe == null;
 	}
-	
+
+	@Nullable
 	public R getRecipe() {
 		return recipe;
 	}

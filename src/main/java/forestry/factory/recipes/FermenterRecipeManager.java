@@ -56,7 +56,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Nullable
 	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
-		if(res.isEmpty()){
+		if (res.isEmpty()) {
 			return null;
 		}
 		for (IFermenterRecipe recipe : recipes) {

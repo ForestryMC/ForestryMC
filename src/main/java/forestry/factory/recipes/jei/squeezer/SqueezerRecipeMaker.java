@@ -3,12 +3,14 @@ package forestry.factory.recipes.jei.squeezer;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import forestry.factory.recipes.SqueezerRecipeManager;
+
 import mezz.jei.api.ingredients.IIngredientRegistry;
-import net.minecraft.item.ItemStack;
 
 public class SqueezerRecipeMaker {
 

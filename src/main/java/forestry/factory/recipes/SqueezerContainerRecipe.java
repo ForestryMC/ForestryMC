@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 

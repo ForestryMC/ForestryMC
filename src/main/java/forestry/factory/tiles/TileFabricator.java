@@ -167,8 +167,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		return true;
 	}
 
-	@Nullable
-	private RecipePair getRecipe() {
+	private RecipePair<IFabricatorRecipe> getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
@@ -242,6 +241,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		if (!recipePair.isEmpty()) {
 			IFabricatorRecipe recipe = recipePair.getRecipe();
+			if (recipe == null) {
+				return false;
+			}
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, recipePair, false);
 			FluidStack toDrain = recipe.getLiquid();

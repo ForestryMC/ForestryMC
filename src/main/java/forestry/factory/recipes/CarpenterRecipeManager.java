@@ -52,17 +52,17 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		addRecipe(recipe);
 	}
 
-	@Nullable
 	public static RecipePair<ICarpenterRecipe> findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
 		for (ICarpenterRecipe recipe : recipes) {
 			String[][] resourceDicts = matches(recipe, liquid, item, inventorycrafting);
 			if (resourceDicts != null) {
-				return new RecipePair(recipe, resourceDicts);
+				return new RecipePair<>(recipe, resourceDicts);
 			}
 		}
 		return RecipePair.EMPTY;
 	}
 
+	@Nullable
 	public static String[][] matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
 		if (recipe == null) {
 			return null;
@@ -113,7 +113,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return removed;
 	}
 
-	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack){
+	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}

@@ -11,9 +11,12 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
+
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
 
 public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 

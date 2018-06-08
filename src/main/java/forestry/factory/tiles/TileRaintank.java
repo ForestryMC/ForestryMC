@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -137,9 +138,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (!resourceTank.isEmpty()) {
 			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.down(), EnumFacing.UP);
 			if (fluidDestination != null) {
-				if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
-					return true;
-				}
+				return FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null;
 			}
 		}
 		return false;

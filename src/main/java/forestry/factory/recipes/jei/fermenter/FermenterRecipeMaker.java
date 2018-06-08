@@ -25,10 +25,10 @@ public class FermenterRecipeMaker {
 		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
 			if (!recipe.getResource().isEmpty()) {
 				addWrapperToList(stackHelper, recipe, recipe.getResource(), recipes);
-			}else if(recipe.getResourceOreName() != null){
+			} else if (recipe.getResourceOreName() != null) {
 				NonNullList<ItemStack> itemStacks = OreDictionary.getOres(recipe.getResourceOreName());
-				if(!itemStacks.isEmpty()){
-					for(ItemStack resource : itemStacks){
+				if (!itemStacks.isEmpty()) {
+					for (ItemStack resource : itemStacks) {
 						addWrapperToList(stackHelper, recipe, resource, recipes);
 					}
 				}
@@ -39,7 +39,7 @@ public class FermenterRecipeMaker {
 		return recipes;
 	}
 
-	private static void addWrapperToList(IStackHelper stackHelper, IFermenterRecipe recipe, ItemStack resource, List<FermenterRecipeWrapper> recipes){
+	private static void addWrapperToList(IStackHelper stackHelper, IFermenterRecipe recipe, ItemStack resource, List<FermenterRecipeWrapper> recipes) {
 		if (resource.getItem() instanceof IVariableFermentable) {
 			for (ItemStack stack : stackHelper.getSubtypes(resource)) {
 				recipes.add(new FermenterRecipeWrapper(recipe, stack));

@@ -11,10 +11,13 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-import forestry.api.recipes.IFabricatorRecipe;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFabricatorRecipe;
 
 public class FabricatorRecipe implements IFabricatorRecipe {
 	private final ItemStack plan;
@@ -52,7 +55,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	public NonNullList<String> getOreDicts() {
 		return oreDicts;
 	}
-	
+
 	@Override
 	public int getWidth() {
 		return width;

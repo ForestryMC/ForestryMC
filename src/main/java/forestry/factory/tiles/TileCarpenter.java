@@ -65,6 +65,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
+	@Nullable
 	private NonNullList<String> oreDicts;
 
 	private ItemStack getBoxStack() {
@@ -124,7 +125,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			currentRecipe = recipePair.getRecipe();
 			oreDicts = recipePair.getOreDictEntries();
 
-			if (!recipePair.isEmpty()) {
+			if (!recipePair.isEmpty() && currentRecipe != null) {
 				int recipeTime = currentRecipe.getPackagingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);

@@ -16,10 +16,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.utils.ItemStackUtil;
-import net.minecraft.item.ItemStack;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 

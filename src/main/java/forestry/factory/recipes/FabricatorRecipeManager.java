@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,7 +30,7 @@ import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
-	
+
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override
@@ -43,7 +42,6 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		addRecipe(recipe);
 	}
 
-	@Nullable
 	public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
@@ -85,7 +83,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return Collections.unmodifiableSet(recipes);
 	}
 
-	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack){
+	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}
