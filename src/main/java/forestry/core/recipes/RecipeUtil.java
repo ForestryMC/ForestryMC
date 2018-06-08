@@ -126,7 +126,7 @@ public abstract class RecipeUtil {
 	}
 
 	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+		return ForgeRegistries.RECIPES.getValuesCollection().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
 	public static void addSmelting(ItemStack res, Item prod, float xp) {
