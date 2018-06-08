@@ -31,7 +31,7 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.fuels", "[2.0, 3.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void doInit() {
+	public void postInit() {
 		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
 		FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
 		ICoolant waterCoolant = coolantManager.getCoolant(water);
@@ -55,6 +55,11 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 		}
+	}
+
+	@Override
+	public void doInit() {
+		// FIXME postInit belongs in here, really
 	}
 
 }

@@ -36,7 +36,7 @@ public class PluginBuildCraftStatements extends BlankForestryModule implements I
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID);
 	}
 
 	@Override

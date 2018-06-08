@@ -26,7 +26,7 @@ public class PluginBuildCraftRecipes extends BlankForestryModule {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.recipes", "[2.0, 4.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID);
 	}
 
 	@Override
