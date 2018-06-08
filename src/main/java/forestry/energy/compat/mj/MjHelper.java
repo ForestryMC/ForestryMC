@@ -11,6 +11,9 @@ import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 @SuppressWarnings("ConstantConditions")
 public class MjHelper {
 	@Nullable
@@ -64,7 +67,8 @@ public class MjHelper {
 			}
 			return 0;
 		}
-		return fromMicroJoules(amountMicro - consumer.receivePower(amountMicro, simulate));
+		long req = consumer.getPowerRequested();
+		return fromMicroJoules(amountMicro - consumer.receivePower(min(amountMicro, req), simulate) - max(0, amountMicro - req));
 	}
 
 	public static boolean isMjCapability(Capability<?> capability) {
