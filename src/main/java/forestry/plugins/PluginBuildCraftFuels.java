@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import buildcraft.api.mj.MjAPI;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -51,7 +52,7 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 
 		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
 		if (ethanol != null) {
-			int ethanolPower = 40;
+			long ethanolPower = 40 * MjAPI.MJ;
 			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 		}
