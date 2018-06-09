@@ -239,6 +239,26 @@
   },
   {
     "ingredient": {
+      "type": "forestry:fallback",
+      "primary": [
+        {
+          "item": "forestry:royal_jelly"
+        },
+        {
+          "item": "forestry:fruits",
+          "data": 4
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#CHESTWOOD"
+        }
+      ]
+    },
+    "name": "POSSIBLESPECIAL"
+  },
+  {
+    "ingredient": {
       "type": "forge:ore_dict",
       "ore": "sand"
     },
@@ -250,6 +270,23 @@
       "ore": "slabWood"
     },
     "name": "SLABWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "forestry:honey_drop",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
+    },
+    "name": "STAMPGLUE"
   },
   {
     "ingredient": {

@@ -19,25 +19,9 @@
     "#": {
       "item": "forestry:portable_alyzer"
     },
-    "C": [
-      {
-        "type": "forestry:fallback",
-        "primary": [
-          {
-            "item": "forestry:royal_jelly"
-          },
-          {
-            "item": "forestry:fruits",
-            "data": 4
-          }
-        ],
-        "fallback": [
-          {
-            "item": "#CHESTWOOD"
-          }
-        ]
-      }
-    ],
+    "C": {
+      "item": "#POSSIBLESPECIAL"
+    },
     "S": {
       "type": "forestry:fallback",
       "primary": [

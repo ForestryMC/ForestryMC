@@ -37,18 +37,7 @@
       "item": "#GEMAPATITE"
     },
     "Z": {
-      "type": "fallback",
-      "primary": [
-        {
-          "item": "forestry:honey_drop",
-          "data": 0
-        }
-      ],
-      "fallback": [
-        {
-          "item": "minecraft:slime_ball"
-        }
-      ]
+      "item": "#STAMPGLUE"
     }
   },
   "group": "mail"
