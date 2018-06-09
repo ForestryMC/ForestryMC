@@ -93,4 +93,12 @@ public class MjHelper {
 	public static int mjToRf(int mj) {
 		return mj * 10;
 	}
+
+	public static long rfToMicro(int rf) {
+		return toMicroJoules(rfToMj(rf));
+	}
+
+	public static int microToRf(long microJoules) {
+		return mjToRf(fromMicroJoules(microJoules));
+	}
 }

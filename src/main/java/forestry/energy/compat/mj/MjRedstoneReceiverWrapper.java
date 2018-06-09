@@ -1,15 +1,15 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.IMjReceiver;
+import buildcraft.api.mj.IMjRedstoneReceiver;
 import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
 import net.minecraftforge.fml.common.Optional;
 
 import static java.lang.Math.min;
 
-@Optional.Interface(iface = "buildcraft.api.mj.IMjReceiver", modid = Constants.BCLIB_MOD_ID)
-public class MjReceiverWrapper extends MjConnectorWrapper implements IMjReceiver {
-	public MjReceiverWrapper(EnergyManager energyManager) {
+@Optional.Interface(iface = "buildcraft.api.mj.IMjRedstoneReceiver", modid = Constants.BCLIB_MOD_ID)
+public class MjRedstoneReceiverWrapper extends MjConnectorWrapper implements IMjRedstoneReceiver {
+	public MjRedstoneReceiverWrapper(EnergyManager energyManager) {
 		super(energyManager);
 	}
 

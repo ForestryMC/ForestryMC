@@ -13,11 +13,11 @@ public class MjReadableWrapper extends MjConnectorWrapper implements IMjReadable
 
 	@Override
 	public long getStored() {
-		return MjHelper.toMicroJoules(MjHelper.rfToMj(energyManager.getEnergyStored()));
+		return MjHelper.rfToMicro(energyManager.getEnergyStored());
 	}
 
 	@Override
 	public long getCapacity() {
-		return MjHelper.toMicroJoules(MjHelper.rfToMj(energyManager.getMaxEnergyStored()));
+		return MjHelper.rfToMicro(energyManager.getMaxEnergyStored());
 	}
 }

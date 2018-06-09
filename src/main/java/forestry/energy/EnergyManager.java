@@ -138,7 +138,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 			} else if (capability == mjReceiver && externalMode.canReceive()) {
 				return mjReceiver.cast(new MjReceiverWrapper(this));
 			} else if (capability == mjRedstoneReceiver && externalMode.canReceive()) {
-				return mjRedstoneReceiver.cast(new MjReceiverWrapper(this));
+				return mjRedstoneReceiver.cast(new MjRedstoneReceiverWrapper(this));
 			} else if (capability == mjReadable) {
 				return mjReadable.cast(new MjReadableWrapper(this));
 			} else if (capability == mjConnector) {
