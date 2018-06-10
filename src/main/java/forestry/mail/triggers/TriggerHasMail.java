@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import org.apache.commons.lang3.NotImplementedException;
-
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.TileMailbox;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
 public class TriggerHasMail extends Trigger {
 
@@ -27,13 +25,11 @@ public class TriggerHasMail extends Trigger {
 
 	@Override
 	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-		// TODO therealfarfetchd
-		// if (!(tile instanceof IMailContainer)) {
-		// 	return false;
-		// }
-		//
-		// return ((IMailContainer) tile).hasMail();
-		return false;
+		if (!(tile instanceof TileMailbox)) {
+			return false;
+		}
+
+		return !((TileMailbox) tile).getInternalInventory().isEmpty();
 	}
 
 }
