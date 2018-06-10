@@ -33,7 +33,7 @@ public class TriggerHasMail extends Trigger {
 		// }
 		//
 		// return ((IMailContainer) tile).hasMail();
-		throw new NotImplementedException("not implemented");
+		return false;
 	}
 
 }
