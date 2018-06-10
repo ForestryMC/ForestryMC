@@ -1,16 +1,16 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.47"
-    }
+	repositories {
+		jcenter()
+		maven { url = "http://files.minecraftforge.net/maven" }
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.47"
+	}
 }
 
 plugins {
-    id "com.matthewprenger.cursegradle" version "1.0.9"
+	id "com.matthewprenger.cursegradle" version "1.0.9"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'idea'
@@ -19,7 +19,7 @@ apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
-    version = project.version + '-' + project.buildQualifier
+	version = project.version + '-' + project.buildQualifier
 }
 group = "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forestry_" + mcversion
@@ -31,140 +31,140 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = mcversion + "-" + forgeversion
-    runDir = "run"
-    mappings = mcp_mappings
+	version = mcversion + "-" + forgeversion
+	runDir = "run"
+	mappings = mcp_mappings
 
-    replace '@VERSION@', project.version
-    replace '@BUILD_NUMBER@', getBuildNumber()
+	replace '@VERSION@', project.version
+	replace '@BUILD_NUMBER@', getBuildNumber()
 }
 
 repositories {
-    maven {
-        url = 'http://maven.mcmoddev.com'
-    }
-    maven {
-        url "http://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        name = "ic2"
-        url = "http://maven.ic2.player.to/"
-    }
-    maven {
-        name = "Modmuss50"
-        url = "http://maven.modmuss50.me"
-    }
-    maven {
-        url = 'https://mod-buildcraft.com/maven'
-    }
+	maven {
+		url = 'http://maven.mcmoddev.com'
+	}
+	maven {
+		url "http://dvs1.progwml6.com/files/maven"
+	}
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+	maven {
+		name = "Modmuss50"
+		url = "http://maven.modmuss50.me"
+	}
+	maven {
+		url = 'https://mod-buildcraft.com/maven'
+	}
 }
 
 dependencies {
-    deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
-    deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
-    runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
-    deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
-    deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
-    deobfCompile "com.mod-buildcraft:buildcraft:${buildcraft_version}"
+	deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
+	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
+	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
+	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
+	deobfCompile "com.mod-buildcraft:buildcraft:${buildcraft_version}"
 }
 
 configurations {
-    api
-    compile.extendsFrom api
+	api
+	compile.extendsFrom api
 }
 
 processResources {
 
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
 
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
+		// replace version and mcversion
+		expand 'version': project.version, 'mcversion': project.minecraft.version
+	}
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-        exclude '**/*.md'
-    }
+	// copy everything else, thats not the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+		exclude '**/*.md'
+	}
 
-    // Move access transformers to META-INF
-    rename '(.+_at.cfg)', 'META-INF/$1'
+	// Move access transformers to META-INF
+	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // prevent java 8's strict doclint for javadocs from failing builds
 allprojects {
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
+	tasks.withType(Javadoc) {
+		options.addStringOption('Xdoclint:none', '-quiet')
+	}
 }
 
 jar {
-    manifest {
-        attributes 'FMLAT': 'forestry_at.cfg'
-    }
+	manifest {
+		attributes 'FMLAT': 'forestry_at.cfg'
+	}
 }
 
 task sourcesJar(type: Jar) {
-    from zipTree('build/retromapping/retromappedReplacedMain.jar')
-    // Not sure if this is how Abrar designed it, but grab the remapped src
-    classifier = 'sources'
+	from zipTree('build/retromapping/retromappedReplacedMain.jar')
+	// Not sure if this is how Abrar designed it, but grab the remapped src
+	classifier = 'sources'
 }
 
 task apiJar(type: Jar) {
-    // TODO: when FG bug is fixed, remove allSource from the api jar.
-    // https://github.com/MinecraftForge/ForgeGradle/issues/369
-    // Gradle should be able to pull them from the -sources jar.
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-    include 'forestry/api/**'
-    classifier = 'api'
+	// TODO: when FG bug is fixed, remove allSource from the api jar.
+	// https://github.com/MinecraftForge/ForgeGradle/issues/369
+	// Gradle should be able to pull them from the -sources jar.
+	from sourceSets.main.allSource
+	from sourceSets.main.output
+	include 'forestry/api/**'
+	classifier = 'api'
 }
 
 artifacts {
-    archives sourcesJar
-    archives apiJar
+	archives sourcesJar
+	archives apiJar
 }
 
 uploadArchives {
-    repositories {
-        if (project.hasProperty('mavenDir')) {
-            mavenDeployer {
-                repository(url: "file://" + mavenDir)
-            }
-        } else {
-            println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
-        }
-    }
+	repositories {
+		if (project.hasProperty('mavenDir')) {
+			mavenDeployer {
+				repository(url: "file://" + mavenDir)
+			}
+		} else {
+			println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
+		}
+	}
 }
 
 def getBuildNumber() {
-    return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
+	return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
 }
 
 task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-    filePath = "changelog.html"
-    untaggedName = "Current release ${project.version}"
-    fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
-    toRef = "HEAD"
-    templateContent = file('changelog.mustache').getText('UTF-8')
+	filePath = "changelog.html"
+	untaggedName = "Current release ${project.version}"
+	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
+	toRef = "HEAD"
+	templateContent = file('changelog.mustache').getText('UTF-8')
 }
 
 curseforge {
-    apiKey = project.hasProperty('curseforge_apikey') ? project.curseforge_apikey : '0'
-    project {
-        id = curse_project_id
-        changelog = file('changelog.html')
-        changelogType = 'html'
-        releaseType = 'beta'
-    }
+	apiKey = project.hasProperty('curseforge_apikey') ? project.curseforge_apikey : '0'
+	project {
+		id = curse_project_id
+		changelog = file('changelog.html')
+		changelogType = 'html'
+		releaseType = 'beta'
+	}
 }
 
 afterEvaluate {
-    tasks.curseforge59751.dependsOn.add(makeChangelog)
+	tasks.curseforge59751.dependsOn.add(makeChangelog)
 }
