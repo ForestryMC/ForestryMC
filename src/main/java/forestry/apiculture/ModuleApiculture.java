@@ -942,7 +942,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
+			boolean hasVillageGenerated) {
 		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
 			return;
 		}
