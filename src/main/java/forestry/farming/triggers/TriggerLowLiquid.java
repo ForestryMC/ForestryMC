@@ -25,7 +25,7 @@ public class TriggerLowLiquid extends Trigger {
 	private final float threshold;
 
 	public TriggerLowLiquid(String tag, float threshold) {
-		super(tag, "lowLiquid");
+		super(tag, "lowLiquid", "low_liquid");
 		this.threshold = threshold;
 	}
 

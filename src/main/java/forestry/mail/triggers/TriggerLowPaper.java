@@ -23,7 +23,7 @@ public class TriggerLowPaper extends Trigger {
 	private final int threshold;
 
 	public TriggerLowPaper(String tag, int threshold) {
-		super(tag, "lowPaper");
+		super(tag, "lowPaper", "low_paper");
 		this.threshold = threshold;
 	}
 

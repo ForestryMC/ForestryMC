@@ -29,7 +29,7 @@ public class TriggerLowSoil extends Trigger {
 	private final int threshold;
 
 	public TriggerLowSoil(int threshold) {
-		super("lowSoil." + threshold, "lowSoil");
+		super("lowSoil." + threshold, "lowSoil", "low_soil");
 		this.threshold = threshold;
 	}
 

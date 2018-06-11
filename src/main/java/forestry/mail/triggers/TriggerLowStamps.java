@@ -23,7 +23,7 @@ public class TriggerLowStamps extends Trigger {
 	private final int threshold;
 
 	public TriggerLowStamps(String tag, int threshold) {
-		super(tag, "lowStamps");
+		super(tag, "lowStamps", "low_stamps");
 		this.threshold = threshold;
 	}
 

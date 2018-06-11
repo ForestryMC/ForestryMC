@@ -22,7 +22,7 @@ import forestry.core.triggers.Trigger;
 public class TriggerMissingQueen extends Trigger {
 
 	public TriggerMissingQueen() {
-		super("missingQueen");
+		super("missingQueen", "missing_queen");
 	}
 
 	/**

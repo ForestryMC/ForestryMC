@@ -1,5 +1,10 @@
 package forestry.core.config;
 
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public enum EnergyDisplayMode {
 	RF("RF", 1),
 	FE("FE", 1),
@@ -15,10 +20,19 @@ public enum EnergyDisplayMode {
 	}
 
 	public String formatRate(int energy) {
-		return String.format("%.0f %s/t", energy * factor, energyName);
+		String amountString = formatEnergyNum(energy);
+		return String.format("%s %s/t", amountString, energyName);
 	}
 
 	public String formatEnergyValue(int energy) {
-		return String.format("%.0f %s", energy * factor, energyName);
+		String amountString = formatEnergyNum(energy);
+		return String.format("%s %s", amountString, energyName);
+	}
+
+	private String formatEnergyNum(int energy) {
+		Locale locale = MinecraftForgeClient.getLocale();
+		NumberFormat numberFormat = NumberFormat.getIntegerInstance(locale);
+		float amount = energy * factor;
+		return numberFormat.format(amount);
 	}
 }

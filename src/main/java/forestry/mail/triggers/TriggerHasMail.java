@@ -20,7 +20,7 @@ import net.minecraft.util.EnumFacing;
 public class TriggerHasMail extends Trigger {
 
 	public TriggerHasMail() {
-		super("mail.hasMail", "hasMail");
+		super("mail.hasMail", "hasMail", "has_mail");
 	}
 
 	@Override

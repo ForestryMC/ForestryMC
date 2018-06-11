@@ -1,6 +1,11 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.*;
+import buildcraft.api.mj.IMjConnector;
+import buildcraft.api.mj.IMjPassiveProvider;
+import buildcraft.api.mj.IMjReadable;
+import buildcraft.api.mj.IMjReceiver;
+import buildcraft.api.mj.IMjRedstoneReceiver;
+import buildcraft.api.mj.MjAPI;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
 import net.minecraft.tileentity.TileEntity;

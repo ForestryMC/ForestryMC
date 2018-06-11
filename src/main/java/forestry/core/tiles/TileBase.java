@@ -47,7 +47,7 @@ public abstract class TileBase extends TileForestry {
 
 	@Nonnull
 	public EnumFacing getFacing() {
-		return EnumFacing.getFront(getBlockMetadata());
+		return getWorld().getBlockState(getPos()).getValue(BlockBase.FACING);
 	}
 
 }

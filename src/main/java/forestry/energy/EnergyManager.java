@@ -1,13 +1,22 @@
 package forestry.energy;
 
-import buildcraft.api.mj.*;
+import buildcraft.api.mj.IMjConnector;
+import buildcraft.api.mj.IMjPassiveProvider;
+import buildcraft.api.mj.IMjReadable;
+import buildcraft.api.mj.IMjReceiver;
+import buildcraft.api.mj.IMjRedstoneReceiver;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.energy.compat.EnergyStorageWrapper;
-import forestry.energy.compat.mj.*;
+import forestry.energy.compat.mj.MjConnectorWrapper;
+import forestry.energy.compat.mj.MjHelper;
+import forestry.energy.compat.mj.MjPassiveProviderWrapper;
+import forestry.energy.compat.mj.MjReadableWrapper;
+import forestry.energy.compat.mj.MjReceiverWrapper;
+import forestry.energy.compat.mj.MjRedstoneReceiverWrapper;
 import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.compat.tesla.TeslaHolderWrapper;

@@ -17,6 +17,6 @@ public class MjConnectorWrapper implements IMjConnector {
 
 	@Override
 	public boolean canConnect(@Nonnull IMjConnector other) {
-		return true; // TODO
+		return true;
 	}
 }

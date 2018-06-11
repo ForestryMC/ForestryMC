@@ -22,7 +22,7 @@ import forestry.core.triggers.Trigger;
 public class TriggerNoFrames extends Trigger {
 
 	public TriggerNoFrames() {
-		super("noFrames");
+		super("noFrames", "no_frames");
 	}
 
 	/**

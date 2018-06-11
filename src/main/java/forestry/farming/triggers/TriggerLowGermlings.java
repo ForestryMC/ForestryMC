@@ -25,7 +25,7 @@ public class TriggerLowGermlings extends Trigger {
 	private final float threshold;
 
 	public TriggerLowGermlings(String tag, float threshold) {
-		super(tag, "lowGermlings");
+		super(tag, "lowGermlings", "low_germlings");
 		this.threshold = threshold;
 	}
 

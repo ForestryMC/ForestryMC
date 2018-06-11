@@ -23,7 +23,7 @@ public class TriggerBuffer extends Trigger {
 	private final float threshold;
 
 	public TriggerBuffer(String tag, float threshold) {
-		super(tag, "mailBuffer");
+		super(tag, "mailBuffer", "mail_buffer");
 		this.threshold = threshold;
 	}
 

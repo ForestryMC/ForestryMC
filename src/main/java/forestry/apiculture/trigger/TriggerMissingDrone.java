@@ -22,7 +22,7 @@ import forestry.core.triggers.Trigger;
 public class TriggerMissingDrone extends Trigger {
 
 	public TriggerMissingDrone() {
-		super("missingDrone");
+		super("missingDrone", "missing_drone");
 	}
 
 	/**

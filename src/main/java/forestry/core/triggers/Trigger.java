@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-
 import buildcraft.api.core.render.ISprite;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.StatementManager;
-import buildcraft.lib.client.sprite.SpriteRaw;
-import forestry.Forestry;
 import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public abstract class Trigger implements ITriggerExternal {
 
@@ -32,14 +29,14 @@ public abstract class Trigger implements ITriggerExternal {
 	private final String localization;
 	private final String textureName;
 
-	protected Trigger(String uid) {
-		this(uid, uid);
+	protected Trigger(String uid, String textureName) {
+		this(uid, uid, textureName);
 	}
 
-	protected Trigger(String uid, String localization) {
+	protected Trigger(String uid, String localization, String textureName) {
 		this.uid = "forestry:" + uid;
 		this.localization = localization;
-		this.textureName = localization.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+		this.textureName = textureName;
 		StatementManager.registerStatement(this);
 	}
 
@@ -76,7 +73,7 @@ public abstract class Trigger implements ITriggerExternal {
 	@Override
 	public ISprite getSprite() {
 		if (icon == null) {
-			icon = new SpriteRaw(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)), 0, 0, 16, 16, 16);
+			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
 		}
 		return icon;
 	}

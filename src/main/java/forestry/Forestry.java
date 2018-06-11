@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import forestry.plugins.*;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -52,10 +53,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
-import forestry.plugins.ForestryCompatPlugins;
-import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginNatura;
-import forestry.plugins.PluginTechReborn;
 
 /**
  * Forestry Minecraft Mod
@@ -73,7 +70,8 @@ import forestry.plugins.PluginTechReborn;
 				+ "after:" + PluginIC2.MOD_ID + ";"
 				+ "after:" + PluginNatura.MOD_ID + ";"
 				+ "after:toughasnails;"
-				+ "after:" + PluginTechReborn.MOD_ID + ";")
+				+ "after:" + PluginTechReborn.MOD_ID + ";"
+				+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")

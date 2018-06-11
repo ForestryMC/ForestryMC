@@ -25,7 +25,7 @@ public class TriggerLowFertilizer extends Trigger {
 	private final float threshold;
 
 	public TriggerLowFertilizer(String tag, float threshold) {
-		super(tag, "lowFertilizer");
+		super(tag, "lowFertilizer", "low_fertilizer");
 		this.threshold = threshold;
 	}
 

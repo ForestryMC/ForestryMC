@@ -23,7 +23,7 @@ public class TriggerLowResource extends Trigger {
 	private float threshold = 0.25F;
 
 	public TriggerLowResource(String tag, float threshold) {
-		super(tag, "lowResources");
+		super(tag, "lowResources", "low_resources");
 		this.threshold = threshold;
 	}
 

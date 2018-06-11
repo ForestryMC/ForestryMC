@@ -23,7 +23,7 @@ public class TriggerLowInput extends Trigger {
 	private final float threshold;
 
 	public TriggerLowInput(String tag, float threshold) {
-		super(tag, "lowInput");
+		super(tag, "lowInput", "low_input");
 		this.threshold = threshold;
 	}
 
