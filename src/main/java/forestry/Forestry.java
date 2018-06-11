@@ -15,7 +15,11 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import forestry.plugins.*;
+import forestry.plugins.ForestryCompatPlugins;
+import forestry.plugins.PluginBuildCraftFuels;
+import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginNatura;
+import forestry.plugins.PluginTechReborn;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.client.event.ModelRegistryEvent;

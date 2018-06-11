@@ -112,9 +112,8 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-	// Not sure if this is how Abrar designed it, but grab the remapped src
+	from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
 	classifier = 'sources'
-	from zipTree('build/retromapping/retromappedReplacedMain.jar')
 }
 
 task apiJar(type: Jar) {
