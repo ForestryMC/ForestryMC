@@ -24,7 +24,7 @@ public class MailTriggers {
 	public static Trigger highBuffer90;
 
 	public static void initialize() {
-		triggerHasMail = new TriggerHasMail();
+		// triggerHasMail = new TriggerHasMail();
 		lowPaper64 = new TriggerLowPaper("mail.lowPaper.64", 64);
 		lowPaper32 = new TriggerLowPaper("mail.lowPaper.32", 32);
 		lowPostage40 = new TriggerLowStamps("mail.lowStamps.40", 40);

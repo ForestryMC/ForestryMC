@@ -94,7 +94,7 @@ public class TileMailbox extends TileBase {
 	@Override
 	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
 		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(MailTriggers.triggerHasMail);
+		// triggers.add(MailTriggers.triggerHasMail);
 	}
 
 	@Override
