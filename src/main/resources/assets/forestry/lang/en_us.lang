@@ -1818,7 +1818,7 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set there value to 0.
+for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
