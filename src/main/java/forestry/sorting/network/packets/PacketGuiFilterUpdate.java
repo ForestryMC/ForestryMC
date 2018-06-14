@@ -28,7 +28,7 @@ public class PacketGuiFilterUpdate extends ForestryPacket implements IForestryPa
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		logic.writeGuiData(data);
 	}

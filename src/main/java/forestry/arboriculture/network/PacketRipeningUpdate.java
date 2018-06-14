@@ -39,7 +39,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeVarInt(value);
 	}
@@ -47,7 +47,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			int value = data.readVarInt();
 

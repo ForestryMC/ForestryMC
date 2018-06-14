@@ -189,9 +189,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private boolean shouldConvertToDefaultLeaves() {
 		if (getOwnerHandler().getOwner() == null) { // null owner likely means it's a worldgen tree
 			ITree tree = getTree();
-			if (tree != null && tree.getGenome().matchesTemplateGenome()) {
-				return true;
-			}
+			return tree != null && tree.getGenome().matchesTemplateGenome();
 		}
 		return false;
 	}
@@ -389,7 +387,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 
 		String speciesUID = data.readString(); // this is called instead of super.readData, be careful!
 

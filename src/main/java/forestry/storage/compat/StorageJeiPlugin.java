@@ -20,27 +20,27 @@ public class StorageJeiPlugin implements IModPlugin {
 
 		ItemRegistryBackpacks items = ModuleBackpacks.getItems();
 
-		JeiUtil.addDescription(registry, "minerBag",
+		JeiUtil.addDescription(registry, "miner_bag",
 				items.minerBackpack,
 				items.minerBackpackT2
 		);
-		JeiUtil.addDescription(registry, "diggerBag",
+		JeiUtil.addDescription(registry, "digger_bag",
 				items.diggerBackpack,
 				items.diggerBackpackT2
 		);
-		JeiUtil.addDescription(registry, "foresterBag",
+		JeiUtil.addDescription(registry, "forester_bag",
 				items.foresterBackpack,
 				items.foresterBackpackT2
 		);
-		JeiUtil.addDescription(registry, "hunter",
+		JeiUtil.addDescription(registry, "hunter_bag",
 				items.hunterBackpack,
 				items.hunterBackpackT2
 		);
-		JeiUtil.addDescription(registry, "adventurerBag",
+		JeiUtil.addDescription(registry, "adventurer_bag",
 				items.adventurerBackpack,
 				items.adventurerBackpackT2
 		);
-		JeiUtil.addDescription(registry, "builderBag",
+		JeiUtil.addDescription(registry, "builder_bag",
 				items.builderBackpack,
 				items.builderBackpackT2
 		);

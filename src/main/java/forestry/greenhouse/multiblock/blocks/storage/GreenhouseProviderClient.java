@@ -68,7 +68,7 @@ public class GreenhouseProviderClient extends GreenhouseProvider {
 		storage.clearBlocks(false);
 		storage.createBlocksFromCache();
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.addScheduledTask(() -> markBlockForRenderUpdate());
+		mc.addScheduledTask(this::markBlockForRenderUpdate);
 	}
 
 	/* CHUNK LOADING */

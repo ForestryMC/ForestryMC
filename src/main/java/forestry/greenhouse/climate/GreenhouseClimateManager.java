@@ -37,7 +37,7 @@ public class GreenhouseClimateManager implements IGreenhouseClimateManager {
 
 	private GreenhouseClimateManager() {
 		managers = new World2ObjectMap(world -> new ClimateSourceWorldManager());
-		modifiers = new TreeSet<IClimateModifier>((firstModifier, secondModifier) -> firstModifier.getPriority() > secondModifier.getPriority() ? 1 : -1);
+		modifiers = new TreeSet<>((firstModifier, secondModifier) -> firstModifier.getPriority() > secondModifier.getPriority() ? 1 : -1);
 	}
 
 	public static GreenhouseClimateManager getInstance() {

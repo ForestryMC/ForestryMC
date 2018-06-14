@@ -29,7 +29,7 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 	private TreePlugin() {
 		super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
 			new TreeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(()-> ItemFruit.EnumFruit.CHERRY.getStack()),
+			new ProductsTab(ItemFruit.EnumFruit.CHERRY::getStack),
 			new MutationsTab(()->ModuleArboriculture.getItems().grafter.getItemStack()));
 		NonNullList<ItemStack> treeList = NonNullList.create();
 		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);

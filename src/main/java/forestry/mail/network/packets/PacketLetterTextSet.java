@@ -33,14 +33,14 @@ public class PacketLetterTextSet extends ForestryPacket implements IForestryPack
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeString(string);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			if (player.openContainer instanceof ContainerLetter) {
 				String string = data.readString();
 				((ContainerLetter) player.openContainer).handleSetText(string);

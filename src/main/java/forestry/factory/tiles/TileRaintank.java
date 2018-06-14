@@ -137,9 +137,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (!resourceTank.isEmpty()) {
 			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.down(), EnumFacing.UP);
 			if (fluidDestination != null) {
-				if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
-					return true;
-				}
+				return FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null;
 			}
 		}
 		return false;

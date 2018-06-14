@@ -36,7 +36,7 @@ public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestry
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeInt(poboxInfo.playerLetters);
 		data.writeInt(poboxInfo.tradeLetters);
 	}
@@ -45,7 +45,7 @@ public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestry
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			POBoxInfo poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
 			GuiMailboxInfo.instance.setPOBoxInfo(player, poboxInfo);
 		}

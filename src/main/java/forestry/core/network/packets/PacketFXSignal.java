@@ -61,7 +61,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());

@@ -42,7 +42,7 @@ public class PacketBeeLogicActiveEntity extends ForestryPacket implements IFores
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeEntityById(entity);
 		beekeepingLogic.writeData(data);
 	}

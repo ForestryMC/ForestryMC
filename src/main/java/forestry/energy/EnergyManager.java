@@ -66,7 +66,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		int energyStored = data.readVarInt();
 		setEnergyStored(energyStored);
 	}

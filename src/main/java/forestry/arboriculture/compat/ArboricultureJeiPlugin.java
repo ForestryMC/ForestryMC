@@ -2,12 +2,8 @@ package forestry.arboriculture.compat;
 
 import com.google.common.base.Preconditions;
 
-import net.minecraft.util.ResourceLocation;
-
-import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
-import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;

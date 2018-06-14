@@ -24,7 +24,7 @@ public class PacketHandlerDummyServer extends PacketHandlerDummy implements IFor
 	}
 
 	@Override
-	public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+	public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 
 	}
 }
