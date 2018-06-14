@@ -14,13 +14,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public interface IAlyzerPlugin {
 
+	@SideOnly(Side.CLIENT)
 	void drawAnalyticsPage1(GuiScreen gui, ItemStack itemStack);
 
+	@SideOnly(Side.CLIENT)
 	void drawAnalyticsPage2(GuiScreen gui, ItemStack itemStack);
 
+	@SideOnly(Side.CLIENT)
 	void drawAnalyticsPage3(GuiScreen gui, ItemStack itemStack);
 
 	/**
