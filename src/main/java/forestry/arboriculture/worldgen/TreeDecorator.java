@@ -67,6 +67,9 @@ public class TreeDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			Biome biome = world.getBiome(pos);
+			if (!Config.isValidTreeBiome(biome)) {
+				continue;
+			}
 
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
