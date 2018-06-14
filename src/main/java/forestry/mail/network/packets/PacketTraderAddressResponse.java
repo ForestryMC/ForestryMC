@@ -39,7 +39,7 @@ public class PacketTraderAddressResponse extends ForestryPacket implements IFore
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeString(addressName);
 	}
@@ -48,7 +48,7 @@ public class PacketTraderAddressResponse extends ForestryPacket implements IFore
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			String addressName = data.readString();
 

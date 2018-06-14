@@ -37,7 +37,7 @@ public class PacketGuiUpdate extends ForestryPacket implements IForestryPacketCl
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		guiDataTile.writeGuiData(data);
 	}

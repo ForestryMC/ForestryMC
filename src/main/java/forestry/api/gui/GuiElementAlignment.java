@@ -6,7 +6,7 @@
 package forestry.api.gui;
 
 /**
- * The alignment of a gui element.
+ * The alignment of the {@link IGuiElement} defines the position of the element relative to the position of its parent.
  */
 public enum GuiElementAlignment {
 	TOP_LEFT(0.0f, 0.0f),

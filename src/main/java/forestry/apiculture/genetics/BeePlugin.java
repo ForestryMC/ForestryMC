@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
+import forestry.api.genetics.DatabaseMode;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.config.Config;
@@ -26,8 +27,8 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private BeePlugin() {
-		super(new BeeDatabaseTab(true),
-			new BeeDatabaseTab(false),
+		super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
+			new BeeDatabaseTab(DatabaseMode.INACTIVE),
 			new ProductsTab(()->ModuleApiculture.getItems().beeComb.get(EnumHoneyComb.HONEY, 1)),
 			new MutationsTab(()-> ModuleApiculture.getItems().frameImpregnated.getItemStack()));
 		NonNullList<ItemStack> beeList = NonNullList.create();

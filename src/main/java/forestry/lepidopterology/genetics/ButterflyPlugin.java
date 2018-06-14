@@ -10,6 +10,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.genetics.DatabaseMode;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
@@ -25,8 +26,8 @@ public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private ButterflyPlugin() {
-		super(new ButterflyDatabaseTab(true),
-			new ButterflyDatabaseTab(false),
+		super(new ButterflyDatabaseTab(DatabaseMode.ACTIVE),
+			new ButterflyDatabaseTab(DatabaseMode.INACTIVE),
 			new ButterflyProductsTab(),
 			new MutationsTab(()->ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON)));
 		NonNullList<ItemStack> butterflyList = NonNullList.create();

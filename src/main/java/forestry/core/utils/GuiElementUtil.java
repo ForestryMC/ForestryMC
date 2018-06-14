@@ -1,34 +1,32 @@
 package forestry.core.utils;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.text.TextFormatting;
 
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IGuiElement;
+import forestry.api.gui.style.ITextStyle;
 
 public class GuiElementUtil {
 	private GuiElementUtil() {
 	}
 
-	public static void preRender(IGuiElement element, GuiElementAlignment align){
-		IGuiElement parent = element.getParent();
-		int xPos = element.getX();
-		int yPos = element.getY();
-		if(parent != null){
-			if(parent.getWidth() > element.getWidth()){
-				xPos += (parent.getWidth() - element.getWidth()) * align.getXOffset();
-			}
-			if (parent.getHeight() > element.getHeight()) {
-				yPos += (parent.getHeight() - element.getHeight()) * align.getYOffset();
-			}
+	public static String getFormattedString(ITextStyle style, String rawText) {
+		StringBuilder modifiers = new StringBuilder();
+		if (style.isBold()) {
+			modifiers.append(TextFormatting.BOLD);
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(xPos, yPos, 0.0F);
-		GlStateManager.color(1.0F, 1.0F, 1.0F);
-
-	}
-
-	public static void posRender(IGuiElement element){
-		GlStateManager.popMatrix();
+		if (style.isItalic()) {
+			modifiers.append(TextFormatting.ITALIC);
+		}
+		if (style.isUnderlined()) {
+			modifiers.append(TextFormatting.UNDERLINE);
+		}
+		if (style.isStrikethrough()) {
+			modifiers.append(TextFormatting.STRIKETHROUGH);
+		}
+		if (style.isObfuscated()) {
+			modifiers.append(TextFormatting.OBFUSCATED);
+		}
+		modifiers.append(rawText);
+		return modifiers.toString();
 	}
 
 }

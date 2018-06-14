@@ -209,7 +209,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		IAllele stored = AlleleManager.alleleRegistry.getAllele(data.readString());
 		if (stored instanceof IAlleleFruit) {
 			allele = (IAlleleFruit) stored;

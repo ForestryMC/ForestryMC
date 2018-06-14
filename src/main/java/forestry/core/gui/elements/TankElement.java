@@ -149,6 +149,11 @@ public class TankElement extends GuiElement {
 		return toolTip;
 	}
 
+	@Override
+	public boolean hasTooltip() {
+		return true;
+	}
+
 	private static void setGLColorFromInt(int color) {
 		float red = (color >> 16 & 0xFF) / 255.0F;
 		float green = (color >> 8 & 0xFF) / 255.0F;

@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,26 +35,41 @@ public class BeeManager {
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
+	 *
+	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
+	@Nullable
 	public static IBeeRoot beeRoot;
 
 	/**
 	 * Used to create new bees.
+	 *
+	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
+	@Nullable
 	public static IBeeFactory beeFactory;
 
 	/**
 	 * Used to create new bee mutations.
+	 *
+	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
+	@Nullable
 	public static IBeeMutationFactory beeMutationFactory;
 
 	/**
 	 * Used to get Forestry's jubilance implementations.
+	 *
+	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
+	@Nullable
 	public static IJubilanceFactory jubilanceFactory;
 
 	/**
 	 * Used to check whether a player is wearing Apiarist Armor.
+	 *
+	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
+	@Nullable
 	public static IArmorApiaristHelper armorApiaristHelper;
 }

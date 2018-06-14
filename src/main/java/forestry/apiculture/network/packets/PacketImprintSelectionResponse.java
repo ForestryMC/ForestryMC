@@ -38,7 +38,7 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeVarInt(primary);
 		data.writeVarInt(secondary);
 	}
@@ -46,7 +46,7 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			Container container = player.openContainer;
 			if (container instanceof ContainerImprinter) {
 				int primaryIndex = data.readVarInt();

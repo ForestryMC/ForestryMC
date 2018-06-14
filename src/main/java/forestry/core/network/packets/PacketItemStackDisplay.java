@@ -36,7 +36,7 @@ public class PacketItemStackDisplay extends ForestryPacket implements IForestryP
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeItemStack(itemStack);
 	}

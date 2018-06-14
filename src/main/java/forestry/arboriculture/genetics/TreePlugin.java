@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.DatabaseMode;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.config.Config;
 import forestry.core.genetics.analyzer.DatabasePlugin;
@@ -26,9 +27,9 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private TreePlugin() {
-		super(new TreeDatabaseTab(true),
-			new TreeDatabaseTab(false),
-			new ProductsTab(()-> ItemFruit.EnumFruit.CHERRY.getStack()),
+		super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
+			new TreeDatabaseTab(DatabaseMode.INACTIVE),
+			new ProductsTab(ItemFruit.EnumFruit.CHERRY::getStack),
 			new MutationsTab(()->ModuleArboriculture.getItems().grafter.getItemStack()));
 		NonNullList<ItemStack> treeList = NonNullList.create();
 		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);

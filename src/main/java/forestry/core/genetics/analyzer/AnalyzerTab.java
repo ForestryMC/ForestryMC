@@ -5,13 +5,13 @@ import net.minecraft.util.text.translation.I18n;
 
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.genetics.IIndividual;
-import forestry.api.gui.IElementGenetic;
+import forestry.api.gui.IDatabaseElement;
 import forestry.core.ModuleCore;
 
 public enum AnalyzerTab implements IDatabaseTab {
 	ANALYZE {
 		@Override
-		public void createElements(IElementGenetic container, IIndividual individual, ItemStack itemStack) {
+		public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 
 		}
 

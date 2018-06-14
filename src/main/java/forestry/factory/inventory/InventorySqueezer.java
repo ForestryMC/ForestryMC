@@ -46,9 +46,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 				return false;
 			}
 
-			if (SqueezerRecipeManager.canUse(itemStack)) {
-				return true;
-			}
+			return SqueezerRecipeManager.canUse(itemStack);
 		}
 
 		return false;

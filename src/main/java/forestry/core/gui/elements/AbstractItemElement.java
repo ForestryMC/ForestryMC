@@ -35,7 +35,7 @@ public abstract class AbstractItemElement extends GuiElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		ItemStack itemStack = getItemStack();
+		ItemStack itemStack = getStack();
 		if (!itemStack.isEmpty()) {
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.enableRescaleNormal();
@@ -47,9 +47,14 @@ public abstract class AbstractItemElement extends GuiElement {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public List<String> getTooltip(int mouseX, int mouseY) {
-		ItemStack itemStack = getItemStack();
+		ItemStack itemStack = getStack();
 		return ItemTooltipUtil.getInformation(itemStack);
 	}
 
-	protected abstract ItemStack getItemStack();
+	@Override
+	public boolean hasTooltip() {
+		return true;
+	}
+
+	protected abstract ItemStack getStack();
 }

@@ -28,7 +28,8 @@ public class IngredientElement extends AbstractItemElement {
 		this.items = items;
 	}
 
-	protected ItemStack getItemStack() {
+	@Override
+	protected ItemStack getStack() {
 		if (items.isEmpty()) {
 			return ItemStack.EMPTY;
 		}

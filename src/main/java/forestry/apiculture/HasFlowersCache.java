@@ -225,7 +225,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		}
 	}
 
-	public void readData(PacketBuffer data) throws IOException {
+	public void readData(PacketBuffer data) {
 		flowerCoords.clear();
 		flowers.clear();
 

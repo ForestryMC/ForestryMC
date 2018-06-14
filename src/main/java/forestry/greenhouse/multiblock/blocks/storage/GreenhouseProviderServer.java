@@ -122,7 +122,7 @@ public class GreenhouseProviderServer extends GreenhouseProvider {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		// Only read on the client side
 	}
 

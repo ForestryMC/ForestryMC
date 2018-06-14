@@ -30,7 +30,7 @@ public class PacketChipsetClick extends ForestryPacket implements IForestryPacke
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeVarInt(slot);
 	}
 
@@ -41,7 +41,7 @@ public class PacketChipsetClick extends ForestryPacket implements IForestryPacke
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			int slot = data.readVarInt();
 
 			if (player.openContainer instanceof IContainerSocketed) {

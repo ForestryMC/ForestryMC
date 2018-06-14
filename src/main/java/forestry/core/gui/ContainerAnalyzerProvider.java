@@ -112,6 +112,7 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
 
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				individual.writeToNBT(nbttagcompound);
+				specimen = specimen.copy();
 				specimen.setTagCompound(nbttagcompound);
 
 				if (requiresEnergy) {

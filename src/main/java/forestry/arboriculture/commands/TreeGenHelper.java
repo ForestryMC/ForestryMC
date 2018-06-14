@@ -28,7 +28,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public final class TreeGenHelper {
 
-	public static WorldGenerator getWorldGen(String treeName, EntityPlayer player, BlockPos pos) throws SpeciesNotFoundException, TemplateNotFoundException {
+	public static WorldGenerator getWorldGen(String treeName, EntityPlayer player, BlockPos pos) throws SpeciesNotFoundException {
 		ITreeGenome treeGenome = getTreeGenome(treeName);
 		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
 		return tree.getTreeGenerator(player.world, pos, true);
@@ -69,7 +69,7 @@ public final class TreeGenHelper {
 		return false;
 	}
 
-	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
+	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException {
 		IAlleleTreeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {

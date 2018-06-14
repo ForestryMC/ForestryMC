@@ -33,20 +33,20 @@ public interface IClimateHelper {
 	/**
 	 * Gets a collection of humidities which fit the given parameters.
 	 *
-	 * @param prefered  Base humidity from which to measure.
+	 * @param preferred  Base humidity from which to measure.
 	 * @param tolerance Tolerance to apply to the base humidity.
 	 * @return A collection of humidities which fall within the given parameters.
 	 */
-	Collection<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance);
+	Collection<EnumHumidity> getToleratedHumidity(EnumHumidity preferred, EnumTolerance tolerance);
 
 	/**
 	 * Gets a collection of temperatures which fit the given parameters.
 	 *
-	 * @param prefered  Base temperature from which to measure.
+	 * @param preferred  Base temperature from which to measure.
 	 * @param tolerance Tolerance to apply to the base temperatures.
 	 * @return A collection of temperatures which fall within the given parameters.
 	 */
-	Collection<EnumTemperature> getToleratedTemperature(EnumTemperature prefered, EnumTolerance tolerance);
+	Collection<EnumTemperature> getToleratedTemperature(EnumTemperature preferred, EnumTolerance tolerance);
 
 	/**
 	 * Gets a localized, human readable string for the given temperature.

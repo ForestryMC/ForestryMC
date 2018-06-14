@@ -2,11 +2,10 @@ package forestry.book.gui.elements;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
@@ -41,7 +40,7 @@ public abstract class SelectionElement<R> extends PaneLayout {
 		this.recipes = recipes;
 		if (recipes.length > 1) {
 			drawable(0, 0, CRAFTING_COUNT).setAlign(GuiElementAlignment.BOTTOM_CENTER);
-			text = panel(width, this.height);
+			text = pane(width, this.height);
 			leftButton = add(new ButtonElement(-27, -2, LEFT_BUTTON, e -> setIndex(index - 1)));
 			leftButton.setAlign(GuiElementAlignment.BOTTOM_CENTER);
 
@@ -52,7 +51,7 @@ public abstract class SelectionElement<R> extends PaneLayout {
 			leftButton = null;
 			rightButton = null;
 		}
-		selectedElement = GuiElementFactory.INSTANCE.createPanel(0, 2, width, this.height);
+		selectedElement = GuiElementFactory.INSTANCE.createPane(0, 2, width, this.height);
 	}
 
 	protected final void setIndex(int index) {
@@ -64,7 +63,7 @@ public abstract class SelectionElement<R> extends PaneLayout {
 		onIndexUpdate(index, recipes[index]);
 		if (text != null) {
 			text.clear();
-			text.text(TextFormatting.BLACK.toString() + (index + 1) + "/" + recipes.length, GuiElementAlignment.BOTTOM_CENTER, 0).setYPosition(2);
+			text.label((index + 1) + "/" + recipes.length, GuiElementAlignment.BOTTOM_CENTER, GuiConstants.BLACK_STYLE).setYPosition(2);
 		}
 		if (leftButton != null) {
 			leftButton.setEnabled(index > 0);

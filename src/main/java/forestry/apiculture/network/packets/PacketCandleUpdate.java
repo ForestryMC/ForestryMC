@@ -41,7 +41,7 @@ public class PacketCandleUpdate extends ForestryPacket implements IForestryPacke
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeInt(colour);
 		data.writeBoolean(lit);
@@ -50,7 +50,7 @@ public class PacketCandleUpdate extends ForestryPacket implements IForestryPacke
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			int colour = data.readInt();
 			boolean lit = data.readBoolean();

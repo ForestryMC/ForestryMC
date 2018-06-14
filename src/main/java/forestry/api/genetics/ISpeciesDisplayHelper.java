@@ -1,24 +1,12 @@
 package forestry.api.genetics;
 
-import java.util.Optional;
-
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface ISpeciesDisplayHelper {
-	/**
-	 * Plugin to add information for the genetic database.
-	 */
-	Optional<IDatabasePlugin> getDatabasePlugin();
-
-	/**
-	 * Plugin to add information for the handheld genetic analyzer.
-	 */
-	Optional<IAlyzerPlugin> getAlyzerPlugin();
-
+public interface ISpeciesDisplayHelper<I extends IIndividual, S extends IAlleleSpecies> {
 	/**
 	 * Retrieves a stack that can and should only be used on the client side in a gui.
 	 *

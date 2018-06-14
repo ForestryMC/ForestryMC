@@ -39,7 +39,7 @@ public class PacketErrorUpdateEntity extends ForestryPacket implements IForestry
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeEntityById(entity);
 		errorLogic.writeData(data);
 	}
@@ -47,7 +47,7 @@ public class PacketErrorUpdateEntity extends ForestryPacket implements IForestry
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			Entity entity = data.readEntityById(player.world);
 			if (entity instanceof IErrorLogicSource) {
 				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;

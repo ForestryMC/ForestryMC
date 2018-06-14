@@ -8,22 +8,20 @@ public class HorizontalLayout extends AbstractElementLayout {
 		super(xPos, yPos, 0, height);
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
 	public <E extends IGuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
 		element.setXPosition(width);
-		width += element.getWidth() + distance;
+		setWidth(width + (element.getWidth() + distance));
+		element.onCreation();
 		return element;
 	}
 
 	public <E extends IGuiElement> E remove(E element) {
 		elements.remove(element);
-		width -= element.getWidth() + distance;
+		setWidth(width - (element.getWidth() + distance));
 		element.setXPosition(0);
+		element.onDeletion();
 		return element;
 	}
 

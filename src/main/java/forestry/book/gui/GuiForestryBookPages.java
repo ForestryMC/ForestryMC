@@ -21,7 +21,6 @@ import forestry.api.gui.IGuiElement;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
-import forestry.core.gui.elements.layouts.ElementGroup;
 
 @SideOnly(Side.CLIENT)
 public class GuiForestryBookPages extends GuiForesterBook {
@@ -42,9 +41,8 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		this.category = category;
 		this.entry = entry;
 		this.parent = parent;
-		ElementGroup group = elementManager.group();
-		leftPage = group.panel(LEFT_PAGE_START_X, LEFT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
-		rightPage = group.panel(RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
+		leftPage = window.pane(LEFT_PAGE_START_X, LEFT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
+		rightPage = window.pane(RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
 		pages = ImmutableList.copyOf(entry.getPageFactory().load(entry, GuiForesterBook.PAGE_HEIGHT - 13, GuiForesterBook.PAGE_HEIGHT, GuiForesterBook.PAGE_WIDTH));
 		setPages(0);
 	}
@@ -116,7 +114,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(GuiButton button) {
 		if (button instanceof GuiButtonPage) {
 			GuiButtonPage pageButton = (GuiButtonPage) button;
 			if (pageButton.left) {

@@ -42,7 +42,7 @@ public class PacketWorktableMemoryUpdate extends ForestryPacket implements IFore
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		recipeMemory.writeData(data);
 	}

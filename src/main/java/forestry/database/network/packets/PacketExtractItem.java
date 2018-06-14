@@ -31,7 +31,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeInt(invIndex);
 		data.writeByte(flags);
 	}
@@ -43,7 +43,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			int invIndex = data.readInt();
 			byte flags = data.readByte();
 

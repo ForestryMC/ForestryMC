@@ -430,7 +430,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) {
 		breedingProgressPercent = data.readVarInt();
 		tempChange = data.readVarInt() / 100.0F;
 		humidChange = data.readVarInt() / 100.0F;

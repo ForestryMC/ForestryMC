@@ -29,7 +29,7 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeShort(facing.getIndex());
 		data.writeShort(AlleleManager.filterRegistry.getId(rule));
@@ -42,7 +42,7 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			BlockPos pos = data.readBlockPos();
 			EnumFacing facing = EnumFacing.getFront(data.readShort());
 			IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
