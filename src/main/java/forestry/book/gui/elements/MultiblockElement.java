@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.gui.events.GuiEvent;
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureBlockAccess;
 import forestry.book.data.structure.StructureInfo;
@@ -76,6 +77,14 @@ public class MultiblockElement extends GuiElement {
 
 		rotX = 25;
 		rotY = -45;
+
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> lastClick = new int[]{event.getX(), event.getY()});
+		addSelfEventHandler(GuiEvent.UpEvent.class, event -> lastClick = null);
+	}
+
+	@Override
+	public boolean canMouseOver() {
+		return true;
 	}
 
 	@Override
@@ -154,18 +163,5 @@ public class MultiblockElement extends GuiElement {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableBlend();
 		RenderHelper.disableStandardItemLighting();
-	}
-
-	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-
-		lastClick = new int[]{mouseX, mouseY};
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY, int clickedMouseButton) {
-		super.mouseReleased(mouseX, mouseY, clickedMouseButton);
-		lastClick = null;
 	}
 }

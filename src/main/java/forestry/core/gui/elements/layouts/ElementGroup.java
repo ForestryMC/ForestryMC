@@ -6,16 +6,26 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IElementLayoutHelper;
 import forestry.api.gui.IGuiElement;
+import forestry.api.gui.IItemElement;
+import forestry.api.gui.ILabelElement;
+import forestry.api.gui.ITextElement;
+import forestry.api.gui.style.ITextStyle;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.DrawableElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.ItemElement;
-import forestry.core.gui.elements.TextElement;
+import forestry.core.gui.elements.LabelElement;
+import forestry.core.gui.elements.SplitTextElement;
 
+@SideOnly(Side.CLIENT)
 public abstract class ElementGroup extends GuiElement implements IElementGroup {
 	protected final List<IGuiElement> elements = new ArrayList<>();
 
@@ -26,16 +36,20 @@ public abstract class ElementGroup extends GuiElement implements IElementGroup {
 	public <E extends IGuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
+		element.onCreation();
 		return element;
 	}
 
 	public <E extends IGuiElement> E remove(E element) {
 		elements.remove(element);
+		element.onDeletion();
 		return element;
 	}
 
 	public void clear() {
-		elements.clear();
+		for (IGuiElement element : new ArrayList<>(elements)) {
+			remove(element);
+		}
 	}
 
 	@Override
@@ -51,50 +65,15 @@ public abstract class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		int mX = mouseX - getX();
-		int mY = mouseY - getY();
-		elements.stream()
-			.filter(element -> element.isMouseOver(mX, mY))
-			.forEach(element -> element.mouseClicked(mX, mY, mouseButton));
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-		int mX = mouseX - getX();
-		int mY = mouseY - getY();
-		elements.stream()
-			.filter(element -> element.isMouseOver(mX, mY))
-			.forEach(element -> element.mouseReleased(mX, mY, mouseButton));
-	}
-
-	@Override
-	public void mouseClickMove(int mouseX, int mouseY, int mouseButton) {
-		int mX = mouseX - getX();
-		int mY = mouseY - getY();
-		elements.stream()
-			.filter(element -> element.isMouseOver(mX, mY))
-			.forEach(element -> element.mouseClickMove(mX, mY, mouseButton));
-	}
-
-	@Override
-	public boolean keyTyped(char typedChar, int keyCode) {
-		return elements.stream().anyMatch(element -> element.keyTyped(typedChar, keyCode));
-	}
-
-	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		mouseX -= getX();
-		mouseY -= getY();
-		for (IGuiElement element : elements) {
-			if (element.isMouseOver(mouseX, mouseY)) {
-				List<String> tooltip = element.getTooltip(mouseX, mouseY);
-				if (!tooltip.isEmpty()) {
-					return tooltip;
-				}
-			}
+	@SideOnly(Side.CLIENT)
+	public void updateClient() {
+		if (!isVisible()) {
+			return;
 		}
-		return tooltip;
+		onUpdateClient();
+		for (IGuiElement widget : getElements()) {
+			widget.updateClient();
+		}
 	}
 
 	@Nullable
@@ -112,58 +91,60 @@ public abstract class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public IGuiElement item(int xPos, int yPos, ItemStack itemStack) {
-		IGuiElement element = new ItemElement(xPos, yPos, itemStack);
+	public IItemElement item(int xPos, int yPos, ItemStack itemStack) {
+		IItemElement element = new ItemElement(xPos, yPos, itemStack);
 		add(element);
 		return element;
 	}
 
 	@Override
-	public IGuiElement text(String text) {
-		return text(0, text, 0xFFFFFF);
+	public ILabelElement label(String text) {
+		return label(text, GuiConstants.DEFAULT_STYLE);
 	}
 
 	@Override
-	public IGuiElement text(String text, int color) {
-		return text(0, text, color);
+	public ILabelElement label(String text, ITextStyle style) {
+		return label(text, GuiElementAlignment.TOP_LEFT, style);
 	}
 
 	@Override
-	public IGuiElement text(String text, GuiElementAlignment align) {
-		return text(text, align, 0xFFFFFF);
+	public ILabelElement label(String text, GuiElementAlignment align) {
+		return label(text, align, GuiConstants.DEFAULT_STYLE);
 	}
 
 	@Override
-	public IGuiElement text(String text, GuiElementAlignment align, int color, boolean unicode) {
-		return text(0, 12, text, align, color, unicode);
+	public ILabelElement label(String text, GuiElementAlignment align, ITextStyle textStyle) {
+		return label(text, -1, 12, align, textStyle);
 	}
 
 	@Override
-	public IGuiElement text(String text, GuiElementAlignment align, int color) {
-		return text(0, text, align, color);
-	}
-
-	public IGuiElement text(int x, String text, int color) {
-		return text(x, text, GuiElementAlignment.TOP_LEFT, color);
-	}
-
-	public IGuiElement text(int x, String text, GuiElementAlignment align, int color) {
-		return text(x, 12, text, align, color);
+	public ILabelElement label(String text, int width, int height, GuiElementAlignment align, ITextStyle textStyle) {
+		return label(text, 0, 0, width, height, align, textStyle);
 	}
 
 	@Override
-	public IGuiElement text(int x, int height, String text, GuiElementAlignment align, int color) {
-		return text(x, height, text, align, color, false);
+	public ILabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, ITextStyle textStyle) {
+		return add(new LabelElement(x, y, width, height, text, align, textStyle));
 	}
 
 	@Override
-	public IGuiElement text(int x, int y, int width, int height, String text) {
-		return add(new TextElement(x, y, width, height, text, GuiElementAlignment.TOP_LEFT, 0xFFFFFF, false));
+	public ITextElement splitText(String text, int width) {
+		return splitText(text, width, GuiConstants.DEFAULT_STYLE);
 	}
 
 	@Override
-	public IGuiElement text(int x, int height, String text, GuiElementAlignment align, int color, boolean unicode) {
-		return add(new TextElement(x, 0, -1, height, text, align, color, unicode));
+	public ITextElement splitText(String text, int width, ITextStyle textStyle) {
+		return splitText(text, width, GuiElementAlignment.TOP_LEFT, textStyle);
+	}
+
+	@Override
+	public ITextElement splitText(String text, int width, GuiElementAlignment align, ITextStyle textStyle) {
+		return splitText(text, 0, 0, width, align, textStyle);
+	}
+
+	@Override
+	public ITextElement splitText(String text, int x, int y, int width, GuiElementAlignment align, ITextStyle textStyle) {
+		return add(new SplitTextElement(x, y, width, text, align, textStyle));
 	}
 
 	@Override
@@ -187,12 +168,12 @@ public abstract class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public ElementGroup panel(int xPos, int yPos, int width, int height) {
+	public ElementGroup pane(int xPos, int yPos, int width, int height) {
 		return add(new PaneLayout(xPos, yPos, width, height));
 	}
 
 	@Override
-	public ElementGroup panel(int width, int height) {
+	public ElementGroup pane(int width, int height) {
 		return add(new PaneLayout(0, 0, width, height));
 	}
 

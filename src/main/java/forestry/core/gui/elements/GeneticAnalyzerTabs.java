@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.gui.IGuiElement;
+import forestry.api.gui.events.GuiEvent;
 import forestry.core.genetics.analyzer.AnalyzerTab;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
@@ -43,7 +44,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 
 	public IDatabaseTab getSelected() {
 		IGuiElement element = elements.get(selected);
-		if (!(element instanceof Tab) || !((Tab) element).isVisible()) {
+		if (!(element instanceof Tab) || !element.isVisible()) {
 			return AnalyzerTab.ANALYZE;
 		}
 		return ((Tab) element).tab;
@@ -81,6 +82,18 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 		public Tab(int xPos, int yPos, int index) {
 			super(xPos, yPos, 35, 26);
 			this.index = index;
+			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+				if (isVisible()) {
+					select(index);
+					SoundUtil.playButtonClick();
+					analyzer.update();
+				}
+			});
+		}
+
+		@Override
+		public boolean canMouseOver() {
+			return true;
 		}
 
 		public boolean isVisible() {
@@ -112,15 +125,6 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 				GlStateManager.enableRescaleNormal();
 				GuiUtil.drawItemStack(Minecraft.getMinecraft().fontRenderer, displayStack, x + 9, 5);
 				RenderHelper.disableStandardItemLighting();
-			}
-		}
-
-		@Override
-		public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-			if (isVisible() && isMouseOver(mouseX, mouseY)) {
-				select(index);
-				SoundUtil.playButtonClick();
-				analyzer.update();
 			}
 		}
 	}

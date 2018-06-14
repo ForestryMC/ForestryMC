@@ -28,4 +28,5 @@ public class AlleleManager {
 	 * @since 5.8
 	 */
 	public static IFilterRegistry filterRegistry;
+
 }
