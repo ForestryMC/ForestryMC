@@ -34,7 +34,7 @@ public class TextureMapForestry extends TextureMap {
 	}
 
 	@Override
-	public void loadTexture(IResourceManager resourceManager) throws IOException {
+	public void loadTexture(IResourceManager resourceManager) {
 		this.initMissingImage();
 		this.deleteGlTexture();
 		this.loadTextureAtlas(resourceManager);

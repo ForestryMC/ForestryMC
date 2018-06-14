@@ -24,7 +24,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 
 public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItemModelRegister {
-	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class);
+	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class);
 
 	public BlockDecorativeWoodPile() {
 		super(Material.WOOD);
@@ -111,7 +111,7 @@ public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItem
 	}
 
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{AXIS});
+		return new BlockStateContainer(this, AXIS);
 	}
 
 	protected ItemStack getSilkTouchDrop(IBlockState state) {

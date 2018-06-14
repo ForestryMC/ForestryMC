@@ -34,5 +34,5 @@ public abstract class ForestryPacket implements IForestryPacket {
 		return new FMLProxyPacket(data, PacketHandler.channelId);
 	}
 
-	protected abstract void writeData(PacketBufferForestry data) throws IOException;
+	protected abstract void writeData(PacketBufferForestry data);
 }

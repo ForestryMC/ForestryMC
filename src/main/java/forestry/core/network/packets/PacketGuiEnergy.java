@@ -37,7 +37,7 @@ public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketCl
 	}
 
 	@Override
-	public void writeData(PacketBufferForestry data) throws IOException {
+	public void writeData(PacketBufferForestry data) {
 		data.writeVarInt(windowId);
 		data.writeVarInt(value);
 	}
@@ -45,7 +45,7 @@ public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketCl
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			int windowId = data.readVarInt();
 			int value = data.readVarInt();
 			if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {

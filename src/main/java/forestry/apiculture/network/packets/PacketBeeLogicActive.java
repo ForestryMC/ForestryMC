@@ -40,7 +40,7 @@ public class PacketBeeLogicActive extends ForestryPacket implements IForestryPac
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(tilePos);
 		beekeepingLogic.writeData(data);
 	}

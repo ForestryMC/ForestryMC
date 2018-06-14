@@ -45,7 +45,7 @@ public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPa
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeVarInt(tankIndex);
 		data.writeFluidStack(contents);
@@ -55,7 +55,7 @@ public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPa
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			int tankIndex = data.readVarInt();
 			FluidStack contents = data.readFluidStack();

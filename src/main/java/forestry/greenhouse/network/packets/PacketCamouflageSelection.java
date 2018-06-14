@@ -32,7 +32,7 @@ public abstract class PacketCamouflageSelection extends ForestryPacket {
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeShort(handlerType.ordinal());
 		data.writeItemStack(camouflageStack);

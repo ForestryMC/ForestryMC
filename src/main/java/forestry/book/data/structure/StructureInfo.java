@@ -93,9 +93,7 @@ public class StructureInfo {
 	private boolean inside(int x, int y, int z, int[] rangeStart, int[] rangeEnd) {
 		if (x >= rangeStart[0] && x <= rangeEnd[0]) {
 			if (y >= rangeStart[1] && y <= rangeEnd[1]) {
-				if (z >= rangeStart[2] && z <= rangeEnd[2]) {
-					return true;
-				}
+				return z >= rangeStart[2] && z <= rangeEnd[2];
 			}
 		}
 

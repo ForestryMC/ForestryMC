@@ -97,7 +97,7 @@ public class CommandBeeGive extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getAlleleName(), beeType.getName());
 	}
 
-	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
+	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException {
 		IAlleleBeeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {

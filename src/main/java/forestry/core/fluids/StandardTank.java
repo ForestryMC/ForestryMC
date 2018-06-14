@@ -119,7 +119,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		fluid = data.readFluidStack();
 	}
 

@@ -197,7 +197,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) {
 		if (ic2EnergySource != null) {
 			ic2EnergySource.setEnergyStored(data.readDouble());
 		}

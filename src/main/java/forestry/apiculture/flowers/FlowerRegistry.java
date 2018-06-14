@@ -319,9 +319,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 						}
 					}
 
-					if (isAcceptedFlower(blockState, acceptedBlocks, acceptedBlockStates)) {
-						return true;
-					}
+					return isAcceptedFlower(blockState, acceptedBlocks, acceptedBlockStates);
 				}
 			}
 			return false;

@@ -98,7 +98,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		hydrationDelay = data.readVarInt();
 		ticksSinceRainfall = data.readVarInt();
 	}
