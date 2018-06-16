@@ -64,16 +64,16 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBoarder, this);
 		updateVisibility();
 
-		SlotAnalyzer slotAnalyzer = null;
-		if (container instanceof ContainerAnalyzerProvider) {
-			ContainerAnalyzerProvider containerAnalyzer = (ContainerAnalyzerProvider) container;
+		SlotAnalyzer analyzer = null;
+		if (container instanceof IContainerAnalyzerProvider) {
+			IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
 			Slot analyzerSlot = containerAnalyzer.getAnalyzerSlot();
 			if (analyzerSlot instanceof SlotAnalyzer) {
 				((SlotAnalyzer) analyzerSlot).setGui(this);
-				slotAnalyzer = (SlotAnalyzer) analyzerSlot;
+				analyzer = (SlotAnalyzer) analyzerSlot;
 			}
 		}
-		this.slotAnalyzer = slotAnalyzer;
+		this.slotAnalyzer = analyzer;
 	}
 
 	/* Methods */
@@ -96,13 +96,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			this.guiLeft = (this.width - this.xSize + analyzer.getWidth() + (screenDistance)) / 2;
 		}
 		window.init(guiLeft, guiTop + (ySize - 166) / 2);
-		/*analyzer.setXOffset(guiLeft);
-		analyzer.setYOffset(guiTop + (ySize - 166) / 2);*/
 
-		/*GuiButtonToggle toggle = new GuiButtonToggle(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, false);
-		toggle.initTextureValues(0, 192, 0, 20, GeneticAnalyzer.TEXTURE);
-		buttonList.add(toggle);*/
-		addButton(new GuiToggleButton(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON)).enabled = ((ContainerAnalyzerProvider) inventorySlots).getAnalyzerSlot() != null;
+		addButton(new GuiToggleButton(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON)).enabled = ((IContainerAnalyzerProvider) inventorySlots).getAnalyzerSlot() != null;
 		dirty = true;
 
 		if (slotAnalyzer != null) {
