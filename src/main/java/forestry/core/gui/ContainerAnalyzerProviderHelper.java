@@ -65,14 +65,14 @@ public class ContainerAnalyzerProviderHelper {
 		return container.getSlotFromInventory(alyzerInventory, 0);
 	}
 
-	public ItemStack analyzeSpecimen(int selectedSlot) {
+	public void analyzeSpecimen(int selectedSlot) {
 		if(selectedSlot < 0 || alyzerInventory == null){
-			return ItemStack.EMPTY;
+			return;
 		}
 		Slot specimenSlot = container.getForestrySlot( selectedSlot);
 		ItemStack specimen = specimenSlot.getStack();
 		if (specimen.isEmpty()) {
-			return ItemStack.EMPTY;
+			return;
 		}
 
 		ItemStack convertedSpecimen = GeneticsUtil.convertToGeneticEquivalent(specimen);
@@ -85,7 +85,7 @@ public class ContainerAnalyzerProviderHelper {
 
 		// No individual, abort
 		if (speciesRoot == null) {
-			return specimen;
+			return;
 		}
 
 		IIndividual individual = speciesRoot.getMember(specimen);
@@ -93,11 +93,9 @@ public class ContainerAnalyzerProviderHelper {
 		// Analyze if necessary
 		if (individual != null && !individual.isAnalyzed()) {
 			final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-			if (requiresEnergy) {
-				// Requires energy
-				if (!ItemInventoryAlyzer.isAlyzingFuel(alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY))) {
-					return specimen;
-				}
+			ItemStack energyStack = alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
+			if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
+				return;
 			}
 
 			if (individual.analyze()) {
@@ -117,6 +115,6 @@ public class ContainerAnalyzerProviderHelper {
 			}
 			specimenSlot.putStack(specimen);
 		}
-		return specimen;
+		return;
 	}
 }
