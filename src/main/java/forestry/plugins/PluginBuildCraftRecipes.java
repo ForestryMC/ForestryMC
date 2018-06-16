@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import buildcraft.api.mj.MjAPI;
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -36,7 +37,7 @@ public class PluginBuildCraftRecipes extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		// Add recipe for ethanol
-		BuildcraftRecipeRegistry.refineryRecipes.addDistillationRecipe(Fluids.BIOMASS.getFluid(4),
-				Fluids.BIO_ETHANOL.getFluid(0), Fluids.BIO_ETHANOL.getFluid(1), 100);
+		BuildcraftRecipeRegistry.refineryRecipes.addDistillationRecipe(Fluids.BIOMASS.getFluid(10),
+				Fluids.BIO_ETHANOL.getFluid(0), Fluids.BIO_ETHANOL.getFluid(3), 20 * MjAPI.MJ);
 	}
 }
