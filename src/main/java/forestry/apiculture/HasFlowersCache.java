@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,7 +43,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	public HasFlowersCache() {
 		this.flowerCheckInterval = 200;
 	}
-	
+
 	public HasFlowersCache(int checkInterval) {
 		flowerCheckInterval = checkInterval;
 	}
@@ -203,7 +202,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 				flowersList[i] = flowerPos.getX();
 				flowersList[i + 1] = flowerPos.getY();
 				flowersList[i + 2] = flowerPos.getZ();
-				i++;
+				i += 3;
 			}
 
 			hasFlowerCacheNBT.setIntArray(NBT_KEY_FLOWERS, flowersList);
