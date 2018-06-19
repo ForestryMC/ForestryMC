@@ -349,7 +349,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 			}
 		}
 
-		Log.debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
+		Log.debug("Failed to find a beekeeping mode called '{}', reverting to fallback.", name);
 		return beekeepingModes.get(0);
 	}
 
