@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
@@ -46,14 +47,14 @@ public class ModuleSorting extends BlankForestryModule {
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -68,44 +69,44 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_api", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"PGP",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'P', ModuleApiculture.getItems().propolis);
+					"WDW",
+					"PGP",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'P', ModuleApiculture.getItems().propolis);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_arb", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"FGF",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'F', OreDictUtil.FRUIT_FORESTRY);
+					"WDW",
+					"FGF",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'F', OreDictUtil.FRUIT_FORESTRY);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			RecipeUtil.addRecipe("genetic_filter_lep", new ItemStack(getBlocks().filter, 2),
-				"WDW",
-				"FGF",
-				"BDB",
-				'D', OreDictUtil.GEM_DIAMOND,
-				'W', OreDictUtil.PLANK_WOOD,
-				'G', OreDictUtil.BLOCK_GLASS,
-				'B', OreDictUtil.GEAR_BRONZE,
-				'F', ModuleLepidopterology.getItems().caterpillarGE);
+					"WDW",
+					"FGF",
+					"BDB",
+					'D', OreDictUtil.GEM_DIAMOND,
+					'W', OreDictUtil.PLANK_WOOD,
+					'G', OreDictUtil.BLOCK_GLASS,
+					'B', OreDictUtil.GEAR_BRONZE,
+					'F', ModuleLepidopterology.getItems().caterpillarGE);
 		}
 	}
 
 	@Override
 	public void doInit() {
-		GameRegistry.registerTileEntity(TileGeneticFilter.class, "forestry.GeneticFilter");
-		((FilterRegistry)AlleleManager.filterRegistry).init();
+		GameRegistry.registerTileEntity(TileGeneticFilter.class, new ResourceLocation(Constants.MOD_ID, "geneticFilter"));
+		((FilterRegistry) AlleleManager.filterRegistry).init();
 	}
 }

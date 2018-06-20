@@ -18,6 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.MinecraftForge;
 
@@ -132,15 +133,15 @@ public class ModuleGreenhouse extends BlankForestryModule {
 	public void doInit() {
 		IGreenhouseHelper helper = GreenhouseManager.helper;
 
-		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
-		GameRegistry.registerTileEntity(TileHygroregulator.class, "forestry.ClimateSourceHygroregulator");
-		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
-		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
-		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.ClimateSourceWindow");
-		GameRegistry.registerTileEntity(TileFan.class, "forestry.GreenhouseFan");
-		GameRegistry.registerTileEntity(TileHeater.class, "forestry.GreenhouseHeater");
-		GameRegistry.registerTileEntity(TileDehumidifier.class, "forestry.GreenhouseDryer");
-		GameRegistry.registerTileEntity(TileHumidifier.class, "forestry.GreenhouseSprinkler");
+		GameRegistry.registerTileEntity(TileGreenhousePlain.class, new ResourceLocation(Constants.MOD_ID, "greenhousePlain"));
+		GameRegistry.registerTileEntity(TileHygroregulator.class, new ResourceLocation(Constants.MOD_ID, "climateSourceHygroregulator"));
+		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, new ResourceLocation(Constants.MOD_ID, "greenhouseGearbox"));
+		GameRegistry.registerTileEntity(TileGreenhouseControl.class, new ResourceLocation(Constants.MOD_ID, "greenhouseController"));
+		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, new ResourceLocation(Constants.MOD_ID, "climateSourceWindow"));
+		GameRegistry.registerTileEntity(TileFan.class, new ResourceLocation(Constants.MOD_ID, "greenhouseFan"));
+		GameRegistry.registerTileEntity(TileHeater.class, new ResourceLocation(Constants.MOD_ID, "greenhouseHeater"));
+		GameRegistry.registerTileEntity(TileDehumidifier.class, new ResourceLocation(Constants.MOD_ID, "greenhouseDryer"));
+		GameRegistry.registerTileEntity(TileHumidifier.class, new ResourceLocation(Constants.MOD_ID, "greenhouseSprinkler"));
 
 		helper.registerWindowGlass("glass", new ItemStack(Blocks.GLASS), "blocks/glass");
 		for (EnumDyeColor dye : EnumDyeColor.values()) {
@@ -171,86 +172,86 @@ public class ModuleGreenhouse extends BlankForestryModule {
 
 		ItemStack greenhousePlainBlock = new ItemStack(blocks.greenhouseBlock, 2, BlockGreenhouseType.PLAIN.ordinal());
 		RecipeUtil.addRecipe("greenhouse_plain", greenhousePlainBlock.copy(),
-			"#X#",
-			"SIS",
-			'I', OreDictUtil.INGOT_IRON,
-			'S', OreDictUtil.SLAB_WOOD,
-			'X', GreenhouseController.createDefaultCamouflageBlock(),
-			'#', coreItems.craftingMaterial.getCamouflagedPaneling());
+				"#X#",
+				"SIS",
+				'I', OreDictUtil.INGOT_IRON,
+				'S', OreDictUtil.SLAB_WOOD,
+				'X', GreenhouseController.createDefaultCamouflageBlock(),
+				'#', coreItems.craftingMaterial.getCamouflagedPaneling());
 		greenhousePlainBlock.setCount(1);
 
 		RecipeUtil.addRecipe("greenhouse_control", new ItemStack(blocks.greenhouseBlock, 1, BlockGreenhouseType.CONTROL.ordinal()),
-			" X ",
-			"#T#",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.DUST_REDSTONE,
-			'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
+				" X ",
+				"#T#",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.DUST_REDSTONE,
+				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		RecipeUtil.addRecipe("greenhouse_gearbox", new ItemStack(blocks.greenhouseBlock, 1, BlockGreenhouseType.GEARBOX.ordinal()),
-			" X ",
-			"###",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.GEAR_TIN);
+				" X ",
+				"###",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.GEAR_TIN);
 
 		RecipeUtil.addRecipe("greenhouse_hygro", new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HYGRO.ordinal()),
-			"GIG",
-			"GXG",
-			"GIG",
-			'X', greenhousePlainBlock.copy(),
-			'I', OreDictUtil.INGOT_IRON,
-			'G', OreDictUtil.BLOCK_GLASS);
+				"GIG",
+				"GXG",
+				"GIG",
+				'X', greenhousePlainBlock.copy(),
+				'I', OreDictUtil.INGOT_IRON,
+				'G', OreDictUtil.BLOCK_GLASS);
 
 		RecipeUtil.addRecipe("greenhouse_heater", new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HEATER.ordinal()),
-			"T#T",
-			"#X#",
-			"T#T",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.INGOT_TIN,
-			'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.INGOT_TIN,
+				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1));
 
 		RecipeUtil.addRecipe("greenhouse_fan", new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.FAN.ordinal()),
-			"T#T",
-			"#X#",
-			"T#T",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.INGOT_IRON,
-			'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.INGOT_IRON,
+				'T', coreItems.tubes.get(EnumElectronTube.TIN, 1));
 
 		RecipeUtil.addRecipe("greenhouse_dehumidifier", new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.DEHUMIDIFIER.ordinal()),
-			"T#T",
-			"#X#",
-			"T#T",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.INGOT_TIN,
-			'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.INGOT_TIN,
+				'T', coreItems.tubes.get(EnumElectronTube.BLAZE, 1));
 
 		RecipeUtil.addRecipe("greenhouse_humidifier", new ItemStack(blocks.climatiserBlock, 1, BlockClimatiserType.HUMIDIFIER.ordinal()),
-			"T#T",
-			"#X#",
-			"T#T",
-			'X', greenhousePlainBlock.copy(),
-			'#', OreDictUtil.INGOT_TIN,
-			'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', greenhousePlainBlock.copy(),
+				'#', OreDictUtil.INGOT_TIN,
+				'T', coreItems.tubes.get(EnumElectronTube.LAPIS, 1));
 
 		for (String glassName : GreenhouseManager.helper.getWindowGlasses()) {
 			ItemStack glassItem = GreenhouseManager.helper.getGlassItem(glassName);
 			ItemStack window = blocks.window.getItem(glassName);
 			ItemStack roodWindow = blocks.roofWindow.getItem(glassName);
 			RecipeUtil.addRecipe("greenhouse_window_" + glassName, roodWindow,
-				true,
-				"SGS",
-				"GGG",
-				"GGG",
-				'G', glassItem,
-				'S', OreDictUtil.STICK_WOOD);
+					true,
+					"SGS",
+					"GGG",
+					"GGG",
+					'G', glassItem,
+					'S', OreDictUtil.STICK_WOOD);
 
 			RecipeUtil.addRecipe("greenhouse_window_roof_" + glassName, window,
-				true,
-				"SGG",
-				"GGG",
-				"SGG",
-				'G', glassItem,
-				'S', OreDictUtil.STICK_WOOD);
+					true,
+					"SGG",
+					"GGG",
+					"SGG",
+					'G', glassItem,
+					'S', OreDictUtil.STICK_WOOD);
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.greenhouse.climatiser");

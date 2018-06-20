@@ -26,6 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -129,7 +130,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		
+
 		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
@@ -184,11 +185,11 @@ public class ModuleFarming extends BlankForestryModule {
 		FarmRegistry.getInstance().loadConfig(config);
 		config.save();
 
-		GameRegistry.registerTileEntity(TileFarmPlain.class, "forestry.Farm");
-		GameRegistry.registerTileEntity(TileFarmGearbox.class, "forestry.FarmGearbox");
-		GameRegistry.registerTileEntity(TileFarmHatch.class, "forestry.FarmHatch");
-		GameRegistry.registerTileEntity(TileFarmValve.class, "forestry.FarmValve");
-		GameRegistry.registerTileEntity(TileFarmControl.class, "forestry.FarmControl");
+		GameRegistry.registerTileEntity(TileFarmPlain.class, new ResourceLocation(Constants.MOD_ID, "farm"));
+		GameRegistry.registerTileEntity(TileFarmGearbox.class, new ResourceLocation(Constants.MOD_ID, "farmGearbox"));
+		GameRegistry.registerTileEntity(TileFarmHatch.class, new ResourceLocation(Constants.MOD_ID, "farmHatch"));
+		GameRegistry.registerTileEntity(TileFarmValve.class, new ResourceLocation(Constants.MOD_ID, "farmValve"));
+		GameRegistry.registerTileEntity(TileFarmControl.class, new ResourceLocation(Constants.MOD_ID, "farmControl"));
 
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
