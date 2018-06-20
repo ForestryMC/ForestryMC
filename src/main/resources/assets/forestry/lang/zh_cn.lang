@@ -1684,6 +1684,7 @@ for.module.actuallyadditions.description=实用扩展（Actually Additions）兼
 for.module.roots.description=Roots 兼容组件。
 for.module.rustic.description=乡村（Rustic）兼容组件。
 for.module.mysticalagriculture.description=神秘农业（Mystical Agriculture）兼容组件。激活后农场能够支持其作物。
+for.module.techreborn.description=Tech reborn 兼容组件。激活后可从 Tech Reborn 的橡胶树上收获橡胶。
 
 ####################
 # CONFIG FILES
@@ -1722,8 +1723,12 @@ for.config.world.generate.beehives.blacklist.category_comment=在指定生物群
 for.config.world.generate.villagers=生成村民
 for.config.world.generate.villagers.comment=在他们的宅邸中生成林业添加的村民。
 
+for.config.world.generate.trees=林业是否会在世界中生成林业的树木。
 for.config.world.generate.trees.dimBlacklist=树木生成维度黑名单
 for.config.world.generate.trees.dimBlacklist.comment=树木将不会在本名单指定的维度中生成。每一个维度占一行。
+for.config.world.generate.trees.treeFrequency=树木生成频率
+for.config.world.generate.trees.treeFrequency.comment=林业树木在世界中的生成频率。
+for.config.world.generate.trees.biomeblacklist.comment=在指定生物群系或指定生物群系类型中禁止指定树木的生成。参见蜂巢生成生物群系黑名单获得详细说明。
 
 for.config.crafting=合成表设置
 for.config.crafting.bronze=允许合成青铜
@@ -1782,6 +1787,8 @@ for.config.tweaks.cultivation.ring_size.comment=使用环形布局时内环的�
 
 for.config.tweaks.capsule=胶囊收集流体
 for.config.tweaks.capsule.comment=启用后，罐、胶囊等可直接收集世界中的流体方块。
+for.config.tweaks.capsule.capsuleReuseable=可回收胶囊
+for.config.tweaks.capsule.capsuleReuseable.comment=启用后，清空胶囊不再会消耗胶囊。
 
 for.config.tweaks.greenhouse.range=温室范围
 for.config.tweaks.greenhouse.range.comment=温室气候控制设备的范围因数 (range divisior)。
@@ -1796,7 +1803,7 @@ for.config.tweaks.book.spawn.comment=启用后，首次加入游戏的玩家会�
 for.config.genetics=遗传
 for.config.genetics.pollinate.vanilla.trees=原版树授粉
 for.config.genetics.pollinate.vanilla.trees.comment=允许蜜蜂、蝴蝶和玩家对原版树木授粉。禁用后，原版树须经过分析方可授粉。
-for.config.genetics.analyzerblock.energy.use=分析仪方块能耗
+for.config.genetics.analyzerblock.energy=分析仪方块能耗
 for.config.genetics.analyzerblock.energy.use=分析仪方块每轮工作的耗能数值。
 for.config.genetics.research.boost.multiplier=研究突变率倍数
 for.config.genetics.research.boost.multiplier.comment=在写字台中研究时突变几率的倍数。
@@ -1807,7 +1814,7 @@ for.config.difficulty=难度
 for.config.difficulty.game.mode=游戏模式
 for.config.difficulty.game.mode.comment=设置你偏好的游戏模式。若与服务器设置不匹配可能会导致出现合成表界面显示错误。
 for.config.difficulty.recreate.definitions=重定义
-for.config.difficulty.recreate.definitions.comment=强制重构config/forestry/gamemodes目录下的所有游戏模式配置。
+for.config.difficulty.recreate.definitions.comment=强制重置 config/forestry/gamemodes 目录下的所有游戏模式配置。
 
 for.config.structures=多方块结构
 for.config.structures.disabled=禁用多方块结构
@@ -1858,6 +1865,11 @@ for.config.butterfly.entities.pollination.comment=允许蝴蝶为树木授粉。
 
 for.config.backpacks.item.stacks.format=在此添加%s的背包对物品的支持，格式为：'modid:name:meta'，也可以使用忽略附加值的通配格式：'modid:name'。
 for.config.backpacks.ore.dict.format=在此添加%s的背包对矿物字典的支持，格式为：'oreDictName'。支持正则表达式。
+
+for.config.crates.items.accepted.comment=板条箱支持的物品。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
+for.config.crates.items.rejected.comment=板条箱黑名单。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
+for.config.crates.oredict.accepted.comment=板条箱支持的矿物词典条目。格式为：'oreDictName'。支持正则表达式。参见背包配置获得详细信息。
+for.config.crates.oredict.rejected.comment=矿物词典版的板条箱黑名单。格式为：'oreDictName'。支持正则表达式。参见背包配置获得详细信息。
 
 for.config.gamemode=游戏模式
 
