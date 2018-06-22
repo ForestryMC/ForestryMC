@@ -43,7 +43,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	public HasFlowersCache() {
 		this.flowerCheckInterval = 200;
 	}
-	
+
 	public HasFlowersCache(int checkInterval) {
 		flowerCheckInterval = checkInterval;
 	}

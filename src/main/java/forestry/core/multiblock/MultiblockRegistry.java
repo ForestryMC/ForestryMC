@@ -108,7 +108,7 @@ public class MultiblockRegistry {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
-			Log.warning("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
+			Log.warning("Controller {} in world {} marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
 		}
 	}
 

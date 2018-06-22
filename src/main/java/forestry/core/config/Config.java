@@ -370,7 +370,7 @@ public class Config {
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
-			Log.debug("Disabled structure '%s'.", str);
+			Log.debug("Disabled structure '{}'.", str);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
