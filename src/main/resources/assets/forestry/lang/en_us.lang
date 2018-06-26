@@ -1496,6 +1496,7 @@ for.chat.command.forestry.butterfly.format=Format: /%s <sub-command>
 for.chat.command.forestry.butterfly.kill.desc=- %s : Kills all Butterflies
 for.chat.command.forestry.butterfly.kill.help=Kills all Butterflies in loaded chunks
 for.chat.command.forestry.butterfly.kill.format=Format: /%s [<dimension#>]
+for.chat.command.forestry.butterfly.kill.response=Killed %d butterflies
 
 for.butterflies.hybrid=Hybrid: %PRIMARY-%SECONDARY
 
