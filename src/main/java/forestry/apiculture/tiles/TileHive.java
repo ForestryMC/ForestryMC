@@ -133,7 +133,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								EntityLivingBase entity = entities.get(0);
-								if (entity.isInsideOfMaterial(Material.WATER)) {
+								if (entity.isInsideOfMaterial(Material.WATER) && !ModuleApiculture.hivesDamageUnderwater) {
 									return;
 								}
 								attack(entity, 2);
