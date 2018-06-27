@@ -159,6 +159,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static boolean hivesDamageOnPeaceful = false;
 
+	public static boolean hivesDamageUnderwater = true;
+
 	public static boolean doSelfPollination = true;
 
 	public static int maxFlowersSpawnedPerHive = 20;
@@ -282,7 +284,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
-		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
+		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping.hivedamage", "peaceful", hivesDamageOnPeaceful);
+
+		hivesDamageUnderwater = config.getBooleanLocalized("beekeeping.hivedamage", "underwater", hivesDamageUnderwater);
 
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 

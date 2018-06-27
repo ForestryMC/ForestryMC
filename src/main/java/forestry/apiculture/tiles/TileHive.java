@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -126,12 +127,15 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if(world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful) {
+						if (world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
 							List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								EntityLivingBase entity = entities.get(0);
+								if (entity.isInsideOfMaterial(Material.WATER) && !ModuleApiculture.hivesDamageUnderwater) {
+									return;
+								}
 								attack(entity, 2);
 							}
 						}
