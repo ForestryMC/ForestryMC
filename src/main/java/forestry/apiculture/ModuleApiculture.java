@@ -55,7 +55,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -127,6 +126,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
@@ -302,15 +302,15 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Inducers for swarmer
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
 
-		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
-		GameRegistry.registerTileEntity(TileHive.class, "forestry.Swarm");
-		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
-		GameRegistry.registerTileEntity(TileAlvearyHeater.class, "forestry.AlvearyHeater");
-		GameRegistry.registerTileEntity(TileAlvearyFan.class, "forestry.AlvearyFan");
-		GameRegistry.registerTileEntity(TileAlvearyHygroregulator.class, "forestry.AlvearyHygro");
-		GameRegistry.registerTileEntity(TileAlvearyStabiliser.class, "forestry.AlvearyStabiliser");
-		GameRegistry.registerTileEntity(TileAlvearySieve.class, "forestry.AlvearySieve");
-		GameRegistry.registerTileEntity(TileCandle.class, "forestry.Candle");
+		TileUtil.registerTile(TileAlvearyPlain.class, "alveary_plain");
+		TileUtil.registerTile(TileHive.class, "hive_wild");
+		TileUtil.registerTile(TileAlvearySwarmer.class, "alveary_swarmer");
+		TileUtil.registerTile(TileAlvearyHeater.class, "alveary_heater");
+		TileUtil.registerTile(TileAlvearyFan.class, "alveary_fan");
+		TileUtil.registerTile(TileAlvearyHygroregulator.class, "alveary_hygro");
+		TileUtil.registerTile(TileAlvearyStabiliser.class, "alveary_stabiliser");
+		TileUtil.registerTile(TileAlvearySieve.class, "alveary_sieve");
+		TileUtil.registerTile(TileCandle.class, "candle");
 
 		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");
 		EntityUtil.registerEntity(beeHouseCartResource, EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);

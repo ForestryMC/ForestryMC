@@ -33,7 +33,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -56,6 +55,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
@@ -184,11 +184,11 @@ public class ModuleFarming extends BlankForestryModule {
 		FarmRegistry.getInstance().loadConfig(config);
 		config.save();
 
-		GameRegistry.registerTileEntity(TileFarmPlain.class, "forestry.Farm");
-		GameRegistry.registerTileEntity(TileFarmGearbox.class, "forestry.FarmGearbox");
-		GameRegistry.registerTileEntity(TileFarmHatch.class, "forestry.FarmHatch");
-		GameRegistry.registerTileEntity(TileFarmValve.class, "forestry.FarmValve");
-		GameRegistry.registerTileEntity(TileFarmControl.class, "forestry.FarmControl");
+		TileUtil.registerTile(TileFarmPlain.class, "farm");
+		TileUtil.registerTile(TileFarmGearbox.class, "farm_gearbox");
+		TileUtil.registerTile(TileFarmHatch.class, "farm_hatch");
+		TileUtil.registerTile(TileFarmValve.class, "farm_valve");
+		TileUtil.registerTile(TileFarmControl.class, "farm_control");
 
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
