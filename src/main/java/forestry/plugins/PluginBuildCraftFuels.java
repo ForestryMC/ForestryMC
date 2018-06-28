@@ -10,19 +10,29 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import buildcraft.api.fuels.ICoolant;
+import buildcraft.api.fuels.ICoolantManager;
+import buildcraft.api.mj.MjAPI;
+import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
-// TODO: Buildcraft for 1.9
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_FUELS, name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
 public class PluginBuildCraftFuels extends BlankForestryModule {
 
+	public static final String MOD_ID = "buildcraftenergy";
+
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.fuels", "[2.0, 3.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID, "[7.99.17,8.0)");
 	}
 
 	@Override
@@ -30,21 +40,21 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 		return "Compatible BuildCraftAPI|fuels version not found";
 	}
 
-//	@Optional.Method(modid = "BuildCraftAPI|fuels")
-//	@Override
-//	public void doInit() {
-//		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
-	//		ICoolant waterCoolant = coolantManager.getCoolant(FluidRegistry.WATER);
-//		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
-//
-//		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
-//
-//		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
-//		if (ethanol != null) {
-//			int ethanolPower = 40;
-//			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
-//			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
-//		}
-//	}
+	@Override
+	public void doInit() {
+		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
+		FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
+		ICoolant waterCoolant = coolantManager.getCoolant(water);
+		float waterCooling = waterCoolant.getDegreesCoolingPerMB(water, 100);
+
+		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
+
+		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
+		if (ethanol != null) {
+			long ethanolPower = 40 * MjAPI.MJ;
+			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
+			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
+		}
+	}
 
 }

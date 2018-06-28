@@ -10,21 +10,22 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraftforge.fml.common.Optional;
-
+import buildcraft.api.mj.MjAPI;
+import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-
+import net.minecraftforge.fml.common.Optional;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_RECIPES, name = "BuildCraft 6 Recipes", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
 public class PluginBuildCraftRecipes extends BlankForestryModule {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.recipes", "[2.0, 4.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID, "[7.99.17,8.0)");
 	}
 
 	@Override
@@ -32,11 +33,11 @@ public class PluginBuildCraftRecipes extends BlankForestryModule {
 		return "Compatible BuildCraftAPI|recipes version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|recipes")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void registerRecipes() {
 		// Add recipe for ethanol
-		// TODO: Buildcraft for 1.9
-//		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.BIO_ETHANOL.getFluid(1), 100, 1);
+		BuildcraftRecipeRegistry.refineryRecipes.addDistillationRecipe(Fluids.BIOMASS.getFluid(10),
+				Fluids.BIO_ETHANOL.getFluid(0), Fluids.BIO_ETHANOL.getFluid(3), 20 * MjAPI.MJ);
 	}
 }

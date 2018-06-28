@@ -1911,6 +1911,15 @@ for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch pe
 
 for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
 
+for.config.power.types.rf=Redstone Flux
+for.config.power.types.rf.comment=Enable Redstone Flux power support.
+for.config.power.types.mj=MJ
+for.config.power.types.mj.comment=Enable MJ power support.
+for.config.power.types.tesla=Tesla
+for.config.power.types.tesla.comment=Enable Tesla power support.
+for.config.power.display.mode=Power Display Mode
+for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
+
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
 ###################################

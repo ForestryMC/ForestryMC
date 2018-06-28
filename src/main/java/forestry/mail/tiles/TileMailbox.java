@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import buildcraft.api.statements.ITriggerExternal;
 import com.mojang.authlib.GameProfile;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.PostManager;
+import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.tiles.TileBase;
 import forestry.mail.EnumDeliveryState;
@@ -22,15 +24,22 @@ import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
+import forestry.mail.triggers.MailTriggers;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
 public class TileMailbox extends TileBase {
 
@@ -79,6 +88,13 @@ public class TileMailbox extends TileBase {
 		}
 
 		return result;
+	}
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		// triggers.add(MailTriggers.triggerHasMail);
 	}
 
 	@Override
