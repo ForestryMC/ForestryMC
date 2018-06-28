@@ -18,7 +18,7 @@ public class TileEntityDataFixable implements IFixableData {
 		if (oldName.startsWith("forestry.")) {
 			String remappedName = MigrationHelper.getRemappedTileName(oldName);
 			if(remappedName != null){
-				Log.info("Replaced old Tile Entity name '{}' with the remapped name '{}'.", oldName, remappedName);
+				Log.debug("Replaced old Tile Entity name '{}' with the remapped name '{}'.", oldName, remappedName);
 				compound.setString("id", remappedName);
 			}else{
 				Log.error("Failed to find remapped name for the Tile Entity with the name {}.", oldName);
