@@ -134,14 +134,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-		
+
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
 
 		proxy.preInitializeRendering();
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			LepidopterologyFilterRule.init();
 			LepidopterologyFilterRuleType.init();
 		}
@@ -159,7 +159,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void doInit() {
 		BlockRegistryLepidopterology blocks = getBlocks();
 
-		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+		GameRegistry.registerTileEntity(TileCocoon.class, new ResourceLocation(Constants.MOD_ID, "cocoon"));
 
 		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 

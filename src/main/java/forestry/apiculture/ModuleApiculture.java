@@ -306,15 +306,15 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Inducers for swarmer
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
 
-		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
-		GameRegistry.registerTileEntity(TileHive.class, "forestry.Swarm");
-		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
-		GameRegistry.registerTileEntity(TileAlvearyHeater.class, "forestry.AlvearyHeater");
-		GameRegistry.registerTileEntity(TileAlvearyFan.class, "forestry.AlvearyFan");
-		GameRegistry.registerTileEntity(TileAlvearyHygroregulator.class, "forestry.AlvearyHygro");
-		GameRegistry.registerTileEntity(TileAlvearyStabiliser.class, "forestry.AlvearyStabiliser");
-		GameRegistry.registerTileEntity(TileAlvearySieve.class, "forestry.AlvearySieve");
-		GameRegistry.registerTileEntity(TileCandle.class, "forestry.Candle");
+		GameRegistry.registerTileEntity(TileAlvearyPlain.class, new ResourceLocation(Constants.MOD_ID, "alveary"));
+		GameRegistry.registerTileEntity(TileHive.class, new ResourceLocation(Constants.MOD_ID, "swarm"));
+		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, new ResourceLocation(Constants.MOD_ID, "alvearySwarmer"));
+		GameRegistry.registerTileEntity(TileAlvearyHeater.class, new ResourceLocation(Constants.MOD_ID, "alvearyHeater"));
+		GameRegistry.registerTileEntity(TileAlvearyFan.class, new ResourceLocation(Constants.MOD_ID, "alvearyFan"));
+		GameRegistry.registerTileEntity(TileAlvearyHygroregulator.class, new ResourceLocation(Constants.MOD_ID, "alvearyHygro"));
+		GameRegistry.registerTileEntity(TileAlvearyStabiliser.class, new ResourceLocation(Constants.MOD_ID, "alvearyStabiliser"));
+		GameRegistry.registerTileEntity(TileAlvearySieve.class, new ResourceLocation(Constants.MOD_ID, "alvearySieve"));
+		GameRegistry.registerTileEntity(TileCandle.class, new ResourceLocation(Constants.MOD_ID, "candle"));
 
 		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");
 		EntityUtil.registerEntity(beeHouseCartResource, EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);
