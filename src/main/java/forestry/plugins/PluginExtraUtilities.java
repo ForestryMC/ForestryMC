@@ -18,6 +18,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -58,7 +59,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 		if (Config.isExUtilRedOrchidEnabled() && redOrchid != null) {
 			Item item = Item.getItemFromBlock(redOrchid);
 
-			registerFarmable(redOrchid, item, ForestryFarmIdentifier.ORCHID);
+			registerFarmable(redOrchid, item, new ItemStack(Items.REDSTONE), ForestryFarmIdentifier.ORCHID);
 
 			IFarmProperties orchidFarm = FarmRegistry.getInstance().registerLogic(ForestryFarmIdentifier.ORCHID, FarmLogicRedOrchid::new);
 			orchidFarm.registerSoil(new ItemStack(Blocks.REDSTONE_ORE), Blocks.REDSTONE_ORE.getDefaultState());
@@ -72,7 +73,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 
 		if (Config.isExUtilEnderLilyEnabled() && enderLilly != null) {
 			Item item = Item.getItemFromBlock(enderLilly);
-			registerFarmable(enderLilly, item, ForestryFarmIdentifier.ENDER);
+			registerFarmable(enderLilly, item, new ItemStack(Items.ENDER_PEARL), ForestryFarmIdentifier.ENDER);
 		}
 	}
 
@@ -94,7 +95,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 		}
 	}
 
-	private void registerFarmable(Block plantBlock, Item plantItem, String identifier){
+	private void registerFarmable(Block plantBlock, Item plantItem, ItemStack product, String identifier){
 		IProperty<Integer> growthProperty = BlockUtil.getProperty(plantBlock, "growth", Integer.class);
 		if (growthProperty == null) {
 			Log.error("Could not find the growth property of {}.", plantBlock.getLocalizedName());
@@ -102,7 +103,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 			IFarmRegistry registry = FarmRegistry.getInstance();
 			int harvestAge = Collections.max(growthProperty.getAllowedValues());
 			int replantAge = plantBlock.getDefaultState().getValue(growthProperty);
-			registry.registerFarmables(identifier, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, growthProperty, harvestAge, replantAge));
+			registry.registerFarmables(identifier, new FarmableAgingCrop(new ItemStack(plantItem), plantBlock, product, growthProperty, harvestAge, replantAge));
 		}
 	}
 }

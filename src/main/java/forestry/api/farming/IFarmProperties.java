@@ -22,6 +22,14 @@ public interface IFarmProperties {
 	 */
 	void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData);
 
+	void addGermlings(ItemStack... germlings);
+
+	void addGermlings(Collection<ItemStack> germlings);
+
+	void addProducts(ItemStack... products);
+
+	void addProducts(Collection<ItemStack> products);
+
 	/**
 	 * Adds the {@link IFarmable}s that where registered with the given identifier.
 	 */
@@ -40,6 +48,8 @@ public interface IFarmProperties {
 	Collection<ISoil> getSoils();
 
 	Collection<IFarmable> getFarmables();
+
+	Collection<IFarmableInfo> getFarmableInfo();
 
 	/**
 	 * Returns the instance of the manual or managed {@link IFarmLogic}.

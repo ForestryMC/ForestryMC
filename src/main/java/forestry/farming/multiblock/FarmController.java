@@ -680,6 +680,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public boolean canPlantSoil(boolean manual) {
+		return true;
+	}
+
+	@Override
 	public boolean isValidPlatform(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		return FarmHelper.bricks.contains(blockState.getBlock());

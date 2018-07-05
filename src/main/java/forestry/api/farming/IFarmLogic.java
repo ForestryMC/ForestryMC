@@ -100,9 +100,14 @@ public interface IFarmLogic {
 		return ForestryAPI.farmRegistry.createFakeInstance(this);
 	}
 
+	default boolean isManual(){
+		return false;
+	}
+
 	/**
 	 * @deprecated Since Forestry 5.8 logic instances are created at the constructor of the {@link IFarmProperties} and
-	 * have a immutable manual state. TODO Remove this method in 1.13
+	 * have a immutable manual state.
+	 * TODO Remove this method in 1.13
 	 */
 	@Deprecated
 	default IFarmLogic setManual(boolean manual){
