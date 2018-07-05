@@ -16,7 +16,9 @@ public interface ICharcoalPileWall {
 	boolean matches(IBlockState state);
 
 	@Deprecated
-	NonNullList<ItemStack> getDisplyItems();
+	default NonNullList<ItemStack> getDisplyItems(){
+		return getDisplayItems();
+	}
 
 	NonNullList<ItemStack> getDisplayItems();
 	

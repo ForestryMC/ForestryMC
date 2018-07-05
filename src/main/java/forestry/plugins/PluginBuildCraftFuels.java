@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import buildcraft.api.fuels.ICoolant;
-import buildcraft.api.fuels.ICoolantManager;
-import buildcraft.api.mj.MjAPI;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -21,9 +21,11 @@ import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
+
+import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import buildcraft.api.fuels.ICoolant;
+import buildcraft.api.fuels.ICoolantManager;
+import buildcraft.api.mj.MjAPI;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_FUELS, name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
 public class PluginBuildCraftFuels extends BlankForestryModule {
@@ -43,12 +45,15 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
-		FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
-		ICoolant waterCoolant = coolantManager.getCoolant(water);
-		float waterCooling = waterCoolant.getDegreesCoolingPerMB(water, 100);
+		if(coolantManager != null) {
+			FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
+			ICoolant waterCoolant = coolantManager.getCoolant(water);
+			if (waterCoolant != null) {
+				float waterCooling = waterCoolant.getDegreesCoolingPerMB(water, 100);
 
-		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
-
+				coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
+			}
+		}
 		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
 		if (ethanol != null) {
 			long ethanolPower = 40 * MjAPI.MJ;

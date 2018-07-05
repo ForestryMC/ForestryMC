@@ -55,10 +55,5 @@ public class CharcoalPileWall implements ICharcoalPileWall {
 		}
 		return NonNullList.create();
 	}
-
-	@Override
-	public NonNullList<ItemStack> getDisplyItems() {
-		return getDisplayItems();
-	}
 	
 }
