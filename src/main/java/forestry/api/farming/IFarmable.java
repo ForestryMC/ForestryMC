@@ -45,6 +45,9 @@ public interface IFarmable {
 	 */
 	boolean isGermling(ItemStack itemstack);
 
+	default void addInformation(IFarmableInfo info){
+	}
+
 	/**
 	 * @return true if the item is something that can drop from this type without actually being harvested as a crop. (Apples or sapling from decaying leaves.)
 	 */

@@ -38,7 +38,7 @@ public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPa
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeEntityById(entity);
 		streamableGui.writeGuiData(data);
 	}

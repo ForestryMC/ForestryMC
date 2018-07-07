@@ -12,9 +12,7 @@ package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -27,15 +25,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.io.IOException;
+import java.util.Collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
@@ -50,8 +58,8 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable {
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable, ITriggerProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -170,18 +178,16 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* ITriggerProvider */
-	// TODO: buildcraft for 1.9
-	//	@Optional.Method(modid = "BuildCraftAPI|statements")
-	//	@Override
-	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-	//		return null;
-	//	}
-	//
-	//	@Optional.Method(modid = "BuildCraftAPI|statements")
-	//	@Override
-	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-	//		return null;
-	//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+
+	@Override
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) { }
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {

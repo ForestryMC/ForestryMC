@@ -10,28 +10,35 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-// TODO: Buildcraft for 1.9
-public class TriggerBuffer {//extends Trigger {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-//	private final float threshold;
-//
-//	public TriggerBuffer(String tag, float threshold) {
-//		super(tag, "mailBuffer");
-//		this.threshold = threshold;
-//	}
-//
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " > " + threshold * 100 + "%";
-//	}
-//
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof TileTrader)) {
-//			return false;
-//		}
-//
-//		return ((TileTrader) tile).hasOutputBufMin(threshold);
-//	}
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.TileTrader;
+
+public class TriggerBuffer extends Trigger {
+
+	private final float threshold;
+
+	public TriggerBuffer(String tag, float threshold) {
+		super(tag, "mailBuffer", "mail_buffer");
+		this.threshold = threshold;
+	}
+
+	@Override
+	public String getDescription() {
+		return super.getDescription() + " > " + threshold * 100 + "%";
+	}
+
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+
+		if (!(tile instanceof TileTrader)) {
+			return false;
+		}
+
+		return ((TileTrader) tile).hasOutputBufMin(threshold);
+	}
 }

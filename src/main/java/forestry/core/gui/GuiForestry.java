@@ -31,8 +31,11 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
+import forestry.api.gui.IGuiElement;
+import forestry.api.gui.events.GuiEvent;
+import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.config.Config;
-import forestry.core.gui.elements.ElementManager;
+import forestry.core.gui.elements.Window;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
@@ -53,8 +56,8 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 	public final ResourceLocation textureFile;
 	protected final WidgetManager widgetManager;
 	protected final LedgerManager ledgerManager;
-	protected final ElementManager elementManager;
 	protected final TextLayoutHelper textLayout;
+	protected final Window window;
 
 	protected GuiForestry(String texture, C container) {
 		this(new ForestryResource(texture), container);
@@ -65,7 +68,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
-		this.elementManager = new ElementManager(this);
+		this.window = new Window<>(xSize, ySize, this);
 
 		this.textureFile = texture;
 
@@ -84,12 +87,24 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		this.ledgerManager.setMaxWidth(maxLedgerWidth);
 		this.ledgerManager.clear();
 
-		this.elementManager.init(guiLeft, guiTop);
+		this.window.init(guiLeft, guiTop);
 
 		addLedgers();
 	}
-	
+
+	@Override
+	public void setWorldAndResolution(Minecraft mc, int width, int height) {
+		window.setSize(width, height);
+		super.setWorldAndResolution(mc, width, height);
+	}
+
+	@Override
+	public void updateScreen() {
+		window.updateClient();
+	}
+
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		window.setMousePosition(mouseX, mouseY);
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
@@ -155,7 +170,8 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
-		elementManager.mouseClicked(mouseX, mouseY, mouseButton);
+		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 	}
 
 	@Override
@@ -163,24 +179,22 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
 			return;
 		}
-		elementManager.mouseReleased(mouseX, mouseY, mouseButton);
+		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
-	protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long time) {
-
-		widgetManager.handleMouseMove(mouseX, mouseY, mouseButton, time);
-
-		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
-	}
-
-	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if(elementManager.keyTyped(typedChar, keyCode)){
-			return;
+		if (keyCode == 1 || (keyCode == this.mc.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
+			this.mc.displayGuiScreen(null);
+
+			if (this.mc.currentScreen == null) {
+				this.mc.setIngameFocus();
+			}
 		}
-		super.keyTyped(typedChar, keyCode);
+		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
 	}
 
 	@Nullable
@@ -224,7 +238,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
 			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
-			elementManager.drawTooltip(mouseX, mouseY);
+			window.drawTooltip(mouseX, mouseY);
 		}
 	}
 
@@ -246,7 +260,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		GlStateManager.popMatrix();
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
-		elementManager.draw(mouseX, mouseY);
+		window.draw(mouseX, mouseY);
 
 		bindTexture(textureFile);
 	}

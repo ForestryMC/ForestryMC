@@ -90,7 +90,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 		}
 	}
 
-	private void addCamouflageModel(B block, IModelBaker baker, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
+	private void addCamouflageModel(B block, IModelBaker baker, @Nullable BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
 		if (world == null || pos == null) {
 			TextureAtlasSprite defaultSprite = block.getDefaultSprite();
 
@@ -106,7 +106,7 @@ public class ModelCamouflaged<B extends Block & IBlockCamouflaged> extends Model
 			if (itemHandler != null) {
 				Pair<IBlockState, IBakedModel> modelPair = itemHandler.getModel(camouflageStack);
 				IBlockState blockState = modelPair.getLeft();
-				if (camouflageBlock.canRenderInLayer(blockState, layer)) {
+				if (layer != null && camouflageBlock.canRenderInLayer(blockState, layer)) {
 					IBakedModel bakedModel = modelPair.getRight();
 					baker.addBakedModel(blockState, bakedModel);
 					baker.setParticleSprite(bakedModel.getParticleTexture());

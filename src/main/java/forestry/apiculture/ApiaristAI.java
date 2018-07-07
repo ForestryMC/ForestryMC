@@ -30,7 +30,7 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 	private final EntityVillager villager;
 	private boolean hasDrone;
 	private boolean hasPrincess;
-	private InventoryBasic villagerInventory;
+	private final InventoryBasic villagerInventory;
 
 	private static final int SLOT_PRODUCT_1 = InventoryBeeHousing.SLOT_PRODUCT_1;
 	private static final int SLOT_PRODUCT_COUNT = InventoryBeeHousing.SLOT_PRODUCT_COUNT;

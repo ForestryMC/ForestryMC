@@ -99,9 +99,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		float mutationModifier = beeModifier.getMutationModifier(queen.getGenome(), queen.getMate(), 1.0f);
 		if (mutationModifier > 10) {
-			if (housing.getWorldObj().rand.nextFloat() * 100 < 0.4 * (mutationModifier * mutationModifier - 100)) {
-				return true;
-			}
+			return housing.getWorldObj().rand.nextFloat() * 100 < 0.4 * (mutationModifier * mutationModifier - 100);
 		}
 
 		return false;

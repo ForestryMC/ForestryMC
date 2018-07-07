@@ -53,7 +53,7 @@ public class GreenhouseBlockCache implements IStreamable {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		positions.clear();
 		int size = data.readInt();
 		for (int i = 0; i < size; i++) {

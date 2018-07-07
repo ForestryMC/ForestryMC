@@ -24,7 +24,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	protected static final Drawable SELECTED_COMB_SLOT = new Drawable(GeneticAnalyzer.TEXTURE, 163, 0, 22, 22);
 	protected static final Drawable TOGGLE_BUTTON = new Drawable(GeneticAnalyzer.TEXTURE, 35, 166, 18, 20);
 	/* Attributes - Global */
-	protected static boolean analyzerVisible = false;
+	private static boolean analyzerVisible = false;
 
 	/* Attributes - Final */
 	public final IGeneticAnalyzer analyzer;
@@ -61,20 +61,19 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		this.slots = slots;
 		this.firstSlot = firstSlot;
 
-		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(-189 - screenDistance, 0, hasBoarder, this);
+		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBoarder, this);
 		updateVisibility();
-		this.elementManager.add(analyzer);
 
-		SlotAnalyzer slotAnalyzer = null;
-		if (container instanceof ContainerAnalyzerProvider) {
-			ContainerAnalyzerProvider containerAnalyzer = (ContainerAnalyzerProvider) container;
-			Slot analyzerSlot = containerAnalyzer.getAnalyzerSlot();
-			if (analyzerSlot instanceof SlotAnalyzer) {
-				((SlotAnalyzer) analyzerSlot).setGui(this);
-				slotAnalyzer = (SlotAnalyzer) analyzerSlot;
+		SlotAnalyzer analyzerSlot = null;
+		if (container instanceof IContainerAnalyzerProvider) {
+			IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
+			Slot slot = containerAnalyzer.getAnalyzerSlot();
+			if (slot instanceof SlotAnalyzer) {
+				((SlotAnalyzer) slot).setGui(this);
+				analyzerSlot = (SlotAnalyzer) slot;
 			}
 		}
-		this.slotAnalyzer = slotAnalyzer;
+		this.slotAnalyzer = analyzerSlot;
 	}
 
 	/* Methods */
@@ -96,14 +95,9 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		if (analyzer.isVisible()) {
 			this.guiLeft = (this.width - this.xSize + analyzer.getWidth() + (screenDistance)) / 2;
 		}
-		elementManager.init(guiLeft, guiTop + (ySize - 166) / 2);
-		/*analyzer.setXOffset(guiLeft);
-		analyzer.setYOffset(guiTop + (ySize - 166) / 2);*/
+		window.init(guiLeft, guiTop + (ySize - 166) / 2);
 
-		/*GuiButtonToggle toggle = new GuiButtonToggle(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, false);
-		toggle.initTextureValues(0, 192, 0, 20, GeneticAnalyzer.TEXTURE);
-		buttonList.add(toggle);*/
-		addButton(new GuiToggleButton(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON)).enabled = ((ContainerAnalyzerProvider) inventorySlots).getAnalyzerSlot() != null;
+		addButton(new GuiToggleButton(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON)).enabled = ((IContainerAnalyzerProvider) inventorySlots).getAnalyzerSlot() != null;
 		dirty = true;
 
 		if (slotAnalyzer != null) {
@@ -130,31 +124,16 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			dirty = false;
 		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		//analyzer.drawTooltip(this, mouseX, mouseY);
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		if (button instanceof GuiToggleButton) {
-			analyzerVisible = !analyzerVisible;
+			setAnalyzerVisible(!isAnalyzerVisible());
 			updateVisibility();
 			dirtyAnalyzer = true;
 		}
-	}
-
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		//analyzer.mouseClicked(mouseX, mouseY, mouseButton);
-	}
-
-	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		/*if (analyzer.keyTyped(typedChar, keyCode)) {
-			return;
-		}*/
-		super.keyTyped(typedChar, keyCode);
 	}
 
 	/* Methods - Implement GuiContainer */
@@ -162,7 +141,6 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
-		//analyzer.draw(0, 0, mouseX, mouseY);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();
 			if (selectedSlot >= 0) {
@@ -201,4 +179,12 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		return firstSlot;
 	}
 
+	/* Methods - Gui Globals */
+	private static void setAnalyzerVisible(boolean analyzerVisible) {
+		GuiAnalyzerProvider.analyzerVisible = analyzerVisible;
+	}
+
+	private static boolean isAnalyzerVisible() {
+		return analyzerVisible;
+	}
 }

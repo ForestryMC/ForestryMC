@@ -12,17 +12,21 @@ package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
@@ -80,6 +84,23 @@ public class FarmableSapling implements IFarmable {
 			return ItemStack.areItemsEqual(germling, new ItemStack((itemstack.getItem())));
 		}
 		return ItemStack.areItemsEqual(germling, itemstack);
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		NonNullList<ItemStack> germlings = NonNullList.create();
+		if(ignoreMetadata){
+			Item germlingItem = germling.getItem();
+			CreativeTabs tab = germlingItem.getCreativeTab();
+			if(tab != null) {
+				germlingItem.getSubItems(tab, germlings);
+			}
+		}
+		if(germlings.isEmpty()){
+			germlings.add(germling);
+		}
+		info.addGermlings(germlings);
+		info.addProducts(windfall);
 	}
 
 	@Override

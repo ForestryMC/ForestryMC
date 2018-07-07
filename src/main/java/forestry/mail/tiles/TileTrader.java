@@ -10,9 +10,28 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import java.io.IOException;
-
 import com.google.common.base.Preconditions;
+
+import forestry.core.config.Constants;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.io.IOException;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -35,15 +54,7 @@ import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.mail.triggers.MailTriggers;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -306,21 +317,19 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
 	}
 
-	// TODO: Buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(MailTriggers.lowPaper64);
-//		res.add(MailTriggers.lowPaper32);
-//		res.add(MailTriggers.lowInput25);
-//		res.add(MailTriggers.lowInput10);
-//		res.add(MailTriggers.lowPostage40);
-//		res.add(MailTriggers.lowPostage20);
-//		res.add(MailTriggers.highBuffer90);
-//		res.add(MailTriggers.highBuffer75);
-//		return res;
-//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		triggers.add(MailTriggers.lowPaper64);
+		triggers.add(MailTriggers.lowPaper32);
+		triggers.add(MailTriggers.lowInput25);
+		triggers.add(MailTriggers.lowInput10);
+		triggers.add(MailTriggers.lowPostage40);
+		triggers.add(MailTriggers.lowPostage20);
+		triggers.add(MailTriggers.highBuffer90);
+		triggers.add(MailTriggers.highBuffer75);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

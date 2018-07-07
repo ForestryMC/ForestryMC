@@ -10,29 +10,36 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-// TODO: Buildcraft for 1.9
-public class TriggerLowPaper {//} extends Trigger {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-//	private final int threshold;
-//
-//	public TriggerLowPaper(String tag, int threshold) {
-//		super(tag, "lowPaper");
-//		this.threshold = threshold;
-//	}
-//
-//	@Override
-//	public String getDescription() {
-//		return super.getDescription() + " < " + threshold;
-//	}
-//
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof TileTrader)) {
-//			return false;
-//		}
-//
-//		return !((TileTrader) tile).hasPaperMin(threshold);
-//	}
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.TileTrader;
+
+public class TriggerLowPaper extends Trigger {
+
+	private final int threshold;
+
+	public TriggerLowPaper(String tag, int threshold) {
+		super(tag, "lowPaper", "low_paper");
+		this.threshold = threshold;
+	}
+
+	@Override
+	public String getDescription() {
+		return super.getDescription() + " < " + threshold;
+	}
+
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+
+		if (!(tile instanceof TileTrader)) {
+			return false;
+		}
+
+		return !((TileTrader) tile).hasPaperMin(threshold);
+	}
 
 }

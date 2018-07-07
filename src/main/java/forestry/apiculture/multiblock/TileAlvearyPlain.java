@@ -10,8 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileAlvearyPlain extends TileAlveary {//implements ITriggerProvider {
+import forestry.core.config.Constants;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
+
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
+import forestry.apiculture.trigger.ApicultureTriggers;
+
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 	@Override
 	public boolean allowsAutomation() {
@@ -19,19 +35,18 @@ public class TileAlvearyPlain extends TileAlveary {//implements ITriggerProvider
 	}
 
 	/* ITRIGGERPROVIDER */
-	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		Collection<ITriggerExternal> res = new ArrayList<>();
-//		res.add(ApicultureTriggers.missingQueen);
-//		res.add(ApicultureTriggers.missingDrone);
-//		return res;
-//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		triggers.add(ApicultureTriggers.missingQueen);
+		triggers.add(ApicultureTriggers.missingDrone);
+	}
 }

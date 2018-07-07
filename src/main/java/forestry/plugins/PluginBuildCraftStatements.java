@@ -10,8 +10,20 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
+import buildcraft.api.statements.StatementManager;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
@@ -19,12 +31,12 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_STATEMENTS, name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class PluginBuildCraftStatements extends BlankForestryModule {//implements ITriggerProvider {
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public class PluginBuildCraftStatements extends BlankForestryModule implements ITriggerProvider {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
+		return ModUtil.isModLoaded(Constants.BCLIB_MOD_ID, "[7.99.17,8.0)");
 	}
 
 	@Override
@@ -32,35 +44,38 @@ public class PluginBuildCraftStatements extends BlankForestryModule {//implement
 		return "Compatible BuildCraftAPI|statements version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
 	public void doInit() {
 		// Add custom trigger handler
-		// TODO: Buildcraft for 1.9
-//		StatementManager.registerTriggerProvider(this);
+		StatementManager.registerTriggerProvider(this);
 	}
 
 	/* ITriggerProvider */
 
-	// TODO: Buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-//		TileEntity tile = container.getTile();
-//		if (tile instanceof ITriggerProvider) {
-//			return ((ITriggerProvider) tile).getInternalTriggers(container);
-//		}
-//
-//		return null;
-//	}
-//
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		if (tile instanceof ITriggerProvider) {
-//			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
-//		}
-//
-//		return null;
-//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+		TileEntity tile = container.getTile();
+		if (tile instanceof ITriggerProvider) {
+			((ITriggerProvider) tile).addInternalTriggers(triggers, container);
+		}
+	}
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+		TileEntity tile = container.getTile();
+		if (tile instanceof ITriggerProvider) {
+			((ITriggerProvider) tile).addInternalSidedTriggers(triggers, container, side);
+		}
+	}
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		if (tile instanceof ITriggerProvider) {
+			((ITriggerProvider) tile).addExternalTriggers(triggers, side, tile);
+		}
+	}
 }

@@ -48,6 +48,8 @@ public interface IFarmRegistry {
 	void registerFarmables(String identifier, IFarmable... farmable);
 	
 	Collection<IFarmable> getFarmables(String identifier);
+
+	IFarmableInfo getFarmableInfo(String identifier);
 	
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.
@@ -63,13 +65,13 @@ public interface IFarmRegistry {
 	}
 	
 	/**
-	 * @param itemStack
-	 * @param value The value of the fertitlizer. The value of the forestry fertelizer is 500.
+	 * @param itemStack the fertilizer itemstack
+	 * @param value The value of the fertilizer. The value of the forestry fertilizer is 500.
 	 */
 	void registerFertilizer(ItemStack itemStack, int value);
 	
 	/**
-	 * @return The value of the fertitlizer
+	 * @return The value of the fertilizer
 	 */
 	int getFertilizeValue(ItemStack itemStack);
 

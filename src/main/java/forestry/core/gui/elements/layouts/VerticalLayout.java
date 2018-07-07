@@ -1,7 +1,11 @@
 package forestry.core.gui.elements.layouts;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.IGuiElement;
 
+@SideOnly(Side.CLIENT)
 public class VerticalLayout extends AbstractElementLayout {
 	public VerticalLayout(int width) {
 		this(0, 0, width);
@@ -11,22 +15,20 @@ public class VerticalLayout extends AbstractElementLayout {
 		super(xPos, yPos, width, 0);
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
 	public <E extends IGuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
 		element.setYPosition(height);
-		height += element.getHeight() + distance;
+		setHeight(height + (element.getHeight() + distance));
+		element.onCreation();
 		return element;
 	}
 
 	public <E extends IGuiElement> E remove(E element) {
 		elements.remove(element);
-		height -= element.getHeight() + distance;
+		setHeight(height - (element.getHeight() + distance));
 		element.setYPosition(0);
+		element.onDeletion();
 		return element;
 	}
 
@@ -34,7 +36,7 @@ public class VerticalLayout extends AbstractElementLayout {
 		height = 0;
 		for(IGuiElement element : elements){
 			element.setYPosition(height);
-			height += element.getHeight() + distance;
+			setHeight(height + (element.getHeight() + distance));
 		}
 	}
 

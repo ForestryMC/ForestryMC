@@ -70,13 +70,13 @@ public interface ISpeciesRoot {
 
 	IIndividual getMember(NBTTagCompound compound);
 	
-	<O extends Object, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
+	<O, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
 	
 	@Nullable
-	<O extends Object, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
+	<O, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
 
 	@Nullable
-	<O extends Object, I extends IIndividual> I translateMember(O objectToTranslator);
+	<O, I extends IIndividual> I translateMember(O objectToTranslator);
 
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);

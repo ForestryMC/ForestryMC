@@ -1,5 +1,7 @@
 package forestry.arboriculture.blocks;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -25,6 +27,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
@@ -214,7 +217,8 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				}
 				continue;
 			}
-			for(ICharcoalPileWall wall : TreeManager.pileWalls){
+			ICharcoalManager charcoalManager = Preconditions.checkNotNull(TreeManager.charcoalManager);
+			for(ICharcoalPileWall wall : charcoalManager.getWalls()){
 				if(wall.matches(state)){
 					return wall.getCharcoalAmount();
 				}

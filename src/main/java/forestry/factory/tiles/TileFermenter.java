@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,16 +17,27 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+<<<<<<< HEAD
 
+=======
+import net.minecraftforge.fml.common.Optional;
+>>>>>>> upstream/mc-1.12
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.IOException;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
@@ -48,6 +56,7 @@ import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
+import forestry.factory.triggers.FactoryTriggers;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
@@ -307,6 +316,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	/* ITRIGGERPROVIDER */
+<<<<<<< HEAD
 	// TODO: BuildCraft for 1.9
 	//	@Optional.Method(modid = "BuildCraftAPI|statements")
 	//	@Override
@@ -316,6 +326,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	//		res.add(FactoryTriggers.lowResource10);
 	//		return res;
 	//	}
+=======
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		triggers.add(FactoryTriggers.lowResource25);
+		triggers.add(FactoryTriggers.lowResource10);
+	}
+>>>>>>> upstream/mc-1.12
 
 	@Override
 	@SideOnly(Side.CLIENT)

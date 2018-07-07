@@ -35,7 +35,7 @@ public class GreenhouseBlockManager implements IGreenhouseBlockManager {
 	private World2ObjectMap<ChunkManager> managers;
 
 	private GreenhouseBlockManager() {
-		managers = new World2ObjectMap(world -> new ChunkManager(world));
+		managers = new World2ObjectMap(ChunkManager::new);
 	}
 
 	public static GreenhouseBlockManager getInstance() {

@@ -1496,6 +1496,7 @@ for.chat.command.forestry.butterfly.format=Format: /%s <sub-command>
 for.chat.command.forestry.butterfly.kill.desc=- %s : Kills all Butterflies
 for.chat.command.forestry.butterfly.kill.help=Kills all Butterflies in loaded chunks
 for.chat.command.forestry.butterfly.kill.format=Format: /%s [<dimension#>]
+for.chat.command.forestry.butterfly.kill.response=Killed %d butterflies
 
 for.butterflies.hybrid=Hybrid: %PRIMARY-%SECONDARY
 
@@ -1684,6 +1685,7 @@ for.module.actuallyadditions.description=Compatibility module for Actually Addit
 for.module.roots.description=Compatibility module for Roots.
 for.module.rustic.description=Compatibility module for Rustic.
 for.module.mysticalagriculture.description=Compatibility module for Mystical Agriculture. Enables farming Mystical Agriculture crops.
+for.module.techreborn.description=Compatibility module for Tech reborn. Enables harvesting rubber from rubber trees.
 
 ####################
 # CONFIG FILES
@@ -1717,15 +1719,17 @@ for.config.world.generate.beehives.debug=Debug Beehive Generation
 for.config.world.generate.beehives.debug.comment=Force Forestry to generate a beehive at every possible location. (This will break your world. Only useful to developers)
 for.config.world.generate.beehives.dimBlacklist=Beehive Generation Dimension Blacklist
 for.config.world.generate.beehives.dimBlacklist.comment=Disables the generation of all hives in the specified dimensions. Enter one dimension id per line.
-for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line.
+for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line. The global type can be used to blacklist a biome from all hive generation.
 
 for.config.world.generate.villagers=Generate Villagers
 for.config.world.generate.villagers.comment=Generates Forestry villagers and their houses.
 
+for.config.world.generate.trees=Whether forestry should generate forestry trees in the world.
 for.config.world.generate.trees.dimBlacklist=Tree Generation Dimension Blacklist
 for.config.world.generate.trees.dimBlacklist.comment=Disables the generation of all trees in the specified dimensions. Enter one dimension id per line.
 for.config.world.generate.trees.treeFrequency=Tree Generation Frequency
 for.config.world.generate.trees.treeFrequency.comment=How Frequently forestry generates it's trees in the world
+for.config.world.generate.trees.biomeblacklist.comment=This will blacklist a biome or biome type for all tree generation. See the hive biome blacklist for more information.
 
 for.config.crafting=Crafting
 for.config.crafting.bronze=Craft Bronze
@@ -1782,8 +1786,10 @@ for.config.tweaks.cultivation.ring.comment=Makes cultivation farms use a ring la
 for.config.tweaks.cultivation.ring_size=Inner Ring Size
 for.config.tweaks.cultivation.ring_size.comment=Sets the size of the inner ring of the ring layout.
 
-for.config.tweaks.capsule=Capsules
-for.config.tweaks.capsule.comment=Enables the function that cans and capsules can pick up fluids from the world.
+for.config.tweaks.capsule.capsulePickup=Capsule Pickup
+for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans and capsules can pick up fluids from the world.
+for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
+for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
 for.config.tweaks.greenhouse.range=Greenhouse Range
 for.config.tweaks.greenhouse.range.comment=Set the range divisor of the climatiser of the greenhouse.
@@ -1798,7 +1804,6 @@ for.config.tweaks.book.spawn.comment=Players who enter the world for the first t
 for.config.genetics=Genetics
 for.config.genetics.pollinate.vanilla.trees=Pollinate Vanilla Trees
 for.config.genetics.pollinate.vanilla.trees.comment=Allow bees to pollinate vanilla tree leaves. When disabled, vanilla trees must be analyzed before they can be pollinated.
-for.config.genetics.analyzerblock.energy.use=Analyzer Block Energy Use
 for.config.genetics.analyzerblock.energy.use=Energy use of Analyzer Block per work cycle.
 for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
 for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
@@ -1815,7 +1820,7 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. \n You can't remove auto generated entries you only can deactivate them if you set there value to 0.
+for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
@@ -1839,6 +1844,8 @@ for.config.beekeeping.ticks.work=Ticks per Cycle
 for.config.beekeeping.ticks.work.comment=The number of ticks per bee work cycle.
 for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
 for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
+for.config.beekeeping.hivedamage.underwater=Underwater Hive Damage
+for.config.beekeeping.hivedamage.underwater.comment=Whether bees can damage a player while they are underwater.
 for.config.beekeeping.self.pollination=Leaf Self Pollination
 for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
 for.config.beekeeping.ignoble.decay=Ignoble Decay
@@ -1903,6 +1910,15 @@ for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice s
 for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
 
 for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+
+for.config.power.types.rf=Redstone Flux
+for.config.power.types.rf.comment=Enable Redstone Flux power support.
+for.config.power.types.mj=MJ
+for.config.power.types.mj.comment=Enable MJ power support.
+for.config.power.types.tesla=Tesla
+for.config.power.types.tesla.comment=Enable Tesla power support.
+for.config.power.display.mode=Power Display Mode
+for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
 
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
@@ -2015,6 +2031,10 @@ for.jei.rainmaker.causes.rain=Causes Rain
 for.jei.rainmaker.stops.rain=Stops Rain
 for.jei.rainmaker.speed=Speed: %s
 for.jei.rainmaker.duration=Duration: %s ticks
-tile.for.charcoal.pile.wall.name=Charcoal Pile
+for.jei.farming.name=Farming
+for.jei.farming.soil=Soil
+for.jei.farming.germlings=Germlings
+for.jei.farming.products=Products
+for.jei.charcoal.pile.name=Charcoal Pile
 for.jei.chance=Chance: %s
 for.jei.fortune=The amount of this item is affected by the fortune enchantment.

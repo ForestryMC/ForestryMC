@@ -51,7 +51,7 @@ class NextTickEntry implements Comparable<NextTickEntry> {
 
 	@Override
 	public int compareTo(NextTickEntry o) {
-		return this.scheduledTime < o.scheduledTime ? -1 : (this.scheduledTime > o.scheduledTime ? 1 : 0);
+		return Long.compare(this.scheduledTime, o.scheduledTime);
 	}
 
 	public BlockPos getPosition() {

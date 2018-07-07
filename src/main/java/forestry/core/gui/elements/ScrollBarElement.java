@@ -32,9 +32,6 @@ public class ScrollBarElement extends ElementGroup {
 	public ScrollBarElement(int xPos, int yPos, int width, int height, Drawable sliderTexture) {
 		super(xPos, yPos, width, height);
 
-		this.width = width;
-		this.height = height;
-
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
@@ -61,6 +58,11 @@ public class ScrollBarElement extends ElementGroup {
 		this.step = step;
 
 		setValue(currentValue);
+	}
+
+	@Override
+	public boolean canMouseOver() {
+		return true;
 	}
 
 	public void setVisible(boolean visible) {
@@ -141,12 +143,12 @@ public class ScrollBarElement extends ElementGroup {
 			} else {
 				setValue((int) (minValue + (float) step * Math.round(value)));
 			}
-		} else if (slider.isMouseOver(mouseX - getX(), mouseY - getY())) { //clicked on the slider
+		} else if (slider.isMouseOver()) { //clicked on the slider
 			if (mouseDown) {
 				isScrolling = true;
 				initialMouseClickY = y - slider.getY();
 			}
-		} else if (mouseDown && !wasClicked && isMouseOver(mouseX, mouseY)) { //clicked on the bar but not on the slider
+		} else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
 			int range = maxValue - minValue;
 			float value = ((float) y - (float) slider.height / 2.0F) / (float) (height - slider.height);
 			value *= (float) range;

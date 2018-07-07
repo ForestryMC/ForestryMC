@@ -1,7 +1,5 @@
 package forestry.energy.compat.tesla;
 
-import javax.annotation.Nullable;
-
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
 import net.darkhax.tesla.api.ITeslaConsumer;
@@ -12,6 +10,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nullable;
 
 public class TeslaHelper {
 	@Nullable
@@ -57,5 +57,10 @@ public class TeslaHelper {
 			return 0;
 		}
 		return (int) consumer.givePower(amount, simulate);
+	}
+
+	public static boolean isTeslaCapability(Capability<?> capability) {
+		if (!isLoaded()) return false;
+		return capability == TESLA_CONSUMER || capability == TESLA_HOLDER || capability == TESLA_PRODUCER;
 	}
 }

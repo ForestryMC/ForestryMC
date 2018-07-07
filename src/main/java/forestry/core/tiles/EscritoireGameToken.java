@@ -175,7 +175,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		state = data.readEnum(State.VALUES);
 		if (data.readBoolean()) {
 			String speciesUid = data.readString();

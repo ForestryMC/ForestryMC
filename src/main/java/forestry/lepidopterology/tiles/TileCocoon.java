@@ -104,7 +104,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		String speciesUID = data.readString();
 		IButterfly caterpillar = getButterfly(speciesUID);
 		setCaterpillar(caterpillar);

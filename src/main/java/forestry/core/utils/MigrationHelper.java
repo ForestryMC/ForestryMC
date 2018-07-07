@@ -1,31 +1,42 @@
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.FixTypes;
 
+import net.minecraftforge.common.util.CompoundDataFixer;
+import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEntityDataFixable;
 
 @Mod.EventBusSubscriber
 public class MigrationHelper {
 	private static Map<String, String> blockRemappings = new HashMap<>();
 	private static Map<String, String> itemRemappings = new HashMap<>();
+	private static Map<String, String> tileRemappings = new HashMap<>();
 
 	private static Set<String> ignoredMappings = new HashSet<>();
 	static {
+		//Greenhouse
 		ignoredMappings.add("greenhouse.sprinkler");
 
 		itemRemappings.put("greenhouse.plain", "greenhouse");
@@ -44,14 +55,56 @@ public class MigrationHelper {
 		itemRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
 		itemRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
 		blockRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
+		//Arboriculture
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_ash", "ash_block");
+
+		//Apiculture
+		addTileRemappingName("Alveary", "alveary_plain");
+		addTileRemappingName("Swarm", "hive_wild");
+		addTileRemappingName("AlvearySwarmer", "alveary_swarmer");
+		addTileRemappingName("AlvearyHeater", "alveary_heater");
+		addTileRemappingName("AlvearyFan", "alveary_fan");
+		addTileRemappingName("AlvearyHygro", "alveary_hygro");
+		addTileRemappingName("AlvearyStabiliser", "alveary_stabiliser");
+		addTileRemappingName("AlvearySieve", "alveary_sieve");
+		addTileRemappingName("Candle", "candle");
+		//Arboriculture
+		addTileRemappingName("Sapling", "sapling");
+		addTileRemappingName("Leaves", "leaves");
+		addTileRemappingName("Pods", "pods");
+		//Farming
+		addTileRemappingName("Farm", "farm");
+		addTileRemappingName("FarmGearbox", "farm_gearbox");
+		addTileRemappingName("FarmHatch", "farm_hatch");
+		addTileRemappingName("FarmValve", "farm_valve");
+		addTileRemappingName("FarmControl", "farm_control");
+		//Greenhouse
+		addTileRemappingName("GreenhousePlain", "greenhouse");
+		addTileRemappingName("ClimateSourceHygroregulator", "greenhouse_hygro");
+		addTileRemappingName("GreenhouseGearbox", "greenhouse_gearbox");
+		addTileRemappingName("GreenhouseController", "greenhouse_controller");
+		addTileRemappingName("ClimateSourceWindow", "greenhouse_window");
+		addTileRemappingName("GreenhouseFan", "greenhouse_fan");
+		addTileRemappingName("GreenhouseHeater", "greenhouse_heater");
+		addTileRemappingName("GreenhouseDryer", "greenhouse_dehumidifier");
+		addTileRemappingName("GreenhouseSprinkler", "greenhouse_humidifier");
+		//Sorting
+		addTileRemappingName("GeneticFilter", "genetic_filter");
+
 	}
 
 	public static Pattern underscores = Pattern.compile("_");
+
+	public static void registerFixable() {
+		TileEntityDataFixable tileFixable = new TileEntityDataFixable();
+		CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
+		ModFixs modFixs = fixer.init(Constants.MOD_ID, tileFixable.getFixVersion());    //is there a current save format version?
+		modFixs.registerFix(FixTypes.BLOCK_ENTITY, tileFixable);
+	}
 
 	public static void addBlockName(String blockName) {
 		add(blockName, blockRemappings);
@@ -59,6 +112,10 @@ public class MigrationHelper {
 
 	public static void addItemName(String itemName) {
 		add(itemName, itemRemappings);
+	}
+
+	public static void addTileName(String tileName){
+		add(tileName, tileRemappings);
 	}
 
 	private static void add(String name, Map<String, String> remappings) {
@@ -108,5 +165,18 @@ public class MigrationHelper {
 		}
 	}
 
-	private MigrationHelper() {}
+	@Nullable
+	public static String getRemappedTileName(String resourcePath){
+		if(tileRemappings.containsKey(resourcePath)){
+			return Constants.MOD_ID + ":" + tileRemappings.get(resourcePath);
+		}
+		return null;
+	}
+
+	private MigrationHelper() {
+	}
+
+	public static void addTileRemappingName(String oldName, String remappedName) {
+		tileRemappings.put("forestry." + WordUtils.uncapitalize(oldName), remappedName);
+	}
 }

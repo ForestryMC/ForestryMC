@@ -6,14 +6,13 @@ import javax.annotation.Nullable;
 
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.modules.ForestryModule;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.tiles.TileUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.sorting.blocks.BlockRegistrySorting;
@@ -61,7 +60,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		GameRegistry.registerTileEntity(TileGeneticFilter.class, "forestry.GeneticFilter");
+		TileUtil.registerTile(TileGeneticFilter.class, "genetic_filter");
 		((FilterRegistry) AlleleManager.filterRegistry).init();
 	}
 }

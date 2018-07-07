@@ -34,6 +34,7 @@ import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
+import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -76,11 +77,10 @@ public class ModuleMail extends BlankForestryModule {
 		}
 	}
 
-	// TODO: Buildcraft for 1.9
-	//	@Override
-	//	public void registerTriggers() {
-	//		MailTriggers.initialize();
-	//	}
+	@Override
+	public void registerTriggers() {
+		MailTriggers.initialize();
+	}
 
 	@Override
 	public void doInit() {

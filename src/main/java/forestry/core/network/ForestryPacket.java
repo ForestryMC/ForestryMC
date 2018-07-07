@@ -23,16 +23,12 @@ public abstract class ForestryPacket implements IForestryPacket {
 	public final FMLProxyPacket getPacket() {
 		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
 
-		try {
-			IPacketId id = getPacketId();
-			data.writeByte(id.ordinal());
-			writeData(data);
-		} catch (IOException e) {
-			Log.error("Failed to write packet.", e);
-		}
+		IPacketId id = getPacketId();
+		data.writeByte(id.ordinal());
+		writeData(data);
 
 		return new FMLProxyPacket(data, PacketHandler.channelId);
 	}
 
-	protected abstract void writeData(PacketBufferForestry data) throws IOException;
+	protected abstract void writeData(PacketBufferForestry data);
 }

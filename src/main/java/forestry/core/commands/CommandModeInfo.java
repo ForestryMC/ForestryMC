@@ -36,7 +36,7 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 		if (args.length <= 0) {
 			printHelp(sender);
 			return;

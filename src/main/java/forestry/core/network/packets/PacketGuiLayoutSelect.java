@@ -38,14 +38,14 @@ public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPa
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeString(layoutUid);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			String layoutUid = data.readString();
 			Container container = player.openContainer;
 			if (!(container instanceof ContainerSolderingIron)) {

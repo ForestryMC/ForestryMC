@@ -1,14 +1,19 @@
 package forestry.api.gui;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * The window element is the root element of the containment hierarchy. Its the only element the gui interacts with
+ * directly.
+ */
 @SideOnly(Side.CLIENT)
-public interface IGuiState {
-
+public interface IWindowElement extends IElementGroup {
 	/**
 	 * Returns the mouse position.
 	 */
@@ -22,12 +27,12 @@ public interface IGuiState {
 	/**
 	 * Returns the mouse position relative to the given element.
 	 */
-	int getRelativeMouseX(IGuiElement element);
+	int getRelativeMouseX(@Nullable IGuiElement element);
 
 	/**
 	 * Returns the mouse position relative to the given element.
 	 */
-	int getRelativeMouseY(IGuiElement element);
+	int getRelativeMouseY(@Nullable IGuiElement element);
 
 	/**
 	 * Returns the current screen width.
@@ -56,4 +61,19 @@ public interface IGuiState {
 	TextureManager getTextureManager();
 
 	FontRenderer getFontRenderer();
+
+	@Nullable
+	IGuiElement getMousedOverElement();
+
+	@Nullable
+	IGuiElement getDraggedElement();
+
+	@Nullable
+	IGuiElement getFocusedElement();
+
+	boolean isMouseOver(IGuiElement element);
+
+	boolean isDragged(IGuiElement element);
+
+	boolean isFocused(IGuiElement element);
 }

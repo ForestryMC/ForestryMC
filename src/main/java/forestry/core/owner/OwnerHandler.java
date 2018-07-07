@@ -50,7 +50,7 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		if (data.readBoolean()) {
 			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 			setOwner(owner);

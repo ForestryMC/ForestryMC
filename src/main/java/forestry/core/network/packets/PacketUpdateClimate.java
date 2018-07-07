@@ -44,7 +44,7 @@ public class PacketUpdateClimate extends ForestryPacket implements IForestryPack
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		container.writeData(data);
 	}

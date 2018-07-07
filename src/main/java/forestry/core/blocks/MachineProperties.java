@@ -1,12 +1,9 @@
 package forestry.core.blocks;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-import forestry.api.core.IModelManager;
-import forestry.core.tiles.TileForestry;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -17,28 +14,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.core.IModelManager;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.MigrationHelper;
+
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
-	private final String teIdent;
 	private final Class<T> teClass;
 	private final AxisAlignedBB boundingBox;
 	@Nullable
 	private Block block;
 
 	public MachineProperties(Class<T> teClass, String name) {
-		this("forestry." + name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+		this(teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
 	}
 
 	public MachineProperties(Class<T> teClass, String name, AxisAlignedBB boundingBox) {
-		this("forestry." + name, teClass, name, boundingBox);
-	}
-
-	private MachineProperties(String teIdent, Class<T> teClass, String name, AxisAlignedBB boundingBox) {
-		this.teIdent = teIdent;
 		this.teClass = teClass;
 		this.name = name;
 		this.boundingBox = boundingBox;
@@ -68,7 +66,8 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 	@Override
 	public void registerTileEntity() {
-		GameRegistry.registerTileEntity(teClass, teIdent);
+		TileUtil.registerTile(teClass, name);
+		MigrationHelper.addTileRemappingName(name, name);
 	}
 
 	@Override

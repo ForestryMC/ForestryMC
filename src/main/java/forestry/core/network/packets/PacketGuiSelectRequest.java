@@ -36,14 +36,14 @@ public class PacketGuiSelectRequest extends ForestryPacket implements IForestryP
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeVarInt(primaryIndex);
 		data.writeVarInt(secondaryIndex);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			int primary = data.readVarInt();
 			int secondary = data.readVarInt();
 

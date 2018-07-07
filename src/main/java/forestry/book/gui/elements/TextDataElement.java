@@ -130,6 +130,6 @@ public class TextDataElement extends GuiElement {
 
 	public void addData(TextData textData) {
 		textElements.add(textData);
-		height = -1;
+		setHeight(-1);
 	}
 }

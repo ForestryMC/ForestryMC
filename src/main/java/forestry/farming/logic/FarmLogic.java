@@ -68,6 +68,16 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
+	public IFarmProperties getProperties() {
+		return properties;
+	}
+
+	@Override
+	public boolean isManual() {
+		return isManual;
+	}
+
+	@Override
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {

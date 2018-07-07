@@ -3,6 +3,7 @@ package forestry.arboriculture.charcoal.jei;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.ModuleCharcoal;
@@ -33,12 +34,13 @@ public class CharcoalJeiPlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL))) {
+		ICharcoalManager charcoalManager = TreeManager.charcoalManager;
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL)) || charcoalManager == null) {
 			return;
 		}
 
 		registry.handleRecipes(CharcoalPileWall.class, CharcoalPileWallWrapper::new, RECIPE_UID);
-		registry.addRecipes(TreeManager.pileWalls, RECIPE_UID);
+		registry.addRecipes(charcoalManager.getWalls(), RECIPE_UID);
 		registry.addRecipeCatalyst(new ItemStack(ModuleCharcoal.getBlocks().woodPile), RECIPE_UID);
 	}
 

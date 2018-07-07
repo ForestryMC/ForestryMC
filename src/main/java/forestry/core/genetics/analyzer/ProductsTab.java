@@ -10,7 +10,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IIndividual;
 import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IElementGenetic;
+import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.IElementLayoutHelper;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.ItemElement;
@@ -22,11 +22,11 @@ public class ProductsTab extends DatabaseTab {
 	}
 
 	@Override
-	public void createElements(IElementGenetic container, IIndividual individual, ItemStack itemStack) {
+	public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
 		Collection<ItemStack> products = getProducts(individual);
 		if(!products.isEmpty()) {
-			container.text(Translator.translateToLocal("for.gui.beealyzer.produce"), GuiElementAlignment.TOP_CENTER);
+			container.label(Translator.translateToLocal("for.gui.beealyzer.produce"), GuiElementAlignment.TOP_CENTER);
 			products.forEach(product -> groupHelper.add(new ItemElement(0, 0, product)));
 			groupHelper.finish();
 		}
@@ -36,7 +36,7 @@ public class ProductsTab extends DatabaseTab {
 			return;
 		}
 
-		container.text(Translator.translateToLocal("for.gui.beealyzer.specialty"), GuiElementAlignment.TOP_CENTER);
+		container.label(Translator.translateToLocal("for.gui.beealyzer.specialty"), GuiElementAlignment.TOP_CENTER);
 		specialties.forEach(specialty -> groupHelper.add(new ItemElement(0, 0, specialty)));
 		groupHelper.finish();
 	}

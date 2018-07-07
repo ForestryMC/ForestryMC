@@ -46,7 +46,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -104,6 +103,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.VillagerTradeLists;
@@ -231,9 +231,9 @@ public class ModuleArboriculture extends BlankForestryModule {
 		TreeDefinition.initTrees();
 		registerErsatzGenomes();
 
-		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
-		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
-		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
+		TileUtil.registerTile(TileSapling.class, "sapling");
+		TileUtil.registerTile(TileLeaves.class, "leaves");
+		TileUtil.registerTile(TileFruitPod.class, "pods");
 
 		ItemRegistryArboriculture items = getItems();
 		BlockRegistryArboriculture blocks = getBlocks();

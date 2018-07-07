@@ -7,6 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
@@ -41,7 +42,7 @@ public class MutationElement extends SelectionElement<IMutation> {
 		} else {
 			conditionText = String.format("%.0f%%", mutation.getBaseChance());
 		}
-		selectedElement.text(58, conditionText, GuiElementAlignment.TOP_LEFT, 0).addTooltip(conditions);
+		selectedElement.label(conditionText, 58, 0, -1, 12, GuiElementAlignment.TOP_LEFT, GuiConstants.BLACK_STYLE).addTooltip(conditions);
 		selectedElement.drawable(62, 6, MUTATION_ARROW).addTooltip(conditions);
 		//
 		selectedElement.item(1, 1, root.getMemberStack(mutation.getAllele0(), root.getTypeForMutation(0)));

@@ -2,6 +2,7 @@ package forestry.core.gui.elements;
 
 import java.util.function.Consumer;
 
+import forestry.api.gui.events.GuiEvent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.utils.SoundUtil;
@@ -20,6 +21,13 @@ public class ButtonElement extends GuiElement {
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
+		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+			if (!enabled) {
+				return;
+			}
+			onPressed();
+			SoundUtil.playButtonClick();
+		});
 	}
 
 	public ButtonElement(int xPos, int yPos, StandardButtonTextureSets textureSets, Consumer<ButtonElement> onClicked) {
@@ -28,14 +36,26 @@ public class ButtonElement extends GuiElement {
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(textureSets.getTexture(), textureSets.getX(), textureSets.getY() + textureSets.getHeight() * i, textureSets.getWidth(), textureSets.getHeight());
 		}
+		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+			if (!enabled) {
+				return;
+			}
+			onPressed();
+			SoundUtil.playButtonClick();
+		});
 	}
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		boolean mouseOver = isMouseOver(mouseX, mouseY);
+		boolean mouseOver = isMouseOver();
 		int hoverState = getHoverState(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(0, 0);
+	}
+
+	@Override
+	public boolean canMouseOver() {
+		return true;
 	}
 
 	public boolean isEnabled() {
@@ -56,16 +76,6 @@ public class ButtonElement extends GuiElement {
 		}
 
 		return i;
-	}
-
-
-	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
-		if (!enabled) {
-			return;
-		}
-		onPressed();
-		SoundUtil.playButtonClick();
 	}
 
 	public void onPressed() {

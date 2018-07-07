@@ -37,14 +37,14 @@ public class PacketAlvearyChange extends ForestryPacket implements IForestryPack
 	}
 
 	@Override
-	protected void writeData(PacketBufferForestry data) throws IOException {
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(controllerPos);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			TileUtil.actOnTile(player.world, pos, IMultiblockComponent.class, tile -> tile.getMultiblockLogic().getController().reassemble());
 		}

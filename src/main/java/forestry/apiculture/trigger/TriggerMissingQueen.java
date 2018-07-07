@@ -10,24 +10,32 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-public class TriggerMissingQueen {//extends Trigger {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-//	public TriggerMissingQueen() {
-//		super("missingQueen");
-//	}
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.triggers.Trigger;
+
+public class TriggerMissingQueen extends Trigger {
+
+	public TriggerMissingQueen() {
+		super("missingQueen", "missing_queen");
+	}
 
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
-	// TODO: buildcraft for 1.9
-//	@Override
-//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-//
-//		if (!(tile instanceof IErrorLogicSource)) {
-//			return false;
-//		}
-//
-//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
-//	}
+	@Override
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+
+		if (!(tile instanceof IErrorLogicSource)) {
+			return false;
+		}
+
+		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
+	}
 }

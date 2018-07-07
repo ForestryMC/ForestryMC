@@ -10,11 +10,26 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import forestry.core.config.Constants;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -26,13 +41,7 @@ import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.apiculture.trigger.ApicultureTriggers;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -76,16 +85,14 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	/* ITRIGGERPROVIDER */
-	// TODO: buildcraft for 1.9
-//	@Optional.Method(modid = "BuildCraftAPI|statements")
-//	@Override
-//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-//		LinkedList<ITriggerExternal> res = new LinkedList<>();
-//		res.add(ApicultureTriggers.missingQueen);
-//		res.add(ApicultureTriggers.missingDrone);
-//		res.add(ApicultureTriggers.noFrames);
-//		return res;
-//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+		super.addExternalTriggers(triggers, side, tile);
+		triggers.add(ApicultureTriggers.missingQueen);
+		triggers.add(ApicultureTriggers.missingDrone);
+		triggers.add(ApicultureTriggers.noFrames);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

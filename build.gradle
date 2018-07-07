@@ -21,7 +21,7 @@ version = version_major + '.' + version_minor + '.' + version_patch + '.' + getB
 if (project.hasProperty('buildQualifier')) {
 	version = project.version + '-' + project.buildQualifier
 }
-group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forestry_" + mcversion
 
 ext.dirDest = './build/dist'
@@ -41,6 +41,9 @@ minecraft {
 
 repositories {
 	maven {
+		url = 'http://maven.mcmoddev.com'
+	}
+	maven {
 		url "http://dvs1.progwml6.com/files/maven"
 	}
 	maven {
@@ -52,8 +55,7 @@ repositories {
 		url = "http://maven.modmuss50.me"
 	}
 	maven {
-
-		url 'http://maven.mcmoddev.com'
+		url = 'https://mod-buildcraft.com/maven'
 	}
 }
 
@@ -63,6 +65,8 @@ dependencies {
 	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
+	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
+	runtimeOnly "com.mod-buildcraft:buildcraft:${buildcraft_version}"
 }
 
 configurations {
@@ -81,7 +85,7 @@ processResources {
 		include 'mcmod.info'
 
 		// replace version and mcversion
-		expand 'version':project.version, 'mcversion':project.minecraft.version
+		expand 'version': project.version, 'mcversion': project.minecraft.version
 	}
 
 	// copy everything else, thats not the mcmod.info
@@ -131,7 +135,7 @@ uploadArchives {
 	repositories {
 		if (project.hasProperty('mavenDir')) {
 			mavenDeployer {
-				repository(url: "file://"+mavenDir)
+				repository(url: "file://" + mavenDir)
 			}
 		} else {
 			println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
@@ -147,7 +151,7 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	filePath = "changelog.html"
 	untaggedName = "Current release ${project.version}"
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
-	toRef =  "HEAD"
+	toRef = "HEAD"
 	templateContent = file('changelog.mustache').getText('UTF-8')
 }
 

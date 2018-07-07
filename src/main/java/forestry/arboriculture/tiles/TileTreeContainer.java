@@ -83,7 +83,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		String speciesUID = data.readString();
 		ITree tree = getTree(speciesUID);
 		setTree(tree);

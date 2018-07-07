@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 import forestry.farming.logic.crops.CropDestroy;
@@ -55,6 +56,12 @@ public class FarmableRusticSapling implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		return germling == itemstack.getItem();
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addGermlings(new ItemStack(germling));
+		info.addProducts(windfall);
 	}
 
 	@Override

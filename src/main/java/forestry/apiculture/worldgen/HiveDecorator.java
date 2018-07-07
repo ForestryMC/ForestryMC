@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -34,6 +35,7 @@ import forestry.core.utils.Log;
 
 public abstract class HiveDecorator {
 
+	@Nullable
 	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
 
 	public static void decorateHives(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {

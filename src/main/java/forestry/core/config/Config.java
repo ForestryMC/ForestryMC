@@ -25,11 +25,16 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -61,10 +66,10 @@ public class Config {
 	// Graphics
 	public static boolean enableParticleFX = true;
 
-	//Humus
+	// Humus
 	public static int humusDegradeDelimiter = 3;
 
-	//Greenhouse
+	// Greenhouse
 	public static int climateSourceRange = 36;
 	public static float climateSourceEnergyModifier = 1.5F;
 	public static int greenhouseSize = 4;
@@ -79,16 +84,18 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	public static Set<Integer> blacklistedOreDims = new HashSet<Integer>();
-	public static Set<Integer> whitelistedOreDims = new HashSet<Integer>();
+	public static Set<Integer> blacklistedOreDims = new HashSet<>();
+	public static Set<Integer> whitelistedOreDims = new HashSet<>();
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
 	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<Integer>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<Integer>();
+	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
+	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
+	public static Set<BiomeDictionary.Type> blacklistedTreeTypes = new HashSet<>();
+	public static Set<Biome> blacklistedTreeBiomes = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -135,6 +142,12 @@ public class Config {
 	public static boolean enableHints = true;
 	public static final LinkedListMultimap<String, String> hints = LinkedListMultimap.create();
 	public static boolean enableEnergyStat = true;
+
+	// Energy
+	public static boolean enableRF = true;
+	public static boolean enableMJ = true;
+	public static boolean enableTesla = true;
+	public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
 
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
@@ -200,9 +213,16 @@ public class Config {
 		return false;
 	}
 
+	public static boolean isValidTreeBiome(Biome biome) {
+		if (blacklistedTreeBiomes.contains(biome)) {
+			return true;
+		}
+		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
+	}
+
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.0");
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.1");
 		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
@@ -236,13 +256,13 @@ public class Config {
 			// Make sure the default mode files are there.
 
 			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
-			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
+			copyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
 
 			File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
-			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
+			copyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
 
 			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
-			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
+			copyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
 		}
 
 		// RetroGen
@@ -278,14 +298,23 @@ public class Config {
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-    
+
 		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
-    
+
 		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
 			blacklistedTreeDims.add(dimId);
 		}
 		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
 			whitelistedTreeDims.add(dimId);
+		}
+		for (String entry : configCommon.get("world.generate.trees", "biomeblacklist", new String[0]).getStringList()) {
+			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
+			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
+			if (type != null) {
+				blacklistedTreeTypes.add(type);
+			} else if (biome != null) {
+				blacklistedTreeBiomes.add(biome);
+			}
 		}
 
 
@@ -349,12 +378,19 @@ public class Config {
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
-			Log.debug("Disabled structure '%s'.", str);
+			Log.debug("Disabled structure '{}'.", str);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
 
 		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
+
+		enableRF = configCommon.getBooleanLocalized("power.types", "rf", true);
+		enableMJ = configCommon.getBooleanLocalized("power.types", "mj", true);
+		enableTesla = configCommon.getBooleanLocalized("power.types", "tesla", true);
+
+		energyDisplayMode = configCommon.getEnumLocalized("power.display", "mode", EnergyDisplayMode.RF, EnergyDisplayMode.values());
+
 
 		configCommon.save();
 	}
@@ -381,7 +417,7 @@ public class Config {
 		configFluid.save();
 	}
 
-	private static void CopyFileToFS(File destination, String resourcePath) {
+	private static void copyFileToFS(File destination, String resourcePath) {
 		InputStream stream = Config.class.getResourceAsStream(resourcePath);
 		OutputStream outstream;
 		int readBytes;

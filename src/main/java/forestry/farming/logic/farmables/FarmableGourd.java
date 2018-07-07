@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
 
@@ -51,6 +52,12 @@ public class FarmableGourd implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		return ItemStack.areItemsEqual(itemstack, seed);
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addGermlings(seed);
+		info.addProducts(new ItemStack(fruit));
 	}
 
 	@Override

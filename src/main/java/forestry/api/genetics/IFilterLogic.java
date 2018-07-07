@@ -20,7 +20,7 @@ public interface IFilterLogic extends INbtWritable, INbtReadable {
 	void writeGuiData(PacketBuffer data);
 
 	@SideOnly(Side.CLIENT)
-	void readGuiData(PacketBuffer data) throws IOException;
+	void readGuiData(PacketBuffer data);
 
 	Collection<EnumFacing> getValidDirections(ItemStack itemStack, EnumFacing from);
 

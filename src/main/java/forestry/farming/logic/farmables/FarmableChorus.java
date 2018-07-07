@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropChorusFlower;
 
@@ -49,6 +50,12 @@ public class FarmableChorus implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		return ItemStack.areItemsEqual(germling, itemstack);
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addGermlings(germling);
+		info.addProducts(germling, fruit);
 	}
 
 	@Override

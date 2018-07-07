@@ -98,21 +98,15 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		ORIGINAL_GRASS_COLOR = BiomeColorHelper.GRASS_COLOR;
-		BiomeColorHelper.GRASS_COLOR = new BiomeColorHelper.ColorResolver() {
-			@Override
-			public int getColorAtPos(Biome biome, BlockPos blockPosition) {
-				COLOR_BLOCK_POSITION = blockPosition;
-				return ORIGINAL_GRASS_COLOR.getColorAtPos(biome, blockPosition);
-			}
+		BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) -> {
+			COLOR_BLOCK_POSITION = blockPosition;
+			return ORIGINAL_GRASS_COLOR.getColorAtPos(biome, blockPosition);
 		};
 
 		ORIGINAL_FOLIAGE_COLOR = BiomeColorHelper.FOLIAGE_COLOR;
-		BiomeColorHelper.FOLIAGE_COLOR = new BiomeColorHelper.ColorResolver() {
-			@Override
-			public int getColorAtPos(Biome biome, BlockPos blockPosition) {
-				COLOR_BLOCK_POSITION = blockPosition;
-				return ORIGINAL_FOLIAGE_COLOR.getColorAtPos(biome, blockPosition);
-			}
+		BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) -> {
+			COLOR_BLOCK_POSITION = blockPosition;
+			return ORIGINAL_FOLIAGE_COLOR.getColorAtPos(biome, blockPosition);
 		};
 	}
 

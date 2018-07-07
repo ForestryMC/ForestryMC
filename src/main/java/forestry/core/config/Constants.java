@@ -27,6 +27,7 @@ public class Constants implements IForestryConstants {
 
 	public static final String RF_MOD_ID = "CoFHAPI|energy";
 	public static final String TESLA_MOD_ID = "tesla";
+	public static final String BCLIB_MOD_ID = "buildcraftlib";
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;

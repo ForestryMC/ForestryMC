@@ -19,6 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
@@ -31,7 +32,17 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.core.config.Constants;
+import forestry.core.utils.MigrationHelper;
+
 public abstract class TileUtil {
+
+	public static void registerTile(Class<? extends TileEntity> tileClass, String key){
+		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
+		MigrationHelper.addTileName(key);
+	}
 
 	public static boolean isUsableByPlayer(EntityPlayer player, TileEntity tile) {
 		BlockPos pos = tile.getPos();

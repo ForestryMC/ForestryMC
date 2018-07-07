@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -39,6 +38,7 @@ import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.tiles.TileUtil;
 import forestry.greenhouse.api.climate.IGreenhouseClimateManager;
 import forestry.greenhouse.api.greenhouse.GreenhouseManager;
 import forestry.greenhouse.api.greenhouse.IGreenhouseHelper;
@@ -127,15 +127,15 @@ public class ModuleGreenhouse extends BlankForestryModule {
 	public void doInit() {
 		IGreenhouseHelper helper = GreenhouseManager.helper;
 
-		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
-		GameRegistry.registerTileEntity(TileHygroregulator.class, "forestry.ClimateSourceHygroregulator");
-		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
-		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
-		GameRegistry.registerTileEntity(TileGreenhouseWindow.class, "forestry.ClimateSourceWindow");
-		GameRegistry.registerTileEntity(TileFan.class, "forestry.GreenhouseFan");
-		GameRegistry.registerTileEntity(TileHeater.class, "forestry.GreenhouseHeater");
-		GameRegistry.registerTileEntity(TileDehumidifier.class, "forestry.GreenhouseDryer");
-		GameRegistry.registerTileEntity(TileHumidifier.class, "forestry.GreenhouseSprinkler");
+		TileUtil.registerTile(TileGreenhousePlain.class, "greenhouse");
+		TileUtil.registerTile(TileHygroregulator.class, "greenhouse_hygro");
+		TileUtil.registerTile(TileGreenhouseGearbox.class, "greenhouse_gearbox");
+		TileUtil.registerTile(TileGreenhouseControl.class, "greenhouse_controller");
+		TileUtil.registerTile(TileGreenhouseWindow.class, "greenhouse_window");
+		TileUtil.registerTile(TileFan.class, "greenhouse_fan");
+		TileUtil.registerTile(TileHeater.class, "greenhouse_heater");
+		TileUtil.registerTile(TileDehumidifier.class, "greenhouse_dehumidifier");
+		TileUtil.registerTile(TileHumidifier.class, "greenhouse_humidifier");
 
 		helper.registerWindowGlass("glass", new ItemStack(Blocks.GLASS), "blocks/glass");
 		for (EnumDyeColor dye : EnumDyeColor.values()) {

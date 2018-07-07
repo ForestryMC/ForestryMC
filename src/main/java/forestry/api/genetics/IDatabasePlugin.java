@@ -20,16 +20,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IDatabasePlugin<I extends IIndividual> {
 
-	/**
-	 * A map that contains a {@link ItemStack} for every possible {@link IAlleleSpecies}.
-	 * This item stack represents the species in the database and alyzer gui.
-	 *
-	 * The key of the map is the uid of the species.
-	 */
-	Map<String, ItemStack> getIndividualStacks();
-
 	/* ALYZER */
 	List<String> getHints();
 
 	IDatabaseTab[] getTabs();
+
+	Map<String, ItemStack> getIndividualStacks();
 }

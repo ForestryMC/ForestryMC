@@ -40,7 +40,7 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws PlayerNotFoundException, SpeciesNotFoundException, TemplateNotFoundException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws SpeciesNotFoundException, TemplateNotFoundException {
 		if (args.length < 1 || args.length > 2) {
 			printHelp(sender);
 			return;
