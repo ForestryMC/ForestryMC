@@ -40,7 +40,6 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -135,14 +134,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-		
+
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
 
 		proxy.preInitializeRendering();
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			LepidopterologyFilterRule.init();
 			LepidopterologyFilterRuleType.init();
 		}
