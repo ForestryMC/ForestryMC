@@ -13,6 +13,14 @@ package forestry.apiculture;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlowerPot;
 import net.minecraft.block.properties.PropertyEnum;
@@ -34,6 +42,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,22 +50,14 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -119,11 +120,7 @@ import forestry.core.entities.ParticleSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-<<<<<<< HEAD
-=======
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileUtil;
->>>>>>> upstream/mc-1.12
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
