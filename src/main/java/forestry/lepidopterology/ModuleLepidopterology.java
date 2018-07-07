@@ -57,6 +57,7 @@ import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -159,7 +160,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void doInit() {
 		BlockRegistryLepidopterology blocks = getBlocks();
 
-		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+		TileUtil.registerTile(TileCocoon.class, "cocoon");
 
 		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 
