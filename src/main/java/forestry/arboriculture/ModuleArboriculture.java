@@ -40,6 +40,8 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
@@ -393,21 +395,24 @@ public class ModuleArboriculture extends BlankForestryModule {
 			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
 				logs.setCount(1);
 				fireproofLogs.setCount(1);
-				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
-						" # ",
-						"#X#",
-						" # ",
-						'#', coreItems.refractoryWax,
-						'X', logs.copy()});
+				FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
+				if (liquidGlass != null) {
+					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofLogs.copy(), new Object[]{
+							" # ",
+							"#X#",
+							" # ",
+							'#', coreItems.refractoryWax,
+							'X', logs.copy()});
 
-				planks.setCount(1);
-				fireproofPlanks.setCount(5);
-				RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[]{
-						"X#X",
-						"#X#",
-						"X#X",
-						'#', coreItems.refractoryWax,
-						'X', planks.copy()});
+					planks.setCount(1);
+					fireproofPlanks.setCount(5);
+					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofPlanks.copy(), new Object[]{
+							"X#X",
+							"#X#",
+							"X#X",
+							'#', coreItems.refractoryWax,
+							'X', planks.copy()});
+				}
 			}
 		}
 
@@ -418,14 +423,19 @@ public class ModuleArboriculture extends BlankForestryModule {
 			int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 			int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 			ItemStack mulch = new ItemStack(coreItems.mulch);
-			RecipeManagers.squeezerManager.addRecipe(20, EnumFruit.CHERRY.getStack(), Fluids.SEED_OIL.getFluid(5 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(60, EnumFruit.WALNUT.getStack(), Fluids.SEED_OIL.getFluid(18 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(70, EnumFruit.CHESTNUT.getStack(), Fluids.SEED_OIL.getFluid(22 * seedOilMultiplier), mulch, 2);
-			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.LEMON.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PLUM.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
-			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PAPAYA.getStack(), Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.DATES.getStack(), Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
-			
+			Fluid seedOil = Fluids.SEED_OIL.getFluid();
+			if(seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(20, EnumFruit.CHERRY.getStack(), new FluidStack(seedOil, 5 * seedOilMultiplier), mulch, 5);
+				RecipeManagers.squeezerManager.addRecipe(60, EnumFruit.WALNUT.getStack(), new FluidStack(seedOil, 18 * seedOilMultiplier), mulch, 5);
+				RecipeManagers.squeezerManager.addRecipe(70, EnumFruit.CHESTNUT.getStack(), new FluidStack(seedOil, 22 * seedOilMultiplier), mulch, 2);
+			}
+			Fluid juice = Fluids.JUICE.getFluid();
+			if(juice != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.LEMON.getStack(), new FluidStack(juice,juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
+				RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PLUM.getStack(), new FluidStack(juice, (int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
+				RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.PAPAYA.getStack(), new FluidStack(juice, juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
+				RecipeManagers.squeezerManager.addRecipe(10, EnumFruit.DATES.getStack(), new FluidStack(juice, (int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
+			}
 			RecipeUtil.addFermenterRecipes(new ItemStack(items.sapling, 1, OreDictionary.WILDCARD_VALUE), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
