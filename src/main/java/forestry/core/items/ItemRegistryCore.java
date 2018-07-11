@@ -18,6 +18,8 @@ import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -189,7 +191,9 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		// / BEE RESOURCES
 		beeswax = registerItem(new ItemForestry(), "beeswax");
-		beeswax.setCreativeTab(Tabs.tabApiculture);
+		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			beeswax.setCreativeTab(Tabs.tabApiculture);
+		}
 		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 
 		refractoryWax = registerItem(new ItemForestry(), "refractory_wax");

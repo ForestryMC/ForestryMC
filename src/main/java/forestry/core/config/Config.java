@@ -215,9 +215,9 @@ public class Config {
 
 	public static boolean isValidTreeBiome(Biome biome) {
 		if (blacklistedTreeBiomes.contains(biome)) {
-			return true;
+			return false;
 		}
-		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
+		return !BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
 	}
 
 	public static void load(Side side) {

@@ -66,7 +66,6 @@ dependencies {
 	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfCompile "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
-	runtime "com.mod-buildcraft:buildcraft:${buildcraft_version}"
 }
 
 configurations {

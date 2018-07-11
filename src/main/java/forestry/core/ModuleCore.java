@@ -85,12 +85,12 @@ public class ModuleCore extends BlankForestryModule {
 	private static BlockRegistryCore blocks;
 
 	public static ItemRegistryCore getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryCore getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -245,7 +245,6 @@ public class ModuleCore extends BlankForestryModule {
 		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.COPPER, 1), items.ingotCopper, 0.5f);
 		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.TIN, 1), items.ingotTin, 0.5f);
 		RecipeUtil.addSmelting(new ItemStack(items.peat), items.ash, 0.0f);
-
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
@@ -267,7 +266,6 @@ public class ModuleCore extends BlankForestryModule {
 		} else {
 			//TODO - config conditions here (like everything else)
 		}
-
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(

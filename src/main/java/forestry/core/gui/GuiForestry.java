@@ -187,11 +187,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (keyCode == 1 || (keyCode == this.mc.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
-			this.mc.displayGuiScreen(null);
-
-			if (this.mc.currentScreen == null) {
-				this.mc.setIngameFocus();
-			}
+			this.mc.player.closeScreen();
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
