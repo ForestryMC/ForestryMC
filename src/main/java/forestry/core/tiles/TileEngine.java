@@ -10,19 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.common.capabilities.Capability;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.IErrorLogic;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -34,6 +21,16 @@ import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
@@ -303,15 +300,17 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+		return (facing == getFacing() && energyManager.hasCapability(capability)) || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
-			return energyCapability;
+		if (facing == getFacing()) {
+			T energyCapability = energyManager.getCapability(capability);
+			if (energyCapability != null) {
+				return energyCapability;
+			}
 		}
 		return super.getCapability(capability, facing);
 	}

@@ -11,8 +11,10 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISimpleFarmLogic;
 import forestry.farming.logic.FakeFarmProperties;
+import forestry.farming.logic.farmables.FarmableInfo;
 
 public class DummyFarmRegistry implements IFarmRegistry {
 
@@ -30,6 +32,11 @@ public class DummyFarmRegistry implements IFarmRegistry {
 	public Collection<IFarmable> getFarmables(String identifier) {
 		//Dummy-Implementation
 		return Collections.emptyList();
+	}
+
+	@Override
+	public IFarmableInfo getFarmableInfo(String identifier) {
+		return new FarmableInfo(identifier);
 	}
 
 	@Override

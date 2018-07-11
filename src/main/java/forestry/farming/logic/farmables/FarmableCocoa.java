@@ -27,7 +27,7 @@ public class FarmableCocoa extends FarmableAgingCrop {
 	public static final int COCOA_META = 3;
 
 	public FarmableCocoa() {
-		super(new ItemStack(COCOA_SEED, 1, COCOA_META), Blocks.COCOA, BlockCocoa.AGE, 2, null);
+		super(new ItemStack(COCOA_SEED, 1, COCOA_META), Blocks.COCOA, new ItemStack(COCOA_SEED, 1, COCOA_META), BlockCocoa.AGE, 2, null);
 	}
 
 	@Override

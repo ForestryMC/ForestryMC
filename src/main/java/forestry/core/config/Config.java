@@ -66,10 +66,10 @@ public class Config {
 	// Graphics
 	public static boolean enableParticleFX = true;
 
-	//Humus
+	// Humus
 	public static int humusDegradeDelimiter = 3;
 
-	//Greenhouse
+	// Greenhouse
 	public static int climateSourceRange = 36;
 	public static float climateSourceEnergyModifier = 1.5F;
 	public static int greenhouseSize = 4;
@@ -143,6 +143,12 @@ public class Config {
 	public static final LinkedListMultimap<String, String> hints = LinkedListMultimap.create();
 	public static boolean enableEnergyStat = true;
 
+	// Energy
+	public static boolean enableRF = true;
+	public static boolean enableMJ = true;
+	public static boolean enableTesla = true;
+	public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
+
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
 	}
@@ -207,14 +213,14 @@ public class Config {
 
 	public static boolean isValidTreeBiome(Biome biome) {
 		if (blacklistedTreeBiomes.contains(biome)) {
-			return true;
+			return false;
 		}
-		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
+		return !BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
 	}
 
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.0");
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.1");
 		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
@@ -248,13 +254,13 @@ public class Config {
 			// Make sure the default mode files are there.
 
 			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
-			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
+			copyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
 
 			File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
-			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
+			copyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
 
 			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
-			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
+			copyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
 		}
 
 		// RetroGen
@@ -377,6 +383,13 @@ public class Config {
 
 		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
 
+		enableRF = configCommon.getBooleanLocalized("power.types", "rf", true);
+		enableMJ = configCommon.getBooleanLocalized("power.types", "mj", true);
+		enableTesla = configCommon.getBooleanLocalized("power.types", "tesla", true);
+
+		energyDisplayMode = configCommon.getEnumLocalized("power.display", "mode", EnergyDisplayMode.RF, EnergyDisplayMode.values());
+
+
 		configCommon.save();
 	}
 
@@ -402,7 +415,7 @@ public class Config {
 		configFluid.save();
 	}
 
-	private static void CopyFileToFS(File destination, String resourcePath) {
+	private static void copyFileToFS(File destination, String resourcePath) {
 		InputStream stream = Config.class.getResourceAsStream(resourcePath);
 		OutputStream outstream;
 		int readBytes;

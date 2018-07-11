@@ -27,6 +27,7 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.ItemStackUtil;
@@ -35,12 +36,14 @@ import forestry.core.utils.Translator;
 import forestry.farming.logic.FakeFarmProperties;
 import forestry.farming.logic.FarmLogicSimple;
 import forestry.farming.logic.FarmProperties;
+import forestry.farming.logic.farmables.FarmableInfo;
 
 public final class FarmRegistry implements IFarmRegistry {
 
 	private static final FarmRegistry INSTANCE = new FarmRegistry();
 
 	private final Multimap<String, IFarmable> farmables = HashMultimap.create();
+	private final Map<String, IFarmableInfo> farmableInfo = new LinkedHashMap<>();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
 	private final Map<String, IFarmProperties> farmInstances = new HashMap<>();
 	private FertilizerConfig fertilizer = FertilizerConfig.DUMMY;
@@ -56,12 +59,21 @@ public final class FarmRegistry implements IFarmRegistry {
 
 	@Override
 	public void registerFarmables(String identifier, IFarmable... farmablesArray) {
+		IFarmableInfo info = getFarmableInfo(identifier);
+		for(IFarmable farmable : farmablesArray){
+			farmable.addInformation(info);
+		}
 		farmables.putAll(identifier, Arrays.asList(farmablesArray));
 	}
 
 	@Override
 	public Collection<IFarmable> getFarmables(String identifier) {
 		return farmables.get(identifier);
+	}
+
+	@Override
+	public IFarmableInfo getFarmableInfo(String identifier) {
+		return farmableInfo.computeIfAbsent(identifier, FarmableInfo::new);
 	}
 
 	@Override
@@ -97,7 +109,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	public IFarmProperties registerLogic(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
 		Set<String> identifiers = new HashSet<>(Arrays.asList(farmablesIdentifiers));
 		identifiers.add(identifier);
-		IFarmProperties instance = new FarmProperties(logicFactory, identifiers);
+		IFarmProperties instance = new FarmProperties(logicFactory, identifiers, identifier);
 		farmInstances.put(identifier, instance);
 		return instance;
 	}

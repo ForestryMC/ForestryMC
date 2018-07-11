@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISoil;
 
 public class FakeFarmProperties implements IFarmProperties {
@@ -24,6 +25,26 @@ public class FakeFarmProperties implements IFarmProperties {
 
 	@Override
 	public void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+	}
+
+	@Override
+	public void addGermlings(ItemStack... germlings) {
+
+	}
+
+	@Override
+	public void addGermlings(Collection<ItemStack> germlings) {
+
+	}
+
+	@Override
+	public void addProducts(Collection<ItemStack> products) {
+
+	}
+
+	@Override
+	public void addProducts(ItemStack... products) {
+
 	}
 
 	@Override
@@ -43,6 +64,11 @@ public class FakeFarmProperties implements IFarmProperties {
 
 	@Override
 	public Collection<IFarmable> getFarmables() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public Collection<IFarmableInfo> getFarmableInfo() {
 		return Collections.emptySet();
 	}
 

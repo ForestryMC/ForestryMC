@@ -13,14 +13,6 @@ package forestry.apiculture;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlowerPot;
 import net.minecraft.block.properties.PropertyEnum;
@@ -42,7 +34,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
-
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,15 +41,22 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.IForgeRegistry;
-
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -109,6 +107,7 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
@@ -127,6 +126,7 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
@@ -158,6 +158,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int ticksPerBeeWorkCycle = 550;
 
 	public static boolean hivesDamageOnPeaceful = false;
+
+	public static boolean hivesDamageUnderwater = true;
 
 	public static boolean doSelfPollination = true;
 
@@ -244,11 +246,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 	}
 
-	// TODO: Buildcraft for 1.9
-	//	@Override
-	//	public void registerTriggers() {
-	//		ApicultureTriggers.initialize();
-	//	}
+	@Override
+	public void registerTriggers() {
+		ApicultureTriggers.initialize();
+	}
 
 	@Override
 	public void doInit() {
@@ -282,7 +283,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
 
-		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping", "hivedamage.peaceful", false);
+		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping.hivedamage", "peaceful", hivesDamageOnPeaceful);
+
+		hivesDamageUnderwater = config.getBooleanLocalized("beekeeping.hivedamage", "underwater", hivesDamageUnderwater);
 
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
@@ -302,15 +305,15 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Inducers for swarmer
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
 
-		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
-		GameRegistry.registerTileEntity(TileHive.class, "forestry.Swarm");
-		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
-		GameRegistry.registerTileEntity(TileAlvearyHeater.class, "forestry.AlvearyHeater");
-		GameRegistry.registerTileEntity(TileAlvearyFan.class, "forestry.AlvearyFan");
-		GameRegistry.registerTileEntity(TileAlvearyHygroregulator.class, "forestry.AlvearyHygro");
-		GameRegistry.registerTileEntity(TileAlvearyStabiliser.class, "forestry.AlvearyStabiliser");
-		GameRegistry.registerTileEntity(TileAlvearySieve.class, "forestry.AlvearySieve");
-		GameRegistry.registerTileEntity(TileCandle.class, "forestry.Candle");
+		TileUtil.registerTile(TileAlvearyPlain.class, "alveary_plain");
+		TileUtil.registerTile(TileHive.class, "hive_wild");
+		TileUtil.registerTile(TileAlvearySwarmer.class, "alveary_swarmer");
+		TileUtil.registerTile(TileAlvearyHeater.class, "alveary_heater");
+		TileUtil.registerTile(TileAlvearyFan.class, "alveary_fan");
+		TileUtil.registerTile(TileAlvearyHygroregulator.class, "alveary_hygro");
+		TileUtil.registerTile(TileAlvearyStabiliser.class, "alveary_stabiliser");
+		TileUtil.registerTile(TileAlvearySieve.class, "alveary_sieve");
+		TileUtil.registerTile(TileCandle.class, "candle");
 
 		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");
 		EntityUtil.registerEntity(beeHouseCartResource, EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);

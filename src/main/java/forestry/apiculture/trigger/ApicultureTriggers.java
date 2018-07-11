@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-// TODO: Buildcraft for 1.9
+import forestry.core.triggers.Trigger;
+
 public class ApicultureTriggers {
-//	public static Trigger noFrames;
-//	public static Trigger missingQueen;
-//	public static Trigger missingDrone;
-//
-//	public static void initialize() {
-//		noFrames = new TriggerNoFrames();
-//
-//		missingQueen = new TriggerMissingQueen();
-//		missingDrone = new TriggerMissingDrone();
-//	}
+	public static Trigger noFrames;
+	public static Trigger missingQueen;
+	public static Trigger missingDrone;
+
+	public static void initialize() {
+		noFrames = new TriggerNoFrames();
+
+		missingQueen = new TriggerMissingQueen();
+		missingDrone = new TriggerMissingDrone();
+	}
 }

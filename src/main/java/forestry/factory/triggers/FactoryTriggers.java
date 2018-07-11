@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.factory.triggers;
 
+import forestry.core.triggers.Trigger;
+
 public class FactoryTriggers {
-//	public static Trigger lowResource25;
-//	public static Trigger lowResource10;
-//	public static Trigger lowFuel25;
-//	public static Trigger lowFuel10;
-//
-//	public static void initialize() {
-//		lowResource25 = new TriggerLowResource("lowResources.25", 0.25f);
-//		lowResource10 = new TriggerLowResource("lowResources.10", 0.1f);
-//		lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f);
-//		lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f);
-//	}
+	public static Trigger lowResource25;
+	public static Trigger lowResource10;
+	public static Trigger lowFuel25;
+	public static Trigger lowFuel10;
+
+	public static void initialize() {
+		lowResource25 = new TriggerLowResource("lowResources.25", 0.25f);
+		lowResource10 = new TriggerLowResource("lowResources.10", 0.1f);
+		lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f);
+		lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f);
+	}
 }

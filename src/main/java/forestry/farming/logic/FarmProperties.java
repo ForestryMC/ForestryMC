@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISoil;
 import forestry.farming.FarmRegistry;
 
@@ -22,14 +23,17 @@ public final class FarmProperties implements IFarmProperties {
 	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
-
+	private final IFarmableInfo defaultInfo;
 	@Nullable
 	private Collection<IFarmable> farmables;
+	@Nullable
+	private Collection<IFarmableInfo> farmableInfo;
 
-	public FarmProperties(BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers) {
+	public FarmProperties(BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers, String identifier) {
 		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.manualLogic = logicFactory.apply(this, true);
 		this.managedLogic = logicFactory.apply(this, false);
+		this.defaultInfo = FarmRegistry.getInstance().getFarmableInfo(identifier);
 	}
 
 	@Override
@@ -49,6 +53,16 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
+	public Collection<IFarmableInfo> getFarmableInfo() {
+		if(farmableInfo == null){
+			farmableInfo = farmablesIdentifiers.stream()
+				.map(FarmRegistry.getInstance()::getFarmableInfo)
+				.collect(Collectors.toSet());
+		}
+		return farmableInfo;
+	}
+
+	@Override
 	public IFarmLogic getLogic(boolean manuel) {
 		return manuel ? manualLogic : managedLogic;
 	}
@@ -56,6 +70,26 @@ public final class FarmProperties implements IFarmProperties {
 	@Override
 	public void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
 		soils.add(new Soil(resource, soilState, hasMetaData));
+	}
+
+	@Override
+	public void addGermlings(ItemStack... germlings) {
+		defaultInfo.addGermlings(germlings);
+	}
+
+	@Override
+	public void addGermlings(Collection<ItemStack> germlings) {
+		defaultInfo.addGermlings(germlings);
+	}
+
+	@Override
+	public void addProducts(ItemStack... products) {
+		defaultInfo.addProducts(products);
+	}
+
+	@Override
+	public void addProducts(Collection<ItemStack> products) {
+		defaultInfo.addProducts(products);
 	}
 
 	@Override

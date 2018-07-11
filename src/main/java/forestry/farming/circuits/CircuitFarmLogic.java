@@ -13,12 +13,13 @@ package forestry.farming.circuits;
 import javax.annotation.Nullable;
 
 import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmCircuit;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.circuits.Circuit;
 
-public class CircuitFarmLogic extends Circuit {
+public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 
 	private final IFarmLogic logic;
 	private boolean isManual = false;
@@ -44,10 +45,7 @@ public class CircuitFarmLogic extends Circuit {
 		return logic.getName();
 	}
 
-	/**
-	 * @deprecated TODO: Remove this method in 1.13
-	 */
-	@Deprecated
+	@Override
 	public IFarmLogic getFarmLogic() {
 		return logic;
 	}

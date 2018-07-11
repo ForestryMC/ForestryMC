@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
 
@@ -26,9 +27,15 @@ public class FarmableStacked implements IFarmable {
 	protected final ItemStack germling;
 	protected final Block cropBlock;
 	protected final int matureHeight;
+	protected final ItemStack fruit;
 
 	public FarmableStacked(ItemStack germling, Block cropBlock, int matureHeight) {
+		this(germling, germling, cropBlock, matureHeight);
+	}
+
+	public FarmableStacked(ItemStack germling, ItemStack fruit, Block cropBlock, int matureHeight) {
 		this.germling = germling;
+		this.fruit = fruit;
 		this.cropBlock = cropBlock;
 		this.matureHeight = matureHeight;
 	}
@@ -52,6 +59,12 @@ public class FarmableStacked implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		return ItemStack.areItemsEqual(germling, itemstack);
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addGermlings(germling);
+		info.addProducts(fruit);
 	}
 
 	@Override

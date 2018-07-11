@@ -14,11 +14,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.gui.GuiHandler;
+
+import javax.annotation.Nonnull;
 
 public abstract class TileBase extends TileForestry {
 
@@ -41,4 +44,10 @@ public abstract class TileBase extends TileForestry {
 		Block newBlock = newState.getBlock();
 		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
 	}
+
+	@Nonnull
+	public EnumFacing getFacing() {
+		return getWorld().getBlockState(getPos()).getValue(BlockBase.FACING);
+	}
+
 }

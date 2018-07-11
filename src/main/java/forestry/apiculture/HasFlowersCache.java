@@ -50,7 +50,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 
 	@Nullable
 	private FlowerData flowerData;
-	private final List<BlockPos> flowerCoords = new ArrayList<>();
+	private final ArrayList<BlockPos> flowerCoords = new ArrayList<>();
 	private final List<IBlockState> flowers = new ArrayList<>();
 
 	private boolean needsSync = false;
@@ -176,13 +176,17 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		}
 
 		NBTTagCompound hasFlowerCacheNBT = nbttagcompound.getCompoundTag(NBT_KEY);
-
+		flowerCoords.clear();
 		if (hasFlowerCacheNBT.hasKey(NBT_KEY_FLOWERS)) {
 			int[] flowersList = hasFlowerCacheNBT.getIntArray(NBT_KEY_FLOWERS);
 			if (flowersList.length % 3 == 0) {
 				int flowerCount = flowersList.length / 3;
+
+				flowerCoords.ensureCapacity(flowerCount);
+
 				for (int i = 0; i < flowerCount; i++) {
-					BlockPos flowerPos = new BlockPos(flowersList[i], flowersList[i + 1], flowersList[i + 2]);
+					int index = i * 3;
+					BlockPos flowerPos = new BlockPos(flowersList[index], flowersList[index + 1], flowersList[index + 2]);
 					flowerCoords.add(flowerPos);
 				}
 				needsSync = true;

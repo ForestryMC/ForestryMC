@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import forestry.core.config.Config;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
@@ -41,18 +42,18 @@ public class PowerLedger extends Ledger {
 		drawHeader(Translator.translateToLocal("for.gui.energy"), xHeader, y + 8);
 
 		drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', xBody, y + 20);
-		drawText(energyManager.getEnergyStored() + " RF", xBody, y + 32);
+		drawText(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()), xBody, y + 32);
 
 		drawSubheader(Translator.translateToLocal("for.gui.maxenergy") + ':', xBody, y + 44);
-		drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
+		drawText(Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyStored()), xBody, y + 56);
 
 		drawSubheader(Translator.translateToLocal("for.gui.maxenergyreceive") + ':', xBody, y + 68);
-		drawText(energyManager.getMaxEnergyReceived() + " RF", xBody, y + 80);
+		drawText(Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyReceived()), xBody, y + 80);
 	}
 
 	@Override
 	public String getTooltip() {
-		return energyManager.getEnergyStored() + " RF";
+		return Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored());
 	}
 
 }

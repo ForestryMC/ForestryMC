@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.commands;
 
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SubCommand;
-import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.text.TextComponentTranslation;
+
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SubCommand;
+import forestry.lepidopterology.entities.EntityButterfly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -42,12 +44,13 @@ public class CommandButterfly extends SubCommand {
 			if (args.length > 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
-
+			int killCount = 0;
 			for (EntityButterfly butterfly : sender.getEntityWorld().getEntities(EntityButterfly.class, EntitySelectors.IS_ALIVE)) {
 				butterfly.setDead();
+				killCount++;
 			}
+			sender.sendMessage(new TextComponentTranslation("for.chat.command.forestry.butterfly.kill.response", killCount));
 		}
-
 	}
 
 }

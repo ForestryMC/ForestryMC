@@ -48,6 +48,8 @@ public interface IFarmRegistry {
 	void registerFarmables(String identifier, IFarmable... farmable);
 	
 	Collection<IFarmable> getFarmables(String identifier);
+
+	IFarmableInfo getFarmableInfo(String identifier);
 	
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.

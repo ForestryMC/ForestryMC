@@ -10,62 +10,81 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-// TODO: buildcraft for 1.9
-public abstract class Trigger {//implements ITriggerExternal {
+import buildcraft.api.core.render.ISprite;
+import buildcraft.api.statements.IStatement;
+import buildcraft.api.statements.IStatementParameter;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.StatementManager;
+import forestry.core.config.Constants;
+import forestry.core.utils.Translator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-//	private final String uid;
-//	private final String localization;
+import javax.annotation.Nullable;
 
-//	protected Trigger(String uid) {
-//		this(uid, uid);
-//	}
-//
-//	protected Trigger(String uid, String localization) {
-//		this.uid = "forestry:" + uid;
-//		this.localization = localization;
-//		StatementManager.registerStatement(this);
-//	}
-//
-//	@Override
-//	public String getUniqueTag() {
-//		return uid;
-//	}
-//
-//	@Override
-//	public String getDescription() {
-//		return Translator.translateToLocal("for.trigger." + localization);
-//	}
-//
-//	@Override
-//	public IStatementParameter createParameter(int index) {
-//		return null;
-//	}
-//
-//	@Override
-//	public int maxParameters() {
-//		return 0;
-//	}
-//
-//	@Override
-//	public int minParameters() {
-//		return 0;
-//	}
-//
-//	@SideOnly(Side.CLIENT)
-//	private TextureAtlasSprite icon;
-//
-//	@SideOnly(Side.CLIENT)
-//	public void registerSprites() {
-//		icon = TextureManager.registerSprite("triggers/" + localization);
-//	}
-//
-//	@Override
-//	public TextureAtlasSprite getGuiSprite() {
-//		return icon;
-//	}
-//
-//	@Override
-//	public IStatement rotateLeft() {
-//		return this;
-//	}
+public abstract class Trigger implements ITriggerExternal {
+
+	private final String uid;
+	private final String localization;
+	private final String textureName;
+
+	protected Trigger(String uid, String textureName) {
+		this(uid, uid, textureName);
+	}
+
+	protected Trigger(String uid, String localization, String textureName) {
+		this.uid = "forestry:" + uid;
+		this.localization = localization;
+		this.textureName = textureName;
+		StatementManager.registerStatement(this);
+	}
+
+	@Override
+	public String getUniqueTag() {
+		return uid;
+	}
+
+	@Override
+	public String getDescription() {
+		return Translator.translateToLocal("for.trigger." + localization);
+	}
+
+	@Override
+	public IStatementParameter createParameter(int index) {
+		return null;
+	}
+
+	@Override
+	public int maxParameters() {
+		return 0;
+	}
+
+	@Override
+	public int minParameters() {
+		return 0;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	private ISprite icon;
+
+	@Nullable
+	@Override
+	public ISprite getSprite() {
+		if (icon == null) {
+			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
+		}
+		return icon;
+	}
+
+	@Override
+	public IStatement rotateLeft() {
+		return this;
+	}
+
+	@Override
+	public IStatement[] getPossible() {
+		return new IStatement[0];
+	}
 }

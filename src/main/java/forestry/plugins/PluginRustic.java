@@ -73,7 +73,7 @@ public class PluginRustic extends CompatPlugin {
 				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount / 25));
 			}
 			if (seeds != null && block != null) {
-				farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableAgingCrop(seeds, block, cropAge, 3, 2));
+				farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableAgingCrop(seeds, block, fruit, cropAge, 3, 2));
 			}
 		}
 	}

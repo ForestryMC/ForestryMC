@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.gui;
 
+import forestry.core.config.Config;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.render.TextureManagerForestry;
@@ -41,7 +42,7 @@ public class GreenhouseEnergyLedger extends Ledger {
 		drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
 		drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 20);
-		drawText(controller.getEnergyManager().getEnergyStored() + " RF", x + 22, y + 32);
+		drawText(Config.energyDisplayMode.formatEnergyValue(controller.getEnergyManager().getEnergyStored()), x + 22, y + 32);
 	}
 
 	@Override
