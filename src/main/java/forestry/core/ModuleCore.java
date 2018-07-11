@@ -88,12 +88,12 @@ public class ModuleCore extends BlankForestryModule {
 	private static BlockRegistryCore blocks;
 
 	public static ItemRegistryCore getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryCore getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -260,10 +260,23 @@ public class ModuleCore extends BlankForestryModule {
 		/* STURDY MACHINE */
 		RecipeUtil.addRecipe("sturdy_casing", items.sturdyCasing, "###", "# #", "###", '#', OreDictUtil.INGOT_BRONZE);
 
-		// / EMPTY CANS
+		// / CONTAINERS
 		int canAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.can");
 		ItemStack canOutput = fluidItems.canEmpty.getItemStack(canAmount);
 		RecipeUtil.addRecipe("tin_can", canOutput, " # ", "# #", '#', OreDictUtil.INGOT_TIN);
+
+		// / CAPSULES
+		int outputCapsuleAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule");
+		if (outputCapsuleAmount > 0) {
+			ItemStack capsule = fluidItems.waxCapsuleEmpty.getItemStack(outputCapsuleAmount);
+			RecipeUtil.addRecipe("wax_capsule", capsule, "###", '#', items.beeswax);
+		}
+
+		int outputRefractoryAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.refractory");
+		if (outputRefractoryAmount > 0) {
+			ItemStack capsule = fluidItems.refractoryEmpty.getItemStack(outputRefractoryAmount);
+			RecipeUtil.addRecipe("refractory_capsule", capsule, "###", '#', items.refractoryWax);
+		}
 
 		// / GEARS
 		List<ItemStack> stoneGear = OreDictionary.getOres(OreDictUtil.GEAR_STONE);
@@ -288,7 +301,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		// / WRENCH
 		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-		
+
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
@@ -433,22 +446,22 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)){
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 
 		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
-			"A#A",
-			"# #",
-			"A#A",
-			'#', Items.BRICK,
-			'A', OreDictUtil.DUST_ASH);
+				"A#A",
+				"# #",
+				"A#A",
+				'#', Items.BRICK,
+				'A', OreDictUtil.DUST_ASH);
 		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
-			true,
-			"#  ",
-			"## ",
-			"###",
-			'#', Items.BRICK);
+				true,
+				"#  ",
+				"## ",
+				"###",
+				'#', Items.BRICK);
 
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
@@ -467,14 +480,14 @@ public class ModuleCore extends BlankForestryModule {
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("blacklist-ores-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistOreDim(dim);
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
