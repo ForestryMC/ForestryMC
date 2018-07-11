@@ -82,7 +82,7 @@ public class ModuleFactory extends BlankForestryModule {
 	private static BlockRegistryFactory blocks;
 
 	public static BlockRegistryFactory getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

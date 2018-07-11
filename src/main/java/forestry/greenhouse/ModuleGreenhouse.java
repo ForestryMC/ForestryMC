@@ -87,12 +87,12 @@ public class ModuleGreenhouse extends BlankForestryModule {
 	private static ItemRegistryGreenhouse items;
 
 	public static BlockRegistryGreenhouse getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
 	public static ItemRegistryGreenhouse getItems() {
-		Preconditions.checkArgument(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 

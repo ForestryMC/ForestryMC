@@ -118,7 +118,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	@Override
 	public boolean workCycle() {
-		Preconditions.checkState(currentRecipe != null);
+		Preconditions.checkNotNull(currentRecipe);
 		int cycles = currentRecipe.getCyclesPerUnit();
 		FluidStack output = currentRecipe.getOutput();
 

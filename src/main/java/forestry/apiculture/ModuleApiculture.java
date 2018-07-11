@@ -168,23 +168,23 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static VillagerRegistry.VillagerProfession villagerApiarist;
 
 	public static ItemRegistryApiculture getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryApiculture getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
 	public static HiveRegistry getHiveRegistry() {
-		Preconditions.checkState(hiveRegistry != null);
+		Preconditions.checkNotNull(hiveRegistry);
 		return hiveRegistry;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static TextureAtlasSprite getBeeSprite() {
-		Preconditions.checkState(beeSprite != null, "Bee sprite has not been registered");
+		Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
 		return beeSprite;
 	}
 

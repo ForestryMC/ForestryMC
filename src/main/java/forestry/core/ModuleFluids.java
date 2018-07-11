@@ -65,7 +65,7 @@ public class ModuleFluids extends BlankForestryModule {
 
 	private static void createBlock(Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
-		Preconditions.checkState(fluid != null);
+		Preconditions.checkNotNull(fluid);
 		Block fluidBlock = fluid.getBlock();
 
 		if (Config.isBlockEnabled(forestryFluid.getTag())) {
@@ -96,7 +96,7 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	public static ItemRegistryFluids getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
