@@ -5,12 +5,9 @@
 death.engine.clockwork.player=%1$s подвергся нападению со стороны свободной пружины. %2$s был небрежным часовщиком.
 death.engine.clockwork=%1$s подвергся нападению со стороны свободной пружины.
 
-for.beverage.effect.alcoholic=Спиртное
-for.beverage.effect.antidote=Противоядие
-
 for.chat.cannotmemorizeagain=Вы уже запомнили эту информацию.
-for.chat.memorizednote=Вы запоминаете записку и избавляетесь от смятого клочка бумаги.
-for.chat.memorizednote2=Вы уверены, что сможете скрестить %1$s с %2$s и получить %3$s!
+for.chat.memorizednote=Вы запоминаете записку и избавляетесь от мятого клочка бумаги.
+for.chat.memorizednote2=Вы уверены, что сможете спарить %1$s с %2$s и получить %3$s!
 
 for.chat.command.aliases=Замены: %s
 for.chat.command.list=Доступные подкоманды:
@@ -33,7 +30,7 @@ for.chat.command.forestry.modules.info.help=Показывает информа�
 for.chat.command.forestry.modules.info.format=Формат: /%s <module-name>
 
 for.chat.help=Напишите '%s' для помощи.
-for.chat.modules.error=Информация о модуле %s не найдена.
+for.chat.modules.error=Нет информации для модуля %s.
 for.chat.version=Forestry %1$s для Minecraft %2$s (Последняя: %3$s).
 
 for.circuit.dampener.1=Демпфер огня
@@ -57,15 +54,15 @@ for.circuit.machine.speed.boost.2=Повышение скорости II
 for.circuit.machine.speed.boost.2.description.1=Повышает скорость на 25%
 for.circuit.machine.speed.boost.2.description.2=Повышает потребление энергии на 10%
 for.circuit.machine.efficiency.1=Повышение эффективности
-for.circuit.machine.efficiency.1.description.1=Снижает потребление энергии на 10%
+for.circuit.machine.efficiency.1.description.1=Снижает потребление на 10%
 for.circuit.climatiser.temperature.1=Повышение температуры I
-for.circuit.climatiser.temperature.1.description.1=Increases Range and Change by 12.5%
+for.circuit.climatiser.temperature.1.description.1=Увеличивает дальность и изменяет на 12.5%
 for.circuit.climatiser.temperature.2=Повышение температуры II
-for.circuit.climatiser.temperature.2.description.1=Increases Range and Change by 25%
+for.circuit.climatiser.temperature.2.description.1=Увеличивает дальность и изменяет на 25%
 for.circuit.climatiser.humidity.1=Повышение влажности I
-for.circuit.climatiser.humidity.1.description.1=Increases Range and Change by 12.5%
+for.circuit.climatiser.humidity.1.description.1=Увеличивает дальность и изменяет на 12.5%
 for.circuit.climatiser.humidity.2=Повышение влажности II
-for.circuit.climatiser.humidity.2.description.1=Increases Range and Change by 25%
+for.circuit.climatiser.humidity.2.description.1=Увеличивает дальность и изменяет на 25%
 
 for.circuit.layout.dummy.name=Не доступен
 for.circuit.layout.dummy.usage=Ничего
@@ -80,10 +77,10 @@ for.circuit.layout.farms.manual.name=Ручная ферма
 for.circuit.layout.farms.manual.usage=Ручные фермы
 
 for.circuit.layout.machine.upgrade.name=Улучшение механизма
-for.circuit.layout.machine.upgrade.usage=Механизмы с разъёмами
+for.circuit.layout.machine.upgrade.usage=Сокетные машины
 
-for.circuit.layout.greenhouse.climatiser.name=Акклиматизатор
-for.circuit.layout.greenhouse.climatiser.usage=Акклиматизаторы
+for.circuit.layout.greenhouse.climatiser.name=Климат контроль
+for.circuit.layout.greenhouse.climatiser.usage=Климат контроль
 
 for.flowers.cacti=Кактусы
 for.flowers.end=Край
@@ -130,8 +127,8 @@ for.gui.area=Территория
 for.gui.arid=Сухая
 for.gui.beach=Пляж
 
-for.gui.portablealyzer=Переносной генетический анализатор
-for.gui.portablealyzer.help=Положите пчелу, саженец, бабочку и добавьте мёда или нектара.
+for.gui.portablealyzer=Портативный генетический анализатор
+for.gui.portablealyzer.help=Поставьте пчелу, дерево, бабочку или другое лицо и поставьте мед или медвяную росу в виде пустышки.
 
 for.gui.beealyzer.artificial=Искусственного происх.
 for.gui.beealyzer.behaviour=Поведение
@@ -139,15 +136,15 @@ for.gui.beealyzer.generations=Поколений в неволе: %s
 for.gui.beealyzer.mutations=Возможные мутации
 for.gui.beealyzer.natural=Естественного происх.
 for.gui.beealyzer.produce=Возможная продукция
-for.gui.beealyzer.specialty=Особая продукция
+for.gui.beealyzer.specialty=Возможная специальная продукция
 
 for.gui.database.tab.active_species.name=Активные виды
 for.gui.database.tab.inactive_species.name=Неактивные виды
 for.gui.database.tab.products.name=Продукты
 for.gui.database.tab.mutations.name=Мутации
 for.gui.database.mutations.further=Дальнейшие мутации
-for.gui.database.mutations.resultant=Мутации в результате
-for.gui.database.support=Данный образец не числится в базе данных.
+for.gui.database.mutations.resultant=Результирующие мутации
+for.gui.database.support=Этот человек в настоящее время не имеет интеграции на базе.
 
 for.gui.blank=Пусто
 for.gui.cave=Пещерная
@@ -159,19 +156,19 @@ for.gui.currentOutput=Текущая мощность
 for.gui.damp=Сырая
 for.gui.derelict=Покинут
 for.gui.desert=Пустыня
-for.gui.didyouknow=А Вы знали...
+for.gui.didyouknow=А Вы знаете
 for.gui.diurnal=Дневная
 for.gui.drones=Трутней
 for.gui.effect=Эффект
 for.gui.empty=Пусто
-for.gui.emptysocket=Пустой разъём
-for.gui.empty.slot.camouflage.multiblock=Слот мульти-блок маскировки
-for.gui.empty.slot.camouflage=Слот маскировки
+for.gui.emptysocket=Разъём для печатной платы
+for.gui.empty.slot.camouflage.multiblock=Мультиблочный камуфляжный слот
+for.gui.empty.slot.camouflage=Камуфляжный слот
 for.gui.socket.remove=Можно снять паяльником
 for.gui.energy=Энергия
 for.gui.environment=Среда
 for.gui.evolution=Эволюция
-for.gui.fecundated=Скрещенный
+for.gui.fecundated=Соединяемый
 for.gui.fertility=Плодовитость
 for.gui.fireresist=Огнеупорность
 for.gui.flowers=Вид цветка
@@ -193,29 +190,29 @@ for.gui.lifespan=Срок жизни
 for.gui.normal=Обычная
 
 for.gui.escritoire.probe=Изучить образцы
-for.gui.escritoire.instructions=Чтобы начать, положите генетический образец в центр. Положите ещё несколько в левые слоты и изучите их.
+for.gui.escritoire.instructions=Положите генетический образец в центр, чтобы начать. Также положите несколько в левые слоты и изучите их для помощи.
 for.gui.escritoire.attempt.number=Попытка №%s
 
-for.gui.escritoire.notes.level1.1=Я нашёл любопытный образец во время путешествий.
+for.gui.escritoire.notes.level1.1=Я нашёл любопытный образец во время путешествия.
 for.gui.escritoire.notes.level1.2=Этот странный малый нуждается в дальнейшем исследовании.
 for.gui.escritoire.notes.level1.3=Ликуя, я решил сразу начать с моего исследования.
 
-for.gui.escritoire.notes.level2.1=Я был поражён дивной натурой данного образца.
-for.gui.escritoire.notes.level2.2=Образец дёрнулся во время детального осмотра.
-for.gui.escritoire.notes.level2.3=Странные знаки в нижней части удивили меня.
-for.gui.escritoire.notes.level2.4=Об этом будет говорить общество, когда я закончу исследование.
+for.gui.escritoire.notes.level2.1=Я был поражён дивной натурой этого образца.
+for.gui.escritoire.notes.level2.2=Образец дёрнулся, когда я осматривал его более внимательно.
+for.gui.escritoire.notes.level2.3=Странные знаки на нижней части удивили меня.
+for.gui.escritoire.notes.level2.4=Об этом будут говорить в обществе, когда я закончу исследование.
 
-for.gui.escritoire.notes.level3.1=После некоторых размышлений, я обнаружил новое интересное направление.
-for.gui.escritoire.notes.level3.2=Я почесал голову и подверг всё открытие сомнению.
-for.gui.escritoire.notes.level3.3=Я думал, что мои глаза меня обманывают, но не тут-то было.
+for.gui.escritoire.notes.level3.1=После некоторых мыслей, я обнаружил новое интересное направление.
+for.gui.escritoire.notes.level3.2=Я почесал голову над этим открытием и подверг всё сомнению.
+for.gui.escritoire.notes.level3.3=Я думал, что мои глаза обманывают меня, но не тут-то было.
 for.gui.escritoire.notes.level3.4=Ранее недоступная точка привела меня к вопросу о классификации образца.
 
-for.gui.escritoire.notes.level4.1=Мои крики вынудили домработницу заглянуть в мой кабинет.
+for.gui.escritoire.notes.level4.1=Мои крики разочарования заставили домработника заглянуть в мой кабинет от беспокойства.
 for.gui.escritoire.notes.level4.2=В безумии и на грани отчаяния, я разорвал все заметки!
 for.gui.escritoire.notes.level4.3=Это... просто не имеет никакого смысла!
 for.gui.escritoire.notes.level4.4=Этого просто не может быть. Оно не делало этого раньше!
 for.gui.escritoire.notes.level4.5=Кувалда едва сделала вмятину, поэтому я отправился за пилой.
-for.gui.escritoire.notes.level4.6=Я клянусь, оно смотрит на меня, своими ужасными маленькими, похожими на бусинки, глазами.
+for.gui.escritoire.notes.level4.6=Я клянусь, оно смотрит на меня, своими ужасными, маленькими, похожими на бусинки, глазами.
 for.gui.escritoire.notes.level4.7=Оно смеётся? Я слышал смех? Кто здесь смеётся?
 
 for.gui.escritoire.notes.success.1=Эврика!
@@ -236,15 +233,15 @@ for.gui.mail.nametrader=Назовите Вашу торговую станци�
 for.gui.mail.nothing.to.trade=Торговой станции нечем торговать.
 for.gui.mail.no.trader=Торговая станция с данным именем не доступна.
 for.gui.mail.pleasesend=Пожалуйста пришлите
-for.gui.mail.order.attached=Пожалуйста заберите Ваш заказ.
+for.gui.mail.order.attached=Пожалуйста, приложите свой заказ.
 for.gui.mail.order.filled.one=1 заказ от %SENDER был заполнен.
-for.gui.mail.order.filled.multiple=Заказы (%COUNT) от %SENDER были заполнены.
+for.gui.mail.order.filled.multiple=%COUNT заказов от %SENDER были заполнены.
 for.gui.mail.to=Кому
-for.gui.mail.receive=Получение
-for.gui.mail.send=Отправление
+for.gui.mail.receive=Получать
+for.gui.mail.send=Отправлять
 
 for.gui.maxenergy=Макс. энергия
-for.gui.maxenergyreceive=Макс. входная энергия
+for.gui.maxenergyreceive=Макс. входящая энергия
 for.gui.maxspeed=Максимальная
 for.gui.metabolism=Метаболизм
 for.gui.nether=Нижний мир
@@ -252,21 +249,6 @@ for.gui.nocturnal=Ночная
 for.gui.noeffect=Нет эффекта
 for.gui.owner=Владелец
 for.gui.page=Страница
-
-for.gui.pipe.filter.anything=Всё
-for.gui.pipe.filter.bee=Любые пчелы
-for.gui.pipe.filter.cave=Пещерные
-for.gui.pipe.filter.closed=Закрыт
-for.gui.pipe.filter.drone=Трутни
-for.gui.pipe.filter.flyer=Летуны
-for.gui.pipe.filter.item=Предметы
-for.gui.pipe.filter.nocturnal=Ночные
-for.gui.pipe.filter.princess=Принцессы
-for.gui.pipe.filter.pure_breed=Чистопородные
-for.gui.pipe.filter.pure_cave=Породистые пещерные
-for.gui.pipe.filter.pure_flyer=Породистые летуны
-for.gui.pipe.filter.pure_nocturnal=Породистые ночные
-for.gui.pipe.filter.queen=Матки
 
 for.gui.plains=Равнины
 for.gui.princesses=Принцесс
@@ -281,9 +263,9 @@ for.gui.solder.west=З
 forestry.allele.true=Да
 forestry.allele.false=Нет
 
-forestry.allele.normal=Обычный
-forestry.allele.gigantic=Гигантская
 forestry.allele.average=Средний
+forestry.allele.gigantic=Гигантский
+forestry.allele.normal=Обычный
 
 forestry.allele.slowest=Самый медленный
 forestry.allele.slower=Очень медленный
@@ -291,7 +273,7 @@ forestry.allele.slow=Медленный
 forestry.allele.fast=Быстрый
 forestry.allele.faster=Очень быстрый
 forestry.allele.fastest=Быстрейший
-forestry.allele.maximum=Макс. ск.
+forestry.allele.maximum=Макс. скор.
 
 forestry.allele.smallest=Самый маленький
 forestry.allele.smaller=Очень маленький
@@ -340,55 +322,55 @@ for.gui.species=Вид
 for.gui.speciescount=Видов
 for.gui.speed=Скорость производства
 for.gui.pollination=Скорость опыления
-for.gui.stored=Запасено
+for.gui.stored=Хранится
 for.gui.temperature=Температура
 for.gui.tolerance=Устойчивость
 for.gui.temptol=Устойчивость к темп.
 for.gui.tooltip.tmi=Зажмите Shift для подробностей
-for.gui.tooltip.liquid.amount=%,d / %,d мВ
+for.gui.tooltip.liquid.amount=%,d / %,d mB
 for.gui.triple=Тройной
 for.gui.unknown=Неизвестный геном
 for.gui.warm=Жаркая
 for.gui.water=Вода
 for.gui.worker=рабочий
 
-for.gui.camouflage_spray_can=Распылитель маскировки
+for.gui.camouflage_spray_can=Камуфляжная банка спрея
 
 for.hints.apiaristsuit.desc=Полный костюм пчеловода будет защищать Вас от всех негативных эффектов пчёл.
 for.hints.apiaristsuit.tag=Костюм от пчёл!
-for.hints.beebiomes.desc=Пчёлы работают только в тех биомах, что подходят их виду. Используйте анализатор и определитель ареала для выяснения в каких именно.
+for.hints.beebiomes.desc=Пчёлы работают только в тех биомах, что подходят их виду. Используйте анализатор пчёл и определитель ареала для их выяснения.
 for.hints.beebiomes.tag=Выберите Ваш биом!
 for.hints.beebreeding.desc=Скрещивайте трутней и принцесс разных видов, чтобы получить в потомстве новые виды.
 for.hints.beebreeding.tag=Разводите Ваших пчёл!
-for.hints.beeflowers.desc=Пчелам нужны цветы. Некоторым довольно экзотичные, а некоторым не очень.
+for.hints.beeflowers.desc=Любой пчеле нужен определенный вид цветов поблизости. Некоторые виды цветов достаточно экзотичны.
 for.hints.beeflowers.tag=Пчелам нужны цветы
-for.hints.beejubilance.desc=Только довольные пчёлы будут производить свой особый продукт. Убедитесь, что разместили их в предпочитаемом климате.
+for.hints.beejubilance.desc=Только довольные пчёлы будут производить свой спец.продукт. Убедитесь, что разместили их в предпочитаемом климате.
 for.hints.beejubilance.tag=Сделайте Ваших пчёл счастливыми!
-for.hints.cooldownloss.desc=Двигатели в режиме принудительно охлаждения теряют значительную часть запасённой ими энергии.
+for.hints.cooldownloss.desc=Двигатели в режиме принудительно охлаждения теряют значительную часть запасенной ими энергии.
 for.hints.cooldownloss.tag=Охлаждение означает потерю энергии!
-for.hints.crating.desc=Главная задача плотника - сжимать Ваши излишки ресурсов. Упаковывать можно большую часть блоков и предметов.
-for.hints.crating.tag=Упаковывайте Ваши излишки!
-for.hints.energybuffer.desc=Двигатели способны запасать небольшое количество энергии, если она не может быть передана механизму.
+for.hints.crating.desc=Главная задача плотника - сжимать ваши излишки ресурсов. Упаковывать можно большую часть блоков и предметов.
+for.hints.crating.tag=Упаковывайте ваши излишки!
+for.hints.energybuffer.desc=Двигатели способны запасать небольшое количество энергии, если она не может передана цели.
 for.hints.energybuffer.tag=Накопление энергии!
 for.hints.energyunit.desc=Выходная мощность двигателей измеряется в RF/тик, что означает "Redstone Flux на тик". В каждой секунде 20 тиков.
 for.hints.energyunit.tag=Скажите Redstone Flux!
 for.hints.enginebronzefuels.desc=Биогазовый двигатель имеет широкий выбор топлива: биомасса, растительное масло, мёд, молоко и даже вода!
 for.hints.enginebronzefuels.tag=Используйте все вида топлива!
-for.hints.enginebronzeheatloss.desc=Несмотря на то, что биогазовый двигатель может работать на воде, она ужасно неэффективна и постоянно расходует лаву.
-for.hints.enginebronzeheatloss.tag=Повнимательней с водой!
+for.hints.enginebronzeheatloss.desc=Несмотря на то, что биогазовый двигатель может работать на воде, она ужасно неэффективна, и постоянно расходует лаву.
+for.hints.enginebronzeheatloss.tag=Внимательней с водой!
 for.hints.enginebronzeoutput.desc=Биогазовый двигатель, используя различные виды топлива, имеет различную выходную мощность, которая варьируется от 10 RF/тик до 50 RF/тик.
-for.hints.enginebronzeoutput.tag=Выбирайте топливо!
+for.hints.enginebronzeoutput.tag=Выбирайте используемое топливо!
 for.hints.enginebronzewaste.desc=В отличии от торфяных двигателей, отключенные биогазовые двигатели не расходует топливо, которое сейчас сгорает.
 for.hints.enginebronzewaste.tag=Сохранение топлива
 for.hints.enginecopperfuels.desc=Торфяной двигатель может работать на неочищенном торфе, но работа на смолистом торфе удвоит выходную мощность.
 for.hints.enginecopperfuels.tag=Используйте все вида топлива!
-for.hints.enginecopperwaste.desc=Отключенный торфяной двигатель будет продолжать сжигать остатки торфа, которые он уже начал сжигать, но без образования энергии.
+for.hints.enginecopperwaste.desc=Отключенный торфяной двигатель будет продолжать сжигать остатки торфа, который он уже начал сжигать, но без генерирования энергии.
 for.hints.enginecopperwaste.tag=Остерегайтесь растраты энергии!
 for.hints.enginetinbatteries.desc=Вы можете использовать батареи для того, чтобы запустить Ваш электродвигатель, без необходимости подводить к нему провода.
 for.hints.enginetinbatteries.tag=Заряжайте эти батареи!
 for.hints.enginetinchoke.desc=Электродвигатели могут быть оснащены печатными платами, чтобы понизить их выходную мощность на 10 RF/тик и также уменьшить их потребность в энергии.
 for.hints.enginetinchoke.tag=Контролируйте выходную мощность
-for.hints.flowerjungle.desc=К цветам джунглей относятся папоротник и лоза.
+for.hints.flowerjungle.desc=К цветам джунглей относится папоротник и лоза.
 for.hints.flowerjungle.tag=Что за цветы джунглей?
 for.hints.flowernether.desc=К цветам Нижнего мира относится нарост Нижнего мира.
 for.hints.flowernether.tag=Что за цветы Нижнего мира?
@@ -398,19 +380,19 @@ for.hints.generatorfuels.desc=Биогенераторы могут работа
 for.hints.generatorfuels.tag=Используйте все вида топлива!
 for.hints.habitatlocatoruse.desc=Через некоторое время, Определитель ареала будет указывать прямо на ближайший подходящий биом. Когда он будет найден, индикатор начнёт вращаться.
 for.hints.habitatlocatoruse.tag=Определитель ареала 101!
-for.hints.honeyfood.desc=Из мёда и остальной продукции пчёл можно сделать множество видов еды.
+for.hints.honeyfood.desc=Из меда и остальной продукции пчёл можно сделать множество видов еды.
 for.hints.honeyfood.tag=Получайте продовольствие!
 for.hints.manualpeat.desc=Торф можно добывать в автоматическом режиме с помощью торфяника, но до этого момента Вы можете добыть немного торфа вручную.
 for.hints.manualpeat.tag=Торфяник не обязателен!
-for.hints.moistenerproducts.desc=Если добавить нужные ингредиенты, Ваш увлажнитель может также создавать замшелый булыжник и каменный кирпич.
 for.hints.moistenerproducts.tag=Хотите немного замшелого булыжника?
+for.hints.moistenerproducts.desc=Если предоставить нужные ингредиенты, Ваш увлажнитель может также создавать замшелый булыжник и каменный кирпич.
 for.hints.nopowerrequired.desc=Для работы данного устройства энергия не требуется.
 for.hints.nopowerrequired.tag=Не требует энергии
 for.hints.peatharvest.desc=Болотная земля, соприкасающаяся с водой (по диагонали тоже), со временем созреет до торфа. Используйте лопату для его сбора.
 for.hints.peatharvest.tag=Собирайте торф!
 for.hints.pipette.desc=Если Вам мешает остаток жидкости в резервуаре механизма, Вы можете очистить его, щёлкнув по нему пипеткой.
 for.hints.pipette.tag=Очищайте резервуары с помощью пипетки
-for.hints.postage.desc=Отправка писем требует оплату марками. Основная плата 1n, каждый прикреплённый стак предметов добавляет еще 1n к цене.
+for.hints.postage.desc=Отправка писем требует оплату марками. Основная плата 1n, каждый прикрепленный стак предметов добавляет еще 1n к цене.
 for.hints.postage.tag=Платите перевозчику
 for.hints.powerraintank.desc=Даже обесточенный сборщик дождя будет собирать воду. Но для её разлива требуется энергия от двигателя.
 for.hints.powerraintank.tag=Разлив требует энергию!
@@ -478,8 +460,8 @@ item.for.apiarist_chest.name=Куртка пчеловода
 item.for.apiarist_helmet.name=Защитная маска пчеловода
 item.for.apiarist_legs.name=Штаны пчеловода
 
-item.for.ash.name=Зола
-tile.for.pile_ash.name=Кучка золы
+item.for.ash.name=Пепел
+tile.for.pile_ash.name=Груда пепла
 
 item.for.habitat_locator.name=Определитель ареала
 
@@ -505,9 +487,6 @@ item.for.bee_combs.stringy.name=Вязкие соты
 item.for.bee_combs.wheaten.name=Пшеничные соты
 
 item.for.beeswax.name=Пчелиный воск
-
-item.for.beverage.meadCurative.name=Целебный мёд
-item.for.beverage.meadShort.name=Питный мёд
 
 item.for.biome_finder.name=Определитель ареала
 item.for.bituminous_peat.name=Смолистый торф
@@ -549,7 +528,7 @@ item.for.frame_proven.name=Проверенная рамка
 item.for.frame_untreated.name=Необработанная рамка
 
 item.for.durability=Прочность: %,d
-item.for.uses=Применений: %,d
+item.for.uses=Использование: %,d
 
 item.for.bee.modifier.production=Производство: %.2fx
 item.for.bee.modifier.genetic.decay=Генетический распад: %.2fx
@@ -570,8 +549,9 @@ item.for.hardened_machine.name=Укреплённый корпус
 
 item.for.honeydew.name=Медвяная роса
 
-item.for.portable_alyzer.name=Переносной анализатор
-item.for.portable_alyzer.tooltip=Портативный генетический анализатор для пчёл, саженцев и бабочек.
+item.for.portable_alyzer.name=Портативный анализатор
+item.for.portable_alyzer.tooltip=Переносной генетический анализатор для пчел, деревьев и бабочек.
+item.for.portable_alyzer.charges=%s расходы
 
 item.for.honey_drop.charged.name=Заряженная капля
 item.for.honey_drop.honey.name=Капля мёда
@@ -589,7 +569,7 @@ item.for.ingot_copper.name=Медный слиток
 item.for.ingot_tin.name=Оловянный слиток
 
 item.for.iodine_capsule.name=Капсула йода
-item.for.iodine_capsule.tooltip=Используйте на генераторе дождя, чтобы вызвать дождь.
+item.for.iodine_capsule.tooltip=Использовать на вызывателе дождя, чтобы вызвать дождь.
 item.for.kit_pickaxe.name=Сборная кирка
 item.for.kit_shovel.name=Сборная лопата
 item.for.letters.name=Письмо
@@ -597,7 +577,7 @@ item.for.letters.name=Письмо
 item.for.mouldy_wheat.name=Плесневелая пшеница
 item.for.mulch.name=Мульча
 item.for.naturalist_helmet.name=Очки
-item.for.naturalist_helmet.tooltip=Оденьте, чтобы увидеть опылённую листву и ошибки в мульти-блоках.
+item.for.naturalist_helmet.tooltip=Носите, чтобы увидеть опыленные листья и ошибки на мультиблоках.
 item.for.oak_stick.name=Полированная палка
 item.for.peat.name=Торф
 item.for.phosphor.name=Фосфор
@@ -612,7 +592,7 @@ item.for.propolis.silky.name=Шелковистый прополис
 item.for.propolis.sticky.name=Липкий прополис
 
 item.for.refractory.empty.name=Огнеупорная капсула
-item.for.refractory.grammar=Капсула (%s)
+item.for.refractory.grammar=Капсула %s
 
 item.for.refractory_wax.name=Огнеупорный воск
 item.for.refractory_wax.tooltip=Воск с высокой температурой плавления.
@@ -650,7 +630,7 @@ item.for.thermionic_tubes.rubber.name=Прорезиненная электро�
 item.for.thermionic_tubes.emerald.name=Изумрудная электронная лампа
 item.for.thermionic_tubes.apatite.name=Апатитовая электронная лампа
 item.for.thermionic_tubes.lapis.name=Лазуритовая электронная лампа
-item.for.thermionic_tubes.ender.name=Электронная лампа Края
+item.for.thermionic_tubes.ender.name=Электронная лампа края
 item.for.thermionic_tubes.orchid.name=Орхидеевая электронная лампа
 item.for.thermionic_tubes.tooltip=Используется в программировании плат.
 
@@ -766,119 +746,119 @@ for.errors.is_raining.help=Только устойчивые летуны мог
 for.errors.no_drone.desc=Нет трутня
 for.errors.no_drone.help=Спаривание требует наличия трутня.
 for.errors.no_flower.desc=Нет цветов
-for.errors.no_flower.help=Hive members are not finding the right flowers. Use the Beealyzer to learn their flower preference.
+for.errors.no_flower.help=Члены улья не находя нужных цветов. Используйте анализатор пчёл, чтобы узнать их предпочтения цветов.
 for.errors.no_queen.desc=Нет матки
-for.errors.no_queen.help=Supply this hive with a queen or a princess and a drone.
-for.errors.no_sky.desc=Небо закрыто
-for.errors.no_sky.help=The hive requires direct sunlight from above.
+for.errors.no_queen.help=Поместите в этот улий матку или принцессу и трутня.
+for.errors.no_sky.desc=Небо заслонено
+for.errors.no_sky.help=Улью требуется прямой солнечный свет сверху.
 for.errors.not_day.desc=Не дневное время
-for.errors.not_day.help=The bees can only work during the daytime.
-for.errors.not_gloomy.desc=Недостаточно темно
-for.errors.not_gloomy.help=The bees can only work in darkness.
-for.errors.not_lucid.desc=Недостаточно светло
-for.errors.not_lucid.help=The bees have trouble navigating in the dark.
+for.errors.not_day.help=Пчелы могут работать только в дневное время.
+for.errors.not_gloomy.desc=Не достаточно темно
+for.errors.not_gloomy.help=Пчелы могут работать только в темноте.
+for.errors.not_lucid.desc=Не достаточно ярко
+for.errors.not_lucid.help=Пчелы плохо ориентируется в темноте.
 for.errors.not_night.desc=Не ночное время
-for.errors.not_night.help=The bees can only work during the night.
+for.errors.not_night.help=Пчелы могут работать только в дневное время.
 for.errors.too_hot.desc=Слишком жарко
-for.errors.too_hot.help=The bees are melting in the heat here and unable to work. Use a Habitat Locator to find a cooler climate.
+for.errors.too_hot.help=Пчелы тают в жару, вот и не в состоянии работать. Используйте локатор среды обитания, чтобы найти более прохладный климат.
 for.errors.too_cold.desc=Слишком холодно
-for.errors.too_cold.help=The bees are huddled together to survive the freezing cold here. Use a Habitat Locator to find a warmer climate.
+for.errors.too_cold.help=Пчелы сжимаются вместе, чтобы выжить здесь. Используйте локатор среды обитания, чтобы найти более теплый климат.
 for.errors.too_humid.desc=Слишком влажно
-for.errors.too_humid.help=The climate here has made the bees' wings too damp to fly. Use a Habitat Locator to find a dryer climate.
+for.errors.too_humid.help=Климат здесь сделал пчел крылья слишком влажной, чтобы летать. Используйте локатор среды обитания, чтобы найти более сухой климат.
 for.errors.too_arid.desc=Слишком сухо
-for.errors.too_arid.help=The dry climate here has made the bees parched and unable to work. Use a Habitat Locator to find a wetter climate.
+for.errors.too_arid.help=Сухой климат здесь заставил пчел пересохнуть без возможности работать. Используйте локатор среды обитания, чтобы найти более влажный климат.
 
 # MACHINES
 for.errors.no_power.desc=Нет энергии
-for.errors.no_power.help=This machine requires RF energy from an engine to function.
-for.errors.no_redstone.desc=Требуется красный камень
-for.errors.no_redstone.help=This machine requires a redstone signal to activate it.
-for.errors.disabled_redstone.desc=Отключено красным камнем
-for.errors.disabled_redstone.help=This machine is being disabled by a redstone signal.
+for.errors.no_power.help=Для работы этой машины требуется RF энергия от двигателя.
+for.errors.no_redstone.desc=Требуется Редстоун
+for.errors.no_redstone.help=Эта машина требует сигнал редстоуна, чтобы активировать его.
+for.errors.disabled_redstone.desc=Отключено от Редстоун
+for.errors.disabled_redstone.help=Эта машина отключается сигналом редстоун.
 for.errors.no_recipe.desc=Нет рецепта
-for.errors.no_recipe.help=No matching recipe was found for the supplied resources.
+for.errors.no_recipe.help=Не найдено подходящего рецепта для поставляемых ресурсов.
 for.errors.no_resource.desc=Отсутствуют ресурсы
-for.errors.no_resource.help=More resources need to be supplied for operation.
-for.errors.no_resource_inventory.desc=Требуются ресурсы в инвентаре
-for.errors.no_resource_inventory.help=Resources need to be added to the machine's inventory to begin crafting this recipe.
-for.errors.no_resource_liquid.desc=Недостаточно жидкости
-for.errors.no_resource_liquid.help=More liquid resources need to be supplied for operation.
+for.errors.no_resource.help=Для работы необходимо предоставить больше ресурсов.
+for.errors.no_resource_inventory.desc=Инвентарю нужны ресурсы
+for.errors.no_resource_inventory.help=Ресурсы необходимо добавить в инвентарь машины, чтобы начать разработку этого рецепта.
+for.errors.no_resource_liquid.desc=Отсутствуют жидкие ресурсы
+for.errors.no_resource_liquid.help=Для работы необходимо предоставить больше жидких ресурсов.
 for.errors.no_space.desc=Нет места в инвентаре
-for.errors.no_space.help=Empty this machine's inventory.
-for.errors.no_space_tank.desc=Резервуар полон
-for.errors.no_space_tank.help=Empty this machine's liquid tank.
+for.errors.no_space.help=Очистите инвентарь этой машины.
+for.errors.no_space_tank.desc=Нет места в резервуаре
+for.errors.no_space_tank.help=Опорожните емкость для этой машины.
 for.errors.not_dark.desc=Недостаточно темно
-for.errors.not_dark.help=A lower light level is required for operation.
+for.errors.not_dark.help=Для работы требуется более низкий уровень освещенности.
 
 # RAIN TANK
 for.errors.not_raining.desc=Нет дождя
-for.errors.not_raining.help=Operation is only possible when it is raining.
-for.errors.no_rain_biome.desc=Не бывает дождя
-for.errors.no_rain_biome.help=This location never receives rain.
-for.errors.no_sky_rain_tank.desc=Небо закрыто
-for.errors.no_sky_rain_tank.help=Clear the area above this machine so it can gather rain.
+for.errors.not_raining.help=Эксплуатация возможна только в случае дождя.
+for.errors.no_rain_biome.desc=Без дождей
+for.errors.no_rain_biome.help=В этом месте никогда не быват дождей.
+for.errors.no_sky_rain_tank.desc=Небо заслонено
+for.errors.no_sky_rain_tank.help=Очистите область над этой машиной, чтобы она могла собирать дождь.
 
 # ALYZERS
-for.errors.no_honey.desc=Требуется мёд
-for.errors.no_honey.help=This gadget requires honey drops or honeydew for operation.
+for.errors.no_honey.desc=Требуется мед
+for.errors.no_honey.help=Для этого гаджета необходимы медовые капли или медовый нектар для работы.
 for.errors.no_specimen.desc=Нечего анализировать
-for.errors.no_specimen.help=Supply a specimen to analyze.
+for.errors.no_specimen.help=Поставьте образец для анализа.
 
 # ENGINES
-for.errors.forced_cooldown.desc=Принудительное охлаждение
-for.errors.forced_cooldown.help=The engine has overheated and must cool down before it can start again.
+for.errors.forced_cooldown.desc=Принудительное остывание
+for.errors.forced_cooldown.help=Двигатель перегрелся и должен остыть, прежде чем он начнет снова.
 for.errors.no_energy_net.desc=Нет электричества
-for.errors.no_energy_net.help=Your world is barren of any electricity. (Install IndustrialCraft\u00b2.)
+for.errors.no_energy_net.help=В вашем мире нет никакого электричества. (Установите IndustrialCraft\u00b2.)
 for.errors.no_fuel.desc=Нет топлива
-for.errors.no_fuel.help=This engine requires fuel to run. Replenish this machine's fuel supplies.
-for.errors.no_heat.desc=Не разогрет
-for.errors.no_heat.help=This engine requires a heat source to run. Refill the heating tank.
+for.errors.no_fuel.help=Для этого двигателя требуется горючее. Пополните запас топлива для этого устройства.
+for.errors.no_heat.desc=Не подогревается
+for.errors.no_heat.help=Для этого двигателя требуется источник тепла для запуска. Заполните отопительный бак.
 
 # TRADE STATION
-for.errors.no_stamps.desc=Нужны марки
-for.errors.no_stamps.help=The trade station requires more stamps to pay postage.
+for.errors.no_stamps.desc=Нужны почтовые марки
+for.errors.no_stamps.help=Торговая станция требует больше почтовых марок для оплаты почтовых расходов.
 for.errors.no_paper.desc=Нужна бумага
-for.errors.no_paper.help=The trade station requires more paper to send letters.
-for.errors.no_supplies.desc=Нужны припасы
-for.errors.no_supplies.help=The trade station requires more supplies to send.
-for.errors.no_trade.desc=Торговля не настроена
-for.errors.no_trade.help=The trade station requires items to Send and Receive.
+for.errors.no_paper.help=Торговая станция требует больше бумаг, чтобы отправить письма.
+for.errors.no_supplies.desc=Нужны материалы
+for.errors.no_supplies.help=Торговая станция требует больше материалов, чтобы отправить.
+for.errors.no_trade.desc=Нет торгового набора
+for.errors.no_trade.help=Торговая станция требует предметы, чтобы отправлять и получать.
 
 # TRADE STATION NAMING
-for.errors.not_alpha_numeric.desc=Некорректное имя
-for.errors.not_alpha_numeric.help=A Trade Station name must consist of letters and numbers only.
-for.errors.not_unique.desc=Не уникальное имя
-for.errors.not_unique.help=Trade Station names must be unique and this name is already taken.
+for.errors.not_alpha_numeric.desc=Неправильное имя
+for.errors.not_alpha_numeric.help=Торговое название станции должно состоять из букв и цифр.
+for.errors.not_unique.desc=Не уникально
+for.errors.not_unique.help=Названия торговых станций должны быть уникальными, и это имя уже принято.
 
 # LETTERS
 for.errors.no_recipient.desc=Нет получателя
-for.errors.no_recipient.help=You need to address your letter to a recipient to send it.
-for.errors.not_postpaid.desc=Требуются марки
-for.errors.not_postpaid.help=Apply more stamps to pay the postal service.
+for.errors.no_recipient.help=Вам необходимо обратиться к своему письму получателю, чтобы отправить его.
+for.errors.not_postpaid.desc=Необходимы марки
+for.errors.not_postpaid.help=Примените больше марок для оплаты почтовой службы.
 
 # CIRCUIT BOARDS
 for.errors.circuit_mismatch.desc=Несоответствие макета
-for.errors.circuit_mismatch.help=Amount of tubes does not match size of circuit board.
+for.errors.circuit_mismatch.help=Количество трубок не соответствует размеру печатной платы.
 for.errors.no_circuit_board.desc=Отсутствует плата
-for.errors.no_circuit_board.help=Insert a circuit board to solder the selected tubes onto it.
-for.errors.no_circuit_layout.desc=Макеты не найдены
-for.errors.no_circuit_layout.help=No layouts available due to the current game settings.
+for.errors.no_circuit_board.help=Вставьте монтажную плату, чтобы спаять отобранные трубы на него.
+for.errors.no_circuit_layout.desc=Не найдены макеты
+for.errors.no_circuit_layout.help=Нет макетов, представленных в связи с текущими настройками игры.
 
 # FARMS
-for.errors.no_farmland.desc=Нет фундамента
-for.errors.no_farmland.help=Smooth sandstone, bricks or stone bricks create a platform the farm will build on.
-for.errors.no_fertilizer.desc=Нет удобрения
-for.errors.no_fertilizer.help=Farms require fertilizer for function. Compost is insufficient.
+for.errors.no_farmland.desc=Нет сельхозугодий
+for.errors.no_farmland.help=Гладкий песчаник, кирпич или каменный кирпич создают платформу, на которой будет строиться ферма.
+for.errors.no_fertilizer.desc=Нет удобрений
+for.errors.no_fertilizer.help=Фермы требуют удобрения для работы. Компост недостаточен.
 for.errors.no_liquid.desc=Нет воды
-for.errors.no_liquid.help=Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
+for.errors.no_liquid.help=В зависимости от количества осадков, температуры и влажности ферм должны быть поставлены с различными количествами воды.
 
 # GREENHOUSE
 for.errors.not_closed.desc=Крыша не закрыта
-for.errors.not_closed.help=The roof of the greenhouse is not closed.
-for.errors.not_loaded.desc=Не загружен
-for.errors.not_loaded.help=One chunk of the greenhouse is not loaded.
-for.errors.too_large.desc=Слишком большой
-for.errors.too_large.help=The greenhouse is too large for its controller or it is not closed at a position.
+for.errors.not_closed.help=Крыша теплицы не закрыта.
+for.errors.not_loaded.desc=Не загружено
+for.errors.not_loaded.help=Один чанк теплицы не загружен.
+for.errors.too_large.desc=Слишком большая
+for.errors.too_large.help=Теплица слишком велика для своего контроллера или не закрыта в положении.
 
 ####################
 # APICULTURE
@@ -887,11 +867,11 @@ for.errors.too_large.help=The greenhouse is too large for its controller or it i
 entity.Villager.apiarist=Пчеловод
 
 death.bee.aggressive.player=%1$s столкнулся с роем пчёл. %2$s украл его костюм пчеловода.
-death.bee.aggressive=%1$s столкнулся с роем пчёл. Оно пришло ужалить.
-death.bee.hive.player=%1$s был убит дикими пчёлами. %2$s украл его костюм пчеловода.
-death.bee.hive=%1$s был убит дикими пчёлами. Нужно было использовать дымарь.
-death.bee.end.player=%1$s был прикончен вредным жалом, пока боролся с %2$s.
-death.bee.end=%1$s был прикончен вредным жалом.
+death.bee.aggressive=%1$s столкнулся с роем пчёл. Оно пришло, чтобы ужалить.
+death.bee.hive.player=%1$s был убит дикими пчелами. %2$s украл его костюм пчеловода.
+death.bee.hive=%1$s был убит дикими пчелами. Они должны были использовать пчелинный дымарь.
+death.bee.end.player=%1$s был прикончен недружественным жалом, когда боролся с %2$s.
+death.bee.end=%1$s был прикончен недружественным жалом.
 death.bee.radioactive.player=%1$s вошёл в Чернобыль без своего шлема. %2$s смотрел и хихикал.
 death.bee.radioactive=%1$s вошёл в Чернобыль без своего шлема.
 death.bee.heroic.player=%1$s был убит героическими пчёлами! %2$s навсегда в долгу у него.
@@ -922,13 +902,13 @@ for.beemode.hardcore.desc=Сокращает наполовину скорост
 for.beemode.insane.desc=Снижает скорость мутации до 20%, десятикратно увеличивает продолжительность жизни и приводит к снижению рождаемости на 40%.
 for.beemode.normal.desc=Рекомендованный режим для обычного игрока.
 
-for.bees.grammar.drone.type=трутень
+for.bees.grammar.drone.type=Трутень
 for.bees.grammar.drone=%SPECIES %TYPE
-for.bees.grammar.larvae.type=личинка
+for.bees.grammar.larvae.type=Личинка
 for.bees.grammar.larvae=%SPECIES %TYPE
-for.bees.grammar.princess.type=принцесса
+for.bees.grammar.princess.type=Принцесса
 for.bees.grammar.princess=%SPECIES %TYPE
-for.bees.grammar.queen.type=матка
+for.bees.grammar.queen.type=Матка
 for.bees.grammar.queen=%SPECIES %TYPE
 
 for.bees.hybrid=Гибрид: %PRIMARY-%SECONDARY
@@ -1026,12 +1006,12 @@ for.chat.command.forestry.stats.save.saved=Статистика для игро�
 for.chat.command.forestry.stats.save.key.discovered=Обнаружено
 for.chat.command.forestry.stats.save.key.discovered.symbol=X
 for.chat.command.forestry.stats.save.key.blacklisted=Запрещено
-for.chat.command.forestry.stats.save.key.blacklisted.symbol=ЗА
-for.chat.command.forestry.stats.save.key.notCounted=Не учитывается в общее кол-во видов
-for.chat.command.forestry.stats.save.key.notCounted.symbol=НУ
+for.chat.command.forestry.stats.save.key.blacklisted.symbol=BL
+for.chat.command.forestry.stats.save.key.notCounted=Не учитывается для общего вида
+for.chat.command.forestry.stats.save.key.notCounted.symbol=NC
 for.chat.command.forestry.stats.save.mode=Режим: %s
 
-for.description.speciesAgrarian="Doesn't reek as much as the alternative. Gets the job done, eh?"|Мирафи, благоразумный пчеловод
+for.description.speciesAgrarian="Не похолодает, как альтернатива. Сделали работу, а?"|Мирафи, благоразумный пчеловод
 for.description.speciesAustere=Опасные и изменчивые; рядом с ними пчеловодам рекомендуется одевать защиту.|Пчеловодство 101
 for.description.speciesAvenging="Стены дома дрожали, я слышал треск крыши, но меня это не волновало! Я чуял в перчатке тысячи жал, потому что новую матку держал!"|Аноним
 for.description.speciesBoggy="Я видел, как одна из них ужалила корову и через несколько секунд та стала зарастать грибами! ... Фотографию? Э-э, не успел сделать.|"Сэр" Сенгир, безумец
@@ -1060,40 +1040,40 @@ for.description.speciesMeadows=Любит жить на равнинах в ум
 for.description.speciesMerry="Хо Хо Хо!"|Весёлая пчела
 for.description.speciesMiry="Как пчёлы вообще опыляют грибы?"|Мецц, юный пчеловод
 for.description.speciesModest=Горячий и сухой климат заставил этот вид измениться до такой степени, что он не выживает в более пригодных местах.|Пчеловодство 101
-for.description.speciesMonastic="I remained austere and said to him: 'Not only a princess, but also a whole pile of emeralds for a measly drone? That's extortion!'|Пчеловодство 101
-for.description.speciesNoble="There is no more noble occupation in the world than to breed another bee."|Binnie, пчеловод
-for.description.speciesOmega="I am Alpha and Omega, the beginning and the end, the first and the last."|Pahimar, пчеловод
-for.description.speciesPhantasmal="Whatever you do, do not, I repeat, DO NOT drop the dragon e..."|"Sir" Sengir, последние слова
-for.description.speciesReddened=Requiring massive amounts of alchemically bound matter, these little fellows could flood a world in energy.|Лексикон пчеловода
+for.description.speciesMonastic="Я остался строгим и сказанным ему: 'Не только принцесса, но также и целая груда изумрудов за ничтожного трутня? Это - вымогательство!'|Пчеловодство 101
+for.description.speciesNoble="Нет никакого более благородного занятия в мире, чем развести другую пчелу."|Binnie, пчеловод
+for.description.speciesOmega="Я - Альфа и омега, начало и конец, первое и последнее."|Pahimar, пчеловод
+for.description.speciesPhantasmal="Независимо от того, что Вы делаете, не делайте, я повторяюсь, Не бросать! дракон e..."|"Sir" Sengir, последние слова
+for.description.speciesReddened=Требуя огромных количеств алхимически связанной материи, эти маленькие люди могли наводнить мир энергией.|Лексикон пчеловода
 for.description.speciesRural="Дождь в мае обещает многа сена."|М. Эйджес, сельский пчеловод
-for.description.speciesSecluded="Crossbreeding with the desert kind was a mistake. My bees withdrew more and more from the outside world."|Пчеловодство 101
-for.description.speciesSinister=Not many bee species are able to survive in the nether. And even those are severly affected by their hellish environment.|Пчеловодство 101
-for.description.speciesSpectral="I was unsure whether it was alive as it lay there in the palm of my hand, glimmering and pulsating, oozing a coldness I never felt before. Then I heard the pile of bones behind me rattle..."|Пчеловодство 101
+for.description.speciesSecluded="Скрещивание с пустынным видом было ошибкой. Мои пчелы все больше и больше выходили из внешнего мира."|Пчеловодство 101
+for.description.speciesSinister=Не многие виды пчел способны выжить в преисподней. И даже те, кто сильно пострадали от их адской среды.|Пчеловодство 101
+for.description.speciesSpectral="Я не был уверен, жива ли она, когда она лежала на ладони, мерцала и пульсировала, сочиняя холод, которого я никогда раньше не ощущал. Затем я услышал, как грудь костей позади меня грохочет ..."|Пчеловодство 101
 for.description.speciesSteadfast=Считались вымершими, пока некоторые не были найдены путешественниками в глубоком подземелье.|Гримуар пчеловода
 for.description.speciesTipsy="Танцуйте мои красотульки! Тануцуйте!"|Пьяная ведьма востока
 for.description.speciesTricky="Кошелёк или жизнь!"|Хитрая пчела
-for.description.speciesTropical="My travels along the jungle river allowed me to catch many of these poisonous specimen. Unfortunately I had lost my only austere branch to crocodiles a while back."|Пчеловодство 101
+for.description.speciesTropical="Мои путешествия по реке джунглей позволили мне поймать многие из этих ядовитых образцов. К сожалению, я потерял свою единственную строгую ветвь крокодилам некоторое время назад."|Пчеловодство 101
 for.description.speciesUnweary=Неутомимые. Потом они умирают.|Пчеловодство 101
-for.description.speciesValiant=A rare subspecies rarely seen cohabiting in mundane hives.|Гримуар пчеловода
+for.description.speciesValiant=Редкие подвиды редко встречаются в сожительстве в мирских ульях.|Гримуар пчеловода
 for.description.speciesVengeful="Veni, vidi, vici!"|Apinus Julius Caesar
 for.description.speciesVindictive="Они съели моё лицо! Они съели моё лицо!"|K.M.
 for.description.speciesWintry=Обычные, но ориентированные на холод пчёлы; выращивание их в тёплом климате - это испытание.|Пчеловодство 101
 
-for.genus.bees.agrarian=Agrarian
-for.genus.bees.austere=Austere
-for.genus.bees.boggy=Boggy
-for.genus.bees.common=Common
-for.genus.bees.end=End
-for.genus.bees.festive=Festive
-for.genus.bees.frozen=Frozen
-for.genus.bees.heroic=Heroic
-for.genus.bees.industrious=Industrious
-for.genus.bees.infernal=Infernal
-for.genus.bees.monastic=Monastic
-for.genus.bees.noble=Noble
-for.genus.bees.reddened=Reddened
-for.genus.bees.tropical=Tropical
-for.genus.bees.vengeful=Vengeful
+for.genus.bees.agrarian=Аграрный
+for.genus.bees.austere=Простой
+for.genus.bees.boggy=Болотный
+for.genus.bees.common=Общий
+for.genus.bees.end=Края
+for.genus.bees.festive=Праздничный
+for.genus.bees.frozen=Морозный
+for.genus.bees.heroic=Героический
+for.genus.bees.industrious=Трудолюбивый
+for.genus.bees.infernal=Адский
+for.genus.bees.monastic=Монашеский
+for.genus.bees.noble=Благородный
+for.genus.bees.reddened=Покрасневший
+for.genus.bees.tropical=Тропический
+for.genus.bees.vengeful=Мстительный
 
 item.for.bee_princess_ge.name=Принцесса
 item.for.bee_drone_ge.name=Трутень
@@ -1129,38 +1109,58 @@ tile.for.candle.stump.name=Тёмная свеча
 tile.for.stump.name=Потухшая свеча
 
 ####################
+# BOOK
+####################
+item.for.book_forester.name=Руководство лесника
+
+for.gui.book.element.crafting=Создание
+for.gui.book.about.title=О книге
+for.gui.book.about=§oЭти обрывки знаний были получены и составлены Binnie и представляют собой остатки Пчеловодства 101, книга безумного апиариста знает только как сэр Сенгир.§r
+for.gui.book.about.author=| Binnie, Редактор
+for.gui.book.categories=Категории
+
+for.gui.book.category.core.title=Ядро
+for.gui.book.category.lepidopterology.title=Лепидоптерология
+for.gui.book.category.mail.title=Почта
+for.gui.book.category.greenhouse.title=Теплица (WIP)
+for.gui.book.category.beekeeping.title=Пчеловодство
+for.gui.book.category.arboriculture.title=Лесоводство
+for.gui.book.category.farming.title=Сельское хозяйство
+for.gui.book.category.genetics.title=Генетика
+
+####################
 # MULTIBLOCK
 ####################
 
-for.multiblock.error.notConnected=The MultiBlock is not connected to a controller. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block.
-for.multiblock.error.invalid.interior=(%s) - Block is not valid for use in the machine's interior.
-for.multiblock.error.invalid.part=A multiblock part is incompatible with this type (%s).
-for.multiblock.error.small=The multiblock is too small. It must be at least %dx%dx%d in size.
-for.multiblock.error.large.x=The multiblock is too large, it may be at most %d blocks wide.
-for.multiblock.error.large.y=The multiblock is too large, it may be at most %d blocks high.
-for.multiblock.error.large.z=The multiblock is too large, it may be at most %d blocks deep.
-for.multiblock.error.small.x=The multiblock is too small, it must be at least %d blocks wide.
-for.multiblock.error.small.y=The multiblock is too small, it must be at least %d blocks high.
-for.multiblock.error.small.z=The multiblock is too small, it must be at least %d blocks deep.
+for.multiblock.error.notConnected=Мультиблок не подключён к контролеру. Это может быть связано с задержкой или ошибкой. Если проблема не устранена, попробуйте сломать и повторно разместить блок.
+for.multiblock.error.invalid.interior=%d, %d, %d - (%s) Блок не действителен для использования во внутренней части машины.
+for.multiblock.error.invalid.part=Часть мультиблока @ %d, %d, %d несовместимо с машинами типа %s.
+for.multiblock.error.small=Мультиблок слишком маленький. Это должно быть, по крайней мере %d X, %d Y, %d Z.
+for.multiblock.error.large.x=Мультиблок слишком большой, он может быть не более %d блоков в X границе.
+for.multiblock.error.large.y=Мультиблок слишком большой, он может быть не более %d блоков в Y границе.
+for.multiblock.error.large.z=Мультиблок слишком большой, он может быть не более %d блоков в Z границе.
+for.multiblock.error.small.x=Мультиблок слишком маленький, он должен быть как минимум %d блоков в X границе.
+for.multiblock.error.small.y=Мультиблок слишком маленький, он должен быть как минимум %d блоков в Y границе.
+for.multiblock.error.small.z=Мультиблок слишком маленький, он должен быть как минимум %d блоков в Z границе.
 
-for.multiblock.alveary.error.needSlabs=The Alveary must have wooden slabs on top.
-for.multiblock.alveary.error.needSpace=The alveary needs space around the top for the bees to enter and exit.
-for.multiblock.alveary.error.needPlainOnTop=The Alveary must have plain alveary blocks for the top level.
-for.multiblock.alveary.error.needPlainInterior=The Alveary must have plain alveary blocks for the interior.
+for.multiblock.alveary.error.needSlabs=Пчелиный улий должны быть покрыт деревянными перекрытиями сверху.
+for.multiblock.alveary.error.needSpace=Пчелиному улью нужно пространство вокруг вершины для пчел, чтобы войти и выйти.
+for.multiblock.alveary.error.needPlainOnTop=В пчелиных ульев должны иметь простой пчелиных ульев блоков на верхнем уровне.
+for.multiblock.alveary.error.needPlainInterior=В пчелиных ульев должны иметь простой пчелиных ульев блоки для интерьера.
 
-for.multiblock.farm.error.needPlainBand=The Farm must have plain farm blocks for the third level.
-for.multiblock.farm.error.needPlainInterior=The Farm must have plain farm blocks for the interior.
-for.multiblock.farm.error.needGearbox=The farm must have a gearbox to accept power and do work.
+for.multiblock.farm.error.needPlainBand=Ферма должна иметь простые фермерские блоки для третьего уровня.
+for.multiblock.farm.error.needPlainInterior=Ферма должна иметь простые фермерские блоки для интерьера.
+for.multiblock.farm.error.needGearbox=Ферма должна иметь редуктор, чтобы принимать энергию и работать.
 
-for.multiblock.greenhouse.error.needPlainOnTop=The Greenhouse must have plain greenhouse blocks for the top level.
-for.multiblock.greenhouse.error.needPlainInterior=The Greenhouse must have plain greenhouse blocks for the interior.
-for.multiblock.greenhouse.error.space.notclosed=The Greenhouse must be closed. Some blocks are missing or they are not a valid wall block.
-for.multiblock.greenhouse.error.space.unloaded=A part of the Greenhouse is in an unloaded chunk. All chunks around the greenhouse must to be loaded.
-for.multiblock.greenhouse.error.needSpace=The Greenhouse must not stand in the range of an other Greenhouse.
+for.multiblock.greenhouse.error.needPlainOnTop=Парниковый дом должен иметь простые парниковые блоки для верхнего уровня.
+for.multiblock.greenhouse.error.needPlainInterior=У теплицы должны быть простые парниковые блоки для интерьера.
+for.multiblock.greenhouse.error.space.notclosed=Теплица должна быть закрыта. Некоторые блоки отсутствуют или они не являются допустимыми стенами.
+for.multiblock.greenhouse.error.space.unloaded=Часть парника в разгруженном чанке. Все чанки вокруг теплицы должны быть загружены.
+for.multiblock.greenhouse.error.needSpace=Парниковый дом не должен находиться в зоне действия другого парника.
 
-for.multiblock.alveary.type=Alveary
-for.multiblock.farm.type=Farm
-for.multiblock.greenhouse.type=Greenhouse
+for.multiblock.alveary.type=Пчелиный улей
+for.multiblock.farm.type=Ферма
+for.multiblock.greenhouse.type=Теплица
 
 ####################
 # ARBORICULTURE
@@ -1237,7 +1237,7 @@ for.gui.sappiness=Жизнеспособность
 for.gui.supports=Вид плодов
 for.gui.yield=Урожай
 for.gui.combustibility=Горючесть
-for.gui.carbonization=Коксование
+for.gui.carbonization=Карбонизация
 
 for.trees.grammar.blossom.type=Расцвет
 for.trees.grammar.blossom=%TYPE %SPECIES
@@ -1249,13 +1249,13 @@ for.trees.grammar.sapling.type=Саженец
 for.trees.grammar.sapling=%TYPE %SPECIES
 for.trees.grammar.leaves.type=Листва
 for.trees.grammar.leaves=%TYPE %SPECIES
-for.trees.grammar.pile.type=Wood Pile
+for.trees.grammar.pile.type=Охапка дров
 for.trees.grammar.pile=%SPECIES %TYPE
 
-tile.for.wood_pile.name=Кучка древесины
-tile.for.wood_pile_decorative.name=Декоративная кучка древесины
+tile.for.wood_pile.name=Охапка дров
+tile.for.wood_pile_decorative.name=Декоративная охапка дров
 tile.for.loam.name=Суглинок
-tile.for.ash_block.name=Блока золы
+tile.for.ash_block.name=Пепельный блок
 tile.for.charcoal.name=Блок древесного угля
 
 for.trees.hybrid=Гибрид: %PRIMARY-%SECONDARY
@@ -1273,7 +1273,7 @@ for.trees.species.desertAcacia=пустынной акации
 for.trees.species.giantSequoia=гигантской секвойи
 for.trees.species.grandidierBaobab=Адансонии Грандидье
 for.trees.species.hillCherry=сакуры
-for.trees.species.jungle=дерева джунглей
+for.trees.species.jungle=тропического дерева
 for.trees.species.kapok=хлопкового дерева
 for.trees.species.lemon=лимонного дерева
 for.trees.species.mundaneLarch=мировой лиственницы
@@ -1335,7 +1335,7 @@ for.trees.woodType.padauk=падука
 for.trees.woodType.cocobolo=кокоболо
 for.trees.woodType.zebrawood=зебрано
 
-tile.for.fireproof=%s (Огнеупор.)
+tile.for.fireproof=%s (огнестойкость)
 
 item.for.grafter.name=Садовый нож
 item.for.grafter_proven.name=Проверенный садовый нож
@@ -1349,25 +1349,22 @@ tile.for.pods.0.name=Стручок
 ####################
 # FARMING
 ####################
+for.farm.grammar.manual=Руководство %s
+for.farm.grammar.managed=Управляемый %s
 
-for.circuit.managedArboreal=Дендрарий
-for.circuit.managedCereal=Ферма зерновых
-for.circuit.managedInfernal=Адская ферма
-for.circuit.managedPeat=Торфяник
-for.circuit.managedShroom=Грибная ферма
-for.circuit.managedVegetable=Овощная ферма
-for.circuit.managedEnder=Ферма Края
-for.circuit.managedOrchid=Ферма орхидей
-for.circuit.manualCereal=Ферма зерновых
-for.circuit.manualCocoa=Какао плантация
-for.circuit.manualGourd=Ферма бахчевых
-for.circuit.manualOrchard=Фруктовый сад
-for.circuit.manualPeat=Торфяник
-for.circuit.manualPoales=Тростниковая ферма
-for.circuit.manualRubber=Плантация резины
-for.circuit.manualShroom=Грибная ферма
-for.circuit.manualSucculent=Кактусовая ферма
-for.circuit.manualVegetable=Овощная ферма
+for.farm.arboretum=Дендрарий
+for.farm.crops=Crop Farm
+for.farm.shroom=Грибная ферма
+for.farm.succulent=Кактусовая ферма
+for.farm.peat=Торфяник
+for.farm.infernal=Адская ферма
+for.farm.reed=Тростниковая ферма
+for.farm.orchard=Фруктовый сад
+for.farm.gourd=Ферма бахчевых
+for.farm.cocoa=Какао плантация
+for.farm.ender=Ферма края
+for.farm.orchid=Ферма орхидей
+for.farm.rubber=Плантация резины
 
 for.gui.farm.title=Ферма
 for.gui.hydr.heat=тепла
@@ -1397,7 +1394,7 @@ for.trigger.lowFertilizer=Удобрение
 for.trigger.lowLiquid=Цистерна воды
 for.trigger.lowSoil=Почва
 
-tile.for.ffarm.tooltip=Мульти-блок: 3x4x3 - 5x4x5
+tile.for.ffarm.tooltip=Мультиблок: 3x4x3 - 5x4x5
 tile.for.ffarm.material.tooltip=Материал:
 tile.for.ffarm.0.name=Блок фермы
 tile.for.ffarm.2.name=Редуктор фермы
@@ -1409,54 +1406,82 @@ tile.for.mushroom.0.name=Гриб
 tile.for.mushroom.1.name=Гриб
 
 ####################
+# CULTIVATION
+####################
+tile.for.arboretum.name=Дендрарий
+tile.for.arboretum.tooltip=Ферма деревьев
+tile.for.farm_crops.name=Ферма
+tile.for.farm_crops.tooltip=Растениеводство
+tile.for.farm_mushroom.name=Грибная ферма
+tile.for.farm_nether.name=Адская ферма
+tile.for.farm_nether.tooltip=Ферма адского нароста
+tile.for.farm_gourd.name=Ферма бахчевых
+tile.for.farm_gourd.tooltip=Ферма арбуза и тыквы
+tile.for.farm_ender.name=Ферма Края
+tile.for.farm_ender.tooltip=Ферма цветка хоруса и эндер лилии
+tile.for.peat_bog.name=Торфяник
+tile.for.peat_bog.tooltip=Торфяная ферма
+tile.for.plantation.name=Ферма резины
+
+item.for.flexible_casing.name=Гибкий корпус
+
+tile.for.planter.manual=%s (руководство)
+tile.for.planter.managed=%s (управляемый)
+
+for.gui.planter.north=С
+for.gui.planter.south=Ю
+for.gui.planter.east=В
+for.gui.planter.west=З
+
+####################
 # GREENHOUSE
 ####################
 for.gui.greenhouse.title=Теплица
-for.gui.greenhouse.hygroregulator.title=Кондиционер теплицы
+for.gui.greenhouse.hygroregulator.title=Тепличный гидрорегулятор
 
-tile.for.greenhouse.tooltip=Мульти-блок: 3x2x3 - 5x5x5
-tile.for.greenhouse.camouflage.tooltip=Этот блок может быть замаскирован (это значит что Вы можете изменить модель этого блока)
-tile.for.greenhouse.plain.name=Блок теплицы
-tile.for.greenhouse.gearbox.name=Распределитель энергии теплицы
-tile.for.greenhouse.control.name=Регулятор теплицы
-tile.for.greenhouse.screen.name=Монитор теплицы
-tile.for.greenhouse.window_up.name=Окно крыши теплицы
-tile.for.greenhouse.window.name=Окно теплицы
-tile.for.climatiser.fan.name=Вентилятор теплицы
-tile.for.climatiser.heater.name=Обогреватель теплицы
-tile.for.climatiser.dehumidifier.name=Осушитель теплицы
-tile.for.climatiser.humidifier.name=Увлажнитель теплицы
-tile.for.climatiser.hygro.name=Кондиционер теплицы
+tile.for.greenhouse.tooltip=Мультиблок: 3x2x3 - 5x5x5
+tile.for.greenhouse.camouflage.tooltip=Этот блок можно замаскировать, что означает, что вы можете настроить модель этого блока.
+tile.for.greenhouse.plain.name=Парниковый блок
+tile.for.greenhouse.gearbox.name=Распределитель парниковой энергии
+tile.for.greenhouse.control.name=Парниковый контроль
+tile.for.greenhouse.screen.name=Парниковый экран
+tile.for.greenhouse.window_up.name=Окно крыши парника
+tile.for.greenhouse.window.name=Окно парника
+tile.for.climatiser.fan.name=Вентилятор парника
+tile.for.climatiser.heater.name=Подогреватель парника
+tile.for.climatiser.dehumidifier.name=Осушитель парника
+tile.for.climatiser.humidifier.name=Увлажнитель парника
+tile.for.climatiser.hygro.name=Тепличный терморегулятор
 
-item.for.greenhouse_screen.name=Переносной монитор теплицы
+item.for.greenhouse_screen.name=Портативный парниковый экран
 
-for.gui.modifier.sources.range.up=Range Up: %s
-for.gui.modifier.sources.range.down=Range Down: %s
-for.gui.modifier.sources.change=Change: %s
+for.gui.modifier.sources.range.up=Диапазон выше: %s
+for.gui.modifier.sources.range.down=Диапазон ниже: %s
+for.gui.modifier.sources.change=Изменить: %s
 for.gui.modifier.rain=Дождь: %s
 for.gui.modifier.time=Время: %s
-for.gui.modifier.altitude=Выс. над ур. моря: %s
+for.gui.modifier.altitude=Высота: %s
 for.gui.modifier.title=Модификаторы
-for.gui.sources=Клим. источники: %s
+for.gui.sources=Источники климата: %s
 for.gui.modifier.weather.title=Погода
 for.gui.modifier.time.title=Время
-for.gui.modifier.altitude.title=Выс. над ур. моря
-for.gui.modifier.sources.title=Клим. источники
+for.gui.modifier.altitude.title=Высота
+for.gui.modifier.sources.title=Источники климата
 
-for.message.greenhouse_screen.fail=Вы можете использовать этот предмет только, если он привязан к теплице
-for.message.greenhouse_screen.position=Этот предмет теперь привязан к теплице
-for.message.greenhouse_screen.preview.active=Предварительный просмотр включен
-for.message.greenhouse_screen.preview.inactive=Предварительный просмотр выключен
-for.message.greenhouse_screen.center=Вы назначили координаты центра теплицы
+for.message.greenhouse_screen.fail=Вы можете использовать этот предмет только в том случае, если он связан с теплицей
+for.message.greenhouse_screen.position=Этот предмет теперь связан с теплицей
+for.message.greenhouse_screen.preview.active=Переключить режим предпросмотра на активный
+for.message.greenhouse_screen.preview.inactive=Переключить режим предпросмотра на неактивный
+for.message.greenhouse_screen.center=Вы установили центр теплицы в координаты
 for.message.greenhouse_screen.away=Вы слишком далеко от теплицы, чтобы использовать этот предмет
-for.message.greenhouse_screen.notassembled=Вы можете привязать этот предмет только к готовой теплице
+for.message.greenhouse_screen.notassembled=Вам может понравиться только этот предмет в собранной теплице
 
-for.greenhouse_screen.mode=Режим предв. просмотра: %s
-for.greenhouse_screen.mode.active=Активен
-for.greenhouse_screen.mode.inactive=Неактивен
+for.greenhouse_screen.mode=Режим предпросмотра: %s
+for.greenhouse_screen.mode.active=Активный
+for.greenhouse_screen.mode.inactive=Неактивный
 for.greenhouse_screen.state=Состояние: %s
-for.greenhouse_screen.state.linked=Привязан к координатам (%s, %s, %s)
-for.greenhouse_screen.state.fail=Не привязан
+for.greenhouse_screen.state.linked=Связано с позицией (%s, %s, %s)
+for.greenhouse_screen.state.fail=Не связано
 for.greenhouse_screen.temperature=Температура: %s
 for.greenhouse_screen.humidity=Влажность: %s
 
@@ -1517,7 +1542,7 @@ for.butterflies.species.pieridae.postillion=Желтушка Шафранова�
 for.butterflies.species.pieridae.reseda=Белянка Рапсовая
 for.butterflies.species.pieridae.springAzure=Голубянка Весенняя
 for.butterflies.species.saturniidae.atlas=Павлиноглазка Атлас
-for.butterflies.species.bombycidae.bombyxMori=Тутовый шелкопряд
+for.butterflies.species.bombycidae.bombyxMori=Тутовый Шелкопряд
 
 for.gui.loot.butterfly=Возможная добыча бабочки
 for.gui.loot.caterpillar=Возможная добыча гусеницы
@@ -1574,7 +1599,7 @@ for.gui.mail.tradefor=для
 for.gui.mail.willtrade=%s будет торговать
 
 item.for.catalogue.name=Каталог
-item.for.catalogue.tooltip=Отображает все доступные обмены торговой станции.
+item.for.catalogue.tooltip=Перечисляет все доступные торговые сделки.
 
 ####################
 # PIPES
@@ -1582,38 +1607,71 @@ item.for.catalogue.tooltip=Отображает все доступные обм
 
 item.PipeItemsPropolis.name=Труба пчеловода
 
+tile.for.genetic_filter.name=Генетический фильтр
+tile.for.genetic_filter.0.name=Генетический фильтр
+
+for.gui.filter.seletion=Фильтр селекции
+
+for.gui.filter.forestry.default.anything=Всё
+for.gui.filter.forestry.default.closed=Закрыт
+for.gui.filter.forestry.default.item=Предметы
+for.gui.filter.forestry.default.cave=Пещерные
+for.gui.filter.forestry.default.flyer=Летуны
+for.gui.filter.forestry.default.nocturnal=Ночные
+for.gui.filter.forestry.default.pure_breed=Чистопородные
+for.gui.filter.forestry.default.pure_cave=Породистые пещерные
+for.gui.filter.forestry.default.pure_flyer=Породистые летуны
+for.gui.filter.forestry.default.pure_nocturnal=Породистые ночные
+
+for.gui.filter.forestry.apiculture.bee=Любые пчелы
+for.gui.filter.forestry.apiculture.queen=Матка
+for.gui.filter.forestry.apiculture.drone=Трутень
+for.gui.filter.forestry.apiculture.princess=Принцесса
+
+for.gui.filter.forestry.arboriculture.tree=Любой саженец
+for.gui.filter.forestry.arboriculture.sapling=Саженец
+for.gui.filter.forestry.arboriculture.pollen=Пыльца
+
+for.gui.filter.forestry.lepidopterology.flutter=Любая бабочка
+for.gui.filter.forestry.lepidopterology.butterfly=Бабочка
+for.gui.filter.forestry.lepidopterology.caterpillar=Гусеница
+for.gui.filter.forestry.lepidopterology.serum=Сыворотка
+for.gui.filter.forestry.lepidopterology.cocoon=Кокон
+
 ####################
 # MODULES
 ####################
-for.module.core.description=Основные механики модификации Forestry. Требуется для всех других модулей.
-for.module.fluids.description=Добавляет жидкости, блоки жидкостей и контейнеры для них.
+for.module.core.description=Основная механика для Forestry. Требуется для всех других модулей.
+for.module.fluids.description=Добавляет жидкости, жидкостные блоки и жидкостные контейнеры.
 for.module.apiculture.description=Добавляет пчёл, пчеловодство и продукты пчёл. Влияет на генерацию мира.
-for.module.arboriculture.description=Добавляет новые виды деревьев и продуктов.
-for.module.charcoal.description=Добавляет кучку древесины, суглинок и производство древесного угля.
-for.module.energy.description=Добавляет двигатели, работающие на энергии RF.
+for.module.arboriculture.description=Добавляет дополнительные виды деревьев и продуктов.
+for.module.charcoal.description=Добавляет охапки дров, суглинки и древесный уголь продукцию.
+for.module.energy.description=Добавляет несколько двигателей, работающих на RF.
 for.module.factory.description=Добавление широкий спектр механизмов, которые производят и перерабатывают продукты.
-for.module.worktable.description=Добавляет верстак, который может содержать до 8 рецептов.
+for.module.worktable.description=Добавляет верстак, который может хранить 8 рецептов.
 for.module.farming.description=Добавляет автоматические фермы и сборщиков для широкого спектра продуктов.
 for.module.food.description=Добавляет еду.
 for.module.lepidopterology.description=Бабочки. Яркие.
 for.module.mail.description=Добавляет системы почты и торговли Forestry.
 for.module.backpacks.description=Добавляет рюкзаки.
 for.module.crates.description=Добавляет ящики.
-for.module.greenhouse.description=Добавляет теплицу из мульти-блоков.
-for.module.database.description=Добавляет новое хранилище для пчёл, деревьев и бабочек.
+for.module.greenhouse.description=Добавляет мультиблочную теплицу.
+for.module.database.description=Добавляет новый блок хранения для пчел/деревьев и бабочек.
+for.module.cultivation.description=Добавляет автоматические фермы для самых разных продуктов.
+for.module.book.description=Добавляет справочник, содержащий информацию обо всех других модулях.
 
 for.module.buildcraft6.description=Модуль совместимости для BuildCraft 6.
-for.module.pipes.description=Добавляет трубу пчеловода, если модуль пчеловодства включён и BuildCraft 6 установлен.
+for.module.pipes.description=Добавляет трубу пчеловода для пчеловодства, если пчеловодство включено и BuildCraft 6 установлен.
 for.module.ic2.description=Модуль совместимости для IC2. Добавляет электрический двигатель и генератор для преобразования энергии.
 for.module.natura.description=Модуль совместимости для Natura. Позволяет выращивать саженцы Natura.
-for.module.ee2.description=Модуль совместимости для Equivalent Exchange 2. Включает Омега пчёл. Модуль пчеловодства должен быть включён.
+for.module.ee2.description=Модуль совместимости для Equivalent Exchange 2. Включает Омега пчёл. Пчеловодство должно быть включено.
 for.module.ee3.description=Модуль совместимости для Equivalent Exchange 3.
 for.module.farmcraftory.description=Включает совместимость с FarmCraftory. Добавляет растения и овощи в фермы.
 for.module.biomesoplenty.description=Модуль совместимости для Biomes O Plenty. Позволяет выращивать саженцы BoP.
-for.module.extrautilities.description=Модуль совместимости для Extra Utilities. Позволяет выращивать лилии Края и красные орхидеи.
+for.module.extrautilities.description=Модуль совместимости для Extra Utilities. Позволяет выращивать лилии Края.
 for.module.harvestcraft.description=Модуль совместимости для HarvestCraft. Позволяет выращивать растения и деревья HarvestCraft.
 for.module.magicalcrops.description=Модуль совместимости для Magical Crops.
-for.module.chisel.description=Модуль совместимости для Chisel. Добавляет природные блоки в рюкзаки.
+for.module.chisel.description=Модуль совместимости для Chisel. Добавляет генерируемые блоки в рюкзаки.
 for.module.plantmegapack.description=Модуль совместимости для Plant Mega Pack.
 for.module.witchery.description=Модуль совместимости для Witchery.
 for.module.agricraft.description=Модуль совместимости для AgriCraft.
@@ -1622,10 +1680,10 @@ for.module.immersiveengineering.description=Модуль совместимос�
 for.module.growthcraft.description=Модуль совместимости для GrowthCraft.
 for.module.erebus.description=Модуль совместимости для Erebus.
 for.module.rotarycraft.description=Модуль совместимости для RotaryCraft.
-for.module.actuallyadditions.description=Модуль совместимости для Actually Additions.
-for.module.roots.description=Модуль совместимости для Roots.
-for.module.rustic.description=Модуль совместимости для Rustic.
-for.module.mysticalagriculture.description=Модуль совместимости для Mystical Agriculture. Позволяет выращивать растения Mystical Agriculture.
+for.module.actuallyadditions.description=Плагин совместимости для Actually Additions.
+for.module.roots.description=Плагин совместимости для Roots.
+for.module.rustic.description=Плагин совместимости для Rustic.
+for.module.mysticalagriculture.description=Плагин совместимости для Mystical Agriculture. Позволяет выращивать Mystical Agriculture культуры.
 
 ####################
 # CONFIG FILES
@@ -1650,6 +1708,8 @@ for.config.world.generate.ore.copper=Generate Copper
 for.config.world.generate.ore.copper.comment=Generates copper ore blocks in the world.
 for.config.world.generate.ore.tin=Generate Tin
 for.config.world.generate.ore.tin.comment=Generates tin ore blocks in the world.
+for.config.world.generate.ore.dimBlacklist=Ore generation Dimension Blacklist
+for.config.world.generate.ore.dimBlacklist.comment=Disables the generation of all ore in the specified dimensions. Enter one dimension id per line.
 
 for.config.world.generate.beehives.amount=Beehives Generation Amount
 for.config.world.generate.beehives.amount.comment=Sets how many beehives spawn in the world.
@@ -1661,6 +1721,11 @@ for.config.world.generate.beehives.blacklist.category_comment=Disables the gener
 
 for.config.world.generate.villagers=Generate Villagers
 for.config.world.generate.villagers.comment=Generates forestry villagers and their houses.
+
+for.config.world.generate.trees.dimBlacklist=Tree Generation Dimension Blacklist
+for.config.world.generate.trees.dimBlacklist.comment=Disables the generation of all trees in the specified dimensions. Enter one dimension id per line.
+for.config.world.generate.trees.treeFrequency=Tree Generation Frequency
+for.config.world.generate.trees.treeFrequency.comment=How Frequently forestry generates it's trees in the world
 
 for.config.crafting=Crafting
 for.config.crafting.bronze=Craft Bronze
@@ -1699,14 +1764,23 @@ for.config.tweaks.humus.degradeDelimiter.comment=Set how many stages humus has b
 
 for.config.tweaks.farms.size=Farm Size
 for.config.tweaks.farms.size.comment=Sets the size multiplier of the farmland.
+for.config.tweaks.farms.fertilizer=Farm Fertilizer
+for.config.tweaks.farms.fertilizer.comment=Sets the multiplier of the multifarm and the cultivation farms. All cultivation farms alway use the double amount of fertilizer.
 for.config.tweaks.farms.square=Square Farms
 for.config.tweaks.farms.square.comment=Makes farms use a square layout instead of a diamond one.
 for.config.tweaks.farms.enderlily=EnderLily Farm Support
-for.config.tweaks.farms.enderlily.comment=Enables farm support for ExtraUtilities Ender-lily seeds.
+for.config.tweaks.farms.enderlily.comment=Enables farm support for Extra Utilities Ender-lily seeds.
 for.config.tweaks.farms.redorchid=Red Orchid Farm Support
-for.config.tweaks.farms.redorchid.comment=Enables farm support for ExtraUtilities Red Orchid.
+for.config.tweaks.farms.redorchid.comment=Enables farm support for Extra Utilities Red Orchid.
 for.config.tweaks.farms.magicalcrops=Magical Crops Farm Support
 for.config.tweaks.farms.magicalcrops.comment=Enables farm support for Magical Crops.
+
+for.config.tweaks.cultivation.extend=Cultivation Farm Size
+for.config.tweaks.cultivation.extend.comment=Sets the size of the farmland that is used by all cultivation farms.
+for.config.tweaks.cultivation.ring=Ring Cultivation Farms
+for.config.tweaks.cultivation.ring.comment=Makes cultivation farms use a ring layout like the layout of the old farms. The farmland size of the ring layout is always one block smaller.
+for.config.tweaks.cultivation.ring_size=Inner Ring Size
+for.config.tweaks.cultivation.ring_size.comment=Sets the size of the inner ring of the ring layout.
 
 for.config.tweaks.capsule=Capsules
 for.config.tweaks.capsule.comment=Enables the function that cans and capsules can pick up fluids from the world.
@@ -1717,6 +1791,9 @@ for.config.tweaks.greenhouse.size=Greenhouse Size
 for.config.tweaks.greenhouse.size.comment=Set the size multiplier of the climated blocks.
 for.config.tweaks.greenhouse.energy=Greenhouse Energy Modifier
 for.config.tweaks.greenhouse.energy.comment=Modifies the energy that is used by the greenhouse climatisers.
+
+for.config.tweaks.book.spawn=Forester's Manual
+for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
 
 for.config.genetics=Genetics
 for.config.genetics.pollinate.vanilla.trees=Pollinate Vanilla Trees
@@ -1738,7 +1815,7 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to seperate every entry in a sererate line.
+for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. \n You can't remove auto generated entries you only can deactivate them if you set there value to 0.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
@@ -1762,6 +1839,11 @@ for.config.beekeeping.ticks.work=Ticks per Cycle
 for.config.beekeeping.ticks.work.comment=The number of ticks per bee work cycle.
 for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
 for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
+for.config.beekeeping.self.pollination=Leaf Self Pollination
+for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
+for.config.beekeeping.ignoble.decay=Ignoble Decay
+for.config.beekeeping.ignoble.decay.comment=Whether ignoble bees will eventually die out.
+
 
 for.config.species.blacklist=Species Blacklist
 for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
@@ -1882,52 +1964,287 @@ for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
 ####################
 # JEI Descriptions
 ####################
-for.jei.description.frames=Place Forestry Frames in an Apiary to improve the bees' production rate and reduce the genetic decay of Ignoble bees.
-for.jei.description.apiarist.suit=Pieces of the Apiarist's Suit protect the wearer from negative bee effects. A full suit offers complete protection.
-for.jei.description.habitat_locator=The Habitat Locator searches for the closest ideal habitat for a bee. When it has located a spot, it will point the way there. When the current location is ideal, it will spin steadily.
-for.jei.description.scoop=The Scoop is used to break bee hives found in the world, it will collect the bees inside. It can also be used to catch butterflies by right-clicking them.
-for.jei.description.imprinter=Creative-only. Creates hybrid bees of any type.
+for.jei.description.frames=Поместите лесные рамы в пасеку, чтобы улучшить скорость производства пчел и уменьшить генетический распад пчел Игнобле.
+for.jei.description.apiarist.suit=Части костюма пчеловода защищают пользователя от негативных эффектов пчел. Полный костюм предлагает полную защиту.
+for.jei.description.habitat_locator=Локатор среды обитания ищет самую близкую идеальную среду обитания для пчелы. Когда определит местонахождение места, укажет путь туда. Когда текущее местоположение будет идеально, оно будет постоянно вращаться.
+for.jei.description.scoop=Сачок используется, чтобы сломать пчелинные улья, найденную в мире, которая соберет пчел внутри. Также можно использовать, чтобы поймать бабочек, щелкая ПКМ по ним.
+for.jei.description.imprinter=Только в творческом режиме. Создает гибридных пчел любого типа.
 
-for.jei.description.infuser=Used to infuse Mead with Pollen Clusters and create Curative Mead.
+for.jei.description.infuser=Используется для наполнения медовухи Пыльцевыми Кластерами и создания лечебной медовухи.
 
-for.jei.description.chipsets=Circuit Boards can be fitted with Electron Tubes by using a Soldering Iron. Once complete, they can be placed in the sockets on machine guis. Use a Soldering Iron to remove them from a socket.
-for.jei.description.soldering_iron=Right click with the Soldering Iron in hand to open the soldering gui. There, you can select the type of circuit to make and attach Electron Tubes to Circuit Boards. Can be used to remove a circuit board from a socket.
-for.jei.description.thermionic_tubes=Electron Tubes can be attached to Circuit Boards using a Soldering Iron. They have many purposes displayed on the tooltip, which depend on the circuit type selected in the Soldering Iron. Once soldered, they cannot be removed from a Circuit Board.
-for.jei.description.humus=Rich soil that can grow plants and doesn't require water. Degrades into sand over time.
-for.jei.description.bog_earth=Slowly turns into peat if left to soak near water for a while.
-for.jei.description.analyzer=Block version of the Portable Genetic Analyzer. Requires power and liquid honey.
-for.jei.description.escritoire=Play a matching mini-game to research bee, tree, and butterfly mutations. Gives research notes that boost mutation rates, and other rewards.
-for.jei.description.pipette=Can pick up small amounts of liquid. In Forestry GUIs, you can hold a pipette and click the tanks to fill or drain them directly.
-for.jei.description.kit_shovel=A stackable package that contains a bronze shovel. Use it in your hand to open.
-for.jei.description.kit_pickaxe=A stackable package that contains a bronze pickaxe. Use it in your hand to open.
-for.jei.description.fertilizer_compound=Rich fertilizer. Can be used as bonemeal on crops and saplings. Required in order to run a Forestry farm.
+for.jei.description.chipsets=Платы могут быть оснащены электронными трубами с помощью паяльника. После завершения их можно поместить в гнезда на гине. Используйте паяльник, чтобы удалить их из гнезда.
+for.jei.description.soldering_iron=Щелкните ПКМ с помощью паяльника в руке, чтобы открыть паяльник. Там вы можете выбрать тип схемы для изготовления и подключения электронных трубок к печатным платам. Может использоваться для извлечения печатной платы из гнезда.
+for.jei.description.thermionic_tubes=Электронные трубки могут быть прикреплены к печатным платам с помощью паяльника. Они имеют много целей, отображаемых на всплывающей подсказке, которые зависят от типа схемы, выбранного в паяльном утюге. После пайки они не могут быть удалены из печатной платы.
+for.jei.description.humus=Богатая почва, которая может выращивать растения и не требует воды. Со временем превращается в песок.
+for.jei.description.bog_earth=Медленно превращается в торф, если оставить на некоторое время в непосредственной близости от воды.
+for.jei.description.analyzer=Блочная версия портативного генетического анализатора. Требует энергию и жидкий мед.
+for.jei.description.escritoire=Играйте в подходящую мини-игру, чтобы исследовать мутации пчел, деревьев и бабочек. Дает исследовательские заметки, которые повышают скорость мутаций и другие награды.
+for.jei.description.pipette=Может собирать небольшое количество жидкости. В графическом интерфейсе Forestry вы можете держать пипетку и нажимать на цистерну, чтобы заполнить или слить их напрямую.
+for.jei.description.kit_shovel=Составной комплект, который содержит бронзовую лопату. Используйте его в руке, чтобы открыться.
+for.jei.description.kit_pickaxe=Составной комплект, который содержит бронзовую кирку. Используйте его в руке, чтобы открыть.
+for.jei.description.fertilizer_compound=Богатое удобрение. Может использоваться как бонезем на культурах и саженцах. Требуется для ведения фермерского хозяйства.
 
-for.jei.description.raintank=Collects water when it rains. Can automatically output water from the bottom side.
-for.jei.description.worktable=Advanced crafting table with an inventory. Remembers up to 9 recipes. Has the ability to choose the crafting result when there is a recipe conflict.
+for.jei.description.raintank=Собирает воду, когда идет дождь. Может автоматически выводить воду с нижней стороны.
+for.jei.description.worktable=Расширенный верстак с записями. Запоминает до 9 рецептов. Имеет возможность выбирать результат создания, когда есть конфликт рецептов.
 
-for.jei.description.grafter=Guarantees a sapling drop when breaking Forestry leaves. Has a very limited number of uses.
-for.jei.description.grafter_proven=Guarantees a sapling drop when breaking Forestry leaves. They can only be purchased from villagers.
+for.jei.description.grafter=Гарантирует падение саженцев при разбивании листьев леса. Имеет очень ограниченное количество применений.
+for.jei.description.grafter_proven=Гарантирует падение саженцев при разбивании листьев дерева. Их можно купить только у жителей деревни.
 
-for.jei.description.mailbox=Allows players to send letters to trade stations and other players. Opening any mailbox will show the player their own mail.
-for.jei.description.trade_station=An automatic mailbox that lets players set up a trading deal.
-for.jei.description.stamp_collector=Creative-only. Collects all the stamps used by mailing letters. Useful for servers with a stamp economy.
+for.jei.description.mailbox=Позволяет игрокам отправлять письма на торговые станции и других игроков. Открытие любого почтового ящика покажет игроку собственную почту.
+for.jei.description.trade_station=Автоматический почтовый ящик, который позволяет игрокам настроить торговую сделку.
+for.jei.description.stamp_collector=Только в творческом режиме. Собирает все марки, используемые почтовыми письмами. Полезно для серверов с марочной экономикой.
 
-for.jei.description.adventurer_bag=Extra inventory that can hold whatever is set in the configs in /config/forestry/backpacks.cfg
-for.jei.description.builder_bag=Extra inventory that automatically picks up building-related items.
-for.jei.description.digger_bag=Extra inventory that automatically picks up dirt, cobble, and other low-value mining-related items.
-for.jei.description.forester_bag=Extra inventory that automatically picks up plants and related items.
-for.jei.description.hunter_bag=Extra inventory that automatically picks up mob drops and related items.
-for.jei.description.miner_bag=Extra inventory that automatically picks up ores and valuable mining-related items.
-for.jei.description.apiarist_bag=Extra inventory that automatically picks up bees.
-for.jei.description.lepidopterist_bag=Extra inventory that automatically picks up butterflies.
+for.jei.description.adventurer_bag=Дополнительные ресурсы, которые могут содержать все, что установлено в конфигурациях в /config/forestry/backpacks.cfg
+for.jei.description.builder_bag=Дополнительный инвентарь, который автоматически собирает предметы, связанные со строительством.
+for.jei.description.digger_bag=Дополнительный инвентарь, который автоматически собирает грязь, булыжник и другие мелкие предметы, связанные с горнодобывающей отраслью.
+for.jei.description.forester_bag=Дополнительный инвентарь, который автоматически собирает растения и связанные с ними предметы.
+for.jei.description.hunter_bag=Дополнительный инвентарь, который автоматически поднимает дропы мобов и связанные с ними предметы.
+for.jei.description.miner_bag=Дополнительный инвентарь, который автоматически забирает руды и ценные предметы, связанные с добычей.
+for.jei.description.apiarist_bag=Дополнительный инвентарь, который автоматически подбирает пчел.
+for.jei.description.lepidopterist_bag=Дополнительный инвентарь, который автоматически подбирает бабочек.
 
-####################
+##############
 # JEI Recipes
-####################
+##############
 for.jei.rainmaker.causes.rain=Вызывает дождь
-for.jei.rainmaker.stops.rain=Прекращает дождь
+for.jei.rainmaker.stops.rain=Останавливает дождь
 for.jei.rainmaker.speed=Скорость: %s
-for.jei.rainmaker.duration=Длительность: %s (в тиках)
-tile.for.charcoal.pile.wall.name=Кучка древесного угля
+for.jei.rainmaker.duration=Продолжительность: %s тиков
+tile.for.charcoal.pile.wall.name=Охапка древесного угля
 for.jei.chance=Шанс: %s
-for.jei.fortune=Количество этого предмета зависит от зачарования удача.
+for.jei.fortune=Количество этого предмета зависит от зачарования на удачу.
+
+###########################################################
+# CUSTOM BEES NAMES  (Probably outdated and needs updating)
+###########################################################
+
+for.bees.custom.drone.forest=Лесной трутень
+for.bees.custom.drone.meadows=Луговой трутень
+for.bees.custom.drone.boggy=Болотистый трутень
+for.bees.custom.drone.miry=Топкий трутень
+for.bees.custom.drone.agrarian=Земельный трутень
+for.bees.custom.drone.farmerly=Прошлый трутень
+for.bees.custom.drone.common=Обычный трутень
+for.bees.custom.drone.cultivated=Развитый трутень
+for.bees.custom.drone.noble=Знатный трутень
+for.bees.custom.drone.majestic=Величавый трутень
+for.bees.custom.drone.imperial=Имперский трутень
+for.bees.custom.drone.diligent=Прилежный трутень
+for.bees.custom.drone.unweary=Неутомимый трутень
+for.bees.custom.drone.industrious=Трудолюбивый трутень
+for.bees.custom.drone.steadfast=Стойкий трутень
+for.bees.custom.drone.valiant=Доблестный трутень
+for.bees.custom.drone.heroic=Героический трутень
+for.bees.custom.drone.sinister=Зловещий трутень
+for.bees.custom.drone.fiendish=Жестокий трутень
+for.bees.custom.drone.demonic=Одержимый трутень
+for.bees.custom.drone.modest=Скромный трутень
+for.bees.custom.drone.frugal=Бережливый трутень
+for.bees.custom.drone.austere=Суровый трутень
+for.bees.custom.drone.tropical=Тропический трутень
+for.bees.custom.drone.exotic=Редкий трутень
+for.bees.custom.drone.edenic=Райский трутень
+for.bees.custom.drone.ended=Драконий трутень
+for.bees.custom.drone.wintry=Зимний трутень
+for.bees.custom.drone.icy=Ледяной трутень
+for.bees.custom.drone.glacial=Ледниковый трутень
+for.bees.custom.drone.vindictive=Карательный трутень
+for.bees.custom.drone.vengeful=Мстительный трутень
+for.bees.custom.drone.avenging=Мстящий трутень
+for.bees.custom.drone.darkened=Тёмный трутень
+for.bees.custom.drone.reddened=Красный трутень
+for.bees.custom.drone.omega=Омега трутень
+for.bees.custom.drone.leporine=Заячий трутень
+for.bees.custom.drone.tricky=Хитрый трутень
+for.bees.custom.drone.rural=Сельский трутень
+for.bees.custom.drone.marshy=Болотный трутень
+for.bees.custom.drone.merry=Весёлый трутень
+for.bees.custom.drone.tipsy=Пьяный трутень
+for.bees.custom.drone.monastic=Монаший трутень
+for.bees.custom.drone.secluded=Укромный трутень
+for.bees.custom.drone.hermitic=Уединённый трутень
+for.bees.custom.drone.spectral=Призрачный трутень
+for.bees.custom.drone.phantasmal=Воображаемый трутень
+
+for.bees.custom.larvae.ended=Драконья личинка
+for.bees.custom.princess.ended=Драконья принцесса
+for.bees.custom.queen.ended=Драконья матка
+
+###################################
+# CUSTOM Beealyzer/Treealyzer NAMES
+###################################
+
+for.bees.custom.beealyzer.drone.forest=Лесной
+for.bees.custom.beealyzer.drone.meadows=Луговой
+for.bees.custom.beealyzer.drone.boggy=Болотистый
+for.bees.custom.beealyzer.drone.miry=Топкий
+for.bees.custom.beealyzer.drone.agrarian=Земельный
+for.bees.custom.beealyzer.drone.farmerly=Прошлый
+for.bees.custom.beealyzer.drone.common=Обычный
+for.bees.custom.beealyzer.drone.cultivated=Развитый
+for.bees.custom.beealyzer.drone.noble=Знатный
+for.bees.custom.beealyzer.drone.majestic=Величавый
+for.bees.custom.beealyzer.drone.imperial=Имперский
+for.bees.custom.beealyzer.drone.diligent=Прилежный
+for.bees.custom.beealyzer.drone.unweary=Неутомимый
+for.bees.custom.beealyzer.drone.industrious=Трудолюбивый
+for.bees.custom.beealyzer.drone.steadfast=Стойкий
+for.bees.custom.beealyzer.drone.valiant=Доблестный
+for.bees.custom.beealyzer.drone.heroic=Героический
+for.bees.custom.beealyzer.drone.sinister=Зловещий
+for.bees.custom.beealyzer.drone.fiendish=Жестокий
+for.bees.custom.beealyzer.drone.demonic=Одержимый
+for.bees.custom.beealyzer.drone.modest=Скромный
+for.bees.custom.beealyzer.drone.frugal=Бережливый
+for.bees.custom.beealyzer.drone.austere=Суровый
+for.bees.custom.beealyzer.drone.tropical=Тропический
+for.bees.custom.beealyzer.drone.exotic=Редкий
+for.bees.custom.beealyzer.drone.edenic=Райский
+for.bees.custom.beealyzer.drone.ended=Драконий
+for.bees.custom.beealyzer.drone.wintry=Зимний
+for.bees.custom.beealyzer.drone.icy=Ледяной
+for.bees.custom.beealyzer.drone.glacial=Ледниковый
+for.bees.custom.beealyzer.drone.vindictive=Карательный
+for.bees.custom.beealyzer.drone.vengeful=Мстительный
+for.bees.custom.beealyzer.drone.avenging=Мстящий
+for.bees.custom.beealyzer.drone.darkened=Тёмный
+for.bees.custom.beealyzer.drone.reddened=Красный
+for.bees.custom.beealyzer.drone.omega=Омега
+for.bees.custom.beealyzer.drone.leporine=Заячий
+for.bees.custom.beealyzer.drone.tricky=Хитрый
+for.bees.custom.beealyzer.drone.rural=Сельский
+for.bees.custom.beealyzer.drone.marshy=Болотный
+for.bees.custom.beealyzer.drone.merry=Весёлый
+for.bees.custom.beealyzer.drone.tipsy=Пьяный
+for.bees.custom.beealyzer.drone.monastic=Монаший
+for.bees.custom.beealyzer.drone.secluded=Укромный
+for.bees.custom.beealyzer.drone.hermitic=Уединённый
+for.bees.custom.beealyzer.drone.spectral=Призрачный
+for.bees.custom.beealyzer.drone.phantasmal=Воображаемый
+
+for.bees.custom.beealyzer.larvae.ended=Края
+for.bees.custom.beealyzer.princess.ended=Края
+for.bees.custom.beealyzer.queen.ended=Края
+
+for.trees.custom.treealyzer.pollen.acacia=Акация
+for.trees.custom.treealyzer.pollen.appleOak=Яблочный дуб
+for.trees.custom.treealyzer.pollen.balsa=Бальза
+for.trees.custom.treealyzer.pollen.blueMahoe=Синий гибискус
+for.trees.custom.treealyzer.pollen.bullPine=Жёлтая cосна
+for.trees.custom.treealyzer.pollen.coastSequoia=Береговая секвойя
+for.trees.custom.treealyzer.pollen.commonWalnut=Обычное ореховое дерево
+for.trees.custom.treealyzer.pollen.darkOak=Тёмный дуб
+for.trees.custom.treealyzer.pollen.datePalm=Финиковая пальма
+for.trees.custom.treealyzer.pollen.desertAcacia=Пустынная акация
+for.trees.custom.treealyzer.pollen.giantSequoia=Гигантская секвойя
+for.trees.custom.treealyzer.pollen.grandidierBaobab=Адансония Грандидье
+for.trees.custom.treealyzer.pollen.hillCherry=Сакура
+for.trees.custom.treealyzer.pollen.jungle=Дерево джунглей
+for.trees.custom.treealyzer.pollen.kapok=Хлопковое дерево
+for.trees.custom.treealyzer.pollen.lemon=Лимонное дерево
+for.trees.custom.treealyzer.pollen.mundaneLarch=Мировая лиственница
+for.trees.custom.treealyzer.pollen.myrtleEbony=Мирт
+for.trees.custom.treealyzer.pollen.papaya=Дынное дерево
+for.trees.custom.treealyzer.pollen.plum=Сливовое дерево
+for.trees.custom.treealyzer.pollen.redSpruce=Красная ель
+for.trees.custom.treealyzer.pollen.silverBirch=Белая берёза
+for.trees.custom.treealyzer.pollen.silverLime=Липа пушистая
+for.trees.custom.treealyzer.pollen.sipiri=Сипири
+for.trees.custom.treealyzer.pollen.sugarMaple=Сахарный клён
+for.trees.custom.treealyzer.pollen.sweetChestnut=Каштан посевной
+for.trees.custom.treealyzer.pollen.teak=Тиковое дерево
+for.trees.custom.treealyzer.pollen.wenge=Дерево Венге
+for.trees.custom.treealyzer.pollen.whitePoplar=Белый тополь
+for.trees.custom.treealyzer.pollen.whiteWillow=Белая ива
+for.trees.custom.treealyzer.pollen.yellowMeranti=Жёлтое меранти
+for.trees.custom.treealyzer.pollen.ipe=Муравьиное дерево
+for.trees.custom.treealyzer.pollen.padauk=Падук
+for.trees.custom.treealyzer.pollen.cocobolo=Кокоболо
+for.trees.custom.treealyzer.pollen.zebrawood=Зебрано
+
+for.trees.custom.treealyzer.sapling.acacia=Акация
+for.trees.custom.treealyzer.sapling.appleOak=Яблочный дуб
+for.trees.custom.treealyzer.sapling.balsa=Бальза
+for.trees.custom.treealyzer.sapling.blueMahoe=Синий гибискус
+for.trees.custom.treealyzer.sapling.bullPine=Сосна жёлтая
+for.trees.custom.treealyzer.sapling.coastSequoia=Береговая секвойя
+for.trees.custom.treealyzer.sapling.commonWalnut=Обычное ореховое дерево
+for.trees.custom.treealyzer.sapling.darkOak=Тёмный дуб
+for.trees.custom.treealyzer.sapling.datePalm=Финиковая пальма
+for.trees.custom.treealyzer.sapling.desertAcacia=Пустынная акация
+for.trees.custom.treealyzer.sapling.giantSequoia=Гигантская секвойя
+for.trees.custom.treealyzer.sapling.grandidierBaobab=Адансония Грандидье
+for.trees.custom.treealyzer.sapling.hillCherry=Сакура
+for.trees.custom.treealyzer.sapling.jungle=Дерево джунглей
+for.trees.custom.treealyzer.sapling.kapok=Хлопковое дерево
+for.trees.custom.treealyzer.sapling.lemon=Лимонное дерево
+for.trees.custom.treealyzer.sapling.mundaneLarch=Мировая лиственница
+for.trees.custom.treealyzer.sapling.myrtleEbony=Мирт
+for.trees.custom.treealyzer.sapling.papaya=Дынное дерево
+for.trees.custom.treealyzer.sapling.plum=Сливовое дерево
+for.trees.custom.treealyzer.sapling.redSpruce=Красная ель
+for.trees.custom.treealyzer.sapling.silverBirch=Белая берёза
+for.trees.custom.treealyzer.sapling.silverLime=Липа пушистая
+for.trees.custom.treealyzer.sapling.sipiri=Сипири
+for.trees.custom.treealyzer.sapling.sugarMaple=Сахарный клён
+for.trees.custom.treealyzer.sapling.sweetChestnut=Каштан посевной
+for.trees.custom.treealyzer.sapling.teak=Тиковое дерево
+for.trees.custom.treealyzer.sapling.wenge=Дерево Венге
+for.trees.custom.treealyzer.sapling.whitePoplar=Белый тополь
+for.trees.custom.treealyzer.sapling.whiteWillow=Белая ива
+for.trees.custom.treealyzer.sapling.yellowMeranti=Жёлтое меранти
+for.trees.custom.treealyzer.sapling.ipe=Муравьиное дерево
+for.trees.custom.treealyzer.sapling.padauk=Падук
+for.trees.custom.treealyzer.sapling.cocobolo=Кокоболо
+for.trees.custom.treealyzer.sapling.zebrawood=Зебрано
+
+forestry.allele.height.smallest=Самая низкая
+forestry.allele.height.smaller=Очень низкая
+forestry.allele.height.small=Низкая
+forestry.allele.height.average=Средняя
+forestry.allele.height.large=Большая
+forestry.allele.height.larger=Очень большая
+forestry.allele.height.largest=Наибольшая
+forestry.allele.height.gigantic=Гигантская
+
+forestry.allele.sappiness.lowest=Самая низкая
+forestry.allele.sappiness.lower=Очень низкая
+forestry.allele.sappiness.low=Низкая
+forestry.allele.sappiness.average=Средняя
+forestry.allele.sappiness.high=Высокая
+forestry.allele.sappiness.higher=Очень высокая
+forestry.allele.sappiness.highest=Наивысшая
+
+forestry.allele.maturation.slowest=Очень медленное
+forestry.allele.maturation.slower=Медленное
+forestry.allele.maturation.slow=Неторопливое
+forestry.allele.maturation.normal=Обычное
+forestry.allele.maturation.average=Среднее
+forestry.allele.maturation.fast=Быстрое
+forestry.allele.maturation.faster=Очень быстрое
+forestry.allele.maturation.fastest=Наибыстрейшее
+
+forestry.allele.speed.slowest=Очень медленная
+forestry.allele.speed.slower=Медленная
+forestry.allele.speed.slow=Неторопливая
+forestry.allele.speed.normal=Обычная
+forestry.allele.speed.fast=Быстрая
+forestry.allele.speed.faster=Очень быстрая
+forestry.allele.speed.fastest=Наибыстрейшая
+
+forestry.allele.flowering.slowest=Очень медленная
+forestry.allele.flowering.slower=Медленная
+forestry.allele.flowering.slow=Неторопливая
+forestry.allele.flowering.normal=Обычная
+forestry.allele.flowering.fast=Быстрая
+forestry.allele.flowering.faster=Очень быстрая
+forestry.allele.flowering.fastest=Наибыстрейшая
+forestry.allele.flowering.maximum=Максимально быстрая
+
+for.tooltip.worker.slowest=Очень медленный рабочий
+for.tooltip.worker.slower=Медленный рабочий
+for.tooltip.worker.slow=Неторопливый рабочий
+for.tooltip.worker.normal=Обычный рабочий
+for.tooltip.worker.fast=Быстрый рабочий
+for.tooltip.worker.faster=Очень быстрый рабочий
+for.tooltip.worker.fastest=Наибыстрейший рабочий
