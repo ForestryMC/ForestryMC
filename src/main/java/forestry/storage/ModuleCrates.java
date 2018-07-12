@@ -63,7 +63,7 @@ public class ModuleCrates extends BlankForestryModule {
 	private static ItemRegistryCrates items;
 
 	public static ItemRegistryCrates getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 

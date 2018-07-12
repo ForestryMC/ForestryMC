@@ -131,12 +131,12 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public static VillagerRegistry.VillagerProfession villagerArborist;
 
 	public static ItemRegistryArboriculture getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryArboriculture getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

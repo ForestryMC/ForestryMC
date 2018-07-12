@@ -180,9 +180,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public void onCraftingComplete(EntityPlayer player) {
-		Preconditions.checkState(currentRecipe != null);
+		Preconditions.checkNotNull(currentRecipe);
 		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
-		Preconditions.checkState(selectedRecipe != null);
+		Preconditions.checkNotNull(selectedRecipe);
 		
 		ForgeHooks.setCraftingPlayer(player);
 		InventoryCraftingForestry craftMatrix = currentRecipe.getCraftMatrix();

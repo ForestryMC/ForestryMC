@@ -34,7 +34,7 @@ public class ModuleBook extends BlankForestryModule {
 	private static ItemRegistryBook items;
 
 	public static ItemRegistryBook getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 

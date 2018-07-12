@@ -105,12 +105,12 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static BlockRegistryLepidopterology blocks;
 
 	public static ItemRegistryLepidopterology getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryLepidopterology getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

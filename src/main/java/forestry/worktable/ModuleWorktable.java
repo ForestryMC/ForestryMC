@@ -21,7 +21,7 @@ public class ModuleWorktable extends BlankForestryModule {
 	private static BlockRegistryWorktable blocks;
 
 	public static BlockRegistryWorktable getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

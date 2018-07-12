@@ -102,7 +102,7 @@ public class Forestry {
 	private static PacketHandler packetHandler;
 
 	public static PacketHandler getPacketHandler() {
-		Preconditions.checkState(packetHandler != null);
+		Preconditions.checkNotNull(packetHandler);
 		return packetHandler;
 	}
 
@@ -126,7 +126,7 @@ public class Forestry {
 		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
-		Preconditions.checkState(gameMode != null);
+		Preconditions.checkNotNull(gameMode);
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		MigrationHelper.registerFixable();

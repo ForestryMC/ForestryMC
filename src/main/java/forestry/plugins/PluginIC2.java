@@ -89,7 +89,7 @@ public class PluginIC2 extends BlankForestryModule {
 	public static BlockRegistryIC2 blocks;
 
 	public static BlockRegistryIC2 getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
