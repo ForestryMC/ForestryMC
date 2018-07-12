@@ -656,8 +656,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / SQUEEZER
 			FluidStack honeyDropFluid = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
-			RecipeManagers.squeezerManager.addRecipe(10, items.honeyDrop.getItemStack(), honeyDropFluid, items.propolis.getItemStack(), 5);
-			RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
+			if (honeyDropFluid != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, items.honeyDrop.getItemStack(), honeyDropFluid, items.propolis.getItemStack(), 5);
+				RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
+			}
 
 			ItemStack phosphor = coreItems.phosphor.getItemStack(2);
 			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
@@ -791,7 +793,11 @@ public class ModuleApiculture extends BlankForestryModule {
 			));
 
 			// / FERMENTER
-			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+			FluidStack shortMead = Fluids.SHORT_MEAD.getFluid(1);
+			FluidStack honey = Fluids.FOR_HONEY.getFluid(1);
+			if (shortMead != null && honey != null) {
+				RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, shortMead, honey);
+			}
 		}
 
 		RecipeUtil.addRecipe("apiary", blocks.apiary,

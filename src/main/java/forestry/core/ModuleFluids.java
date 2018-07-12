@@ -124,28 +124,36 @@ public class ModuleFluids extends BlankForestryModule {
 		}
 
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
-		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+		if (ethanol != null) {
+			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+		}
 
 		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
-		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+		if (biomass != null) {
+			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
+			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+		}
 	}
 
 	@Override
 	public void registerRecipes() {
+		Fluid milk = Fluids.MILK.getFluid();
+		if (milk == null) {
+			return;
+		}
 		for (EnumContainerType containerType : EnumContainerType.values()) {
 			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
 				continue;
 			}
 			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
-				"AAA",
-				"BEB",
-				"CCC",
-				'A', items.getContainer(containerType, Fluids.MILK.getFluid()),
-				'B', Items.SUGAR,
-				'C', Items.WHEAT,
-				'E', Items.EGG);
+					"AAA",
+					"BEB",
+					"CCC",
+					'A', items.getContainer(containerType, milk),
+					'B', Items.SUGAR,
+					'C', Items.WHEAT,
+					'E', Items.EGG);
 		}
 	}
 }
