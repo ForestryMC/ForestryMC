@@ -92,6 +92,8 @@ public class MigrationHelper {
 		addTileRemappingName("GreenhouseHeater", "greenhouse_heater");
 		addTileRemappingName("GreenhouseDryer", "greenhouse_dehumidifier");
 		addTileRemappingName("GreenhouseSprinkler", "greenhouse_humidifier");
+		//Lepidopterology
+		addTileRemappingName("Cocoon", "cocoon");
 		//Sorting
 		addTileRemappingName("GeneticFilter", "genetic_filter");
 
