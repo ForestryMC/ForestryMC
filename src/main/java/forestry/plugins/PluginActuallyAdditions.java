@@ -48,9 +48,11 @@ public class PluginActuallyAdditions extends CompatPlugin {
 		//add seed squeezing
 		int amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedFluid = Fluids.SEED_OIL.getFluid(amount);
-		for (Item seed : Arrays.asList(canolaSeed, flaxSeed, riceSeed, coffeeSeed)) {
-			if (seed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(seed), seedFluid);
+		if (seedFluid != null) {
+			for (Item seed : Arrays.asList(canolaSeed, flaxSeed, riceSeed, coffeeSeed)) {
+				if (seed != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(seed), seedFluid);
+				}
 			}
 		}
 

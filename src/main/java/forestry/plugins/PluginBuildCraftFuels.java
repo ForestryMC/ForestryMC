@@ -48,10 +48,11 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 		if(coolantManager != null) {
 			FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
 			ICoolant waterCoolant = coolantManager.getCoolant(water);
-			if (waterCoolant != null) {
+			Fluid ice = Fluids.ICE.getFluid();
+			if (waterCoolant != null && ice != null) {
 				float waterCooling = waterCoolant.getDegreesCoolingPerMB(water, 100);
 
-				coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
+				coolantManager.addCoolant(ice, Constants.ICE_COOLING_MULTIPLIER * waterCooling);
 			}
 		}
 		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
