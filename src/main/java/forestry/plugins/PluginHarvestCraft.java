@@ -17,6 +17,9 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.fuels.FuelManager;
@@ -189,15 +192,17 @@ public class PluginHarvestCraft extends CompatPlugin {
 		PropertyInteger fruitAGE = PropertyInteger.create("age", 0, 2);
 
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
+		Fluid juice = Fluids.JUICE.getFluid();
+		Fluid seedOil = Fluids.SEED_OIL.getFluid();
 		for (String berryName : berries) {
 			ItemStack berry = getItemStack(berryName + "item");
 			ItemStack berrySeed = getItemStack(berryName + "seeditem");
 			Block berryBlock = getBlock("pam" + berryName + "crop");
-			if (berry != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, berry, Fluids.JUICE.getFluid(juiceAmount));
+			if (berry != null && juice != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, berry, new FluidStack(juice, juiceAmount));
 			}
-			if (berrySeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, berrySeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (berrySeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, berrySeed, new FluidStack(seedOil, seedamount));
 			}
 			if (farmingModuleEnabled && berrySeed != null && berryBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(berrySeed, berryBlock, plantAGE, 3, 0));
@@ -210,11 +215,11 @@ public class PluginHarvestCraft extends CompatPlugin {
 			ItemStack fruit = getItemStack(fruitName + "item");
 			ItemStack fruitSeed = getItemStack(fruitName + "seeditem");
 			Block fruitBlock = getBlock("pam" + fruitName + "crop");
-			if (fruit != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, fruit, Fluids.JUICE.getFluid(juiceAmount));
+			if (fruit != null && juice != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, fruit, new FluidStack(juice, juiceAmount));
 			}
-			if (fruitSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, fruitSeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (fruitSeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, fruitSeed, new FluidStack(seedOil, seedamount));
 			}
 			if (farmingModuleEnabled && fruitSeed != null && fruitBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(fruitSeed, fruitBlock, plantAGE, 3, 0));
@@ -228,11 +233,11 @@ public class PluginHarvestCraft extends CompatPlugin {
 			ItemStack vegetable = getItemStack(vegetableName + "item");
 			ItemStack vegetableSeed = getItemStack(vegetableName + "seeditem");
 			Block vegetableBlock = getBlock("pam" + vegetableName + "crop");
-			if (vegetable != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, vegetable, Fluids.JUICE.getFluid(juiceAmount));
+			if (vegetable != null && juice != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, vegetable, new FluidStack(juice, juiceAmount));
 			}
-			if (vegetableSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, vegetableSeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (vegetableSeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, vegetableSeed, new FluidStack(seedOil, seedamount));
 			}
 			if (farmingModuleEnabled && vegetableSeed != null && vegetableBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(vegetableSeed, vegetableBlock, plantAGE, 3, 0));
@@ -249,8 +254,8 @@ public class PluginHarvestCraft extends CompatPlugin {
 				RecipeUtil.addRecipe("pam_compost_" + grainName, coreItems.compost.getItemStack(wheatamount), " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', grain);
 				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, coreItems.mouldyWheat.getItemStack(), 0, 300));
 			}
-			if (grainSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, grainSeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (grainSeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, grainSeed, new FluidStack(seedOil, seedamount));
 				RecipeManagers.moistenerManager.addRecipe(grainSeed, new ItemStack(Blocks.MYCELIUM), 5000);
 			}
 			if (farmingModuleEnabled && grainSeed != null && grainBlock != null) {
@@ -265,8 +270,8 @@ public class PluginHarvestCraft extends CompatPlugin {
 			if (farmingModuleEnabled && treeFruitBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableAgingCrop(ItemStack.EMPTY, treeFruitBlock, fruitAGE, 2, 0));
 			}
-			if (treeFruit != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, treeFruit, Fluids.JUICE.getFluid(juiceAmount));
+			if (treeFruit != null && juice != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, treeFruit, new FluidStack(juice, juiceAmount));
 			}
 			plants.add(treeFruitName);
 		}
@@ -296,8 +301,8 @@ public class PluginHarvestCraft extends CompatPlugin {
 			}
 			ItemStack genericCropSeed = getItemStack(seedPrefix + "seeditem");
 			Block genericCropBlock = getBlock("pam" + cropName + "crop");
-			if (genericCropSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, genericCropSeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (genericCropSeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, genericCropSeed, new FluidStack(seedOil, seedamount));
 			}
 			if (farmingModuleEnabled && genericCropSeed != null && genericCropBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(genericCropSeed, genericCropBlock, plantAGE, 3, 0));
@@ -307,8 +312,8 @@ public class PluginHarvestCraft extends CompatPlugin {
 		ItemStack mustardCropSeed = getItemStack("mustard" + "seeditem");
 		Block mustardCropBlock = getBlock("pam" + "mustardseeds" + "crop");
 		ItemStack mustardFruit = getItemStack("mustard" + "seedsitem");
-		if (mustardCropSeed != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, mustardCropSeed, Fluids.SEED_OIL.getFluid(seedamount));
+		if (mustardCropSeed != null && seedOil != null) {
+			RecipeManagers.squeezerManager.addRecipe(10, mustardCropSeed, new FluidStack(seedOil, seedamount));
 		}
 		if (farmingModuleEnabled && mustardCropSeed != null && mustardCropBlock != null) {
 			farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(mustardCropSeed, mustardCropBlock, plantAGE, 3, 0));
@@ -328,14 +333,14 @@ public class PluginHarvestCraft extends CompatPlugin {
 			ItemStack cropnut = getItemStack(cropnutName + "item");
 			ItemStack cropnutSeed = getItemStack(cropnutName + "seeditem");
 			Block cropnutBlock = getBlock("pam" + cropnutName + "crop");
-			if (cropnutSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, cropnutSeed, Fluids.SEED_OIL.getFluid(seedamount));
+			if (cropnutSeed != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, cropnutSeed, new FluidStack(seedOil, seedamount));
 			}
 			if (farmingModuleEnabled && cropnutSeed != null && cropnutBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(cropnutSeed, cropnutBlock, plantAGE, 3, 0));
 			}
-			if (cropnut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, cropnut, Fluids.SEED_OIL.getFluid(12 * seedamount));
+			if (cropnut != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(20, cropnut, new FluidStack(seedOil, 12 * seedamount));
 			}
 		}
 
@@ -345,15 +350,16 @@ public class PluginHarvestCraft extends CompatPlugin {
 			if (farmingModuleEnabled && nutBlock != null) {
 				farmRegistry.registerFarmables(ForestryFarmIdentifier.ORCHARD, new FarmableAgingCrop(ItemStack.EMPTY, nutBlock, fruitAGE, 2, 0));
 			}
-			if (nut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, nut, Fluids.SEED_OIL.getFluid(15 * seedamount));
+			if (nut != null && seedOil != null) {
+				RecipeManagers.squeezerManager.addRecipe(20, nut, new FluidStack(seedOil, 15 * seedamount));
 			}
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemStack hcHoneyItem = getItemStack("honeyitem");
-			if (hcHoneyItem != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
+			FluidStack honey = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
+			if (hcHoneyItem != null && honey != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, hcHoneyItem, honey);
 			}
 
 			ItemStack hcBeeswaxItem = getItemStack("beeswaxitem");
