@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "forestry:refractory",
+    "item": "forestry:capsule",
     "count": 4
   },
   "pattern": [
@@ -8,15 +8,15 @@
   ],
   "conditions": [
     {
-      "module": "apiculture",
+      "module": "core",
       "type": "module"
     }
   ],
   "type": "forestry:variable_output",
-  "config_property": "recipe.output.refractory",
+  "config_property": "recipe.output.capsule",
   "key": {
     "#": {
-      "item": "forestry:refractory_wax"
+      "item": "forestry:beeswax"
     }
   },
   "group": "apiculture"
