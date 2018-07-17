@@ -28,7 +28,7 @@ public class ModuleCharcoal extends BlankForestryModule {
 	private static BlockRegistryCharcoal blocks;
 
 	public static BlockRegistryCharcoal getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

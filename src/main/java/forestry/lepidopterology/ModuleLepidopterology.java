@@ -40,7 +40,6 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -56,6 +55,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -104,12 +104,12 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static BlockRegistryLepidopterology blocks;
 
 	public static ItemRegistryLepidopterology getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryLepidopterology getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -158,7 +158,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void doInit() {
 		BlockRegistryLepidopterology blocks = getBlocks();
 
-		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+		TileUtil.registerTile(TileCocoon.class, "cocoon");
 
 		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 

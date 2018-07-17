@@ -26,7 +26,7 @@ public class ModuleFood extends BlankForestryModule {
 	private static ItemRegistryFood items;
 
 	public static ItemRegistryFood getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 

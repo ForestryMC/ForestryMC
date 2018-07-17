@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
@@ -155,12 +157,12 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 
 			IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
 			int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-
+			FluidStack seedOil = Fluids.SEED_OIL.getFluid(seedAmount);
 			for (String cropName : crops) {
 				ItemStack seeds = getItemStack(cropName + "_seeds");
 				Block block = getBlock(cropName + "_crop");
-				if (seeds != null) {
-					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
+				if (seeds != null && seedOil != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, seeds, seedOil);
 				}
 				if (seeds != null && block != null) {
 					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
@@ -169,8 +171,8 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 			for(int i = 1;i <= 5;i++){
 				ItemStack seeds = getItemStack("tier" + i + "_inferium_seeds");
 				Block block = getBlock("tier" + i + "_inferium_crop");
-				if (seeds != null) {
-					RecipeManagers.squeezerManager.addRecipe(10, seeds, Fluids.SEED_OIL.getFluid(seedAmount));
+				if (seeds != null && seedOil != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, seeds, seedOil);
 				}
 				if (seeds != null && block != null) {
 					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));

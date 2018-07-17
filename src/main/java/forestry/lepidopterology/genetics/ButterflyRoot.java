@@ -108,7 +108,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		}
 
 		ItemRegistryLepidopterology butterflyItems = ModuleLepidopterology.getItems();
-		Preconditions.checkState(butterflyItems != null);
+		Preconditions.checkNotNull(butterflyItems);
 
 		Item item = stack.getItem();
 		if (butterflyItems.butterflyGE == item) {
@@ -162,7 +162,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
 		Preconditions.checkArgument(type instanceof EnumFlutterType);
 		ItemRegistryLepidopterology items = ModuleLepidopterology.getItems();
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 
 		Item butterflyItem;
 		switch ((EnumFlutterType) type) {

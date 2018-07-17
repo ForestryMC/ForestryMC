@@ -86,7 +86,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 	);
 
 	public static ItemRegistryBackpacks getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 

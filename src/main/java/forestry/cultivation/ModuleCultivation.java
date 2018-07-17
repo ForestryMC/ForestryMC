@@ -20,7 +20,7 @@ public class ModuleCultivation extends BlankForestryModule {
 	private static BlockRegistryCultivation blocks;
 
 	public static BlockRegistryCultivation getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

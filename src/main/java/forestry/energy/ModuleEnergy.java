@@ -35,7 +35,7 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static BlockRegistryEnergy blocks;
 
 	public static BlockRegistryEnergy getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

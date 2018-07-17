@@ -25,7 +25,7 @@ public class ModuleSorting extends BlankForestryModule {
 	private static BlockRegistrySorting blocks;
 
 	public static BlockRegistrySorting getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

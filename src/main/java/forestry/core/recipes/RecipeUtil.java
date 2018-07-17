@@ -42,15 +42,19 @@ public abstract class RecipeUtil {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
+		FluidStack outputStack = output.getFluid(1);
+		if(outputStack == null) {
+			return;
+		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
 
 		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
 		}
 
 		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
 		}
 	}
 
@@ -58,15 +62,19 @@ public abstract class RecipeUtil {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
+		FluidStack outputStack = output.getFluid(1);
+		if(outputStack == null) {
+			return;
+		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
 
 		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
 		}
 
 		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
 		}
 	}
 

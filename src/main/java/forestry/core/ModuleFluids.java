@@ -61,7 +61,7 @@ public class ModuleFluids extends BlankForestryModule {
 
 	private static void createBlock(Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
-		Preconditions.checkState(fluid != null);
+		Preconditions.checkNotNull(fluid);
 		Block fluidBlock = fluid.getBlock();
 
 		if (Config.isBlockEnabled(forestryFluid.getTag())) {
@@ -92,7 +92,7 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	public static ItemRegistryFluids getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
@@ -120,11 +120,15 @@ public class ModuleFluids extends BlankForestryModule {
 		}
 
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
-		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+		if (ethanol != null) {
+			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+		}
 
 		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
-		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+		if (biomass != null) {
+			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
+			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+		}
 	}
 }

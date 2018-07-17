@@ -54,7 +54,7 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 	@Override
 	public void initializeModels() {
 		BlockRegistryGreenhouse blocks = ModuleGreenhouse.getBlocks();
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 
 		ModelManager modelManager = ModelManager.getInstance();
 		Block greenhouseBlock = blocks.greenhouseBlock;

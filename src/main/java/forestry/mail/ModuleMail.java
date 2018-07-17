@@ -46,12 +46,12 @@ public class ModuleMail extends BlankForestryModule {
 	private static BlockRegistryMail blocks;
 
 	public static ItemRegistryMail getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryMail getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

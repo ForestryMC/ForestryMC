@@ -176,6 +176,7 @@ public enum Fluids {
 		return FluidRegistry.getFluid(getTag());
 	}
 
+	@Nullable
 	public final FluidStack getFluid(int mb) {
 		return FluidRegistry.getFluidStack(getTag(), mb);
 	}

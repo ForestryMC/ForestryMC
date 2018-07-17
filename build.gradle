@@ -60,12 +60,12 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
-	deobfCompile "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
-	runtime "mezz.jei:jei_${jei_mcversion}:${jei_version}"
-	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
-	deobfCompile "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
-	deobfCompile "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
+	deobfProvided "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"
+	deobfProvided "mezz.jei:jei_${jei_mcversion}:${jei_version}:api"
+	runtimeOnly "mezz.jei:jei_${jei_mcversion}:${jei_version}"
+	deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
+	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
 }
 
 configurations {

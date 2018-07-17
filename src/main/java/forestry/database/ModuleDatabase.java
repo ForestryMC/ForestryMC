@@ -18,7 +18,7 @@ public class ModuleDatabase extends BlankForestryModule {
 	private static BlockRegistryDatabase blocks;
 
 	public static BlockRegistryDatabase getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 

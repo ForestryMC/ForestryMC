@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.fml.common.Optional;
 
@@ -86,7 +87,7 @@ public class PluginIC2 extends BlankForestryModule {
 	public static BlockRegistryIC2 blocks;
 
 	public static BlockRegistryIC2 getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -188,9 +189,9 @@ public class PluginIC2 extends BlankForestryModule {
 	@Optional.Method(modid = PluginIC2.MOD_ID)
 	public void registerRecipes() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-
-		if (rubber != null) {
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, Fluids.GLASS.getFluid(500), coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
+		FluidStack glass = Fluids.GLASS.getFluid(500);
+		if (rubber != null && glass != null) {
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, glass, coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
 					new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 		}
 
@@ -229,9 +230,10 @@ public class PluginIC2 extends BlankForestryModule {
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ENERGY)) {
 			Fluid biogas = FluidRegistry.getFluid("ic2biogas");
-			if (biogas != null) {
+			Fluid biomass = Fluids.BIOMASS.getFluid();
+			if (biogas != null && biomass != null) {
 				int burnDuration = Math.round(Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas"));
-				EngineBronzeFuel bronzeFuel = new EngineBronzeFuel(Fluids.BIOMASS.getFluid(), Constants.ENGINE_FUEL_VALUE_BIOMASS, burnDuration, 1);
+				EngineBronzeFuel bronzeFuel = new EngineBronzeFuel(biomass, Constants.ENGINE_FUEL_VALUE_BIOMASS, burnDuration, 1);
 				FuelManager.bronzeEngineFuel.put(biogas, bronzeFuel);
 			}
 		}

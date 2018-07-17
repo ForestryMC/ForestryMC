@@ -107,7 +107,7 @@ public class ModuleFarming extends BlankForestryModule {
 	private static BlockRegistryFarming blocks;
 
 	public static BlockRegistryFarming getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
