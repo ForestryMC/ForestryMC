@@ -74,10 +74,10 @@ public final class FluidHelper {
 		ItemStack filled = input.copy();
 		filled.setCount(1);
 
-		if(emptyStack.isEmpty()){
+		if (emptyStack.isEmpty()) {
 			emptyStack = filled;
 		}
-		
+
 		IFluidHandlerItem fluidFilledHandler = FluidUtil.getFluidHandler(filled);
 		IFluidHandlerItem fluidEmptyHandler = FluidUtil.getFluidHandler(emptyStack);
 		if (fluidFilledHandler == null || fluidEmptyHandler == null) {
@@ -189,6 +189,9 @@ public final class FluidHelper {
 						if (!isFillableContainer(newStack) || isFillableContainerAndEmpty(newStack)) {
 							inv.setInventorySlotContents(outputSlot, newStack);
 							inv.decrStackSize(inputSlot, 1);
+						}
+						if (isDrainableContainer(newStack) && !isEmpty(newStack)) {
+							inv.setInventorySlotContents(inputSlot, newStack);
 						}
 					} else {
 						inv.decrStackSize(inputSlot, 1);
@@ -314,4 +317,38 @@ public final class FluidHelper {
 
 		return true;
 	}
+
+	public static boolean isDrainableContainer(ItemStack container) {
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		if (fluidHandler == null) {
+			return false;
+		}
+
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (properties.canDrain()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isEmpty(ItemStack container) {
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		if (fluidHandler == null) {
+			return false;
+		}
+
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			FluidStack contents = properties.getContents();
+			if (contents != null && contents.amount > 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }
