@@ -1496,6 +1496,7 @@ for.chat.command.forestry.butterfly.format=Формат: /%s <подкоманд
 for.chat.command.forestry.butterfly.kill.desc=- %s : Убивает всех бабочек
 for.chat.command.forestry.butterfly.kill.help=Убивает всех бабочек в загруженных чанках
 for.chat.command.forestry.butterfly.kill.format=Формат: /%s [<dimension#>]
+for.chat.command.forestry.butterfly.kill.response=Убит %d бабочками
 
 for.butterflies.hybrid=Гибрид: %PRIMARY-%SECONDARY
 
@@ -1641,49 +1642,40 @@ for.gui.filter.forestry.lepidopterology.cocoon=Кокон
 ####################
 # MODULES
 ####################
-for.module.core.description=Основная механика для Forestry. Требуется для всех других модулей.
-for.module.fluids.description=Добавляет жидкости, жидкостные блоки и жидкостные контейнеры.
 for.module.apiculture.description=Добавляет пчёл, пчеловодство и продукты пчёл. Влияет на генерацию мира.
 for.module.arboriculture.description=Добавляет дополнительные виды деревьев и продуктов.
+for.module.backpacks.description=Добавляет рюкзаки.
+for.module.book.description=Добавляет справочник, содержащий информацию обо всех других модулях.
 for.module.charcoal.description=Добавляет охапки дров, суглинки и древесный уголь продукцию.
+for.module.core.description=Основная механика для Forestry. Требуется для всех других модулей.
+for.module.crates.description=Добавляет ящики.
+for.module.cultivation.description=Добавляет автоматические фермы для самых разных продуктов.
+for.module.database.description=Добавляет новый блок хранения для пчел/деревьев и бабочек.
 for.module.energy.description=Добавляет несколько двигателей, работающих на RF.
 for.module.factory.description=Добавление широкий спектр механизмов, которые производят и перерабатывают продукты.
-for.module.worktable.description=Добавляет верстак, который может хранить 8 рецептов.
 for.module.farming.description=Добавляет автоматические фермы и сборщиков для широкого спектра продуктов.
+for.module.fluids.description=Добавляет жидкости, жидкостные блоки и жидкостные контейнеры.
 for.module.food.description=Добавляет еду.
+for.module.greenhouse.description=Добавляет мультиблочную теплицу.
 for.module.lepidopterology.description=Бабочки. Яркие.
 for.module.mail.description=Добавляет системы почты и торговли Forestry.
-for.module.backpacks.description=Добавляет рюкзаки.
-for.module.crates.description=Добавляет ящики.
-for.module.greenhouse.description=Добавляет мультиблочную теплицу.
-for.module.database.description=Добавляет новый блок хранения для пчел/деревьев и бабочек.
-for.module.cultivation.description=Добавляет автоматические фермы для самых разных продуктов.
-for.module.book.description=Добавляет справочник, содержащий информацию обо всех других модулях.
+for.module.sorting.description=Добавляет фильтр для сортировки предметов с генетическим материалом
+for.module.worktable.description=Добавляет верстак, который может хранить 8 рецептов.
 
-for.module.buildcraft6.description=Модуль совместимости для BuildCraft 6.
-for.module.pipes.description=Добавляет трубу пчеловода для пчеловодства, если пчеловодство включено и BuildCraft 6 установлен.
-for.module.ic2.description=Модуль совместимости для IC2. Добавляет электрический двигатель и генератор для преобразования энергии.
-for.module.natura.description=Модуль совместимости для Natura. Позволяет выращивать саженцы Natura.
-for.module.ee2.description=Модуль совместимости для Equivalent Exchange 2. Включает Омега пчёл. Пчеловодство должно быть включено.
-for.module.ee3.description=Модуль совместимости для Equivalent Exchange 3.
-for.module.farmcraftory.description=Включает совместимость с FarmCraftory. Добавляет растения и овощи в фермы.
+for.module.actuallyadditions.description=Модуль совместимости для Actually Additions.
+for.module.betterwithmods.description=Модуль совместимости для Better With Mods. Позволяет выращивать коноплю.
+for.module.buildcraft6.description=Модуль совместимости для BuildCraft. Текущая версия 7.99.
 for.module.biomesoplenty.description=Модуль совместимости для Biomes O Plenty. Позволяет выращивать саженцы BoP.
-for.module.extrautilities.description=Модуль совместимости для Extra Utilities. Позволяет выращивать лилии Края.
-for.module.harvestcraft.description=Модуль совместимости для HarvestCraft. Позволяет выращивать растения и деревья HarvestCraft.
-for.module.magicalcrops.description=Модуль совместимости для Magical Crops.
-for.module.chisel.description=Модуль совместимости для Chisel. Добавляет генерируемые блоки в рюкзаки.
-for.module.plantmegapack.description=Модуль совместимости для Plant Mega Pack.
-for.module.witchery.description=Модуль совместимости для Witchery.
-for.module.agricraft.description=Модуль совместимости для AgriCraft.
 for.module.enderIO.description=Модуль совместимости для EnderIO.
+for.module.extrautilities.description=Модуль совместимости для Extra Utilities. Позволяет выращивать лилию края и красную орхидею.
+for.module.harvestcraft.description=Модуль совместимости для HarvestCraft. Позволяет выращивать растения и деревья HarvestCraft.
+for.module.ic2.description=Модуль совместимости для IC2. Добавляет электрический двигатель и генератор для преобразования энергии.
 for.module.immersiveengineering.description=Модуль совместимости для Immersive Engineering.
-for.module.growthcraft.description=Модуль совместимости для GrowthCraft.
-for.module.erebus.description=Модуль совместимости для Erebus.
-for.module.rotarycraft.description=Модуль совместимости для RotaryCraft.
-for.module.actuallyadditions.description=Плагин совместимости для Actually Additions.
-for.module.roots.description=Плагин совместимости для Roots.
-for.module.rustic.description=Плагин совместимости для Rustic.
-for.module.mysticalagriculture.description=Плагин совместимости для Mystical Agriculture. Позволяет выращивать Mystical Agriculture культуры.
+for.module.mysticalagriculture.description=Модуль совместимости для Mystical Agriculture. Позволяет выращивать Mystical Agriculture культуры.
+for.module.natura.description=Модуль совместимости для Natura. Позволяет выращивать саженцы Natura.
+for.module.roots.description=Модуль совместимости для Roots.
+for.module.rustic.description=Модуль совместимости для Rustic.
+for.module.techreborn.description=Модуль совместимости для Tech reborn. Позволяет собирать резину из резиновых деревьев.
 
 ####################
 # CONFIG FILES
@@ -1722,10 +1714,12 @@ for.config.world.generate.beehives.blacklist.category_comment=Disables the gener
 for.config.world.generate.villagers=Generate Villagers
 for.config.world.generate.villagers.comment=Generates forestry villagers and their houses.
 
+for.config.world.generate.trees=Whether forestry should generate forestry trees in the world.
 for.config.world.generate.trees.dimBlacklist=Tree Generation Dimension Blacklist
 for.config.world.generate.trees.dimBlacklist.comment=Disables the generation of all trees in the specified dimensions. Enter one dimension id per line.
 for.config.world.generate.trees.treeFrequency=Tree Generation Frequency
 for.config.world.generate.trees.treeFrequency.comment=How Frequently forestry generates it's trees in the world
+for.config.world.generate.trees.biomeblacklist.comment=This will blacklist a biome or biome type for all tree generation. See the hive biome blacklist for more information.
 
 for.config.crafting=Crafting
 for.config.crafting.bronze=Craft Bronze
@@ -1782,8 +1776,10 @@ for.config.tweaks.cultivation.ring.comment=Makes cultivation farms use a ring la
 for.config.tweaks.cultivation.ring_size=Inner Ring Size
 for.config.tweaks.cultivation.ring_size.comment=Sets the size of the inner ring of the ring layout.
 
-for.config.tweaks.capsule=Capsules
-for.config.tweaks.capsule.comment=Enables the function that cans and capsules can pick up fluids from the world.
+for.config.tweaks.capsule.capsulePickup=Capsule Pickup
+for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans and capsules can pick up fluids from the world.
+for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
+for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
 for.config.tweaks.greenhouse.range=Greenhouse Range
 for.config.tweaks.greenhouse.range.comment=Set the range divisor of the climatiser of the greenhouse.
@@ -1798,8 +1794,8 @@ for.config.tweaks.book.spawn.comment=Players who enter the world for the first t
 for.config.genetics=Genetics
 for.config.genetics.pollinate.vanilla.trees=Pollinate Vanilla Trees
 for.config.genetics.pollinate.vanilla.trees.comment=Allow bees to pollinate vanilla tree leaves. When disabled, vanilla trees must be analyzed before they can be pollinated.
-for.config.genetics.analyzerblock.energy.use=Analyzer Block Energy Use
-for.config.genetics.analyzerblock.energy.use=Energy use of Analyzer Block per work cycle.
+for.config.genetics.analyzerblock.energy.use=Analyzer Block Energy Usage
+for.config.genetics.analyzerblock.energy.use.comment=Energy use of Analyzer Block per work cycle.
 for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
 for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
 for.config.genetics.research.boost.max.percent=Research Mutation Max
@@ -1839,6 +1835,8 @@ for.config.beekeeping.ticks.work=Ticks per Cycle
 for.config.beekeeping.ticks.work.comment=The number of ticks per bee work cycle.
 for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
 for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
+for.config.beekeeping.hivedamage.underwater=Underwater Hive Damage
+for.config.beekeeping.hivedamage.underwater.comment=Whether bees can damage a player while they are underwater.
 for.config.beekeeping.self.pollination=Leaf Self Pollination
 for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
 for.config.beekeeping.ignoble.decay=Ignoble Decay
@@ -1860,6 +1858,11 @@ for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate
 
 for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
+
+for.config.crates.items.accepted.comment=Added items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.items.rejected.comment=Blacklisted items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.oredict.accepted.comment=Added oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
+for.config.crates.oredict.rejected.comment=Blacklisted oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
 
 for.config.gamemode=Game Mode
 
@@ -1898,6 +1901,15 @@ for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice s
 for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
 
 for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+
+for.config.power.types.rf=Redstone Flux
+for.config.power.types.rf.comment=Enable Redstone Flux power support.
+for.config.power.types.mj=MJ
+for.config.power.types.mj.comment=Enable MJ power support.
+for.config.power.types.tesla=Tesla
+for.config.power.types.tesla.comment=Enable Tesla power support.
+for.config.power.display.mode=Power Display Mode
+for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
 
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
@@ -2003,248 +2015,17 @@ for.jei.description.miner_bag=Дополнительный инвентарь, �
 for.jei.description.apiarist_bag=Дополнительный инвентарь, который автоматически подбирает пчел.
 for.jei.description.lepidopterist_bag=Дополнительный инвентарь, который автоматически подбирает бабочек.
 
-##############
+####################
 # JEI Recipes
-##############
+####################
 for.jei.rainmaker.causes.rain=Вызывает дождь
 for.jei.rainmaker.stops.rain=Останавливает дождь
 for.jei.rainmaker.speed=Скорость: %s
 for.jei.rainmaker.duration=Продолжительность: %s тиков
-tile.for.charcoal.pile.wall.name=Охапка древесного угля
+for.jei.farming.name=Фермерство
+for.jei.farming.soil=Почва
+for.jei.farming.germlings=Зародыши
+for.jei.farming.products=Продукты
+for.jei.charcoal.pile.name=Охапка древесного угля
 for.jei.chance=Шанс: %s
 for.jei.fortune=Количество этого предмета зависит от зачарования на удачу.
-
-###########################################################
-# CUSTOM BEES NAMES  (Probably outdated and needs updating)
-###########################################################
-
-for.bees.custom.drone.forest=Лесной трутень
-for.bees.custom.drone.meadows=Луговой трутень
-for.bees.custom.drone.boggy=Болотистый трутень
-for.bees.custom.drone.miry=Топкий трутень
-for.bees.custom.drone.agrarian=Земельный трутень
-for.bees.custom.drone.farmerly=Прошлый трутень
-for.bees.custom.drone.common=Обычный трутень
-for.bees.custom.drone.cultivated=Развитый трутень
-for.bees.custom.drone.noble=Знатный трутень
-for.bees.custom.drone.majestic=Величавый трутень
-for.bees.custom.drone.imperial=Имперский трутень
-for.bees.custom.drone.diligent=Прилежный трутень
-for.bees.custom.drone.unweary=Неутомимый трутень
-for.bees.custom.drone.industrious=Трудолюбивый трутень
-for.bees.custom.drone.steadfast=Стойкий трутень
-for.bees.custom.drone.valiant=Доблестный трутень
-for.bees.custom.drone.heroic=Героический трутень
-for.bees.custom.drone.sinister=Зловещий трутень
-for.bees.custom.drone.fiendish=Жестокий трутень
-for.bees.custom.drone.demonic=Одержимый трутень
-for.bees.custom.drone.modest=Скромный трутень
-for.bees.custom.drone.frugal=Бережливый трутень
-for.bees.custom.drone.austere=Суровый трутень
-for.bees.custom.drone.tropical=Тропический трутень
-for.bees.custom.drone.exotic=Редкий трутень
-for.bees.custom.drone.edenic=Райский трутень
-for.bees.custom.drone.ended=Драконий трутень
-for.bees.custom.drone.wintry=Зимний трутень
-for.bees.custom.drone.icy=Ледяной трутень
-for.bees.custom.drone.glacial=Ледниковый трутень
-for.bees.custom.drone.vindictive=Карательный трутень
-for.bees.custom.drone.vengeful=Мстительный трутень
-for.bees.custom.drone.avenging=Мстящий трутень
-for.bees.custom.drone.darkened=Тёмный трутень
-for.bees.custom.drone.reddened=Красный трутень
-for.bees.custom.drone.omega=Омега трутень
-for.bees.custom.drone.leporine=Заячий трутень
-for.bees.custom.drone.tricky=Хитрый трутень
-for.bees.custom.drone.rural=Сельский трутень
-for.bees.custom.drone.marshy=Болотный трутень
-for.bees.custom.drone.merry=Весёлый трутень
-for.bees.custom.drone.tipsy=Пьяный трутень
-for.bees.custom.drone.monastic=Монаший трутень
-for.bees.custom.drone.secluded=Укромный трутень
-for.bees.custom.drone.hermitic=Уединённый трутень
-for.bees.custom.drone.spectral=Призрачный трутень
-for.bees.custom.drone.phantasmal=Воображаемый трутень
-
-for.bees.custom.larvae.ended=Драконья личинка
-for.bees.custom.princess.ended=Драконья принцесса
-for.bees.custom.queen.ended=Драконья матка
-
-###################################
-# CUSTOM Beealyzer/Treealyzer NAMES
-###################################
-
-for.bees.custom.beealyzer.drone.forest=Лесной
-for.bees.custom.beealyzer.drone.meadows=Луговой
-for.bees.custom.beealyzer.drone.boggy=Болотистый
-for.bees.custom.beealyzer.drone.miry=Топкий
-for.bees.custom.beealyzer.drone.agrarian=Земельный
-for.bees.custom.beealyzer.drone.farmerly=Прошлый
-for.bees.custom.beealyzer.drone.common=Обычный
-for.bees.custom.beealyzer.drone.cultivated=Развитый
-for.bees.custom.beealyzer.drone.noble=Знатный
-for.bees.custom.beealyzer.drone.majestic=Величавый
-for.bees.custom.beealyzer.drone.imperial=Имперский
-for.bees.custom.beealyzer.drone.diligent=Прилежный
-for.bees.custom.beealyzer.drone.unweary=Неутомимый
-for.bees.custom.beealyzer.drone.industrious=Трудолюбивый
-for.bees.custom.beealyzer.drone.steadfast=Стойкий
-for.bees.custom.beealyzer.drone.valiant=Доблестный
-for.bees.custom.beealyzer.drone.heroic=Героический
-for.bees.custom.beealyzer.drone.sinister=Зловещий
-for.bees.custom.beealyzer.drone.fiendish=Жестокий
-for.bees.custom.beealyzer.drone.demonic=Одержимый
-for.bees.custom.beealyzer.drone.modest=Скромный
-for.bees.custom.beealyzer.drone.frugal=Бережливый
-for.bees.custom.beealyzer.drone.austere=Суровый
-for.bees.custom.beealyzer.drone.tropical=Тропический
-for.bees.custom.beealyzer.drone.exotic=Редкий
-for.bees.custom.beealyzer.drone.edenic=Райский
-for.bees.custom.beealyzer.drone.ended=Драконий
-for.bees.custom.beealyzer.drone.wintry=Зимний
-for.bees.custom.beealyzer.drone.icy=Ледяной
-for.bees.custom.beealyzer.drone.glacial=Ледниковый
-for.bees.custom.beealyzer.drone.vindictive=Карательный
-for.bees.custom.beealyzer.drone.vengeful=Мстительный
-for.bees.custom.beealyzer.drone.avenging=Мстящий
-for.bees.custom.beealyzer.drone.darkened=Тёмный
-for.bees.custom.beealyzer.drone.reddened=Красный
-for.bees.custom.beealyzer.drone.omega=Омега
-for.bees.custom.beealyzer.drone.leporine=Заячий
-for.bees.custom.beealyzer.drone.tricky=Хитрый
-for.bees.custom.beealyzer.drone.rural=Сельский
-for.bees.custom.beealyzer.drone.marshy=Болотный
-for.bees.custom.beealyzer.drone.merry=Весёлый
-for.bees.custom.beealyzer.drone.tipsy=Пьяный
-for.bees.custom.beealyzer.drone.monastic=Монаший
-for.bees.custom.beealyzer.drone.secluded=Укромный
-for.bees.custom.beealyzer.drone.hermitic=Уединённый
-for.bees.custom.beealyzer.drone.spectral=Призрачный
-for.bees.custom.beealyzer.drone.phantasmal=Воображаемый
-
-for.bees.custom.beealyzer.larvae.ended=Края
-for.bees.custom.beealyzer.princess.ended=Края
-for.bees.custom.beealyzer.queen.ended=Края
-
-for.trees.custom.treealyzer.pollen.acacia=Акация
-for.trees.custom.treealyzer.pollen.appleOak=Яблочный дуб
-for.trees.custom.treealyzer.pollen.balsa=Бальза
-for.trees.custom.treealyzer.pollen.blueMahoe=Синий гибискус
-for.trees.custom.treealyzer.pollen.bullPine=Жёлтая cосна
-for.trees.custom.treealyzer.pollen.coastSequoia=Береговая секвойя
-for.trees.custom.treealyzer.pollen.commonWalnut=Обычное ореховое дерево
-for.trees.custom.treealyzer.pollen.darkOak=Тёмный дуб
-for.trees.custom.treealyzer.pollen.datePalm=Финиковая пальма
-for.trees.custom.treealyzer.pollen.desertAcacia=Пустынная акация
-for.trees.custom.treealyzer.pollen.giantSequoia=Гигантская секвойя
-for.trees.custom.treealyzer.pollen.grandidierBaobab=Адансония Грандидье
-for.trees.custom.treealyzer.pollen.hillCherry=Сакура
-for.trees.custom.treealyzer.pollen.jungle=Дерево джунглей
-for.trees.custom.treealyzer.pollen.kapok=Хлопковое дерево
-for.trees.custom.treealyzer.pollen.lemon=Лимонное дерево
-for.trees.custom.treealyzer.pollen.mundaneLarch=Мировая лиственница
-for.trees.custom.treealyzer.pollen.myrtleEbony=Мирт
-for.trees.custom.treealyzer.pollen.papaya=Дынное дерево
-for.trees.custom.treealyzer.pollen.plum=Сливовое дерево
-for.trees.custom.treealyzer.pollen.redSpruce=Красная ель
-for.trees.custom.treealyzer.pollen.silverBirch=Белая берёза
-for.trees.custom.treealyzer.pollen.silverLime=Липа пушистая
-for.trees.custom.treealyzer.pollen.sipiri=Сипири
-for.trees.custom.treealyzer.pollen.sugarMaple=Сахарный клён
-for.trees.custom.treealyzer.pollen.sweetChestnut=Каштан посевной
-for.trees.custom.treealyzer.pollen.teak=Тиковое дерево
-for.trees.custom.treealyzer.pollen.wenge=Дерево Венге
-for.trees.custom.treealyzer.pollen.whitePoplar=Белый тополь
-for.trees.custom.treealyzer.pollen.whiteWillow=Белая ива
-for.trees.custom.treealyzer.pollen.yellowMeranti=Жёлтое меранти
-for.trees.custom.treealyzer.pollen.ipe=Муравьиное дерево
-for.trees.custom.treealyzer.pollen.padauk=Падук
-for.trees.custom.treealyzer.pollen.cocobolo=Кокоболо
-for.trees.custom.treealyzer.pollen.zebrawood=Зебрано
-
-for.trees.custom.treealyzer.sapling.acacia=Акация
-for.trees.custom.treealyzer.sapling.appleOak=Яблочный дуб
-for.trees.custom.treealyzer.sapling.balsa=Бальза
-for.trees.custom.treealyzer.sapling.blueMahoe=Синий гибискус
-for.trees.custom.treealyzer.sapling.bullPine=Сосна жёлтая
-for.trees.custom.treealyzer.sapling.coastSequoia=Береговая секвойя
-for.trees.custom.treealyzer.sapling.commonWalnut=Обычное ореховое дерево
-for.trees.custom.treealyzer.sapling.darkOak=Тёмный дуб
-for.trees.custom.treealyzer.sapling.datePalm=Финиковая пальма
-for.trees.custom.treealyzer.sapling.desertAcacia=Пустынная акация
-for.trees.custom.treealyzer.sapling.giantSequoia=Гигантская секвойя
-for.trees.custom.treealyzer.sapling.grandidierBaobab=Адансония Грандидье
-for.trees.custom.treealyzer.sapling.hillCherry=Сакура
-for.trees.custom.treealyzer.sapling.jungle=Дерево джунглей
-for.trees.custom.treealyzer.sapling.kapok=Хлопковое дерево
-for.trees.custom.treealyzer.sapling.lemon=Лимонное дерево
-for.trees.custom.treealyzer.sapling.mundaneLarch=Мировая лиственница
-for.trees.custom.treealyzer.sapling.myrtleEbony=Мирт
-for.trees.custom.treealyzer.sapling.papaya=Дынное дерево
-for.trees.custom.treealyzer.sapling.plum=Сливовое дерево
-for.trees.custom.treealyzer.sapling.redSpruce=Красная ель
-for.trees.custom.treealyzer.sapling.silverBirch=Белая берёза
-for.trees.custom.treealyzer.sapling.silverLime=Липа пушистая
-for.trees.custom.treealyzer.sapling.sipiri=Сипири
-for.trees.custom.treealyzer.sapling.sugarMaple=Сахарный клён
-for.trees.custom.treealyzer.sapling.sweetChestnut=Каштан посевной
-for.trees.custom.treealyzer.sapling.teak=Тиковое дерево
-for.trees.custom.treealyzer.sapling.wenge=Дерево Венге
-for.trees.custom.treealyzer.sapling.whitePoplar=Белый тополь
-for.trees.custom.treealyzer.sapling.whiteWillow=Белая ива
-for.trees.custom.treealyzer.sapling.yellowMeranti=Жёлтое меранти
-for.trees.custom.treealyzer.sapling.ipe=Муравьиное дерево
-for.trees.custom.treealyzer.sapling.padauk=Падук
-for.trees.custom.treealyzer.sapling.cocobolo=Кокоболо
-for.trees.custom.treealyzer.sapling.zebrawood=Зебрано
-
-forestry.allele.height.smallest=Самая низкая
-forestry.allele.height.smaller=Очень низкая
-forestry.allele.height.small=Низкая
-forestry.allele.height.average=Средняя
-forestry.allele.height.large=Большая
-forestry.allele.height.larger=Очень большая
-forestry.allele.height.largest=Наибольшая
-forestry.allele.height.gigantic=Гигантская
-
-forestry.allele.sappiness.lowest=Самая низкая
-forestry.allele.sappiness.lower=Очень низкая
-forestry.allele.sappiness.low=Низкая
-forestry.allele.sappiness.average=Средняя
-forestry.allele.sappiness.high=Высокая
-forestry.allele.sappiness.higher=Очень высокая
-forestry.allele.sappiness.highest=Наивысшая
-
-forestry.allele.maturation.slowest=Очень медленное
-forestry.allele.maturation.slower=Медленное
-forestry.allele.maturation.slow=Неторопливое
-forestry.allele.maturation.normal=Обычное
-forestry.allele.maturation.average=Среднее
-forestry.allele.maturation.fast=Быстрое
-forestry.allele.maturation.faster=Очень быстрое
-forestry.allele.maturation.fastest=Наибыстрейшее
-
-forestry.allele.speed.slowest=Очень медленная
-forestry.allele.speed.slower=Медленная
-forestry.allele.speed.slow=Неторопливая
-forestry.allele.speed.normal=Обычная
-forestry.allele.speed.fast=Быстрая
-forestry.allele.speed.faster=Очень быстрая
-forestry.allele.speed.fastest=Наибыстрейшая
-
-forestry.allele.flowering.slowest=Очень медленная
-forestry.allele.flowering.slower=Медленная
-forestry.allele.flowering.slow=Неторопливая
-forestry.allele.flowering.normal=Обычная
-forestry.allele.flowering.fast=Быстрая
-forestry.allele.flowering.faster=Очень быстрая
-forestry.allele.flowering.fastest=Наибыстрейшая
-forestry.allele.flowering.maximum=Максимально быстрая
-
-for.tooltip.worker.slowest=Очень медленный рабочий
-for.tooltip.worker.slower=Медленный рабочий
-for.tooltip.worker.slow=Неторопливый рабочий
-for.tooltip.worker.normal=Обычный рабочий
-for.tooltip.worker.fast=Быстрый рабочий
-for.tooltip.worker.faster=Очень быстрый рабочий
-for.tooltip.worker.fastest=Наибыстрейший рабочий
