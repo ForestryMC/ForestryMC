@@ -65,7 +65,7 @@ public class LocalizedConfiguration extends Configuration {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setValidValues(validValues);
 		prop.setLanguageKey(langKey);
-		prop.setComment(comment + getValidStringComment(prop));
+		prop.setComment(comment + getValiedOptions(prop));
 		return prop.getString();
 	}
 
@@ -122,14 +122,15 @@ public class LocalizedConfiguration extends Configuration {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setLanguageKey(langKey);
 		prop.setValidValues(validValues);
-		prop.setComment(comment + getValidStringComment(prop));
+		prop.setComment(comment + getValiedOptions(prop));
 		return prop.getStringList();
 	}
 
-	private String getValidStringComment(Property prop) {
-		String ret = " [default: " + prop.getDefault() + "]";
+	private String getValiedOptions(Property prop) {
+		String defautValue = prop.isList() ? Arrays.toString(prop.getDefaults()) : prop.getDefault();
+		String ret = " [default: " + defautValue + "]";
 		if (prop.getValidValues().length != 0) {
-			ret += " [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+			ret += " [valid: " + Arrays.toString(prop.getValidValues())+"]";
 		}
 		return ret;
 	}
