@@ -15,11 +15,6 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import forestry.plugins.ForestryCompatPlugins;
-import forestry.plugins.PluginBuildCraftFuels;
-import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginNatura;
-import forestry.plugins.PluginTechReborn;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -30,7 +25,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -58,6 +52,11 @@ import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+import forestry.plugins.ForestryCompatPlugins;
+import forestry.plugins.PluginBuildCraftFuels;
+import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginNatura;
+import forestry.plugins.PluginTechReborn;
 
 /**
  * Forestry Minecraft Mod
@@ -165,9 +164,6 @@ public class Forestry {
 
 		// Register tick handlers
 		Proxies.common.registerTickHandlers(worldGenerator);
-
-		// Handle IMC messages.
-		ModuleManager.getInternalHandler().processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
 	}
 
 	@EventHandler
