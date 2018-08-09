@@ -12,6 +12,7 @@ package forestry.farming.logic.crops;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -54,8 +55,7 @@ public class CropDestroy extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		NonNullList<ItemStack> harvested = NonNullList.create();
-		block.getDrops(harvested, world, pos, blockState, 0);
+		List<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);
 		float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, blockState, 0, 1.0F, false, null);
 
 		boolean removedSeed = germling.isEmpty();
@@ -83,8 +83,11 @@ public class CropDestroy extends Crop {
 		} else {
 			world.setBlockToAir(pos);
 		}
-
-		return harvested;
+		if (!(harvested instanceof NonNullList)) {
+			return NonNullList.from(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));
+		} else {
+			return (NonNullList<ItemStack>) harvested;
+		}
 	}
 
 	@Override
