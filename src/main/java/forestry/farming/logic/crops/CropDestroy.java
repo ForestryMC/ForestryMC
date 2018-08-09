@@ -55,7 +55,7 @@ public class CropDestroy extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);
+		List<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);	//TODO - remove once harvestcraft (and maybe others) stop using deprecated getDrops
 		float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, blockState, 0, 1.0F, false, null);
 
 		boolean removedSeed = germling.isEmpty();
