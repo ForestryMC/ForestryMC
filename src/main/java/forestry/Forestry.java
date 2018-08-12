@@ -15,11 +15,6 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import forestry.plugins.ForestryCompatPlugins;
-import forestry.plugins.PluginBuildCraftFuels;
-import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginNatura;
-import forestry.plugins.PluginTechReborn;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -58,6 +53,11 @@ import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+import forestry.plugins.ForestryCompatPlugins;
+import forestry.plugins.PluginBuildCraftFuels;
+import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginNatura;
+import forestry.plugins.PluginTechReborn;
 
 /**
  * Forestry Minecraft Mod
@@ -70,7 +70,7 @@ import forestry.modules.ModuleManager;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.4.2705,);"
+		dependencies = "required-after:forge@[14.23.4.2749,);"
 				+ "after:jei@[4.7.8.91,);"
 				+ "after:" + PluginIC2.MOD_ID + ";"
 				+ "after:" + PluginNatura.MOD_ID + ";"

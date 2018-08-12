@@ -67,7 +67,9 @@ public class ModelManager implements IModelManager {
 	private final Set<IColoredBlock> blockColorList = new HashSet<>();
 	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
+	@Nullable
 	private IModelState defaultBlockState;
+	@Nullable
 	private IModelState defaultItemState;
 
 	static {
@@ -179,10 +181,16 @@ public class ModelManager implements IModelManager {
 	}
 	
 	public IModelState getDefaultBlockState() {
+		if(defaultBlockState == null){
+			defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));
+		}
 		return defaultBlockState;
 	}
 	
 	public IModelState getDefaultItemState() {
+		if(defaultItemState == null){
+			defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
+		}
 		return defaultItemState;
 	}
 	
@@ -211,10 +219,6 @@ public class ModelManager implements IModelManager {
 		for (final ModelEntry entry : customModels) {
 			registry.putObject(entry.modelLocation, entry.model);
 		}
-		
-		//load default item and block model states
-		defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
-		defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));
 	}
 
 	@SideOnly(Side.CLIENT)

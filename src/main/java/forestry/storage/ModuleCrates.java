@@ -42,7 +42,7 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.items.ItemRegistryCrates;
-import forestry.storage.models.ModelCrate;
+import forestry.storage.models.ModelBakedCrate;
 import forestry.storage.proxy.ProxyStorage;
 
 @ForestryModule(moduleID = ForestryModuleUids.CRATE, containerID = Constants.MOD_ID, name = "Crate", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.crates.description")
@@ -200,7 +200,7 @@ public class ModuleCrates extends BlankForestryModule {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		ModelCrate.onModelBake(event);
+		ModelBakedCrate.onModelBake(event);
 	}
 
 	public static void registerCrate(ItemCrated crate) {

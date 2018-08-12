@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
@@ -88,7 +91,8 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			manager.registerItemModel(item, 0);
 			manager.registerItemModel(item, 1, "crate-filled");
 		} else {
-			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", "crate-filled");
+			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
+			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getResourcePath());
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}
