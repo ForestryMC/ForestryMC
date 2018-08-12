@@ -1642,49 +1642,39 @@ for.gui.filter.forestry.lepidopterology.cocoon=茧
 ####################
 # MODULES
 ####################
-for.module.core.description=林业核心组件，是其他组件的前置组件。
-for.module.fluids.description=添加流体，流体方块以及流体容器的组件。
 for.module.apiculture.description=添加蜜蜂，养蜂系统和蜜蜂产物的组件，会影响世界生成。
 for.module.arboriculture.description=添加更多树木以及相关产物的组件。
+for.module.backpacks.description=添加背包的组件。
+for.module.book.description=添加一本包含其他所有组件信息的手册。
 for.module.charcoal.description=添加木头堆、壤土和木炭生产机制的组件。
+for.module.core.description=林业核心组件，是其他组件的前置组件。
+for.module.crates.description=添加板条箱的组件。
+for.module.cultivation.description=添加一种可以收获各种作物的自动农场。
+for.module.database.description=添加一种适用于蜜蜂、树苗、蝴蝶等的全新存储方块。
 for.module.energy.description=添加一些使用RF能量的引擎的组件。
 for.module.factory.description=添加各种各样的机器，以合成，生产和加工各种产品的组件。
-for.module.worktable.description=添加一种能存储八种合成表的工作台。
 for.module.farming.description=添加了自动化多方块农场，可以产出各种各样的产物。
+for.module.fluids.description=添加流体，流体方块以及流体容器的组件。
 for.module.food.description=添加食物的组件。
+for.module.greenhouse.description=添加多方块结构：温室。
 for.module.lepidopterology.description=蝴蝶组件。璀璨夺目。
 for.module.mail.description=添加林业贸易和邮寄系统的组件。
-for.module.backpacks.description=添加背包的组件。
-for.module.crates.description=添加板条箱的组件。
-for.module.greenhouse.description=添加多方块结构：温室。
-for.module.database.description=添加一种适用于蜜蜂、树苗、蝴蝶等的全新方块。
-for.module.cultivation.description=添加一种可以收获各种作物的自动农场。
-for.module.book.description=添加一本包含其他所有组件信息的手册。
+for.module.sorting.description=添加一种基因过滤器。
+for.module.worktable.description=添加一种能存储八种合成表的工作台。
 
-for.module.buildcraft6.description=建筑 6（BuildCraft 6）兼容组件。
-for.module.pipes.description=如果同时安装了 BC6 且养蜂组件已激活，则添加养蜂员管道的组件。
-for.module.ic2.description=工业2（IC2）兼容组件。添加电力引擎和新的发电机用来进行能源转换。
-for.module.natura.description=自然(Natura)兼容组件。激活后农场能够支持 Natura 的树苗。
-for.module.ee2.description=等价交换 2（Equivalent Exchange 2）兼容组件。激活后开启蜜蜂的终结分支。需要前置的养蜂组件激活。
-for.module.ee3.description=等价交换 3（Equivalent Exchange 3）兼容组件。
-for.module.farmcraftory.description=牧场物语（FarmCraftory）兼容组件。添加作物和蔬菜的自动化农场支持。
+for.module.actuallyadditions.description=实用扩展（Actually Additions）兼容组件。
+for.module.betterwithmods.description=Better With Mods兼容组件。激活后农场能够支持其添加的麻。
+for.module.buildcraft6.description=建筑（BuildCraft）兼容组件。目前兼容 BuildCraft 7.99。
 for.module.biomesoplenty.description=更多生物群系（Biomes O' Plenty）兼容组件。激活后农场能够支持其添加的树苗。
+for.module.enderIO.description=末影接口（EnderIO）兼容组件。
 for.module.extrautilities.description=更多实用设备（Extra Utilities）兼容组件。激活后农场能够支持末影百合。
 for.module.harvestcraft.description=潘马斯农场（HarvestCraft）兼容组件。激活后农场能够支持其添加的作物及树苗。
-for.module.magicalcrops.description=魔法作物（Magical Crops）兼容组件。
-for.module.chisel.description=凿子（Chisel）兼容组件。添加背包对其方块的支持。
-for.module.plantmegapack.description=超多植物世界（Plant Mega Pack）兼容组件。
-for.module.witchery.description=巫术（Witchery）兼容组件。
-for.module.agricraft.description=农业工艺（AgriCraft）兼容组件。
-for.module.enderIO.description=末影接口（EnderIO）兼容组件。
+for.module.ic2.description=工业2（IC2）兼容组件。添加电力引擎和新的发电机用来进行能源转换。
 for.module.immersiveengineering.description=沉浸工程（Immersive Engineering）兼容组件。
-for.module.growthcraft.description=生长工艺（GrowthCraft）兼容组件。
-for.module.erebus.description=Erebus 兼容组件。
-for.module.rotarycraft.description=旋转机械（RotaryCraft）兼容组件。
-for.module.actuallyadditions.description=实用扩展（Actually Additions）兼容组件。
+for.module.mysticalagriculture.description=神秘农业（Mystical Agriculture）兼容组件。激活后农场能够支持其作物。
+for.module.natura.description=自然（Natura）兼容组件。激活后农场能够支持 Natura 的树苗。
 for.module.roots.description=Roots 兼容组件。
 for.module.rustic.description=乡村（Rustic）兼容组件。
-for.module.mysticalagriculture.description=神秘农业（Mystical Agriculture）兼容组件。激活后农场能够支持其作物。
 for.module.techreborn.description=Tech reborn 兼容组件。激活后可从 Tech Reborn 的橡胶树上收获橡胶。
 
 ####################
