@@ -11,8 +11,12 @@
 package forestry.factory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.BlockDirt.DirtType;
@@ -50,6 +54,7 @@ import forestry.core.circuits.Circuits;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemElectronTube;
@@ -58,6 +63,7 @@ import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
+import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.blocks.BlockRegistryFactory;
@@ -78,6 +84,10 @@ import forestry.storage.ModuleCrates;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
+
+	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
+	public static final Map<String, Boolean> MACHINE_RECIPES_ENABLED = Maps.newHashMap();
+
 	@Nullable
 	private static BlockRegistryFactory blocks;
 
@@ -88,14 +98,14 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.carpenterManager = new CarpenterRecipeManager();
-		RecipeManagers.centrifugeManager = new CentrifugeRecipeManager();
-		RecipeManagers.fabricatorManager = new FabricatorRecipeManager();
-		RecipeManagers.fabricatorSmeltingManager = new FabricatorSmeltingRecipeManager();
-		RecipeManagers.fermenterManager = new FermenterRecipeManager();
-		RecipeManagers.moistenerManager = new MoistenerRecipeManager();
-		RecipeManagers.squeezerManager = new SqueezerRecipeManager();
-		RecipeManagers.stillManager = new StillRecipeManager();
+		RecipeManagers.carpenterManager = machineRecipesEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = machineRecipesEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = machineRecipesEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = machineRecipesEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = machineRecipesEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = machineRecipesEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = machineRecipesEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.stillManager = machineRecipesEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}
@@ -115,9 +125,9 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	private static void setupFuelManager() {
-		FuelManager.fermenterFuel = new ItemStackMap<>();
-		FuelManager.moistenerResource = new ItemStackMap<>();
-		FuelManager.rainSubstrate = new ItemStackMap<>();
+		FuelManager.fermenterFuel = machineRecipesEnabled(MachineUIDs.FERMENTER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.moistenerResource = machineRecipesEnabled(MachineUIDs.MOISTENER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.rainSubstrate = machineEnabled(MachineUIDs.RAINMAKER) ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
 		FuelManager.generatorFuel = new FluidMap<>();
@@ -390,13 +400,13 @@ public class ModuleFactory extends BlankForestryModule {
 		iceRecipeResources.add(new ItemStack(Items.SNOWBALL));
 		iceRecipeResources.add(coreItems.craftingMaterial.getIceShard(4));
 		FluidStack liquidIce = Fluids.ICE.getFluid(4000);
-		if(liquidIce != null) {
+		if (liquidIce != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
 		}
 		// STILL
 		FluidStack biomass = Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
 		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
-		if(biomass != null && ethanol != null) {
+		if (biomass != null && ethanol != null) {
 			RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, biomass, ethanol);
 		}
 		// MOISTENER
@@ -417,7 +427,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		// FABRICATOR
 		FluidStack liquidGlass375 = Fluids.GLASS.getFluid(375);
-		if(liquidGlass375 != null && liquidGlassBucket != null && liquidGlassX4 != null) {
+		if (liquidGlass375 != null && liquidGlassBucket != null && liquidGlassX4 != null) {
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS), liquidGlassBucket, 1000);
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS_PANE), liquidGlass375, 1000);
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SAND), liquidGlassBucket, 3000);
@@ -560,90 +570,133 @@ public class ModuleFactory extends BlankForestryModule {
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
 
 		// / Solder Manager
-		if(layout != null) {
+		if (layout != null) {
 			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.machineSpeedUpgrade1);
 			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
 			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
 		}
-		RecipeUtil.addRecipe("bottler", blocks.bottler,
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', fluidItems.canEmpty,
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.BOTTLER)) {
+			RecipeUtil.addRecipe(MachineUIDs.BOTTLER, blocks.bottler,
+					"X#X",
+					"#Y#",
+					"X#X",
+					'#', "blockGlass",
+					'X', fluidItems.canEmpty,
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("carpenter", blocks.carpenter,
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotBronze",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.CARPENTER)) {
+			RecipeUtil.addRecipe(MachineUIDs.CARPENTER, blocks.carpenter,
+					"X#X",
+					"XYX",
+					"X#X",
+					'#', "blockGlass",
+					'X', "ingotBronze",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("centrifuge", blocks.centrifuge,
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotCopper",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.CENTRIFUGE)) {
+			RecipeUtil.addRecipe(MachineUIDs.CENTRIFUGE, blocks.centrifuge,
+					"X#X",
+					"XYX",
+					"X#X",
+					'#', "blockGlass",
+					'X', "ingotCopper",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("fermenter", blocks.fermenter,
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearBronze",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.FERMENTER)) {
+			RecipeUtil.addRecipe(MachineUIDs.FERMENTER, blocks.fermenter,
+					"X#X",
+					"#Y#",
+					"X#X",
+					'#', "blockGlass",
+					'X', "gearBronze",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("moistener", blocks.moistener,
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearCopper",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.MOISTENER)) {
+			RecipeUtil.addRecipe(MachineUIDs.MOISTENER, blocks.moistener,
+					"X#X",
+					"#Y#",
+					"X#X",
+					'#', "blockGlass",
+					'X', "gearCopper",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("squeezer", blocks.squeezer,
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotTin",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.SQUEEZER)) {
+			RecipeUtil.addRecipe(MachineUIDs.SQUEEZER, blocks.squeezer,
+					"X#X",
+					"XYX",
+					"X#X",
+					'#', "blockGlass",
+					'X', "ingotTin",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("still", blocks.still,
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "dustRedstone",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.STILL)) {
+			RecipeUtil.addRecipe(MachineUIDs.STILL, blocks.still,
+					"X#X",
+					"#Y#",
+					"X#X",
+					'#', "blockGlass",
+					'X', "dustRedstone",
+					'Y', coreItems.sturdyCasing);
+		}
 
-		RecipeUtil.addRecipe("rainmaker", blocks.rainmaker,
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearTin",
-				'Y', coreItems.hardenedCasing);
+		if (machineEnabled(MachineUIDs.RAINMAKER)) {
+			RecipeUtil.addRecipe(MachineUIDs.RAINMAKER, blocks.rainmaker,
+					"X#X",
+					"#Y#",
+					"X#X",
+					'#', "blockGlass",
+					'X', "gearTin",
+					'Y', coreItems.hardenedCasing);
+		}
 
-		RecipeUtil.addRecipe("fabricator", blocks.fabricator,
-				"X#X",
-				"#Y#",
-				"XZX",
-				'#', "blockGlass",
-				'X', "ingotGold",
-				'Y', coreItems.sturdyCasing,
-				'Z', "chestWood");
+		if (machineEnabled(MachineUIDs.FABRICATOR)) {
+			RecipeUtil.addRecipe(MachineUIDs.FABRICATOR, blocks.fabricator,
+					"X#X",
+					"#Y#",
+					"XZX",
+					'#', "blockGlass",
+					'X', "ingotGold",
+					'Y', coreItems.sturdyCasing,
+					'Z', "chestWood");
+		}
 
-		RecipeUtil.addRecipe("raintank", blocks.raintank,
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotIron",
-				'Y', coreItems.sturdyCasing);
+		if (machineEnabled(MachineUIDs.RAINTANK)) {
+			RecipeUtil.addRecipe(MachineUIDs.RAINTANK, blocks.raintank,
+					"X#X",
+					"XYX",
+					"X#X",
+					'#', "blockGlass",
+					'X', "ingotIron",
+					'Y', coreItems.sturdyCasing);
+		}
+	}
+
+	public static void loadMachineConfig(LocalizedConfiguration config) {
+		List<String> enabled = Arrays.asList(config.getStringListLocalized("machines", "enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0])));
+		List<String> recipesEnabled = Arrays.asList(config.getStringListLocalizedFormatted("machines", "recipes_enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0]), "\n"));
+		for (String machineID : MachineUIDs.ALL) {
+			MACHINE_ENABLED.put(machineID, enabled.contains(machineID));
+			if(machineID.equals(MachineUIDs.BOTTLER)) {
+				continue;	//bottler doesn't have a recipe map.
+			}
+			MACHINE_RECIPES_ENABLED.put(machineID, recipesEnabled.contains(machineID));
+		}
+	}
+
+	public static boolean machineEnabled(String machineName) {
+		Boolean ret = MACHINE_ENABLED.get(machineName);
+		return ret != null && ret;
+	}
+
+	public static boolean machineRecipesEnabled(String machineName) {
+		Boolean ret = MACHINE_RECIPES_ENABLED.get(machineName);
+		return ret != null && ret;
 	}
 }
+

@@ -13,6 +13,8 @@ package forestry.factory.blocks;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
+import forestry.factory.MachineUIDs;
+import forestry.factory.ModuleFactory;
 
 public class BlockRegistryFactory extends BlockRegistry {
 	public final BlockFactoryTESR bottler;
@@ -29,33 +31,53 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 	public BlockRegistryFactory() {
 		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
-		registerBlock(bottler, new ItemBlockForestry<>(bottler), "bottler");
+		if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
+			registerBlock(bottler, new ItemBlockForestry<>(bottler), MachineUIDs.BOTTLER);
+		}
 
 		carpenter = new BlockFactoryTESR(BlockTypeFactoryTesr.CARPENTER);
-		registerBlock(carpenter, new ItemBlockForestry<>(carpenter), "carpenter");
+		if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
+			registerBlock(carpenter, new ItemBlockForestry<>(carpenter), MachineUIDs.CARPENTER);
+		}
 
 		centrifuge = new BlockFactoryTESR(BlockTypeFactoryTesr.CENTRIFUGE);
-		registerBlock(centrifuge, new ItemBlockForestry<>(centrifuge), "centrifuge");
+		if (ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
+			registerBlock(centrifuge, new ItemBlockForestry<>(centrifuge), MachineUIDs.CENTRIFUGE);
+		}
 
 		fermenter = new BlockFactoryTESR(BlockTypeFactoryTesr.FERMENTER);
-		registerBlock(fermenter, new ItemBlockForestry<>(fermenter), "fermenter");
+		if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
+			registerBlock(fermenter, new ItemBlockForestry<>(fermenter), MachineUIDs.FERMENTER);
+		}
 
 		moistener = new BlockFactoryTESR(BlockTypeFactoryTesr.MOISTENER);
-		registerBlock(moistener, new ItemBlockForestry<>(moistener), "moistener");
+		if (ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
+			registerBlock(moistener, new ItemBlockForestry<>(moistener), MachineUIDs.MOISTENER);
+		}
 
 		squeezer = new BlockFactoryTESR(BlockTypeFactoryTesr.SQUEEZER);
-		registerBlock(squeezer, new ItemBlockForestry<>(squeezer), "squeezer");
+		if (ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
+			registerBlock(squeezer, new ItemBlockForestry<>(squeezer), MachineUIDs.SQUEEZER);
+		}
 
 		still = new BlockFactoryTESR(BlockTypeFactoryTesr.STILL);
-		registerBlock(still, new ItemBlockForestry<>(still), "still");
+		if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+			registerBlock(still, new ItemBlockForestry<>(still), MachineUIDs.STILL);
+		}
 
 		rainmaker = new BlockFactoryTESR(BlockTypeFactoryTesr.RAINMAKER);
-		registerBlock(rainmaker, new ItemBlockForestry<>(rainmaker), "rainmaker");
+		if (ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
+			registerBlock(rainmaker, new ItemBlockForestry<>(rainmaker), MachineUIDs.RAINMAKER);
+		}
 
 		fabricator = new BlockFactoryPlain(BlockTypeFactoryPlain.FABRICATOR);
-		registerBlock(fabricator, new ItemBlockNBT(fabricator), "fabricator");
+		if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
+			registerBlock(fabricator, new ItemBlockNBT(fabricator), MachineUIDs.FABRICATOR);
+		}
 
 		raintank = new BlockFactoryPlain(BlockTypeFactoryPlain.RAINTANK);
-		registerBlock(raintank, new ItemBlockNBT(raintank), "raintank");
+		if (ModuleFactory.machineEnabled(MachineUIDs.RAINTANK)) {
+			registerBlock(raintank, new ItemBlockNBT(raintank), MachineUIDs.RAINTANK);
+		}
 	}
 }

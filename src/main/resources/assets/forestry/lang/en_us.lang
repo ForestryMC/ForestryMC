@@ -1923,6 +1923,13 @@ for.config.power.types.tesla.comment=Enable Tesla power support.
 for.config.power.display.mode=Power Display Mode
 for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
 
+for.config.machines.enabled=Enabled machines.
+for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you do this!
+for.config.machines.recipes_enabled=Enabled forestry recipes for machines.
+for.config.machines.recipes_enabled.comment=Enable forestry recipe maps for machines. Almost all of the time this should be the same as the list of enabled machines. %sIf you do disable machines removing from here will save some memory.
+
+
+
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
 ###################################

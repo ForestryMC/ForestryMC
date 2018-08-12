@@ -1,19 +1,23 @@
 package forestry.factory.recipes.jei;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 import javax.annotation.Nullable;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
+import forestry.factory.MachineUIDs;
 import forestry.factory.ModuleFactory;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.gui.GuiBottler;
@@ -53,6 +57,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
+import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
@@ -71,70 +76,119 @@ public class FactoryJeiPlugin implements IModPlugin {
 		jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
+		List<IRecipeCategory> categories = new ArrayList<>();
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
+			categories.add(new BottlerRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
+			categories.add(new CarpenterRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
+			categories.add(new CentrifugeRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
+			categories.add(new FabricatorRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
+			categories.add(new FermenterRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
+			categories.add(new MoistenerRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
+			categories.add(new RainmakerRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
+			categories.add(new SqueezerRecipeCategory(guiHelper));
+		}
+		if(ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+			categories.add(new StillRecipeCategory(guiHelper));
+		}
+
 		registry.addRecipeCategories(
-				new BottlerRecipeCategory(guiHelper),
-				new CarpenterRecipeCategory(guiHelper),
-				new CentrifugeRecipeCategory(guiHelper),
-				new FabricatorRecipeCategory(guiHelper),
-				new FermenterRecipeCategory(guiHelper),
-				new MoistenerRecipeCategory(guiHelper),
-				new RainmakerRecipeCategory(guiHelper),
-				new SqueezerRecipeCategory(guiHelper),
-				new StillRecipeCategory(guiHelper)
+				categories.toArray(new IRecipeCategory[0])
 		);
 	}
 
 	@Override
 	public void register(IModRegistry registry) {
-		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
-
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			return;
 		}
+		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
+
+
 		jeiHelpers = registry.getJeiHelpers();
-
-		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes(), ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe(), ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes(), ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()), ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes(), ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipes(RainmakerRecipeMaker.getRecipes(), ForestryRecipeCategoryUid.RAINMAKER);
-		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes(), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipes(StillRecipeMaker.getStillRecipes(), ForestryRecipeCategoryUid.STILL);
-
-		registry.addRecipeClickArea(GuiBottler.class, 107, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeClickArea(GuiBottler.class, 45, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeClickArea(GuiCarpenter.class, 98, 48, 21, 26, ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 22, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeClickArea(GuiCentrifuge.class, 38, 54, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeClickArea(GuiFabricator.class, 121, 53, 18, 18, ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipeClickArea(GuiFermenter.class, 72, 40, 32, 18, ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipeClickArea(GuiMoistener.class, 123, 35, 19, 21, ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
 		BlockRegistryFactory blocks = ModuleFactory.getBlocks();
 		Preconditions.checkNotNull(blocks);
 
-		registry.addRecipeCatalyst(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeCatalyst(new ItemStack(blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipeCatalyst(new ItemStack(blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipeCatalyst(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
-
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
-		transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler(), ForestryRecipeCategoryUid.CARPENTER);
-		transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), ForestryRecipeCategoryUid.FABRICATOR);
 
-		JeiUtil.addDescription(registry,
-				blocks.raintank
-		);
+		if(ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
+			registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.BOTTLER);
+			registry.addRecipeClickArea(GuiBottler.class, 107, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
+			registry.addRecipeClickArea(GuiBottler.class, 45, 33, 26, 22, ForestryRecipeCategoryUid.BOTTLER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
+
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
+			registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes(), ForestryRecipeCategoryUid.CARPENTER);
+			registry.addRecipeClickArea(GuiCarpenter.class, 98, 48, 21, 26, ForestryRecipeCategoryUid.CARPENTER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
+			transferRegistry.addRecipeTransferHandler(new CarpenterRecipeTransferHandler(), ForestryRecipeCategoryUid.CARPENTER);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
+			registry.addRecipes(CentrifugeRecipeMaker.getCentrifugeRecipe(), ForestryRecipeCategoryUid.CENTRIFUGE);
+			registry.addRecipeClickArea(GuiCentrifuge.class, 38, 22, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
+			registry.addRecipeClickArea(GuiCentrifuge.class, 38, 54, 38, 14, ForestryRecipeCategoryUid.CENTRIFUGE);
+			registry.addRecipeCatalyst(new ItemStack(blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
+			registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes(), ForestryRecipeCategoryUid.FABRICATOR);
+			registry.addRecipeClickArea(GuiFabricator.class, 121, 53, 18, 18, ForestryRecipeCategoryUid.FABRICATOR);
+			registry.addRecipeCatalyst(new ItemStack(blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
+			transferRegistry.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), ForestryRecipeCategoryUid.FABRICATOR);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
+			registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()), ForestryRecipeCategoryUid.FERMENTER);
+			registry.addRecipeClickArea(GuiFermenter.class, 72, 40, 32, 18, ForestryRecipeCategoryUid.FERMENTER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
+			registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes(), ForestryRecipeCategoryUid.MOISTENER);
+			registry.addRecipeClickArea(GuiMoistener.class, 123, 35, 19, 21, ForestryRecipeCategoryUid.MOISTENER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
+			registry.addRecipes(RainmakerRecipeMaker.getRecipes(), ForestryRecipeCategoryUid.RAINMAKER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
+			registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes(), ForestryRecipeCategoryUid.SQUEEZER);
+			registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientRegistry()), ForestryRecipeCategoryUid.SQUEEZER);
+			registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
+			registry.addRecipeCatalyst(new ItemStack(blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+			registry.addRecipes(StillRecipeMaker.getStillRecipes(), ForestryRecipeCategoryUid.STILL);
+			registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
+			registry.addRecipeCatalyst(new ItemStack(blocks.still), ForestryRecipeCategoryUid.STILL);
+		}
+
+		if(ModuleFactory.machineEnabled(MachineUIDs.RAINTANK)) {
+			JeiUtil.addDescription(registry, blocks.raintank);
+		}
+
 	}
 
 	private static class ForestryAdvancedGuiHandler implements IAdvancedGuiHandler<GuiForestry> {
