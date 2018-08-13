@@ -86,7 +86,6 @@ import forestry.storage.ModuleCrates;
 public class ModuleFactory extends BlankForestryModule {
 
 	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
-	public static final Map<String, Boolean> MACHINE_RECIPES_ENABLED = Maps.newHashMap();
 
 	@Nullable
 	private static BlockRegistryFactory blocks;
@@ -98,14 +97,14 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.carpenterManager = machineRecipesEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
-		RecipeManagers.centrifugeManager = machineRecipesEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
-		RecipeManagers.fabricatorManager = machineRecipesEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
-		RecipeManagers.fabricatorSmeltingManager = machineRecipesEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
-		RecipeManagers.fermenterManager = machineRecipesEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
-		RecipeManagers.moistenerManager = machineRecipesEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
-		RecipeManagers.squeezerManager = machineRecipesEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
-		RecipeManagers.stillManager = machineRecipesEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
+		RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}
@@ -125,8 +124,8 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	private static void setupFuelManager() {
-		FuelManager.fermenterFuel = machineRecipesEnabled(MachineUIDs.FERMENTER) ? new ItemStackMap<>() : new DummyMap<>();
-		FuelManager.moistenerResource = machineRecipesEnabled(MachineUIDs.MOISTENER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.fermenterFuel = machineEnabled(MachineUIDs.FERMENTER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.moistenerResource = machineEnabled(MachineUIDs.MOISTENER) ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.rainSubstrate = machineEnabled(MachineUIDs.RAINMAKER) ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
@@ -679,23 +678,13 @@ public class ModuleFactory extends BlankForestryModule {
 
 	public static void loadMachineConfig(LocalizedConfiguration config) {
 		List<String> enabled = Arrays.asList(config.getStringListLocalized("machines", "enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0])));
-		List<String> recipesEnabled = Arrays.asList(config.getStringListLocalizedFormatted("machines", "recipes_enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0]), "\n"));
 		for (String machineID : MachineUIDs.ALL) {
 			MACHINE_ENABLED.put(machineID, enabled.contains(machineID));
-			if(machineID.equals(MachineUIDs.BOTTLER)) {
-				continue;	//bottler doesn't have a recipe map.
-			}
-			MACHINE_RECIPES_ENABLED.put(machineID, recipesEnabled.contains(machineID));
 		}
 	}
 
 	public static boolean machineEnabled(String machineName) {
 		Boolean ret = MACHINE_ENABLED.get(machineName);
-		return ret != null && ret;
-	}
-
-	public static boolean machineRecipesEnabled(String machineName) {
-		Boolean ret = MACHINE_RECIPES_ENABLED.get(machineName);
 		return ret != null && ret;
 	}
 }
