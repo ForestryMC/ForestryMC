@@ -15,16 +15,22 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
@@ -115,6 +121,11 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	@Override
+	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@Override
 	public void doInit() {
 		if (RecipeManagers.squeezerManager != null) {
 			ItemRegistryCore itemRegistryCore = ModuleCore.getItems();
@@ -154,6 +165,19 @@ public class ModuleFluids extends BlankForestryModule {
 					'B', Items.SUGAR,
 					'C', Items.WHEAT,
 					'E', Items.EGG);
+		}
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void registerTextures(TextureStitchEvent.Pre event){
+		TextureMap map = event.getMap();
+		for(Fluids fluids : Fluids.values()) {
+			Fluid fluid = fluids.getFluid();
+			if(fluid != null) {
+				map.registerSprite(fluid.getStill());
+				map.registerSprite(fluid.getFlowing());
+			}
 		}
 	}
 }
