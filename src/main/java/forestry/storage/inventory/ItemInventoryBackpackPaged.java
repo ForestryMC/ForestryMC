@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.storage.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IPagedInventory;
 import forestry.storage.items.ItemBackpackNaturalist;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements IPagedInventory {
 	private final ItemBackpackNaturalist backpackNaturalist;

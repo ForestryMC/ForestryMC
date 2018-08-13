@@ -32,8 +32,7 @@ public class ModelCrate implements IModel {
 
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
-	@Nullable
-	private static IBakedModel crateModelBaked = null;
+	private static List<BakedQuad> bakedQuads = new LinkedList<>();
 
 	private final ItemCrated crated;
 	private final ItemStack contained;
@@ -62,13 +61,16 @@ public class ModelCrate implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		if(crateModelBaked == null) {
+		if(bakedQuads.isEmpty()) {
 			IModel crateModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation(Constants.MOD_ID + ":item/crate-filled"));
-			crateModelBaked = crateModel.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
+			IBakedModel bakedModel = crateModel.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
+			//Set the crate color index to 100
+			for (BakedQuad quad : bakedModel.getQuads(null, null, 0L)) {
+				bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+			}
 		}
 		IBakedModel model;
-		List<BakedQuad> quads = new LinkedList<>();
-		quads.addAll(crateModelBaked.getQuads(null, null, 0));
+		List<BakedQuad> quads = new LinkedList<>(bakedQuads);
 		IBakedModel contentModel = getCustomContentModel();
 		if(contentModel == null){
 			model = new ModelCrateBaked(quads, contained);

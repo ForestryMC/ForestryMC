@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -24,9 +23,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
@@ -42,8 +38,7 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.items.ItemRegistryCrates;
-import forestry.storage.models.ModelBakedCrate;
-import forestry.storage.proxy.ProxyStorage;
+import forestry.storage.proxy.ProxyCrates;
 
 @ForestryModule(moduleID = ForestryModuleUids.CRATE, containerID = Constants.MOD_ID, name = "Crate", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.crates.description")
 public class ModuleCrates extends BlankForestryModule {
@@ -56,8 +51,8 @@ public class ModuleCrates extends BlankForestryModule {
 	private static final List<ItemCrated> crates = new ArrayList<>();
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
-	public static ProxyStorage proxy;
+	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyCratesClient", serverSide = "forestry.storage.proxy.ProxyCrates")
+	public static ProxyCrates proxy;
 
 	@Nullable
 	private static ItemRegistryCrates items;
@@ -195,12 +190,6 @@ public class ModuleCrates extends BlankForestryModule {
 			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");
 		}
-	}
-
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onBakeModel(ModelBakeEvent event) {
-		ModelBakedCrate.onModelBake(event);
 	}
 
 	public static void registerCrate(ItemCrated crate) {

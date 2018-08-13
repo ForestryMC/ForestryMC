@@ -9,7 +9,7 @@ import forestry.storage.models.ModelLoaderCrate;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
-public class ProxyStorageClient extends ProxyStorage {
+public class ProxyCratesClient extends ProxyCrates {
 
 	@Override
 	public void registerCrateModel() {

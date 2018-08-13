@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.client.model.BakedItemModel;
+
 import forestry.core.models.BlankModel;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ModelUtil;
@@ -28,7 +30,7 @@ public class ModelCrateBaked extends BlankModel {
 	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		if(contentModel.hasBakedModel()) {
-			contentModel = contentModel.bake(rand);
+			contentModel = contentModel.bake();
 		}
 		return contentModel.getQuads();
 	}
@@ -44,7 +46,7 @@ public class ModelCrateBaked extends BlankModel {
 			return quads;
 		}
 
-		public ContentModel bake(long rand){
+		public ContentModel bake(){
 			return this;
 		}
 
@@ -62,11 +64,15 @@ public class ModelCrateBaked extends BlankModel {
 		}
 
 		@Override
-		public ContentModel bake(long rand) {
+		public ContentModel bake() {
 			IBakedModel bakedModel = ModelUtil.getModel(content);
 			if(bakedModel != null) {
-				quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0.0625F, 0.5F).getQuads(null, null, rand));
-				quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, -0.0625F, 0.5F).getQuads(null, null, rand));
+				if(bakedModel instanceof BakedItemModel) {
+					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0.0625F, 0.5F).getQuads(null, null, 0L));
+					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, -0.0625F, 0.5F).getQuads(null, null, 0L));
+				}else{
+					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0, 0.5F).getQuads(null, null, 0L));
+				}
 			}
 			return new ContentModel(quads);
 		}
