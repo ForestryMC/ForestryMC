@@ -130,7 +130,7 @@ public class LocalizedConfiguration extends Configuration {
 		String defautValue = prop.isList() ? Arrays.toString(prop.getDefaults()) : prop.getDefault();
 		String ret = " [default: " + defautValue + "]";
 		if (prop.getValidValues().length != 0) {
-			ret += " [valid: " + Arrays.toString(prop.getValidValues())+"]";
+			ret += " [valid: " + Arrays.toString(prop.getValidValues()) + "]";
 		}
 		return ret;
 	}
