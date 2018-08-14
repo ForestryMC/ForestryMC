@@ -1,18 +1,16 @@
 package forestry.core.recipes.jei;
 
+import forestry.factory.MachineUIDs;
+
 public class ForestryRecipeCategoryUid {
 
-	private ForestryRecipeCategoryUid() {
-	}
-
-	public static final String BOTTLER = "forestry.bottler";
-	public static final String CARPENTER = "forestry.carpenter";
-	public static final String CENTRIFUGE = "forestry.centrifuge";
-	public static final String FABRICATOR = "forestry.fabricator";
-	public static final String FERMENTER = "forestry.fermenter";
-	public static final String MOISTENER = "forestry.moistener";
-	public static final String RAINMAKER = "forestry.rainmaker";
-	public static final String SQUEEZER = "forestry.squeezer";
-	public static final String STILL = "forestry.still";
-
+	public static final String BOTTLER = "forestry." + MachineUIDs.BOTTLER;
+	public static final String CARPENTER = "forestry." + MachineUIDs.CARPENTER;
+	public static final String CENTRIFUGE = "forestry." + MachineUIDs.CENTRIFUGE;
+	public static final String FABRICATOR = "forestry." + MachineUIDs.FABRICATOR;
+	public static final String FERMENTER = "forestry." + MachineUIDs.FERMENTER;
+	public static final String MOISTENER = "forestry." + MachineUIDs.MOISTENER;
+	public static final String RAINMAKER = "forestry." + MachineUIDs.RAINMAKER;
+	public static final String SQUEEZER = "forestry." + MachineUIDs.SQUEEZER;
+	public static final String STILL = "forestry." + MachineUIDs.STILL;
 }
