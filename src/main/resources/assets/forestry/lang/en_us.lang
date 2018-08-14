@@ -1924,7 +1924,7 @@ for.config.power.display.mode=Power Display Mode
 for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
 
 for.config.machines.enabled=Enabled machines.
-for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you do this!
+for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you change this!
 
 
 ###################################
