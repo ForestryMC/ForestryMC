@@ -12,13 +12,14 @@ package forestry.mail;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
