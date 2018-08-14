@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Constants;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.ModelManager;
+import forestry.core.utils.ModelUtil;
 import forestry.storage.items.ItemCrated;
 
 @SideOnly(Side.CLIENT)
@@ -49,8 +49,11 @@ public class ModelCrate implements IModel {
 			return null;
 		}
 		String containedName = registryName.getResourcePath().replace("crated.", "");
-		ResourceLocation location = new ModelResourceLocation(CUSTOM_CRATES + containedName, "inventory");
+		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
 		IModel model;
+		if(!ModelUtil.resourceExists(new ResourceLocation(location.getResourceDomain(), "models/" + location.getResourcePath() + ".json"))){
+			return null;
+		}
 		try{
 			model = ModelLoaderRegistry.getModel(location);
 		}catch(Exception e){

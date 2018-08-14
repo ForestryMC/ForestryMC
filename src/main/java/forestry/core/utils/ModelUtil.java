@@ -48,6 +48,16 @@ public class ModelUtil {
 
 	private static final Map<ResourceLocation, ModelBlockDefinition> blockDefinitions = Maps.newHashMap();
 
+	public static boolean resourceExists(ResourceLocation location){
+		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		try{
+			resourceManager.getResource(location);
+			return true;
+		}catch (IOException e){
+			return false;
+		}
+	}
+
 	/**
 	 * @return The model from the item of the stack.
 	 */
