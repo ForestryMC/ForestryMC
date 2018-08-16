@@ -15,11 +15,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.AbsentClimateState;
-import forestry.core.climate.ClimateStates;
-import forestry.greenhouse.api.greenhouse.Position2D;
+import forestry.core.climate.ClimateStateHelper;
 
 import io.netty.buffer.ByteBuf;
 
@@ -89,15 +87,6 @@ public class PacketBufferForestry extends PacketBuffer {
 			return new FluidStack(fluid, amount);
 		}
 		return null;
-	}
-
-	public void writePosition(Position2D position) {
-		writeInt(position.getX());
-		writeInt(position.getZ());
-	}
-
-	public Position2D readPosition() {
-		return new Position2D(readInt(), readInt());
 	}
 
 	public void writeEntityById(Entity entity) {
@@ -184,9 +173,9 @@ public class PacketBufferForestry extends PacketBuffer {
 	public void writeClimateState(IClimateState climateState){
 		if(climateState.isPresent()) {
 			writeBoolean(true);
-			writeByte(climateState.getType().ordinal());
 			writeFloat(climateState.getTemperature());
 			writeFloat(climateState.getHumidity());
+			writeBoolean(climateState.isMutable());
 		}else{
 			writeBoolean(false);
 		}
@@ -194,8 +183,7 @@ public class PacketBufferForestry extends PacketBuffer {
 
 	public IClimateState readClimateState(){
 		if(readBoolean()){
-			ClimateStateType type = ClimateStateType.values()[readByte()];
-			return ClimateStates.of(readFloat(), readFloat(), type);
+			return ClimateStateHelper.of(readFloat(), readFloat(), readBoolean());
 		}else{
 			return AbsentClimateState.INSTANCE;
 		}

@@ -10,18 +10,44 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
+import com.google.common.base.Preconditions;
+
 import net.minecraftforge.fluids.FluidStack;
 
-public class HygroregulatorRecipe {
-	public final FluidStack liquid;
-	public final int transferTime;
-	public final float humidChange;
-	public final float tempChange;
+import forestry.api.recipes.IHygroregulatorRecipe;
+
+public class HygroregulatorRecipe implements IHygroregulatorRecipe {
+	private final FluidStack liquid;
+	private final int transferTime;
+	private final float humidChange;
+	private final float tempChange;
 
 	public HygroregulatorRecipe(FluidStack liquid, int transferTime, float humidChange, float tempChange) {
+		Preconditions.checkNotNull(liquid);
+		Preconditions.checkArgument(transferTime > 0);
 		this.liquid = liquid;
 		this.transferTime = transferTime;
 		this.humidChange = humidChange;
 		this.tempChange = tempChange;
+	}
+
+	@Override
+	public FluidStack getResource() {
+		return liquid;
+	}
+
+	@Override
+	public int getTransferTime() {
+		return transferTime;
+	}
+
+	@Override
+	public float getHumidChange() {
+		return humidChange;
+	}
+
+	@Override
+	public float getTempChange() {
+		return tempChange;
 	}
 }

@@ -3,7 +3,6 @@ package forestry.book.gui;
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

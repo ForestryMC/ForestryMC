@@ -10,21 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.core.config.Constants;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.common.Optional;
-
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.fml.common.Optional;
+
+import forestry.apiculture.trigger.ApicultureTriggers;
+import forestry.core.config.Constants;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerInternalSided;
 import buildcraft.api.statements.ITriggerProvider;
-import forestry.apiculture.trigger.ApicultureTriggers;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {

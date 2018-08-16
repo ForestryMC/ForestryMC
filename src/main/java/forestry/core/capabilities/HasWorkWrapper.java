@@ -1,11 +1,14 @@
 package forestry.core.capabilities;
 
-import buildcraft.api.tiles.IHasWork;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TilePowered;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+
 import net.minecraftforge.fml.common.Optional;
+
+import forestry.core.config.Constants;
+import forestry.core.tiles.TilePowered;
+
+import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = Constants.BCLIB_MOD_ID)
 public class HasWorkWrapper implements IHasWork {

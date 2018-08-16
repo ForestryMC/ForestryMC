@@ -45,16 +45,16 @@ public class MigrationHelper {
 		blockRemappings.put("greenhouse.gearbox", "greenhouse");
 		itemRemappings.put("greenhouse.control", "greenhouse");
 		blockRemappings.put("greenhouse.control", "greenhouse");
-		itemRemappings.put("greenhouse.fan", "climatiser.fan");
-		blockRemappings.put("greenhouse.fan", "climatiser.fan");
-		blockRemappings.put("greenhouse.heater", "climatiser.heater");
-		itemRemappings.put("greenhouse.heater", "climatiser.heater");
-		blockRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
-		itemRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
-		blockRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
-		itemRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
-		itemRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
-		blockRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
+		itemRemappings.put("greenhouse.fan", "climatiser");
+		blockRemappings.put("greenhouse.fan", "climatiser");
+		blockRemappings.put("greenhouse.heater", "climatiser");
+		itemRemappings.put("greenhouse.heater", "climatiser");
+		blockRemappings.put("greenhouse.dehumidifier", "climatiser");
+		itemRemappings.put("greenhouse.dehumidifier", "climatiser");
+		blockRemappings.put("greenhouse.humidifier", "climatiser");
+		itemRemappings.put("greenhouse.humidifier", "climatiser");
+		itemRemappings.put("greenhouse.dryer", "climatiser");
+		blockRemappings.put("greenhouse.dryer", "climatiser");
 		//Arboriculture
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
@@ -82,16 +82,6 @@ public class MigrationHelper {
 		addTileRemappingName("FarmHatch", "farm_hatch");
 		addTileRemappingName("FarmValve", "farm_valve");
 		addTileRemappingName("FarmControl", "farm_control");
-		//Greenhouse
-		addTileRemappingName("GreenhousePlain", "greenhouse");
-		addTileRemappingName("ClimateSourceHygroregulator", "greenhouse_hygro");
-		addTileRemappingName("GreenhouseGearbox", "greenhouse_gearbox");
-		addTileRemappingName("GreenhouseController", "greenhouse_controller");
-		addTileRemappingName("ClimateSourceWindow", "greenhouse_window");
-		addTileRemappingName("GreenhouseFan", "greenhouse_fan");
-		addTileRemappingName("GreenhouseHeater", "greenhouse_heater");
-		addTileRemappingName("GreenhouseDryer", "greenhouse_dehumidifier");
-		addTileRemappingName("GreenhouseSprinkler", "greenhouse_humidifier");
 		//Lepidopterology
 		addTileRemappingName("Cocoon", "cocoon");
 		//Sorting

@@ -41,8 +41,23 @@ public class Circuits {
 	public static ICircuit machineSpeedUpgrade2;
 	public static ICircuit machineEfficiencyUpgrade1;
 
-	public static ICircuit climatiserTemperature1;
-	public static ICircuit climatiserTemperature2;
-	public static ICircuit climatiserHumidity1;
-	public static ICircuit climatiserHumidity2;
+	/* Range + 10% -> Resources + 5%*/
+	public static ICircuit formerRange1;
+	/* Range + 17.5% -> Resources + 8.75%*/
+	public static ICircuit formerRange2;
+	/* Range + 25% -> Resources + 12.5%*/
+	public static ICircuit formerRange3;
+	/* Resources - 7.5% */
+	public static ICircuit formerEfficiency1;
+	/* Resources - 10% */
+	public static ICircuit formerEfficiency2;
+	/* Resources - 12.5% */
+	public static ICircuit formerEfficiency3;
+	/* Speed + 15% */
+	public static ICircuit formerSpeed1;
+	/* Speed + 20% */
+	public static ICircuit formerSpeed2;
+	/* Speed + 25% */
+	public static ICircuit formerSpeed3;
+
 }

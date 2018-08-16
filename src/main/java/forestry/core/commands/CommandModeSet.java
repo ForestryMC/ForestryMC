@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

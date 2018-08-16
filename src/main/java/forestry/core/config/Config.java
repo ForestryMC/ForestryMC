@@ -71,9 +71,10 @@ public class Config {
 	public static int humusDegradeDelimiter = 3;
 
 	// Greenhouse
-	public static int climateSourceRange = 36;
-	public static float climateSourceEnergyModifier = 1.5F;
-	public static int greenhouseSize = 4;
+	public static float habitatformerResourceModifier = 1.5F;
+	public static int habitatformerRange = 10;
+	public static float habitatformerAreaCostModifier = 0.5F;
+	public static float habitatformerAreaSpeedModifier = 0.5F;
 
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
@@ -367,9 +368,10 @@ public class Config {
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
 		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
-		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
-		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
-		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
+		habitatformerResourceModifier = configCommon.getFloatLocalized("tweaks.habitatformer", "energy", habitatformerResourceModifier, 0.0F, 15.0F);
+		habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
+		habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
+		habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);

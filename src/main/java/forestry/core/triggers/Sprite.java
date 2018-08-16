@@ -1,8 +1,9 @@
 package forestry.core.triggers;
 
-import buildcraft.api.core.render.ISprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+
+import buildcraft.api.core.render.ISprite;
 
 public class Sprite implements ISprite {
 

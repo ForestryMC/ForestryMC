@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 
 import forestry.core.gui.Drawable;
+
 import org.lwjgl.input.Mouse;
 
 public class WidgetScrollBar extends Widget {
@@ -137,7 +138,7 @@ public class WidgetScrollBar extends Widget {
 
 		//clicked on the slider and scrolling
 		if (this.isScrolling) {
-			float range = maxValue - minValue;
+			float range = (float)(maxValue - minValue);
 			float value = (float)(y - initialMouseClickY) / (float)(height - slider.height);
 			value *= range;
 			if(value < (float) step / 2f){
@@ -157,8 +158,8 @@ public class WidgetScrollBar extends Widget {
 		}
 		//clicked on the bar but not on the slider
 		else if(mouseDown && !wasClicked && isMouseOver(mouseX, mouseY)){
-			float range = maxValue - minValue;
-			float value = (float)(y - slider.height / 2) / (float)(height - slider.height);
+			float range = (float)(maxValue - minValue);
+			float value = (float)(y - slider.height / 2.0D) / (float)(height - slider.height);
 			value *= range;
 			if(value < (float) step / 2f){
 				setValue(minValue);

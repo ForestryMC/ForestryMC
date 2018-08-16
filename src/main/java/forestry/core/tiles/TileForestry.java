@@ -12,7 +12,11 @@ package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -25,28 +29,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import java.io.IOException;
-import java.util.Collection;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerInternalSided;
-import buildcraft.api.statements.ITriggerProvider;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
+import forestry.core.config.Constants;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -57,6 +53,12 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable, ITriggerProvider {

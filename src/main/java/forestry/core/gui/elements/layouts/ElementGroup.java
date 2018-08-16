@@ -26,10 +26,10 @@ import forestry.core.gui.elements.LabelElement;
 import forestry.core.gui.elements.SplitTextElement;
 
 @SideOnly(Side.CLIENT)
-public abstract class ElementGroup extends GuiElement implements IElementGroup {
+public class ElementGroup extends GuiElement implements IElementGroup {
 	protected final List<IGuiElement> elements = new ArrayList<>();
 
-	protected ElementGroup(int xPos, int yPos, int width, int height) {
+	public ElementGroup(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
 	}
 

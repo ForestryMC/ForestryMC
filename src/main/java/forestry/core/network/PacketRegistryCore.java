@@ -13,8 +13,15 @@ package forestry.core.network;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.network.packets.PacketChipsetClick;
+import forestry.core.network.packets.PacketClimateListenerUpdate;
+import forestry.core.network.packets.PacketClimateListenerUpdateEntity;
+import forestry.core.network.packets.PacketClimateListenerUpdateEntityRequest;
+import forestry.core.network.packets.PacketClimateListenerUpdateRequest;
+import forestry.core.network.packets.PacketClimatePlayer;
+import forestry.core.network.packets.PacketClimateUpdate;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
 import forestry.core.network.packets.PacketFXSignal;
@@ -30,7 +37,6 @@ import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.network.packets.PacketUpdateClimate;
 
 public class PacketRegistryCore implements IPacketRegistry {
 	@Override
@@ -39,6 +45,9 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
 		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
 		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
+		PacketIdServer.SELECT_CLIMATE_TARGETED.setPacketHandler(new PacketSelectClimateTargeted.Handler());
+		PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST.setPacketHandler(new PacketClimateListenerUpdateRequest.Handler());
+		PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST_ENTITY.setPacketHandler(new PacketClimateListenerUpdateEntityRequest.Handler());
 	}
 
 	@Override
@@ -57,6 +66,9 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdClient.FX_SIGNAL.setPacketHandler(new PacketFXSignal.Handler());
 		PacketIdClient.TANK_LEVEL_UPDATE.setPacketHandler(new PacketTankLevelUpdate.Handler());
 		PacketIdClient.GENOME_TRACKER_UPDATE.setPacketHandler(new PacketGenomeTrackerSync.Handler());
-		PacketIdClient.UPDATE_CLIMATE.setPacketHandler(new PacketUpdateClimate.Handler());
+		PacketIdClient.UPDATE_CLIMATE.setPacketHandler(new PacketClimateUpdate.Handler());
+		PacketIdClient.CLIMATE_LISTENER_UPDATE.setPacketHandler(new PacketClimateListenerUpdate.Handler());
+		PacketIdClient.CLIMATE_LISTENER_UPDATE_ENTITY.setPacketHandler(new PacketClimateListenerUpdateEntity.Handler());
+		PacketIdClient.CLIMATE_PLAYER.setPacketHandler(new PacketClimatePlayer.Handler());
 	}
 }

@@ -62,8 +62,7 @@ public class TextureManagerForestry implements ITextureManager {
 				"analyzer/butterfly", "analyzer/serum", "analyzer/caterpillar", "analyzer/cocoon",
 				"errors/errored", "errors/unknown",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked", "slots/cocoon", "slots/bee",
-				"mail/carrier.player", "mail/carrier.trader",
-				"modifiers/rain"
+				"mail/carrier.player", "mail/carrier.trader"
 		};
 		for (String identifier : defaultIconNames) {
 			ResourceLocation resourceLocation = getForestryGuiLocation(identifier);

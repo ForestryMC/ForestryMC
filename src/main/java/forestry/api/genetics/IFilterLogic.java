@@ -1,7 +1,6 @@
 package forestry.api.genetics;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;

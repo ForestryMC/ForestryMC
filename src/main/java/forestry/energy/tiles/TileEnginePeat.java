@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.Collection;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -19,18 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import java.io.IOException;
-import java.util.Collection;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBase;
@@ -47,6 +47,8 @@ import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private ItemStack fuel = ItemStack.EMPTY;

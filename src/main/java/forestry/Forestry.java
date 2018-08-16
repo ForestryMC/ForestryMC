@@ -35,11 +35,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ForestryEvent;
 import forestry.core.EventHandlerCore;
 import forestry.core.advancements.AdvancementManager;
-import forestry.core.climate.ClimateStates;
+import forestry.core.climate.ClimateFactory;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -89,7 +92,9 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		ForestryAPI.states = ClimateStates.INSTANCE;
+		ClimateManager.climateRoot = ForestryAPI.climateManager= ClimateRoot.getInstance();
+		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
+		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);

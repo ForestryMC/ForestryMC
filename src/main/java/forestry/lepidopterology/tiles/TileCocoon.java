@@ -13,7 +13,6 @@ package forestry.lepidopterology.tiles;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

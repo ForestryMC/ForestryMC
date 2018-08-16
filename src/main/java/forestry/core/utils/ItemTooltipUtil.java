@@ -28,7 +28,7 @@ public class ItemTooltipUtil {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void addShiftInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+	public static void addShiftInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 		tooltip.add(TextFormatting.ITALIC .toString() + '<' + Translator.translateToLocal("for.gui.tooltip.tmi") + '>');
 	}
 

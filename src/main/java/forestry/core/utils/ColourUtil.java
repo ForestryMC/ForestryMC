@@ -13,9 +13,9 @@ package forestry.core.utils;
 public class ColourUtil {
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {
-		r = ((colour & 0xff0000) >> 16) + r;
-		g = ((colour & 0xff00) >> 8) + g;
-		b = (colour & 0xff) + b;
+		r = getRed(colour) + r;
+		g = getGreen(colour) + g;
+		b = getBlue(colour) + b;
 
 		r = r <= 255 ? r : 255;
 		g = g <= 255 ? g : 255;
@@ -25,14 +25,38 @@ public class ColourUtil {
 	}
 
 	public static int multiplyRGBComponents(int colour, float factor) {
-		int r = (int) (((colour & 0xff0000) >> 16) * factor);
-		int g = (int) (((colour & 0xff00) >> 8) * factor);
-		int b = (int) ((colour & 0xff) * factor);
+		int r = (int) (getRed(colour) * factor);
+		int g = (int) (getGreen(colour) * factor);
+		int b = (int) (getBlue(colour) * factor);
 
 		r = r <= 255 ? r : 255;
 		g = g <= 255 ? g : 255;
 		b = b <= 255 ? b : 255;
 
 		return (r & 0x0ff) << 16 | (g & 0x0ff) << 8 | b & 0x0ff;
+	}
+
+	public static int getRed(int colour) {
+		return (colour & 0xff0000) >> 16;
+	}
+
+	public static int getGreen(int colour) {
+		return (colour & 0xff00) >> 8;
+	}
+
+	public static int getBlue(int colour) {
+		return colour & 0xff;
+	}
+
+	public static float getRedAsFloat(int colour) {
+		return getRed(colour) / 255.0F;
+	}
+
+	public static float getGreenAsFloat(int colour) {
+		return getGreen(colour) / 255.0F;
+	}
+
+	public static float getBlueAsFloat(int colour) {
+		return getBlue(colour) / 255.0F;
 	}
 }

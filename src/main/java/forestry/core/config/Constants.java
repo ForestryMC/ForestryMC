@@ -22,7 +22,7 @@ public class Constants implements IForestryConstants {
 	public static final String MOD_ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = /*"@VERSION@"*/"5.8.0.242";
 	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
 
 	public static final String RF_MOD_ID = "CoFHAPI|energy";

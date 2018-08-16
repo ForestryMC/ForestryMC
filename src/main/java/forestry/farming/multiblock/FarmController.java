@@ -68,7 +68,6 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import forestry.farming.FarmHelper;
@@ -352,7 +351,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromValue(getExactTemperature());
+		BlockPos coords = getReferenceCoord();
+		return EnumTemperature.getFromBiome(world.getBiome(coords), coords);
 	}
 
 	@Override
@@ -362,14 +362,14 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public float getExactTemperature() {
-		BlockPos coords = getCoordinates();
-		return ClimateUtil.getTemperature(getWorldObj(), coords);
+		BlockPos coords = getReferenceCoord();
+		return world.getBiome(coords).getTemperature(coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
-		BlockPos coords = getCoordinates();
-		return ClimateUtil.getHumidity(getWorldObj(), coords);
+		BlockPos coords = getReferenceCoord();
+		return world.getBiome(coords).getRainfall();
 	}
 
 	@Override

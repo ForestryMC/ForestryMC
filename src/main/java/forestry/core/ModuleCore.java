@@ -42,6 +42,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
+import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -50,7 +51,6 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
-import forestry.core.climate.ClimateManager;
 import forestry.core.commands.CommandModules;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
@@ -69,12 +69,12 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
+import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -122,9 +122,8 @@ public class ModuleCore extends BlankForestryModule {
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
-		ForestryAPI.climateManager = ClimateManager.getInstance();
-		//TODO: Greenhouse Api
-		//ForestryAPI.climateFactory = new ClimateFactory();
+
+		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
 	}
 
 	@Override
@@ -139,7 +138,6 @@ public class ModuleCore extends BlankForestryModule {
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(World2ObjectMap.class);
 
 		rootCommand.addChildCommand(new CommandModules());
 	}
@@ -468,6 +466,15 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
 					items.craftingMaterial.getSilkWisp(), 0.15f
 			));
+		}
+
+		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
+		if(hygroManager != null) {
+			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
+			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
+			if(Fluids.ICE.getFluid() != null){
+				hygroManager.addRecipe(Fluids.ICE.getFluid(1),10, -0.01f, 0.02f);
+			}
 		}
 	}
 

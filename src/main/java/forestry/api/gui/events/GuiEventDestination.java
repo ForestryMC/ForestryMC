@@ -1,8 +1,12 @@
 package forestry.api.gui.events;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 
+@SideOnly(Side.CLIENT)
 public enum GuiEventDestination {
 	//Only the current element
 	SINGLE{

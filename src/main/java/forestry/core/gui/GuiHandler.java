@@ -12,8 +12,6 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,9 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ForestryAPI;
+import forestry.core.tiles.TileUtil;
 
 public class GuiHandler implements IGuiHandler {
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerEntity guiHandler) {

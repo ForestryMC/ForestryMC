@@ -1,10 +1,11 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.IMjPassiveProvider;
-import buildcraft.api.mj.IMjReadable;
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
-import net.minecraftforge.fml.common.Optional;
+
+import buildcraft.api.mj.IMjPassiveProvider;
 
 @Optional.Interface(iface = "buildcraft.api.mj.IMjPassiveProvider", modid = Constants.BCLIB_MOD_ID)
 public class MjPassiveProviderWrapper extends MjConnectorWrapper implements IMjPassiveProvider {

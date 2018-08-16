@@ -259,9 +259,7 @@ public class GuiElement extends Gui implements IGuiElement {
 		if(!isVisible()){
 			return false;
 		}
-		int x = getX();
-		int y = getY();
-		return mouseX >= 0 && mouseX <= getWidth() + 0 && mouseY >= 0 && mouseY <= getHeight() + 0;
+		return mouseX >= 0 && mouseX < getWidth() && mouseY >= 0 && mouseY < getHeight();
 	}
 
 	@Override
@@ -298,7 +296,7 @@ public class GuiElement extends Gui implements IGuiElement {
 
 	@Override
 	public boolean isVisible() {
-		return visible;
+		return visible && (parent == null || parent.isVisible());
 	}
 
 	@Override

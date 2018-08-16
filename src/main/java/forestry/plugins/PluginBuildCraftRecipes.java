@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.recipes.BuildcraftRecipeRegistry;
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import net.minecraftforge.fml.common.Optional;
+
+import buildcraft.api.mj.MjAPI;
+import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_RECIPES, name = "BuildCraft 6 Recipes", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
 public class PluginBuildCraftRecipes extends BlankForestryModule {

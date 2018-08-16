@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import java.io.IOException;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INbtReadable;

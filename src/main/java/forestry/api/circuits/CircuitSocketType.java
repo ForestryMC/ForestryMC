@@ -8,7 +8,7 @@ package forestry.api.circuits;
 public enum CircuitSocketType implements ICircuitSocketType {
 	NONE("none"),
 	FARM("forestry.farm"),
-	GREENHOUSE_CLIMATISER("forestry.greenhouse.climatiser"),
+	HABITAT_FORMER("forestry.habitat.former"),
 	ELECTRIC_ENGINE("forestry.electric.engine"),
 	MACHINE("forestry.machine");
 
