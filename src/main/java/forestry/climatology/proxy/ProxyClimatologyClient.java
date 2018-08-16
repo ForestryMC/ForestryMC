@@ -15,14 +15,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.climatology.ClimateHandlerClient;
+import forestry.core.ClimateHandlerClient;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClimatologyClient extends ProxyClimatology {
 
 	@Override
 	public void preInti() {
-		super.preInti();
 		MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
 	}
 

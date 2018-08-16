@@ -187,11 +187,6 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	}
 
 	@Override
-	public int hashCode() {
-		return housing.getCoordinates().hashCode();
-	}
-
-	@Override
 	public int getRange() {
 		return Math.round(range * getRangeModifier());
 	}

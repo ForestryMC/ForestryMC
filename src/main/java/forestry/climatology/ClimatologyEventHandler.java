@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.climatology;
 
 import javax.annotation.Nullable;
@@ -11,35 +21,17 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateState;
-import forestry.api.core.EnumTemperature;
-import forestry.core.climate.ClimateStateHelper;
-import forestry.core.render.ParticleRender;
-
-@SideOnly(Side.CLIENT)
-public class ClimateHandlerClient {
-
+public class ClimatologyEventHandler {
 	private static final Set<BlockPos> DEBUG_POSITIONS = new HashSet<>();
 	@Nullable
 	private static BlockPos currentFormer = null;
-
-	//The current climate state at the position of the player.
-	private static IClimateState currentState = ClimateStateHelper.INSTANCE.absent();
-
-	public static void setCurrentState(IClimateState currentState) {
-		ClimateHandlerClient.currentState = currentState;
-	}
 
 	@Nullable
 	public static BlockPos getCurrentFormer() {
@@ -50,16 +42,16 @@ public class ClimateHandlerClient {
 		BlockPos center = new BlockPos(0, 0, 0);
 		for (int x = -range; x <= range; x++) {
 			for (int y = -range; y <= range; y++) {
+				BlockPos position = centerPosition.add(x, 0, y);
+				boolean valid;
 				if (circular) {
 					double distance = Math.round(center.getDistance(x, 0, y));
-					if (distance <= range && distance > (range - 1)) {
-						DEBUG_POSITIONS.add(centerPosition.add(x, 0, y));
-					}
+					valid = distance <= range && distance > (range - 1);
 				} else {
-					if (!(x == -range || x == range) && !(y == -range || y == range)) {
-						continue;
-					}
-					DEBUG_POSITIONS.add(centerPosition.add(x, 0, y));
+					valid = !(!(x == -range || x == range) && !(y == -range || y == range));
+				}
+				if (valid) {
+					DEBUG_POSITIONS.add(position);
 				}
 			}
 		}
@@ -106,29 +98,13 @@ public class ClimateHandlerClient {
 
 	@SubscribeEvent
 	public void onBreakBlock(BlockEvent.BreakEvent event) {
-		if (ClimateHandlerClient.getCurrentFormer() == event.getPos()) {
-			ClimateHandlerClient.clearDebugPositions();
+		if (getCurrentFormer() == event.getPos()) {
+			clearDebugPositions();
 		}
 	}
 
 	@SubscribeEvent
 	public void worldUnloaded(WorldEvent.Unload event) {
-		ClimateHandlerClient.clearDebugPositions();
-	}
-
-	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase != TickEvent.Phase.END || event.side != Side.CLIENT) {
-			return;
-		}
-		EntityPlayer player = event.player;
-		World world = player.world;
-		BlockPos pos = player.getPosition();
-		if (currentState.isPresent()) {
-			int x = world.rand.nextInt(11) - 5;
-			int y = world.rand.nextInt(5) - 1;
-			int z = world.rand.nextInt(11) - 5;
-			ParticleRender.addClimateParticles(world, pos.add(x, y, z), world.rand, EnumTemperature.getFromValue(currentState.getTemperature()));
-		}
+		clearDebugPositions();
 	}
 }

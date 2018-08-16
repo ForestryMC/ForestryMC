@@ -10,13 +10,8 @@
  ******************************************************************************/
 package forestry.climatology.proxy;
 
-import net.minecraftforge.common.MinecraftForge;
-
-import forestry.climatology.ClimateHandlerServer;
-
 public class ProxyClimatology {
 
 	public void preInti() {
-		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 	}
 }

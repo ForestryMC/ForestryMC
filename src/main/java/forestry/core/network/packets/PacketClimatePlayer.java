@@ -5,7 +5,7 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.climate.IClimateState;
-import forestry.climatology.ClimateHandlerClient;
+import forestry.core.ClimateHandlerClient;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;

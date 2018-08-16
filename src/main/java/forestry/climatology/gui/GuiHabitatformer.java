@@ -28,7 +28,7 @@ import forestry.api.climate.IClimateState;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.ILabelElement;
 import forestry.api.gui.events.ElementEvent;
-import forestry.climatology.ClimateHandlerClient;
+import forestry.climatology.ClimatologyEventHandler;
 import forestry.climatology.gui.elements.ClimateBarElement;
 import forestry.climatology.gui.elements.HabitatSelectionElement;
 import forestry.climatology.gui.elements.HabitatformerButton;
@@ -164,7 +164,7 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		if (rangeLabel != null && rangeBar != null) {
 			rangeLabel.setText(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", logic.getRange()));
 			rangeBar.setValue(logic.getRange());
-			ClimateHandlerClient.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
+			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 		}
 	}
 
@@ -223,7 +223,7 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		if (rangeLabel != null) {
 			rangeLabel.setText(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", value));
 			logic.setRange(value);
-			ClimateHandlerClient.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
+			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 		}
 	}
 
@@ -240,7 +240,7 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 
 		private void onButtonPressed() {
 			logic.setCircular(!logic.isCircular());
-			ClimateHandlerClient.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
+			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatformer.REQUEST_ID_CIRCLE, logic.isCircular() ? 1 : 0));
 		}
 
@@ -269,16 +269,16 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		}
 
 		private void onButtonPressed() {
-			if (ClimateHandlerClient.getCurrentFormer() != tile.getCoordinates()) {
-				ClimateHandlerClient.setDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
+			if (ClimatologyEventHandler.getCurrentFormer() != tile.getCoordinates()) {
+				ClimatologyEventHandler.setDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 			} else {
-				ClimateHandlerClient.clearDebugPositions();
+				ClimatologyEventHandler.clearDebugPositions();
 			}
 		}
 
 		@Override
 		protected int getHoverState(boolean mouseOver) {
-			return ClimateHandlerClient.getCurrentFormer() == tile.getCoordinates() ? 1 : 0;
+			return ClimatologyEventHandler.getCurrentFormer() == tile.getCoordinates() ? 1 : 0;
 		}
 
 		@Override

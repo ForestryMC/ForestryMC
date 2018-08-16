@@ -138,6 +138,7 @@ public class ModuleCore extends BlankForestryModule {
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
 		rootCommand.addChildCommand(new CommandModules());
 	}

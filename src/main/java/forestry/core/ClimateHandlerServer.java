@@ -1,4 +1,4 @@
-package forestry.climatology;
+package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
