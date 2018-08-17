@@ -33,6 +33,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
+import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateLogic;
@@ -397,12 +398,17 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}
+		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
+			return ClimateCapabilities.CLIMATE_TRANSFORMER.cast(logic);
+		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+			|| capability == ClimateCapabilities.CLIMATE_TRANSFORMER
+			|| super.hasCapability(capability, facing);
 	}
 
 	public void changeClimateConfig(float changeChange, float rangeChange, float energyChange) {

@@ -31,7 +31,7 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
 
-//TODO: Add needsGuiUpdate() method, so we only have to send one gui update packet.
+//TODO: Add needsGuiUpdate() method, so we only send one gui update packet.
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 	protected final T tile;
 	@Nullable

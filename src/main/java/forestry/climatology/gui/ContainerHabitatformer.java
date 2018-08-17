@@ -44,7 +44,6 @@ public class ContainerHabitatformer extends ContainerSocketed<TileHabitatformer>
 	private IClimateState previousDefault = ClimateStateHelper.INSTANCE.absent();
 	private int previousRange;
 	private boolean previousCircular;
-	private boolean previousPreview;
 
 	//Container Helper
 	private final ContainerLiquidTanksHelper<TileHabitatformer> helper;

@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
@@ -68,11 +67,6 @@ public class BlockHabitatformer extends BlockBase<BlockTypeClimatology> implemen
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 
 	@Override

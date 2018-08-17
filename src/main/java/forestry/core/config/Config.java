@@ -70,8 +70,7 @@ public class Config {
 	// Humus
 	public static int humusDegradeDelimiter = 3;
 
-	// Greenhouse
-	public static float habitatformerResourceModifier = 1.5F;
+	// Climatology
 	public static int habitatformerRange = 10;
 	public static float habitatformerAreaCostModifier = 0.5F;
 	public static float habitatformerAreaSpeedModifier = 0.5F;
@@ -368,7 +367,6 @@ public class Config {
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
 		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
-		habitatformerResourceModifier = configCommon.getFloatLocalized("tweaks.habitatformer", "energy", habitatformerResourceModifier, 0.0F, 15.0F);
 		habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
 		habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
 		habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);

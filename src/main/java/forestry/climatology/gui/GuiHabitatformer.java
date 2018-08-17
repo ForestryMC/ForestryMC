@@ -28,7 +28,6 @@ import forestry.api.climate.IClimateState;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.ILabelElement;
 import forestry.api.gui.events.ElementEvent;
-import forestry.climatology.ClimatologyEventHandler;
 import forestry.climatology.gui.elements.ClimateBarElement;
 import forestry.climatology.gui.elements.HabitatSelectionElement;
 import forestry.climatology.gui.elements.HabitatformerButton;
@@ -58,8 +57,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 	private static final Drawable HUMIDITY_FIELD = new Drawable(TEXTURE, 204, 34, 52, 12);
 	private static final Drawable SCROLLBAR_BACKGROUND = new Drawable(TEXTURE, 22, 233, 154, 14);
 	private static final Drawable SCROLLBAR_SLIDER = new Drawable(TEXTURE, 241, 68, 15, 12);
-	private static final Drawable PREVIEW_ENABLED_BUTTON = new Drawable(TEXTURE, 238, 92, 18, 18);
-	private static final Drawable PREVIEW_DISABLED_BUTTON = new Drawable(TEXTURE, 220, 92, 18, 18);
 	private static final Drawable CIRCLE_ENABLED_BUTTON = new Drawable(TEXTURE, 238, 110, 18, 18);
 	private static final Drawable CIRCLE_DISABLED_BUTTON = new Drawable(TEXTURE, 220, 110, 18, 18);
 
@@ -141,7 +138,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		rangeLabel.setYPosition(26);
 		updateRange();
 		page.add(new CircleButton(3, 9));
-		page.add(new PreviewButton(-8, 9).setAlign(GuiElementAlignment.TOP_RIGHT));
 		return page;
 	}
 
@@ -164,7 +160,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		if (rangeLabel != null && rangeBar != null) {
 			rangeLabel.setText(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", logic.getRange()));
 			rangeBar.setValue(logic.getRange());
-			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 		}
 	}
 
@@ -223,7 +218,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		if (rangeLabel != null) {
 			rangeLabel.setText(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", value));
 			logic.setRange(value);
-			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 		}
 	}
 
@@ -240,7 +234,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 
 		private void onButtonPressed() {
 			logic.setCircular(!logic.isCircular());
-			ClimatologyEventHandler.updateDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatformer.REQUEST_ID_CIRCLE, logic.isCircular() ? 1 : 0));
 		}
 
@@ -258,38 +251,6 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		public List<String> getTooltip(int mouseX, int mouseY) {
 			List<String> tooltip = new ArrayList<>(getTooltip());
 			tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.circle." + (logic.isCircular() ? "enabled" : "disabled")));
-			return tooltip;
-		}
-	}
-
-	private class PreviewButton extends ButtonElement {
-
-		private PreviewButton(int xPos, int yPos) {
-			super(xPos, yPos, 18, 18, PREVIEW_DISABLED_BUTTON, PREVIEW_ENABLED_BUTTON, button -> ((PreviewButton) button).onButtonPressed());
-		}
-
-		private void onButtonPressed() {
-			if (ClimatologyEventHandler.getCurrentFormer() != tile.getCoordinates()) {
-				ClimatologyEventHandler.setDebugPositions(tile.getCoordinates(), tile.getLogic().getRange(), tile.getLogic().isCircular());
-			} else {
-				ClimatologyEventHandler.clearDebugPositions();
-			}
-		}
-
-		@Override
-		protected int getHoverState(boolean mouseOver) {
-			return ClimatologyEventHandler.getCurrentFormer() == tile.getCoordinates() ? 1 : 0;
-		}
-
-		@Override
-		public boolean hasTooltip() {
-			return true;
-		}
-
-		@Override
-		public List<String> getTooltip(int mouseX, int mouseY) {
-			List<String> tooltip = new ArrayList<>(getTooltip());
-			tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.preview." + (logic.isCircular() ? "enabled" : "disabled")));
 			return tooltip;
 		}
 	}
