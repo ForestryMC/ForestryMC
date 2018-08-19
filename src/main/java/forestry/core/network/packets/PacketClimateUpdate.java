@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateLogic;
-import forestry.core.climate.ClimateLogic;
+import forestry.api.climate.IClimateTransformer;
+import forestry.core.climate.ClimateTransformer;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
@@ -29,9 +29,9 @@ import forestry.core.tiles.TileUtil;
 public class PacketClimateUpdate extends ForestryPacket implements IForestryPacketClient {
 
 	private BlockPos pos;
-	private ClimateLogic container;
+	private ClimateTransformer container;
 	
-	public PacketClimateUpdate(BlockPos pos, ClimateLogic container) {
+	public PacketClimateUpdate(BlockPos pos, ClimateTransformer container) {
 		this.pos = pos;
 		this.container = container;
 	}
@@ -55,9 +55,9 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 			if(housing == null){
 				return;
 			}
-			IClimateLogic logic = housing.getLogic();
-			if(logic instanceof IStreamable){
-				IStreamable streamable = (IStreamable) logic;
+			IClimateTransformer transformer = housing.getTransformer();
+			if(transformer instanceof IStreamable){
+				IStreamable streamable = (IStreamable) transformer;
 				streamable.readData(data);
 			}
 			//housing.onUpdateClimate();

@@ -14,22 +14,28 @@ import java.io.IOException;
 import java.util.function.BiFunction;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateLogic;
+import forestry.api.climate.IClimateTransformer;
 import forestry.api.climate.IClimateManipulator;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IWorldClimateHolder;
-import forestry.api.climate.LogicInfo;
+import forestry.api.climate.TransformerProperties;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
-public class ClimateLogic implements IClimateLogic, IStreamable {
+public class ClimateTransformer implements IClimateTransformer, IStreamable, INbtReadable, INbtWritable {
 
 	private static final String CURRENT_STATE_KEY = "Current";
+
 	private static final String TARGETED_STATE_KEY = "Target";
 	private static final String CIRCULAR_KEY = "Circular";
 	private static final String RANGE_KEY = "Range";
@@ -42,16 +48,16 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	protected IClimateState currentState;
 	//The climate state of the biome that is located at the position of this tile.
 	private IClimateState defaultState;
-	//The radius of the habitatformer in blocks
+	//The range of the habitatformer in blocks in one direction.
 	private int range;
+	//The area of the former in blocks.
 	private int area;
+	//True if 'update()' was called at least once.
 	private boolean addedToWorld;
+	//True if the area of the former is circular.
 	private boolean circular;
-	private float changeChange = 1.0F;
-	private float rangeChange = 1.0F;
-	private float resourceChange = 1.0F;
 
-	public ClimateLogic(IClimateHousing housing) {
+	public ClimateTransformer(IClimateHousing housing) {
 		this.housing = housing;
 		this.currentState = ClimateStateHelper.INSTANCE.absent();
 		this.defaultState = AbsentClimateState.INSTANCE;
@@ -67,14 +73,16 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	}
 
 	@Override
-	public void update() {
+	public void addTransformer() {
 		if (!addedToWorld) {
-			defaultState = ClimateRoot.getInstance().getBiomeState(getWorldObj(), getCoordinates());
+			World world = housing.getWorldObj();
+			BlockPos pos = housing.getCoordinates();
+			defaultState = ClimateRoot.getInstance().getBiomeState(world, pos);
 			if (!targetedState.isPresent()) {
-				setState(defaultState.copy());
+				setCurrent(defaultState.copy());
 				setTarget(defaultState);
 			}
-			IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+			IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(world);
 			worldClimate.updateTransformer(this);
 			addedToWorld = true;
 		}
@@ -82,9 +90,9 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 
 	/* Climate Holders */
 	@Override
-	public void onRemoval() {
+	public void removeTransformer() {
 		addedToWorld = false;
-		IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+		IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(housing.getWorldObj());
 		worldClimate.removeTransformer(this);
 	}
 
@@ -107,13 +115,13 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	}
 
 	@Override
-	public LogicInfo createInfo() {
-		return new LogicInfo(this, targetedState, defaultState, currentState, resourceChange, changeChange);
+	public TransformerProperties createProperties() {
+		return new TransformerProperties(this, targetedState, defaultState, currentState);
 	}
 
 	@Override
-	public IClimateManipulator createManipulator(ClimateType type, BiFunction<ClimateType, LogicInfo, Float> changeSupplier) {
-		return new ClimateManipulator(createInfo(), type, changeSupplier);
+	public IClimateManipulator createManipulator(ClimateType type, BiFunction<ClimateType, TransformerProperties, Float> changeSupplier) {
+		return new ClimateManipulator(createProperties(), type, changeSupplier);
 	}
 
 	@Override
@@ -140,9 +148,14 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	}
 
 	@Override
-	public void setState(IClimateState state) {
-		this.currentState = ClimateStateHelper.INSTANCE.clamp(state.toImmutable());
-		housing.markNetworkUpdate();
+	public void setCurrent(IClimateState state) {
+		state = ClimateStateHelper.INSTANCE.clamp(state.toImmutable());
+		if(!state.equals(currentState)) {
+			this.currentState = state;
+			housing.markNetworkUpdate();
+			IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+			worldClimate.updateTransformer(this);
+		}
 	}
 
 	@Override
@@ -164,6 +177,8 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	public void setCircular(boolean circular) {
 		this.circular = circular;
 		housing.markNetworkUpdate();
+		IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+		worldClimate.updateTransformer(this);
 	}
 
 	public boolean isCircular() {
@@ -171,8 +186,8 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 	}
 
 	@Override
-	public void setRange(int range) {
-		this.range = range;
+	public void setRange(int value) {
+		this.range = MathHelper.clamp(value, 1, 16);
 		this.addedToWorld = true;
 		if(circular){
 			this.area = Math.round(this.range * this.range * 2.0F * (float)Math.PI);
@@ -180,32 +195,27 @@ public class ClimateLogic implements IClimateLogic, IStreamable {
 			this.area = (range * 2 + 1) * (range * 2 + 1);
 		}
 		housing.markNetworkUpdate();
+		IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+		worldClimate.updateTransformer(this);
 	}
 
+	@Override
 	public int getArea() {
 		return area;
 	}
 
 	@Override
 	public int getRange() {
-		return Math.round(range * getRangeModifier());
+		return range;
 	}
 
-	public float getResourceModifier(){
-		return resourceChange;
+	@Override
+	public BlockPos getCoordinates() {
+		return housing.getCoordinates();
 	}
 
-	public float getChangeModifier(){
-		return changeChange;
-	}
-
-	public float getRangeModifier(){
-		return rangeChange;
-	}
-
-	public void changeClimateConfig(float changeChange, float rangeChange, float energyChange) {
-		this.changeChange+=changeChange;
-		this.rangeChange+=rangeChange;
-		this.resourceChange +=energyChange;
+	@Override
+	public World getWorldObj() {
+		return housing.getWorldObj();
 	}
 }

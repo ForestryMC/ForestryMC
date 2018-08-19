@@ -139,12 +139,16 @@ public class PreviewHandlerClient {
 		tickHelper.onTick();
 		if(tickHelper.updateOnInterval(100)){
 			ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-			if(stack.isEmpty() || stack.getItem() != ModuleClimatology.getItems().habitatScreen || !ItemHabitatScreen.isValid(stack, player.world)){
+			if(stack.isEmpty()
+				|| stack.getItem() != ModuleClimatology.getItems().habitatScreen
+				|| !ItemHabitatScreen.isValid(stack, player.world)
+				|| !ItemHabitatScreen.isPreviewModeActive(stack)){
 				clearPreview();
 				return;
 			}
 			BlockPos currentPos = ItemHabitatScreen.getPosition(stack);
-			if (currentPos == null || player.getDistance(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128F) {
+			if (currentPos == null
+				|| player.getDistance(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128F) {
 				clearPreview();
 				return;
 			}

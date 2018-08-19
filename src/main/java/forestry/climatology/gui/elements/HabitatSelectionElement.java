@@ -26,8 +26,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateLogic;
 import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.ForestryAPI;
 import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatformer;
@@ -42,11 +42,11 @@ import forestry.core.utils.StringUtil;
 public class HabitatSelectionElement extends ElementGroup {
 	private static final Comparator<ClimateButton> BUTTON_COMPARATOR = Comparator.comparingDouble(ClimateButton::getComparingCode);
 	private final List<ClimateButton> buttons = new ArrayList<>();
-	private final IClimateLogic logic;
+	private final IClimateTransformer transformer;
 
-	public HabitatSelectionElement(int xPos, int yPos, IClimateLogic logic) {
+	public HabitatSelectionElement(int xPos, int yPos, IClimateTransformer transformer) {
 		super(xPos, yPos, 60, 40);
-		this.logic = logic;
+		this.transformer = transformer;
 		int x = 0;
 		int y = 0;
 		for (EnumClimate climate : EnumClimate.values()) {
@@ -107,6 +107,10 @@ public class HabitatSelectionElement extends ElementGroup {
 				former.setClimate(climateState);
 				former.sendClimateUpdate();
 			});
+			addTooltip((tooltip, element, mouseX, mouseY) -> {
+				tooltip.add("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature()));
+				tooltip.add("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity()));
+			});
 		}
 
 		@Override
@@ -119,27 +123,8 @@ public class HabitatSelectionElement extends ElementGroup {
 			drawTexturedModalRect(2, 2, climate.getSprite(), 16, 16);
 		}
 
-		@Override
-		public List<String> getTooltip(int mouseX, int mouseY) {
-			List<String> lines = new ArrayList<>();
-			lines.addAll(getTooltip());
-			lines.add("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature()));
-			lines.add("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity()));
-			return lines;
-		}
-
-		@Override
-		public boolean canMouseOver() {
-			return true;
-		}
-
-		@Override
-		public boolean hasTooltip() {
-			return true;
-		}
-
 		private double getComparingCode() {
-			IClimateState target = logic.getTarget();
+			IClimateState target = transformer.getTarget();
 			IClimateState state = climate.climateState;
 			double temp = target.getTemperature() - state.getTemperature();
 			double hem = target.getHumidity() - state.getHumidity();

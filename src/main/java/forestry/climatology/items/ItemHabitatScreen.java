@@ -34,14 +34,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateLogic;
 import forestry.api.climate.IClimateState;
-import forestry.api.core.EnumTemperature;
+import forestry.api.climate.IClimateTransformer;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
@@ -162,7 +160,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 		if (housing == null) {
 			return;
 		}
-		IClimateState climateState = housing.getLogic().getCurrent();
+		IClimateState climateState = housing.getTransformer().getCurrent();
 		tooltip.add(Translator.translateToLocalFormatted("for.habitat_screen.temperature", TextFormatting.GOLD + StringUtil.floatAsPercent(climateState.getTemperature())));
 		tooltip.add(Translator.translateToLocalFormatted("for.habitat_screen.humidity", TextFormatting.BLUE + StringUtil.floatAsPercent(climateState.getHumidity())));
 	}
@@ -185,9 +183,9 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			if (housing == null) {
 				return 0xFFFFFF;
 			}
-			IClimateLogic container = housing.getLogic();
-			IClimateState state = container.getCurrent();
-			return ClimateUtil.getColor(EnumTemperature.getFromValue(state.getTemperature()));
+			IClimateTransformer transformer = housing.getTransformer();
+			IClimateState state = transformer.getCurrent();
+			return state.getTemperatureEnum().color;
 		}
 		return 0xFFFFFF;
 	}

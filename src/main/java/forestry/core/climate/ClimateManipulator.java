@@ -8,15 +8,15 @@ import net.minecraft.util.math.MathHelper;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateManipulator;
 import forestry.api.climate.IClimateState;
-import forestry.api.climate.LogicInfo;
+import forestry.api.climate.TransformerProperties;
 
 public class ClimateManipulator implements IClimateManipulator {
-	private final LogicInfo logic;
+	private final TransformerProperties logic;
 	private final ClimateType type;
-	private final BiFunction<ClimateType, LogicInfo, Float> changeSupplier;
+	private final BiFunction<ClimateType, TransformerProperties, Float> changeSupplier;
 	private boolean backwards = false;
 
-	public ClimateManipulator(LogicInfo logic, ClimateType type, BiFunction<ClimateType, LogicInfo, Float> changeSupplier) {
+	public ClimateManipulator(TransformerProperties logic, ClimateType type, BiFunction<ClimateType, TransformerProperties, Float> changeSupplier) {
 		this.logic = logic;
 		this.type = type;
 		this.changeSupplier = changeSupplier;
@@ -30,7 +30,7 @@ public class ClimateManipulator implements IClimateManipulator {
 	@Override
 	public void finish() {
 		if(!logic.currentState.equals(logic.startState)){
-			logic.parent.setState(logic.currentState);
+			logic.parent.setCurrent(logic.currentState);
 		}
 	}
 

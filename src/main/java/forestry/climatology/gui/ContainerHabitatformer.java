@@ -20,19 +20,19 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateLogic;
 import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
 import forestry.climatology.inventory.InventoryHabitatformer;
 import forestry.climatology.tiles.TileHabitatformer;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.gui.ContainerLiquidTanksHelper;
-import forestry.core.gui.ContainerSocketed;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 
-public class ContainerHabitatformer extends ContainerSocketed<TileHabitatformer> implements IContainerLiquidTanks, IGuiSelectable {
+public class ContainerHabitatformer extends ContainerTile<TileHabitatformer> implements IContainerLiquidTanks, IGuiSelectable {
 
 	//Selection Request Ids
 	static final int REQUEST_ID_CIRCLE = 0;
@@ -59,33 +59,33 @@ public class ContainerHabitatformer extends ContainerSocketed<TileHabitatformer>
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		boolean guiNeedsUpdate = false;
-		IClimateLogic logic = tile.getLogic();
+		IClimateTransformer transformer = tile.getTransformer();
 
-		IClimateState state = logic.getCurrent();
+		IClimateState state = transformer.getCurrent();
 		if (!previousState.equals(state)) {
 			previousState = state;
 			guiNeedsUpdate = true;
 		}
 
-		IClimateState target = logic.getTarget();
+		IClimateState target = transformer.getTarget();
 		if (!previousTarget.equals(target)) {
 			previousTarget = target;
 			guiNeedsUpdate = true;
 		}
 
-		IClimateState defaultState = logic.getDefault();
+		IClimateState defaultState = transformer.getDefault();
 		if (!previousDefault.equals(defaultState)) {
 			previousDefault = defaultState;
 			guiNeedsUpdate = true;
 		}
 
-		int range = logic.getRange();
+		int range = transformer.getRange();
 		if (range != previousRange) {
 			previousRange = range;
 			guiNeedsUpdate = true;
 		}
 
-		boolean circular = logic.isCircular();
+		boolean circular = transformer.isCircular();
 		if (circular != previousCircular) {
 			previousCircular = circular;
 			guiNeedsUpdate = true;
@@ -101,13 +101,13 @@ public class ContainerHabitatformer extends ContainerSocketed<TileHabitatformer>
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
-		IClimateLogic logic = tile.getLogic();
+		IClimateTransformer transformer = tile.getTransformer();
 		switch (primary) {
 			case REQUEST_ID_CIRCLE:
-				logic.setCircular(secondary == 1);
+				transformer.setCircular(secondary == 1);
 				break;
 			case REQUEST_ID_RANGE:
-				logic.setRange(secondary);
+				transformer.setRange(secondary);
 				break;
 			default:
 				break;

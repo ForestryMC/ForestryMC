@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,8 +20,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateLogic;
 import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
 import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatformer;
 import forestry.core.gui.elements.GuiElement;
@@ -35,20 +32,20 @@ import forestry.core.utils.Translator;
 public class ClimateBarElement extends GuiElement {
 	public static final float MAX_VALUE = 2.0F;
 
-	private final IClimateLogic housing;
+	private final IClimateTransformer transformer;
 	private final ClimateType type;
 	private boolean dragging;
 
-	public ClimateBarElement(int xPos, int yPos, IClimateLogic housing, ClimateType type) {
+	public ClimateBarElement(int xPos, int yPos, IClimateTransformer transformer, ClimateType type) {
 		super(xPos, yPos, 52, 12);
-		this.housing = housing;
+		this.transformer = transformer;
 		this.type = type;
 
 		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (GuiScreen.isCtrlKeyDown()) {
 				GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
 				IClimateState climateState = former.getClimate();
-				IClimateState newState = climateState.toImmutable().setClimate(type, housing.getDefault().getTemperature());
+				IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
 				former.setClimate(newState);
 				former.sendClimateUpdate();
 				return;
@@ -62,6 +59,14 @@ public class ClimateBarElement extends GuiElement {
 				GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
 				former.sendClimateUpdate();
 			}
+		});
+		addTooltip((tooltip, element, mouseX, mouseY) -> {
+			IClimateState targetedState = transformer.getTarget();
+			IClimateState state = transformer.getCurrent();
+			IClimateState defaultState = transformer.getDefault();
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
 	}
 
@@ -86,17 +91,17 @@ public class ClimateBarElement extends GuiElement {
 	}
 
 	private int getProgressScaled() {
-		float value = housing.getCurrent().getClimate(type);
+		float value = transformer.getCurrent().getClimate(type);
 		return (int) (value * (width - 2) / MAX_VALUE);
 	}
 
 	private int getPointerPosition() {
-		float targetedValue = housing.getTarget().getClimate(type);
+		float targetedValue = transformer.getTarget().getClimate(type);
 		return (int) (targetedValue * 49 / MAX_VALUE);
 	}
 
 	private int getDefaultPosition() {
-		float value = housing.getDefault().getClimate(type);
+		float value = transformer.getDefault().getClimate(type);
 		return (int) (value * 49 / MAX_VALUE);
 	}
 
@@ -122,28 +127,5 @@ public class ClimateBarElement extends GuiElement {
 
 		IClimateState newState = climateState.toImmutable().setClimate(type, value);
 		former.setClimate(newState);
-	}
-
-	@Override
-	public boolean canMouseOver() {
-		return true;
-	}
-
-	@Override
-	public boolean hasTooltip() {
-		return true;
-	}
-
-	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		IClimateState targetedState = housing.getTarget();
-		IClimateState state = housing.getCurrent();
-		IClimateState defaultState = housing.getDefault();
-		List<String> lines = new ArrayList<>();
-		lines.addAll(getTooltip());
-		lines.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
-		lines.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
-		lines.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
-		return lines;
 	}
 }

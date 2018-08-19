@@ -3,7 +3,7 @@ package forestry.core.climate;
 import forestry.api.climate.IClimateFactory;
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateListener;
-import forestry.api.climate.IClimateLogic;
+import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.ILocatable;
 
 public class ClimateFactory implements IClimateFactory {
@@ -13,8 +13,8 @@ public class ClimateFactory implements IClimateFactory {
 	}
 
 	@Override
-	public IClimateLogic createLogic(IClimateHousing housing) {
-		return new ClimateLogic(housing);
+	public IClimateTransformer createTransformer(IClimateHousing housing) {
+		return new ClimateTransformer(housing);
 	}
 
 	@Override

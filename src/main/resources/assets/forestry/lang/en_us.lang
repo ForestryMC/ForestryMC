@@ -1489,8 +1489,6 @@ for.hints.formergui.tag=Click and done!
 for.hints.formergui.desc=You can use the habitat buttons, the two climate bars in the upper center or the two text fields to change the targeted climate.
 for.hints.formerresources.tag=What do you need?
 for.hints.formerresources.desc=The habitatformer uses energy to alter its temperature. And fluids like lava, water or crushed ice to alter its humidity and a small amount of its temperature.
-for.hints.formercircuitboard.tag=Expensive and Fast or Cheap and Slow
-for.hints.formercircuitboard.desc=Use a soldering iron to chnage the range, the resource usage or the speed of the former.
 for.hints.formersettings.tag=Everything you want
 for.hints.formersettings.desc=Additional to the other options you can use the slot next to the habitat buttons to change the targeted climate to the preferred climate of a bee. Simply click with a bee on it.
 

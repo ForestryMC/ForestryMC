@@ -12,9 +12,9 @@ import forestry.api.core.ILocatable;
  */
 public interface IClimateFactory {
 	/**
-	 * Creates a {@link IClimateLogic}.
+	 * Creates a {@link IClimateTransformer}.
 	 */
-	IClimateLogic createLogic(IClimateHousing housing);
+	IClimateTransformer createTransformer(IClimateHousing housing);
 
 	/**
 	 * Creates a {@link IClimateListener}.

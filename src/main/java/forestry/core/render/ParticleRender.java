@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IHiveTile;
+import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.entities.ParticleBeeExplore;
 import forestry.apiculture.entities.ParticleBeeRoundTrip;
@@ -109,7 +110,7 @@ public class ParticleRender {
 		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
-	public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature){
+	public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity){
 		if (!shouldSpawnParticle(worldIn)) {
 			return;
 		}
@@ -121,18 +122,22 @@ public class ParticleRender {
 				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
 				double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
 				double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
-				ParticleRender.addEntityClimateParticle(worldIn, x, y, z, temperature);
+				if(rand.nextBoolean()) {
+					ParticleRender.addEntityClimateParticle(worldIn, x, y, z, temperature.color);
+				}else{
+					ParticleRender.addEntityClimateParticle(worldIn, x, y, z, humidity.color);
+				}
 			}
 		}
 	}
 
-	public static void addEntityClimateParticle(World world, double x, double y, double z, EnumTemperature temperature){
+	public static void addEntityClimateParticle(World world, double x, double y, double z, int color){
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
 		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, temperature));
+		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
 	}
 
 	public static void addTransformParticles(World worldIn, BlockPos pos, Random rand){

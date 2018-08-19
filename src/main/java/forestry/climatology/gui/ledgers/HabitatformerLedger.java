@@ -13,21 +13,20 @@ package forestry.climatology.gui.ledgers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.climate.IClimateLogic;
+import forestry.api.climate.IClimateTransformer;
 import forestry.climatology.ModuleClimatology;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 public class HabitatformerLedger extends Ledger {
-	private final IClimateLogic climateLogic;
+	private final IClimateTransformer transformer;
 
-	public HabitatformerLedger(LedgerManager manager, IClimateLogic climateLogic) {
+	public HabitatformerLedger(LedgerManager manager, IClimateTransformer climateLogic) {
 		super(manager, "habitatformer");
 		maxHeight = 96;
-		this.climateLogic = climateLogic;
+		this.transformer = climateLogic;
 	}
 
 	@Override
@@ -54,28 +53,21 @@ public class HabitatformerLedger extends Ledger {
 
 		y += drawSubheader(Translator.translateToLocal("for.gui.habitatformer.range") + ':', xBody, y);
 		y += 3;
-		y += drawText(StringUtil.floatAsPercent(climateLogic.getRangeModifier()), xBody, y);
+		//y += drawText(StringUtil.floatAsPercent(transformer.getRangeModifier()), xBody, y);
 		y += 3;
 
 		y += drawSubheader(Translator.translateToLocal("for.gui.habitatformer.resources") + ':', xBody, y);
 		y += 3;
-		y += drawText(StringUtil.floatAsPercent(climateLogic.getResourceModifier()), xBody, y);
+		//y += drawText(StringUtil.floatAsPercent(transformer.getResourceModifier()), xBody, y);
 		y += 3;
 
 		y += drawSubheader(Translator.translateToLocal("for.gui.habitatformer.speed") + ':', xBody, y);
 		y += 3;
-		drawText(StringUtil.floatAsPercent(climateLogic.getChangeModifier()), xBody, y);
+		//drawText(StringUtil.floatAsPercent(transformer.getSpeedModifier()), xBody, y);
 	}
 
 	@Override
 	public String getTooltip() {
-		return "Ra: " +
-			StringUtil.floatAsPercent(climateLogic.getRangeModifier()) +
-			" / " +
-			"Re: " +
-			StringUtil.floatAsPercent(climateLogic.getResourceModifier()) +
-			" / " +
-			"S: " +
-			StringUtil.floatAsPercent(climateLogic.getChangeModifier());
+		return "";
 	}
 }

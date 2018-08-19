@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.climate.IClimateLogic;
+import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -33,7 +33,7 @@ import forestry.core.gui.elements.GuiElement;
 
 @SideOnly(Side.CLIENT)
 public class SpeciesSelectionElement extends GuiElement {
-	public SpeciesSelectionElement(int xPos, int yPos, IClimateLogic logic) {
+	public SpeciesSelectionElement(int xPos, int yPos, IClimateTransformer transformer) {
 		super(xPos, yPos, 22, 22);
 		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			EntityPlayer player = Minecraft.getMinecraft().player;
@@ -83,7 +83,7 @@ public class SpeciesSelectionElement extends GuiElement {
 					humid = 0.4F;
 					break;
 			}
-			logic.setTarget(ClimateStateHelper.INSTANCE.create(temp, humid));
+			transformer.setTarget(ClimateStateHelper.INSTANCE.create(temp, humid));
 		});
 	}
 

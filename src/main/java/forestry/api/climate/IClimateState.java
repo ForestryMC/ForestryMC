@@ -9,6 +9,9 @@ import java.util.function.Function;
 
 import net.minecraft.world.biome.Biome;
 
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+
 /**
  * A {@link IClimateState} is used to store and handle temperature and humidity.
  * <p>
@@ -18,7 +21,15 @@ public interface IClimateState {
 
 	float getTemperature();
 
+	default EnumTemperature getTemperatureEnum(){
+		return EnumTemperature.getFromValue(getTemperature());
+	}
+
 	float getHumidity();
+
+	default EnumHumidity getHumidityEnum(){
+		return EnumHumidity.getFromValue(getHumidity());
+	}
 
 	IClimateState addTemperature(float temperature);
 

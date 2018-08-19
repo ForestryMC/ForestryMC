@@ -35,7 +35,7 @@ public interface IClimateHousing extends IErrorLogicSource, ILocatable, IClimate
 	/**
 	 * @return the logic that handles the climate change of this housing.
 	 */
-	IClimateLogic getLogic();
+	IClimateTransformer getTransformer();
 
 	void markNetworkUpdate();
 }

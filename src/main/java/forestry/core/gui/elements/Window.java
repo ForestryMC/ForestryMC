@@ -246,7 +246,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	@Override
 	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> tooltip = new ArrayList<>(getTooltip());
+		List<String> tooltip = new ArrayList<>();
 		Deque<IGuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
 			IGuiElement element = queue.removeFirst();

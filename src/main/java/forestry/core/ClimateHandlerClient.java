@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateState;
-import forestry.api.core.EnumTemperature;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.render.ParticleRender;
 
@@ -36,7 +35,7 @@ public class ClimateHandlerClient {
 			int x = world.rand.nextInt(11) - 5;
 			int y = world.rand.nextInt(5) - 1;
 			int z = world.rand.nextInt(11) - 5;
-			ParticleRender.addClimateParticles(world, pos.add(x, y, z), world.rand, EnumTemperature.getFromValue(currentState.getTemperature()));
+			ParticleRender.addClimateParticles(world, pos.add(x, y, z), world.rand, currentState.getTemperatureEnum(), currentState.getHumidityEnum());
 		}
 	}
 }
