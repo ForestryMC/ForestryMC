@@ -175,7 +175,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		}
 		return configEntries;
 	}
-	
+
 	private Map<String, String> getItemStrings() {
 		Map<String, String> itemStrings = new HashMap<>(fertilizers.size());
 		for (Entry<ItemStack, Integer> itemStack : fertilizers.entrySet()) {
@@ -204,5 +204,5 @@ public final class FarmRegistry implements IFarmRegistry {
 			return 0;
 		}
 	}
-	
+
 }
